@@ -1,0 +1,17 @@
+{
+  "name": "lethe-alpha-ai-test-system",
+  "version": "0.1.0",
+  "description": "AI/bot alpha test simulator for LETHE: balance, forgetting, echo pivot, and synthetic fun-signal metrics.",
+  "main": "src/run_alpha.js",
+  "scripts": {
+    "alpha": "node src/run_alpha.js --runs 1000 --stages 2 --seed 20260601 --echo 0.60 --ui 0.62 --out outputs/default",
+    "alpha:quick": "node src/run_alpha.js --runs 120 --stages 2 --seed quick --echo 0.60 --ui 0.62 --out outputs/quick",
+    "alpha:heavy": "node src/run_alpha.js --runs 5000 --stages 3 --seed heavy --echo 0.60 --ui 0.62 --out outputs/heavy",
+    "sweep": "node src/sweep.js --runs 300 --stages 2 --echo 0.40,0.50,0.60,0.70,0.80 --ui 0.45,0.62,0.78 --out outputs/sweep"
+  },
+  "keywords": ["game-balance", "roguelike", "simulation", "playtest", "LETHE"],
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

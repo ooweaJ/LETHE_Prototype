@@ -1,0 +1,128 @@
+'use strict';
+
+const BOT_PROFILES = {
+  random: {
+    id: 'random',
+    name: '랜덤 봇',
+    description: '선택과 이동이 흔들리는 기준선 봇.',
+    skill: 0.45,
+    perception: 0.44,
+    risk: 0.52,
+    novelty: 0.70,
+    persistence: 0.48,
+    attachmentBias: 0.55,
+    concentrationPreference: 0.00,
+    weaponWeights: { dual_blades: 1, greatsword: 1 },
+    memoryWeights: {},
+  },
+  survivor: {
+    id: 'survivor',
+    name: '생존 봇',
+    description: '제어/광역/생존 잔향을 선호하며 무력감에 민감하다.',
+    skill: 0.64,
+    perception: 0.58,
+    risk: 0.30,
+    novelty: 0.45,
+    persistence: 0.58,
+    attachmentBias: 0.50,
+    concentrationPreference: -0.35,
+    weaponWeights: { dual_blades: 0.8, greatsword: 1.2 },
+    memoryWeights: { shattering_ripple: 1.45, stopped_second: 1.55, tracker_oath: 1.10 },
+  },
+  focus_burst: {
+    id: 'focus_burst',
+    name: '몰빵 버스트 봇',
+    description: '처형자의 섬광과 장송대검 중심으로 빠르게 밀어붙인다.',
+    skill: 0.66,
+    perception: 0.62,
+    risk: 0.74,
+    novelty: 0.50,
+    persistence: 0.60,
+    attachmentBias: 0.82,
+    concentrationPreference: 0.55,
+    weaponWeights: { dual_blades: 0.35, greatsword: 1.8 },
+    memoryWeights: { execution_flash: 1.75, tracker_oath: 1.25, blood_reflection: 1.05, shattering_ripple: 0.85 },
+  },
+  melee_onhit: {
+    id: 'melee_onhit',
+    name: '근접 온힛 봇',
+    description: '절단쌍검, 굶주린 칼무리, 피의 반사 조합을 선호한다.',
+    skill: 0.68,
+    perception: 0.57,
+    risk: 0.70,
+    novelty: 0.52,
+    persistence: 0.62,
+    attachmentBias: 0.78,
+    concentrationPreference: 0.40,
+    weaponWeights: { dual_blades: 1.9, greatsword: 0.35 },
+    memoryWeights: { hungry_blades: 1.70, blood_reflection: 1.55, execution_flash: 1.10, stopped_second: 0.80 },
+  },
+  balanced_web: {
+    id: 'balanced_web',
+    name: '분산-거미줄 봇',
+    description: '2~3개 기억 간 시너지를 촘촘히 연결하려 한다.',
+    skill: 0.70,
+    perception: 0.68,
+    risk: 0.48,
+    novelty: 0.63,
+    persistence: 0.68,
+    attachmentBias: 0.66,
+    concentrationPreference: -0.12,
+    weaponWeights: { dual_blades: 1.05, greatsword: 1.00 },
+    memoryWeights: { shattering_ripple: 1.18, stopped_second: 1.18, tracker_oath: 1.15, hungry_blades: 1.05, blood_reflection: 1.05 },
+  },
+  memory_protector: {
+    id: 'memory_protector',
+    name: '기억 보호 봇',
+    description: '가장 좋아하는 기억을 잃지 않으려고 의존도를 분산한다.',
+    skill: 0.63,
+    perception: 0.74,
+    risk: 0.42,
+    novelty: 0.42,
+    persistence: 0.52,
+    attachmentBias: 0.88,
+    concentrationPreference: -0.55,
+    weaponWeights: { dual_blades: 1.0, greatsword: 1.0 },
+    memoryWeights: { tracker_oath: 1.25, stopped_second: 1.15, shattering_ripple: 1.05, execution_flash: 1.05 },
+  },
+  echo_pivot: {
+    id: 'echo_pivot',
+    name: '잔향 피벗 봇',
+    description: '삭제 이후 남은 잔향과 맞는 다음 기억을 고른다.',
+    skill: 0.72,
+    perception: 0.70,
+    risk: 0.50,
+    novelty: 0.72,
+    persistence: 0.74,
+    attachmentBias: 0.62,
+    concentrationPreference: 0.05,
+    weaponWeights: { dual_blades: 1.05, greatsword: 1.05 },
+    memoryWeights: { execution_flash: 1.05, hungry_blades: 1.05, tracker_oath: 1.05, shattering_ripple: 1.05, blood_reflection: 1.05, stopped_second: 1.05 },
+  },
+  optimizer: {
+    id: 'optimizer',
+    name: '최적화 봇',
+    description: '현재 수치상 가장 강한 선택을 한다. 시스템 악용 가능성 탐지용.',
+    skill: 0.82,
+    perception: 0.78,
+    risk: 0.66,
+    novelty: 0.38,
+    persistence: 0.66,
+    attachmentBias: 0.58,
+    concentrationPreference: 0.22,
+    weaponWeights: { dual_blades: 1.0, greatsword: 1.0 },
+    memoryWeights: {},
+  },
+};
+
+function listBots() {
+  return Object.values(BOT_PROFILES);
+}
+
+function getBot(id) {
+  const bot = BOT_PROFILES[id];
+  if (!bot) throw new Error(`Unknown bot profile: ${id}`);
+  return bot;
+}
+
+module.exports = { BOT_PROFILES, listBots, getBot };

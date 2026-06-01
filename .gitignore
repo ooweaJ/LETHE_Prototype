@@ -1,0 +1,9 @@
+.DS_Store
+node_modules/
+
+# Local archives and generated AI-test artifacts
+LETHE_alpha_ai_test_system_v01.zip
+alpha_test/outputs/
+
+# Temporary logs
+*.log

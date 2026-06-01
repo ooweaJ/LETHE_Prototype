@@ -1,0 +1,15 @@
+{
+  "name": "lethe-html-alpha",
+  "version": "0.1.0",
+  "private": true,
+  "description": "LETHE HTML alpha prototype with AI playability test tooling.",
+  "scripts": {
+    "ai:test": "node alpha_test/src/run_alpha.js --runs 1000 --stages 2 --seed 20260601 --echo 0.60 --ui 0.62 --out alpha_test/outputs/default",
+    "ai:test:quick": "node alpha_test/src/run_alpha.js --runs 120 --stages 2 --seed quick --echo 0.60 --ui 0.62 --out alpha_test/outputs/quick",
+    "ai:test:heavy": "node alpha_test/src/run_alpha.js --runs 5000 --stages 3 --seed heavy --echo 0.60 --ui 0.62 --out alpha_test/outputs/heavy",
+    "ai:sweep": "node alpha_test/src/sweep.js --runs 300 --stages 2 --echo 0.40,0.50,0.60,0.70,0.80 --ui 0.45,0.62,0.78 --out alpha_test/outputs/sweep"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

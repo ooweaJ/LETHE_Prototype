@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LETHE: 망각의 군주 v0.1</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="topbar" aria-label="run status">
+        <div>
+          <p class="eyebrow">HTML Alpha Prototype v0.1</p>
+          <h1>LETHE: 망각의 군주</h1>
+        </div>
+        <div class="status-strip">
+          <span id="phaseLabel">기억 각인 전</span>
+          <span id="timerLabel">00:00</span>
+          <span id="hpLabel">HP 100 / 100</span>
+        </div>
+      </section>
+
+      <section class="game-layout">
+        <div class="arena-wrap">
+          <canvas id="gameCanvas" width="960" height="600" aria-label="LETHE combat arena"></canvas>
+          <div id="overlay" class="overlay show">
+            <div class="panel start-panel">
+              <p class="eyebrow">검증 목표</p>
+              <h2>가장 의존한 기억은 레테가 가져간다.</h2>
+              <p class="panel-copy">
+                이동은 WASD 또는 방향키입니다. 기본 공격과 기억은 자동으로 발동됩니다.
+                보스 처치 후, 잃고 싶지 않은 기억과 잃을 것 같은 기억을 답해주세요.
+              </p>
+
+              <div class="setup-grid">
+                <div>
+                  <h3>무기</h3>
+                  <div id="weaponChoices" class="choice-list"></div>
+                </div>
+                <div>
+                  <h3>기억 슬롯 <span id="slotCount">0 / 3</span></h3>
+                  <div id="memoryChoices" class="choice-list memory-list"></div>
+                </div>
+              </div>
+
+              <button id="startRunButton" class="primary-btn" type="button" disabled>런 시작</button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="side-panel">
+          <section>
+            <p class="eyebrow">그릇</p>
+            <div id="weaponCard" class="info-card empty">무기를 선택하세요.</div>
+          </section>
+
+          <section>
+            <div class="section-row">
+              <p class="eyebrow">기억 슬롯</p>
+              <span id="clarityHint">선명도</span>
+            </div>
+            <div id="memorySlots" class="slot-stack"></div>
+          </section>
+
+          <section>
+            <p class="eyebrow">잔향</p>
+            <div id="echoList" class="echo-list empty">아직 남은 잔향이 없습니다.</div>
+          </section>
+
+          <section>
+            <p class="eyebrow">전투 기록</p>
+            <div id="combatLog" class="combat-log"></div>
+          </section>
+        </aside>
+      </section>
+    </main>
+
+    <template id="questionTemplate">
+      <div class="panel question-panel">
+        <p class="eyebrow">문지기 처치</p>
+        <h2>레테가 물었다.</h2>
+        <div class="question-block">
+          <h3>가장 잃고 싶지 않은 기억은?</h3>
+          <div id="protectChoices" class="pill-row"></div>
+        </div>
+        <div class="question-block">
+          <h3>레테가 가져갈 것 같은 기억은?</h3>
+          <div id="predictChoices" class="pill-row"></div>
+        </div>
+        <button id="submitQuestionsButton" class="primary-btn" type="button" disabled>망각 확인</button>
+      </div>
+    </template>
+
+    <template id="resultTemplate">
+      <div class="panel result-panel">
+        <p class="eyebrow">망각 결과</p>
+        <h2 id="forgottenTitle">기억이 강으로 가라앉았다.</h2>
+        <div id="resultSummary" class="result-summary"></div>
+        <details id="detailTableWrap">
+          <summary>의존도 상세 보기</summary>
+          <div id="detailTable" class="detail-table"></div>
+        </details>
+        <div class="survey">
+          <h3>Q1. 얼마나 아쉬웠나?</h3>
+          <div id="sadnessScale" class="scale-row"></div>
+          <h3>Q2. 얼마나 납득됐나?</h3>
+          <div id="fairnessScale" class="scale-row"></div>
+        </div>
+        <div class="button-row">
+          <button id="downloadLogButton" class="secondary-btn" type="button">JSON 로그 다운로드</button>
+          <button id="restartButton" class="primary-btn" type="button">다시 테스트</button>
+        </div>
+      </div>
+    </template>
+
+    <script src="src/game.js"></script>
+  </body>
+</html>
