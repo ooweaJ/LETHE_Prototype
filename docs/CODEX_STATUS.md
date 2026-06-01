@@ -28,7 +28,8 @@ Last updated: 2026-06-02
 - Q1/Q2 survey plus Q3 memory-name recall free response.
 - JSON log download with selected/predicted/deleted memory names and deletion weights.
 - Browser QA fast mode via `?qa=fast` for result-screen and JSON payload verification.
-- OpenAI planning-review fallback via `npm run review:openai` and `npm run review:openai:dry`.
+- Codex CLI planning-review fallback via `npm run review:codex` and `npm run review:codex:dry`.
+- OpenAI API planning-review fallback via `npm run review:openai` and `npm run review:openai:dry`.
 - v0.3 combat-readability polish:
   - floating memory names and damage numbers,
   - hit sparks and projectile trails,
@@ -102,6 +103,7 @@ npm run ai:sweep
 - Claude verdict: `ITERATE_BEFORE_TEST`.
 - v0.2 scope: timing, deletion distribution, echo default, clearer feedback, JSON logs, human-test recall question.
 - A v0.3/version-up Claude prompt exists, but actual Claude execution still requires local Claude Code login.
+- Codex CLI can write planning responses to `docs/review_responses/YYYY-MM-DD-codex.md` through `npm run review:codex`.
 - OpenAI fallback automation exists, but actual GPT review requires `OPENAI_API_KEY` in the environment or local `.env`.
 - Human testing is intentionally deferred until combat spectacle and LETHE-system readability feel stronger.
 

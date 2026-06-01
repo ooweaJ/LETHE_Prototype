@@ -15,7 +15,8 @@ docs/review_prompts/YYYY-MM-DD.md
 - GPT는 우선순위, 구현 범위, 테스트 기준을 묻는 데 쓴다.
 - Claude는 감정선, 문구, 플레이어 경험을 묻는 데 쓴다.
 - 둘 다에게 무조건 보낼 필요는 없다.
-- Claude Code가 로그인/키체인 문제로 막히면 `npm run review:openai`로 같은 프롬프트를 OpenAI API에 보낸다.
+- Claude Code가 로그인/키체인 문제로 막히면 우선 `npm run review:codex`로 Codex CLI에 같은 프롬프트를 보낸다.
+- API key를 명시적으로 쓰는 fallback이 필요할 때만 `npm run review:openai`를 쓴다.
 
 ## 자동 호출
 
@@ -29,10 +30,18 @@ npm run review:claude
 OpenAI API:
 
 ```bash
+npm run review:codex:dry
+npm run review:codex
+```
+
+OpenAI API:
+
+```bash
 npm run review:openai:dry
 npm run review:openai
 ```
 
+Codex CLI는 ChatGPT/Codex 로그인 세션을 사용한다. 답변은 `docs/review_responses/YYYY-MM-DD-codex.md`에 저장된다.
 OpenAI API 호출에는 `OPENAI_API_KEY`가 필요하다. 로컬 `.env`에 넣어도 되며 `.env`는 Git에 포함하지 않는다.
 
 ## 권장 답변 형식

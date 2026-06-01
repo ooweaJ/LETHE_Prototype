@@ -111,9 +111,33 @@ docs/review_responses/YYYY-MM-DD-claude.md
 
 Claude is called with tools disabled, so it should only answer the planning prompt. Codex remains responsible for file edits, tests, reports, commits, and pushes.
 
+## Codex CLI Review Fallback
+
+Use this when the user wants a GPT/Codex terminal answer without manually setting an OpenAI API key.
+
+Dry-run:
+
+```powershell
+npm run review:codex:dry
+```
+
+Actual review:
+
+```powershell
+npm run review:codex
+```
+
+The script reads the latest dated file in `docs/review_prompts/` and writes the final Codex message to:
+
+```text
+docs/review_responses/YYYY-MM-DD-codex.md
+```
+
+It calls `codex exec` in read-only mode with approvals disabled, so it should not edit files. It uses the local Codex CLI login/session and any applicable ChatGPT/Codex plan limits. Set `CODEX_REVIEW_MODEL` to override the model.
+
 ## OpenAI Review Fallback
 
-If Claude Code is installed but blocked by login, OAuth, or keychain state, use the OpenAI API fallback.
+If Claude Code and Codex CLI are blocked or the user explicitly wants API execution, use the OpenAI API fallback.
 
 Dry-run:
 
