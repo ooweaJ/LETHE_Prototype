@@ -45,7 +45,7 @@ npm run alpha:quick
 파라미터 직접 지정:
 
 ```bash
-node src/run_alpha.js --runs 1000 --stages 2 --seed 20260601 --echo 0.60 --ui 0.62 --out outputs/my_test
+node src/run_alpha.js --runs 1000 --stages 2 --seed 20260601 --echo 0.50 --ui 0.78 --out outputs/my_test
 ```
 
 스윕 테스트:
@@ -63,13 +63,13 @@ npm run sweep
 | `--runs` | 가상 플레이 수 | 1000 이상 |
 | `--stages` | 한 런의 망각 반복 수 | 프로토타입 1~2, 풀게임 가정 3 |
 | `--echo` | 잔향 강도 | 0.50~0.70 |
-| `--ui` | 선명도/예고 UI 가시성 | 0.60 이상 목표 |
+| `--ui` | 선명도/예고 UI 가시성 | 0.78 기본값 |
 | `--bots` | 특정 봇만 실행 | 예: `focus_burst,balanced_web` |
 
 예시:
 
 ```bash
-node src/run_alpha.js --runs 2000 --stages 3 --echo 0.55 --ui 0.70 --bots focus_burst,balanced_web,echo_pivot --out outputs/tuning_055
+node src/run_alpha.js --runs 2000 --stages 3 --echo 0.50 --ui 0.78 --bots focus_burst,balanced_web,echo_pivot --out outputs/tuning_050
 ```
 
 ---
@@ -134,4 +134,3 @@ node src/run_alpha.js --runs 2000 --stages 3 --echo 0.55 --ui 0.70 --bots focus_
 - 이 시스템이 “게임이 재밌다”를 최종 판정하지는 못합니다.
 - 이 시스템은 “사람에게 보여주기 전에 명백한 밸런스/구조 결함이 있는가”를 찾는 도구입니다.
 - 최종 감정 검증은 반드시 8~12명 플레이테스트로 확인해야 합니다.
-

@@ -234,7 +234,7 @@ const SIM_DEFAULTS = {
   stages: 2,
   seed: '20260601',
   echoPower: 0.50,
-  uiClarity: 0.62,
+  uiClarity: 0.78,
   replacementOffer: true,
   enableHumanEmotionProxy: true,
 };

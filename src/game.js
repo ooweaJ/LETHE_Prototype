@@ -145,9 +145,9 @@ const enemyTypes = {
 };
 
 const experiment = {
-  version: "v0.3",
+  version: "v0.4",
   echoPower: 0.5,
-  uiClarity: 0.62,
+  uiClarity: 0.78,
   bossSpawnTimeSec: 540,
   bossHp: 1750,
   qaFastMode: new URLSearchParams(window.location.search).get("qa") === "fast",
@@ -865,6 +865,7 @@ function forgetMostDependent() {
   forgotten.forgotten = true;
   state.forgotten = forgotten.id;
   applyEcho(forgotten.id);
+  renderEchoes();
   logEvent("memory_forgotten", {
     forgotten: forgotten.id,
     forgottenName: forgotten.name,
@@ -875,6 +876,7 @@ function forgetMostDependent() {
     questions: state.questions,
     questionNames: questionNames(),
     echo: state.echo,
+    echoTransformation: echoTransformationLog(forgotten.id),
   });
 }
 
@@ -967,10 +969,10 @@ function showResultOverlay() {
     : `예측 보류: ${forgotten.name} 기억이 사라졌습니다.`;
   overlay.querySelector("#forgottenTitle").textContent = `${forgotten.name} 기억이 망각되었습니다.`;
   overlay.querySelector("#resultSummary").innerHTML = `
-    <div class="result-card"><strong>사라진 기억</strong><br>${forgotten.name}: ${forgotten.desc}</div>
+    <div class="result-card loss-card"><strong>사라진 행동</strong><br>${forgotten.name} 자동 발동이 멈춥니다.<br><small>${forgotten.desc}</small></div>
     <div class="result-card"><strong>예측 결과</strong><br>${predictionText}</div>
     <div class="result-card"><strong>삭제 weight</strong><br>${deletionWeightText()}</div>
-    <div class="result-card"><strong>남은 잔향</strong><br>${forgotten.echo}<br><small>이번 실험 echo 배율: ${Math.round(experiment.echoPower * 100)}%</small></div>
+    ${echoTransformationHtml(forgotten)}
     <div class="result-card"><strong>이어지는 방향</strong><br>${forgotten.direction}</div>
   `;
   overlay.querySelector("#detailTable").innerHTML = dependencyTableHtml();
@@ -1017,6 +1019,59 @@ function dependencyWeights() {
     };
   });
   return weights;
+}
+
+function echoTransformationHtml(memory) {
+  const transform = echoTransformationLog(memory.id);
+  const badges = transform.stats.map((stat) => `<span>${stat}</span>`).join("");
+  return `
+    <div class="result-card echo-transform-card">
+      <strong>잔향 변형</strong>
+      <p>${transform.summary}</p>
+      <div class="echo-badges">${badges}</div>
+      <small>이번 실험 echo 배율: ${Math.round(experiment.echoPower * 100)}%</small>
+    </div>
+  `;
+}
+
+function echoTransformationLog(memoryId) {
+  const map = {
+    execution_flash: {
+      lost: "가장 위협적인 적을 찍어 누르던 백색 강타",
+      summary: "큰 한 방은 사라지고, 남은 모든 공격에 치명적인 섬광의 흔적이 붙습니다.",
+      stats: ["치명률", "치명 피해", "폭딜 운용"],
+    },
+    hungry_blades: {
+      lost: "가까운 적을 계속 긁던 칼무리 오라",
+      summary: "상시 오라는 사라지고, 몸에 남은 칼날 감각이 공격 속도와 지속 피해를 밀어줍니다.",
+      stats: ["공격 속도", "지속 피해", "근접 유지"],
+    },
+    stalker_oath: {
+      lost: "멀리 있는 표적을 쫓던 유도 투사체",
+      summary: "추적 발사는 사라지고, 남은 투사체 계열이 더 많이, 더 빠르게 날아갑니다.",
+      stats: ["투사체 수", "탄속", "카이팅"],
+    },
+    shatter_ripple: {
+      lost: "주변을 밀어내던 충격파",
+      summary: "즉발 파문은 사라지고, 몸 주변의 전투 범위와 버티는 힘이 넓어집니다.",
+      stats: ["범위", "넉백", "피해 감소"],
+    },
+    blood_reflection: {
+      lost: "기본 공격마다 되돌아오던 붉은 추가타",
+      summary: "반사 추가타는 사라지고, 평타 빌드 전체에 피의 반동이 얇게 남습니다.",
+      stats: ["추가타 확률", "온힛 피해", "빠른 타격"],
+    },
+    stopped_second: {
+      lost: "주변 시간을 늦추던 시간 균열",
+      summary: "즉시 둔화 장은 사라지고, 남은 기억들이 더 짧은 호흡으로 돌아옵니다.",
+      stats: ["쿨다운", "둔화 지속", "제어 운용"],
+    },
+  };
+  return map[memoryId] || {
+    lost: "사라진 기억",
+    summary: memories[memoryId]?.echo || "잔향이 남았습니다.",
+    stats: [memories[memoryId]?.role || "잔향"],
+  };
 }
 
 function deletionWeightText() {
@@ -1070,6 +1125,7 @@ function collectLogPayload() {
   state.logs.deletionWeights = dependencyWeights();
   state.logs.echo = state.echo;
   state.logs.echoPower = experiment.echoPower;
+  state.logs.echoTransformation = echoTransformationLog(state.forgotten);
   return state.logs;
 }
 

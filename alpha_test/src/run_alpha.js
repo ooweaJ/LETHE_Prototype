@@ -33,7 +33,7 @@ function main() {
     stages: toNum(a.stages, 2),
     seed: a.seed || '20260601',
     echoPower: toNum(a.echo, 0.50),
-    uiClarity: toNum(a.ui, 0.62),
+    uiClarity: toNum(a.ui, 0.78),
     replacementOffer: a.replacement === 'false' ? false : true,
     enableHumanEmotionProxy: a.emotion === 'false' ? false : true,
     botIds: a.bots ? String(a.bots).split(',').map((s) => s.trim()).filter(Boolean) : undefined,

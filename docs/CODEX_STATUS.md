@@ -4,7 +4,7 @@ Last updated: 2026-06-02
 
 ## Current Build
 
-- Project: LETHE HTML Alpha v0.3 pre-human-test polish candidate.
+- Project: LETHE HTML Alpha v0.4 human-test candidate.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: pre-human-test polish for the forgetting loop. No broad content expansion yet.
@@ -35,6 +35,10 @@ Last updated: 2026-06-02
   - hit sparks and projectile trails,
   - boss spawn/phase impact feedback,
   - `레테의 시선` dependency tag and dependency percent in memory slots.
+- v0.4 human-test readiness polish:
+  - result screen separates lost action from remaining echo transformation,
+  - JSON payload includes `echoTransformation`,
+  - default UI clarity raised to `0.78` to match the stronger dependency/forgetting UI.
 - AI alpha test tool under `alpha_test/`.
 - Codex/GPT/Claude workflow docs.
 - Markdown daily reports, generated HTML reports, and Discord report delivery.
@@ -54,20 +58,24 @@ Result:
 - Verdict: `GO_CANDIDATE`
 - Playability: `AI 기준 사람 테스트 진입 가능`
 - Risk Level: `LOW`
-- Alpha Fun Score: `0.7737`
-- Regret proxy: `76.3%`
-- Irritation proxy: `1.1%`
-- Prediction match: `76.3%`
-- Immediate quit: `0.8%`
-- Restart intent: `70.0%`
+- Alpha Fun Score: `0.8261`
+- Regret proxy: `85.6%`
+- Irritation proxy: `0.4%`
+- Prediction match: `85.8%`
+- Immediate quit: `0.7%`
+- Restart intent: `70.9%`
 - First forgetting time: `9.00 min`
 - Post-forgetting power drop: `29.6%`
 - Recovery after replacement: `96.6%`
 - Max single memory deletion share: `34.1%`
 
+Heavy check:
+
+- `npm run ai:test:heavy`: `GO_CANDIDATE`, Alpha Fun Score `0.8369`, regret `87.6%`, irritation `0.3%`, prediction `87.7%`.
+
 Remaining note:
 
-- Power drop is just under the 30% target. It is close enough for human-test candidate status, but v0.3 should watch whether the loss feels too safe.
+- Power drop is still just under the 30% target (`29.4-29.6%`). It is the only soft warning left and should be observed in human testing rather than over-tuned now.
 
 ## Latest Sweep Note
 
@@ -78,17 +86,17 @@ npm run ai:sweep
 ```
 
 - Best score in this sweep: `echo=0.40`, `ui=0.78`, score `0.8424`, verdict `ITERATE`.
-- Best `GO_CANDIDATE` around the current preset: `echo=0.50`, `ui=0.78`, score `0.8245`.
-- Current implementation stays at `echo=0.50`, `ui=0.62` because that matches the GPT/Claude v0.2 instruction and keeps the tuning narrow.
+- Best current human-test candidate: `echo=0.50`, `ui=0.78`, score `0.8245`.
+- Current implementation uses `echo=0.50`, `ui=0.78` because v0.4 now has stronger dependency/forgetting UI and passes the main AI gates.
 
 ## Open Technical Notes
 
 - Browser visual verification passed in this session:
-  - v0.3 labels load correctly,
+  - v0.4 labels load correctly,
   - `?qa=fast` reaches the question/result flow,
   - result panel fits without internal scroll at desktop QA viewport,
-  - JSON payload includes selected memory names, predicted/protected names, forgotten memory name, deletion weights, survey, echo, and experiment fields,
-  - payload experiment version is `v0.3`.
+  - JSON payload includes selected memory names, predicted/protected names, forgotten memory name, deletion weights, survey, echo, experiment, and echo transformation fields,
+  - payload experiment version is `v0.4`.
 - The game is static HTML and can be run by opening `index.html`.
 - Default browser boss/forgetting timing now matches the 9-minute v0.2 target; `?qa=fast` is only for QA.
 - Generated AI test outputs are ignored by git under `alpha_test/outputs/`.
@@ -109,6 +117,6 @@ npm run ai:sweep
 
 ## Next Codex Tasks
 
-- Continue improving combat spectacle before human testing.
-- Make echo transformation more readable after forgetting.
-- Use `docs/HUMAN_PLAYTEST_GUIDE.md` only after the prototype feels worth showing to 5-8 players.
+- Human playtest is now the next major validation step.
+- Use `docs/HUMAN_PLAYTEST_GUIDE.md` for a 5-8 player test focused on regret vs irritation.
+- During testing, watch whether the 29.4-29.6% power drop feels slightly too safe.

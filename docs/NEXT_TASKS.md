@@ -1,12 +1,12 @@
 # Next Tasks
 
-현재 단계는 v0.3 pre-human-test polish 시작 상태다. 사람 테스트는 바로 진행하지 않고, 전투 연출과 LETHE 고유 시스템 체감이 더 분명해진 프로토타입을 만든 뒤 진행한다.
+현재 단계는 v0.4 human-test candidate 상태다. AI 기준으로는 사람 테스트 진입 가능하며, 다음 큰 판단은 실제 플레이어 5-8명 반응이다.
 
 ## Current Verdict
 
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude verdict: `ITERATE_BEFORE_TEST`.
-- Codex implementation result: `GO_CANDIDATE` from `npm run ai:test`.
+- Codex implementation result: `GO_CANDIDATE` from `npm run ai:test` and `npm run ai:test:heavy`.
 
 ## v0.2 Done
 
@@ -29,17 +29,26 @@
 - [x] 브라우저 `?qa=fast`에서 v0.3 질문/결과/JSON payload 회귀 QA를 통과했다.
 - [x] OpenAI 기획 검토 fallback 명령을 추가했다.
 
+## v0.4 Done
+
+- [x] 브라우저 표기를 v0.4로 올렸다.
+- [x] 결과 화면에서 `사라진 행동`과 `잔향 변형`을 분리해 보여준다.
+- [x] JSON payload에 `echoTransformation`을 추가했다.
+- [x] 기본 AI/UI 선명도 값을 `ui=0.78`로 올렸다.
+- [x] 브라우저 `?qa=fast`에서 v0.4 결과 화면과 JSON payload를 검증했다.
+- [x] `npm run ai:test:heavy` 5000런/3스테이지에서도 `GO_CANDIDATE`를 확인했다.
+
 ## Latest AI Criteria
 
 - [x] Verdict: `GO_CANDIDATE`.
-- [ ] Alpha Fun Score: `0.89+`. 현재 `0.7737`; 감정 프록시가 보수적으로 낮아졌으므로 사람 테스트에서 실제 반응 확인 필요.
+- [ ] Alpha Fun Score: `0.89+`. 현재 `0.8261`; 사람 테스트 전 기준으로는 충분하지만 목표치에는 아직 못 미친다.
 - [x] 첫 망각 시간: `9.00 min`.
-- [ ] Regret proxy: 목표 `85%+`, 현재 `76.3%`.
-- [x] Irritation proxy: 목표 `3%` 이하, 현재 `1.1%`.
-- [x] Restart intent: 목표 `65%+`, 현재 `70.0%`.
+- [x] Regret proxy: 목표 `85%+`, 현재 `85.6%`.
+- [x] Irritation proxy: 목표 `3%` 이하, 현재 `0.4%`.
+- [x] Restart intent: 목표 `65%+`, 현재 `70.9%`.
 - [ ] Post-forgetting power drop: 목표 `30-40%`, 현재 `29.6%`.
 - [x] Recovery after replacement: 목표 `90%+`, 현재 `96.6%`.
-- [x] Prediction match: 목표 `75-90%`, 현재 `76.3%`.
+- [x] Prediction match: 목표 `75-90%`, 현재 `85.8%`.
 - [x] `처형자의 섬광` deletion share: 목표 `25-35%`, 현재 약 `28.0%`.
 
 ## Next Codex Tasks
@@ -48,10 +57,11 @@
 - [x] 결과 화면에서 텍스트가 겹치지 않는지 확인한다.
 - [x] JSON 다운로드에 새 필드가 들어가는지 실제 브라우저에서 확인한다.
 - [x] 5-8명용 human playtest 가이드를 작성한다.
-- [ ] 사람 테스트 전 전투 연출을 더 화려하게 만든다.
+- [x] 사람 테스트 전 전투 연출을 더 화려하게 만든다.
 - [x] 사람 테스트 전 기억 의존도/망각 위험이 플레이 중 더 분명하게 보이게 만든다.
-- [ ] 사람 테스트 전 잔향 시스템이 결과 이후 더 분명하게 보이게 만든다.
-- [ ] 플레이테스트 후 감정 반응을 기준으로 v0.3 방향을 결정한다.
+- [x] 사람 테스트 전 잔향 시스템이 결과 이후 더 분명하게 보이게 만든다.
+- [ ] 5-8명 사람 테스트를 진행한다.
+- [ ] 플레이테스트 후 감정 반응을 기준으로 다음 방향을 결정한다.
 
 ## Pre-Human-Test Polish Gate
 

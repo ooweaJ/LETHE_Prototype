@@ -503,6 +503,70 @@
 <li>실행: GPT 호출 스크립트와 v0.3 전투 가시성 개선을 추가하고 브라우저 QA로 회귀를 확인했다.</li>
 <li>결과: 외부 기획 검토는 키/로그인만 남았고, v0.3 프로토타입은 기억 의존도와 망각 위험이 더 눈에 띄는 상태가 됐다.</li>
 </ul>
+<p>---</p>
+<h1>v0.4 사람 테스트 후보 보고</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>LETHE HTML alpha는 v0.4 human-test candidate 상태다.</li>
+<li>AI 1000런과 heavy 5000런/3스테이지 모두 <code>GO_CANDIDATE</code>다.</li>
+<li>다음 큰 단계는 더 많은 기능 추가가 아니라 5-8명 사람 테스트다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>브라우저 표기를 <code>v0.4</code>로 올렸다.</li>
+<li>기본 AI 테스트의 UI 선명도 값을 <code>ui=0.78</code>로 올렸다.</li>
+<li>결과 화면에서 <code>사라진 행동</code>과 <code>잔향 변형</code>을 분리했다.</li>
+<li>잔향 변형 카드에 요약 문장과 stat badge를 추가했다.</li>
+<li>JSON payload에 <code>echoTransformation</code>을 추가했다.</li>
+<li>AI 테스트 기본 명령과 alpha test 문서 예시를 <code>echo=0.50</code>, <code>ui=0.78</code> 기준으로 맞췄다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>node --check src/game.js</code>: 통과.</li>
+<li><code>node --check alpha_test/src/config.js</code>: 통과.</li>
+<li><code>node --check alpha_test/src/run_alpha.js</code>: 통과.</li>
+<li><code>npm run ai:test:quick</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score <code>0.8190</code>.</li>
+<li><code>npm run ai:test</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score <code>0.8261</code>, regret <code>85.6%</code>, irritation <code>0.4%</code>, prediction <code>85.8%</code>.</li>
+<li><code>npm run ai:test:heavy</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score <code>0.8369</code>, regret <code>87.6%</code>, irritation <code>0.3%</code>, prediction <code>87.7%</code>.</li>
+<li><code>npm run ai:sweep</code>: <code>echo=0.50</code>, <code>ui=0.78</code>이 현재 가장 안정적인 <code>GO_CANDIDATE</code> 프리셋임을 확인했다.</li>
+<li>브라우저 QA:</li>
+<li><code>HTML Alpha Prototype v0.4</code> 표시 확인.</li>
+<li><code>?qa=fast</code>에서 질문 화면과 결과 화면까지 도달했다.</li>
+<li><code>잔향 변형</code> 카드와 echo badge가 표시됐다.</li>
+<li>결과 패널은 내부 스크롤 없이 표시됐다.</li>
+<li>JSON payload에 <code>echoTransformation</code>, <code>uiClarity: 0.78</code>, <code>experiment.version: v0.4</code>가 들어갔다.</li>
+</ul>
+<h2>4. 결정 사항</h2>
+<ul>
+<li>지금부터는 Codex가 더 큰 콘텐츠를 추가하기보다 사람 테스트를 위한 안정화 상태로 본다.</li>
+<li>상점, 메타 진행, 최종 보스, 기억 추가, 다중 지역 구조는 여전히 만들지 않는다.</li>
+<li>남은 <code>29.4-29.6%</code> power drop soft warning은 코드로 과보정하기보다 사람 테스트에서 실제 체감으로 확인한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>Alpha Fun Score는 올랐지만 목표 <code>0.89+</code>에는 아직 못 미친다.</li>
+<li>망각 직후 전투력 딥은 목표 30%보다 아주 조금 낮다.</li>
+<li>AI 지표가 좋아져도 실제 사람이 잔향을 “상실 후 변형”으로 느낄지는 테스트가 필요하다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<ul>
+<li>외부 기획 검토 없이도 v0.4는 사람 테스트 후보까지 도달했다.</li>
+<li>Claude/GPT에게 다음에 물을 질문은 “사람 테스트 결과를 어떻게 해석해 v0.5 방향을 잡을지”다.</li>
+<li>Codex CLI fallback은 준비되어 있지만, 최종 기획 판단은 사람 테스트 후 GPT/Claude에 다시 묻는 것이 좋다.</li>
+</ul>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li><code>docs/HUMAN_PLAYTEST_GUIDE.md</code> 기준으로 5-8명 테스트를 진행한다.</li>
+<li>JSON 로그와 관찰 메모를 분리해서 수집한다.</li>
+<li>테스트 후 regret/irritation/neutral/unclear 비율과 발화 내용을 요약한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: v0.3는 전투 가시성은 좋아졌지만, 잔향이 단순 보상처럼 보일 위험이 있었다.</li>
+<li>방향: 결과 화면에서 “잃은 행동”과 “남은 변형”을 분리해 LETHE의 핵심 감정을 명확히 한다.</li>
+<li>실행: v0.4 결과 화면, 로그 payload, AI 테스트 기본값, 브라우저 QA를 한 번에 맞췄다.</li>
+<li>결과: AI 기준 주요 게이트를 통과했고, 이제 실제 사람 테스트만 남은 후보 상태가 됐다.</li>
+</ul>
   </main>
 </body>
 </html>

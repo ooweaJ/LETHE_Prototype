@@ -39,7 +39,7 @@ alpha_test/
 기본 명령어:
 
 ```bash
-node alpha_test/src/run_alpha.js --runs 1000 --stages 2 --seed 20260601 --echo 0.60 --ui 0.62 --out alpha_test/outputs/default
+node alpha_test/src/run_alpha.js --runs 1000 --stages 2 --seed 20260601 --echo 0.50 --ui 0.78 --out alpha_test/outputs/default
 node alpha_test/src/sweep.js --runs 300 --stages 2 --echo 0.40,0.50,0.60,0.70,0.80 --ui 0.45,0.62,0.78 --out alpha_test/outputs/sweep
 ```
 
