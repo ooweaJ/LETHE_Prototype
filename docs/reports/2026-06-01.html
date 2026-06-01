@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>LETHE Development Report - 2026-06-01</title>
+  <title>LETHE 개발 보고서 - 2026-06-01</title>
   <style>
     :root {
       color-scheme: light;
@@ -116,159 +116,250 @@
 <body>
   <header>
     <div class="header-inner">
-      <h1>LETHE Development Report - 2026-06-01</h1>
+      <h1>LETHE 개발 보고서 - 2026-06-01</h1>
       <p class="meta">Generated from 2026-06-01.md</p>
     </div>
   </header>
   <main>
-    <h1>LETHE Development Report - 2026-06-01</h1>
+    <h1>LETHE 개발 보고서 - 2026-06-01</h1>
 <h2>Executive Summary</h2>
 <ul>
-<li>Today: Built the first playable HTML alpha prototype, integrated the AI alpha test system, pushed the project to GitHub, and added a Codex-GPT documentation workflow.</li>
-<li>Build status: v0.1 is executable as static HTML and can validate one full forgetting loop.</li>
-<li>Key result: AI proxy testing shows the core forgetting loop has potential, but v0.2 should tune timing and deletion bias before human testing.</li>
-<li>Next decision: Ask GPT whether to tune first forgetting time, <code>처형자의 섬광</code> deletion bias, and echo default strength.</li>
+<li>오늘 한 일: LETHE HTML 알파 프로토타입 v0.1을 구현하고, AI 알파테스트 시스템을 통합했으며, GitHub 레포에 초기 버전을 push했다. 이후 Codex-GPT 협업 문서와 포트폴리오용 보고서 생성 구조까지 추가했다.</li>
+<li>현재 상태: 브라우저에서 실행 가능한 정적 HTML 프로토타입이며, “보스 처치 → 예측 질문 → 의존도 기반 망각 → 잔향 획득 → Q1/Q2 설문 → JSON 로그 다운로드”까지 한 번의 코어 루프가 동작한다.</li>
+<li>핵심 결과: AI 테스트 기준으로 망각 루프는 가능성이 있다. 다만 사람 테스트 전에 첫 망각 타이밍, <code>처형자의 섬광</code> 삭제 쏠림, 잔향 강도를 기획적으로 판단해야 한다.</li>
+<li>다음 판단: GPT에게 v0.2의 우선순위를 물어보고, Codex는 그 결과에 따라 구현/테스트/보고서 갱신을 진행한다.</li>
 </ul>
-<h2>GPT Handoff</h2>
-<p>GPT에게 반드시 전달할 내용이다.</p>
-<h3>Current State</h3>
+<h2>오늘 만든 것</h2>
+<h3>1. HTML 알파 프로토타입 v0.1</h3>
+<p>구현 파일:</p>
 <ul>
-<li>LETHE HTML alpha v0.1 exists and runs in browser.</li>
-<li>The prototype implements weapons, memories, enemies, boss phases, dependency-based forgetting, echo rewards, post-boss questions, Q1/Q2 survey, and JSON log download.</li>
-<li>AI alpha test tooling is integrated under <code>alpha_test/</code>.</li>
-<li>Repository is pushed to <code>https://github.com/ooweaJ/LETHE_Prototype.git</code>.</li>
+<li><code>index.html</code></li>
+<li><code>style.css</code></li>
+<li><code>src/game.js</code></li>
 </ul>
-<h3>Latest Evidence</h3>
+<p>구현 기능:</p>
 <ul>
-<li>Command: <code>npm run ai:test</code></li>
+<li>무기 2종: 절단쌍검, 장송대검</li>
+<li>기억 6종 중 3슬롯 선택</li>
+<li>자동 기본 공격</li>
+<li>자동 기억 발동</li>
+<li>적 4종</li>
+<li>보스 1종 3페이즈: 기억을 씹는 자</li>
+<li>의존도 기반 망각</li>
+<li>망각 시 잔향 스탯 획득</li>
+<li>보스 처치 후 질문 UI</li>
+<li>망각 결과 화면</li>
+<li>Q1/Q2 설문</li>
+<li>JSON 로그 다운로드</li>
+</ul>
+<p>제외한 기능:</p>
+<ul>
+<li>메타 진행</li>
+<li>상점</li>
+<li>최종보스</li>
+<li>기억 12종 이상</li>
+<li>다영역 런 구조</li>
+</ul>
+<h3>2. AI 알파테스트 시스템 통합</h3>
+<p><code>LETHE_alpha_ai_test_system_v01.zip</code>을 <code>alpha_test/</code>로 통합했다.</p>
+<p>목적:</p>
+<ul>
+<li>실제 사람 감정을 대체하는 것이 아니라, 사람 테스트 전에 구조적 위험을 거르는 사전 필터로 사용한다.</li>
+<li>“망각됐을 때 아쉬운가, 짜증나는가”를 봇 기반 프록시 지표로 확인한다.</li>
+</ul>
+<p>실행 명령:</p>
+<pre><code>npm run ai:test
+npm run ai:test:quick
+npm run ai:sweep</code></pre>
+<h3>3. GitHub 레포 정리 및 push</h3>
+<p>레포:</p>
+<ul>
+<li><code>https://github.com/ooweaJ/LETHE_Prototype.git</code></li>
+</ul>
+<p>오늘 push된 주요 커밋:</p>
+<ul>
+<li><code>810c567 Initial LETHE HTML alpha prototype</code></li>
+<li><code>7525441 Add development workflow docs</code></li>
+<li><code>e2fadec Add report generation workflow</code></li>
+</ul>
+<p>Git 작성자 설정:</p>
+<ul>
+<li><code>ooweaJ &lt;121000013+ooweaJ@users.noreply.github.com&gt;</code></li>
+</ul>
+<h3>4. Codex-GPT 협업 문서 구조</h3>
+<p>추가 문서:</p>
+<ul>
+<li><code>docs/WORKFLOW.md</code></li>
+<li><code>docs/CODEX_STATUS.md</code></li>
+<li><code>docs/GPT_REVIEW_PROMPT.md</code></li>
+<li><code>docs/NEXT_TASKS.md</code></li>
+<li><code>docs/DECISIONS.md</code></li>
+<li><code>docs/PLAYTEST_NOTES.md</code></li>
+<li><code>docs/devlog/2026-06-01.md</code></li>
+</ul>
+<p>운영 방향:</p>
+<ul>
+<li>Codex는 구현, 테스트, Git, 상태 보고를 담당한다.</li>
+<li>GPT는 기획 검토, 우선순위 결정, 테스트 결과 해석을 담당한다.</li>
+<li>Codex는 작업 후 상태 보고서를 갱신하고, GPT에게 넘길 질문을 명확히 남긴다.</li>
+</ul>
+<h3>5. 개발 보고서 생성 구조</h3>
+<p>추가 파일:</p>
+<ul>
+<li><code>docs/reports/report-template.md</code></li>
+<li><code>docs/reports/2026-06-01.md</code></li>
+<li><code>docs/reports/2026-06-01.html</code></li>
+<li><code>scripts/build_report.js</code></li>
+</ul>
+<p>실행 명령:</p>
+<pre><code>npm run report</code></pre>
+<p>방향:</p>
+<ul>
+<li>보고서는 Markdown을 먼저 작성한다.</li>
+<li>HTML은 Markdown을 기준으로 자동 생성한다.</li>
+<li>토큰이 끊겨도 Markdown 원본을 기준으로 이어갈 수 있게 한다.</li>
+</ul>
+<h3>6. 프로젝트 에이전트 규칙</h3>
+<p>루트에 <code>AGENTS.md</code>를 추가했다.</p>
+<p>포함한 규칙:</p>
+<ul>
+<li>구현 전 현재 문서/파일 확인</li>
+<li>변경 후 테스트 실행</li>
+<li><code>CODEX_STATUS.md</code>, devlog, report 갱신</li>
+<li>보고서 필수 8항목 유지</li>
+<li>GPT에게 넘길 내용 명시</li>
+<li>스코프 밖 기능 추가 금지</li>
+</ul>
+<h2>테스트 결과</h2>
+<h3>실행한 명령</h3>
+<pre><code>node --check src/game.js
+npm run ai:test
+npm run ai:sweep
+npm run report</code></pre>
+<h3>AI 기본 테스트 결과</h3>
+<ul>
 <li>Verdict: <code>ITERATE</code></li>
 <li>Playability: <code>튜닝 후 재검증</code></li>
 <li>Risk Level: <code>MEDIUM</code></li>
 <li>Alpha Fun Score: <code>0.8647</code></li>
-<li>Regret: <code>92.7%</code></li>
-<li>Irritation: <code>0.6%</code></li>
-<li>Prediction match: <code>92.7%</code></li>
-<li>Immediate quit: <code>0.9%</code></li>
-<li>Restart intent: <code>70.7%</code></li>
-<li>Power drop after forgetting: <code>29.9%</code></li>
-<li>Recovery after replacement: <code>95.9%</code></li>
-<li>First forgetting time: <code>6.83 min</code></li>
-<li>Main deletion bias: <code>처형자의 섬광</code> at <code>46.4%</code></li>
-<li>Sweep best setting: <code>echo=0.5</code>, <code>ui=0.62</code>, <code>GO_CANDIDATE</code>, score <code>0.9053</code></li>
+<li>아쉬움 분면: <code>92.7%</code></li>
+<li>짜증 분면: <code>0.6%</code></li>
+<li>예측 일치율: <code>92.7%</code></li>
+<li>삭제 직후 즉시 종료율: <code>0.9%</code></li>
+<li>런 재시작 의향: <code>70.7%</code></li>
+<li>망각 직후 전투력 딥: <code>29.9%</code></li>
+<li>새 기억 후 회복률: <code>95.9%</code></li>
+<li>첫 망각 전 사용 시간: <code>6.83분</code></li>
 </ul>
-<h3>Questions For GPT</h3>
-<p>1. Should the first forgetting timing be delayed toward 8-10 minutes before human testing?</p>
-<p>2. Is <code>처형자의 섬광</code> deletion bias a useful emotional anchor or a balance issue to reduce?</p>
-<p>3. Should echo default strength move from <code>0.60</code> to <code>0.50</code> based on sweep results?</p>
-<p>4. Should v0.2 focus on stronger loss pain, better predictability, or post-loss pivot clarity?</p>
-<h3>Requested Output From GPT</h3>
+<h3>경고 지표</h3>
+<ul>
+<li>첫 망각 전 시간이 목표보다 짧다. 목표는 8~10분, 현재 평균은 6.83분이다.</li>
+<li><code>처형자의 섬광</code> 삭제율이 46.4%로 높다.</li>
+<li>망각 직후 전투력 딥이 29.9%로 목표 하한 30%에 약간 못 미친다.</li>
+</ul>
+<h3>스윕 결과</h3>
+<p>가장 좋은 후보:</p>
+<ul>
+<li><code>echo=0.5</code></li>
+<li><code>ui=0.62</code></li>
+<li>Verdict: <code>GO_CANDIDATE</code></li>
+<li>Alpha Fun Score: <code>0.9053</code></li>
+</ul>
+<p>해석:</p>
+<ul>
+<li>현재 기본값 <code>echo=0.60</code>보다 <code>echo=0.50</code>이 더 나은 후보일 수 있다.</li>
+<li>다만 AI 테스트는 사람 감정의 대체가 아니므로 GPT 기획 검토와 사람 테스트가 필요하다.</li>
+</ul>
+<h2>GPT에게 반드시 전달할 내용</h2>
+<h3>현재 상태</h3>
+<ul>
+<li>LETHE HTML alpha v0.1은 실행 가능하다.</li>
+<li>코어 루프는 구현됐다.</li>
+<li>AI 테스트 기준으로 망각 루프는 가능성이 있지만, 사람 테스트 전 튜닝 판단이 필요하다.</li>
+<li>메타 진행, 상점, 최종보스, 기억 확장은 아직 만들지 않았다.</li>
+</ul>
+<h3>GPT에게 물어볼 질문</h3>
+<p>1. 첫 망각 시간을 8~10분 쪽으로 늦겨야 하는가?</p>
+<p>2. <code>처형자의 섬광</code>이 자주 삭제되는 것을 게임의 감정적 중심으로 봐야 하는가, 아니면 밸런스 문제로 봐야 하는가?</p>
+<p>3. 잔향 기본 강도를 <code>0.60</code>에서 <code>0.50</code>으로 낮춰야 하는가?</p>
+<p>4. v0.2의 목표는 상실감 강화, 예측성 강화, 피벗 명확화 중 무엇이어야 하는가?</p>
+<p>5. 지금 사람 테스트로 넘겨도 되는가, 아니면 v0.2 튜닝 후 넘겨야 하는가?</p>
+<h3>GPT에게 요구할 출력</h3>
 <ul>
 <li>Verdict: <code>GO_TO_HUMAN_TEST</code> / <code>ITERATE_BEFORE_TEST</code> / <code>FIX_CORE</code></li>
-<li>Next 1-3 implementation tasks for Codex</li>
-<li>Test criteria for the next AI run</li>
-<li>Human playtest observation checklist</li>
-<li>Do-not-build list for the next round</li>
+<li>Codex가 구현할 다음 작업 1~3개</li>
+<li>다음 AI 테스트 성공 기준</li>
+<li>사람 플레이테스트 관찰 기준</li>
+<li>이번 라운드에서 만들지 말아야 할 것</li>
 </ul>
-<h2>Build Status</h2>
-<h3>Implemented</h3>
-<ul>
-<li>Static browser prototype: <code>index.html</code>, <code>style.css</code>, <code>src/game.js</code></li>
-<li>Two weapons: 절단쌍검, 장송대검</li>
-<li>Six memories with three active slots</li>
-<li>Auto basic attack and auto memory activation</li>
-<li>Four enemy types</li>
-<li>One boss with three phases</li>
-<li>Dependency-based forgetting</li>
-<li>Echo stat reward after forgetting</li>
-<li>Post-boss question UI</li>
-<li>Forgetting result screen</li>
-<li>Q1/Q2 survey</li>
-<li>JSON log download</li>
-<li>AI alpha test simulator and reports</li>
-<li>Codex-GPT workflow docs</li>
-</ul>
-<h3>Not Implemented</h3>
-<ul>
-<li>Meta progression</li>
-<li>Shop</li>
-<li>Final boss</li>
-<li>More than six memories</li>
-<li>Multi-region run structure</li>
-</ul>
-<h3>Known Limits</h3>
-<ul>
-<li>Browser visual verification was limited by unavailable in-app browser backend.</li>
-<li>AI Q1/Q2 is only a proxy and cannot replace human emotion testing.</li>
-<li>Combat tuning is prototype-grade and intentionally narrow.</li>
-<li>Current first forgetting timing may be too short for attachment.</li>
-</ul>
-<h2>Test Results</h2>
-<h3>Commands</h3>
-<pre><code>node --check src/game.js
-npm run ai:test
-npm run ai:sweep</code></pre>
-<h3>Summary</h3>
-<ul>
-<li>The JavaScript syntax check passed.</li>
-<li>The default AI run produced <code>ITERATE</code>.</li>
-<li>The core emotional proxy is strong: regret is high and irritation is low.</li>
-<li>The main blockers are timing, deletion distribution, and slightly weak post-forgetting power drop.</li>
-<li>Sweep suggests <code>echo=0.5</code>, <code>ui=0.62</code> as a better candidate than the current default.</li>
-</ul>
-<h3>Artifacts</h3>
-<ul>
-<li><code>alpha_test/outputs/default/summary.json</code></li>
-<li><code>alpha_test/outputs/default/alpha_summary.md</code></li>
-<li><code>alpha_test/outputs/default/alpha_report.html</code></li>
-<li><code>alpha_test/outputs/sweep/sweep_results.csv</code></li>
-<li><code>docs/CODEX_STATUS.md</code></li>
-</ul>
-<h2>Decisions Made</h2>
+<h2>오늘의 결정</h2>
 <table>
-<tr><th>Decision</th><th>Reason</th><th>Impact</th></tr>
-<tr><td>Keep v0.1 scoped to one forgetting loop</td><td>The first validation question is emotional response to loss</td><td>No shop, meta, final boss, or content expansion yet</td></tr>
-<tr><td>Treat AI Q1/Q2 as proxy data</td><td>Bots cannot determine real human emotion</td><td>Human testing remains required</td></tr>
-<tr><td>Split Codex and GPT roles</td><td>Implementation and planning need different feedback loops</td><td>Codex updates status, GPT decides priorities</td></tr>
-<tr><td>Record decisions and reports now</td><td>Later portfolio/devlog work needs evidence</td><td>Reports preserve problem-direction-action-result</td></tr>
+<tr><th>결정</th><th>이유</th><th>영향</th></tr>
+<tr><td>v0.1은 코어 망각 검증에만 집중한다</td><td>첫 검증 질문이 “아쉬운가, 짜증나는가”이기 때문이다</td><td>상점, 메타, 최종보스, 콘텐츠 확장은 보류</td></tr>
+<tr><td>AI Q1/Q2는 감정 프록시로만 본다</td><td>봇은 실제 상실감과 납득감을 느낄 수 없다</td><td>최종 판단은 사람 테스트로 확인</td></tr>
+<tr><td>Codex와 GPT 역할을 분리한다</td><td>구현/검증과 기획 판단은 다른 종류의 피드백이다</td><td>Codex는 실행, GPT는 우선순위 판단</td></tr>
+<tr><td>개발 보고서를 Markdown 먼저 작성한다</td><td>작업 중 토큰이 끊겨도 원본 기록이 남아야 한다</td><td>HTML 보고서는 명령어로 생성</td></tr>
+<tr><td>루트 <code>AGENTS.md</code>를 둔다</td><td>저장소를 다시 열어도 작업 규칙을 유지하기 위해서다</td><td>Codex가 프로젝트 규칙을 자동 참고 가능</td></tr>
 </table>
-<h2>Problems And Risks</h2>
+<h2>문제와 리스크</h2>
 <ul>
-<li>First forgetting arrives at 6.83 minutes, below the 8-10 minute target.</li>
-<li><code>처형자의 섬광</code> dominates deletion at 46.4%.</li>
-<li>Power drop after forgetting is 29.9%, just under the target lower bound.</li>
-<li>AI testing can overstate clarity because it reads modeled signals directly.</li>
-<li>The prototype needs at least one human playtest pass before design confidence.</li>
+<li>현재 전투는 검증용 단순 모델이다.</li>
+<li>브라우저 시각 검증은 제한적으로만 진행됐다.</li>
+<li>AI 테스트 수치는 사람 감정 검증을 대체하지 않는다.</li>
+<li>첫 망각 타이밍이 짧아 실제 플레이어가 기억에 충분히 애착을 갖지 못할 수 있다.</li>
+<li><code>처형자의 섬광</code> 삭제 쏠림이 의도된 감정 설계인지, 밸런스 문제인지 아직 판단이 필요하다.</li>
 </ul>
-<h2>Next Codex Tasks</h2>
+<h2>다음 Codex 작업</h2>
 <ul>
-<li>[ ] Send GPT the handoff section and ask for v0.2 priority.</li>
-<li>[ ] Update <code>docs/NEXT_TASKS.md</code> with GPT's decision.</li>
-<li>[ ] Implement only the selected v0.2 tuning changes.</li>
-<li>[ ] Re-run <code>npm run ai:test</code> and <code>npm run ai:sweep</code>.</li>
-<li>[ ] Update this report and <code>docs/CODEX_STATUS.md</code>.</li>
+<li>[ ] GPT에게 이 보고서의 “GPT에게 반드시 전달할 내용” 섹션을 전달한다.</li>
+<li>[ ] GPT 답변을 <code>docs/NEXT_TASKS.md</code>에 반영한다.</li>
+<li>[ ] v0.2 우선순위가 확정되면 해당 작업만 구현한다.</li>
+<li>[ ] 구현 후 <code>npm run ai:test</code>, <code>npm run ai:sweep</code>, <code>npm run report</code>를 실행한다.</li>
+<li>[ ] <code>docs/CODEX_STATUS.md</code>, devlog, report를 갱신한다.</li>
 </ul>
-<h2>Portfolio Notes</h2>
-<h3>Problem</h3>
-<p>The project needed to verify whether losing a relied-on ability creates regret rather than irritation.</p>
-<h3>Direction</h3>
-<p>The prototype was scoped around one complete loop: build attachment, beat a boss, predict the loss, forget the most relied-on memory, gain an echo, and answer Q1/Q2.</p>
-<h3>Action</h3>
-<p>Implemented a browser alpha and an AI alpha test system that can run hundreds to thousands of simulated runs, measure deletion patterns, estimate regret/irritation proxies, and produce reports.</p>
-<h3>Result</h3>
-<p>The first run produced high regret proxy, low irritation proxy, and high prediction match. The system also exposed concrete tuning issues: early forgetting, <code>처형자의 섬광</code> deletion bias, and slightly weak loss impact.</p>
-<h3>Reusable Sentence</h3>
-<p>I converted an abstract roguelike design question into a playable HTML prototype plus an automated validation loop that measured whether the core loss mechanic felt regrettable, predictable, and recoverable.</p>
+<h2>포트폴리오용 정리</h2>
+<h3>문제</h3>
+<p>로그라이크 게임에서 강한 능력을 삭제하는 시스템은 쉽게 “아쉬움”이 아니라 “짜증”으로 받아들여질 수 있다. LETHE의 핵심 문제는 의존한 기억을 잃는 경험이 납득 가능한 상실로 작동하는지 검증하는 것이었다.</p>
+<h3>방향</h3>
+<p>완성 게임을 만들기보다, 하나의 코어 루프를 검증 가능한 형태로 좁혔다. 플레이어가 기억 3개를 구성하고, 보스를 처치한 뒤, 가장 의존한 기억을 잃고, 잔향으로 피벗하는 흐름만 구현했다.</p>
+<h3>실행</h3>
+<p>HTML 프로토타입을 만들고, AI 알파테스트 도구를 통합했다. 자동 테스트는 수백~수천 런을 돌려 삭제 기억 분포, 예측 일치율, 아쉬움/짜증 프록시, 망각 직후 전투력 하락, 잔향 후 회복률을 측정하게 했다.</p>
+<h3>결과</h3>
+<p>AI 테스트 기준으로 아쉬움 프록시는 92.7%, 짜증 프록시는 0.6%로 나왔다. 코어 루프는 가능성이 있지만, 첫 망각 시간이 짧고 <code>처형자의 섬광</code> 삭제 쏠림이 높다는 구체적인 튜닝 과제가 드러났다.</p>
+<h3>포트폴리오 문장 초안</h3>
+<p>추상적인 게임 기획 질문인 “강한 능력을 잃는 것이 짜증이 아니라 아쉬움으로 작동하는가?”를 HTML 프로토타입과 AI 알파테스트 시스템으로 검증 가능한 문제로 전환했다. 구현 범위를 코어 루프 하나로 제한하고, 자동화된 테스트 지표를 통해 다음 기획 판단에 필요한 근거를 만들었다.</p>
+<h2>형상관리 메모</h2>
+<h3>사용한 커밋 규칙</h3>
+<p>한국 개발팀에서도 많이 쓰는 Conventional Commits 형식을 따른다.</p>
+<p>예:</p>
+<ul>
+<li><code>feat: 기억 자동 발동 구현</code></li>
+<li><code>fix: 보스 처치 후 질문 UI 오류 수정</code></li>
+<li><code>docs: 오늘 개발 보고서 갱신</code></li>
+<li><code>test: AI 알파테스트 시나리오 추가</code></li>
+<li><code>chore: gitignore 정리</code></li>
+</ul>
+<h3>올바른 커밋 타이밍</h3>
+<ul>
+<li>기능 하나가 동작하고 검증됐을 때 커밋한다.</li>
+<li>문서/보고서처럼 독립적으로 의미 있는 변경은 코드와 분리해서 커밋한다.</li>
+<li>실험성 변경은 테스트 결과까지 확인한 뒤 커밋한다.</li>
+<li>원격 push는 작업 단위가 끝나고 로컬 상태가 깨끗할 때 한다.</li>
+<li>생성 산출물은 필요한 경우만 커밋하고, 재생성 가능한 대용량 출력은 <code>.gitignore</code>로 제외한다.</li>
+</ul>
 <h2>Changelog</h2>
 <ul>
 <li>Added: HTML alpha prototype</li>
 <li>Added: AI alpha test tooling</li>
 <li>Added: GitHub repository setup</li>
-<li>Added: development workflow docs</li>
-<li>Added: daily devlog and report structure</li>
-<li>Added: root <code>AGENTS.md</code> project rules</li>
-<li>Added: Markdown-to-HTML report generation with <code>npm run report</code></li>
+<li>Added: Codex-GPT workflow docs</li>
+<li>Added: daily devlog structure</li>
+<li>Added: report Markdown/HTML generation</li>
+<li>Added: root <code>AGENTS.md</code></li>
+<li>Changed: README에 실행/테스트/기록 방법 추가</li>
 <li>Commit: <code>810c567 Initial LETHE HTML alpha prototype</code></li>
 <li>Commit: <code>7525441 Add development workflow docs</code></li>
+<li>Commit: <code>e2fadec Add report generation workflow</code></li>
 </ul>
   </main>
 </body>

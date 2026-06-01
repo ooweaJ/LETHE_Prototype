@@ -70,6 +70,7 @@ npm run ai:sweep
 - `docs/GPT_REVIEW_PROMPT.md`: GPT에게 넘길 검토 프롬프트
 - `docs/NEXT_TASKS.md`: 다음 작업 큐
 - `docs/DECISIONS.md`: 기획/기술 결정 로그
+- `docs/GIT_CONVENTION.md`: 커밋 메시지와 push 타이밍 기준
 - `docs/devlog/`: 날짜별 개발일지
 - `docs/reports/`: 사람용 개발 보고서 Markdown/HTML
 - `docs/PLAYTEST_NOTES.md`: 사람 플레이테스트 기록

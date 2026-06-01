@@ -29,6 +29,20 @@ Every daily report should preserve these eight items:
 7. Next Codex tasks.
 8. Portfolio notes: problem, direction, action, result.
 
+## Git Convention
+
+Use Conventional Commits.
+
+Examples:
+
+- `feat: 기억 자동 발동 구현`
+- `fix: 보스 처치 후 질문 UI 오류 수정`
+- `docs: 오늘 개발 보고서 갱신`
+- `test: AI 알파테스트 시나리오 추가`
+- `chore: gitignore 정리`
+
+Commit after a coherent unit is implemented and verified. Push after the working tree is clean and the commit is safe to share.
+
 ## Scope Guard
 
 Until GPT or the user explicitly changes scope, do not add:
@@ -40,4 +54,3 @@ Until GPT or the user explicitly changes scope, do not add:
 - Multi-region run structure.
 
 The current prototype goal is to verify whether forgetting feels regrettable rather than irritating.
-
