@@ -43,7 +43,9 @@ async function main() {
 
   const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
   if (!webhookUrl) {
-    throw new Error('DISCORD_WEBHOOK_URL is not set. Create a Discord channel webhook and set it before running this script.');
+    console.log('DISCORD_WEBHOOK_URL is not set. Skipped Discord upload; the HTML report was still generated.');
+    console.log(`Report: ${path.relative(process.cwd(), htmlPath)}`);
+    return;
   }
 
   const form = new FormData();
