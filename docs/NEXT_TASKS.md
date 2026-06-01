@@ -27,3 +27,5 @@
 
 - [x] Discord report delivery workflow
 - [x] GPT/Claude planning prompt file prepared
+- [x] Codex runbook and checkpoint workflow documented
+- [x] Short Discord status notice script added

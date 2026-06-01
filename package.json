@@ -10,7 +10,9 @@
     "ai:sweep": "node alpha_test/src/sweep.js --runs 300 --stages 2 --echo 0.40,0.50,0.60,0.70,0.80 --ui 0.45,0.62,0.78 --out alpha_test/outputs/sweep",
     "report": "node scripts/build_report.js docs/reports/2026-06-01.md",
     "report:discord": "npm run report && node scripts/send_discord_report.js docs/reports/2026-06-01.md",
-    "report:discord:dry": "node scripts/send_discord_report.js docs/reports/2026-06-01.md --dry-run"
+    "report:discord:dry": "node scripts/send_discord_report.js docs/reports/2026-06-01.md --dry-run",
+    "codex:notice": "node scripts/send_codex_notice.js",
+    "codex:notice:dry": "node scripts/send_codex_notice.js --dry-run"
   },
   "engines": {
     "node": ">=18.0.0"

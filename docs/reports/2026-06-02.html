@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LETHE Development Report - 2026-06-02</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>LETHE Development Report - 2026-06-02</h1>
+      <p class="meta">Generated from 2026-06-02.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>LETHE Development Report - 2026-06-02</h1>
+<h2>Executive Summary</h2>
+<ul>
+<li>The project workflow was normalized for longer Codex runs.</li>
+<li>A lightweight Discord notice script now supports start/status/approval/checkpoint/blocked/done messages.</li>
+<li>A runbook and checkpoint template now define how to pause and resume work when approvals, token pressure, or external review interrupt progress.</li>
+</ul>
+<h2>Current build status</h2>
+<ul>
+<li>LETHE HTML alpha v0.1 remains implemented.</li>
+<li>Report generation and Discord report delivery remain available.</li>
+<li>New Codex notice delivery is implemented as an operational helper, not gameplay scope.</li>
+</ul>
+<h2>What changed today</h2>
+<ul>
+<li>Added <code>scripts/send_codex_notice.js</code>.</li>
+<li>Added <code>docs/CODEX_RUNBOOK.md</code>.</li>
+<li>Added <code>docs/checkpoints/README.md</code>.</li>
+<li>Added <code>npm run codex:notice</code> and <code>npm run codex:notice:dry</code>.</li>
+</ul>
+<h2>Test results and evidence</h2>
+<ul>
+<li><code>node --check scripts/send_codex_notice.js</code>: passed.</li>
+<li><code>node scripts/send_codex_notice.js --dry-run --type=approval ...</code>: verified the custom notice output shape.</li>
+<li><code>node scripts/build_report.js docs/reports/2026-06-02.md</code>: generated <code>docs/reports/2026-06-02.html</code>.</li>
+<li><code>node scripts/send_codex_notice.js --type=done ...</code>: sent the workflow normalization completion notice to Discord.</li>
+</ul>
+<h2>Decisions made</h2>
+<ul>
+<li>Permission prompts still pause Codex work and must be approved in the Codex UI.</li>
+<li>Discord notices are used as attention/status signals, not as remote approval buttons.</li>
+<li>Work should be checkpointed before stopping when the next resume step may be ambiguous.</li>
+<li>GPT and Claude prompts do not need to be sent to both reviewers by default.</li>
+</ul>
+<h2>Problems or risks</h2>
+<ul>
+<li>Discord cannot approve Codex permissions directly.</li>
+<li>If an unexpected approval prompt appears, execution can still pause until the user returns.</li>
+<li>The package-level report scripts still default to the 2026-06-01 report unless a file path is passed manually.</li>
+<li>On this Windows shell, custom notice arguments are more reliable with direct <code>node scripts/send_codex_notice.js ...</code> commands than through <code>npm run ... -- ...</code>.</li>
+</ul>
+<h2>GPT handoff summary</h2>
+<ul>
+<li>No planning review is needed for this workflow normalization.</li>
+<li>v0.2 gameplay direction is still waiting on the planning answer from <code>docs/review_prompts/2026-06-01.md</code>.</li>
+</ul>
+<h2>Next Codex tasks</h2>
+<ul>
+<li>Verify the new notice script.</li>
+<li>Keep using checkpoints for long-running work.</li>
+<li>Convert the GPT/Claude planning answer into <code>docs/NEXT_TASKS.md</code> when it arrives.</li>
+</ul>
+<h2>Portfolio notes</h2>
+<ul>
+<li>Problem: long autonomous coding sessions can pause on permission prompts or context pressure.</li>
+<li>Direction: make progress, blockers, and resume steps explicit.</li>
+<li>Action: added Discord notices, a runbook, and checkpoint rules.</li>
+<li>Result: project work can be resumed with less ambiguity after interruptions.</li>
+</ul>
+  </main>
+</body>
+</html>

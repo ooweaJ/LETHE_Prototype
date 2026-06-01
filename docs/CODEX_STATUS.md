@@ -1,6 +1,6 @@
 # Codex Status
 
-Last updated: 2026-06-01
+Last updated: 2026-06-02
 
 ## Current Build
 
@@ -28,6 +28,7 @@ Last updated: 2026-06-01
 - Codex-GPT workflow docs
 - Daily devlog and human-readable report system
 - Discord daily report delivery script and setup guide
+- Codex runbook, checkpoint template, and short Discord status notices
 - Root `AGENTS.md` for project agent rules
 
 ## Latest AI Test Result
@@ -76,6 +77,10 @@ Sweep note:
 - Local `.env` is ignored by Git; no tracked `.env.example` is required.
 - Current planning handoff file: `docs/review_prompts/2026-06-01.md`.
 - Latest Discord handoff: report and planning prompt uploaded successfully on 2026-06-01.
+- Codex operation runbook: `docs/CODEX_RUNBOOK.md`.
+- Interruption checkpoints should use `docs/checkpoints/YYYY-MM-DD.md` when needed.
+- Short status notices can be previewed with `npm run codex:notice:dry`.
+- Latest Codex status notice: workflow normalization completion sent to Discord on 2026-06-02.
 
 ## Recommended Next Questions For GPT
 
