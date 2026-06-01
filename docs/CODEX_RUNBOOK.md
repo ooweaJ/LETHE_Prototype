@@ -110,3 +110,27 @@ docs/review_responses/YYYY-MM-DD-claude.md
 ```
 
 Claude is called with tools disabled, so it should only answer the planning prompt. Codex remains responsible for file edits, tests, reports, commits, and pushes.
+
+## OpenAI Review Fallback
+
+If Claude Code is installed but blocked by login, OAuth, or keychain state, use the OpenAI API fallback.
+
+Dry-run:
+
+```powershell
+npm run review:openai:dry
+```
+
+Actual review:
+
+```powershell
+npm run review:openai
+```
+
+The script reads the latest dated file in `docs/review_prompts/` and writes the response to:
+
+```text
+docs/review_responses/YYYY-MM-DD-openai.md
+```
+
+It requires `OPENAI_API_KEY` in the environment or local `.env`. The default model is `gpt-5.2`; set `OPENAI_REVIEW_MODEL` to override it.

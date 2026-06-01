@@ -4,7 +4,7 @@ Last updated: 2026-06-02
 
 ## Current Build
 
-- Project: LETHE HTML Alpha v0.2 tuning candidate.
+- Project: LETHE HTML Alpha v0.3 pre-human-test polish candidate.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: pre-human-test polish for the forgetting loop. No broad content expansion yet.
@@ -28,6 +28,12 @@ Last updated: 2026-06-02
 - Q1/Q2 survey plus Q3 memory-name recall free response.
 - JSON log download with selected/predicted/deleted memory names and deletion weights.
 - Browser QA fast mode via `?qa=fast` for result-screen and JSON payload verification.
+- OpenAI planning-review fallback via `npm run review:openai` and `npm run review:openai:dry`.
+- v0.3 combat-readability polish:
+  - floating memory names and damage numbers,
+  - hit sparks and projectile trails,
+  - boss spawn/phase impact feedback,
+  - `레테의 시선` dependency tag and dependency percent in memory slots.
 - AI alpha test tool under `alpha_test/`.
 - Codex/GPT/Claude workflow docs.
 - Markdown daily reports, generated HTML reports, and Discord report delivery.
@@ -77,10 +83,11 @@ npm run ai:sweep
 ## Open Technical Notes
 
 - Browser visual verification passed in this session:
-  - v0.2 labels load correctly,
+  - v0.3 labels load correctly,
   - `?qa=fast` reaches the question/result flow,
   - result panel fits without internal scroll at desktop QA viewport,
-  - JSON payload includes selected memory names, predicted/protected names, forgotten memory name, deletion weights, survey, echo, and experiment fields.
+  - JSON payload includes selected memory names, predicted/protected names, forgotten memory name, deletion weights, survey, echo, and experiment fields,
+  - payload experiment version is `v0.3`.
 - The game is static HTML and can be run by opening `index.html`.
 - Default browser boss/forgetting timing now matches the 9-minute v0.2 target; `?qa=fast` is only for QA.
 - Generated AI test outputs are ignored by git under `alpha_test/outputs/`.
@@ -95,10 +102,11 @@ npm run ai:sweep
 - Claude verdict: `ITERATE_BEFORE_TEST`.
 - v0.2 scope: timing, deletion distribution, echo default, clearer feedback, JSON logs, human-test recall question.
 - A v0.3/version-up Claude prompt exists, but actual Claude execution still requires local Claude Code login.
+- OpenAI fallback automation exists, but actual GPT review requires `OPENAI_API_KEY` in the environment or local `.env`.
 - Human testing is intentionally deferred until combat spectacle and LETHE-system readability feel stronger.
 
 ## Next Codex Tasks
 
-- Improve combat spectacle before human testing.
-- Make memory reliance, forgetting, and echo transformation more readable during play.
+- Continue improving combat spectacle before human testing.
+- Make echo transformation more readable after forgetting.
 - Use `docs/HUMAN_PLAYTEST_GUIDE.md` only after the prototype feels worth showing to 5-8 players.

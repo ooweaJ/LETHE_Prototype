@@ -145,7 +145,7 @@ const enemyTypes = {
 };
 
 const experiment = {
-  version: "v0.2",
+  version: "v0.3",
   echoPower: 0.5,
   uiClarity: 0.62,
   bossSpawnTimeSec: 540,
@@ -235,7 +235,9 @@ function createRunState() {
     enemies: [],
     projectiles: [],
     effects: [],
+    floaters: [],
     boss: null,
+    shake: 0,
     spawnCd: 0,
     metrics: metricSeed,
     questions: {
@@ -419,6 +421,7 @@ function spawnEnemy(typeId, x = null, y = null, child = false) {
 function spawnBoss() {
   state.bossSpawned = true;
   state.enemies.length = Math.min(state.enemies.length, 8);
+  state.shake = Math.max(state.shake, 12);
   state.boss = {
     id: "boss",
     name: "기억을 씹는 자",
@@ -435,6 +438,8 @@ function spawnBoss() {
     aoeCd: 4,
   };
   addLog("기억을 씹는 자가 검은 물을 갈랐다.");
+  addFloater("문지기 출현", canvas.width / 2, 84, "#ff5d6c");
+  addBurst(canvas.width / 2, 96, "#ff5d6c", 28, 6.8);
   logEvent("boss_spawn");
 }
 
@@ -454,6 +459,9 @@ function updateBoss(dt) {
     boss.groggy = boss.phase === 3;
     boss.groggyTimer = boss.groggy ? 3.2 : 0;
     addLog(`${boss.name} ${boss.phase}페이즈.`);
+    addFloater(`${boss.phase}페이즈`, boss.x, boss.y - 38, boss.groggy ? "#e8c15d" : "#ff5d6c");
+    addBurst(boss.x, boss.y, boss.groggy ? "#e8c15d" : "#ff5d6c", 18, 4.6);
+    state.shake = Math.max(state.shake, boss.phase === 3 ? 9 : 6);
     logEvent("boss_phase", { phase: boss.phase });
   }
 
@@ -630,6 +638,7 @@ function updateMemories(dt) {
     memory.cooldownLeft = Math.max(0, memory.cooldownLeft - dt);
     if (memory.id === "hungry_blades") {
       memory.metricsTime = (memory.metricsTime || 0) + dt;
+      memory.visualCd = Math.max(0, (memory.visualCd || 0) - dt);
       const radius = 74 * (1 + state.echo.range);
       let hit = false;
       for (const target of hostiles()) {
@@ -639,6 +648,11 @@ function updateMemories(dt) {
         }
       }
       if (hit) recordPresence(memory.id, dt * 2.2);
+      if (hit && memory.visualCd <= 0) {
+        memory.visualCd = 0.22;
+        state.effects.push({ type: "ripple", x: p.x, y: p.y, r: 24, maxR: radius, life: 0.22, maxLife: 0.22 });
+        addBurst(p.x, p.y, "#6ddfd2", 4, 1.5);
+      }
       continue;
     }
     if (memory.id === "blood_reflection") continue;
@@ -698,11 +712,15 @@ function activateMemory(memory) {
     if (!target) return;
     const damage = 74 * (state.weapon.id === "greatsword" ? 1.12 : 1);
     damageHostile(target, damage, memory.id, { bossTrace: true, groggyBonus: true });
+    addFloater(memory.name, target.x, target.y - 26, "#eef8ff");
+    addBurst(target.x, target.y, "#eef8ff", 18, 4.8);
+    state.shake = Math.max(state.shake, 5);
     state.effects.push({ type: "flash", x: target.x, y: target.y, r: 10, maxR: 86, life: 0.42, maxLife: 0.42 });
   }
 
   if (memory.id === "stalker_oath") {
     const count = 2 + state.echo.projectileCount;
+    addFloater(memory.name, p.x, p.y - 24, "#a98cff");
     for (let i = 0; i < count; i += 1) {
       const target = farHostile() || nearestHostile(p.x, p.y);
       const angle = target ? angleTo(p, target) + rand(-0.28, 0.28) : p.facing + rand(-0.35, 0.35);
@@ -726,6 +744,8 @@ function activateMemory(memory) {
 
   if (memory.id === "shatter_ripple") {
     const radius = 132 * (1 + state.echo.range);
+    addFloater(memory.name, p.x, p.y - 28, "#6ddfd2");
+    state.shake = Math.max(state.shake, 4);
     for (const target of hostiles()) {
       const dist = distance(p, target);
       if (dist < radius + target.r) {
@@ -737,12 +757,14 @@ function activateMemory(memory) {
         state.metrics[memory.id].status += push;
       }
     }
+    addBurst(p.x, p.y, "#6ddfd2", 16, 3.6);
     state.effects.push({ type: "ripple", x: p.x, y: p.y, r: 14, maxR: radius, life: 0.48, maxLife: 0.48 });
   }
 
   if (memory.id === "stopped_second") {
     const radius = 150 * (1 + state.echo.range);
     const duration = 2.4 * (1 + state.echo.slowDuration);
+    addFloater(memory.name, p.x, p.y - 28, "#a98cff");
     for (const target of hostiles()) {
       if (distance(p, target) < radius + target.r) {
         target.slow = Math.max(target.slow || 0, duration);
@@ -755,6 +777,7 @@ function activateMemory(memory) {
         other.cooldownLeft *= 0.88;
       }
     }
+    addBurst(p.x, p.y, "#a98cff", 12, 2.7);
     state.effects.push({ type: "clock", x: p.x, y: p.y, r: 18, maxR: radius, life: 0.72, maxLife: 0.72 });
   }
 }
@@ -763,6 +786,11 @@ function damageHostile(target, amount, source, options = {}) {
   const before = target.hp;
   target.hp -= amount;
   const actual = Math.max(0, before - Math.max(0, target.hp));
+  if (actual > 0) {
+    const color = source === "weapon" ? "#f0f3f8" : source === "execution_flash" ? "#eef8ff" : source === "stalker_oath" ? "#a98cff" : source === "shatter_ripple" ? "#6ddfd2" : source === "blood_reflection" ? "#ff5d6c" : "#e8c15d";
+    if (actual >= 12 || Math.random() < 0.12) addFloater(String(Math.round(actual)), target.x, target.y - target.r - 6, color);
+    if (actual >= 20) addBurst(target.x, target.y, color, source === "weapon" ? 5 : 8, source === "weapon" ? 1.4 : 2.1);
+  }
   if (source && state.metrics[source]) {
     state.metrics[source].damage += actual;
     target.hitBy?.add(source);
@@ -1075,6 +1103,13 @@ function updateEffects(dt) {
     }
   }
   state.effects = state.effects.filter((effect) => effect.life > 0);
+  for (const floater of state.floaters) {
+    floater.life -= dt;
+    floater.y += floater.vy * dt;
+    floater.x += floater.vx * dt;
+  }
+  state.floaters = state.floaters.filter((floater) => floater.life > 0);
+  state.shake = Math.max(0, state.shake - dt * 18);
 }
 
 function updateClarity() {
@@ -1101,16 +1136,20 @@ function renderMemorySlots() {
     ui.memorySlots.innerHTML = `<div class="info-card empty">기억 3개를 선택하세요.</div>`;
     return;
   }
+  const maxClarity = Math.max(0, ...source.map((memory) => memory.clarity || 0));
   for (const memory of source) {
     const maxCd = memory.cooldown || 1;
     const cdPercent = memory.id === "blood_reflection" ? 100 : (1 - (memory.cooldownLeft || 0) / maxCd) * 100;
     const clarityPercent = (memory.clarity || 0) * 100;
+    const watched = state && clarityPercent > 35 && (memory.clarity || 0) >= maxClarity - 0.01;
     const slot = document.createElement("div");
-    slot.className = `slot ${clarityPercent > 68 ? "cracked" : ""} ${clarityPercent > 88 ? "gazed" : ""}`;
+    slot.className = `slot ${watched ? "watched" : ""} ${clarityPercent > 68 ? "cracked" : ""} ${clarityPercent > 88 ? "gazed" : ""}`;
     slot.innerHTML = `
       <div class="slot-header"><strong>${memory.name}</strong><small>${memory.role}</small></div>
+      ${watched ? `<div class="risk-tag">레테의 시선</div>` : ""}
       <div class="cooldown-track"><div class="cooldown-fill" style="width:${clamp(cdPercent, 0, 100)}%"></div></div>
       <small>${memory.forgotten ? "망각됨" : memory.desc}</small>
+      <div class="clarity-row"><span>의존도</span><span>${Math.round(clarityPercent)}%</span></div>
       <div class="clarity-track"><div class="clarity-fill" style="width:${clarityPercent}%"></div></div>
     `;
     ui.memorySlots.appendChild(slot);
@@ -1139,6 +1178,10 @@ function draw() {
     drawTitleWater();
     return;
   }
+  ctx.save();
+  if (state.shake > 0) {
+    ctx.translate(rand(-state.shake, state.shake), rand(-state.shake, state.shake));
+  }
   drawEffects("under");
   drawProjectiles(false);
   drawPlayer();
@@ -1146,6 +1189,8 @@ function draw() {
   drawBoss();
   drawProjectiles(true);
   drawEffects("over");
+  drawFloaters();
+  ctx.restore();
 }
 
 function drawArena() {
@@ -1236,6 +1281,12 @@ function drawUnit(unit, color, label) {
 
 function drawProjectiles(hostile) {
   for (const projectile of state.projectiles.filter((p) => p.hostile === hostile)) {
+    ctx.strokeStyle = projectile.hostile ? "rgba(255, 93, 108, 0.26)" : `${projectile.color}66`;
+    ctx.lineWidth = projectile.hostile ? 2 : 3;
+    ctx.beginPath();
+    ctx.moveTo(projectile.x, projectile.y);
+    ctx.lineTo(projectile.x - projectile.vx * 0.06, projectile.y - projectile.vy * 0.06);
+    ctx.stroke();
     ctx.fillStyle = projectile.color;
     ctx.beginPath();
     ctx.arc(projectile.x, projectile.y, projectile.r, 0, Math.PI * 2);
@@ -1286,7 +1337,63 @@ function drawEffects(layer) {
       ctx.arc(0, 0, effect.r, -0.35, 0.35);
       ctx.stroke();
     }
+    if (effect.type === "spark") {
+      ctx.globalAlpha = Math.max(0, 1 - t);
+      ctx.fillStyle = effect.color;
+      ctx.beginPath();
+      ctx.arc(effect.x + effect.vx * t, effect.y + effect.vy * t, effect.size * (1 - t), 0, Math.PI * 2);
+      ctx.fill();
+    }
     ctx.restore();
+  }
+}
+
+function drawFloaters() {
+  ctx.save();
+  ctx.textAlign = "center";
+  ctx.font = "700 13px system-ui";
+  for (const floater of state.floaters) {
+    const alpha = clamp(floater.life / floater.maxLife, 0, 1);
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = floater.color;
+    ctx.strokeStyle = "rgba(3, 6, 10, 0.82)";
+    ctx.lineWidth = 4;
+    ctx.strokeText(floater.text, floater.x, floater.y);
+    ctx.fillText(floater.text, floater.x, floater.y);
+  }
+  ctx.restore();
+}
+
+function addFloater(text, x, y, color = "#f0f3f8") {
+  if (!state) return;
+  state.floaters.push({
+    text,
+    x,
+    y,
+    vx: rand(-8, 8),
+    vy: -28,
+    color,
+    life: 1.05,
+    maxLife: 1.05,
+  });
+}
+
+function addBurst(x, y, color, count = 10, power = 3) {
+  if (!state) return;
+  for (let i = 0; i < count; i += 1) {
+    const angle = rand(0, Math.PI * 2);
+    const speed = rand(14, 32) * power;
+    state.effects.push({
+      type: "spark",
+      x,
+      y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      size: rand(2, 4.5),
+      color,
+      life: rand(0.22, 0.48),
+      maxLife: 0.48,
+    });
   }
 }
 

@@ -14,7 +14,9 @@
     "codex:notice": "node scripts/send_codex_notice.js",
     "codex:notice:dry": "node scripts/send_codex_notice.js --dry-run",
     "review:claude": "node scripts/ask_claude_review.js",
-    "review:claude:dry": "node scripts/ask_claude_review.js --dry-run"
+    "review:claude:dry": "node scripts/ask_claude_review.js --dry-run",
+    "review:openai": "node scripts/ask_openai_review.js",
+    "review:openai:dry": "node scripts/ask_openai_review.js --dry-run"
   },
   "engines": {
     "node": ">=18.0.0"
