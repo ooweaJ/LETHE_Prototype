@@ -71,6 +71,8 @@ Sweep note:
 - Generated AI test outputs are ignored by git under `alpha_test/outputs/`.
 - Report HTML can be generated from Markdown with `npm run report`.
 - Discord report delivery can be previewed with `npm run report:discord:dry` and uploaded with `npm run report:discord` after setting `DISCORD_WEBHOOK_URL`.
+- Discord messages are intentionally short: work done, completion state, problems, and planning-review need.
+- GPT/Claude review prompts should live in `docs/review_prompts/YYYY-MM-DD.md` and are attached automatically when present.
 
 ## Recommended Next Questions For GPT
 

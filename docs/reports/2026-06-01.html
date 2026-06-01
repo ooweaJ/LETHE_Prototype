@@ -409,6 +409,51 @@ npm run report</code></pre>
 <li>Action: added a webhook upload script and setup guide.</li>
 <li>Result: a daily report can now be previewed locally and uploaded to Discord with one command after the secret is configured.</li>
 </ul>
+<h2>Addendum: Discord Message Refinement</h2>
+<h3>Current build status</h3>
+<ul>
+<li>Discord delivery remains optional and uses the existing report HTML output.</li>
+<li>The Discord message body is now a compact operational summary rather than a long report excerpt.</li>
+</ul>
+<h3>What changed today</h3>
+<ul>
+<li>Updated <code>scripts/send_discord_report.js</code> to extract only work done, completion state, problems, and planning-review need.</li>
+<li>Added <code>docs/review_prompts/README.md</code> as the convention for GPT/Claude handoff prompt files.</li>
+<li>Added auto-detection for <code>docs/review_prompts/YYYY-MM-DD.md</code>; if present, it is attached with the HTML report.</li>
+</ul>
+<h3>Test results and evidence</h3>
+<ul>
+<li><code>node --check scripts/send_discord_report.js</code>: passed.</li>
+<li><code>npm run report:discord:dry</code>: printed the compact Discord message preview.</li>
+</ul>
+<h3>Decisions made</h3>
+<ul>
+<li>Keep Discord as the fast status surface.</li>
+<li>Keep the HTML report as the full record.</li>
+<li>Keep GPT/Claude prompts as separate Markdown files so they can be copied, attached, or specialized per reviewer.</li>
+</ul>
+<h3>Problems or risks</h3>
+<ul>
+<li>Current summary quality depends on report headings being consistent.</li>
+<li>If no review prompt file exists, Discord marks planning review as not needed or uses the report handoff summary.</li>
+</ul>
+<h3>GPT handoff summary</h3>
+<ul>
+<li>No planning review is needed for the Discord formatting change.</li>
+<li>Future planning review prompts should be added as separate files under <code>docs/review_prompts/</code>.</li>
+</ul>
+<h3>Next Codex tasks</h3>
+<ul>
+<li>When a real planning question appears, create <code>docs/review_prompts/YYYY-MM-DD.md</code> and rerun <code>npm run report:discord</code>.</li>
+<li>If daily report headings change, update the Discord summary extraction heading aliases.</li>
+</ul>
+<h3>Portfolio notes</h3>
+<ul>
+<li>Problem: long Discord messages reduced readability.</li>
+<li>Direction: separate quick status, archival report, and planning prompt into distinct artifacts.</li>
+<li>Action: shortened the Discord body and added prompt-file detection.</li>
+<li>Result: Discord now works as a readable daily status channel while preserving full report detail in HTML.</li>
+</ul>
   </main>
 </body>
 </html>

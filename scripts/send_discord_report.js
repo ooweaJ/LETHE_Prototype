@@ -4,11 +4,12 @@
 const fs = require('fs');
 const path = require('path');
 
-const args = process.argv.slice(2);
-const dryRun = args.includes('--dry-run');
-const input = args.find((arg) => !arg.startsWith('--')) || 'docs/reports/2026-06-01.md';
+const options = parseArgs(process.argv.slice(2));
+const dryRun = options.dryRun;
+const input = options.input || 'docs/reports/2026-06-01.md';
 const markdownPath = path.resolve(input);
 const htmlPath = markdownPath.replace(/\.md$/i, '.html');
+const promptPath = resolvePromptPath(options.prompt, markdownPath);
 
 loadDotEnv(path.resolve('.env'));
 
@@ -28,11 +29,15 @@ async function main() {
 
   const markdown = fs.readFileSync(markdownPath, 'utf8');
   const html = fs.readFileSync(htmlPath);
-  const message = buildMessage(markdown, markdownPath, htmlPath);
+  const prompt = promptPath ? fs.readFileSync(promptPath) : null;
+  const message = buildMessage(markdown, markdownPath, htmlPath, promptPath);
 
   if (dryRun) {
     console.log(message);
     console.log(`Attachment: ${path.relative(process.cwd(), htmlPath)} (${html.length} bytes)`);
+    if (promptPath) {
+      console.log(`Attachment: ${path.relative(process.cwd(), promptPath)} (${prompt.length} bytes)`);
+    }
     return;
   }
 
@@ -47,6 +52,9 @@ async function main() {
     allowed_mentions: { parse: [] },
   }));
   form.append('files[0]', new Blob([html], { type: 'text/html' }), path.basename(htmlPath));
+  if (promptPath) {
+    form.append('files[1]', new Blob([prompt], { type: 'text/markdown' }), path.basename(promptPath));
+  }
 
   const response = await fetch(webhookUrl, {
     method: 'POST',
@@ -61,37 +69,133 @@ async function main() {
   console.log(`Uploaded ${path.relative(process.cwd(), htmlPath)} to Discord.`);
 }
 
-function buildMessage(markdown, markdownFile, htmlFile) {
-  const title = firstHeading(markdown) || path.basename(markdownFile);
+function buildMessage(markdown, markdownFile, htmlFile, reviewPromptPath) {
   const reportDate = path.basename(markdownFile, '.md');
-  const bullets = summaryBullets(markdown, 4);
+  const work = bulletsFromSections(markdown, [
+    'what changed today',
+    'what changed',
+    'today work',
+    '오늘 한 일',
+    '작업 내용',
+  ], 2);
+  const status = bulletsFromSections(markdown, [
+    'current build status',
+    'current build',
+    'build status',
+    '현재 상태',
+    '완료 상태',
+  ], 2);
+  const problems = bulletsFromSections(markdown, [
+    'problems or risks',
+    'problems and risks',
+    'risks',
+    '문제와 리스크',
+    '문제',
+  ], 2);
+  const handoff = bulletsFromSections(markdown, [
+    'gpt handoff summary',
+    'planning handoff',
+    '기획 핸드오프',
+    'gpt 전달',
+  ], 1);
+  const planningLine = reviewPromptPath
+    ? `있음 - ${path.relative(process.cwd(), reviewPromptPath)}`
+    : handoff.length > 0
+      ? fit(handoff[0], 220)
+      : '없음';
   const lines = [
-    `LETHE Daily Report - ${reportDate}`,
-    title,
-    '',
-    ...bullets,
-    '',
-    `Attachment: ${path.basename(htmlFile)}`,
+    `LETHE Report - ${reportDate}`,
+    `작업: ${fit(joinBullets(work) || '보고서가 갱신되었습니다.', 260)}`,
+    `완료: ${fit(joinBullets(status) || 'HTML 보고서 생성 완료', 220)}`,
+    `문제: ${fit(joinBullets(problems) || '새로 기록된 문제 없음', 220)}`,
+    `기획질문: ${planningLine}`,
+    `첨부: ${path.basename(htmlFile)}${reviewPromptPath ? `, ${path.basename(reviewPromptPath)}` : ''}`,
   ];
 
   return lines.join('\n').slice(0, 1800);
 }
 
-function firstHeading(markdown) {
-  const match = markdown.match(/^#\s+(.+)$/m);
-  return match ? stripMarkdown(match[1]).trim() : '';
+function parseArgs(args) {
+  const parsed = {
+    dryRun: false,
+    input: '',
+    prompt: '',
+  };
+
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index];
+    if (arg === '--dry-run') {
+      parsed.dryRun = true;
+    } else if (arg === '--prompt') {
+      parsed.prompt = args[index + 1] || '';
+      index += 1;
+    } else if (!arg.startsWith('--') && !parsed.input) {
+      parsed.input = arg;
+    }
+  }
+
+  return parsed;
 }
 
-function summaryBullets(markdown, limit) {
-  const bullets = markdown
-    .split(/\r?\n/)
-    .map((line) => line.match(/^\s*-\s+(.+)$/))
-    .filter(Boolean)
-    .map((match) => `- ${stripMarkdown(match[1]).trim()}`)
-    .filter((line) => line.length > 2);
+function resolvePromptPath(explicitPrompt, reportPath) {
+  if (explicitPrompt) {
+    const explicitPath = path.resolve(explicitPrompt);
+    return fs.existsSync(explicitPath) ? explicitPath : '';
+  }
 
-  if (bullets.length > 0) return bullets.slice(0, limit);
-  return ['- Report generated from Markdown source.'];
+  const date = path.basename(reportPath, '.md');
+  const defaultPath = path.resolve('docs', 'review_prompts', `${date}.md`);
+  return fs.existsSync(defaultPath) ? defaultPath : '';
+}
+
+function bulletsFromSections(markdown, headingNames, limit) {
+  const sections = headingNames
+    .flatMap((heading) => findSections(markdown, heading))
+    .sort((left, right) => left.index - right.index);
+  const latestSection = sections[sections.length - 1]?.content || '';
+  const bullets = (latestSection.match(/^\s*-\s+(.+)$/gm) || [])
+    .map((line) => stripMarkdown(line.replace(/^\s*-\s+/, '')).trim())
+    .filter(Boolean);
+
+  return bullets.slice(0, limit);
+}
+
+function findSections(markdown, headingName) {
+  const lines = markdown.split(/\r?\n/);
+  const sections = [];
+  const target = normalize(headingName);
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const heading = lines[index].match(/^(#{1,6})\s+(.+)$/);
+    if (!heading || normalize(heading[2]) !== target) continue;
+
+    const level = heading[1].length;
+    const content = [];
+    for (let next = index + 1; next < lines.length; next += 1) {
+      const nextHeading = lines[next].match(/^(#{1,6})\s+(.+)$/);
+      if (nextHeading && nextHeading[1].length <= level) break;
+      content.push(lines[next]);
+    }
+    sections.push({
+      index,
+      content: content.join('\n'),
+    });
+  }
+
+  return sections;
+}
+
+function joinBullets(bullets) {
+  return bullets.join(' / ');
+}
+
+function fit(text, maxLength) {
+  if (text.length <= maxLength) return text;
+  return `${text.slice(0, maxLength - 3).trim()}...`;
+}
+
+function normalize(text) {
+  return stripMarkdown(text).trim().toLowerCase().replace(/\s+/g, ' ');
 }
 
 function stripMarkdown(text) {
