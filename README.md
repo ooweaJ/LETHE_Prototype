@@ -56,6 +56,22 @@ npm run ai:sweep
 
 리포트의 Q1/Q2는 실제 인간 감정이 아니라 봇 기반 프록시입니다. 최종 판단은 8~12명 규모의 사람 플레이테스트로 확인해야 합니다.
 
+## 개발 기록
+
+이 프로젝트는 Codex와 GPT의 역할을 분리해 운영합니다.
+
+- Codex: 구현, 테스트, Git, 상태 보고
+- GPT: 기획 검토, 우선순위 결정, 테스트 해석
+
+주요 문서:
+
+- `docs/CODEX_STATUS.md`: 현재 구현 상태와 테스트 결과
+- `docs/GPT_REVIEW_PROMPT.md`: GPT에게 넘길 검토 프롬프트
+- `docs/NEXT_TASKS.md`: 다음 작업 큐
+- `docs/DECISIONS.md`: 기획/기술 결정 로그
+- `docs/devlog/`: 날짜별 개발일지
+- `docs/PLAYTEST_NOTES.md`: 사람 플레이테스트 기록
+
 ## 구현 범위
 
 - 무기 2종: 절단쌍검, 장송대검
