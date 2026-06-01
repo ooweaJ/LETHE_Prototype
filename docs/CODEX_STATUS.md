@@ -7,7 +7,7 @@ Last updated: 2026-06-02
 - Project: LETHE HTML Alpha v0.2 tuning candidate.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
-- Current scope: forgetting loop emotional validation. No new content expansion yet.
+- Current scope: pre-human-test polish for the forgetting loop. No broad content expansion yet.
 
 ## Implemented
 
@@ -27,6 +27,7 @@ Last updated: 2026-06-02
   - next build direction.
 - Q1/Q2 survey plus Q3 memory-name recall free response.
 - JSON log download with selected/predicted/deleted memory names and deletion weights.
+- Browser QA fast mode via `?qa=fast` for result-screen and JSON payload verification.
 - AI alpha test tool under `alpha_test/`.
 - Codex/GPT/Claude workflow docs.
 - Markdown daily reports, generated HTML reports, and Discord report delivery.
@@ -75,10 +76,13 @@ npm run ai:sweep
 
 ## Open Technical Notes
 
-- Browser visual verification has started in this session:
-  - start screen and run start flow were checked,
-  - result screen and JSON download still need full browser confirmation.
+- Browser visual verification passed in this session:
+  - v0.2 labels load correctly,
+  - `?qa=fast` reaches the question/result flow,
+  - result panel fits without internal scroll at desktop QA viewport,
+  - JSON payload includes selected memory names, predicted/protected names, forgotten memory name, deletion weights, survey, echo, and experiment fields.
 - The game is static HTML and can be run by opening `index.html`.
+- Default browser boss/forgetting timing now matches the 9-minute v0.2 target; `?qa=fast` is only for QA.
 - Generated AI test outputs are ignored by git under `alpha_test/outputs/`.
 - Report HTML can be generated from Markdown with `npm run report`.
 - Discord report delivery can be previewed with `npm run report:discord:dry`.
@@ -90,11 +94,11 @@ npm run ai:sweep
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude verdict: `ITERATE_BEFORE_TEST`.
 - v0.2 scope: timing, deletion distribution, echo default, clearer feedback, JSON logs, human-test recall question.
-- No additional GPT/Claude question is required before the next human-test preparation pass.
+- A v0.3/version-up Claude prompt exists, but actual Claude execution still requires local Claude Code login.
+- Human testing is intentionally deferred until combat spectacle and LETHE-system readability feel stronger.
 
 ## Next Codex Tasks
 
-- Review the v0.2 result screen visually in browser.
-- Confirm the downloaded JSON log fields in browser.
-- Use `docs/HUMAN_PLAYTEST_GUIDE.md` for the 5-8 player human test.
-- During human test, focus on whether the forgotten memory feels regrettable, understandable, and recoverable.
+- Improve combat spectacle before human testing.
+- Make memory reliance, forgetting, and echo transformation more readable during play.
+- Use `docs/HUMAN_PLAYTEST_GUIDE.md` only after the prototype feels worth showing to 5-8 players.

@@ -148,9 +148,15 @@ const experiment = {
   version: "v0.2",
   echoPower: 0.5,
   uiClarity: 0.62,
-  bossSpawnTimeSec: 120,
+  bossSpawnTimeSec: 540,
   bossHp: 1750,
+  qaFastMode: new URLSearchParams(window.location.search).get("qa") === "fast",
 };
+
+if (experiment.qaFastMode) {
+  experiment.bossSpawnTimeSec = 10;
+  experiment.bossHp = 180;
+}
 
 const forgetBias = {
   execution_flash: 0.72,
@@ -325,7 +331,7 @@ function weaponCardHtml(weapon) {
 function startRun() {
   state = createRunState();
   overlay.classList.remove("show");
-  addLog("검은 물 위로 기억이 떠올랐다.");
+  addLog(experiment.qaFastMode ? "QA fast mode: 검은 물이 빠르게 차오른다." : "검은 물 위로 기억이 떠올랐다.");
   logEvent("run_start");
 }
 
@@ -928,10 +934,10 @@ function showResultOverlay() {
   const predicted = state.questions.predict === "unknown" ? null : memories[state.questions.predict];
   const predictionText = predicted
     ? predicted.id === forgotten.id
-      ? `예측 성공: ${predicted.name}`
-      : `예측 실패: ${predicted.name}을 예상했지만 ${forgotten.name}이 사라졌습니다.`
-    : `예측 보류: ${forgotten.name}이 사라졌습니다.`;
-  overlay.querySelector("#forgottenTitle").textContent = `${forgotten.name}이(가) 망각되었습니다.`;
+      ? `예측 성공: ${predicted.name} 기억`
+      : `예측 실패: ${predicted.name}을 예상했지만 실제로는 ${forgotten.name} 기억이 사라졌습니다.`
+    : `예측 보류: ${forgotten.name} 기억이 사라졌습니다.`;
+  overlay.querySelector("#forgottenTitle").textContent = `${forgotten.name} 기억이 망각되었습니다.`;
   overlay.querySelector("#resultSummary").innerHTML = `
     <div class="result-card"><strong>사라진 기억</strong><br>${forgotten.name}: ${forgotten.desc}</div>
     <div class="result-card"><strong>예측 결과</strong><br>${predictionText}</div>
@@ -1023,7 +1029,7 @@ function updateDownloadEnabled() {
   button.disabled = state.survey.sadness === null || state.survey.fairness === null;
 }
 
-function downloadLog() {
+function collectLogPayload() {
   calculateDependency();
   state.logs.completedAt = new Date().toISOString();
   state.logs.elapsed = Number(state.elapsed.toFixed(2));
@@ -1036,7 +1042,16 @@ function downloadLog() {
   state.logs.deletionWeights = dependencyWeights();
   state.logs.echo = state.echo;
   state.logs.echoPower = experiment.echoPower;
-  const blob = new Blob([JSON.stringify(state.logs, null, 2)], { type: "application/json" });
+  return state.logs;
+}
+
+function downloadLog() {
+  const payload = collectLogPayload();
+  if (experiment.qaFastMode) {
+    window.__letheLastDownloadedLog = JSON.parse(JSON.stringify(payload));
+    document.documentElement.dataset.letheQaLog = JSON.stringify(payload);
+  }
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
   a.download = `lethe-${experiment.version}-log-${Date.now()}.json`;
@@ -1378,6 +1393,10 @@ window.addEventListener("keydown", (event) => {
 window.addEventListener("keyup", (event) => {
   keys.delete(event.code);
 });
+
+if (experiment.qaFastMode) {
+  window.__letheQaLog = () => (state ? JSON.parse(JSON.stringify(collectLogPayload())) : null);
+}
 
 initSetup();
 requestAnimationFrame(frame);
