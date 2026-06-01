@@ -495,6 +495,89 @@ npm run report</code></pre>
 <li>Action: removed <code>.env.example</code> and kept the setup documented.</li>
 <li>Result: the webhook URL remains protected while the workflow stays understandable.</li>
 </ul>
+<h2>Addendum: v0.2 Planning Handoff</h2>
+<h3>Current build status</h3>
+<ul>
+<li>LETHE HTML alpha v0.1 is implemented and playable.</li>
+<li>Discord report delivery can attach both the HTML report and a planning prompt file.</li>
+</ul>
+<h3>What changed today</h3>
+<ul>
+<li>Added <code>docs/review_prompts/2026-06-01.md</code>.</li>
+<li>Updated <code>docs/NEXT_TASKS.md</code> so v0.2 implementation waits for GPT/Claude planning review.</li>
+</ul>
+<h3>Test results and evidence</h3>
+<ul>
+<li>The prompt summarizes the latest AI alpha result: verdict <code>ITERATE</code>, Alpha Fun Score <code>0.8647</code>, regret proxy <code>92.7%</code>, irritation proxy <code>0.6%</code>, and first forgetting time <code>6.83 min</code>.</li>
+</ul>
+<h3>Decisions made</h3>
+<ul>
+<li>Do not add new gameplay scope before v0.2 direction is decided.</li>
+<li>Ask whether to tune first forgetting timing, deletion bias, echo strength, feedback clarity, or move to human playtest.</li>
+</ul>
+<h3>Problems or risks</h3>
+<ul>
+<li>The current next step depends on external planning review.</li>
+<li>AI alpha results are proxy data and cannot replace human playtest interpretation.</li>
+</ul>
+<h3>GPT handoff summary</h3>
+<ul>
+<li>Use <code>docs/review_prompts/2026-06-01.md</code>.</li>
+<li>Requested verdict: <code>GO_TO_HUMAN_TEST</code>, <code>ITERATE_BEFORE_TEST</code>, or <code>FIX_CORE</code>.</li>
+</ul>
+<h3>Next Codex tasks</h3>
+<ul>
+<li>Send the report and planning prompt through Discord.</li>
+<li>Convert the planning answer into <code>docs/NEXT_TASKS.md</code>.</li>
+<li>Implement only the selected v0.2 tasks.</li>
+</ul>
+<h3>Portfolio notes</h3>
+<ul>
+<li>Problem: the prototype reached a point where more coding without direction could blur the core validation.</li>
+<li>Direction: pause feature growth and ask for a focused v0.2 validation target.</li>
+<li>Action: created a dedicated GPT/Claude planning prompt.</li>
+<li>Result: the next implementation round can be tied to an explicit design verdict.</li>
+</ul>
+<h2>Addendum: Discord Planning Handoff Sent</h2>
+<h3>Current build status</h3>
+<ul>
+<li>The report generator and Discord delivery script ran successfully.</li>
+<li>Discord received the daily HTML report and the v0.2 planning prompt attachment.</li>
+</ul>
+<h3>What changed today</h3>
+<ul>
+<li>Sent <code>docs/reports/2026-06-01.html</code> and <code>docs/review_prompts/2026-06-01.md</code> through the configured Discord webhook.</li>
+</ul>
+<h3>Test results and evidence</h3>
+<ul>
+<li><code>npm run report:discord:dry</code>: confirmed the compact Discord message and both attachments.</li>
+<li><code>npm run report:discord</code>: uploaded the report to Discord successfully.</li>
+</ul>
+<h3>Decisions made</h3>
+<ul>
+<li>Use Discord as the handoff surface for the report and planning prompt.</li>
+</ul>
+<h3>Problems or risks</h3>
+<ul>
+<li>The next implementation step still depends on the GPT/Claude answer.</li>
+</ul>
+<h3>GPT handoff summary</h3>
+<ul>
+<li>The prompt asks for a verdict and 1-3 concrete v0.2 tasks.</li>
+</ul>
+<h3>Next Codex tasks</h3>
+<ul>
+<li>Wait for the planning answer.</li>
+<li>Record the answer in <code>docs/NEXT_TASKS.md</code>.</li>
+<li>Implement only the selected v0.2 tasks.</li>
+</ul>
+<h3>Portfolio notes</h3>
+<ul>
+<li>Problem: the project needed a clean way to move from implementation logs to planning review.</li>
+<li>Direction: use Discord as a lightweight handoff channel.</li>
+<li>Action: sent the report and planning prompt together.</li>
+<li>Result: the project is ready for a planning verdict before more scope is added.</li>
+</ul>
   </main>
 </body>
 </html>

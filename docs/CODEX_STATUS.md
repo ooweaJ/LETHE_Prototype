@@ -74,6 +74,8 @@ Sweep note:
 - Discord messages are intentionally short: work done, completion state, problems, and planning-review need.
 - GPT/Claude review prompts should live in `docs/review_prompts/YYYY-MM-DD.md` and are attached automatically when present.
 - Local `.env` is ignored by Git; no tracked `.env.example` is required.
+- Current planning handoff file: `docs/review_prompts/2026-06-01.md`.
+- Latest Discord handoff: report and planning prompt uploaded successfully on 2026-06-01.
 
 ## Recommended Next Questions For GPT
 

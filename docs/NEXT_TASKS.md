@@ -16,3 +16,14 @@
 - [x] GitHub repository push
 - [x] Codex-GPT 기록 워크플로우 문서화
 
+
+## Current Planning Gate
+
+- [x] Send `docs/review_prompts/2026-06-01.md` to GPT/Claude via Discord handoff.
+- [ ] Convert the answer into 1-3 concrete v0.2 tasks.
+- [ ] Keep new gameplay scope paused until the planning verdict is recorded.
+
+## Recently Done
+
+- [x] Discord report delivery workflow
+- [x] GPT/Claude planning prompt file prepared
