@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>LETHE Development Report - 2026-06-02</title>
+  <title>LETHE 개발 보고서 - 2026-06-02</title>
   <style>
     :root {
       color-scheme: light;
@@ -116,69 +116,87 @@
 <body>
   <header>
     <div class="header-inner">
-      <h1>LETHE Development Report - 2026-06-02</h1>
+      <h1>LETHE 개발 보고서 - 2026-06-02</h1>
       <p class="meta">Generated from 2026-06-02.md</p>
     </div>
   </header>
   <main>
-    <h1>LETHE Development Report - 2026-06-02</h1>
-<h2>Executive Summary</h2>
+    <h1>LETHE 개발 보고서 - 2026-06-02</h1>
+<h2>요약</h2>
 <ul>
-<li>The project workflow was normalized for longer Codex runs.</li>
-<li>A lightweight Discord notice script now supports start/status/approval/checkpoint/blocked/done messages.</li>
-<li>A runbook and checkpoint template now define how to pause and resume work when approvals, token pressure, or external review interrupt progress.</li>
+<li>Codex 작업 운영 규칙을 정리했다.</li>
+<li>Discord 상태 알림 스크립트를 추가했다.</li>
+<li>GPT v0.2 기획 답변을 한국어 작업 목록으로 변환했다.</li>
+<li>앞으로 GPT/Claude에게 보내는 프롬프트와 Discord 보고 요약은 한국어 중심으로 작성한다.</li>
 </ul>
-<h2>Current build status</h2>
+<h2>현재 상태</h2>
 <ul>
-<li>LETHE HTML alpha v0.1 remains implemented.</li>
-<li>Report generation and Discord report delivery remain available.</li>
-<li>New Codex notice delivery is implemented as an operational helper, not gameplay scope.</li>
+<li>LETHE HTML alpha v0.1은 실행 가능하다.</li>
+<li>v0.2 방향은 <code>ITERATE_BEFORE_TEST</code>로 결정됐다.</li>
+<li>다음 작업은 새 콘텐츠 추가가 아니라 좁은 튜닝 패스다.</li>
+<li>보고서 명령은 <code>docs/reports/</code>의 최신 날짜 Markdown을 기본으로 사용한다.</li>
 </ul>
-<h2>What changed today</h2>
+<h2>오늘 한 일</h2>
 <ul>
-<li>Added <code>scripts/send_codex_notice.js</code>.</li>
-<li>Added <code>docs/CODEX_RUNBOOK.md</code>.</li>
-<li>Added <code>docs/checkpoints/README.md</code>.</li>
-<li>Added <code>npm run codex:notice</code> and <code>npm run codex:notice:dry</code>.</li>
+<li><code>scripts/send_codex_notice.js</code>를 추가해 짧은 Discord 상태 알림을 보낼 수 있게 했다.</li>
+<li><code>docs/CODEX_RUNBOOK.md</code>에 Codex 작업 루프와 권한/중단 대응 규칙을 정리했다.</li>
+<li><code>docs/checkpoints/README.md</code>에 중단 체크포인트 템플릿을 추가했다.</li>
+<li>GPT 답변을 <code>docs/review_responses/2026-06-02-gpt-v02.md</code>에 저장했다.</li>
+<li><code>docs/NEXT_TASKS.md</code>를 한국어 v0.2 작업 목록으로 다시 정리했다.</li>
+<li><code>docs/review_prompts/README.md</code>와 <code>docs/review_prompts/2026-06-01.md</code>를 한국어 프롬프트 형식으로 바꿨다.</li>
+<li><code>docs/DISCORD_REPORTING.md</code>를 한국어 기준으로 다시 정리했다.</li>
+<li><code>scripts/send_discord_report.js</code>가 한국어 제목과 섹션을 우선 읽도록 수정했다.</li>
+<li><code>scripts/build_report.js</code>와 <code>scripts/send_discord_report.js</code>가 최신 날짜 보고서를 기본으로 찾도록 바꿨다.</li>
 </ul>
-<h2>Test results and evidence</h2>
+<h2>테스트 결과와 근거</h2>
 <ul>
-<li><code>node --check scripts/send_codex_notice.js</code>: passed.</li>
-<li><code>node scripts/send_codex_notice.js --dry-run --type=approval ...</code>: verified the custom notice output shape.</li>
-<li><code>node scripts/build_report.js docs/reports/2026-06-02.md</code>: generated <code>docs/reports/2026-06-02.html</code>.</li>
-<li><code>node scripts/send_codex_notice.js --type=done ...</code>: sent the workflow normalization completion notice to Discord.</li>
+<li><code>node --check scripts/send_codex_notice.js</code>: 통과.</li>
+<li><code>node --check scripts/send_discord_report.js</code>: 통과.</li>
+<li><code>node --check scripts/build_report.js</code>: 통과.</li>
+<li><code>npm run report</code>: <code>docs/reports/2026-06-02.html</code> 생성 확인.</li>
+<li><code>npm run report:discord:dry</code>: Discord 요약 형식 확인.</li>
+<li><code>npm run report:discord</code>: 한국어 요약 보고서를 Discord에 전송했다.</li>
+<li><code>node scripts/send_codex_notice.js --type=done ...</code>: Codex 운영 규칙 완료 알림을 Discord에 전송했다.</li>
 </ul>
-<h2>Decisions made</h2>
+<h2>결정 사항</h2>
 <ul>
-<li>Permission prompts still pause Codex work and must be approved in the Codex UI.</li>
-<li>Discord notices are used as attention/status signals, not as remote approval buttons.</li>
-<li>Work should be checkpointed before stopping when the next resume step may be ambiguous.</li>
-<li>GPT and Claude prompts do not need to be sent to both reviewers by default.</li>
+<li>GPT/Claude에게 보내는 프롬프트는 기본적으로 한국어로 작성한다.</li>
+<li>답변 형식에는 반드시 <code>앞으로 해야 할 일</code> 섹션을 넣는다.</li>
+<li>Discord 보고는 긴 원문 대신 <code>작업</code>, <code>완료</code>, <code>문제</code>, <code>기획질문</code>만 짧게 보여준다.</li>
+<li>GPT는 구현 우선순위와 테스트 기준 검토에 사용한다.</li>
+<li>Claude는 감정선, 문구, 플레이어 경험 검토가 필요할 때 선택적으로 사용한다.</li>
 </ul>
-<h2>Problems or risks</h2>
+<h2>문제와 리스크</h2>
 <ul>
-<li>Discord cannot approve Codex permissions directly.</li>
-<li>If an unexpected approval prompt appears, execution can still pause until the user returns.</li>
-<li>The package-level report scripts still default to the 2026-06-01 report unless a file path is passed manually.</li>
-<li>On this Windows shell, custom notice arguments are more reliable with direct <code>node scripts/send_codex_notice.js ...</code> commands than through <code>npm run ... -- ...</code>.</li>
+<li>예전 문서 일부에는 깨진 한국어 인코딩이 남아 있다.</li>
+<li>앞으로 새 문서는 깨끗한 UTF-8 한국어로 작성해야 한다.</li>
+<li>Discord는 권한 승인을 대신 누를 수 없고, Codex UI 승인이 필요하면 작업이 멈춘다.</li>
+<li>아직 v0.2 구현은 시작하지 않았다.</li>
 </ul>
-<h2>GPT handoff summary</h2>
+<h2>기획 검토 요약</h2>
 <ul>
-<li>No planning review is needed for this workflow normalization.</li>
-<li>v0.2 gameplay direction is still waiting on the planning answer from <code>docs/review_prompts/2026-06-01.md</code>.</li>
+<li>GPT verdict: <code>ITERATE_BEFORE_TEST</code>.</li>
+<li>v0.1은 바로 사람 테스트로 보내기보다 좁은 v0.2 튜닝 후 테스트하는 것이 좋다.</li>
+<li>첫 망각 타이밍을 8-10분으로 늦춘다.</li>
+<li><code>처형자의 섬광</code> 삭제율을 25-35%로 낮춘다.</li>
+<li>기본 실험값을 <code>echo=0.50</code>, <code>ui=0.62</code>로 바꾼다.</li>
+<li>망각 후 피드백 화면은 “왜 잃었고 무엇이 남았는지” 쉽게 이해되게 만든다.</li>
 </ul>
-<h2>Next Codex tasks</h2>
+<h2>다음 Codex 작업</h2>
 <ul>
-<li>Verify the new notice script.</li>
-<li>Keep using checkpoints for long-running work.</li>
-<li>Convert the GPT/Claude planning answer into <code>docs/NEXT_TASKS.md</code> when it arrives.</li>
+<li><code>docs/NEXT_TASKS.md</code> 기준으로 v0.2 narrow tuning을 구현한다.</li>
+<li>첫 망각 타이밍을 조정한다.</li>
+<li>삭제 분포와 JSON 로그를 개선한다.</li>
+<li>echo/ui 기본 실험값을 조정한다.</li>
+<li>망각 후 피드백 화면을 명확하게 만든다.</li>
+<li>구현 후 AI 테스트와 sweep을 다시 실행한다.</li>
 </ul>
-<h2>Portfolio notes</h2>
+<h2>포트폴리오 메모</h2>
 <ul>
-<li>Problem: long autonomous coding sessions can pause on permission prompts or context pressure.</li>
-<li>Direction: make progress, blockers, and resume steps explicit.</li>
-<li>Action: added Discord notices, a runbook, and checkpoint rules.</li>
-<li>Result: project work can be resumed with less ambiguity after interruptions.</li>
+<li>문제: 기획 답변이 길고 영어/한국어가 섞여 있어 바로 실행하기 어려웠다.</li>
+<li>방향: 리뷰 답변을 한국어 작업 목록과 테스트 기준으로 정리한다.</li>
+<li>실행: GPT 답변을 별도 문서로 저장하고, <code>NEXT_TASKS</code>를 v0.2 작업 지시서로 바꿨다.</li>
+<li>결과: 다음 구현 라운드는 “더 만들기”가 아니라 “망각이 제대로 느껴지는지 판별 가능한 상태 만들기”로 시작할 수 있다.</li>
 </ul>
   </main>
 </body>

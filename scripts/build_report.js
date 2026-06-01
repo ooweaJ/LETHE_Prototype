@@ -4,7 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const input = process.argv[2] || 'docs/reports/2026-06-01.md';
+const input = process.argv[2] || latestMarkdownReport();
 const inputPath = path.resolve(input);
 const outputPath = inputPath.replace(/\.md$/i, '.html');
 
@@ -269,4 +269,16 @@ function escapeHtml(text) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
+}
+
+function latestMarkdownReport() {
+  const reportsDir = path.resolve('docs', 'reports');
+  if (!fs.existsSync(reportsDir)) return 'docs/reports/2026-06-01.md';
+
+  const reports = fs.readdirSync(reportsDir)
+    .filter((file) => /^\d{4}-\d{2}-\d{2}\.md$/.test(file))
+    .sort();
+
+  if (reports.length === 0) return 'docs/reports/2026-06-01.md';
+  return path.join('docs', 'reports', reports[reports.length - 1]);
 }

@@ -1,45 +1,44 @@
-# Review Prompts
+# 기획 검토 프롬프트
 
-Use this folder only when a daily report needs planning review from GPT, Claude, or another reviewer.
+GPT나 Claude에게 기획 검토를 맡길 때 이 폴더에 프롬프트를 둔다.
 
-Recommended file name:
+권장 파일명:
 
 ```text
 docs/review_prompts/YYYY-MM-DD.md
 ```
 
-Keep the prompt separate from the HTML report:
+## 작성 원칙
 
-- The report remains the project record.
-- The prompt can be copied directly into GPT or Claude.
-- The same report can have different prompts for system planning, emotional review, or playtest interpretation.
-- Discord can attach the prompt file only when it exists.
+- 기본은 한국어로 쓴다.
+- Codex가 바로 실행할 수 있게 답변 형식을 지정한다.
+- GPT는 우선순위, 구현 범위, 테스트 기준을 묻는 데 쓴다.
+- Claude는 감정선, 문구, 플레이어 경험을 묻는 데 쓴다.
+- 둘 다에게 무조건 보낼 필요는 없다.
 
-Suggested structure:
+## 권장 답변 형식
 
 ```markdown
-# LETHE Planning Review - YYYY-MM-DD
+## 결론
 
-## Target
+- GO_TO_HUMAN_TEST / ITERATE_BEFORE_TEST / FIX_CORE 중 하나
 
-GPT or Claude
+## 이유
 
-## Context
+- 핵심 판단 근거 3-5개
 
-- Current build:
-- What changed:
-- Test result:
-- Problem:
+## 앞으로 해야 할 일
 
-## Questions
+- [ ] Codex가 구현할 작업 1
+- [ ] Codex가 구현할 작업 2
+- [ ] Codex가 구현할 작업 3
 
-1. 
-2. 
-3. 
+## 테스트 기준
 
-## Requested Output
+- AI 테스트 기준:
+- 사람 플레이테스트 관찰 기준:
 
-- Verdict:
-- Next 1-3 tasks:
-- Do not add:
+## 아직 만들지 말 것
+
+- 이번 라운드에서 제외할 범위
 ```

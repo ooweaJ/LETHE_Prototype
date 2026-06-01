@@ -6,7 +6,7 @@ const path = require('path');
 
 const options = parseArgs(process.argv.slice(2));
 const dryRun = options.dryRun;
-const input = options.input || 'docs/reports/2026-06-01.md';
+const input = options.input || latestMarkdownReport();
 const markdownPath = path.resolve(input);
 const htmlPath = markdownPath.replace(/\.md$/i, '.html');
 const promptPath = resolvePromptPath(options.prompt, markdownPath);
@@ -24,7 +24,7 @@ async function main() {
   }
 
   if (!fs.existsSync(htmlPath)) {
-    throw new Error(`Report HTML not found. Run npm run report first: ${path.relative(process.cwd(), htmlPath)}`);
+    throw new Error(`Report HTML not found. Run the report builder first: ${path.relative(process.cwd(), htmlPath)}`);
   }
 
   const markdown = fs.readFileSync(markdownPath, 'utf8');
@@ -72,30 +72,30 @@ async function main() {
 function buildMessage(markdown, markdownFile, htmlFile, reviewPromptPath) {
   const reportDate = path.basename(markdownFile, '.md');
   const work = bulletsFromSections(markdown, [
+    '오늘 한 일',
+    '작업 내용',
     'what changed today',
     'what changed',
     'today work',
-    '오늘 한 일',
-    '작업 내용',
   ], 2);
   const status = bulletsFromSections(markdown, [
+    '현재 상태',
+    '완료 상태',
     'current build status',
     'current build',
     'build status',
-    '현재 상태',
-    '완료 상태',
   ], 2);
   const problems = bulletsFromSections(markdown, [
+    '문제와 리스크',
+    '문제',
     'problems or risks',
     'problems and risks',
     'risks',
-    '문제와 리스크',
-    '문제',
   ], 2);
   const handoff = bulletsFromSections(markdown, [
+    '기획 검토 요약',
     'gpt handoff summary',
     'planning handoff',
-    '기획 핸드오프',
     'gpt 전달',
   ], 1);
   const planningLine = reviewPromptPath
@@ -104,7 +104,7 @@ function buildMessage(markdown, markdownFile, htmlFile, reviewPromptPath) {
       ? fit(handoff[0], 220)
       : '없음';
   const lines = [
-    `LETHE Report - ${reportDate}`,
+    `LETHE 보고서 - ${reportDate}`,
     `작업: ${fit(joinBullets(work) || '보고서가 갱신되었습니다.', 260)}`,
     `완료: ${fit(joinBullets(status) || 'HTML 보고서 생성 완료', 220)}`,
     `문제: ${fit(joinBullets(problems) || '새로 기록된 문제 없음', 220)}`,
@@ -129,6 +129,8 @@ function parseArgs(args) {
     } else if (arg === '--prompt') {
       parsed.prompt = args[index + 1] || '';
       index += 1;
+    } else if (arg.startsWith('--prompt=')) {
+      parsed.prompt = arg.slice('--prompt='.length);
     } else if (!arg.startsWith('--') && !parsed.input) {
       parsed.input = arg;
     }
@@ -230,4 +232,16 @@ function unquote(value) {
     return value.slice(1, -1);
   }
   return value;
+}
+
+function latestMarkdownReport() {
+  const reportsDir = path.resolve('docs', 'reports');
+  if (!fs.existsSync(reportsDir)) return 'docs/reports/2026-06-01.md';
+
+  const reports = fs.readdirSync(reportsDir)
+    .filter((file) => /^\d{4}-\d{2}-\d{2}\.md$/.test(file))
+    .sort();
+
+  if (reports.length === 0) return 'docs/reports/2026-06-01.md';
+  return path.join('docs', 'reports', reports[reports.length - 1]);
 }

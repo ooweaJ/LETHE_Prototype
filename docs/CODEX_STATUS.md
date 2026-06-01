@@ -82,6 +82,16 @@ Sweep note:
 - Short status notices can be previewed with `npm run codex:notice:dry`.
 - Latest Codex status notice: workflow normalization completion sent to Discord on 2026-06-02.
 
+## Latest Planning Verdict
+
+- Verdict: `ITERATE_BEFORE_TEST`.
+- Planning response summary: `docs/review_responses/2026-06-02-gpt-v02.md`.
+- Next implementation scope: v0.2 narrow tuning for timing, deletion distribution, echo defaults, logs, and player-facing feedback.
+- No additional GPT question is required before v0.2 implementation.
+- If Claude is used, ask for emotional feedback after the forgetting result screen is improved.
+- Default report commands now use the latest dated Markdown report in `docs/reports/`.
+- Latest Discord report: Korean summary report uploaded successfully on 2026-06-02.
+
 ## Recommended Next Questions For GPT
 
 - Should first forgetting be delayed in the HTML prototype, or only in the simulation model?

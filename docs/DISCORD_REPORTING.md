@@ -1,68 +1,63 @@
-# Discord Report Delivery
+# Discord 보고서 전송
 
-LETHE daily reports are written in Markdown and rendered to HTML. The Discord integration uploads the generated HTML file to a Discord channel through a channel webhook.
+LETHE 보고서는 Markdown으로 작성하고 HTML로 생성한다. Discord에는 긴 원문을 그대로 붙이지 않고, 짧은 한국어 요약과 HTML 첨부 파일을 보낸다.
 
-## Channel Setup
+## 채널 설정
 
-1. Create a Discord channel, for example `#daily-report`.
-2. Open channel settings.
-3. Go to Integrations > Webhooks.
-4. Create a webhook and copy its URL.
-5. Store the URL locally as `DISCORD_WEBHOOK_URL`.
+1. Discord에 `#daily-report` 같은 채널을 만든다.
+2. 채널 설정을 연다.
+3. Integrations > Webhooks로 이동한다.
+4. Webhook을 만들고 URL을 복사한다.
+5. 프로젝트 루트의 로컬 `.env`에 URL을 저장한다.
 
-Do not commit the webhook URL. `.env` files are ignored by Git, and the script reads `.env` automatically if it exists.
-
-Create a local `.env` file:
+`.env`는 Git에 올라가지 않는다.
 
 ```text
 DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/...
 ```
 
-PowerShell example:
+## 사용 방법
 
-```powershell
-$env:DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/..."
-npm run report:discord
-```
-
-Dry-run preview without uploading:
+미리보기:
 
 ```powershell
 npm run report:discord:dry
 ```
 
-## Project Flow
+실제 전송:
 
 ```powershell
-npm run report
 npm run report:discord
 ```
 
-`npm run report:discord` rebuilds the HTML report from `docs/reports/2026-06-01.md`, then uploads `docs/reports/2026-06-01.html` as a Discord attachment.
+기본 명령은 `docs/reports/` 안의 최신 날짜 Markdown 보고서를 자동으로 선택한다.
 
-Discord does not render attached HTML inside the chat message. The channel message shows only the key status lines and the HTML file as an attachment.
+특정 보고서를 보내고 싶을 때:
 
-## Message Format
+```powershell
+node scripts/build_report.js docs/reports/2026-06-02.md
+node scripts/send_discord_report.js docs/reports/2026-06-02.md
+```
 
-The Discord message should stay short:
+## Discord 메시지 형식
 
-- `작업`: what was done.
-- `완료`: how far the work got.
-- `문제`: blockers or risks.
-- `기획질문`: whether GPT or Claude review is needed.
+Discord 본문은 아래 네 줄 중심으로 짧게 유지한다.
 
-The HTML report remains the full record.
+- `작업`: 오늘 무엇을 했는지.
+- `완료`: 어디까지 끝났는지.
+- `문제`: 막힌 점이나 리스크.
+- `기획질문`: GPT/Claude 검토가 필요한지.
 
-## Planning Review Prompts
+전체 기록은 HTML 첨부 파일에서 확인한다.
 
-Do not bury GPT or Claude prompts inside the HTML report body. If planning review is needed, create a separate Markdown file:
+## GPT/Claude 프롬프트
+
+기획 검토가 필요하면 HTML 보고서 안에 프롬프트를 묻어두지 말고 별도 Markdown 파일로 둔다.
 
 ```text
 docs/review_prompts/YYYY-MM-DD.md
 ```
 
-`npm run report:discord` detects that file automatically and attaches it with the HTML report. You can also pass a prompt file manually:
+이 파일이 있으면 Discord 보고서 전송 시 자동으로 함께 첨부된다.
 
-```powershell
-node scripts/send_discord_report.js docs/reports/2026-06-01.md --prompt docs/review_prompts/2026-06-01.md
-```
+프롬프트는 기본적으로 한국어로 작성하고, 답변 형식에는 `앞으로 해야 할 일`을 포함한다.
