@@ -276,6 +276,56 @@
 <li>실행: 타이밍, 삭제 weight, 결과 피드백, JSON 로그, 자유응답 문항을 좁게 구현했다.</li>
 <li>결과: AI 기준 human test 후보까지 올라왔고, 다음 단계는 실제 플레이어 감정 반응 검증이다.</li>
 </ul>
+<p>---</p>
+<h1>로컬 pull 이후 추가 보고</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>원격 <code>main</code>을 로컬에 fast-forward로 반영했다.</li>
+<li>LETHE v0.2는 계속 AI 기준 human-test candidate 상태다.</li>
+<li>브라우저 QA는 시작 화면과 런 시작 흐름까지 확인했고, 결과 화면과 JSON 다운로드는 아직 남아 있다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>docs/HUMAN_PLAYTEST_GUIDE.md</code>를 추가했다.</li>
+<li><code>docs/PLAYTEST_NOTES.md</code>에 가이드 링크와 반응 라벨 기록 항목을 추가했다.</li>
+<li><code>docs/NEXT_TASKS.md</code>에서 human playtest 가이드 작성 항목을 완료로 표시했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>npm run ai:test</code>: <code>GO_CANDIDATE</code>.</li>
+<li>Alpha Fun Score <code>0.7737</code>.</li>
+<li>regret <code>76.3%</code>, irritation <code>1.1%</code>, prediction <code>76.3%</code>.</li>
+<li><code>npm run report</code>: <code>docs/reports/2026-06-02.html</code> 생성 성공.</li>
+</ul>
+<h2>4. 결정 사항</h2>
+<ul>
+<li>사람 테스트는 5-8명 규모로 진행한다.</li>
+<li>테스트 목적은 콘텐츠 평가가 아니라 망각이 아쉬운지, 납득되는지, 회복 가능한지 확인하는 것이다.</li>
+<li>AI 테스트 결과와 사람 플레이테스트 노트는 섞지 않는다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>결과 화면과 JSON 다운로드는 아직 실제 브라우저에서 끝까지 확인하지 못했다.</li>
+<li>컨텍스트가 길어질 경우 Codex 대화는 요약될 수 있으므로, 진행 상태는 문서에 남긴다.</li>
+</ul>
+<h2>6. GPT 인계 요약</h2>
+<ul>
+<li>추가 GPT 질문은 아직 필요하지 않다.</li>
+<li>사람 테스트 후 <code>regret</code>, <code>irritation</code>, <code>neutral</code>, <code>unclear</code> 반응 분포를 기준으로 v0.3 방향을 물어보면 된다.</li>
+</ul>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>v0.2 결과 화면 브라우저 QA를 완료한다.</li>
+<li>JSON 다운로드에 선택 기억, 예측 기억, 실제 삭제 기억, 삭제 weight가 들어가는지 확인한다.</li>
+<li>사람 테스트 결과가 모이면 v0.3 방향을 정리한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: AI 지표만으로는 실제 상실감과 짜증을 구분할 수 없다.</li>
+<li>방향: 5-8명 테스트에서 관찰 질문과 로그 필드를 맞춰 감정 반응을 수집한다.</li>
+<li>실행: 플레이테스트 가이드와 노트 항목을 문서화했다.</li>
+<li>결과: v0.2는 사람 테스트를 실행할 준비 문서까지 갖췄고, 남은 것은 결과 화면/JSON 브라우저 QA다.</li>
+</ul>
   </main>
 </body>
 </html>

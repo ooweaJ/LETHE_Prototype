@@ -2,6 +2,8 @@
 
 사람 플레이테스트와 관찰 내용을 기록한다. AI 알파테스트 결과와 섞지 않는다.
 
+테스트 진행 기준은 `docs/HUMAN_PLAYTEST_GUIDE.md`를 따른다.
+
 ## Session Template
 
 ```text
@@ -25,8 +27,8 @@ After forgetting:
 - 계속 플레이 의향:
 
 Observations:
+- reaction label: regret / irritation / neutral / unclear
 - 좋았던 점:
 - 짜증/혼란:
 - 다음 수정 후보:
 ```
-

@@ -75,7 +75,9 @@ npm run ai:sweep
 
 ## Open Technical Notes
 
-- Browser visual verification has not been run in this session.
+- Browser visual verification has started in this session:
+  - start screen and run start flow were checked,
+  - result screen and JSON download still need full browser confirmation.
 - The game is static HTML and can be run by opening `index.html`.
 - Generated AI test outputs are ignored by git under `alpha_test/outputs/`.
 - Report HTML can be generated from Markdown with `npm run report`.
@@ -93,5 +95,6 @@ npm run ai:sweep
 ## Next Codex Tasks
 
 - Review the v0.2 result screen visually in browser.
-- If visual QA passes, prepare a small human test guide for 5-8 players.
+- Confirm the downloaded JSON log fields in browser.
+- Use `docs/HUMAN_PLAYTEST_GUIDE.md` for the 5-8 player human test.
 - During human test, focus on whether the forgotten memory feels regrettable, understandable, and recoverable.
