@@ -454,6 +454,47 @@ npm run report</code></pre>
 <li>Action: shortened the Discord body and added prompt-file detection.</li>
 <li>Result: Discord now works as a readable daily status channel while preserving full report detail in HTML.</li>
 </ul>
+<h2>Addendum: Secret File Cleanup</h2>
+<h3>Current build status</h3>
+<ul>
+<li>Local <code>.env</code> files are ignored by Git.</li>
+<li>Discord delivery still reads <code>DISCORD_WEBHOOK_URL</code> from the environment or local <code>.env</code>.</li>
+</ul>
+<h3>What changed today</h3>
+<ul>
+<li>Removed <code>.env.example</code>.</li>
+<li>Removed the <code>.env.example</code> exception from <code>.gitignore</code>.</li>
+<li>Updated Discord setup docs to describe creating a local <code>.env</code> file directly.</li>
+</ul>
+<h3>Test results and evidence</h3>
+<ul>
+<li><code>git status --short</code> did not show <code>.env</code>.</li>
+<li><code>.gitignore</code> contains <code>.env</code> and <code>.env.*</code>.</li>
+</ul>
+<h3>Decisions made</h3>
+<ul>
+<li>Keep webhook secrets fully local.</li>
+<li>Do not track a sample environment file for this small private prototype.</li>
+</ul>
+<h3>Problems or risks</h3>
+<ul>
+<li>New setup now relies on the documentation instead of a template file.</li>
+</ul>
+<h3>GPT handoff summary</h3>
+<ul>
+<li>No GPT or Claude review is needed for this cleanup.</li>
+</ul>
+<h3>Next Codex tasks</h3>
+<ul>
+<li>Continue using <code>npm run report:discord:dry</code> before live Discord uploads.</li>
+</ul>
+<h3>Portfolio notes</h3>
+<ul>
+<li>Problem: the project did not need a tracked env template.</li>
+<li>Direction: keep secret setup simple and local.</li>
+<li>Action: removed <code>.env.example</code> and kept the setup documented.</li>
+<li>Result: the webhook URL remains protected while the workflow stays understandable.</li>
+</ul>
   </main>
 </body>
 </html>

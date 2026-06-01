@@ -11,4 +11,3 @@ alpha_test/outputs/
 # Local secrets
 .env
 .env.*
-!.env.example

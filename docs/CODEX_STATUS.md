@@ -73,6 +73,7 @@ Sweep note:
 - Discord report delivery can be previewed with `npm run report:discord:dry` and uploaded with `npm run report:discord` after setting `DISCORD_WEBHOOK_URL`.
 - Discord messages are intentionally short: work done, completion state, problems, and planning-review need.
 - GPT/Claude review prompts should live in `docs/review_prompts/YYYY-MM-DD.md` and are attached automatically when present.
+- Local `.env` is ignored by Git; no tracked `.env.example` is required.
 
 ## Recommended Next Questions For GPT
 

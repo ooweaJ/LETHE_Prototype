@@ -12,7 +12,7 @@ LETHE daily reports are written in Markdown and rendered to HTML. The Discord in
 
 Do not commit the webhook URL. `.env` files are ignored by Git, and the script reads `.env` automatically if it exists.
 
-`.env` example:
+Create a local `.env` file:
 
 ```text
 DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/...
