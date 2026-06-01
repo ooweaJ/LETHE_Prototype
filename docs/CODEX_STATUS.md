@@ -27,6 +27,7 @@ Last updated: 2026-06-01
 - AI alpha test tool under `alpha_test/`
 - Codex-GPT workflow docs
 - Daily devlog and human-readable report system
+- Discord daily report delivery script and setup guide
 - Root `AGENTS.md` for project agent rules
 
 ## Latest AI Test Result
@@ -69,6 +70,7 @@ Sweep note:
 - The game is static HTML and can be run by opening `index.html` or with `python3 -m http.server 8000`.
 - Generated AI test outputs are ignored by git under `alpha_test/outputs/`.
 - Report HTML can be generated from Markdown with `npm run report`.
+- Discord report delivery can be previewed with `npm run report:discord:dry` and uploaded with `npm run report:discord` after setting `DISCORD_WEBHOOK_URL`.
 
 ## Recommended Next Questions For GPT
 

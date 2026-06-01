@@ -8,7 +8,9 @@
     "ai:test:quick": "node alpha_test/src/run_alpha.js --runs 120 --stages 2 --seed quick --echo 0.60 --ui 0.62 --out alpha_test/outputs/quick",
     "ai:test:heavy": "node alpha_test/src/run_alpha.js --runs 5000 --stages 3 --seed heavy --echo 0.60 --ui 0.62 --out alpha_test/outputs/heavy",
     "ai:sweep": "node alpha_test/src/sweep.js --runs 300 --stages 2 --echo 0.40,0.50,0.60,0.70,0.80 --ui 0.45,0.62,0.78 --out alpha_test/outputs/sweep",
-    "report": "node scripts/build_report.js docs/reports/2026-06-01.md"
+    "report": "node scripts/build_report.js docs/reports/2026-06-01.md",
+    "report:discord": "npm run report && node scripts/send_discord_report.js docs/reports/2026-06-01.md",
+    "report:discord:dry": "node scripts/send_discord_report.js docs/reports/2026-06-01.md --dry-run"
   },
   "engines": {
     "node": ">=18.0.0"

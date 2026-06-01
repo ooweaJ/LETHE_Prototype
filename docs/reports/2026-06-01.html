@@ -355,11 +355,59 @@ npm run report</code></pre>
 <li>Added: Codex-GPT workflow docs</li>
 <li>Added: daily devlog structure</li>
 <li>Added: report Markdown/HTML generation</li>
+<li>Added: Discord report delivery script and setup guide</li>
 <li>Added: root <code>AGENTS.md</code></li>
 <li>Changed: README에 실행/테스트/기록 방법 추가</li>
 <li>Commit: <code>810c567 Initial LETHE HTML alpha prototype</code></li>
 <li>Commit: <code>7525441 Add development workflow docs</code></li>
 <li>Commit: <code>e2fadec Add report generation workflow</code></li>
+</ul>
+<h2>Addendum: Discord Report Delivery</h2>
+<h3>Current build status</h3>
+<ul>
+<li>The HTML prototype and report generator still build.</li>
+<li>Discord delivery is implemented as an optional webhook step after HTML report generation.</li>
+</ul>
+<h3>What changed today</h3>
+<ul>
+<li>Added <code>scripts/send_discord_report.js</code>.</li>
+<li>Added <code>npm run report:discord</code> and <code>npm run report:discord:dry</code>.</li>
+<li>Added <code>.env.example</code> and <code>.env</code> Git ignore rules for the webhook secret.</li>
+<li>Added <code>docs/DISCORD_REPORTING.md</code>.</li>
+</ul>
+<h3>Test results and evidence</h3>
+<ul>
+<li><code>node --check scripts/send_discord_report.js</code>: passed.</li>
+<li><code>npm run report</code>: regenerated <code>docs/reports/2026-06-01.html</code>.</li>
+<li><code>npm run report:discord:dry</code>: printed the Discord message preview and selected <code>2026-06-01.html</code> as the attachment.</li>
+</ul>
+<h3>Decisions made</h3>
+<ul>
+<li>Use Discord first instead of Slack because the project currently needs lightweight daily development logging more than organization-style workflow management.</li>
+<li>Upload the generated HTML as a Discord attachment, with a short text summary in the message body.</li>
+<li>Keep the webhook URL local through <code>DISCORD_WEBHOOK_URL</code>.</li>
+</ul>
+<h3>Problems or risks</h3>
+<ul>
+<li>Discord does not render attached HTML inline; the report appears as a downloadable/openable attachment.</li>
+<li>Actual upload still requires the user to create a Discord webhook and set the local secret.</li>
+</ul>
+<h3>GPT handoff summary</h3>
+<ul>
+<li>No GPT planning review is needed for the integration itself.</li>
+<li>GPT can later review whether report summaries should include the full eight report items or only a compact build summary.</li>
+</ul>
+<h3>Next Codex tasks</h3>
+<ul>
+<li>After the user provides a Discord webhook URL locally, run <code>npm run report:discord</code>.</li>
+<li>If daily dates become manual overhead, make the report scripts accept today's date automatically.</li>
+</ul>
+<h3>Portfolio notes</h3>
+<ul>
+<li>Problem: the project had local HTML reports but no lightweight delivery path.</li>
+<li>Direction: keep Markdown and HTML as the source of record, then send a compact Discord notification.</li>
+<li>Action: added a webhook upload script and setup guide.</li>
+<li>Result: a daily report can now be previewed locally and uploaded to Discord with one command after the secret is configured.</li>
 </ul>
   </main>
 </body>
