@@ -127,13 +127,15 @@
 <li>Codex 작업 운영 규칙을 정리했다.</li>
 <li>Discord 상태 알림 스크립트를 추가했다.</li>
 <li>GPT v0.2 기획 답변을 한국어 작업 목록으로 변환했다.</li>
+<li>Claude Code 자동 기획 검토 흐름을 구현하고 실제 호출까지 테스트했다.</li>
 <li>앞으로 GPT/Claude에게 보내는 프롬프트와 Discord 보고 요약은 한국어 중심으로 작성한다.</li>
 </ul>
 <h2>현재 상태</h2>
 <ul>
 <li>LETHE HTML alpha v0.1은 실행 가능하다.</li>
 <li>v0.2 방향은 <code>ITERATE_BEFORE_TEST</code>로 결정됐다.</li>
-<li>다음 작업은 새 콘텐츠 추가가 아니라 좁은 튜닝 패스다.</li>
+<li>GPT와 Claude 모두 좁은 v0.2 튜닝 후 사람 테스트를 권장했다.</li>
+<li>다음 작업은 새 콘텐츠 추가가 아니라 망각 루프를 해석 가능한 상태로 보정하는 것이다.</li>
 <li>보고서 명령은 <code>docs/reports/</code>의 최신 날짜 Markdown을 기본으로 사용한다.</li>
 </ul>
 <h2>오늘 한 일</h2>
@@ -142,7 +144,11 @@
 <li><code>docs/CODEX_RUNBOOK.md</code>에 Codex 작업 루프와 권한/중단 대응 규칙을 정리했다.</li>
 <li><code>docs/checkpoints/README.md</code>에 중단 체크포인트 템플릿을 추가했다.</li>
 <li>GPT 답변을 <code>docs/review_responses/2026-06-02-gpt-v02.md</code>에 저장했다.</li>
-<li><code>docs/NEXT_TASKS.md</code>를 한국어 v0.2 작업 목록으로 다시 정리했다.</li>
+<li>루트 <code>CLAUDE.md</code>를 추가해 Claude Code 역할과 답변 규칙을 정리했다.</li>
+<li><code>scripts/ask_claude_review.js</code>를 추가했다.</li>
+<li><code>npm run review:claude</code>와 <code>npm run review:claude:dry</code>를 추가했다.</li>
+<li>Claude Code를 비대화형으로 호출해 <code>docs/review_responses/2026-06-01-claude.md</code>를 생성했다.</li>
+<li><code>docs/NEXT_TASKS.md</code>를 GPT/Claude 답변을 합친 한국어 v0.2 작업 목록으로 다시 정리했다.</li>
 <li><code>docs/review_prompts/README.md</code>와 <code>docs/review_prompts/2026-06-01.md</code>를 한국어 프롬프트 형식으로 바꿨다.</li>
 <li><code>docs/DISCORD_REPORTING.md</code>를 한국어 기준으로 다시 정리했다.</li>
 <li><code>scripts/send_discord_report.js</code>가 한국어 제목과 섹션을 우선 읽도록 수정했다.</li>
@@ -150,13 +156,19 @@
 </ul>
 <h2>테스트 결과와 근거</h2>
 <ul>
+<li><code>claude --version</code>: <code>2.1.153 (Claude Code)</code>.</li>
+<li><code>claude --help</code>: <code>-p/--print</code> 비대화형 출력 지원 확인.</li>
 <li><code>node --check scripts/send_codex_notice.js</code>: 통과.</li>
 <li><code>node --check scripts/send_discord_report.js</code>: 통과.</li>
 <li><code>node --check scripts/build_report.js</code>: 통과.</li>
+<li><code>node --check scripts/ask_claude_review.js</code>: 통과.</li>
+<li><code>npm run review:claude:dry</code>: 프롬프트와 출력 경로 확인.</li>
+<li><code>npm run review:claude</code>: Claude 답변 파일 생성 성공.</li>
 <li><code>npm run report</code>: <code>docs/reports/2026-06-02.html</code> 생성 확인.</li>
-<li><code>npm run report:discord:dry</code>: Discord 요약 형식 확인.</li>
+<li><code>npm run report:discord:dry</code>: Discord 한국어 요약 형식 확인.</li>
 <li><code>npm run report:discord</code>: 한국어 요약 보고서를 Discord에 전송했다.</li>
 <li><code>node scripts/send_codex_notice.js --type=done ...</code>: Codex 운영 규칙 완료 알림을 Discord에 전송했다.</li>
+<li><code>node scripts/send_codex_notice.js --type=done ...</code>: Claude 자동 검토 완료 알림을 Discord에 전송했다.</li>
 </ul>
 <h2>결정 사항</h2>
 <ul>
@@ -164,39 +176,47 @@
 <li>답변 형식에는 반드시 <code>앞으로 해야 할 일</code> 섹션을 넣는다.</li>
 <li>Discord 보고는 긴 원문 대신 <code>작업</code>, <code>완료</code>, <code>문제</code>, <code>기획질문</code>만 짧게 보여준다.</li>
 <li>GPT는 구현 우선순위와 테스트 기준 검토에 사용한다.</li>
-<li>Claude는 감정선, 문구, 플레이어 경험 검토가 필요할 때 선택적으로 사용한다.</li>
+<li>Claude는 감정선, 문구, 플레이어 경험 검토에 사용한다.</li>
+<li>Claude 자동 검토 때는 <code>--tools &quot;&quot;</code>로 도구를 비활성화해 파일을 직접 수정하지 못하게 한다.</li>
+<li>Claude 답변 원문은 Discord가 아니라 <code>docs/review_responses/</code>에 저장한다.</li>
 </ul>
 <h2>문제와 리스크</h2>
 <ul>
 <li>예전 문서 일부에는 깨진 한국어 인코딩이 남아 있다.</li>
 <li>앞으로 새 문서는 깨끗한 UTF-8 한국어로 작성해야 한다.</li>
 <li>Discord는 권한 승인을 대신 누를 수 없고, Codex UI 승인이 필요하면 작업이 멈춘다.</li>
+<li>Claude Code 인증이나 네트워크 문제가 있으면 자동 검토가 멈출 수 있다.</li>
+<li>PowerShell <code>Get-Content</code> 출력에서는 Claude 응답 한국어가 깨져 보일 수 있지만, Node로 읽으면 UTF-8 파일은 정상이다.</li>
 <li>아직 v0.2 구현은 시작하지 않았다.</li>
 </ul>
 <h2>기획 검토 요약</h2>
 <ul>
 <li>GPT verdict: <code>ITERATE_BEFORE_TEST</code>.</li>
+<li>Claude verdict: <code>ITERATE_BEFORE_TEST</code>.</li>
 <li>v0.1은 바로 사람 테스트로 보내기보다 좁은 v0.2 튜닝 후 테스트하는 것이 좋다.</li>
-<li>첫 망각 타이밍을 8-10분으로 늦춘다.</li>
+<li>첫 망각 타이밍을 8-10분, 가능하면 8.0-9.5분 범위로 늦춘다.</li>
 <li><code>처형자의 섬광</code> 삭제율을 25-35%로 낮춘다.</li>
-<li>기본 실험값을 <code>echo=0.50</code>, <code>ui=0.62</code>로 바꾼다.</li>
+<li>JSON 로그에 선택 기억, 예측 기억, 실제 삭제 기억, 삭제 weight 또는 score를 남긴다.</li>
+<li><code>echo=0.50</code>과 기존 <code>echo=0.60</code>을 비교 가능하게 로그를 남긴다.</li>
 <li>망각 후 피드백 화면은 “왜 잃었고 무엇이 남았는지” 쉽게 이해되게 만든다.</li>
+<li>사람 테스트에는 사라진 기억 이름을 말할 수 있는지 확인하는 자유응답을 추가한다.</li>
 </ul>
 <h2>다음 Codex 작업</h2>
 <ul>
 <li><code>docs/NEXT_TASKS.md</code> 기준으로 v0.2 narrow tuning을 구현한다.</li>
 <li>첫 망각 타이밍을 조정한다.</li>
 <li>삭제 분포와 JSON 로그를 개선한다.</li>
-<li>echo/ui 기본 실험값을 조정한다.</li>
+<li>echo/ui 실험값과 로그를 정리한다.</li>
 <li>망각 후 피드백 화면을 명확하게 만든다.</li>
+<li>사람 테스트용 자유응답 문항을 추가한다.</li>
 <li>구현 후 AI 테스트와 sweep을 다시 실행한다.</li>
 </ul>
 <h2>포트폴리오 메모</h2>
 <ul>
-<li>문제: 기획 답변이 길고 영어/한국어가 섞여 있어 바로 실행하기 어려웠다.</li>
-<li>방향: 리뷰 답변을 한국어 작업 목록과 테스트 기준으로 정리한다.</li>
-<li>실행: GPT 답변을 별도 문서로 저장하고, <code>NEXT_TASKS</code>를 v0.2 작업 지시서로 바꿨다.</li>
-<li>결과: 다음 구현 라운드는 “더 만들기”가 아니라 “망각이 제대로 느껴지는지 판별 가능한 상태 만들기”로 시작할 수 있다.</li>
+<li>문제: 기획 답변을 사람이 수동으로 복사해 붙여넣고, 영어/한국어가 섞인 답변을 다시 작업화해야 했다.</li>
+<li>방향: GPT/Claude 기획 검토를 Markdown으로 받고, Codex가 바로 작업 목록과 구현으로 이어가게 만든다.</li>
+<li>실행: Claude Code 자동 호출 스크립트와 <code>CLAUDE.md</code>를 추가하고, 실제 Claude 답변 파일 생성을 검증했다.</li>
+<li>결과: 기획 검토는 파일로 저장되고, Discord는 상태 알림만 맡는 구조가 완성됐다.</li>
 </ul>
   </main>
 </body>

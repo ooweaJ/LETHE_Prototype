@@ -86,11 +86,14 @@ Sweep note:
 
 - Verdict: `ITERATE_BEFORE_TEST`.
 - Planning response summary: `docs/review_responses/2026-06-02-gpt-v02.md`.
+- Claude response summary: `docs/review_responses/2026-06-01-claude.md`.
 - Next implementation scope: v0.2 narrow tuning for timing, deletion distribution, echo defaults, logs, and player-facing feedback.
 - No additional GPT question is required before v0.2 implementation.
 - If Claude is used, ask for emotional feedback after the forgetting result screen is improved.
 - Default report commands now use the latest dated Markdown report in `docs/reports/`.
 - Latest Discord report: Korean summary report uploaded successfully on 2026-06-02.
+- Claude Code automation: `npm run review:claude` saves a Korean planning response with tools disabled.
+- Latest Codex notice: Claude automation completion sent to Discord on 2026-06-02.
 
 ## Recommended Next Questions For GPT
 

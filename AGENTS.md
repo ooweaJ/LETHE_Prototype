@@ -54,3 +54,11 @@ Until GPT or the user explicitly changes scope, do not add:
 - Multi-region run structure.
 
 The current prototype goal is to verify whether forgetting feels regrettable rather than irritating.
+
+## Claude Code Automation
+
+- Claude Code may be used for planning review through `scripts/ask_claude_review.js`.
+- Claude answers should be saved under `docs/review_responses/YYYY-MM-DD-claude.md`.
+- Claude should not edit project files during automated review; it is called with tools disabled.
+- Codex reads the saved Claude response, updates `docs/NEXT_TASKS.md`, then implements the selected work.
+- Discord is only a status/attention channel. Markdown files are the source of truth.

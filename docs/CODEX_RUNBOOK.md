@@ -86,3 +86,27 @@ GPT is the default reviewer for system direction, implementation priority, and t
 Claude is useful when the question is emotional feel, wording, narrative tone, or whether forgetting feels regrettable instead of irritating.
 
 Do not send every prompt to both by default. Send to both only when the decision affects the prototype direction or human-test readiness.
+
+## Claude Code Automation
+
+Claude Code can be called from the terminal for non-interactive planning review.
+
+Dry-run:
+
+```powershell
+npm run review:claude:dry
+```
+
+Actual review:
+
+```powershell
+npm run review:claude
+```
+
+The script reads the latest dated file in `docs/review_prompts/` and writes the response to:
+
+```text
+docs/review_responses/YYYY-MM-DD-claude.md
+```
+
+Claude is called with tools disabled, so it should only answer the planning prompt. Codex remains responsible for file edits, tests, reports, commits, and pushes.

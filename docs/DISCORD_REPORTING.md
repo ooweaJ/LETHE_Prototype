@@ -61,3 +61,12 @@ docs/review_prompts/YYYY-MM-DD.md
 이 파일이 있으면 Discord 보고서 전송 시 자동으로 함께 첨부된다.
 
 프롬프트는 기본적으로 한국어로 작성하고, 답변 형식에는 `앞으로 해야 할 일`을 포함한다.
+
+Claude Code 자동 검토를 쓸 때:
+
+```powershell
+npm run review:claude:dry
+npm run review:claude
+```
+
+Claude 답변은 Discord가 아니라 `docs/review_responses/YYYY-MM-DD-claude.md`에 저장한다. Discord는 답변 도착, 구현 시작, 완료 같은 상태 알림만 보낸다.

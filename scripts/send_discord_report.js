@@ -97,11 +97,11 @@ function buildMessage(markdown, markdownFile, htmlFile, reviewPromptPath) {
     'gpt handoff summary',
     'planning handoff',
     'gpt 전달',
-  ], 1);
+  ], 2);
   const planningLine = reviewPromptPath
     ? `있음 - ${path.relative(process.cwd(), reviewPromptPath)}`
     : handoff.length > 0
-      ? fit(handoff[0], 220)
+      ? fit(joinBullets(handoff), 220)
       : '없음';
   const lines = [
     `LETHE 보고서 - ${reportDate}`,
