@@ -77,6 +77,8 @@ function summarize(batch) {
 
   const buildDiversity = normalizedDiversity(buildClasses, stageCount);
   const memoryDeleteMaxShare = maxShare(deletedMemories, stageCount);
+  const memoryDeleteMinShare = minShare(deletedMemories, stageCount);
+  const memoryDeleteSpread = Math.max(0, memoryDeleteMaxShare - memoryDeleteMinShare);
   const buildClassMaxShare = maxShare(buildClasses, stageCount);
   const alphaFunScore = clamp01(
     regretRate * 0.32
@@ -97,6 +99,7 @@ function summarize(batch) {
     firstUseAvg,
     buildClassMaxShare,
     memoryDeleteMaxShare,
+    memoryDeleteSpread,
     avgPowerDrop,
     avgRecovery,
     echoPower: batch.options.echoPower,
@@ -143,6 +146,8 @@ function summarize(batch) {
       buildDiversity: round(buildDiversity, 4),
       buildClassMaxShare: round(buildClassMaxShare, 4),
       memoryDeleteMaxShare: round(memoryDeleteMaxShare, 4),
+      memoryDeleteMinShare: round(memoryDeleteMinShare, 4),
+      memoryDeleteSpread: round(memoryDeleteSpread, 4),
     },
     distributions: {
       quadrants,
@@ -165,12 +170,14 @@ function makeTargetChecks(m) {
     check('짜증 분면', m.irritationRate, '<=', t.irritationRateMax, 'Q1>=3 && Q2<=1 비율'),
     check('무덤덤 분면', m.dullRate, '<=', t.dullRateMax, 'Q1<=1 비율'),
     check('예측 일치율', m.predictionMatchRate, '>=', t.predictionMatchMin, '플레이어 예측=실제 삭제'),
+    check('예측 일치율 상한', m.predictionMatchRate, '<=', t.predictionMatchMax, '정답 확인처럼 느껴지는 위험 방지'),
     check('삭제 직후 즉시 종료율', m.immediateQuitRate, '<=', t.immediateQuitMax, '무력감/레이지퀏 프록시'),
     check('런 재시작 의향', m.restartRate, '>=', t.restartRateMin, '한 판 더 욕구 프록시'),
     check('첫 망각 전 사용 시간 하한', m.firstUseAvg, '>=', t.firstForgetUseMinSec, '애착 윈도우 8분 이상'),
     check('첫 망각 전 사용 시간 상한', m.firstUseAvg, '<=', t.firstForgetUseMaxSec, '애착 윈도우 10분 이하'),
     check('빌드 분류 쏠림', m.buildClassMaxShare, '<=', t.maxBuildClassShare, '몰빵/거미줄/느슨 중 한 분류 80% 초과 금지'),
     check('단일 기억 삭제 쏠림', m.memoryDeleteMaxShare, '<=', t.maxSingleMemoryDeleteShare, '특정 기억 삭제율 과다 금지'),
+    check('기억 삭제 분포 편차', m.memoryDeleteSpread, '<=', t.maxMemoryDeleteSpread, '특정 기억이 테스트 전체를 과도하게 대표하지 않게 유지'),
     check('망각 직후 전투력 딥 하한', m.avgPowerDrop, '>=', t.postForgetDropMin, '상실 체감'),
     check('망각 직후 전투력 딥 상한', m.avgPowerDrop, '<=', t.postForgetDropMax, '압수감 방지'),
     check('새 기억 후 회복 하한', m.avgRecovery, '>=', t.recoveryMin, '피벗 가능성'),
@@ -300,6 +307,13 @@ function maxShare(hist, total) {
   return Math.max(0, ...Object.values(hist).map((v) => v / total));
 }
 
+function minShare(hist, total) {
+  if (!total) return 0;
+  const values = Object.values(hist);
+  if (!values.length) return 0;
+  return Math.min(...values.map((v) => v / total));
+}
+
 function topEntry(hist) {
   const entries = Object.entries(hist || {});
   if (!entries.length) return null;
@@ -327,7 +341,8 @@ function runsToCsv(runs) {
     'runIndex', 'botId', 'weaponName', 'stageIndex', 'buildClass', 'concentrationIndex', 'synergyConnectivity',
     'deletedMemoryName', 'predictedMemoryName', 'leastWantedName', 'predictionMatch', 'deletedWasLeastWanted',
     'q1Pain', 'q2Understanding', 'quadrant', 'immediateQuit', 'restartIntent', 'powerDrop', 'recoveryRatio',
-    'preForgetPower', 'postDeletePower', 'postReplacementPower', 'replacementName', 'activeMemoryNamesBefore', 'activeMemoryNamesAfter'
+    'preForgetPower', 'postDeletePower', 'postReplacementPower', 'replacementName', 'deletionWeights', 'echoPower', 'uiClarity',
+    'activeMemoryNamesBefore', 'activeMemoryNamesAfter'
   ];
   const rows = [];
   for (const run of runs) {
@@ -364,6 +379,9 @@ function extractCsvValue(run, stage, h) {
     postDeletePower: stage.postDeletePower,
     postReplacementPower: stage.postReplacementPower,
     replacementName: stage.replacementName,
+    deletionWeights: JSON.stringify(stage.reliance?.deletionWeights || {}),
+    echoPower: stage.reviewTargets?.echoPower,
+    uiClarity: stage.reviewTargets?.uiClarity,
     activeMemoryNamesBefore: stage.activeMemoryNamesBefore.join(' / '),
     activeMemoryNamesAfter: stage.activeMemoryNamesAfter.join(' / '),
   };

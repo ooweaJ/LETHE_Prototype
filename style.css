@@ -384,6 +384,26 @@ summary {
   margin: 18px 0;
 }
 
+.recall-field {
+  display: grid;
+  gap: 8px;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.recall-field textarea {
+  width: 100%;
+  resize: vertical;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #0c121b;
+  color: var(--ink);
+  padding: 10px 12px;
+  font: inherit;
+  font-weight: 500;
+}
+
 @media (max-width: 1040px) {
   .game-layout,
   .setup-grid {

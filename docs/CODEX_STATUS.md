@@ -4,32 +4,34 @@ Last updated: 2026-06-02
 
 ## Current Build
 
-- Project: LETHE: 망각의 군주 HTML Alpha v0.1
+- Project: LETHE HTML Alpha v0.2 tuning candidate.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
-- Latest pushed commit: `810c567 Initial LETHE HTML alpha prototype`
+- Current scope: forgetting loop emotional validation. No new content expansion yet.
 
 ## Implemented
 
-- Static browser prototype: `index.html`, `style.css`, `src/game.js`
-- Weapons: 절단쌍검, 장송대검
-- Memories: 6 total, 3 active slots
-- Auto basic attack
-- Auto memory activation
-- Enemy types: 침식자, 떠도는 눈, 쪼개진 자, 공허 사제
-- Boss: 기억을 씹는 자, 3 phases
-- Dependency-based forgetting
-- Echo stat reward after forgetting
-- Post-boss question UI
-- Forgetting result screen
-- Q1/Q2 survey
-- JSON log download
-- AI alpha test tool under `alpha_test/`
-- Codex-GPT workflow docs
-- Daily devlog and human-readable report system
-- Discord daily report delivery script and setup guide
-- Codex runbook, checkpoint template, and short Discord status notices
-- Root `AGENTS.md` for project agent rules
+- Static browser prototype: `index.html`, `style.css`, `src/game.js`.
+- Weapons: twin blades, greatsword.
+- Memories: 6 total, 3 active slots.
+- Auto basic attack and auto memory activation.
+- Enemy waves and boss encounter.
+- Dependency-based forgetting with per-memory deletion bias.
+- Echo stat reward after forgetting, default experiment echo power `0.50`.
+- Post-boss prediction question UI.
+- Forgetting result screen with clearer summary:
+  - forgotten memory,
+  - prediction result,
+  - deletion weight,
+  - remaining echo,
+  - next build direction.
+- Q1/Q2 survey plus Q3 memory-name recall free response.
+- JSON log download with selected/predicted/deleted memory names and deletion weights.
+- AI alpha test tool under `alpha_test/`.
+- Codex/GPT/Claude workflow docs.
+- Markdown daily reports, generated HTML reports, and Discord report delivery.
+- Short Discord status notices for Codex work.
+- Claude Code planning-review automation.
 
 ## Latest AI Test Result
 
@@ -41,63 +43,55 @@ npm run ai:test
 
 Result:
 
-- Verdict: `ITERATE`
-- Playability: `튜닝 후 재검증`
-- Risk Level: `MEDIUM`
-- Alpha Fun Score: `0.8647`
-- Regret: `92.7%`
-- Irritation: `0.6%`
-- Prediction match: `92.7%`
-- Immediate quit: `0.9%`
-- Restart intent: `70.7%`
-- Power drop after forgetting: `29.9%`
-- Recovery after replacement: `95.9%`
-- First forgetting time: `6.83 min`
+- Verdict: `GO_CANDIDATE`
+- Playability: `AI 기준 사람 테스트 진입 가능`
+- Risk Level: `LOW`
+- Alpha Fun Score: `0.7737`
+- Regret proxy: `76.3%`
+- Irritation proxy: `1.1%`
+- Prediction match: `76.3%`
+- Immediate quit: `0.8%`
+- Restart intent: `70.0%`
+- First forgetting time: `9.00 min`
+- Post-forgetting power drop: `29.6%`
+- Recovery after replacement: `96.6%`
+- Max single memory deletion share: `34.1%`
 
-Main warnings:
+Remaining note:
 
-- First forgetting is too early. Target is 8-10 min, current average is 6.83 min.
-- Deletion is biased toward `처형자의 섬광` at 46.4%.
-- Post-forgetting power drop is slightly low at 29.9%, just below the 30% lower bound.
+- Power drop is just under the 30% target. It is close enough for human-test candidate status, but v0.3 should watch whether the loss feels too safe.
 
-Sweep note:
+## Latest Sweep Note
 
-- Best tested setting: `echo=0.5`, `ui=0.62`
-- Sweep result at that setting: `GO_CANDIDATE`, Alpha Fun Score `0.9053`
+Command:
+
+```bash
+npm run ai:sweep
+```
+
+- Best score in this sweep: `echo=0.40`, `ui=0.78`, score `0.8424`, verdict `ITERATE`.
+- Best `GO_CANDIDATE` around the current preset: `echo=0.50`, `ui=0.78`, score `0.8245`.
+- Current implementation stays at `echo=0.50`, `ui=0.62` because that matches the GPT/Claude v0.2 instruction and keeps the tuning narrow.
 
 ## Open Technical Notes
 
-- Browser plugin was unavailable during visual verification, so verification used static checks and simulated runtime checks.
-- The game is static HTML and can be run by opening `index.html` or with `python3 -m http.server 8000`.
+- Browser visual verification has not been run in this session.
+- The game is static HTML and can be run by opening `index.html`.
 - Generated AI test outputs are ignored by git under `alpha_test/outputs/`.
 - Report HTML can be generated from Markdown with `npm run report`.
-- Discord report delivery can be previewed with `npm run report:discord:dry` and uploaded with `npm run report:discord` after setting `DISCORD_WEBHOOK_URL`.
-- Discord messages are intentionally short: work done, completion state, problems, and planning-review need.
-- GPT/Claude review prompts should live in `docs/review_prompts/YYYY-MM-DD.md` and are attached automatically when present.
-- Local `.env` is ignored by Git; no tracked `.env.example` is required.
-- Current planning handoff file: `docs/review_prompts/2026-06-01.md`.
-- Latest Discord handoff: report and planning prompt uploaded successfully on 2026-06-01.
-- Codex operation runbook: `docs/CODEX_RUNBOOK.md`.
-- Interruption checkpoints should use `docs/checkpoints/YYYY-MM-DD.md` when needed.
-- Short status notices can be previewed with `npm run codex:notice:dry`.
-- Latest Codex status notice: workflow normalization completion sent to Discord on 2026-06-02.
+- Discord report delivery can be previewed with `npm run report:discord:dry`.
+- Local `.env` and `.env.*` are ignored by Git.
+- No tracked `.env.example` is required.
 
 ## Latest Planning Verdict
 
-- Verdict: `ITERATE_BEFORE_TEST`.
-- Planning response summary: `docs/review_responses/2026-06-02-gpt-v02.md`.
-- Claude response summary: `docs/review_responses/2026-06-01-claude.md`.
-- Next implementation scope: v0.2 narrow tuning for timing, deletion distribution, echo defaults, logs, and player-facing feedback.
-- No additional GPT question is required before v0.2 implementation.
-- If Claude is used, ask for emotional feedback after the forgetting result screen is improved.
-- Default report commands now use the latest dated Markdown report in `docs/reports/`.
-- Latest Discord report: Korean summary report uploaded successfully on 2026-06-02.
-- Claude Code automation: `npm run review:claude` saves a Korean planning response with tools disabled.
-- Latest Codex notice: Claude automation completion sent to Discord on 2026-06-02.
+- GPT verdict: `ITERATE_BEFORE_TEST`.
+- Claude verdict: `ITERATE_BEFORE_TEST`.
+- v0.2 scope: timing, deletion distribution, echo default, clearer feedback, JSON logs, human-test recall question.
+- No additional GPT/Claude question is required before the next human-test preparation pass.
 
-## Recommended Next Questions For GPT
+## Next Codex Tasks
 
-- Should first forgetting be delayed in the HTML prototype, or only in the simulation model?
-- Is `처형자의 섬광` deletion bias desirable because it creates a clear emotional anchor, or should it be reduced?
-- Should echo power default move from `0.60` to `0.50` based on sweep results?
-- What should v0.2 validate: stronger loss pain, better predictability, or post-loss pivot?
+- Review the v0.2 result screen visually in browser.
+- If visual QA passes, prepare a small human test guide for 5-8 players.
+- During human test, focus on whether the forgotten memory feels regrettable, understandable, and recoverable.

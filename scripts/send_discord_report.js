@@ -72,6 +72,8 @@ async function main() {
 function buildMessage(markdown, markdownFile, htmlFile, reviewPromptPath) {
   const reportDate = path.basename(markdownFile, '.md');
   const work = bulletsFromSections(markdown, [
+    '2. 오늘 바뀐 것',
+    '오늘 바뀐 것',
     '오늘 한 일',
     '작업 내용',
     'what changed today',
@@ -79,6 +81,8 @@ function buildMessage(markdown, markdownFile, htmlFile, reviewPromptPath) {
     'today work',
   ], 2);
   const status = bulletsFromSections(markdown, [
+    '1. 현재 빌드 상태',
+    '현재 빌드 상태',
     '현재 상태',
     '완료 상태',
     'current build status',
@@ -86,6 +90,8 @@ function buildMessage(markdown, markdownFile, htmlFile, reviewPromptPath) {
     'build status',
   ], 2);
   const problems = bulletsFromSections(markdown, [
+    '5. 문제 또는 리스크',
+    '문제 또는 리스크',
     '문제와 리스크',
     '문제',
     'problems or risks',
@@ -93,6 +99,8 @@ function buildMessage(markdown, markdownFile, htmlFile, reviewPromptPath) {
     'risks',
   ], 2);
   const handoff = bulletsFromSections(markdown, [
+    '6. GPT/Claude 인계 요약',
+    'GPT/Claude 인계 요약',
     '기획 검토 요약',
     'gpt handoff summary',
     'planning handoff',

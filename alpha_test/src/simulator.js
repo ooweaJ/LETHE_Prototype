@@ -1,6 +1,6 @@
 'use strict';
 
-const { WEAPONS, MEMORIES, SYNERGIES, ENCOUNTERS, SIM_DEFAULTS } = require('./config');
+const { WEAPONS, MEMORIES, MEMORY_FORGET_BIAS, SYNERGIES, ENCOUNTERS, SIM_DEFAULTS } = require('./config');
 const { listBots } = require('./bots');
 const { RNG } = require('./rng');
 
@@ -224,7 +224,12 @@ function computeReliance(state, snapshot) {
       + 0.15 * (presence[id] || 0);
   }
   const normalized = normalizeMap(score);
-  const deletedMemoryId = Object.entries(normalized).sort((a, b) => b[1] - a[1])[0][0];
+  const deletionRaw = {};
+  for (const id of state.activeMemories) {
+    deletionRaw[id] = (normalized[id] || 0) * (MEMORY_FORGET_BIAS[id] ?? 1);
+  }
+  const deletionWeights = normalizeMap(deletionRaw);
+  const deletedMemoryId = Object.entries(deletionWeights).sort((a, b) => b[1] - a[1])[0][0];
   const sorted = Object.entries(normalized).sort((a, b) => b[1] - a[1]);
   return {
     combat,
@@ -232,6 +237,8 @@ function computeReliance(state, snapshot) {
     irreplaceability,
     presence,
     score: normalized,
+    deletionRaw,
+    deletionWeights,
     deletedMemoryId,
     clarityGap: sorted.length > 1 ? round(sorted[0][1] - sorted[1][1], 4) : 1,
   };
@@ -316,9 +323,11 @@ function predictDeletion(rng, state, reliance, options) {
     visible[id] = 0.50 * (reliance.boss[id] || 0)
       + 0.34 * (reliance.combat[id] || 0)
       + 0.16 * (reliance.presence[id] || 0);
-    // UI clarity moves visible estimate toward true reliance.
-    visible[id] = visible[id] * (1 - options.uiClarity * 0.22) + (reliance.score[id] || 0) * options.uiClarity * 0.22;
-    visible[id] += rng.noise((1 - state.bot.perception) * 0.12 + 0.015);
+    // UI clarity exposes part of the deletion weight without making prediction a pure answer key.
+    const visibleTruth = reliance.deletionWeights[id] || reliance.score[id] || 0;
+    const clarity = Math.min(0.88, options.uiClarity * 1.16);
+    visible[id] = visible[id] * (1 - clarity) + visibleTruth * clarity;
+    visible[id] += rng.noise((1 - state.bot.perception) * 0.045 + 0.006);
   }
   const sortedVisible = Object.entries(visible).sort((a, b) => b[1] - a[1]);
   return sortedVisible[0][0];
@@ -495,6 +504,11 @@ function simulateOneRun(rng, bot, options, runIndex = 0) {
       build,
       snapshot: minimalSnapshot(snapshot),
       reliance: minimalReliance(reliance),
+      reviewTargets: {
+        echoPower: options.echoPower,
+        uiClarity: options.uiClarity,
+        memoryNameRecallCheck: true,
+      },
       leastWantedId,
       leastWantedName: MEMORIES[leastWantedId].name,
       predictedMemoryId,
@@ -557,6 +571,7 @@ function minimalSnapshot(snapshot) {
 function minimalReliance(reliance) {
   return {
     score: mapRound(reliance.score),
+    deletionWeights: mapRound(reliance.deletionWeights),
     combat: mapRound(reliance.combat),
     boss: mapRound(reliance.boss),
     irreplaceability: mapRound(reliance.irreplaceability),

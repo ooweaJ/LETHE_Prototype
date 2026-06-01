@@ -32,7 +32,7 @@ function main() {
     runs: toNum(a.runs, 1000),
     stages: toNum(a.stages, 2),
     seed: a.seed || '20260601',
-    echoPower: toNum(a.echo, 0.60),
+    echoPower: toNum(a.echo, 0.50),
     uiClarity: toNum(a.ui, 0.62),
     replacementOffer: a.replacement === 'false' ? false : true,
     enableHumanEmotionProxy: a.emotion === 'false' ? false : true,

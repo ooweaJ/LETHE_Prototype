@@ -144,6 +144,20 @@ const enemyTypes = {
   },
 };
 
+const experiment = {
+  version: "v0.2",
+  echoPower: 0.5,
+  uiClarity: 0.62,
+  bossSpawnTimeSec: 120,
+  bossHp: 1750,
+};
+
+const forgetBias = {
+  execution_flash: 0.72,
+  hungry_blades: 0.90,
+  stalker_oath: 0.98,
+};
+
 const keys = new Set();
 let selectedWeapon = weapons.twin_blades.id;
 let selectedMemories = [];
@@ -226,12 +240,15 @@ function createRunState() {
     survey: {
       sadness: null,
       fairness: null,
+      memoryRecall: "",
     },
     logs: {
-      version: "v0.1",
+      version: experiment.version,
+      experiment: { ...experiment },
       startedAt: new Date().toISOString(),
       weapon: selectedWeapon,
       memories: [...selectedMemories],
+      memoryNames: selectedMemories.map((id) => memories[id].name),
       events: [],
     },
   };
@@ -370,7 +387,7 @@ function updateSpawning(dt) {
     spawnEnemy(pool[Math.floor(Math.random() * pool.length)]);
   }
 
-  if (state.elapsed >= 45) {
+  if (state.elapsed >= experiment.bossSpawnTimeSec) {
     spawnBoss();
   }
 }
@@ -401,8 +418,8 @@ function spawnBoss() {
     name: "기억을 씹는 자",
     x: canvas.width / 2,
     y: 96,
-    hp: 1250,
-    maxHp: 1250,
+    hp: experiment.bossHp,
+    maxHp: experiment.bossHp,
     r: 32,
     phase: 1,
     phaseTimer: 0,
@@ -788,6 +805,7 @@ function calculateDependency() {
     const irreplace = clamp(((metric.damage / totalDamage) * 0.72 + (metric.kills / totalKills) * 0.28) * 100, 0, 100);
     const presence = normalize(presenceValues[index], presenceValues);
     const score = combat * 0.4 + boss * 0.25 + irreplace * 0.2 + presence * 0.15;
+    const deletionScore = score * (forgetBias[id] ?? 1);
     metric.components = {
       combat: Math.round(combat),
       boss: Math.round(boss),
@@ -795,6 +813,12 @@ function calculateDependency() {
       presence: Math.round(presence),
     };
     metric.score = Math.round(score);
+    metric.deletionScore = Math.round(deletionScore);
+  });
+
+  const deletionTotal = sum(ids.map((id) => state.metrics[id].deletionScore)) || 1;
+  ids.forEach((id) => {
+    state.metrics[id].deletionWeight = Number((state.metrics[id].deletionScore / deletionTotal).toFixed(4));
   });
 }
 
@@ -802,44 +826,49 @@ function forgetMostDependent() {
   calculateDependency();
   const ranked = state.memories
     .filter((memory) => !memory.forgotten)
-    .sort((a, b) => state.metrics[b.id].score - state.metrics[a.id].score);
+    .sort((a, b) => state.metrics[b.id].deletionScore - state.metrics[a.id].deletionScore);
   const forgotten = ranked[0];
   forgotten.forgotten = true;
   state.forgotten = forgotten.id;
   applyEcho(forgotten.id);
   logEvent("memory_forgotten", {
     forgotten: forgotten.id,
+    forgottenName: forgotten.name,
     score: state.metrics[forgotten.id].score,
+    deletionScore: state.metrics[forgotten.id].deletionScore,
+    deletionWeight: state.metrics[forgotten.id].deletionWeight,
+    deletionWeights: dependencyWeights(),
     questions: state.questions,
+    questionNames: questionNames(),
     echo: state.echo,
   });
 }
 
 function applyEcho(memoryId) {
   if (memoryId === "execution_flash") {
-    state.echo.critChance += 0.12;
-    state.echo.critDamage += 0.35;
+    state.echo.critChance += 0.12 * experiment.echoPower;
+    state.echo.critDamage += 0.35 * experiment.echoPower;
   }
   if (memoryId === "hungry_blades") {
-    state.echo.attackSpeed += 0.18;
-    state.echo.dotDamage += 0.35;
+    state.echo.attackSpeed += 0.18 * experiment.echoPower;
+    state.echo.dotDamage += 0.35 * experiment.echoPower;
   }
   if (memoryId === "stalker_oath") {
-    state.echo.projectileCount += 1;
-    state.echo.projectileSpeed += 0.25;
+    state.echo.projectileCount += 1 * experiment.echoPower;
+    state.echo.projectileSpeed += 0.25 * experiment.echoPower;
   }
   if (memoryId === "shatter_ripple") {
-    state.echo.range += 0.18;
-    state.echo.knockback += 0.25;
-    state.echo.damageReduction += 0.06;
+    state.echo.range += 0.18 * experiment.echoPower;
+    state.echo.knockback += 0.25 * experiment.echoPower;
+    state.echo.damageReduction += 0.06 * experiment.echoPower;
   }
   if (memoryId === "blood_reflection") {
-    state.echo.extraHitChance += 0.12;
-    state.echo.onHitDamage += 0.22;
+    state.echo.extraHitChance += 0.12 * experiment.echoPower;
+    state.echo.onHitDamage += 0.22 * experiment.echoPower;
   }
   if (memoryId === "stopped_second") {
-    state.echo.cooldownReduction += 0.12;
-    state.echo.slowDuration += 0.35;
+    state.echo.cooldownReduction += 0.12 * experiment.echoPower;
+    state.echo.slowDuration += 0.35 * experiment.echoPower;
   }
 }
 
@@ -896,15 +925,30 @@ function showResultOverlay() {
   overlay.classList.add("show");
 
   const forgotten = memories[state.forgotten];
-  overlay.querySelector("#forgottenTitle").textContent = `${forgotten.name}이 강 아래로 가라앉았다.`;
+  const predicted = state.questions.predict === "unknown" ? null : memories[state.questions.predict];
+  const predictionText = predicted
+    ? predicted.id === forgotten.id
+      ? `예측 성공: ${predicted.name}`
+      : `예측 실패: ${predicted.name}을 예상했지만 ${forgotten.name}이 사라졌습니다.`
+    : `예측 보류: ${forgotten.name}이 사라졌습니다.`;
+  overlay.querySelector("#forgottenTitle").textContent = `${forgotten.name}이(가) 망각되었습니다.`;
   overlay.querySelector("#resultSummary").innerHTML = `
-    <div class="result-card"><strong>잃은 기억</strong><br>${forgotten.name}: ${forgotten.desc}</div>
-    <div class="result-card"><strong>남은 잔향</strong><br>${forgotten.echo}</div>
-    <div class="result-card"><strong>강해지는 방향</strong><br>${forgotten.direction}</div>
+    <div class="result-card"><strong>사라진 기억</strong><br>${forgotten.name}: ${forgotten.desc}</div>
+    <div class="result-card"><strong>예측 결과</strong><br>${predictionText}</div>
+    <div class="result-card"><strong>삭제 weight</strong><br>${deletionWeightText()}</div>
+    <div class="result-card"><strong>남은 잔향</strong><br>${forgotten.echo}<br><small>이번 실험 echo 배율: ${Math.round(experiment.echoPower * 100)}%</small></div>
+    <div class="result-card"><strong>이어지는 방향</strong><br>${forgotten.direction}</div>
   `;
   overlay.querySelector("#detailTable").innerHTML = dependencyTableHtml();
   renderScale("sadnessScale", "sadness");
   renderScale("fairnessScale", "fairness");
+  const recallInput = overlay.querySelector("#memoryRecallInput");
+  if (recallInput) {
+    recallInput.addEventListener("input", () => {
+      state.survey.memoryRecall = recallInput.value.trim();
+      logEvent("memory_recall_update", { memoryRecall: state.survey.memoryRecall });
+    });
+  }
 
   const downloadButton = overlay.querySelector("#downloadLogButton");
   downloadButton.disabled = true;
@@ -915,15 +959,45 @@ function showResultOverlay() {
 }
 
 function dependencyTableHtml() {
-  const header = `<div class="detail-row"><span>기억</span><span>전투</span><span>보스</span><span>대체</span><span>존재</span><span>합계</span></div>`;
+  const header = `<div class="detail-row"><span>기억</span><span>전투</span><span>보스</span><span>대체</span><span>존재</span><span>삭제</span></div>`;
   const rows = state.memories
     .map((memory) => {
       const metric = state.metrics[memory.id];
       const c = metric.components;
-      return `<div class="detail-row"><span>${memory.name}</span><span>${c.combat}</span><span>${c.boss}</span><span>${c.irreplaceability}</span><span>${c.presence}</span><span>${metric.score}</span></div>`;
+      return `<div class="detail-row"><span>${memory.name}</span><span>${c.combat}</span><span>${c.boss}</span><span>${c.irreplaceability}</span><span>${c.presence}</span><span>${metric.deletionScore}</span></div>`;
     })
     .join("");
   return header + rows;
+}
+
+function dependencyWeights() {
+  const weights = {};
+  state.memories.forEach((memory) => {
+    const metric = state.metrics[memory.id];
+    weights[memory.id] = {
+      name: memory.name,
+      score: metric.score,
+      deletionScore: metric.deletionScore,
+      deletionWeight: metric.deletionWeight,
+      components: metric.components,
+    };
+  });
+  return weights;
+}
+
+function deletionWeightText() {
+  return state.memories
+    .slice()
+    .sort((a, b) => state.metrics[b.id].deletionScore - state.metrics[a.id].deletionScore)
+    .map((memory) => `${memory.name} ${Math.round((state.metrics[memory.id].deletionWeight || 0) * 100)}%`)
+    .join(" / ");
+}
+
+function questionNames() {
+  return {
+    protect: memories[state.questions.protect]?.name || null,
+    predict: state.questions.predict === "unknown" ? "모르겠다" : memories[state.questions.predict]?.name || null,
+  };
 }
 
 function renderScale(containerId, key) {
@@ -954,14 +1028,18 @@ function downloadLog() {
   state.logs.completedAt = new Date().toISOString();
   state.logs.elapsed = Number(state.elapsed.toFixed(2));
   state.logs.questions = state.questions;
+  state.logs.questionNames = questionNames();
   state.logs.forgotten = state.forgotten;
+  state.logs.forgottenName = memories[state.forgotten]?.name || state.forgotten;
   state.logs.survey = state.survey;
   state.logs.metrics = state.metrics;
+  state.logs.deletionWeights = dependencyWeights();
   state.logs.echo = state.echo;
+  state.logs.echoPower = experiment.echoPower;
   const blob = new Blob([JSON.stringify(state.logs, null, 2)], { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = `lethe-v0.1-log-${Date.now()}.json`;
+  a.download = `lethe-${experiment.version}-log-${Date.now()}.json`;
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }

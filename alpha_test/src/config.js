@@ -156,6 +156,12 @@ const MEMORIES = {
   },
 };
 
+const MEMORY_FORGET_BIAS = {
+  execution_flash: 0.72,
+  hungry_blades: 0.90,
+  tracker_oath: 0.98,
+};
+
 const SYNERGIES = [
   { a: 'execution_flash', b: 'tracker_oath', name: '유도 섬광', bonus: 0.13, tags: ['burst', 'projectile'] },
   { a: 'hungry_blades', b: 'blood_reflection', name: '굶주린 반사', bonus: 0.18, tags: ['dot', 'onhit'] },
@@ -170,7 +176,7 @@ const SYNERGIES = [
 const ENCOUNTERS = {
   room: {
     name: '일반 전투',
-    durationSec: 145,
+    durationSec: 190,
     crowd: 0.62,
     single: 0.38,
     boss: 0.00,
@@ -179,7 +185,7 @@ const ENCOUNTERS = {
   },
   elite: {
     name: '엘리트 전투',
-    durationSec: 95,
+    durationSec: 130,
     crowd: 0.48,
     single: 0.52,
     boss: 0.20,
@@ -188,7 +194,7 @@ const ENCOUNTERS = {
   },
   boss: {
     name: '기억을 씹는 자',
-    durationSec: 170,
+    durationSec: 220,
     crowd: 0.36,
     single: 0.64,
     boss: 1.00,
@@ -204,20 +210,22 @@ const ENCOUNTERS = {
 
 const DEFAULT_TARGETS = {
   regretRateMin: 0.60,
-  irritationRateMax: 0.20,
+  irritationRateMax: 0.03,
   dullRateMax: 0.25,
-  predictionMatchMin: 0.625,
+  predictionMatchMin: 0.75,
+  predictionMatchMax: 0.90,
   immediateQuitMax: 0.15,
   restartRateMin: 0.60,
   firstForgetUseMinSec: 480,
   firstForgetUseMaxSec: 600,
   maxBuildClassShare: 0.80,
   maxSingleMemoryDeleteShare: 0.35,
+  maxMemoryDeleteSpread: 0.35,
   echoPowerSweetSpotMin: 0.50,
   echoPowerSweetSpotMax: 0.70,
   postForgetDropMin: 0.30,
-  postForgetDropMax: 0.50,
-  recoveryMin: 0.85,
+  postForgetDropMax: 0.40,
+  recoveryMin: 0.90,
   recoveryMax: 1.10,
 };
 
@@ -225,7 +233,7 @@ const SIM_DEFAULTS = {
   runs: 1000,
   stages: 2,
   seed: '20260601',
-  echoPower: 0.60,
+  echoPower: 0.50,
   uiClarity: 0.62,
   replacementOffer: true,
   enableHumanEmotionProxy: true,
@@ -234,6 +242,7 @@ const SIM_DEFAULTS = {
 module.exports = {
   WEAPONS,
   MEMORIES,
+  MEMORY_FORGET_BIAS,
   SYNERGIES,
   ENCOUNTERS,
   DEFAULT_TARGETS,
