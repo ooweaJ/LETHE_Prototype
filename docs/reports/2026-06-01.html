@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LETHE Development Report - 2026-06-01</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>LETHE Development Report - 2026-06-01</h1>
+      <p class="meta">Generated from 2026-06-01.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>LETHE Development Report - 2026-06-01</h1>
+<h2>Executive Summary</h2>
+<ul>
+<li>Today: Built the first playable HTML alpha prototype, integrated the AI alpha test system, pushed the project to GitHub, and added a Codex-GPT documentation workflow.</li>
+<li>Build status: v0.1 is executable as static HTML and can validate one full forgetting loop.</li>
+<li>Key result: AI proxy testing shows the core forgetting loop has potential, but v0.2 should tune timing and deletion bias before human testing.</li>
+<li>Next decision: Ask GPT whether to tune first forgetting time, <code>처형자의 섬광</code> deletion bias, and echo default strength.</li>
+</ul>
+<h2>GPT Handoff</h2>
+<p>GPT에게 반드시 전달할 내용이다.</p>
+<h3>Current State</h3>
+<ul>
+<li>LETHE HTML alpha v0.1 exists and runs in browser.</li>
+<li>The prototype implements weapons, memories, enemies, boss phases, dependency-based forgetting, echo rewards, post-boss questions, Q1/Q2 survey, and JSON log download.</li>
+<li>AI alpha test tooling is integrated under <code>alpha_test/</code>.</li>
+<li>Repository is pushed to <code>https://github.com/ooweaJ/LETHE_Prototype.git</code>.</li>
+</ul>
+<h3>Latest Evidence</h3>
+<ul>
+<li>Command: <code>npm run ai:test</code></li>
+<li>Verdict: <code>ITERATE</code></li>
+<li>Playability: <code>튜닝 후 재검증</code></li>
+<li>Risk Level: <code>MEDIUM</code></li>
+<li>Alpha Fun Score: <code>0.8647</code></li>
+<li>Regret: <code>92.7%</code></li>
+<li>Irritation: <code>0.6%</code></li>
+<li>Prediction match: <code>92.7%</code></li>
+<li>Immediate quit: <code>0.9%</code></li>
+<li>Restart intent: <code>70.7%</code></li>
+<li>Power drop after forgetting: <code>29.9%</code></li>
+<li>Recovery after replacement: <code>95.9%</code></li>
+<li>First forgetting time: <code>6.83 min</code></li>
+<li>Main deletion bias: <code>처형자의 섬광</code> at <code>46.4%</code></li>
+<li>Sweep best setting: <code>echo=0.5</code>, <code>ui=0.62</code>, <code>GO_CANDIDATE</code>, score <code>0.9053</code></li>
+</ul>
+<h3>Questions For GPT</h3>
+<p>1. Should the first forgetting timing be delayed toward 8-10 minutes before human testing?</p>
+<p>2. Is <code>처형자의 섬광</code> deletion bias a useful emotional anchor or a balance issue to reduce?</p>
+<p>3. Should echo default strength move from <code>0.60</code> to <code>0.50</code> based on sweep results?</p>
+<p>4. Should v0.2 focus on stronger loss pain, better predictability, or post-loss pivot clarity?</p>
+<h3>Requested Output From GPT</h3>
+<ul>
+<li>Verdict: <code>GO_TO_HUMAN_TEST</code> / <code>ITERATE_BEFORE_TEST</code> / <code>FIX_CORE</code></li>
+<li>Next 1-3 implementation tasks for Codex</li>
+<li>Test criteria for the next AI run</li>
+<li>Human playtest observation checklist</li>
+<li>Do-not-build list for the next round</li>
+</ul>
+<h2>Build Status</h2>
+<h3>Implemented</h3>
+<ul>
+<li>Static browser prototype: <code>index.html</code>, <code>style.css</code>, <code>src/game.js</code></li>
+<li>Two weapons: 절단쌍검, 장송대검</li>
+<li>Six memories with three active slots</li>
+<li>Auto basic attack and auto memory activation</li>
+<li>Four enemy types</li>
+<li>One boss with three phases</li>
+<li>Dependency-based forgetting</li>
+<li>Echo stat reward after forgetting</li>
+<li>Post-boss question UI</li>
+<li>Forgetting result screen</li>
+<li>Q1/Q2 survey</li>
+<li>JSON log download</li>
+<li>AI alpha test simulator and reports</li>
+<li>Codex-GPT workflow docs</li>
+</ul>
+<h3>Not Implemented</h3>
+<ul>
+<li>Meta progression</li>
+<li>Shop</li>
+<li>Final boss</li>
+<li>More than six memories</li>
+<li>Multi-region run structure</li>
+</ul>
+<h3>Known Limits</h3>
+<ul>
+<li>Browser visual verification was limited by unavailable in-app browser backend.</li>
+<li>AI Q1/Q2 is only a proxy and cannot replace human emotion testing.</li>
+<li>Combat tuning is prototype-grade and intentionally narrow.</li>
+<li>Current first forgetting timing may be too short for attachment.</li>
+</ul>
+<h2>Test Results</h2>
+<h3>Commands</h3>
+<pre><code>node --check src/game.js
+npm run ai:test
+npm run ai:sweep</code></pre>
+<h3>Summary</h3>
+<ul>
+<li>The JavaScript syntax check passed.</li>
+<li>The default AI run produced <code>ITERATE</code>.</li>
+<li>The core emotional proxy is strong: regret is high and irritation is low.</li>
+<li>The main blockers are timing, deletion distribution, and slightly weak post-forgetting power drop.</li>
+<li>Sweep suggests <code>echo=0.5</code>, <code>ui=0.62</code> as a better candidate than the current default.</li>
+</ul>
+<h3>Artifacts</h3>
+<ul>
+<li><code>alpha_test/outputs/default/summary.json</code></li>
+<li><code>alpha_test/outputs/default/alpha_summary.md</code></li>
+<li><code>alpha_test/outputs/default/alpha_report.html</code></li>
+<li><code>alpha_test/outputs/sweep/sweep_results.csv</code></li>
+<li><code>docs/CODEX_STATUS.md</code></li>
+</ul>
+<h2>Decisions Made</h2>
+<table>
+<tr><th>Decision</th><th>Reason</th><th>Impact</th></tr>
+<tr><td>Keep v0.1 scoped to one forgetting loop</td><td>The first validation question is emotional response to loss</td><td>No shop, meta, final boss, or content expansion yet</td></tr>
+<tr><td>Treat AI Q1/Q2 as proxy data</td><td>Bots cannot determine real human emotion</td><td>Human testing remains required</td></tr>
+<tr><td>Split Codex and GPT roles</td><td>Implementation and planning need different feedback loops</td><td>Codex updates status, GPT decides priorities</td></tr>
+<tr><td>Record decisions and reports now</td><td>Later portfolio/devlog work needs evidence</td><td>Reports preserve problem-direction-action-result</td></tr>
+</table>
+<h2>Problems And Risks</h2>
+<ul>
+<li>First forgetting arrives at 6.83 minutes, below the 8-10 minute target.</li>
+<li><code>처형자의 섬광</code> dominates deletion at 46.4%.</li>
+<li>Power drop after forgetting is 29.9%, just under the target lower bound.</li>
+<li>AI testing can overstate clarity because it reads modeled signals directly.</li>
+<li>The prototype needs at least one human playtest pass before design confidence.</li>
+</ul>
+<h2>Next Codex Tasks</h2>
+<ul>
+<li>[ ] Send GPT the handoff section and ask for v0.2 priority.</li>
+<li>[ ] Update <code>docs/NEXT_TASKS.md</code> with GPT's decision.</li>
+<li>[ ] Implement only the selected v0.2 tuning changes.</li>
+<li>[ ] Re-run <code>npm run ai:test</code> and <code>npm run ai:sweep</code>.</li>
+<li>[ ] Update this report and <code>docs/CODEX_STATUS.md</code>.</li>
+</ul>
+<h2>Portfolio Notes</h2>
+<h3>Problem</h3>
+<p>The project needed to verify whether losing a relied-on ability creates regret rather than irritation.</p>
+<h3>Direction</h3>
+<p>The prototype was scoped around one complete loop: build attachment, beat a boss, predict the loss, forget the most relied-on memory, gain an echo, and answer Q1/Q2.</p>
+<h3>Action</h3>
+<p>Implemented a browser alpha and an AI alpha test system that can run hundreds to thousands of simulated runs, measure deletion patterns, estimate regret/irritation proxies, and produce reports.</p>
+<h3>Result</h3>
+<p>The first run produced high regret proxy, low irritation proxy, and high prediction match. The system also exposed concrete tuning issues: early forgetting, <code>처형자의 섬광</code> deletion bias, and slightly weak loss impact.</p>
+<h3>Reusable Sentence</h3>
+<p>I converted an abstract roguelike design question into a playable HTML prototype plus an automated validation loop that measured whether the core loss mechanic felt regrettable, predictable, and recoverable.</p>
+<h2>Changelog</h2>
+<ul>
+<li>Added: HTML alpha prototype</li>
+<li>Added: AI alpha test tooling</li>
+<li>Added: GitHub repository setup</li>
+<li>Added: development workflow docs</li>
+<li>Added: daily devlog and report structure</li>
+<li>Added: root <code>AGENTS.md</code> project rules</li>
+<li>Added: Markdown-to-HTML report generation with <code>npm run report</code></li>
+<li>Commit: <code>810c567 Initial LETHE HTML alpha prototype</code></li>
+<li>Commit: <code>7525441 Add development workflow docs</code></li>
+</ul>
+  </main>
+</body>
+</html>

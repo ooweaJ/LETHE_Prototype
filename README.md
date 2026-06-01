@@ -65,12 +65,20 @@ npm run ai:sweep
 
 주요 문서:
 
+- `AGENTS.md`: Codex가 이 저장소에서 따를 작업 규칙
 - `docs/CODEX_STATUS.md`: 현재 구현 상태와 테스트 결과
 - `docs/GPT_REVIEW_PROMPT.md`: GPT에게 넘길 검토 프롬프트
 - `docs/NEXT_TASKS.md`: 다음 작업 큐
 - `docs/DECISIONS.md`: 기획/기술 결정 로그
 - `docs/devlog/`: 날짜별 개발일지
+- `docs/reports/`: 사람용 개발 보고서 Markdown/HTML
 - `docs/PLAYTEST_NOTES.md`: 사람 플레이테스트 기록
+
+보고서 HTML 생성:
+
+```bash
+npm run report
+```
 
 ## 구현 범위
 

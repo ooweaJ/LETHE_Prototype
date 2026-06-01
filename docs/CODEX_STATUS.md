@@ -25,6 +25,9 @@ Last updated: 2026-06-01
 - Q1/Q2 survey
 - JSON log download
 - AI alpha test tool under `alpha_test/`
+- Codex-GPT workflow docs
+- Daily devlog and human-readable report system
+- Root `AGENTS.md` for project agent rules
 
 ## Latest AI Test Result
 
@@ -65,6 +68,7 @@ Sweep note:
 - Browser plugin was unavailable during visual verification, so verification used static checks and simulated runtime checks.
 - The game is static HTML and can be run by opening `index.html` or with `python3 -m http.server 8000`.
 - Generated AI test outputs are ignored by git under `alpha_test/outputs/`.
+- Report HTML can be generated from Markdown with `npm run report`.
 
 ## Recommended Next Questions For GPT
 
@@ -72,4 +76,3 @@ Sweep note:
 - Is `처형자의 섬광` deletion bias desirable because it creates a clear emotional anchor, or should it be reduced?
 - Should echo power default move from `0.60` to `0.50` based on sweep results?
 - What should v0.2 validate: stronger loss pain, better predictability, or post-loss pivot?
-
