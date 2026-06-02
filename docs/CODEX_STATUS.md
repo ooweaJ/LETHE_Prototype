@@ -119,7 +119,7 @@ npm run ai:sweep
 ## Latest Planning Verdict
 
 - GPT verdict: `ITERATE_BEFORE_TEST`.
-- Claude verdict: `ITERATE_BEFORE_TEST`.
+- Claude v0.5 evaluation: `ITERATE_BEFORE_TEST`, but only due to missing real-browser verification of the v0.5 level-up flow and `runGrowth` payload. Claude says passing that check should move the build to `GO_TO_HUMAN_TEST`.
 - v0.2 scope: timing, deletion distribution, echo default, clearer feedback, JSON logs, human-test recall question.
 - A v0.3/version-up Claude prompt exists, but actual Claude execution still requires local Claude Code login.
 - This session confirmed the local `claude` command is installed: `claude --version` returned `2.1.153 (Claude Code)`.
@@ -133,6 +133,7 @@ npm run ai:sweep
 
 ## Next Codex Tasks
 
-- Human playtest is now the next major validation step.
+- Local v0.5 browser QA is now the one remaining gate before human playtest.
+- Confirm level-up 3-choice UI appears, selection resumes combat, and `runGrowth` JSON matches actual choices.
 - Use `docs/HUMAN_PLAYTEST_GUIDE.md` for a 5-8 player test focused on regret vs irritation.
-- During testing, watch whether the 29.4-29.6% power drop feels slightly too safe.
+- During testing, watch whether the 27.8-28.0% power drop feels too safe or still regretful enough.

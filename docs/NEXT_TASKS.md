@@ -5,7 +5,7 @@
 ## Current Verdict
 
 - GPT verdict: `ITERATE_BEFORE_TEST`.
-- Claude verdict: `ITERATE_BEFORE_TEST`.
+- Claude v0.5 evaluation: `ITERATE_BEFORE_TEST`, but only because browser/runtime verification is still missing. If v0.5 level-up flow and `runGrowth` JSON pass in a real browser, proceed to `GO_TO_HUMAN_TEST`.
 - Codex implementation result: `GO_CANDIDATE` from `npm run ai:test` and `npm run ai:test:heavy`.
 
 ## v0.2 Done
@@ -50,19 +50,23 @@
 - [x] AI test에 `Early Fun Score`, `earlyKillTempo`, `earlyLevelUps` 게이트를 추가했다.
 - [x] `npm run ai:test`: `GO_CANDIDATE`, Alpha Fun Score `0.8531`, Early Fun `0.8669`.
 - [x] `npm run ai:test:heavy`: `GO_CANDIDATE`, Alpha Fun Score `0.8509`, Early Fun `0.8672`.
+- [x] Claude v0.5 구현 후 평가를 저장했다: `docs/review_responses/2026-06-02-claude-v05-eval.md`.
 
 ## Latest AI Criteria
 
 - [x] Verdict: `GO_CANDIDATE`.
-- [ ] Alpha Fun Score: `0.89+`. 현재 `0.8261`; 사람 테스트 전 기준으로는 충분하지만 목표치에는 아직 못 미친다.
+- [ ] Alpha Fun Score: `0.89+`. 현재 `0.8531`; 사람 테스트 전 기준으로는 충분하지만 목표치에는 아직 못 미친다.
+- [x] Early Fun Score: 목표 `0.72+`, 현재 `0.8669`.
+- [x] Early kill tempo: 목표 `0.68+`, 현재 `0.9620`.
+- [x] Pre-boss level-ups: 목표 `2+`, 현재 `4.08`.
 - [x] 첫 망각 시간: `9.00 min`.
-- [x] Regret proxy: 목표 `85%+`, 현재 `85.6%`.
-- [x] Irritation proxy: 목표 `3%` 이하, 현재 `0.4%`.
-- [x] Restart intent: 목표 `65%+`, 현재 `70.9%`.
-- [ ] Post-forgetting power drop: 목표 `30-40%`, 현재 `29.6%`.
-- [x] Recovery after replacement: 목표 `90%+`, 현재 `96.6%`.
-- [x] Prediction match: 목표 `75-90%`, 현재 `85.8%`.
-- [x] `처형자의 섬광` deletion share: 목표 `25-35%`, 현재 약 `28.0%`.
+- [ ] Regret proxy: 목표 `85%+`, 현재 `81.6%`; Claude 기준 사람 테스트 전에는 충분하며 사람 반응으로 확인한다.
+- [x] Irritation proxy: 목표 `3%` 이하, 현재 `0.3%`.
+- [x] Restart intent: 목표 `65%+`, 현재 `76.1%`.
+- [ ] Post-forgetting power drop: 목표 `30-40%`, 현재 `28.0%`; Claude 기준 지금 보정하지 말고 사람 테스트에서 체감 확인한다.
+- [x] Recovery after replacement: 목표 `90%+`, 현재 `97.5%`.
+- [x] Prediction match: 목표 `75-90%`, 현재 `84.8%`.
+- [x] Max single memory deletion share: 목표 `35%` 이하, 현재 `28.8%`.
 
 ## Next Codex Tasks
 
@@ -74,6 +78,9 @@
 - [x] 사람 테스트 전 기억 의존도/망각 위험이 플레이 중 더 분명하게 보이게 만든다.
 - [x] 사람 테스트 전 잔향 시스템이 결과 이후 더 분명하게 보이게 만든다.
 - [ ] v0.5 브라우저 시각 QA를 로컬에서 다시 확인한다. 이 세션의 Browser 플러그인은 Windows sandbox 오류로 열리지 않았다.
+- [ ] 레벨업 3택 화면이 실제 브라우저에서 뜨고, 선택 후 전투가 정상 재개되는지 확인한다.
+- [ ] 한 런 완료 후 JSON 다운로드에 `runGrowth` 선택 내역이 실제 선택과 일치하는지 확인한다.
+- [ ] 레벨업 일시정지 중 타이머/스폰이 멈추고 재개 후 입력이 정상인지 확인한다.
 - [ ] 5-8명 사람 테스트를 진행한다.
 - [ ] 플레이테스트 후 감정 반응을 기준으로 다음 방향을 결정한다.
 - [ ] 사람 테스트 결과가 모이면 Claude/GPT 검토를 다시 요청한다. 외부 전송 승인이 어려우면 Codex CLI fallback이나 Claude mock 경로로 자동화만 먼저 점검한다.
@@ -90,6 +97,7 @@
 
 - 초반 1-3분이 루즈하지 않고 적을 계속 잡고 싶게 만드는가?
 - 첫 레벨업 선택이 “로그라이크/뱀서식 성장”으로 읽히는가?
+- 3택 성장 선택을 고민하는가, 아니면 아무거나 누르는가?
 - 보스 전 평균 2회 이상 성장 선택을 체감하는가?
 - “방금 사라진 기억이 아까웠나요, 짜증났나요, 아니면 별 감정이 없었나요?”
 - 플레이어가 첫 망각 전에 선택한 기억 3개 중 최소 1개에 애착이나 전략적 기대를 보이는가?
