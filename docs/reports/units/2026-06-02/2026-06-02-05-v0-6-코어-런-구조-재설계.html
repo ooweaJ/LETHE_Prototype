@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-02-05 - v0.6 코어 런 구조 재설계</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-02-05 - v0.6 코어 런 구조 재설계</h1>
+      <p class="meta">Generated from 2026-06-02-05-v0-6-코어-런-구조-재설계.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-02-05 - v0.6 코어 런 구조 재설계</h1>
+<h2>1. Current build status</h2>
+<ul>
+<li>LETHE moved from a single first-loss prototype toward a 20-minute run structure.</li>
+<li>The goal was to test whether repeated loss/recovery cycles could sustain a roguelike loop.</li>
+<li>The scope remained HTML prototype validation only.</li>
+</ul>
+<h2>2. What changed today</h2>
+<ul>
+<li>Added a 20-minute structure with bosses at 4, 8, 12, 16, and 20 minutes.</li>
+<li>Boss defeat now leads to dependency-based memory loss.</li>
+<li>Added a 2-memory deficit survival segment after loss.</li>
+<li>Added memory refill from 3 candidates after the deficit segment.</li>
+<li>Added <code>runTimeline</code> JSON payload with cycles and refill choices.</li>
+<li>Added <code>?qa=fast,v06</code> browser QA gate.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li>AI metrics stayed in <code>GO_CANDIDATE</code> range after the run-structure change.</li>
+<li>Browser QA validated the v0.6 flow and payload hooks.</li>
+<li>Timeline payload recorded cycles and refill choices for later interpretation.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>The core loop should be tested as repeated loss, deficit survival, and recovery.</li>
+<li>Keep the current six memories and three active slots.</li>
+<li>Do not add a shop, meta progression, or multi-region structure.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>A longer structure could expose balance issues not visible in short-run metrics.</li>
+<li>Deficit survival needs to feel challenging, not irritating.</li>
+<li>Refill choices must feel like recovery/pivot, not a full undo of loss.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>v0.6 created the first real run-loop scaffold.</li>
+<li>GPT/Claude should evaluate whether loss/recovery cadence supports regret and replay desire.</li>
+<li>If the loop is too flat, the next pass should strengthen build identity, pressure rhythm, and post-loss challenge before adding content.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>Run balance/proxy checks on the new structure.</li>
+<li>Inspect whether two-memory survival and refill are understandable.</li>
+<li>Prepare v0.7/v0.8 only if evidence says the loop needs clearer agency or balance.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: one forgetting event was not enough to prove LETHE as a roguelike loop.</li>
+<li>Direction: add a repeatable run cycle without broadening scope.</li>
+<li>Action: implemented boss cycles, deficit survival, refill choices, and run timeline logging.</li>
+<li>Result: LETHE became a run-structure prototype rather than a one-event test.</li>
+</ul>
+  </main>
+</body>
+</html>

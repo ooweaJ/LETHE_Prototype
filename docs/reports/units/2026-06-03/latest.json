@@ -1,11 +1,11 @@
 {
   "source": "docs/reports/2026-06-03.md",
-  "generatedAt": "2026-06-02T17:50:22.399Z",
-  "unitCount": 2,
+  "generatedAt": "2026-06-02T17:56:18.509Z",
+  "unitCount": 3,
   "latest": {
-    "title": "2026-06-03-02 - 보고 단위 크기 조정",
-    "number": "02",
-    "markdownPath": "docs/reports/units/2026-06-03/2026-06-03-02-보고-단위-크기-조정.md",
-    "htmlPath": "docs/reports/units/2026-06-03/2026-06-03-02-보고-단위-크기-조정.html"
+    "title": "2026-06-03-03 - 2026-06-02 보고서 압축",
+    "number": "03",
+    "markdownPath": "docs/reports/units/2026-06-03/2026-06-03-03-2026-06-02-보고서-압축.md",
+    "htmlPath": "docs/reports/units/2026-06-03/2026-06-03-03-2026-06-02-보고서-압축.html"
   }
 }

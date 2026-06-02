@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-02-09 - v0.9 WP1 빌드 정체성과 Identity QA</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-02-09 - v0.9 WP1 빌드 정체성과 Identity QA</h1>
+      <p class="meta">Generated from 2026-06-02-09-v0-9-wp1-빌드-정체성과-identity-qa.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-02-09 - v0.9 WP1 빌드 정체성과 Identity QA</h1>
+<h2>1. Current build status</h2>
+<ul>
+<li>v0.9 WP1 implemented build identity readability using existing memories.</li>
+<li>WP1 became automation-complete after cleanup and trusted-local identity QA.</li>
+<li>WP2 could start only after the identity/preflight gate closed.</li>
+</ul>
+<h2>2. What changed today</h2>
+<ul>
+<li>Browser label and experiment version moved to <code>v0.9</code>.</li>
+<li>Memory selection cards now show role, short combat description, and tag chips.</li>
+<li>Setup side panel and combat HUD show:</li>
+<li>current build name,</li>
+<li>active synergy,</li>
+<li>most-dependent memory.</li>
+<li>JSON/event payloads include <code>buildIdentity</code> and <code>buildIdentitySeenBy90Sec</code>.</li>
+<li>AI raw-run payload includes build name, active synergy details, and most-dependent memory.</li>
+<li>Added <code>?qa=fast,identity</code> and <code>npm run qa:identity</code>.</li>
+<li>Compressed memory descriptions to fit UI cards better.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li><code>npm run qa:identity</code>: later passed with <code>status: complete</code>, failures <code>[]</code>, <code>buildIdentitySeenBy90Sec: true</code>.</li>
+<li><code>npm run autopilot:preflight</code>: later passed with 21 pass / 0 warn / 0 fail.</li>
+<li><code>npm run ai:test:quick</code>: remained <code>GO_CANDIDATE</code> around the v0.9 loop.</li>
+<li>Browser identity QA verified that build identity appeared within the required early window.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>WP1 should not be reopened for more gameplay work after identity QA passes.</li>
+<li>Build identity improvement should stay within existing six memories.</li>
+<li>Do not start WP2 until loop-run artifacts, clean preflight, and identity QA are closed.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>Several early devloop runs selected gate cleanup rather than new gameplay because dirty loop artifacts blocked preflight.</li>
+<li>Identity readability is a necessary condition, not proof of fun.</li>
+<li>Some weak metrics such as earlyChoiceInterest and echoPivotScore remained observation items.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>WP1 gave LETHE a clearer build identity surface without adding content.</li>
+<li>Claude/Codex synthesis repeatedly said the next executable work should stay gate-cleanup-only until preflight and identity QA closed.</li>
+<li>After closure, WP2 Slice A pressure rhythm became the next scope.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>Keep WP1 closed unless a regression appears.</li>
+<li>Start WP2 Slice A pressure rhythm only after clean-tree preflight and identity proof.</li>
+<li>Preserve scope guard for existing memories/slots.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: players needed to understand their build identity before loss could feel meaningful.</li>
+<li>Direction: make the existing memory set legible instead of adding content.</li>
+<li>Action: added role/tag/synergy UI, identity payloads, and identity QA.</li>
+<li>Result: WP1 became a proven gate for v0.9 release-feel work.</li>
+</ul>
+  </main>
+</body>
+</html>

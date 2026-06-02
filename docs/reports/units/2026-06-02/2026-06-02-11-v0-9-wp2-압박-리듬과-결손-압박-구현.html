@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-02-11 - v0.9 WP2 압박 리듬과 결손 압박 구현</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-02-11 - v0.9 WP2 압박 리듬과 결손 압박 구현</h1>
+      <p class="meta">Generated from 2026-06-02-11-v0-9-wp2-압박-리듬과-결손-압박-구현.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-02-11 - v0.9 WP2 압박 리듬과 결손 압박 구현</h1>
+<h2>1. Current build status</h2>
+<ul>
+<li>v0.9 WP2 Slice A pressure rhythm is implemented.</li>
+<li>v0.9 WP2 Slice B minimal post-loss challenge is implemented.</li>
+<li>AI proxy metrics stayed positive, but browser proof for post-loss remained missing.</li>
+</ul>
+<h2>2. What changed today</h2>
+<ul>
+<li>Added pressure rhythm phases:</li>
+<li><code>숨 고르기</code>,</li>
+<li><code>압박 상승</code>,</li>
+<li><code>망각 전조</code>.</li>
+<li>Added pressure timeline/payload fields:</li>
+<li><code>runTimeline.pressureSegments</code>,</li>
+<li><code>danger.pressureLullTime</code>,</li>
+<li><code>danger.pressureRiseTime</code>,</li>
+<li><code>danger.pressureClimaxTime</code>.</li>
+<li>Added AI pressure metrics and <code>pressureContrast</code>.</li>
+<li>Added post-loss challenge phases:</li>
+<li><code>결손 정비</code>,</li>
+<li><code>결손 압박</code>.</li>
+<li>Added <code>runTimeline.postLossChallenges</code> and post-loss danger fields.</li>
+<li>Added <code>?qa=fast,postloss</code>, <code>npm run qa:pressure</code>, and <code>npm run qa:postloss</code>.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li><code>npm run qa:pressure</code>: passed earlier with <code>status: complete</code>, failures <code>[]</code>, segments <code>lull/rising/climax</code>.</li>
+<li><code>npm run ai:test:quick</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score around <code>0.8846</code>, pressure contrast around <code>0.4416</code>, post-loss challenge around <code>0.6687</code>, post-loss contrast around <code>0.3134</code>.</li>
+<li><code>npm run ai:test</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score around <code>0.8879</code>, post-loss challenge around <code>0.6692</code>.</li>
+<li><code>npm run doctor</code>: 43 pass / 0 warn / 0 fail during WP2 Slice B.</li>
+<li><code>npm run qa:postloss</code>: failed before gameplay evaluation at Chrome/CDP transport.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>WP2 Slice A and Slice B are implementation-complete and scope-valid.</li>
+<li>Treat post-loss browser proof as missing until trusted-local <code>qa:postloss</code> or <code>qa:postloss:trusted</code> passes.</li>
+<li>Do not start WP3 tactical agency until the post-loss browser gate is resolved.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>Post-loss browser QA failed at transport rather than gameplay assertions.</li>
+<li>The managed sandbox later blocked both CDP pipe and remote-debugging-port paths.</li>
+<li>PostLossChallengeScore around <code>0.669</code> is a planning signal, not human feel proof.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>WP2 added pressure rhythm before loss and a minimal challenge after loss.</li>
+<li>The implementation uses existing enemies, memories, and combat parameters.</li>
+<li>GPT/Claude should judge whether the missing browser proof blocks WP3 or can be treated as environment-specific only after trusted-local evidence.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>Run trusted-local <code>npm run qa:postloss</code> or <code>npm run qa:postloss:trusted</code>.</li>
+<li>If browser proof passes, record WP2 Slice B as browser-proven.</li>
+<li>If gameplay assertion fails, fix only the post-loss QA/flow issue.</li>
+<li>If transport fails again outside the sandbox, use the environment-blocker prompt before WP3.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: LETHE needed pressure highs/lows and a meaningful post-loss challenge before tactical agency.</li>
+<li>Direction: strengthen pacing and loss recovery using existing systems.</li>
+<li>Action: implemented pressure phases, post-loss phases, simulator metrics, and QA hooks.</li>
+<li>Result: WP2 was implemented, but its browser evidence gate remained open.</li>
+</ul>
+  </main>
+</body>
+</html>

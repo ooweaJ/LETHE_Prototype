@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-02-02 - v0.3-v0.4 전투 가시성과 사람 테스트 후보화</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-02-02 - v0.3-v0.4 전투 가시성과 사람 테스트 후보화</h1>
+      <p class="meta">Generated from 2026-06-02-02-v0-3-v0-4-전투-가시성과-사람-테스트-후보화.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-02-02 - v0.3-v0.4 전투 가시성과 사람 테스트 후보화</h1>
+<h2>1. Current build status</h2>
+<ul>
+<li>LETHE moved through v0.3 combat readability and v0.4 human-test candidate polish.</li>
+<li>v0.4 reached stronger AI scores and clearer browser evidence.</li>
+<li>The build was closer to people-test readiness but still below the long-term Alpha Fun Score target.</li>
+</ul>
+<h2>2. What changed today</h2>
+<ul>
+<li>Added Codex CLI planning fallback so Claude auth issues would not stop planning.</li>
+<li>Added combat readability polish:</li>
+<li>floating memory names,</li>
+<li>damage numbers,</li>
+<li>hit sparks,</li>
+<li>projectile trails,</li>
+<li>boss spawn/phase impact feedback,</li>
+<li>dependency tag and dependency percent in memory slots.</li>
+<li>Updated result screen to separate lost action from echo transformation.</li>
+<li>Added <code>echoTransformation</code> to JSON.</li>
+<li>Raised default UI clarity to <code>0.78</code>.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li><code>npm run review:codex:dry</code>: planning fallback path confirmed.</li>
+<li><code>npm run ai:test:quick</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score around <code>0.8190</code> after v0.4 polish.</li>
+<li><code>npm run ai:test</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score around <code>0.8261</code>, regret around <code>85.6%</code>, irritation around <code>0.4%</code>.</li>
+<li><code>npm run ai:test:heavy</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score around <code>0.8369</code>, regret around <code>87.6%</code>, irritation around <code>0.3%</code>.</li>
+<li>Browser QA confirmed v0.3/v0.4 labels and payload fields.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>v0.3 focused on combat legibility rather than new systems.</li>
+<li>v0.4 focused on making loss and echo readable enough for people to answer test questions.</li>
+<li>External planning fallback is required because Claude auth can be unavailable in some sessions.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>Alpha Fun Score improved but stayed below the aspirational <code>0.89+</code>.</li>
+<li>Combat readability improved, but release-feel fun was still not proven.</li>
+<li>AI <code>GO_CANDIDATE</code> was still not a human-test result.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>v0.3/v0.4 improved how players see memory use, dependency risk, lost action, and echo transformation.</li>
+<li>The next planning question was whether this was enough for people testing or whether early fun needed improvement first.</li>
+<li>GPT/Claude should treat v0.4 as a candidate, not a finished prototype.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>Verify level-up/run-fun if human testing is delayed.</li>
+<li>Keep browser QA in the loop for every UI payload change.</li>
+<li>Keep the human playtest guide aligned with the current version.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: the prototype could pass simulation while still feeling visually flat or unclear.</li>
+<li>Direction: make memory activations and forgetting risk visible during play.</li>
+<li>Action: added combat feedback, dependency labels, result-screen separation, and payload fields.</li>
+<li>Result: v0.4 became a stronger human-test candidate, but not yet a release-feel game loop.</li>
+</ul>
+  </main>
+</body>
+</html>

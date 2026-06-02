@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-03-03 - 2026-06-02 보고서 압축</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-03-03 - 2026-06-02 보고서 압축</h1>
+      <p class="meta">Generated from 2026-06-03-03-2026-06-02-보고서-압축.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-03-03 - 2026-06-02 보고서 압축</h1>
+<h2>1. Current build status</h2>
+<ul>
+<li>Reporting policy now expects feature/gate/decision-sized report units.</li>
+<li>The old 2026-06-02 report still had 57 smaller units before this pass.</li>
+<li>Gameplay status is unchanged: v0.9 WP2 Slice B is implemented but not browser-proven.</li>
+</ul>
+<h2>2. What changed today</h2>
+<ul>
+<li>Rewrote <code>docs/reports/2026-06-02.md</code> from 57 small report units into 13 larger units.</li>
+<li>Grouped the old content into meaningful project phases:</li>
+<li>v0.2 forgetting tuning,</li>
+<li>v0.3-v0.4 readability,</li>
+<li>v0.5 early fun,</li>
+<li>planning/doctor/playtest pipeline,</li>
+<li>v0.6 run structure,</li>
+<li>v0.7 balance correction,</li>
+<li>v0.8 evidence gates,</li>
+<li>v0.9 release-feel planning,</li>
+<li>WP1 identity,</li>
+<li>loop/preflight cleanup,</li>
+<li>WP2 pressure/post-loss,</li>
+<li>post-loss browser blocker,</li>
+<li>report/Discord unit system.</li>
+<li>Regenerated the 2026-06-02 daily HTML and unit files.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li><code>node scripts/build_report.js docs/reports/2026-06-02.md</code>: generated 13 unit reports.</li>
+<li><code>rg &quot;^# 2026-06-02-&quot; docs/reports/2026-06-02.md</code>: confirmed 13 numbered units.</li>
+<li>Pending final verification:</li>
+<li><code>node scripts/check_report_units.js docs/reports/2026-06-02.md</code>,</li>
+<li><code>npm run report</code>,</li>
+<li><code>npm run report:check</code>,</li>
+<li><code>npm run doctor:deep</code>.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>Keep detailed loop artifacts in <code>docs/loop_runs/</code> and git history.</li>
+<li>Keep daily report source files concise enough for a human to scan.</li>
+<li>Historical reports may be rewritten into larger report units when the old unit size is too noisy.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>The rewritten report is a summary, not a line-by-line reproduction of every previous loop step.</li>
+<li>Some exact intermediate wording now lives in git history and loop logs rather than the daily report.</li>
+<li>The report is more readable but less exhaustive.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>2026-06-02 is now compressed to 13 report units.</li>
+<li>The report now matches the new rule: feature/gate/decision units rather than commit/feedback-step units.</li>
+<li>Future loops should not recreate the 57-unit pattern.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>Verify both 2026-06-02 and 2026-06-03 report checks.</li>
+<li>Keep future reports around 3-8 units per day unless the day genuinely contains more large decisions.</li>
+<li>Continue gameplay only after the trusted post-loss browser gate is resolved.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: detailed automation logs were leaking into human-facing reports.</li>
+<li>Direction: preserve detail elsewhere while making daily reports readable.</li>
+<li>Action: compressed 57 historical units into 13 functional units.</li>
+<li>Result: the report now shows the actual project arc instead of every loop mechanic.</li>
+</ul>
+  </main>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-02-12 - Post-loss 브라우저 게이트와 환경 blocker 정리</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-02-12 - Post-loss 브라우저 게이트와 환경 blocker 정리</h1>
+      <p class="meta">Generated from 2026-06-02-12-post-loss-브라우저-게이트와-환경-blocker-정리.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-02-12 - Post-loss 브라우저 게이트와 환경 blocker 정리</h1>
+<h2>1. Current build status</h2>
+<ul>
+<li>WP2 Slice B remains implementation-complete and scope-valid.</li>
+<li>Latest status is <code>ITERATE_BEFORE_TEST</code>.</li>
+<li>Browser proof is still missing because the managed sandbox cannot complete Chrome/CDP post-loss QA.</li>
+<li>WP3 Slice A, people testing, balance changes, and UI/gameplay expansion remain blocked.</li>
+</ul>
+<h2>2. What changed today</h2>
+<ul>
+<li>Hardened <code>scripts/run_browser_pressure_qa.js</code>:</li>
+<li>CDP pipe remains the first path,</li>
+<li>pipe target timeout falls back to remote-debugging-port,</li>
+<li>fallback uses OS-confirmed <code>127.0.0.1</code> port,</li>
+<li>pipe/port share stable headless Chrome flags,</li>
+<li>repeated transport failures are reported as <code>BrowserQaTransportError</code>.</li>
+<li>Added <code>docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md</code>.</li>
+<li>Added <code>scripts/run_trusted_postloss_gate.js</code> and <code>npm run qa:postloss:trusted</code>.</li>
+<li>The trusted gate runs standard post-loss QA, retries once with 30000 ms only for transport failures, then points to the blocker prompt.</li>
+<li>Added <code>alpha_test/outputs/postloss-trusted-gate/latest.json</code> result logging with <code>status</code>, <code>transportFailure</code>, run summaries, <code>nextCommand</code>, and <code>blockerPrompt</code>.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li><code>node --check scripts/run_browser_pressure_qa.js</code>: passed.</li>
+<li><code>node --check scripts/run_trusted_postloss_gate.js</code>: passed.</li>
+<li><code>npm run doctor</code>: 44 pass / 0 warn / 0 fail after adding trusted gate.</li>
+<li><code>npm run doctor:deep</code>: 64 pass / 0 warn / 0 fail.</li>
+<li><code>npm run qa:postloss</code>: failed before gameplay evaluation.</li>
+<li><code>npm run qa:postloss -- --timeout-ms 30000</code>: failed before gameplay evaluation.</li>
+<li><code>npm run qa:pressure</code>: failed at the same transport stage during later sandbox runs.</li>
+<li><code>npm run qa:postloss:trusted</code>: failed before gameplay evaluation after standard run plus 30000 ms retry.</li>
+<li>Latest gate JSON recorded <code>status: blocked</code>, <code>transportFailure: true</code>.</li>
+<li>Failure shape:</li>
+<li>pipe: <code>Timed out waiting for CDP response to Target.getTargets</code>,</li>
+<li>port fallback: <code>listen EPERM: operation not permitted 127.0.0.1</code>.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>Treat this as a browser automation transport blocker in the managed sandbox, not proof that post-loss gameplay failed.</li>
+<li>Keep WP3 blocked until trusted-local browser proof passes or an explicit environment-blocker decision exists.</li>
+<li>Use <code>npm run qa:postloss:trusted</code> as the next single gate command.</li>
+<li>Keep AI proxy metrics as planning evidence only.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>Trusted-local behavior outside this sandbox is still unknown.</li>
+<li>Repeated QA tooling fixes can consume loop time without advancing gameplay.</li>
+<li>AI metrics remain positive but cannot replace browser/user proof.</li>
+<li>If the same transport failure repeats outside this sandbox, the project needs a decision rather than more blind QA retries.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>WP2 Slice B is code-complete and scope-valid.</li>
+<li>The next executable unit is sandbox-outside trusted-local <code>npm run qa:postloss:trusted</code>.</li>
+<li>If it passes, record WP2 Slice B as browser-proven before starting only minimal WP3 Slice A.</li>
+<li>If it fails on gameplay assertions, fix only the post-loss flow.</li>
+<li>If it fails on the same transport path, use <code>docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md</code>.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>Run <code>npm run qa:postloss:trusted</code> on a trusted local machine outside this managed sandbox.</li>
+<li>Inspect <code>alpha_test/outputs/postloss-trusted-gate/latest.json</code>.</li>
+<li>Update <code>docs/CODEX_STATUS.md</code>, <code>docs/NEXT_TASKS.md</code>, devlog, and report based on that result.</li>
+<li>Keep WP3, people testing, balance, and UI/gameplay expansion closed until the gate is resolved.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: WP2 had promising AI proxy metrics but lacked browser proof because automation failed before gameplay evaluation.</li>
+<li>Direction: distinguish gameplay failure from environment transport failure.</li>
+<li>Action: added transport diagnostics, fallback hardening, trusted gate wrapper, blocker prompt, and machine-readable gate result JSON.</li>
+<li>Result: the blocker is now explicit and repeatable; the next decision depends on trusted-local browser evidence.</li>
+</ul>
+  </main>
+</body>
+</html>

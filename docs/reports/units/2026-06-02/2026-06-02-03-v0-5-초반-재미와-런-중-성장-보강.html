@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-02-03 - v0.5 초반 재미와 런 중 성장 보강</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-02-03 - v0.5 초반 재미와 런 중 성장 보강</h1>
+      <p class="meta">Generated from 2026-06-02-03-v0-5-초반-재미와-런-중-성장-보강.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-02-03 - v0.5 초반 재미와 런 중 성장 보강</h1>
+<h2>1. Current build status</h2>
+<ul>
+<li>LETHE moved into v0.5 core-fun candidate status.</li>
+<li>The user feedback was that the game needed to be fun enough for players to reach forgetting.</li>
+<li>v0.5 added early combat pressure and in-run growth without adding meta progression or shop systems.</li>
+</ul>
+<h2>2. What changed today</h2>
+<ul>
+<li>Increased early enemy density and combat pressure.</li>
+<li>Added kill XP and run-only level-up choices.</li>
+<li>Added <code>runGrowth</code> payload data.</li>
+<li>Added AI early-fun metrics:</li>
+<li>Early Fun Score,</li>
+<li>early kill tempo,</li>
+<li>early level-ups,</li>
+<li>early crowd pressure.</li>
+<li>Added level-up browser QA mode and verified level-up pause/resume flow.</li>
+<li>Updated Claude v0.5 evaluation and human playtest guide.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li><code>npm run ai:test</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score around <code>0.8531</code>, Early Fun around <code>0.8669</code>, kill tempo around <code>0.9620</code>, level-ups around <code>4.08</code>.</li>
+<li><code>npm run ai:test:heavy</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score around <code>0.8509</code>, Early Fun around <code>0.8672</code>.</li>
+<li><code>?qa=fast,levelup</code> Chrome headless QA verified level-up DOM, selection, resume, and <code>runGrowth</code> payload.</li>
+<li>Claude v0.5 evaluation was recorded and interpreted as conditional on browser validation.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>Improve the early combat/growth loop before broad people testing.</li>
+<li>Keep growth run-only; no meta progression, shop, unlocks, or permanent growth.</li>
+<li>Do not add more memories while the current six memories are not fully proven.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>Alpha Fun improved but still did not prove human enjoyment.</li>
+<li>Simulation proxies could miss feel issues in combat rhythm and choice interest.</li>
+<li>Human testing remained useful but should not happen if the prototype still felt too thin.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>v0.5 asks whether players have enough moment-to-moment fun to keep playing until forgetting.</li>
+<li>Evidence says early fun improved, but the user later judged that release-feel depth still needed work.</li>
+<li>GPT/Claude should separate &quot;AI can clear it&quot; from &quot;a human wants to replay it.&quot;</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>Use test-result planning pipeline for future design decisions.</li>
+<li>Watch earlyChoiceInterest and echoPivotScore as weak-but-not-yet-actionable signals.</li>
+<li>Keep human-test packaging ready but pause it if the core loop is not yet compelling.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: good forgetting metrics do not matter if players quit before the first meaningful loss.</li>
+<li>Direction: strengthen early combat tempo and in-run choices.</li>
+<li>Action: added denser waves, XP, level-ups, and early-fun metrics.</li>
+<li>Result: v0.5 improved early playability but exposed the need for a deeper run structure.</li>
+</ul>
+  </main>
+</body>
+</html>

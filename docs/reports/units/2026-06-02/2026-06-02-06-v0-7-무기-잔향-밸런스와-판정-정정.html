@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-02-06 - v0.7 무기/잔향 밸런스와 판정 정정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-02-06 - v0.7 무기/잔향 밸런스와 판정 정정</h1>
+      <p class="meta">Generated from 2026-06-02-06-v0-7-무기-잔향-밸런스와-판정-정정.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-02-06 - v0.7 무기/잔향 밸런스와 판정 정정</h1>
+<h2>1. Current build status</h2>
+<ul>
+<li>v0.7 improved weapon baselines and lost-memory echo effects.</li>
+<li>AI and Claude planning signals initially suggested solo/human test candidacy.</li>
+<li>User direct feedback later invalidated the balance confidence.</li>
+</ul>
+<h2>2. What changed today</h2>
+<ul>
+<li>Buffed the two existing weapon baselines.</li>
+<li>Added weapon-facing echo effects for lost memories.</li>
+<li>Added side-panel echo labels for weapon residue effects.</li>
+<li>Updated AI simulator weapon base DPS and residue proxy.</li>
+<li>Recorded Claude v0.7 feedback and the later correction that AI balance confidence was too optimistic.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li><code>npm run ai:test</code> and related checks stayed in <code>GO_CANDIDATE</code> range.</li>
+<li>Claude v0.7 balance verdict leaned toward solo/human testing.</li>
+<li>User direct feedback judged the balance verdict unreliable and the game not yet ready.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>User live play feedback outranks AI planning/proxy metrics.</li>
+<li>Do not proceed to people testing just because Claude or AI proxies say <code>GO</code>.</li>
+<li>Fix the automatic balance proxy before trusting it for major decisions.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>AI proxies can miss subjective balance and fun issues.</li>
+<li>Weapon/echo improvements can look good numerically while still feeling off.</li>
+<li>The project needed a stronger release-feel plan before more people testing.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>v0.7 improved the prototype but also exposed that AI verdicts were overconfident.</li>
+<li>GPT/Claude should treat future <code>GO</code> outputs as planning passes until browser/user evidence supports them.</li>
+<li>The next plan should be stricter and more reference-driven.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>Start v0.8 double-check planning for major design changes.</li>
+<li>Improve danger/death metrics and balance proxy reliability.</li>
+<li>Keep scope guard active: no new memories, shop, meta progression, final boss, or multi-region run.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: simulated balance confidence diverged from user play feel.</li>
+<li>Direction: make AI planning subordinate to direct play evidence.</li>
+<li>Action: recorded the verdict correction and changed the planning default to double-check.</li>
+<li>Result: future work became more cautious, evidence-based, and user-feedback-led.</li>
+</ul>
+  </main>
+</body>
+</html>

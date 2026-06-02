@@ -1,11 +1,11 @@
 {
   "source": "docs/reports/2026-06-02.md",
-  "generatedAt": "2026-06-02T17:43:00.668Z",
-  "unitCount": 57,
+  "generatedAt": "2026-06-02T17:55:17.419Z",
+  "unitCount": 13,
   "latest": {
-    "title": "2026-06-02-57 - Devloop 193946 Feedback-6 태스크 갱신",
-    "number": "57",
-    "markdownPath": "docs/reports/units/2026-06-02/2026-06-02-57-devloop-193946-feedback-6-태스크-갱신.md",
-    "htmlPath": "docs/reports/units/2026-06-02/2026-06-02-57-devloop-193946-feedback-6-태스크-갱신.html"
+    "title": "2026-06-02-13 - 보고서/Discord 단위 체계 1차 정리",
+    "number": "13",
+    "markdownPath": "docs/reports/units/2026-06-02/2026-06-02-13-보고서-discord-단위-체계-1차-정리.md",
+    "htmlPath": "docs/reports/units/2026-06-02/2026-06-02-13-보고서-discord-단위-체계-1차-정리.html"
   }
 }

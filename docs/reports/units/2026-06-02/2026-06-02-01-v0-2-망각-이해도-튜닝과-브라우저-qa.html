@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-02-01 - v0.2 망각 이해도 튜닝과 브라우저 QA</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-02-01 - v0.2 망각 이해도 튜닝과 브라우저 QA</h1>
+      <p class="meta">Generated from 2026-06-02-01-v0-2-망각-이해도-튜닝과-브라우저-qa.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-02-01 - v0.2 망각 이해도 튜닝과 브라우저 QA</h1>
+<h2>1. Current build status</h2>
+<ul>
+<li>LETHE HTML alpha moved from v0.1 into v0.2 narrow tuning.</li>
+<li>The goal was not more content, but making the first forgetting event understandable and testable.</li>
+<li>v0.2 reached AI <code>GO_CANDIDATE</code> and browser QA candidate status.</li>
+</ul>
+<h2>2. What changed today</h2>
+<ul>
+<li>Converted GPT/Claude v0.2 planning into Korean task docs.</li>
+<li>Tuned first forgetting timing toward the 8-10 minute target.</li>
+<li>Tuned boss/forgetting timing around a 9-minute browser run.</li>
+<li>Reduced single-memory deletion skew, especially <code>처형자의 섬광</code>.</li>
+<li>Added clearer result screen fields: forgotten memory, prediction result, deletion weight, remaining echo, next build direction.</li>
+<li>Added Q3 free-response recall and JSON fields for selected/predicted/deleted memories and deletion weights.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li><code>npm run ai:test:quick</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score around <code>0.7798</code>.</li>
+<li><code>npm run ai:test</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score around <code>0.7737</code>.</li>
+<li>Browser <code>?qa=fast</code> verified result screen and JSON payload.</li>
+<li>Report/Discord dry-runs confirmed Korean summary format.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>v0.2 should validate whether forgetting feels like understandable loss.</li>
+<li>Do not expand content before result-screen and JSON evidence are readable.</li>
+<li>Keep Discord as a concise status channel, not the source of truth.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>v0.2 was still early and not yet a release-feel prototype.</li>
+<li>AI metrics were enough for a candidate signal, not proof of human emotion.</li>
+<li>Browser QA had to remain part of the gate before people testing.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>v0.2 asks whether the first forgetting is predictable, legible, and regrettable rather than irritating.</li>
+<li>Human feedback should focus on regret, irritation, neutral reactions, unclear reactions, and memory-name recall.</li>
+<li>GPT/Claude should use test evidence, not vibes, to choose the next version.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>Continue pre-human-test polish only where readability or evidence quality is weak.</li>
+<li>Keep browser QA and JSON payload verification mandatory.</li>
+<li>Prepare v0.3 only if the result-screen/forgetting loop needs more clarity before people testing.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: v0.1 had a promising emotional loop but the first loss could be too early and hard to parse.</li>
+<li>Direction: narrow the prototype around a testable first forgetting moment.</li>
+<li>Action: tuned timing, deletion skew, result UI, survey, JSON logging, and Discord/report flow.</li>
+<li>Result: v0.2 became a better evidence-gathering build rather than a content expansion.</li>
+</ul>
+  </main>
+</body>
+</html>

@@ -8,7 +8,7 @@ Last updated: 2026-06-03
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
-- Latest task-update status: report delivery now uses larger feature/decision units instead of tiny loop-step units. The autonomous dev loop no longer sends a report/Discord attachment immediately after implementation; it reports once after implementation, verification, Claude/Codex feedback, and task update are folded together. `npm run report:check` now rejects procedural report titles such as `Feedback-N 태스크 갱신`, `자동 개발 루프 N차`, or single QA retries. WP2 Slice B remains implementation-complete but not browser-proven; WP3, people testing, balance changes, and UI/gameplay expansion remain blocked until trusted-local `npm run qa:postloss:trusted` passes or an explicit environment-blocker decision exists.
+- Latest task-update status: historical reports now follow the larger feature/decision unit policy too. `docs/reports/2026-06-02.md` was compressed from 57 tiny loop-step units into 13 feature/gate/decision units, and its generated unit files were regenerated. The autonomous dev loop reports once after implementation, verification, Claude/Codex feedback, and task update are folded together. `npm run report:check` rejects procedural report titles from 2026-06-03 onward. WP2 Slice B remains implementation-complete but not browser-proven; WP3, people testing, balance changes, and UI/gameplay expansion remain blocked until trusted-local `npm run qa:postloss:trusted` passes or an explicit environment-blocker decision exists.
 
 ## Implemented
 
@@ -111,6 +111,7 @@ Last updated: 2026-06-03
   - report units should describe a feature, gate, or decision,
   - one report unit should include implementation, verification, feedback, and next-task decision,
   - commit/log units may stay small, but Discord/report units should not be `Feedback-N 태스크 갱신` or loop-step titles.
+  - `docs/reports/2026-06-02.md` is now consolidated to 13 units instead of 57; detailed loop mechanics remain in `docs/loop_runs/` and git history.
 - Short Discord status notices for Codex work.
 - Claude Code planning-iteration automation for interpreting AI/human test results and deciding next design direction.
 - Test-result planning pipeline via `npm run planning:pipeline`, with Claude first and Codex CLI fallback.
