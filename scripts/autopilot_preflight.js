@@ -2,6 +2,7 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
 const { spawnSync } = require('child_process');
 
 const options = parseArgs(process.argv.slice(2));
@@ -92,8 +93,13 @@ function dirtySummary(lines) {
 function dirtyFix(lines) {
   const loopRunLines = lines.filter((line) => /docs\/loop_runs\/.+\.md$/.test(line));
   if (loopRunLines.length) {
+    const missingResults = pendingLoopResultSummary(loopRunLines);
+    const resultLine = missingResults
+      ? `Missing expected result files: ${missingResults}.`
+      : 'No missing prompt/result pairs were detected from the dirty loop-run files.';
     return [
       'Loop-run artifacts are pending.',
+      resultLine,
       'Let the wrapper finish any missing result files, then run `git add docs/loop_runs && git commit -m "docs: 자동 개발 루프 산출물 기록"` or remove abandoned artifacts.',
       'Next check: `npm run autopilot:preflight:local`.',
       'Use --allow-dirty only for deliberate local smoke checks.',
@@ -101,6 +107,23 @@ function dirtyFix(lines) {
   }
 
   return 'Commit, stash, ignore, or move unrelated files before unattended automation. Use --allow-dirty only for deliberate local checks.';
+}
+
+function pendingLoopResultSummary(lines) {
+  const missing = lines
+    .map((line) => dirtyPath(line))
+    .filter((file) => /-(?:implement|task-update)-prompt\.md$/.test(file))
+    .map((promptFile) => promptFile.replace(/-prompt\.md$/, '-result.md'))
+    .filter((resultFile) => !fs.existsSync(path.resolve(resultFile)));
+
+  if (!missing.length) return '';
+  const shown = missing.slice(0, 3).join(', ');
+  const extra = missing.length > 3 ? `, ... +${missing.length - 3} more` : '';
+  return `${shown}${extra}`;
+}
+
+function dirtyPath(line) {
+  return String(line).slice(3).trim();
 }
 
 function checkNpmScripts() {

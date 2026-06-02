@@ -23,6 +23,7 @@
 - Latest devloop feedback verdict: the `2026-06-02-devloop-175642` automation prompt cleanup is valid, WP1 should not be reopened for new gameplay work, and the next executable scope remains gate cleanup: record/track current loop-run outputs and rerun trusted-local `npm run qa:identity` before WP2 or unattended automation.
 - Latest devloop feedback-2 verdict: `ITERATE_BEFORE_TEST`. The preflight-order cleanup is code-complete, but WP1 is not officially closed until the current loop-run outputs are recorded/cleaned, `npm run autopilot:preflight:local` passes on a clean tree, and trusted-local `npm run qa:identity` passes.
 - Latest devloop feedback-3 verdict: AI planning evidence supports `GO_CANDIDATE` / Claude `GO_TO_HUMAN_TEST`, but the selected Codex scope remains gate cleanup only. Do not start WP2 or human-test checklist work until loop-run artifacts are recorded/cleaned, clean-tree `npm run autopilot:preflight:local` passes, and trusted-local `npm run qa:identity` passes.
+- Latest devloop feedback-4 verdict: `GO_CANDIDATE` remains an AI planning pass, not human emotion or balance proof. The missing-result diagnosis worked and the wrapper result now exists, so the next executable scope is still artifact 정합성 정리: record/track or remove the `docs/loop_runs/2026-06-02-devloop-175642*` outputs, then pass clean-tree `npm run autopilot:preflight:local` and trusted-local `npm run qa:identity` before WP2.
 - Reference research: `docs/research/2026-06-02-roguelike-reference.md`.
 - New v0.9 prompt: `docs/review_prompts/2026-06-02-v09-release-feel-loop.md`.
 - Overnight loop command:
@@ -198,6 +199,10 @@
   - `scripts/autopilot_preflight.js`가 dirty 파일 목록을 5개까지 요약하고, `docs/loop_runs/*.md`가 포함되면 loop-run artifact 전용 안내를 출력한다.
   - 출력 안내는 wrapper result 파일 마무리, `git add docs/loop_runs && git commit -m "docs: 자동 개발 루프 산출물 기록"` 또는 abandoned artifact 제거, 그리고 `npm run autopilot:preflight:local` 재실행이다.
   - 검증: `node --check scripts/autopilot_preflight.js` 통과, `npm run doctor` 39 pass, `npm run autopilot:preflight:local`은 현재 dirty tree 때문에 예상대로 실패하면서 새 안내 문구를 출력했다.
+- [x] `npm run autopilot:preflight:local`이 dirty loop-run prompt의 누락된 result 파일을 직접 표시하게 했다.
+  - dirty `*-prompt.md` 파일에서 예상 `*-result.md` 경로를 계산한다.
+  - 현재 확인된 누락 파일은 `docs/loop_runs/2026-06-02-devloop-175642-iteration-4-implement-result.md`다.
+  - 검증: `node --check scripts/autopilot_preflight.js` 통과, `npm run autopilot:preflight:local`은 dirty tree 때문에 예상대로 실패하면서 누락 result 경로를 출력했다.
 - [x] `2026-06-02-devloop-175642-feedback-3` Claude/Codex 피드백 공통점과 충돌을 정리했다.
   - 공통점: AI proxy는 `GO_CANDIDATE`, Alpha Fun Score `0.8883`, regret `0.8083`, irritation `0.0104`, restart `0.90`로 planning 기준은 긍정적이다.
   - 공통점: 이번 구현은 게임 기능이 아니라 preflight blocker 진단 보강이며, WP1을 새 gameplay 작업으로 재오픈하지 않는다.
@@ -205,7 +210,14 @@
   - 공통점: echoPivotScore `0.656`과 earlyChoiceInterest `0.654`는 AI 수치만으로 수정하지 않고 사람 관찰 또는 WP2 검증에서 본다.
   - 충돌: Claude는 gate cleanup 이후 사람 테스트 체크리스트와 `GO_TO_HUMAN_TEST`를 제안했고, Codex CLI는 cleanup 이후 기존 WP2 Slice A 압박 리듬 순서를 유지하자고 했다.
   - 선택: 이번 cycle은 docs-only update로 닫는다. 다음 executable scope는 gate cleanup 하나이며, 통과 전에는 WP2, human-test checklist, UI/튜토리얼/밸런스 변경을 시작하지 않는다.
-- [ ] 현재 루프가 생성한 `docs/loop_runs/2026-06-02-devloop-175642*.md` 파일을 wrapper가 커밋하거나, 다음 unattended loop 전에 정리해 `npm run autopilot:preflight:local` blocker를 제거한다.
+- [x] `2026-06-02-devloop-175642-feedback-4` Claude/Codex 피드백 공통점과 충돌을 정리했다.
+  - 공통점: AI proxy는 `GO_CANDIDATE`, Alpha Fun Score `0.8883`, regret `0.8083`, irritation `0.0104`, restart `0.90`로 planning 기준은 긍정적이지만 사람 감정/밸런스 증거는 아니다.
+  - 공통점: 이번 구현은 missing-result preflight diagnosis이며, 새 gameplay scope를 늘리지 않는다.
+  - 공통점: wrapper result 파일은 현재 생성된 상태이므로 다음 blocker는 `docs/loop_runs/2026-06-02-devloop-175642*` 산출물 기록/정리, clean-tree `npm run autopilot:preflight:local`, trusted-local `npm run qa:identity`다.
+  - 공통점: `멈춘 초침` 삭제율, earlyChoiceInterest `0.654`, echoPivotScore `0.656`은 AI 수치만으로 튜닝하지 않고 관찰 대상으로 둔다.
+  - 충돌: Claude는 사람 테스트 직전 단계로 보고 outlier 관찰을 강조했고, Codex CLI는 아직 Unity 전환 근거가 아니며 다음 최소 작업을 loop-run artifact 정합성 정리로 제한했다.
+  - 선택: 이번 cycle은 docs-only update로 닫는다. 다음 executable scope는 artifact 정합성 정리 하나이며, 통과 후에만 기존 순서대로 WP2 Slice A 압박 고저차를 시작한다.
+- [ ] 현재 루프가 생성한 `docs/loop_runs/2026-06-02-devloop-175642*.md` 파일을 기록/커밋하거나, 다음 unattended loop 전에 abandoned artifact를 정리해 `npm run autopilot:preflight:local` blocker를 제거한다.
 - [ ] clean tree에서 `npm run autopilot:preflight:local`을 재실행하고 pass를 기록한다.
 - [ ] trusted local에서 `npm run qa:identity`를 재실행하고 `status: complete`, failures `[]`를 확인한다.
 - [ ] v0.9 Work Package 2 Slice A: 전투 구간별 압박 고저차를 구현한다.
