@@ -61,11 +61,11 @@ function main() {
     runRequired('report build after feedback', 'npm run report');
     sendWorkUnitReport();
 
+    sendNotice('checkpoint', `자동 개발 루프 ${iteration}/${options.iterations} 완료`, '구현-검증-보고-피드백-태스크 갱신까지 완료했습니다.');
+
     if (options.commit) {
       commitAndMaybePush(iteration);
     }
-
-    sendNotice('checkpoint', `자동 개발 루프 ${iteration}/${options.iterations} 완료`, '구현-검증-보고-피드백-태스크 갱신까지 완료했습니다.');
 
     if (iteration < options.iterations && options.sleepMinutes > 0) {
       log(`\nSleeping ${options.sleepMinutes} minute(s).\n`);
@@ -73,8 +73,7 @@ function main() {
     }
   }
 
-  sendNotice('done', '자동 개발 루프 완료', '루프가 종료되었습니다.', path.relative(process.cwd(), runLogPath));
-  log('\n## Result\n\nAutonomous development loop finished.\n');
+  sendNotice('done', '자동 개발 루프 완료', '루프가 종료되었습니다.', path.relative(process.cwd(), runLogPath), { record: false });
   console.log(`Autonomous dev loop log: ${path.relative(process.cwd(), runLogPath)}`);
 }
 
@@ -322,11 +321,13 @@ function commitAndMaybePush(iteration) {
     return;
   }
 
-  runRequired('git add', 'git add -A');
-  runRequired('git commit', `git commit -m ${quote(`feat: 자동 개발 루프 ${iteration}차 반영`)}`);
+  log('\n### git checkpoint\n\nGit add/commit/push is executed after loop logging so the next automation starts clean.\n');
+
+  runSilentRequired('git add', 'git add -A');
+  runSilentRequired('git commit', `git commit -m ${quote(`feat: 자동 개발 루프 ${iteration}차 반영`)}`);
 
   if (options.push) {
-    runRequired('git push', 'git push');
+    runSilentRequired('git push', 'git push');
   }
 }
 
@@ -341,7 +342,7 @@ function sendWorkUnitReport() {
   }
 }
 
-function sendNotice(type, title, summary, file = '') {
+function sendNotice(type, title, summary, file = '', opts = {}) {
   if (options.noDiscord) return;
   const args = [
     'node scripts/send_codex_notice.js',
@@ -351,7 +352,9 @@ function sendNotice(type, title, summary, file = '') {
   ];
   if (file) args.push(`--file=${quoteArg(file)}`);
   if (options.discordDryRun) args.push('--dry-run');
-  const result = runStep(`discord notice ${type}`, args.join(' '));
+  const result = opts.record === false
+    ? runSilentStep(`discord notice ${type}`, args.join(' '))
+    : runStep(`discord notice ${type}`, args.join(' '));
   if (result.status !== 0) {
     log(`- WARN discord notice ${type}: ${firstLine(result.stderr || result.stdout)}\n`);
   }
@@ -369,6 +372,17 @@ function runRequired(name, command, opts = {}) {
   return result;
 }
 
+function runSilentRequired(name, command) {
+  const result = runSilentStep(name, command);
+  if (result.status !== 0) {
+    const detail = firstLine(result.stderr || result.stdout);
+    writeBlockerPrompt(0, name, detail);
+    sendNotice('blocked', `자동 개발 루프 중단: ${name}`, detail);
+    failLoop(name, detail);
+  }
+  return result;
+}
+
 function runStep(name, command) {
   log(`\n### ${name}\n\n\`${command}\`\n`);
   const result = spawnSync(command, {
@@ -378,6 +392,19 @@ function runStep(name, command) {
     maxBuffer: 1024 * 1024 * 30,
   });
   recordResult(name, result);
+  return result;
+}
+
+function runSilentStep(name, command) {
+  const result = spawnSync(command, {
+    cwd: process.cwd(),
+    encoding: 'utf8',
+    shell: true,
+    maxBuffer: 1024 * 1024 * 30,
+  });
+  if (result.status !== 0 || result.error) {
+    recordResult(name, result);
+  }
   return result;
 }
 
