@@ -229,7 +229,7 @@ function verificationCommands() {
 }
 
 function writeFeedbackPrompt(iteration, implementation) {
-  const promptPath = path.join('docs', 'review_prompts', `${date}-autodev-feedback-${iteration}.md`);
+  const promptPath = path.join('docs', 'review_prompts', `${runId}-feedback-${iteration}.md`);
   const summary = readText('alpha_test/outputs/quick/summary.json');
   const diffStat = runCapture('git diff --stat');
   const prompt = [

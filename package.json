@@ -28,6 +28,7 @@
     "planning:pipeline:claude": "node scripts/run_planning_pipeline.js --provider claude",
     "doctor": "node scripts/check_local_pipeline.js",
     "doctor:deep": "node scripts/check_local_pipeline.js --deep",
+    "qa:identity": "node scripts/run_browser_identity_qa.js",
     "autopilot:preflight": "node scripts/autopilot_preflight.js --external",
     "autopilot:preflight:local": "node scripts/autopilot_preflight.js",
     "autopilot:preflight:dry": "node scripts/autopilot_preflight.js --dry-run",

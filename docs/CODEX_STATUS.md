@@ -69,6 +69,10 @@ Last updated: 2026-06-02
   - JSON/event payloads include `buildIdentity` and `buildIdentitySeenBy90Sec`,
   - AI raw-run payload `stage.build` includes `buildName`, `activeSynergyDetails`, and `mostDependentMemory`,
   - `?qa=fast,identity` writes `data-lethe-identity-qa` for build identity QA.
+- v0.9 Work Package 1 QA runner:
+  - added `scripts/run_browser_identity_qa.js`,
+  - added `npm run qa:identity`,
+  - local doctor now checks the identity QA script entry and syntax.
 - AI alpha test tool under `alpha_test/`.
 - Codex/GPT/Claude workflow docs.
 - Markdown daily reports, generated HTML reports, and Discord report delivery.
@@ -307,6 +311,12 @@ npm run ai:sweep
   - `npm run ai:test:heavy`: `GO_CANDIDATE`, Alpha Fun Score `0.8893`, regret `81.8%`, irritation `0.8%`, prediction `84.8%`, death/fail `67.7%`.
 - Latest Discord work-unit delivery succeeded with `npm run report:discord:unit`.
 - Browser plugin QA was not available in this session (`iab` unavailable). Chrome CLI also returned no dump output because it handed off to an existing user browser session, so the next gate must add a stable browser QA runner rather than treating flow QA as complete.
+- Latest v0.9 identity QA runner attempt:
+  - `npm run qa:identity` exists and syntax checks pass,
+  - fixed Chrome pipe direction and core-visible completion criteria,
+  - `npm run qa:identity`: passed,
+  - result: `status: complete`, failures `[]`,
+  - confirmed visible build name, active synergy, dependent memory, buildIdentity payload, and `buildIdentitySeenBy90Sec`.
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the v0.5 level-up flow and `runGrowth` payload.
 - Planning pipeline prompt generated: `docs/review_prompts/2026-06-02-pipeline.md`.
@@ -338,7 +348,8 @@ npm run ai:sweep
 ## Next Codex Tasks
 
 - v0.9 Work Package 1 remains the current product gate until browser evidence confirms build identity is visible within 90 seconds.
-- Verify `?qa=fast,identity` in a stable browser/headless runner.
+- `?qa=fast,identity` browser/headless runner passed on this machine.
+- Next v0.9 WP1 task: compress memory card descriptions if needed, then decide whether WP1 can close before WP2.
 - Resolve the dirty working tree before unattended automation:
   - existing untracked files: `docs/loop_runs/2026-06-02-devloop-170139-iteration-1-implement-prompt.md`, `docs/loop_runs/2026-06-02-devloop-170139.md`,
   - next command before unattended automation: clean, commit, stash, ignore, or intentionally run with `--allow-dirty` from a trusted local terminal.
