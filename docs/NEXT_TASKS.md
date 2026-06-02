@@ -1,6 +1,6 @@
 # Next Tasks
 
-현재 단계는 v0.5 core-fun human-test ready 상태다. 사용자의 실제 테스트 피드백에 따라 “망각 감정”보다 먼저 초반 재미, 적 몰림, 런 중 성장 선택을 보완했고, Claude가 요구한 레벨업 UI/`runGrowth` 브라우저 gate도 Chrome headless로 통과했다.
+현재 단계는 v0.5 core-fun human-test ready에서 `FIX_CORE_RUN_STRUCTURE` 판단 대기로 바뀌었다. 사용자의 실제 1인 플레이 확인 결과, 보스까지 가는 시간이 너무 멀고 망각 루프가 늦게 열려 지금 사람 테스트를 진행해도 의미가 약하다고 판단했다.
 
 이 프로젝트의 현재 목표는 HTML 프로토타입으로 LETHE의 핵심 재미와 가능성을 검증하는 것이다. 충분히 재미가 확인되면 그 결과를 근거로 Unity 구현 단계로 넘어간다.
 
@@ -9,6 +9,8 @@
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the level-up flow and `runGrowth` payload.
 - Codex implementation result: `GO_CANDIDATE` from `npm run ai:test` and `npm run ai:test:heavy`.
+- User direct playtest verdict: pause broad human testing and redesign the core run structure before more testing.
+- New planning prompt: `docs/review_prompts/2026-06-02-run-structure-redesign.md`.
 - Project direction: HTML prototype validation first, Unity implementation later only if AI/human tests show enough promise.
 
 ## v0.2 Done
@@ -94,9 +96,12 @@
 - [x] 다른 로컬에서 파이프라인 준비 상태를 확인하는 `npm run doctor` 라인을 추가한다.
 - [x] 사람 테스트 JSON 로그를 요약하고 Claude/GPT용 human-test 프롬프트를 생성하는 `npm run playtest:summary` 라인을 추가한다.
 - [x] 사람 테스트용 정적 배포 폴더를 만드는 `npm run playtest:package` 라인을 추가한다.
-- [ ] 5-8명 사람 테스트를 진행한다.
-- [ ] 플레이테스트 후 감정 반응을 기준으로 다음 방향을 결정한다.
-- [ ] 사람 테스트 결과가 모이면 Claude/GPT에 결과를 보고하고 기획 수정 방향을 받는다. 외부 전송 승인이 어려우면 Codex CLI fallback이나 Claude mock 경로로 자동화만 먼저 점검한다.
+- [x] 실제 1인 플레이 피드백을 바탕으로 v0.5 사람 테스트를 보류하고 런 구조 재설계 프롬프트를 작성한다.
+- [ ] `docs/review_prompts/2026-06-02-run-structure-redesign.md`를 Claude/GPT에 보내 v0.6 방향을 결정한다.
+- [ ] 답변을 읽고 v0.6 Codex 작업 목록으로 변환한다.
+- [ ] v0.6에서 첫 보스/첫 망각 타이밍, 보스 주기, 기억 상실 후 치환 보상, 기억 보충 타이밍을 구현한다.
+- [ ] v0.6 구현 후 AI/브라우저 QA를 다시 실행한다.
+- [ ] v0.6이 재미 기준을 통과하면 그때 사람 테스트를 진행한다.
 
 ## Pre-Human-Test Polish Gate
 

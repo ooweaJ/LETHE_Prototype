@@ -4,10 +4,10 @@ Last updated: 2026-06-02
 
 ## Current Build
 
-- Project: LETHE HTML Alpha v0.5 core-fun human-test ready.
+- Project: LETHE HTML Alpha v0.5 core-fun run-structure redesign pending.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
-- Current scope: HTML prototype validation. The project is testing whether LETHE's early combat/growth loop and forgetting loop are fun enough to justify moving into Unity implementation.
+- Current scope: HTML prototype validation. The project is testing whether LETHE's early combat/growth loop and forgetting loop are fun enough to justify moving into Unity implementation. Human testing is paused until the core run structure is reworked because the first boss/forgetting event currently arrives too late for the loop to matter.
 
 ## Implemented
 
@@ -90,6 +90,7 @@ Heavy check:
 Remaining note:
 
 - Power drop is now below the 30% target (`27.8-28.0%`) because v0.5 prioritizes early fun and smoother growth. It should be observed directly in human testing before over-tuning.
+- User direct playtest found that the boss/forgetting loop opens too late, so the next planning question is not numeric tuning but run-structure redesign.
 
 ## Latest Sweep Note
 
@@ -154,6 +155,8 @@ npm run ai:sweep
 - Planning pipeline Claude response saved: `docs/review_responses/2026-06-02-pipeline-claude.md`.
 - Claude pipeline verdict: `GO_TO_HUMAN_TEST`.
 - Claude requested no new gameplay feature before human testing. Only minimum data collection was added: tester ID and session number in JSON logs.
+- User direct playtest supersedes the previous human-test gate for now: the prototype needs a v0.6 run-structure decision before broader people testing.
+- New run-structure planning prompt: `docs/review_prompts/2026-06-02-run-structure-redesign.md`.
 - v0.2 scope: timing, deletion distribution, echo default, clearer feedback, JSON logs, human-test recall question.
 - A v0.3/version-up Claude prompt exists, but actual Claude execution still requires local Claude Code login.
 - This session confirmed the local `claude` command is installed: `claude --version` returned `2.1.153 (Claude Code)`.
@@ -163,11 +166,11 @@ npm run ai:sweep
 - Offline mock verification wrote `alpha_test/outputs/claude-review-mock.md` with `--mock-response`, confirming prompt selection, output directory creation, and response writing without external transmission.
 - Codex CLI can write planning responses to `docs/review_responses/YYYY-MM-DD-codex.md` through `npm run review:codex`.
 - OpenAI API fallback has been removed by request. The review order is now Claude Code first, then Codex CLI fallback.
-- Human testing can proceed.
+- Human testing is paused until Claude/GPT or the user chooses the v0.6 run structure.
 
 ## Next Codex Tasks
 
-- Human playtest is the next product gate.
+- v0.6 run-structure planning is the next product gate.
 - On another local machine, run `npm run doctor` first; run `npm run doctor:deep` before leaving Codex to continue unattended.
-- Use `docs/HUMAN_PLAYTEST_GUIDE.md` for a 5-8 player test focused on early fun, growth choice quality, regret vs irritation, and Unity transition signals.
-- During testing, watch whether the 27.8-28.0% power drop feels too safe or still regretful enough.
+- Send `docs/review_prompts/2026-06-02-run-structure-redesign.md` to Claude/GPT manually, then give Codex the saved answer.
+- After the v0.6 direction is chosen and implemented, return to `docs/HUMAN_PLAYTEST_GUIDE.md` for people testing.
