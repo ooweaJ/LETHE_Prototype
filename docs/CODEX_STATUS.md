@@ -109,7 +109,7 @@ Remaining note:
 - Prediction match is still high and should be watched during 1-person feel testing.
 - v0.7 improves weapon baseline and mob-clearing proxy, but echo pivot score dropped slightly; watch whether the player feels "weapon solved it" instead of "lost memory changed the build."
 - Actual Claude v0.7 review succeeded and saved `docs/review_responses/2026-06-02-v07-balance-claude.md`.
-- Claude verdict: `GO_TO_SOLO_PLAYTEST`.
+- Claude verdict: `GO_TO_SOLO_PLAYTEST`, now superseded by user live balance feedback.
 - Solo test sheet: `docs/playtest/2026-06-02-solo.md`.
 
 ## Latest Sweep Note
@@ -216,13 +216,15 @@ npm run ai:sweep
 - Local Codex v0.7 judgment saved: `docs/review_responses/2026-06-02-v07-balance-codex.md`.
 - Actual Claude v0.7 judgment saved: `docs/review_responses/2026-06-02-v07-balance-claude.md`.
 - Claude v0.7 verdict: `GO_TO_SOLO_PLAYTEST`.
-- Claude says do not add new weapons, special skills, or v0.7.1 numeric tuning before solo human-feel data. Watch post-loss 30 seconds, weapon echo visibility, prediction causes, and restart desire.
+- User live feedback after v0.7 invalidated the balance judgment: the current balance is not close enough.
+- The root problem is that v0.7 Claude feedback was based on AI proxy metrics and browser flow QA, not real balance play.
+- New v0.7.1 prompt: `docs/review_prompts/2026-06-02-v071-balance-reality-check.md`.
 
 ## Next Codex Tasks
 
-- v0.7 solo feel-test decision is the next product gate.
+- v0.7 balance reality check is the next product gate.
 - On another local machine, run `npm run doctor` first; run `npm run doctor:deep` before leaving Codex to continue unattended.
 - Before an unattended implement -> Claude feedback -> implement loop, run `npm run autopilot:preflight`.
-- Run user 1-person feel testing against v0.7 before any broader playtest.
-- Use `docs/playtest/2026-06-02-solo.md` during the run.
-- Only start v0.7.1 if the solo notes say post-loss mob clearing is still too hard, echo effects are not visible, or the loss feels like no big deal.
+- Do not describe AI proxy metrics as real balance feedback.
+- Before v0.7.1 tuning, improve the test model or browser balance QA so the automation catches the mismatch the user just found.
+- Then run a focused v0.7.1 combat/balance iteration.

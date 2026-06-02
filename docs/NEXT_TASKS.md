@@ -13,7 +13,8 @@
 - New planning prompt: `docs/review_prompts/2026-06-02-run-structure-redesign.md`.
 - v0.6 implementation verdict: `GO_TO_SOLO_PLAYTEST_CANDIDATE` by local Codex evidence.
 - v0.7 implementation verdict: `GO_TO_SOLO_PLAYTEST_CANDIDATE` by local Codex evidence after weapon baseline and lost-memory weapon echo pass.
-- Claude v0.7 balance verdict: `GO_TO_SOLO_PLAYTEST`. The automated loop should stop here and collect user solo feel-test data before any v0.7.1 tuning.
+- Claude v0.7 balance verdict: `GO_TO_SOLO_PLAYTEST`, but this was based on AI proxy metrics rather than live balance play.
+- User v0.7 direct feedback invalidated the balance verdict: balance is not close enough and the automatic balance proxy must be fixed before trusting the loop.
 - Actual automation proof for this turn: Discord work-unit report sent successfully, Claude v0.7 prompt sent successfully, Claude response saved successfully.
 - Project direction: HTML prototype validation first, Unity implementation later only if AI/human tests show enough promise.
 
@@ -113,9 +114,11 @@
 - [x] 실제 Claude v0.7 balance feedback을 받았다: `docs/review_responses/2026-06-02-v07-balance-claude.md`.
 - [x] Claude v0.7 verdict를 다음 gate로 반영한다: `GO_TO_SOLO_PLAYTEST`.
 - [x] v0.7 1인 체감 테스트 시트를 만든다: `docs/playtest/2026-06-02-solo.md`.
-- [ ] v0.7을 사용자 1인 체감 테스트로 실행한다.
-- [ ] 1인 테스트에서 기억 상실 후 쫄몹 처리가 여전히 무너지면 v0.7.1 자동 밸런스 루프를 실행한다.
-- [ ] 1인 테스트에서 전투력은 괜찮지만 잔향이 안 보이면 수치가 아니라 표시 중심 v0.7.1을 실행한다.
+- [x] v0.7 사용자 직접 피드백을 받았다: 밸런스가 맞지 않는다.
+- [x] v0.7 자동 밸런스 판정을 실패 사례로 기록한다.
+- [x] v0.7.1 밸런스 현실 검증 프롬프트를 작성한다: `docs/review_prompts/2026-06-02-v071-balance-reality-check.md`.
+- [ ] v0.7.1 전에 AI proxy와 실제 브라우저 전투 체감의 차이를 줄이는 테스트/지표를 보강한다.
+- [ ] v0.7.1은 사용자 피드백 기준으로 결손 구간 스폰 압박, 적 HP/피해, 무기 역할, 위기 탈출 수단 중 가장 큰 원인부터 좁게 수정한다.
 
 ## Pre-Human-Test Polish Gate
 

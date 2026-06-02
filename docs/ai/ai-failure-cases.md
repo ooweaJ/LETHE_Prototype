@@ -124,6 +124,39 @@ The automation optimized for availability instead of the user's actual decision 
 
 More automation paths are not automatically better. The best AI workflow is the smallest one the project can operate reliably.
 
+## Case 05. AI Balance Proxy Was Mistaken For Real Balance Feedback
+
+### AI/Automation Attempt
+
+Codex implemented v0.7 from the user's v0.6 feedback that memory loss made the player too weak to kill normal mobs. Codex then sent Claude an evaluation prompt containing AI simulator results, browser functional QA, and a summary of the weapon/echo changes.
+
+### Problem
+
+The user played v0.7 and reported that the balance was not close. The earlier report made it sound like the project had received meaningful balance feedback, but the feedback was only a proxy-based planning judgment.
+
+### Cause
+
+- Claude did not play the browser build.
+- The AI simulator used aggregate DPS/survival proxies rather than actual browser combat pressure.
+- Functional browser QA verified boss/forget/refill flow, not whether the combat felt balanced.
+- The v0.7 prompt over-weighted passing AI metrics and under-weighted the known risk that human feel could invalidate the numbers.
+
+### Developer Fix
+
+- Treat the user's live play feedback as the highest-priority balance signal.
+- Mark v0.7 balance as invalidated by human evidence.
+- Create a v0.7.1 reality-check prompt that asks planning AI to judge the mismatch, not rubber-stamp AI metrics.
+- Future balance reports must distinguish `AI proxy passed`, `browser flow passed`, and `human balance passed`.
+
+### Verification
+
+- User direct feedback: "밸런스가 1도 안 맞는다."
+- Code inspection showed that actual browser deficit pressure increases spawn pressure when active memories drop below 3, while the AI simulator only estimates survival from abstract power ratios.
+
+### Lesson
+
+AI balance metrics are only scouting tools. They cannot be reported as real balance feedback until live play or a browser-play balance bot validates the actual combat loop.
+
 ## Template
 
 Use this template for future cases:
