@@ -47,6 +47,7 @@ Last updated: 2026-06-02
 - AI alpha test tool under `alpha_test/`.
 - Codex/GPT/Claude workflow docs.
 - Markdown daily reports, generated HTML reports, and Discord report delivery.
+- Work-unit Discord report delivery via `npm run report:discord:unit` and `--section`.
 - Short Discord status notices for Codex work.
 - Claude Code planning-review automation.
 
@@ -111,6 +112,7 @@ npm run ai:sweep
 - Generated AI test outputs are ignored by git under `alpha_test/outputs/`.
 - Report HTML can be generated from Markdown with `npm run report`.
 - Discord report delivery can be previewed with `npm run report:discord:dry`.
+- Work-unit Discord reports can be previewed with `npm run report:discord:unit:dry` or `node scripts/send_discord_report.js docs/reports/YYYY-MM-DD.md --dry-run --section "섹션 제목"`.
 - Local `.env` and `.env.*` are ignored by Git.
 - No tracked `.env.example` is required.
 
@@ -122,6 +124,7 @@ npm run ai:sweep
 - A v0.3/version-up Claude prompt exists, but actual Claude execution still requires local Claude Code login.
 - This session confirmed the local `claude` command is installed: `claude --version` returned `2.1.153 (Claude Code)`.
 - A minimal non-project Claude prompt failed with `401 Invalid authentication credentials`, so actual Claude review is blocked until local Claude authentication is fixed.
+- `scripts/ask_claude_review.js` now explains 401 failures by asking the user to run `claude` locally, complete login/authentication, and retry `npm run review:claude`.
 - `npm run review:claude:dry` still selects `docs/review_prompts/2026-06-02.md` and targets `docs/review_responses/2026-06-02-claude.md`.
 - Offline mock verification wrote `alpha_test/outputs/claude-review-mock.md` with `--mock-response`, confirming prompt selection, output directory creation, and response writing without external transmission.
 - Codex CLI can write planning responses to `docs/review_responses/YYYY-MM-DD-codex.md` through `npm run review:codex`.

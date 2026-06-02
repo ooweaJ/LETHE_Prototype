@@ -21,6 +21,15 @@ Daily reports use:
 npm run report:discord
 ```
 
+Work-unit reports use the latest top-level section in the current daily report:
+
+```powershell
+npm run report:discord:unit:dry
+npm run report:discord:unit
+```
+
+Use a work-unit report after a coherent version-up, automation change, AI test milestone, or other user-facing result. The Markdown source still stays in `docs/reports/YYYY-MM-DD.md`; the Discord summary can target only the relevant section.
+
 Short Codex status notices use:
 
 ```powershell
@@ -110,6 +119,8 @@ docs/review_responses/YYYY-MM-DD-claude.md
 ```
 
 Claude is called with tools disabled, so it should only answer the planning prompt. Codex remains responsible for file edits, tests, reports, commits, and pushes.
+
+If Claude exits with `401 Invalid authentication credentials`, run `claude` in a local terminal and complete login/authentication, then retry `npm run review:claude`.
 
 ## Codex CLI Review Fallback
 

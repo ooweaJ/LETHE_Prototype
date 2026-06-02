@@ -11,6 +11,8 @@
     "report": "node scripts/build_report.js",
     "report:discord": "npm run report && node scripts/send_discord_report.js",
     "report:discord:dry": "node scripts/send_discord_report.js --dry-run",
+    "report:discord:unit": "npm run report && node scripts/send_discord_report.js --latest-section",
+    "report:discord:unit:dry": "node scripts/send_discord_report.js --dry-run --latest-section",
     "codex:notice": "node scripts/send_codex_notice.js",
     "codex:notice:dry": "node scripts/send_codex_notice.js --dry-run",
     "review:claude": "node scripts/ask_claude_review.js",

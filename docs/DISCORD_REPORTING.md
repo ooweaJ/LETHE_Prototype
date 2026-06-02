@@ -1,6 +1,6 @@
 # Discord 보고서 전송
 
-LETHE 보고서는 Markdown으로 작성하고 HTML로 생성한다. Discord에는 긴 원문을 그대로 붙이지 않고, 짧은 한국어 요약과 HTML 첨부 파일을 보낸다.
+LETHE 보고서는 Markdown으로 작성하고 HTML로 생성한다. Markdown 파일은 날짜 단위로 보관하지만, Discord 전송은 일일 보고와 작업 단위 보고를 구분한다. Discord에는 긴 원문을 그대로 붙이지 않고, 짧은 한국어 요약과 HTML 첨부 파일을 보낸다.
 
 ## 채널 설정
 
@@ -18,13 +18,13 @@ DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/...
 
 ## 사용 방법
 
-미리보기:
+일일 보고 미리보기:
 
 ```powershell
 npm run report:discord:dry
 ```
 
-실제 전송:
+일일 보고 실제 전송:
 
 ```powershell
 npm run report:discord
@@ -32,11 +32,31 @@ npm run report:discord
 
 기본 명령은 `docs/reports/` 안의 최신 날짜 Markdown 보고서를 자동으로 선택한다.
 
+작업 단위 보고 미리보기:
+
+```powershell
+npm run report:discord:unit:dry
+```
+
+작업 단위 보고 실제 전송:
+
+```powershell
+npm run report:discord:unit
+```
+
+작업 단위 보고는 최신 날짜 보고서의 마지막 `# 제목` 섹션만 요약한다. 예를 들어 `# v0.5 초반 재미 보완 보고` 같은 큰 버전업 섹션을 별도로 보낼 때 쓴다.
+
 특정 보고서를 보내고 싶을 때:
 
 ```powershell
 node scripts/build_report.js docs/reports/2026-06-02.md
 node scripts/send_discord_report.js docs/reports/2026-06-02.md
+```
+
+특정 작업 섹션만 보내고 싶을 때:
+
+```powershell
+node scripts/send_discord_report.js docs/reports/2026-06-02.md --section "v0.5 초반 재미 보완 보고"
 ```
 
 ## Discord 메시지 형식

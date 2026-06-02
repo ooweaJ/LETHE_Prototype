@@ -53,8 +53,7 @@ function main() {
 
   if (result.error) fail(result.error.message);
   if (result.status !== 0) {
-    const stderr = result.stderr ? `\n${result.stderr.trim()}` : '';
-    fail(`Claude exited with status ${result.status}.${stderr}`);
+    fail(claudeFailureMessage(result));
   }
 
   const response = result.stdout.trim();
@@ -110,6 +109,22 @@ function parseArgs(args) {
 
 function writeResponse(response, targetPath) {
   fs.writeFileSync(targetPath, response.endsWith('\n') ? response : `${response}\n`, 'utf8');
+}
+
+function claudeFailureMessage(result) {
+  const stderr = result.stderr ? result.stderr.trim() : '';
+  const stdout = result.stdout ? result.stdout.trim() : '';
+  const detail = [stderr, stdout].filter(Boolean).join('\n');
+  if (/401|invalid authentication credentials|authenticate/i.test(detail)) {
+    return [
+      `Claude exited with status ${result.status}.`,
+      'Claude authentication failed.',
+      '로컬 터미널에서 `claude`를 실행해 로그인/인증을 완료한 뒤 `npm run review:claude`를 다시 실행하세요.',
+      detail,
+    ].filter(Boolean).join('\n');
+  }
+
+  return `Claude exited with status ${result.status}.${detail ? `\n${detail}` : ''}`;
 }
 
 function latestMarkdown(dir) {

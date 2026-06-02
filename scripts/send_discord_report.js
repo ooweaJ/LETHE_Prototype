@@ -27,10 +27,12 @@ async function main() {
     throw new Error(`Report HTML not found. Run the report builder first: ${path.relative(process.cwd(), htmlPath)}`);
   }
 
-  const markdown = fs.readFileSync(markdownPath, 'utf8');
+  const fullMarkdown = fs.readFileSync(markdownPath, 'utf8');
+  const reportScope = selectReportScope(fullMarkdown, options);
+  const markdown = reportScope.markdown;
   const html = fs.readFileSync(htmlPath);
   const prompt = promptPath ? fs.readFileSync(promptPath) : null;
-  const message = buildMessage(markdown, markdownPath, htmlPath, promptPath);
+  const message = buildMessage(markdown, markdownPath, htmlPath, promptPath, reportScope.title);
 
   if (dryRun) {
     console.log(message);
@@ -71,7 +73,7 @@ async function main() {
   console.log(`Uploaded ${path.relative(process.cwd(), htmlPath)} to Discord.`);
 }
 
-function buildMessage(markdown, markdownFile, htmlFile, reviewPromptPath) {
+function buildMessage(markdown, markdownFile, htmlFile, reviewPromptPath, sectionTitle = '') {
   const reportDate = path.basename(markdownFile, '.md');
   const work = bulletsFromSections(markdown, [
     '2. 오늘 바뀐 것',
@@ -114,7 +116,7 @@ function buildMessage(markdown, markdownFile, htmlFile, reviewPromptPath) {
       ? fit(joinBullets(handoff), 220)
       : '없음';
   const lines = [
-    `LETHE 보고서 - ${reportDate}`,
+    sectionTitle ? `LETHE 작업 보고 - ${sectionTitle}` : `LETHE 일일 보고서 - ${reportDate}`,
     `작업: ${fit(joinBullets(work) || '보고서가 갱신되었습니다.', 260)}`,
     `완료: ${fit(joinBullets(status) || 'HTML 보고서 생성 완료', 220)}`,
     `문제: ${fit(joinBullets(problems) || '새로 기록된 문제 없음', 220)}`,
@@ -130,6 +132,8 @@ function parseArgs(args) {
     dryRun: false,
     input: '',
     prompt: '',
+    section: '',
+    latestSection: false,
   };
 
   for (let index = 0; index < args.length; index += 1) {
@@ -141,12 +145,69 @@ function parseArgs(args) {
       index += 1;
     } else if (arg.startsWith('--prompt=')) {
       parsed.prompt = arg.slice('--prompt='.length);
+    } else if (arg === '--section') {
+      parsed.section = args[index + 1] || '';
+      index += 1;
+    } else if (arg.startsWith('--section=')) {
+      parsed.section = arg.slice('--section='.length);
+    } else if (arg === '--latest-section') {
+      parsed.latestSection = true;
     } else if (!arg.startsWith('--') && !parsed.input) {
       parsed.input = arg;
     }
   }
 
   return parsed;
+}
+
+function selectReportScope(markdown, opts) {
+  if (opts.section) {
+    const section = sectionByTitle(markdown, opts.section);
+    if (!section) {
+      throw new Error(`Report section not found: ${opts.section}`);
+    }
+    return section;
+  }
+
+  if (opts.latestSection) {
+    const section = latestTopLevelSection(markdown);
+    if (!section) {
+      throw new Error('No top-level report section found.');
+    }
+    return section;
+  }
+
+  return {
+    title: '',
+    markdown,
+  };
+}
+
+function sectionByTitle(markdown, title) {
+  const target = normalize(title);
+  return topLevelSections(markdown).find((section) => normalize(section.title) === target) || null;
+}
+
+function latestTopLevelSection(markdown) {
+  const sections = topLevelSections(markdown).filter((section) => section.title);
+  return sections[sections.length - 1] || null;
+}
+
+function topLevelSections(markdown) {
+  const lines = markdown.split(/\r?\n/);
+  const headings = [];
+  for (let index = 0; index < lines.length; index += 1) {
+    const match = lines[index].match(/^#\s+(.+)$/);
+    if (match) headings.push({ index, title: stripMarkdown(match[1]).trim() });
+  }
+
+  return headings.map((heading, idx) => {
+    const end = headings[idx + 1]?.index ?? lines.length;
+    return {
+      title: heading.title,
+      markdown: lines.slice(heading.index, end).join('\n'),
+    };
+  });
 }
 
 function resolvePromptPath(explicitPrompt, reportPath) {
