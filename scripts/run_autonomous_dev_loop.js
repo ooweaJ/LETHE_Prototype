@@ -21,11 +21,11 @@ function main() {
     return;
   }
 
+  checkInitialGitState();
   fs.mkdirSync(logDir, { recursive: true });
   writeLogHeader();
   sendNotice('start', '자동 개발 루프 시작', `iterations=${options.iterations}, duration=${options.durationMinutes}m`);
 
-  runRequired('git status', 'git status --short', { failOnStdout: !options.allowDirty });
   runRequired('preflight', options.preflight);
 
   for (let iteration = 1; iteration <= options.iterations; iteration += 1) {
@@ -112,6 +112,16 @@ function printDryRun() {
   commands.forEach((command) => console.log(`- ${command}`));
   console.log('');
   console.log(`Log: ${path.relative(process.cwd(), runLogPath)}`);
+}
+
+function checkInitialGitState() {
+  const status = runCapture('git status --short');
+  if (!status.trim()) return;
+  if (options.allowDirty) return;
+
+  console.error('Autonomous dev loop requires a clean working tree before it creates loop logs.');
+  console.error(status);
+  process.exit(1);
 }
 
 function readLoopContext(iteration) {
@@ -555,4 +565,3 @@ function fail(message) {
   console.error(message);
   process.exit(1);
 }
-
