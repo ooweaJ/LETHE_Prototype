@@ -1110,6 +1110,63 @@
 <li>실행: AI 협업 문서, failure cases, ADR, case study, local doctor를 추가했다.</li>
 <li>결과: LETHE는 “AI로 만든 게임”보다 “AI를 통제해 프로토타입 검증 파이프라인을 만든 프로젝트”로 설명할 수 있게 됐다.</li>
 </ul>
+<p>---</p>
+<h1>사람 테스트 요약 자동화 보고</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>LETHE HTML alpha v0.5는 사람 테스트 준비 상태다.</li>
+<li>사람 테스트 자체는 아직 필요하지만, 테스트 후 JSON 로그를 요약하고 Claude/GPT에 넘기는 자동화 라인은 준비됐다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>playtest_logs/README.md</code>를 추가했다.</li>
+<li><code>docs/playtest_summaries/README.md</code>를 추가했다.</li>
+<li><code>scripts/summarize_playtests.js</code>를 추가했다.</li>
+<li><code>playtest:summary</code>, <code>playtest:summary:dry</code> npm 명령을 추가했다.</li>
+<li><code>playtest_logs/**/*.json</code>을 gitignore에 추가해 원본 사람 테스트 JSON이 추적되지 않게 했다.</li>
+<li><code>docs/HUMAN_PLAYTEST_GUIDE.md</code>에 테스트 후 요약 절차를 추가했다.</li>
+<li><code>docs/CODEX_RUNBOOK.md</code>, <code>docs/ai/ai-collaboration.md</code>, <code>docs/adr/ADR-002-test-result-planning-pipeline.md</code>에 human-test result loop를 반영했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>node --check scripts/summarize_playtests.js</code>: 통과.</li>
+<li>package.json JSON parse 검사: 통과.</li>
+<li><code>npm run playtest:summary:dry</code>: 로그 0개 상태에서 안전하게 요약 preview 생성.</li>
+<li><code>npm run playtest:summary</code>: <code>docs/playtest_summaries/2026-06-02.md</code>와 <code>docs/review_prompts/2026-06-02-human-playtest.md</code> 생성.</li>
+<li><code>npm run doctor</code>: 26 pass, 0 warn, 0 fail.</li>
+<li><code>npm run doctor:deep</code>: 34 pass, 0 warn, 0 fail.</li>
+</ul>
+<h2>4. 결정 사항</h2>
+<ul>
+<li>원본 사람 테스트 JSON은 <code>playtest_logs/</code>에 두고 git에는 올리지 않는다.</li>
+<li>추적 가능한 산출물은 요약 Markdown과 human-test prompt만 남긴다.</li>
+<li>사람 테스트 후에는 바로 기능 구현하지 않고, summary prompt를 Claude/GPT에 보내 방향을 다시 결정한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>현재 생성된 summary는 로그 0개 기준이므로 최종 판단 자료가 아니다.</li>
+<li>사람 테스트가 5개 미만이면 script가 preparation output으로 표시한다.</li>
+<li>정성 관찰은 JSON만으로 충분하지 않으므로 <code>docs/PLAYTEST_NOTES.md</code>를 함께 작성해야 한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<ul>
+<li>다음 외부 기획 판단에는 <code>docs/review_prompts/2026-06-02-human-playtest.md</code> 같은 사람 테스트 summary prompt를 사용한다.</li>
+<li>Claude/GPT는 Unity groundwork, HTML v0.6, FIX_CORE, NEED_MORE_HUMAN_DATA 중 하나를 판단해야 한다.</li>
+</ul>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>5-8명 사람 테스트를 진행한다.</li>
+<li>JSON 로그를 <code>playtest_logs/</code>에 넣는다.</li>
+<li><code>docs/PLAYTEST_NOTES.md</code>에 관찰 기록을 적는다.</li>
+<li><code>npm run playtest:summary</code> 후 생성된 human-test prompt로 planning pipeline을 실행한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 사람 테스트 결과가 생겨도 수동 요약만 하면 AI 기획 파이프라인으로 이어지는 근거가 흐려진다.</li>
+<li>방향: 원본 로그, 정성 노트, 요약 Markdown, Claude/GPT 프롬프트를 분리한다.</li>
+<li>실행: playtest summary script와 문서 절차를 추가했다.</li>
+<li>결과: 사람 테스트 이후에도 “테스트 결과 -&gt; AI 기획 판단 -&gt; Codex 구현” 흐름을 반복할 준비가 됐다.</li>
+</ul>
   </main>
 </body>
 </html>

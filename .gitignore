@@ -8,6 +8,10 @@ alpha_test/outputs/
 # Temporary logs
 *.log
 
+# Human playtest raw exports
+playtest_logs/**/*.json
+playtest_logs/*.json
+
 # Local secrets
 .env
 .env.*

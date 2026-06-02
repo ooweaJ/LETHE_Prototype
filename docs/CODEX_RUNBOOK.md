@@ -172,6 +172,30 @@ After the response is saved, Codex should read it, update `docs/NEXT_TASKS.md`, 
 
 If the current Codex session cannot export repository prompts to external services, use `planning:pipeline:prompt` and run `npm run planning:pipeline` from the user's trusted local terminal.
 
+## Human Playtest Summary
+
+After human sessions, put downloaded JSON logs in:
+
+```text
+playtest_logs/
+```
+
+Then run:
+
+```powershell
+npm run playtest:summary:dry
+npm run playtest:summary
+```
+
+This writes:
+
+```text
+docs/playtest_summaries/YYYY-MM-DD.md
+docs/review_prompts/YYYY-MM-DD-human-playtest.md
+```
+
+Use the generated human-test prompt as the next Claude/GPT planning input before HTML v0.6 or Unity transition decisions.
+
 ## Codex CLI Review Fallback
 
 Use this when the user wants a GPT/Codex terminal answer without manually setting an OpenAI API key.

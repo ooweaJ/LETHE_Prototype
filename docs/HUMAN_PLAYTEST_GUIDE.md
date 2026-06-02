@@ -122,4 +122,6 @@ Stop and revise before adding content if:
 2. Add notes to `docs/PLAYTEST_NOTES.md`.
 3. Keep AI alpha test results separate from human notes.
 4. After 5-8 sessions, summarize the pattern.
-5. Run the planning pipeline again with the human-test summary before deciding HTML v0.6 or Unity transition groundwork.
+5. Put downloaded JSON logs in `playtest_logs/`.
+6. Run `npm run playtest:summary`.
+7. Send the generated human-test prompt through the planning pipeline before deciding HTML v0.6 or Unity transition groundwork.

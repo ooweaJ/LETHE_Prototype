@@ -34,6 +34,13 @@ Use `scripts/run_planning_pipeline.js` and npm aliases:
 
 The pipeline defaults to quick AI testing, writes `docs/review_prompts/YYYY-MM-DD-pipeline.md`, asks Claude first, and falls back to Codex CLI.
 
+Human test logs use a separate summary line:
+
+- `npm run playtest:summary:dry`
+- `npm run playtest:summary`
+
+This reads raw JSON logs from `playtest_logs/`, writes `docs/playtest_summaries/YYYY-MM-DD.md`, and creates `docs/review_prompts/YYYY-MM-DD-human-playtest.md`.
+
 ## Reasons
 
 - It keeps AI planning tied to test evidence.
@@ -50,6 +57,7 @@ Claude/GPT are planning partners, not code owners. They do not edit project file
 - External model calls still require local authentication and permission.
 - The project needs a doctor command so other local environments can see what is missing.
 - Prompt-only generation is treated as a valid partial success when external transfer is blocked.
+- Raw human playtest JSON logs are ignored by git; generated summaries and prompts are tracked.
 
 ## Verification
 
@@ -57,4 +65,5 @@ Claude/GPT are planning partners, not code owners. They do not edit project file
 - `npm run planning:pipeline:prompt`
 - `npm run review:claude:dry`
 - `npm run review:codex:dry`
+- `npm run playtest:summary:dry`
 - `npm run doctor`

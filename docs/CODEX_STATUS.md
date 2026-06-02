@@ -53,6 +53,7 @@ Last updated: 2026-06-02
 - Test-result planning pipeline via `npm run planning:pipeline`, with Claude first and Codex CLI fallback.
 - Local pipeline doctor via `npm run doctor` and `npm run doctor:deep`.
 - AI collaboration portfolio docs under `docs/ai/`, `docs/adr/`, and `docs/portfolio/`.
+- Human playtest summary automation via `npm run playtest:summary`.
 
 ## Latest AI Test Result
 
@@ -122,13 +123,19 @@ npm run ai:sweep
   - payload `playtest.testerId: T01`,
   - payload `playtest.sessionId: S01`.
 - Local doctor passed on this machine:
-  - `npm run doctor`: 24 pass, 0 warn, 0 fail,
-  - `npm run doctor:deep`: 30 pass, 0 warn, 0 fail.
+  - `npm run doctor`: 26 pass, 0 warn, 0 fail,
+  - `npm run doctor:deep`: 34 pass, 0 warn, 0 fail.
+- Human playtest summary preparation passed:
+  - `npm run playtest:summary:dry`,
+  - `npm run playtest:summary`,
+  - generated `docs/playtest_summaries/2026-06-02.md`,
+  - generated `docs/review_prompts/2026-06-02-human-playtest.md`.
 - The game is static HTML and can be run by opening `index.html`.
 - Default browser boss/forgetting timing now matches the 9-minute v0.2 target; `?qa=fast` is only for QA.
 - Generated AI test outputs are ignored by git under `alpha_test/outputs/`.
 - Report HTML can be generated from Markdown with `npm run report`.
 - Local setup can be checked with `npm run doctor`.
+- Human playtest logs can be summarized from `playtest_logs/` with `npm run playtest:summary`.
 - Discord report delivery can be previewed with `npm run report:discord:dry`.
 - Work-unit Discord reports can be previewed with `npm run report:discord:unit:dry` or `node scripts/send_discord_report.js docs/reports/YYYY-MM-DD.md --dry-run --section "섹션 제목"`.
 - Local `.env` and `.env.*` are ignored by Git.
