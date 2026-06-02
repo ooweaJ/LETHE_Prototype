@@ -8,7 +8,7 @@ Last updated: 2026-06-02
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
-- Latest task-update status: completed the docs-only synthesis for `2026-06-02-devloop-193946-feedback-4`. Claude and Codex agree the post-loss QA port fallback hardening is scope-valid QA/gate work, but WP2 Slice B is still `ITERATE_BEFORE_TEST` because trusted browser proof is missing. AI proxy evidence remains positive planning evidence only (`GO_CANDIDATE`, Alpha Fun Score `0.8846`, regret `0.8073`, irritation `0.0104`, restart `0.90`). The latest managed-sandbox blocker is still transport-level: CDP pipe times out at `Target.getTargets`, and the port fallback cannot bind `127.0.0.1` (`listen EPERM`). WP3 and people testing remain blocked until trusted-local `npm run qa:postloss` passes or an explicit environment-blocker decision exists.
+- Latest task-update status: feedback-5 synthesis is docs-only. Claude and Codex agree that `npm run qa:postloss:trusted` is the correct next gate and that the positive AI proxy remains planning evidence only. In this managed sandbox the wrapper still failed before gameplay evaluation because CDP pipe timed out at `Target.getTargets` and port fallback could not bind `127.0.0.1` (`listen EPERM`). WP2 Slice B remains `ITERATE_BEFORE_TEST`; WP3, people testing, balance changes, and UI/gameplay expansion remain blocked until trusted-local browser proof or an explicit environment-blocker decision exists.
 
 ## Implemented
 
@@ -95,6 +95,7 @@ Last updated: 2026-06-02
   - if pipe target lookup times out, it retries once through Chrome remote-debugging-port and a WebSocket CDP client,
   - if both transport paths fail, it now reports `BrowserQaTransportError` with the pipe failure, port failure, and next trusted-local command,
   - port fallback now asks the OS for a confirmed free `127.0.0.1` port and shares stable headless Chrome flags with the pipe path,
+  - `scripts/run_trusted_postloss_gate.js` and `npm run qa:postloss:trusted` run the selected trusted-local post-loss gate as one command: standard post-loss QA, one 30000 ms retry for transport failures, then the blocker prompt if transport still fails,
   - this is a QA tooling change only and does not alter gameplay scope.
 - AI alpha test tool under `alpha_test/`.
 - Codex/GPT/Claude workflow docs.
@@ -159,9 +160,9 @@ Heavy check:
 Remaining note:
 
 - v0.9 WP2 now has both pre-loss pressure rhythm and a minimal post-loss challenge proxy.
-- The current browser automation channel failed before gameplay evaluation: CDP pipe timed out at `Target.getTargets`, and the remote-debugging-port fallback cannot bind `127.0.0.1` in this managed sandbox. Rerun `npm run qa:postloss` on a trusted local before treating this as browser-proven.
+- The current browser automation channel failed before gameplay evaluation: CDP pipe timed out at `Target.getTargets`, and the remote-debugging-port fallback cannot bind `127.0.0.1` in this managed sandbox. Rerun `npm run qa:postloss:trusted` on a trusted local before treating this as browser-proven.
 - AI proxy evidence remains a planning pass only, not human emotion or Unity-transition proof.
-- Latest feedback-4 synthesis found no material next-scope conflict: keep the next executable unit limited to trusted-local post-loss QA, retry once with `--timeout-ms 30000` only if the same transport failure repeats, then use `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md` before any WP3 or people-test step.
+- Latest feedback-5 synthesis found no material next-scope conflict: keep the next executable unit limited to sandbox-outside trusted-local `npm run qa:postloss:trusted`, which already encodes the standard run, one 30000 ms transport retry, and blocker-prompt handoff. Use `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md` before any WP3 or people-test step if the same transport failure repeats outside this sandbox.
 
 ## Latest Sweep Note
 
@@ -505,6 +506,13 @@ npm run ai:sweep
   - latest `npm run qa:postloss` now fails with explicit `BrowserQaTransportError`,
   - environment blocker prompt added: `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md`,
   - WP3 remains blocked until trusted-local post-loss browser proof or a reviewed environment-blocker decision.
+- Trusted-local post-loss gate wrapper completed:
+  - `scripts/run_trusted_postloss_gate.js` and `npm run qa:postloss:trusted` added,
+  - `node --check scripts/run_trusted_postloss_gate.js`: passed,
+  - `npm run doctor`: 44 pass, 0 warn, 0 fail,
+  - `npm run doctor:deep`: 64 pass, 0 warn, 0 fail,
+  - `npm run qa:postloss:trusted`: failed before gameplay evaluation in this sandbox after standard run plus 30000 ms retry,
+  - next execution remains sandbox outside trusted-local `npm run qa:postloss:trusted` or equivalent manual `qa:postloss` plus one timeout retry.
 - Current dev-loop prompt cleanup is implemented: future nested implementation prompts should not keep re-selecting WP1 after WP1 is complete.
 - Current dev-loop preflight-order cleanup is implemented: future clean-tree dev loops should run preflight before creating their own loop log, and should not mask dirty-tree state with `--allow-dirty` by default.
 - Current autopilot preflight diagnosis now gives exact loop-run artifact cleanup guidance when `docs/loop_runs/*.md` blocks a clean unattended loop.
@@ -517,7 +525,7 @@ npm run ai:sweep
   - working tree clean after `f6ee83f feat: 자동 개발 루프 4차 반영`,
   - `npm run autopilot:preflight`: 21 pass, 0 warn, 0 fail,
   - `npm run qa:identity`: `status: complete`, failures `[]`, `buildIdentitySeenBy90Sec: true`.
-- WP1 gate is officially complete for automation purposes. WP2 Slice A pressure rhythm/high-low pacing and WP2 Slice B minimal post-loss challenge are implemented. The next executable gate remains trusted-local `npm run qa:postloss`; after that, WP3 Slice A may add only a minimal existing-memory tactical agency hook.
+- WP1 gate is officially complete for automation purposes. WP2 Slice A pressure rhythm/high-low pacing and WP2 Slice B minimal post-loss challenge are implemented. The next executable gate remains trusted-local `npm run qa:postloss:trusted`; after that, WP3 Slice A may add only a minimal existing-memory tactical agency hook.
 - On another local machine, run `npm run doctor` first; run `npm run doctor:deep` before leaving Codex to continue unattended.
 - Before an unattended implement -> Claude feedback -> implement loop, run `npm run autopilot:preflight`.
 - Do not describe AI proxy metrics as real balance feedback.
