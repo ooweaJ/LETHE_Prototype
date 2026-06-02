@@ -6,14 +6,51 @@ The project goal is to validate LETHE's core fun and player-facing possibility i
 
 ## Normal Work Loop
 
-1. Read the current files and project notes before editing.
-2. Implement the smallest coherent unit.
-3. Run the relevant checks.
-4. Update `docs/CODEX_STATUS.md`, `docs/NEXT_TASKS.md`, `docs/devlog/YYYY-MM-DD.md`, and `docs/reports/YYYY-MM-DD.md`.
-5. Generate the HTML report from the Markdown report.
-6. Send a Discord handoff when useful.
-7. Commit with a Conventional Commit message.
-8. Push only when the working tree is clean and the commit is safe to share.
+1. Run autopilot preflight before any unattended version-up loop.
+2. Read the current files and project notes before editing.
+3. Implement the smallest coherent unit.
+4. Run the relevant checks.
+5. Update `docs/CODEX_STATUS.md`, `docs/NEXT_TASKS.md`, `docs/devlog/YYYY-MM-DD.md`, and `docs/reports/YYYY-MM-DD.md`.
+6. Generate the HTML report from the Markdown report.
+7. Send a Discord handoff when useful.
+8. Commit with a Conventional Commit message.
+9. Push only when the working tree is clean and the commit is safe to share.
+
+## Autopilot Preflight
+
+Use this before the implement -> test -> Claude report -> implement loop, especially when the user is stepping away.
+
+Dry-run:
+
+```powershell
+npm run autopilot:preflight:dry
+```
+
+Local checks without live Claude transmission:
+
+```powershell
+npm run autopilot:preflight:local
+```
+
+Full preflight with a minimal Claude authentication check:
+
+```powershell
+npm run autopilot:preflight
+```
+
+The full preflight checks:
+
+- clean git working tree,
+- required npm scripts,
+- `npm run doctor:deep`,
+- Claude/Codex dry-runs,
+- Discord work-unit report dry-run,
+- `claude --version`,
+- `codex --version` fallback readiness,
+- `.env` Discord webhook presence,
+- a minimal non-project Claude prompt to catch login/auth failures early.
+
+Preflight failures are blockers. Do not start a long automation loop if Claude authentication, fallback readiness, dirty git state, or report notification setup is already known to be broken. Fix the failed item, or generate the prompt/report and ask the user to run the blocked external command from a trusted local terminal.
 
 ## Discord Notices
 
@@ -133,6 +170,7 @@ Before using a new local machine, run:
 ```powershell
 npm run doctor
 npm run doctor:deep
+npm run autopilot:preflight:local
 ```
 
 `doctor` checks required tools, npm scripts, and role/rule docs. `doctor:deep` also runs safe dry-runs so missing local setup is visible before a long unattended task.

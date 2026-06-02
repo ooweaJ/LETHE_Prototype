@@ -52,6 +52,7 @@ Last updated: 2026-06-02
 - Claude Code planning-iteration automation for interpreting AI/human test results and deciding next design direction.
 - Test-result planning pipeline via `npm run planning:pipeline`, with Claude first and Codex CLI fallback.
 - Local pipeline doctor via `npm run doctor` and `npm run doctor:deep`.
+- Autopilot readiness preflight via `npm run autopilot:preflight`, `npm run autopilot:preflight:local`, and `npm run autopilot:preflight:dry`.
 - AI collaboration portfolio docs under `docs/ai/`, `docs/adr/`, and `docs/portfolio/`.
 - Human playtest summary automation via `npm run playtest:summary`.
 - Human playtest package generation via `npm run playtest:package`.
@@ -126,7 +127,11 @@ npm run ai:sweep
   - payload `playtest.sessionId: S01`.
 - Local doctor passed on this machine:
   - `npm run doctor`: 26 pass, 0 warn, 0 fail,
-  - `npm run doctor:deep`: 38 pass, 0 warn, 0 fail.
+  - `npm run doctor:deep`: 43 pass, 0 warn, 0 fail.
+- Autopilot preflight checks passed:
+  - `npm run autopilot:preflight:dry`,
+  - `node scripts/autopilot_preflight.js --allow-dirty`: 15 pass, 2 warn, 0 fail.
+- Full preflight intentionally checks Claude auth before starting unattended implement/test/report loops.
 - Human playtest summary preparation passed:
   - `npm run playtest:summary:dry`,
   - `npm run playtest:summary`,
@@ -172,5 +177,6 @@ npm run ai:sweep
 
 - v0.6 run-structure planning is the next product gate.
 - On another local machine, run `npm run doctor` first; run `npm run doctor:deep` before leaving Codex to continue unattended.
+- Before an unattended implement -> Claude feedback -> implement loop, run `npm run autopilot:preflight`. If live Claude transmission is blocked in the current session, run `npm run autopilot:preflight:local` and stop at prompt/report generation.
 - Send `docs/review_prompts/2026-06-02-run-structure-redesign.md` to Claude/GPT manually, then give Codex the saved answer.
 - After the v0.6 direction is chosen and implemented, return to `docs/HUMAN_PLAYTEST_GUIDE.md` for people testing.

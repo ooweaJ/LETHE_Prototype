@@ -6,12 +6,13 @@
 
 ## Core Workflow
 
-1. 구현 전 현재 파일과 문서를 확인한다.
-2. 코드 변경 후 가능한 검증을 실행한다.
-3. 결과를 `docs/CODEX_STATUS.md`에 반영한다.
-4. 의미 있는 작업 단위가 끝나면 `docs/devlog/YYYY-MM-DD.md`와 `docs/reports/YYYY-MM-DD.md`를 갱신한다.
-5. 보고서 HTML은 Markdown 원본을 기준으로 생성한다.
-6. 테스트 결과를 바탕으로 기획 수정 또는 방향 결정이 필요하면 `docs/review_prompts/`에 Claude/GPT 전달 프롬프트를 남긴다.
+1. 자동 버전업/무인 루프를 시작하기 전 `npm run autopilot:preflight` 또는 최소 `npm run autopilot:preflight:local`을 실행한다.
+2. 구현 전 현재 파일과 문서를 확인한다.
+3. 코드 변경 후 가능한 검증을 실행한다.
+4. 결과를 `docs/CODEX_STATUS.md`에 반영한다.
+5. 의미 있는 작업 단위가 끝나면 `docs/devlog/YYYY-MM-DD.md`와 `docs/reports/YYYY-MM-DD.md`를 갱신한다.
+6. 보고서 HTML은 Markdown 원본을 기준으로 생성한다.
+7. 테스트 결과를 바탕으로 기획 수정 또는 방향 결정이 필요하면 `docs/review_prompts/`에 Claude/GPT 전달 프롬프트를 남긴다.
 
 ## Role Split
 
@@ -64,3 +65,10 @@ The current prototype goal is to verify whether the core loop is fun enough to j
 - Claude should not edit project files during automated planning; it is called with tools disabled.
 - Codex reads the saved Claude response, updates `docs/NEXT_TASKS.md`, then implements the selected work.
 - Discord is only a status/attention channel. Markdown files are the source of truth.
+
+## Autopilot Preflight
+
+- Before any unattended implement -> test -> Claude report -> implement loop, run `npm run autopilot:preflight`.
+- If external Claude transmission is not allowed in the current session, run `npm run autopilot:preflight:local` and generate the Claude prompt for the user to execute from a trusted terminal.
+- Preflight failures are blockers, not footnotes. Fix authentication, dirty git state, missing scripts, missing Discord config, or fallback readiness before starting the loop.
+- If preflight cannot pass, Codex must document the exact failed check and next command instead of starting a long automation run.

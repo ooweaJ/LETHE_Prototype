@@ -97,6 +97,7 @@
 - [x] 사람 테스트 JSON 로그를 요약하고 Claude/GPT용 human-test 프롬프트를 생성하는 `npm run playtest:summary` 라인을 추가한다.
 - [x] 사람 테스트용 정적 배포 폴더를 만드는 `npm run playtest:package` 라인을 추가한다.
 - [x] 실제 1인 플레이 피드백을 바탕으로 v0.5 사람 테스트를 보류하고 런 구조 재설계 프롬프트를 작성한다.
+- [x] 자동 루프 시작 전 인증/권한/알림/fallback 상태를 확인하는 `npm run autopilot:preflight` 규약을 추가한다.
 - [ ] `docs/review_prompts/2026-06-02-run-structure-redesign.md`를 Claude/GPT에 보내 v0.6 방향을 결정한다.
 - [ ] 답변을 읽고 v0.6 Codex 작업 목록으로 변환한다.
 - [ ] v0.6에서 첫 보스/첫 망각 타이밍, 보스 주기, 기억 상실 후 치환 보상, 기억 보충 타이밍을 구현한다.

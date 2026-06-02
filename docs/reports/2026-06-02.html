@@ -1275,6 +1275,67 @@
 <li>실행: 런 구조 후보안을 정리하고 Claude/GPT 판단용 프롬프트로 문서화했다.</li>
 <li>결과: LETHE는 이제 “망각 감정 튜닝”보다 먼저 “반복되는 상실/치환/생존 리듬”을 검증하는 v0.6 단계로 이동한다.</li>
 </ul>
+<p>---</p>
+<h1>자동화 preflight 규약 보고</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>LETHE는 v0.6 코어 런 구조 구현 전 단계다.</li>
+<li>앞으로 자동 루프는 구현 중간에 Claude 인증/권한/알림 문제가 터지는 방식이 아니라, 시작 전에 preflight로 위험을 확인하는 방식으로 운영한다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>scripts/autopilot_preflight.js</code>를 추가했다.</li>
+<li><code>package.json</code>에 다음 명령을 추가했다:</li>
+<li><code>npm run autopilot:preflight</code>,</li>
+<li><code>npm run autopilot:preflight:local</code>,</li>
+<li><code>npm run autopilot:preflight:dry</code>.</li>
+<li><code>scripts/check_local_pipeline.js</code>의 deep 검사에 preflight 문법 검사와 dry-run을 추가했다.</li>
+<li><code>AGENTS.md</code>, <code>docs/CODEX_RUNBOOK.md</code>, <code>docs/ai/ai-collaboration.md</code>, <code>docs/CODEX_STATUS.md</code>에 preflight 규약을 반영했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>node --check scripts/autopilot_preflight.js</code>: 통과.</li>
+<li><code>npm run autopilot:preflight:dry</code>: 통과.</li>
+<li><code>node scripts/autopilot_preflight.js --allow-dirty</code>: 15 pass, 2 warn, 0 fail.</li>
+<li><code>npm run doctor:deep</code>: 43 pass, 0 warn, 0 fail.</li>
+<li><code>npm run report</code>: <code>docs/reports/2026-06-02.html</code> 생성.</li>
+<li><code>npm run report:discord:unit:dry</code>: <code>자동화 preflight 규약 보고</code> 섹션을 작업 단위 보고로 선택.</li>
+<li><code>git diff --check</code>: 공백 오류 없음.</li>
+</ul>
+<h2>4. 결정 사항</h2>
+<ul>
+<li>무인 자동화 루프 전에는 반드시 preflight를 먼저 실행한다.</li>
+<li><code>autopilot:preflight</code>는 최소 Claude 인증 프롬프트까지 보내므로, 신뢰된 로컬 터미널에서 사용한다.</li>
+<li>외부 전송이 불가능한 Codex 세션에서는 <code>autopilot:preflight:local</code>을 사용하고, Claude 프롬프트/보고서 생성까지만 진행한다.</li>
+<li>preflight 실패는 참고사항이 아니라 blocker로 취급한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>실제 Claude 인증 확인은 외부 Claude 서비스 호출이므로, 현재 Codex 세션에서는 정책상 실행이 막힐 수 있다.</li>
+<li>git 작업 트리가 더러우면 preflight가 자동 루프를 막는다.</li>
+<li>Discord webhook이 없는 로컬은 알림 전송이 아니라 dry-run/문서 보고 중심으로 운영해야 한다.</li>
+<li>현재 local preflight의 2개 warning은 의도된 검증 상태다:</li>
+<li>작업 중이라 git tree가 dirty였다.</li>
+<li>live Claude auth는 외부 호출이므로 <code>autopilot:preflight:local</code> 경로에서 생략했다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<ul>
+<li>Claude/GPT 피드백 루프는 계속 사용한다.</li>
+<li>단, 자동 루프 시작 전에 인증/권한/알림/fallback 상태를 확인해 “중간에 안 될 수 있음”을 사전 문제로 바꾼다.</li>
+</ul>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>preflight 검증을 완료한다.</li>
+<li>v0.6 구현을 시작하기 전 <code>npm run autopilot:preflight:local</code> 또는 신뢰된 터미널의 <code>npm run autopilot:preflight</code>를 실행한다.</li>
+<li>preflight가 통과하면 구현 -&gt; 테스트 -&gt; 보고 -&gt; Claude 피드백 -&gt; 구현 루프를 반복한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 자동화를 표방하면서 Claude 인증/권한/알림 문제가 중간에 터지면 신뢰도가 떨어진다.</li>
+<li>방향: 이미 아는 실패 조건을 자동 루프 시작 전에 검사하는 preflight gate로 만든다.</li>
+<li>실행: preflight 스크립트, npm 명령, doctor deep 연결, 운영 규약 문서화를 추가했다.</li>
+<li>결과: LETHE 자동화는 “될 수도 있다”가 아니라 “시작 전에 가능한지 검사하고, 실패하면 정확히 보고한다”는 구조로 정리됐다.</li>
+</ul>
   </main>
 </body>
 </html>
