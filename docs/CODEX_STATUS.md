@@ -8,7 +8,7 @@ Last updated: 2026-06-02
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
-- Latest task-update status: feedback-5 synthesis is docs-only. Claude and Codex agree that `npm run qa:postloss:trusted` is the correct next gate and that the positive AI proxy remains planning evidence only. In this managed sandbox the wrapper still failed before gameplay evaluation because CDP pipe timed out at `Target.getTargets` and port fallback could not bind `127.0.0.1` (`listen EPERM`). WP2 Slice B remains `ITERATE_BEFORE_TEST`; WP3, people testing, balance changes, and UI/gameplay expansion remain blocked until trusted-local browser proof or an explicit environment-blocker decision exists.
+- Latest task-update status: feedback-6 synthesis confirms no material Claude/Codex scope conflict. The trusted post-loss gate JSON logging is valid QA evidence cleanup, but the latest managed-sandbox JSON still records `status: blocked` and `transportFailure: true` after the standard run plus the 30000 ms retry. WP2 Slice B remains implementation-complete but not browser-proven; WP3, people testing, balance changes, and UI/gameplay expansion remain blocked until trusted-local `npm run qa:postloss:trusted` passes or an explicit environment-blocker decision exists.
 
 ## Implemented
 
@@ -96,6 +96,7 @@ Last updated: 2026-06-02
   - if both transport paths fail, it now reports `BrowserQaTransportError` with the pipe failure, port failure, and next trusted-local command,
   - port fallback now asks the OS for a confirmed free `127.0.0.1` port and shares stable headless Chrome flags with the pipe path,
   - `scripts/run_trusted_postloss_gate.js` and `npm run qa:postloss:trusted` run the selected trusted-local post-loss gate as one command: standard post-loss QA, one 30000 ms retry for transport failures, then the blocker prompt if transport still fails,
+  - the trusted wrapper writes `alpha_test/outputs/postloss-trusted-gate/latest.json` with `status`, `transportFailure`, run summaries, `nextCommand`, and `blockerPrompt` for loop/report handoff,
   - this is a QA tooling change only and does not alter gameplay scope.
 - AI alpha test tool under `alpha_test/`.
 - Codex/GPT/Claude workflow docs.
@@ -160,9 +161,9 @@ Heavy check:
 Remaining note:
 
 - v0.9 WP2 now has both pre-loss pressure rhythm and a minimal post-loss challenge proxy.
-- The current browser automation channel failed before gameplay evaluation: CDP pipe timed out at `Target.getTargets`, and the remote-debugging-port fallback cannot bind `127.0.0.1` in this managed sandbox. Rerun `npm run qa:postloss:trusted` on a trusted local before treating this as browser-proven.
+- The current browser automation channel failed before gameplay evaluation: CDP pipe timed out at `Target.getTargets`, and the remote-debugging-port fallback cannot bind `127.0.0.1` in this managed sandbox. The latest trusted gate run wrote `alpha_test/outputs/postloss-trusted-gate/latest.json` with `status: blocked` and `transportFailure: true`. Rerun `npm run qa:postloss:trusted` on a trusted local before treating this as browser-proven.
 - AI proxy evidence remains a planning pass only, not human emotion or Unity-transition proof.
-- Latest feedback-5 synthesis found no material next-scope conflict: keep the next executable unit limited to sandbox-outside trusted-local `npm run qa:postloss:trusted`, which already encodes the standard run, one 30000 ms transport retry, and blocker-prompt handoff. Use `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md` before any WP3 or people-test step if the same transport failure repeats outside this sandbox.
+- Latest feedback-6 synthesis found no material next-scope conflict: keep the next executable unit limited to sandbox-outside trusted-local `npm run qa:postloss:trusted`, which already encodes the standard run, one 30000 ms transport retry, JSON result logging, and blocker-prompt handoff. Use `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md` before any WP3 or people-test step if the same transport failure repeats outside this sandbox.
 
 ## Latest Sweep Note
 

@@ -3563,6 +3563,128 @@
 <li>Action: recorded the feedback-5 synthesis, lack of material conflict, selected gate, and required tests across task/status/devlog/report docs.</li>
 <li>Result: the next loop is constrained to one trusted-local proof command before WP3 or people testing.</li>
 </ul>
+<h1>2026-06-02-56 - Trusted Post-loss Gate Result Logging</h1>
+<h2>1. Current build status</h2>
+<ul>
+<li>v0.9 WP2 Slice B remains implementation-complete and scope-valid.</li>
+<li>Latest status remains <code>ITERATE_BEFORE_TEST</code>.</li>
+<li>Browser proof is still missing because this managed sandbox cannot complete Chrome/CDP post-loss QA.</li>
+<li>WP3 Slice A, people testing, balance changes, and UI/gameplay expansion remain blocked.</li>
+</ul>
+<h2>2. What changed today</h2>
+<ul>
+<li>Updated <code>scripts/run_trusted_postloss_gate.js</code> so the gate writes <code>alpha_test/outputs/postloss-trusted-gate/latest.json</code>.</li>
+<li>The JSON records <code>status</code>, <code>transportFailure</code>, standard/retry run summaries, <code>nextCommand</code>, and <code>blockerPrompt</code>.</li>
+<li>Updated <code>docs/CODEX_STATUS.md</code>, <code>docs/NEXT_TASKS.md</code>, and <code>docs/devlog/2026-06-02.md</code> with the new gate evidence behavior.</li>
+<li>No gameplay code, UI, balance, memories, slots, shops, meta progression, regions, enemies, or weapons were added.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li><code>node --check scripts/run_trusted_postloss_gate.js</code>: passed.</li>
+<li><code>npm run doctor</code>: 44 pass, 0 warn, 0 fail.</li>
+<li><code>npm run qa:postloss:trusted</code>: failed before gameplay evaluation after the standard run and the 30000 ms retry.</li>
+<li>Generated ignored output: <code>alpha_test/outputs/postloss-trusted-gate/latest.json</code>.</li>
+<li>Latest JSON result: <code>status: blocked</code>, <code>transportFailure: true</code>.</li>
+<li>Latest failure shape:</li>
+<li>pipe failure: <code>Timed out waiting for CDP response to Target.getTargets</code>,</li>
+<li>port fallback failure: <code>listen EPERM: operation not permitted 127.0.0.1</code>.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>Treat this as QA evidence cleanup only, not browser proof.</li>
+<li>Keep the trusted-local post-loss gate open.</li>
+<li>Keep WP3 Slice A blocked until trusted-local browser proof passes or an explicit environment-blocker decision exists.</li>
+<li>Do not compensate for the missing browser proof by starting gameplay, UI, tutorial, or balance work.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>The managed sandbox still blocks both CDP pipe and remote-debugging-port paths.</li>
+<li>The latest JSON result is useful for automation, but it still records a blocker rather than a gameplay result.</li>
+<li>WP2 Slice B remains supported by AI proxy metrics only, not browser/user evidence.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>The next executable scope stayed on the post-loss browser proof gate.</li>
+<li>Codex added machine-readable gate logging so future loops can distinguish <code>complete</code>, gameplay <code>failed</code>, and transport <code>blocked</code> without scraping terminal output.</li>
+<li>The current run remains blocked by the same Chrome/CDP transport failure, so WP3 and people testing stay closed.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>Run <code>npm run qa:postloss:trusted</code> on a trusted local machine outside this managed sandbox.</li>
+<li>If it passes, record WP2 Slice B as browser-proven before starting only the minimal WP3 Slice A active-memory tactical agency hook.</li>
+<li>If it fails on gameplay assertions, fix only the post-loss QA/flow issue.</li>
+<li>If it fails on the same transport path, use <code>docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md</code> before starting new gameplay work.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: the browser evidence gate was repeatable but its result was only visible in terminal logs.</li>
+<li>Direction: make the gate result durable and machine-readable without widening gameplay scope.</li>
+<li>Action: added ignored JSON result logging to the trusted post-loss wrapper and reran the gate.</li>
+<li>Result: automation can now cite the blocker precisely, but browser proof is still pending outside this sandbox.</li>
+</ul>
+<h1>2026-06-02-57 - Devloop 193946 Feedback-6 태스크 갱신</h1>
+<h2>1. Current build status</h2>
+<ul>
+<li>v0.9 WP2 Slice B remains implementation-complete and scope-valid.</li>
+<li>Latest planning status remains <code>ITERATE_BEFORE_TEST</code>.</li>
+<li>Browser proof is still missing because the latest trusted gate JSON records <code>status: blocked</code>, <code>transportFailure: true</code> in the managed sandbox.</li>
+<li>This pass changed documentation only; no gameplay code or feature scope was changed.</li>
+</ul>
+<h2>2. What changed today</h2>
+<ul>
+<li>Filled <code>docs/review_responses/2026-06-02-devloop-193946-feedback-6-double-check.md</code>.</li>
+<li>Summarized Claude/Codex common recommendations and conflicts in <code>docs/NEXT_TASKS.md</code>.</li>
+<li>Updated <code>docs/CODEX_STATUS.md</code> with the feedback-6 synthesis and selected next gate.</li>
+<li>Added this feedback cycle to <code>docs/devlog/2026-06-02.md</code>.</li>
+<li>Added this numbered report unit.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li>No new code tests were required for this docs-only pass.</li>
+<li>Latest evidence used:</li>
+<li><code>node --check scripts/run_trusted_postloss_gate.js</code>: passed,</li>
+<li><code>npm run doctor</code>: 44 pass, 0 warn, 0 fail,</li>
+<li><code>npm run report:check</code>: 57 units passed,</li>
+<li><code>npm run qa:postloss:trusted</code>: failed before gameplay evaluation after the standard run and 30000 ms retry.</li>
+<li>Latest gate JSON: <code>alpha_test/outputs/postloss-trusted-gate/latest.json</code> with <code>status: blocked</code>, <code>transportFailure: true</code>.</li>
+<li>AI proxy context remains positive but insufficient as proof: <code>GO_CANDIDATE</code>, Alpha Fun Score <code>0.8846</code>, regret <code>0.8073</code>, irritation <code>0.0104</code>, restart <code>0.90</code>.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>Treat WP2 Slice B and trusted post-loss gate JSON logging as scope-valid QA/evidence cleanup.</li>
+<li>Treat AI proxy metrics as planning evidence only, not browser/user evidence or Unity-transition proof.</li>
+<li>Keep sandbox-outside trusted-local <code>npm run qa:postloss:trusted</code> as the next executable unit.</li>
+<li>Keep WP3 Slice A, people testing, balance changes, and UI/gameplay expansion blocked until browser proof or an explicit environment-blocker decision exists.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>The managed sandbox still blocks both CDP pipe proof and remote-debugging-port proof.</li>
+<li>WP2 Slice B is not browser-proven.</li>
+<li><code>echoPivotScore</code> and <code>postLossChallengeScore</code> remain observation items, not balance-change triggers in this loop.</li>
+<li>Trusted-local behavior is still unknown.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>공통점: WP2 Slice B와 trusted post-loss gate JSON logging은 범위 적합한 QA/evidence cleanup이며 새 gameplay scope를 늘리지 않았다.</li>
+<li>공통점: AI proxy는 긍정적인 planning pass지만 browser/user/balance/Unity-transition proof가 아니다.</li>
+<li>공통점: 다음 실행은 sandbox 밖 trusted-local <code>npm run qa:postloss:trusted</code> 하나다.</li>
+<li>충돌: 실질적인 다음 범위 충돌은 없다. Claude는 약한 지표를 관찰 대상으로 강조했고, Codex CLI는 실행 범위를 gate run 하나로 제한했다.</li>
+<li>Codex 선택: docs-only update로 닫고, wrapper가 sandbox 밖에서도 같은 transport failure를 보이면 <code>docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md</code>로 판단을 넘긴다.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>Run <code>npm run qa:postloss:trusted</code> on a trusted local machine outside this managed sandbox.</li>
+<li>If it passes, record WP2 Slice B as browser-proven before starting only the minimal WP3 Slice A active-memory tactical agency hook.</li>
+<li>If it fails on gameplay assertions, fix only the post-loss QA/flow issue.</li>
+<li>If it fails on the same transport path, use <code>docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md</code> before starting new gameplay work.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: the gate now logs a durable result, but the result still records transport blockage rather than browser gameplay proof.</li>
+<li>Direction: keep the evidence threshold explicit and avoid converting an automation blocker into gameplay scope.</li>
+<li>Action: recorded the feedback-6 synthesis, lack of material conflict, selected gate, and required tests across task/status/devlog/report docs.</li>
+<li>Result: the next loop remains constrained to one trusted-local proof command before WP3 or people testing.</li>
+</ul>
   </main>
 </body>
 </html>
