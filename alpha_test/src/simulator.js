@@ -436,10 +436,39 @@ function simulateEarlyFunProxy(rng, state, snapshot, build, options) {
 }
 
 function bossClearCheck(rng, state, stageIndex, power) {
-  const difficulty = 108 + stageIndex * 18;
+  const difficulty = 96 + stageIndex * 14;
   const margin = (power - difficulty) / difficulty;
   const p = clamp(0.66 + margin * 0.95 + state.bot.skill * 0.18 - state.bot.risk * 0.04, 0.08, 0.98);
   return { clear: rng.bool(p), clearChance: round(p, 3), difficulty };
+}
+
+function twoMemorySurvivalCheck(rng, state, stageIndex, postDeletePower, preForgetPower, build) {
+  const powerRatio = preForgetPower > 0 ? postDeletePower / preForgetPower : 0.7;
+  const pressure = 0.52 + stageIndex * 0.06;
+  const p = clamp(
+    0.46
+      + powerRatio * 0.42
+      + state.bot.skill * 0.16
+      + build.synergyConnectivity * 0.08
+      + state.echoPower * 0.10
+      - pressure * 0.22
+      - state.bot.risk * 0.04,
+    0.12,
+    0.96,
+  );
+  return { survived: rng.bool(p), survivalChance: round(p, 4) };
+}
+
+function echoPivotScore(state, build, powerDrop, recoveryRatio) {
+  const echoSignal = clamp(state.echoPower / 0.70, 0, 1);
+  return round(clamp(
+    echoSignal * 0.30
+      + clamp(1 - Math.abs(powerDrop - 0.34) / 0.34, 0, 1) * 0.24
+      + clamp(recoveryRatio, 0, 1.12) * 0.24
+      + build.synergyConnectivity * 0.22,
+    0,
+    1,
+  ), 4);
 }
 
 function applyEcho(state, memoryId) {
@@ -511,13 +540,16 @@ function simulateOneRun(rng, bot, options, runIndex = 0) {
     const postDeletePower = calculatePower(state);
     const powerDrop = preForgetPower > 0 ? clamp((preForgetPower - postDeletePower) / preForgetPower, -1, 1) : 0;
 
+    const deficit = twoMemorySurvivalCheck(rng, state, stageIndex, postDeletePower, preForgetPower, build);
+
     let replacementId = null;
-    if (options.replacementOffer && state.activeMemories.length < 3) {
+    if (options.replacementOffer && deficit.survived && state.activeMemories.length < 3) {
       replacementId = chooseReplacement(rng, state, forgottenIds);
       if (replacementId) state.activeMemories.push(replacementId);
     }
     const postReplacementPower = calculatePower(state);
     const recoveryRatio = preForgetPower > 0 ? postReplacementPower / preForgetPower : 1;
+    const pivotScore = echoPivotScore(state, build, powerDrop, recoveryRatio);
     const emotion = simulateEmotionProxy(rng, { ...state, activeMemories: preActive, echoes: preEchoes }, snapshot, reliance, deletedMemoryId, predictedMemoryId, leastWantedId, powerDrop, recoveryRatio, options);
 
     stageLogs.push({
@@ -553,6 +585,10 @@ function simulateOneRun(rng, bot, options, runIndex = 0) {
       postReplacementPower: round(postReplacementPower, 3),
       powerDrop: round(powerDrop, 4),
       recoveryRatio: round(recoveryRatio, 4),
+      deficitSurvivalChance: deficit.survivalChance,
+      cycleCompleted: deficit.survived && Boolean(replacementId),
+      refillReached: deficit.survived,
+      echoPivotScore: pivotScore,
       echoAdded: MEMORIES[deletedMemoryId].echo,
       replacementId,
       replacementName: replacementId ? MEMORIES[replacementId].name : null,
@@ -562,6 +598,12 @@ function simulateOneRun(rng, bot, options, runIndex = 0) {
       emotion,
       stageTimeSec: snapshot.durationSec,
     });
+
+    if (!deficit.survived) {
+      failed = true;
+      failureStage = stageIndex;
+      break;
+    }
   }
 
   const restartIntent = stageLogs.some((s) => s.emotion?.restartIntent) || (!failed && rng.bool(0.48 + bot.persistence * 0.24));

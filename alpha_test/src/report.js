@@ -56,9 +56,13 @@ function makeMarkdown(summary) {
   lines.push(`| 초반 재미 점수 | ${num(m.earlyFunScore, 3)} | 목표: 0.72 이상 |`);
   lines.push(`| 초반 처치 템포 | ${num(m.earlyKillTempo, 3)} | 목표: 0.68 이상 |`);
   lines.push(`| 보스 전 레벨업 | ${num(m.earlyLevelUps, 2)}회 | 목표: 2회 이상 |`);
+  lines.push(`| 첫 사이클 완주율 | ${pct(m.firstCycleCompletionRate)} | 목표: 70% 이상 |`);
+  lines.push(`| 2기억 생존율 | ${pct(m.twoMemorySurvivalRate)} | 목표: 65~88% |`);
+  lines.push(`| 잔향 피벗 점수 | ${num(m.echoPivotScore, 3)} | 목표: 0.62 이상 |`);
+  lines.push(`| 기억 보충 도달율 | ${pct(m.refillReachedRate)} | 목표: 70% 이상 |`);
   lines.push(`| 망각 직후 전투력 딥 | ${pct(m.avgPowerDrop)} | 목표: 30~50% |`);
   lines.push(`| 새 기억 후 회복률 | ${pct(m.avgRecovery)} | 목표: 85~110% |`);
-  lines.push(`| 첫 망각 전 사용 시간 | ${num(m.firstForgetUseAvgSec / 60, 2)}분 | 목표: 8~10분 |`);
+  lines.push(`| 첫 망각 전 사용 시간 | ${num(m.firstForgetUseAvgSec / 60, 2)}분 | 목표: 3.5~4.5분 |`);
   lines.push('');
   lines.push(`## Go/No-Go 체크`);
   lines.push('');

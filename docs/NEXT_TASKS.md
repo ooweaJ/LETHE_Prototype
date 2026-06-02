@@ -11,6 +11,7 @@
 - Codex implementation result: `GO_CANDIDATE` from `npm run ai:test` and `npm run ai:test:heavy`.
 - User direct playtest verdict: pause broad human testing and redesign the core run structure before more testing.
 - New planning prompt: `docs/review_prompts/2026-06-02-run-structure-redesign.md`.
+- v0.6 implementation verdict: `GO_TO_SOLO_PLAYTEST_CANDIDATE` by local Codex evidence. Claude v0.6 external feedback is blocked in this Codex session and must be run from a trusted local terminal if required.
 - Project direction: HTML prototype validation first, Unity implementation later only if AI/human tests show enough promise.
 
 ## v0.2 Done
@@ -99,10 +100,12 @@
 - [x] 실제 1인 플레이 피드백을 바탕으로 v0.5 사람 테스트를 보류하고 런 구조 재설계 프롬프트를 작성한다.
 - [x] 자동 루프 시작 전 인증/권한/알림/fallback 상태를 확인하는 `npm run autopilot:preflight` 규약을 추가한다.
 - [ ] `docs/review_prompts/2026-06-02-run-structure-redesign.md`를 Claude/GPT에 보내 v0.6 방향을 결정한다.
-- [ ] 답변을 읽고 v0.6 Codex 작업 목록으로 변환한다.
-- [ ] v0.6에서 첫 보스/첫 망각 타이밍, 보스 주기, 기억 상실 후 치환 보상, 기억 보충 타이밍을 구현한다.
-- [ ] v0.6 구현 후 AI/브라우저 QA를 다시 실행한다.
-- [ ] v0.6이 재미 기준을 통과하면 그때 사람 테스트를 진행한다.
+- [x] GPT/Claude 공통 답변을 읽고 v0.6 Codex 작업 목록으로 변환한다.
+- [x] v0.6에서 첫 보스/첫 망각 타이밍, 보스 주기, 기억 상실 후 치환 보상, 기억 보충 타이밍을 구현한다.
+- [x] v0.6 구현 후 AI/브라우저 QA를 다시 실행한다.
+- [x] v0.6 결과 보고 프롬프트를 작성한다: `docs/review_prompts/2026-06-02-v06-cycle-eval.md`.
+- [ ] 신뢰된 로컬 터미널에서 Claude v0.6 피드백을 실행한다. 현재 Codex 세션에서는 외부 전송 정책으로 차단됐다.
+- [ ] Claude가 `GO_TO_SOLO_PLAYTEST`를 주거나, 사용자가 로컬 피드백 없이 진행을 승인하면 1인 체감 테스트를 진행한다.
 
 ## Pre-Human-Test Polish Gate
 

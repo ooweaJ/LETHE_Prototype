@@ -4,10 +4,10 @@ Last updated: 2026-06-02
 
 ## Current Build
 
-- Project: LETHE HTML Alpha v0.5 core-fun run-structure redesign pending.
+- Project: LETHE HTML Alpha v0.6 core run-structure solo-test candidate.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
-- Current scope: HTML prototype validation. The project is testing whether LETHE's early combat/growth loop and forgetting loop are fun enough to justify moving into Unity implementation. Human testing is paused until the core run structure is reworked because the first boss/forgetting event currently arrives too late for the loop to matter.
+- Current scope: HTML prototype validation. The project is testing whether LETHE's early combat/growth loop and forgetting loop are fun enough to justify moving into Unity implementation. Broad human testing is paused; v0.6 is now ready for user 1-person feel testing once Claude feedback is either obtained from a trusted local terminal or explicitly skipped.
 
 ## Implemented
 
@@ -44,6 +44,13 @@ Last updated: 2026-06-02
   - kill XP and in-run level-up choices,
   - run-only stat growth without meta progression or shops,
   - AI early-fun metrics for pressure, kill tempo, and pre-boss level-ups.
+- v0.6 core run structure:
+  - 20-minute structure with bosses at 4 / 8 / 12 / 16 / 20 minutes,
+  - boss defeat -> dependency-based memory loss,
+  - 2-memory deficit survival segment,
+  - memory refill from 3 candidates after the deficit segment,
+  - `runTimeline` JSON payload with cycles and refill choices,
+  - `?qa=fast,v06` browser QA gate.
 - AI alpha test tool under `alpha_test/`.
 - Codex/GPT/Claude workflow docs.
 - Markdown daily reports, generated HTML reports, and Discord report delivery.
@@ -65,33 +72,36 @@ Command:
 npm run ai:test
 ```
 
-Result:
+v0.6 result:
 
 - Verdict: `GO_CANDIDATE`
 - Playability: `AI 기준 사람 테스트 진입 가능`
 - Risk Level: `LOW`
-- Alpha Fun Score: `0.8531`
-- Early Fun Score: `0.8669`
-- Early kill tempo: `0.9620`
+- Alpha Fun Score: `0.9093`
+- Early Fun Score: `0.8670`
+- Early kill tempo: `0.9619`
 - Pre-boss level-ups: `4.08`
-- Regret proxy: `81.6%`
-- Irritation proxy: `0.3%`
-- Prediction match: `84.8%`
+- First cycle completion: `82.4%`
+- Two-memory survival: `80.5%`
+- Echo pivot score: `0.7456`
+- Regret proxy: `84.8%`
+- Irritation proxy: `0.1%`
+- Prediction match: `87.7%`
 - Immediate quit: `0.7%`
 - Restart intent: `76.1%`
-- First forgetting time: `9.00 min`
+- First forgetting time: `4.00 min`
 - Post-forgetting power drop: `28.0%`
 - Recovery after replacement: `97.5%`
 - Max single memory deletion share: `28.8%`
 
 Heavy check:
 
-- `npm run ai:test:heavy`: `GO_CANDIDATE`, Alpha Fun Score `0.8509`, Early Fun Score `0.8672`, regret `81.4%`, irritation `0.3%`, prediction `84.6%`.
+- `npm run ai:test:heavy`: `GO_CANDIDATE`, Alpha Fun Score `0.9095`, Early Fun Score `0.8661`, first cycle completion `81.8%`, two-memory survival `80.2%`, echo pivot `0.7415`, regret `85.2%`, irritation `0.3%`, prediction `88.3%`.
 
 Remaining note:
 
-- Power drop is now below the 30% target (`27.8-28.0%`) because v0.5 prioritizes early fun and smoother growth. It should be observed directly in human testing before over-tuning.
-- User direct playtest found that the boss/forgetting loop opens too late, so the next planning question is not numeric tuning but run-structure redesign.
+- v0.6 fixed the previous 9-minute first-forgetting delay by opening the first cycle at 4 minutes.
+- Prediction match is still high and should be watched during 1-person feel testing.
 
 ## Latest Sweep Note
 
@@ -125,6 +135,17 @@ npm run ai:sweep
   - `file:///C:/jaewoo/LETHE_Prototype/index.html?qa=fast,levelup&tester=T01&session=S01`,
   - payload `playtest.testerId: T01`,
   - payload `playtest.sessionId: S01`.
+- Chrome headless QA passed for v0.6 cycle gate:
+  - `file:///C:/jaewoo/LETHE_Prototype/index.html?qa=fast,v06`,
+  - `status: complete`,
+  - `bossSpawned: true`,
+  - `forgotten: true`,
+  - `deficitStarted: true`,
+  - `refillSeen: true`,
+  - `refilled: true`,
+  - `hasTimelinePayload: true`,
+  - `cycleCount: 1`,
+  - `refillCount: 1`.
 - Local doctor passed on this machine:
   - `npm run doctor`: 26 pass, 0 warn, 0 fail,
   - `npm run doctor:deep`: 43 pass, 0 warn, 0 fail.
@@ -172,11 +193,14 @@ npm run ai:sweep
 - Codex CLI can write planning responses to `docs/review_responses/YYYY-MM-DD-codex.md` through `npm run review:codex`.
 - OpenAI API fallback has been removed by request. The review order is now Claude Code first, then Codex CLI fallback.
 - Human testing is paused until Claude/GPT or the user chooses the v0.6 run structure.
+- v0.6 Claude evaluation prompt generated: `docs/review_prompts/2026-06-02-v06-cycle-eval.md`.
+- Actual Claude call for v0.6 was blocked by outbound transfer policy in this Codex session. Block note: `docs/review_responses/2026-06-02-v06-cycle-claude-blocked.md`.
 
 ## Next Codex Tasks
 
-- v0.6 run-structure planning is the next product gate.
+- v0.6 solo feel-test decision is the next product gate.
 - On another local machine, run `npm run doctor` first; run `npm run doctor:deep` before leaving Codex to continue unattended.
 - Before an unattended implement -> Claude feedback -> implement loop, run `npm run autopilot:preflight`. If live Claude transmission is blocked in the current session, run `npm run autopilot:preflight:local` and stop at prompt/report generation.
-- Send `docs/review_prompts/2026-06-02-run-structure-redesign.md` to Claude/GPT manually, then give Codex the saved answer.
-- After the v0.6 direction is chosen and implemented, return to `docs/HUMAN_PLAYTEST_GUIDE.md` for people testing.
+- If Claude feedback is required, run the v0.6 prompt from a trusted local terminal:
+  `node scripts/ask_claude_review.js --prompt docs/review_prompts/2026-06-02-v06-cycle-eval.md --output docs/review_responses/2026-06-02-v06-cycle-claude.md`
+- If proceeding on local evidence, run user 1-person feel testing against v0.6 before any broader playtest.

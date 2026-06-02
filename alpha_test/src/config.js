@@ -179,7 +179,7 @@ const SYNERGIES = [
 const ENCOUNTERS = {
   room: {
     name: '일반 전투',
-    durationSec: 190,
+    durationSec: 130,
     crowd: 0.62,
     single: 0.38,
     boss: 0.00,
@@ -188,7 +188,7 @@ const ENCOUNTERS = {
   },
   elite: {
     name: '엘리트 전투',
-    durationSec: 130,
+    durationSec: 50,
     crowd: 0.48,
     single: 0.52,
     boss: 0.20,
@@ -197,7 +197,7 @@ const ENCOUNTERS = {
   },
   boss: {
     name: '기억을 씹는 자',
-    durationSec: 220,
+    durationSec: 60,
     crowd: 0.36,
     single: 0.64,
     boss: 1.00,
@@ -219,8 +219,8 @@ const DEFAULT_TARGETS = {
   predictionMatchMax: 0.90,
   immediateQuitMax: 0.15,
   restartRateMin: 0.60,
-  firstForgetUseMinSec: 480,
-  firstForgetUseMaxSec: 600,
+  firstForgetUseMinSec: 210,
+  firstForgetUseMaxSec: 270,
   maxBuildClassShare: 0.80,
   maxSingleMemoryDeleteShare: 0.35,
   maxMemoryDeleteSpread: 0.35,
@@ -233,11 +233,16 @@ const DEFAULT_TARGETS = {
   earlyFunScoreMin: 0.72,
   earlyLevelUpsMin: 2,
   earlyKillTempoMin: 0.68,
+  firstCycleCompletionRateMin: 0.70,
+  twoMemorySurvivalRateMin: 0.65,
+  twoMemorySurvivalRateMax: 0.88,
+  echoPivotScoreMin: 0.62,
+  refillReachedRateMin: 0.70,
 };
 
 const SIM_DEFAULTS = {
   runs: 1000,
-  stages: 2,
+  stages: 3,
   seed: '20260601',
   echoPower: 0.50,
   uiClarity: 0.78,

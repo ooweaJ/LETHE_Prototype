@@ -201,18 +201,23 @@ const enemyTypes = {
 const qaMode = new URLSearchParams(window.location.search).get("qa") || "";
 
 const experiment = {
-  version: "v0.5",
+  version: "v0.6",
   echoPower: 0.5,
   uiClarity: 0.78,
-  bossSpawnTimeSec: 540,
-  bossHp: 1750,
+  runDurationSec: 1200,
+  bossScheduleSec: [240, 480, 720, 960, 1200],
+  bossHp: 760,
+  deficitDurationSec: 105,
   qaFastMode: qaMode.includes("fast"),
   qaLevelupMode: qaMode.includes("levelup"),
+  qaV06Mode: qaMode.includes("v06"),
 };
 
 if (experiment.qaFastMode) {
-  experiment.bossSpawnTimeSec = 10;
+  experiment.runDurationSec = 72;
+  experiment.bossScheduleSec = [12, 28, 44, 60, 72];
   experiment.bossHp = 180;
+  experiment.deficitDurationSec = 5;
 }
 
 const forgetBias = {
@@ -244,17 +249,20 @@ const baseEcho = {
   slowDuration: 0,
 };
 
-function createRunState() {
-  const activeMemories = selectedMemories.map((id) => ({
+function createMemoryInstance(id) {
+  return {
     ...memories[id],
     cooldownLeft: id === "blood_reflection" ? 0 : 0.8 + Math.random() * 1.3,
     clarity: 0,
     forgotten: false,
-  }));
+    joinedAt: state ? Number(state.elapsed.toFixed(2)) : 0,
+  };
+}
 
+function createMetricSeed(memoryIds) {
   const metricSeed = {};
-  activeMemories.forEach((memory) => {
-    metricSeed[memory.id] = {
+  memoryIds.forEach((id) => {
+    metricSeed[id] = {
       damage: 0,
       kills: 0,
       assists: 0,
@@ -268,6 +276,11 @@ function createRunState() {
       components: {},
     };
   });
+  return metricSeed;
+}
+
+function createRunState() {
+  const activeMemories = selectedMemories.map((id) => createMemoryInstance(id));
 
   return {
     running: true,
@@ -314,12 +327,25 @@ function createRunState() {
     boss: null,
     shake: 0,
     spawnCd: 0,
-    metrics: metricSeed,
+    metrics: createMetricSeed(selectedMemories),
+    runTimeline: {
+      version: "v0.6",
+      totalRunSec: experiment.runDurationSec,
+      bossScheduleSec: [...experiment.bossScheduleSec],
+      nextBossIndex: 0,
+      currentBossIndex: 0,
+      deficitDurationSec: experiment.deficitDurationSec,
+      deficitStartedAt: null,
+      refillAvailableAt: null,
+      cycles: [],
+      refillChoices: [],
+    },
     questions: {
       protect: null,
       predict: null,
     },
     forgotten: null,
+    forgottenHistory: [],
     survey: {
       sadness: null,
       fairness: null,
@@ -330,6 +356,7 @@ function createRunState() {
       experiment: { ...experiment },
       playtest: currentPlaytestMeta(),
       runGrowth: null,
+      runTimeline: null,
       startedAt: new Date().toISOString(),
       weapon: selectedWeapon,
       memories: [...selectedMemories],
@@ -448,6 +475,7 @@ function update(dt) {
   state.player.attackCd = Math.max(0, state.player.attackCd - dt);
 
   movePlayer(dt);
+  updateRefillGate();
   updateSpawning(dt);
   updateBoss(dt);
   updateEnemies(dt);
@@ -480,12 +508,13 @@ function movePlayer(dt) {
 }
 
 function updateSpawning(dt) {
-  if (state.bossSpawned) return;
+  if (state.boss) return;
   state.spawnCd -= dt;
-  const spawnRate = state.elapsed < 18 ? 0.72 : state.elapsed < 55 ? 0.58 : 0.76;
+  const deficitPressure = activeMemoryCount() < 3 ? 0.14 : 0;
+  const spawnRate = Math.max(0.38, (state.elapsed < 35 ? 0.62 : state.elapsed < 90 ? 0.54 : 0.72) - deficitPressure);
   if (state.spawnCd <= 0) {
     state.spawnCd = spawnRate;
-    const packSize = state.elapsed < 30 ? 2 : state.elapsed < 80 ? 3 : 2;
+    const packSize = activeMemoryCount() < 3 ? 3 : state.elapsed < 30 ? 2 : state.elapsed < 80 ? 3 : 2;
     const pool = ["eroder", "eroder", "eroder", "drifting_eye", "split_one"];
     if (state.elapsed > 28) pool.push("void_priest");
     for (let i = 0; i < packSize; i += 1) {
@@ -493,9 +522,18 @@ function updateSpawning(dt) {
     }
   }
 
-  if (state.elapsed >= experiment.bossSpawnTimeSec) {
+  const nextBossAt = state.runTimeline.bossScheduleSec[state.runTimeline.nextBossIndex];
+  if (nextBossAt && state.elapsed >= nextBossAt) {
     spawnBoss();
   }
+}
+
+function updateRefillGate() {
+  const timeline = state.runTimeline;
+  if (!timeline.refillAvailableAt || state.elapsed < timeline.refillAvailableAt) return;
+  if (state.boss || activeMemoryCount() >= 3) return;
+  timeline.refillAvailableAt = null;
+  showRefillOverlay();
 }
 
 function spawnEnemy(typeId, x = null, y = null, child = false) {
@@ -518,15 +556,20 @@ function spawnEnemy(typeId, x = null, y = null, child = false) {
 
 function spawnBoss() {
   state.bossSpawned = true;
+  const bossIndex = state.runTimeline.nextBossIndex + 1;
+  const isFinal = bossIndex >= state.runTimeline.bossScheduleSec.length;
+  state.runTimeline.currentBossIndex = bossIndex;
+  state.runTimeline.nextBossIndex += 1;
+  state.phase = isFinal ? "최종 문지기" : `${bossIndex}차 문지기`;
   state.enemies.length = Math.min(state.enemies.length, 8);
   state.shake = Math.max(state.shake, 12);
   state.boss = {
     id: "boss",
-    name: "기억을 씹는 자",
+    name: isFinal ? "끝의 문지기" : `기억을 씹는 자 ${bossIndex}`,
     x: canvas.width / 2,
     y: 96,
-    hp: experiment.bossHp,
-    maxHp: experiment.bossHp,
+    hp: Math.round(experiment.bossHp * (1 + (bossIndex - 1) * 0.22)),
+    maxHp: Math.round(experiment.bossHp * (1 + (bossIndex - 1) * 0.22)),
     r: 32,
     phase: 1,
     phaseTimer: 0,
@@ -534,11 +577,18 @@ function spawnBoss() {
     groggy: false,
     groggyTimer: 0,
     aoeCd: 4,
+    cycleIndex: bossIndex,
+    final: isFinal,
   };
-  addLog("기억을 씹는 자가 검은 물을 갈랐다.");
-  addFloater("문지기 출현", canvas.width / 2, 84, "#ff5d6c");
+  addLog(`${state.boss.name}가 검은 물을 갈랐다.`);
+  addFloater(isFinal ? "최종 문지기" : `${bossIndex}차 문지기`, canvas.width / 2, 84, "#ff5d6c");
   addBurst(canvas.width / 2, 96, "#ff5d6c", 28, 6.8);
-  logEvent("boss_spawn");
+  logEvent("boss_spawn", {
+    cycleIndex: bossIndex,
+    bossName: state.boss.name,
+    final: isFinal,
+    activeMemoryCount: activeMemoryCount(),
+  });
 }
 
 function updateBoss(dt) {
@@ -995,9 +1045,16 @@ function defeatBoss() {
   state.mode = "questions";
   state.running = false;
   calculateDependency();
+  const defeated = state.boss;
+  state.boss = null;
+  state.bossSpawned = false;
   addLog("문지기가 쓰러지고, 소리가 강 아래로 빨려 들어갔다.");
-  logEvent("boss_defeated", { elapsed: Number(state.elapsed.toFixed(2)) });
-  showQuestionOverlay();
+  logEvent("boss_defeated", {
+    elapsed: Number(state.elapsed.toFixed(2)),
+    cycleIndex: defeated?.cycleIndex || state.runTimeline.currentBossIndex,
+    final: Boolean(defeated?.final),
+  });
+  showQuestionOverlay(Boolean(defeated?.final));
 }
 
 function calculateDependency() {
@@ -1049,9 +1106,29 @@ function forgetMostDependent() {
   const forgotten = ranked[0];
   forgotten.forgotten = true;
   state.forgotten = forgotten.id;
+  state.forgottenHistory.push({
+    id: forgotten.id,
+    name: forgotten.name,
+    t: Number(state.elapsed.toFixed(2)),
+    cycleIndex: state.runTimeline.currentBossIndex,
+    activeBefore: ranked.map((memory) => memory.id),
+  });
   applyEcho(forgotten.id);
   renderEchoes();
+  const cycle = {
+    cycleIndex: state.runTimeline.currentBossIndex,
+    bossDefeatedAt: Number(state.elapsed.toFixed(2)),
+    forgotten: forgotten.id,
+    forgottenName: forgotten.name,
+    activeBefore: ranked.map((memory) => memory.id),
+    activeAfterForget: activeMemoryIds(),
+    refillAvailableAt: null,
+    refillChoice: null,
+    final: state.runTimeline.currentBossIndex >= state.runTimeline.bossScheduleSec.length,
+  };
+  state.runTimeline.cycles.push(cycle);
   logEvent("memory_forgotten", {
+    cycleIndex: state.runTimeline.currentBossIndex,
     forgotten: forgotten.id,
     forgottenName: forgotten.name,
     score: state.metrics[forgotten.id].score,
@@ -1062,7 +1139,9 @@ function forgetMostDependent() {
     questionNames: questionNames(),
     echo: state.echo,
     echoTransformation: echoTransformationLog(forgotten.id),
+    activeMemoryCount: activeMemoryCount(),
   });
+  return forgotten;
 }
 
 function applyEcho(memoryId) {
@@ -1093,7 +1172,8 @@ function applyEcho(memoryId) {
   }
 }
 
-function showQuestionOverlay() {
+function showQuestionOverlay(finalCycle = false) {
+  state.questions = { protect: null, predict: null };
   const template = document.getElementById("questionTemplate");
   overlay.innerHTML = "";
   overlay.appendChild(template.content.cloneNode(true));
@@ -1102,7 +1182,7 @@ function showQuestionOverlay() {
   const predict = overlay.querySelector("#predictChoices");
   const submit = overlay.querySelector("#submitQuestionsButton");
 
-  state.memories.forEach((memory) => {
+  activeMemories().forEach((memory) => {
     protect.appendChild(questionButton(memory.name, () => {
       state.questions.protect = memory.id;
       selectPill(protect, memory.name);
@@ -1121,9 +1201,109 @@ function showQuestionOverlay() {
   }));
 
   submit.addEventListener("click", () => {
-    forgetMostDependent();
-    showResultOverlay();
+    const forgotten = forgetMostDependent();
+    if (finalCycle) {
+      showResultOverlay();
+    } else {
+      showCycleResultOverlay(forgotten);
+    }
   });
+}
+
+function showCycleResultOverlay(forgotten) {
+  const cycle = state.runTimeline.cycles[state.runTimeline.cycles.length - 1];
+  const refillAt = state.elapsed + experiment.deficitDurationSec;
+  state.runTimeline.deficitStartedAt = Number(state.elapsed.toFixed(2));
+  state.runTimeline.refillAvailableAt = refillAt;
+  if (cycle) cycle.refillAvailableAt = Number(refillAt.toFixed(2));
+
+  overlay.innerHTML = `
+    <div class="panel result-panel">
+      <p class="eyebrow">망각 사이클 ${state.runTimeline.currentBossIndex}</p>
+      <h2>${forgotten.name} 기억이 가라앉았다.</h2>
+      <div class="result-summary">
+        <div class="result-card loss-card"><strong>사라진 행동</strong><br>${forgotten.name} 자동 발동이 멈춥니다.</div>
+        ${echoTransformationHtml(forgotten)}
+        <div class="result-card"><strong>결손 생존</strong><br>${Math.round(experiment.deficitDurationSec)}초 동안 기억 ${activeMemoryCount()}개로 버틴 뒤 새 기억을 고릅니다.</div>
+      </div>
+      <button id="continueCycleButton" class="primary-btn" type="button">결손 구간 시작</button>
+    </div>
+  `;
+  overlay.classList.add("show");
+  overlay.querySelector("#continueCycleButton").addEventListener("click", () => {
+    overlay.classList.remove("show");
+    overlay.innerHTML = "";
+    state.mode = "combat";
+    state.running = true;
+    state.phase = "결손 생존";
+    addLog(`${forgotten.name}의 잔향만 남았다. 기억 ${activeMemoryCount()}개로 버텨라.`);
+    logEvent("deficit_started", {
+      cycleIndex: state.runTimeline.currentBossIndex,
+      refillAvailableAt: Number(refillAt.toFixed(2)),
+      activeMemoryIds: activeMemoryIds(),
+    });
+  });
+}
+
+function showRefillOverlay() {
+  const candidates = refillCandidates();
+  state.mode = "refill";
+  state.running = false;
+  overlay.innerHTML = `
+    <div class="panel question-panel">
+      <p class="eyebrow">기억 보충</p>
+      <h2>망가진 빌드가 새 기억을 붙잡았다.</h2>
+      <p class="panel-copy">새 기억 하나를 골라 다시 3개 슬롯으로 돌아갑니다. 이전 빌드는 복구되지 않고, 잔향 위에 새 방향이 붙습니다.</p>
+      <div id="refillChoices" class="choice-list memory-list"></div>
+    </div>
+  `;
+  overlay.classList.add("show");
+  const container = overlay.querySelector("#refillChoices");
+  candidates.forEach((id) => {
+    const memory = memories[id];
+    const button = document.createElement("button");
+    button.className = "choice";
+    button.type = "button";
+    button.innerHTML = `<strong>${memory.name}</strong><span>${memory.role}<br>${memory.desc}</span>`;
+    button.addEventListener("click", () => applyMemoryRefill(id));
+    container.appendChild(button);
+  });
+  logEvent("memory_refill_available", {
+    cycleIndex: state.runTimeline.currentBossIndex,
+    candidates,
+    candidateNames: candidates.map((id) => memories[id].name),
+  });
+}
+
+function applyMemoryRefill(id) {
+  if (activeMemoryIds().includes(id)) return;
+  const memory = createMemoryInstance(id);
+  memory.joinedAt = Number(state.elapsed.toFixed(2));
+  state.memories.push(memory);
+  if (!state.metrics[id]) state.metrics[id] = createMetricSeed([id])[id];
+  const choice = {
+    cycleIndex: state.runTimeline.currentBossIndex,
+    t: Number(state.elapsed.toFixed(2)),
+    memoryId: id,
+    memoryName: memories[id].name,
+    activeAfter: activeMemoryIds(),
+  };
+  state.runTimeline.refillChoices.push(choice);
+  const cycle = state.runTimeline.cycles[state.runTimeline.cycles.length - 1];
+  if (cycle) {
+    cycle.refillChoice = choice;
+    cycle.activeAfterRefill = activeMemoryIds();
+  }
+  overlay.classList.remove("show");
+  overlay.innerHTML = "";
+  state.mode = "combat";
+  state.running = true;
+  state.phase = "전투";
+  addLog(`${memories[id].name} 기억이 빈 슬롯을 채웠다.`);
+  addFloater("기억 보충", state.player.x, state.player.y - 34, "#6ddfd2");
+  logEvent("memory_refilled", choice);
+  updateUi();
+  renderMemorySlots();
 }
 
 function questionButton(label, onClick) {
@@ -1137,6 +1317,26 @@ function questionButton(label, onClick) {
 
 function selectPill(container, text) {
   [...container.children].forEach((button) => button.classList.toggle("selected", button.textContent === text));
+}
+
+function activeMemories() {
+  return state.memories.filter((memory) => !memory.forgotten);
+}
+
+function activeMemoryIds() {
+  return activeMemories().map((memory) => memory.id);
+}
+
+function activeMemoryCount() {
+  return activeMemoryIds().length;
+}
+
+function refillCandidates() {
+  const active = new Set(activeMemoryIds());
+  const used = new Set(state.memories.map((memory) => memory.id));
+  const fresh = Object.keys(memories).filter((id) => !active.has(id) && !used.has(id));
+  const recycled = Object.keys(memories).filter((id) => !active.has(id) && used.has(id));
+  return fresh.concat(recycled).slice(0, 3);
 }
 
 function showResultOverlay() {
@@ -1159,6 +1359,7 @@ function showResultOverlay() {
     <div class="result-card"><strong>삭제 weight</strong><br>${deletionWeightText()}</div>
     ${echoTransformationHtml(forgotten)}
     <div class="result-card"><strong>이어지는 방향</strong><br>${forgotten.direction}</div>
+    ${runConclusionHtml()}
   `;
   overlay.querySelector("#detailTable").innerHTML = dependencyTableHtml();
   renderScale("sadnessScale", "sadness");
@@ -1312,8 +1513,29 @@ function collectLogPayload() {
   state.logs.echo = state.echo;
   state.logs.echoPower = experiment.echoPower;
   state.logs.runGrowth = runGrowthLog();
+  state.logs.runTimeline = runTimelineLog();
+  state.logs.forgottenHistory = state.forgottenHistory;
   state.logs.echoTransformation = echoTransformationLog(state.forgotten);
   return state.logs;
+}
+
+function runConclusionHtml() {
+  const active = activeMemories();
+  const longest = state.memories
+    .slice()
+    .sort((a, b) => (a.joinedAt || 0) - (b.joinedAt || 0))[0];
+  const mostDependent = state.memories
+    .slice()
+    .sort((a, b) => (state.metrics[b.id]?.score || 0) - (state.metrics[a.id]?.score || 0))[0];
+  const strongestEcho = state.forgottenHistory[state.forgottenHistory.length - 1];
+  return `
+    <div class="result-card"><strong>런 결산</strong><br>
+      오래 붙잡은 기억: ${longest?.name || "-"}<br>
+      가장 의존한 기억: ${mostDependent?.name || "-"}<br>
+      마지막 잔향: ${strongestEcho?.name || "-"}<br>
+      마지막 슬롯: ${active.map((memory) => memory.name).join(" / ") || "-"}
+    </div>
+  `;
 }
 
 function runGrowthLog() {
@@ -1333,6 +1555,24 @@ function runGrowthLog() {
     earlyKills: growth.earlyKills,
     maxEnemies: growth.maxEnemies,
     levelUpsBeforeBoss: growth.levelUpsBeforeBoss,
+  };
+}
+
+function runTimelineLog() {
+  const timeline = state.runTimeline;
+  return {
+    version: timeline.version,
+    totalRunSec: timeline.totalRunSec,
+    bossScheduleSec: timeline.bossScheduleSec,
+    nextBossIndex: timeline.nextBossIndex,
+    currentBossIndex: timeline.currentBossIndex,
+    deficitDurationSec: timeline.deficitDurationSec,
+    deficitStartedAt: timeline.deficitStartedAt,
+    refillAvailableAt: timeline.refillAvailableAt,
+    cycles: timeline.cycles,
+    refillChoices: timeline.refillChoices,
+    activeMemoryIds: activeMemoryIds(),
+    activeMemoryNames: activeMemories().map((memory) => memory.name),
   };
 }
 
@@ -1425,7 +1665,7 @@ function updateUi() {
 }
 
 function renderMemorySlots() {
-  const source = state?.memories || selectedMemories.map((id) => ({ ...memories[id], cooldownLeft: 0, clarity: 0 }));
+  const source = state ? activeMemories() : selectedMemories.map((id) => ({ ...memories[id], cooldownLeft: 0, clarity: 0 }));
   ui.memorySlots.innerHTML = "";
   if (!source.length) {
     ui.memorySlots.innerHTML = `<div class="info-card empty">기억 3개를 선택하세요.</div>`;
@@ -1895,10 +2135,122 @@ function startLevelupQa() {
   }, 120);
 }
 
-if (experiment.qaFastMode || experiment.qaLevelupMode) {
+function writeV06QaResult(extra = {}) {
+  if (!experiment.qaV06Mode) return;
+  const payload = {
+    version: experiment.version,
+    hasState: Boolean(state),
+    mode: state?.mode || null,
+    elapsed: state ? Number(state.elapsed.toFixed(2)) : 0,
+    activeMemoryCount: state ? activeMemoryCount() : 0,
+    runTimeline: state ? runTimelineLog() : null,
+    ...extra,
+  };
+  document.documentElement.dataset.letheV06Qa = JSON.stringify(payload);
+}
+
+function startV06CycleQa() {
+  selectedWeapon = weapons.twin_blades.id;
+  selectedMemories = ["hungry_blades", "stalker_oath", "blood_reflection"];
+  renderSetup();
+  setTimeout(() => {
+    if (!state) startRun();
+  }, 50);
+
+  const qa = {
+    bossSpawned: false,
+    forgotten: false,
+    deficitStarted: false,
+    refillSeen: false,
+    refilled: false,
+    startedAt: performance.now(),
+  };
+
+  const timer = setInterval(() => {
+    if (!state) {
+      writeV06QaResult({ status: "waiting_for_run" });
+      return;
+    }
+
+    if (!qa.bossSpawned && !state.boss && state.mode === "combat") {
+      const nextBossAt = state.runTimeline.bossScheduleSec[state.runTimeline.nextBossIndex] || 0;
+      state.elapsed = Math.max(state.elapsed, nextBossAt);
+      updateSpawning(0);
+    }
+
+    if (state.boss) {
+      qa.bossSpawned = true;
+      state.boss.hp = 0;
+      updateBoss(0);
+    }
+
+    if (state.mode === "questions") {
+      const active = activeMemories();
+      if (active.length) {
+        state.questions.protect = active[0].id;
+        state.questions.predict = active[0].id;
+        const forgotten = forgetMostDependent();
+        qa.forgotten = Boolean(forgotten);
+        showCycleResultOverlay(forgotten);
+      }
+    }
+
+    const continueButton = document.querySelector("#continueCycleButton");
+    if (continueButton) {
+      continueButton.click();
+      qa.deficitStarted = true;
+    }
+
+    if (state.runTimeline.refillAvailableAt && state.mode === "combat") {
+      state.elapsed = Math.max(state.elapsed, state.runTimeline.refillAvailableAt);
+      updateRefillGate();
+    }
+
+    if (state.mode === "refill") {
+      qa.refillSeen = document.querySelectorAll("#refillChoices .choice").length > 0;
+      const candidates = refillCandidates();
+      if (candidates.length) {
+        applyMemoryRefill(candidates[0]);
+        qa.refilled = true;
+      }
+    }
+
+    const complete = qa.bossSpawned && qa.forgotten && qa.deficitStarted && qa.refillSeen && qa.refilled && activeMemoryCount() === 3;
+    if (complete) {
+      const payload = collectLogPayload();
+      writeV06QaResult({
+        status: "complete",
+        bossSpawned: qa.bossSpawned,
+        forgotten: qa.forgotten,
+        deficitStarted: qa.deficitStarted,
+        refillSeen: qa.refillSeen,
+        refilled: qa.refilled,
+        hasTimelinePayload: Boolean(payload.runTimeline),
+        cycleCount: payload.runTimeline?.cycles?.length || 0,
+        refillCount: payload.runTimeline?.refillChoices?.length || 0,
+      });
+      clearInterval(timer);
+      return;
+    }
+
+    const timedOut = performance.now() - qa.startedAt > 45000;
+    writeV06QaResult({
+      status: timedOut ? "timeout" : "running",
+      bossSpawned: qa.bossSpawned,
+      forgotten: qa.forgotten,
+      deficitStarted: qa.deficitStarted,
+      refillSeen: qa.refillSeen,
+      refilled: qa.refilled,
+    });
+    if (timedOut) clearInterval(timer);
+  }, 120);
+}
+
+if (experiment.qaFastMode || experiment.qaLevelupMode || experiment.qaV06Mode) {
   window.__letheQaLog = () => (state ? JSON.parse(JSON.stringify(collectLogPayload())) : null);
 }
 
 initSetup();
 if (experiment.qaLevelupMode) startLevelupQa();
+if (experiment.qaV06Mode) startV06CycleQa();
 requestAnimationFrame(frame);

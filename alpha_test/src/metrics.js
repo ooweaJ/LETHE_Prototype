@@ -79,6 +79,11 @@ function summarize(batch) {
   const earlyCrowdPressure = mean(stages.map(({ stage }) => stage.earlyLoop?.crowdPressure || 0));
   const earlyChoiceInterest = mean(stages.map(({ stage }) => stage.earlyLoop?.choiceInterest || 0));
   const earlyLevelUps = mean(stages.map(({ stage }) => stage.earlyLoop?.levelUpsBeforeBoss || 0));
+  const cycleCompletionRate = pct(stages.filter(({ stage }) => stage.cycleCompleted).length, stageCount);
+  const firstCycleCompletionRate = pct(firstStages.filter((stage) => stage.cycleCompleted).length, firstStages.length);
+  const twoMemorySurvivalRate = mean(stages.map(({ stage }) => stage.deficitSurvivalChance || 0));
+  const refillReachedRate = pct(stages.filter(({ stage }) => stage.refillReached).length, stageCount);
+  const echoPivotScore = mean(stages.map(({ stage }) => stage.echoPivotScore || 0));
 
   const buildDiversity = normalizedDiversity(buildClasses, stageCount);
   const memoryDeleteMaxShare = maxShare(deletedMemories, stageCount);
@@ -89,9 +94,10 @@ function summarize(batch) {
     regretRate * 0.23
       + predictionMatchRate * 0.18
       + earlyFunScore * 0.19
+      + echoPivotScore * 0.08
       + (1 - immediateQuitRate) * 0.14
       + restartRate * 0.14
-      + buildDiversity * 0.08
+      + buildDiversity * 0.05
       + clamp01(1 - Math.abs(avgPowerDrop - 0.40) / 0.40) * 0.04,
   );
 
@@ -112,6 +118,10 @@ function summarize(batch) {
     earlyFunScore,
     earlyLevelUps,
     earlyKillTempo,
+    firstCycleCompletionRate,
+    twoMemorySurvivalRate,
+    echoPivotScore,
+    refillReachedRate,
   });
   const verdict = gateVerdict(targetChecks);
 
@@ -140,6 +150,11 @@ function summarize(batch) {
       earlyCrowdPressure,
       earlyChoiceInterest,
       earlyLevelUps,
+      firstCycleCompletionRate,
+      cycleCompletionRate,
+      twoMemorySurvivalRate,
+      refillReachedRate,
+      echoPivotScore,
       targetChecks,
     }),
     headlineMetrics: {
@@ -161,6 +176,11 @@ function summarize(batch) {
       earlyCrowdPressure: round(earlyCrowdPressure, 4),
       earlyChoiceInterest: round(earlyChoiceInterest, 4),
       earlyLevelUps: round(earlyLevelUps, 2),
+      firstCycleCompletionRate: round(firstCycleCompletionRate, 4),
+      cycleCompletionRate: round(cycleCompletionRate, 4),
+      twoMemorySurvivalRate: round(twoMemorySurvivalRate, 4),
+      refillReachedRate: round(refillReachedRate, 4),
+      echoPivotScore: round(echoPivotScore, 4),
       firstForgetUseAvgSec: round(firstUseAvg, 1),
       buildDiversity: round(buildDiversity, 4),
       buildClassMaxShare: round(buildClassMaxShare, 4),
@@ -195,8 +215,13 @@ function makeTargetChecks(m) {
     check('초반 재미 점수', m.earlyFunScore, '>=', t.earlyFunScoreMin, '초반 압박/처치/성장 선택 프록시'),
     check('초반 레벨업 수', m.earlyLevelUps, '>=', t.earlyLevelUpsMin, '보스 전 런 중 성장 선택 횟수'),
     check('초반 처치 템포', m.earlyKillTempo, '>=', t.earlyKillTempoMin, '적 처치 리듬과 밀도 프록시'),
-    check('첫 망각 전 사용 시간 하한', m.firstUseAvg, '>=', t.firstForgetUseMinSec, '애착 윈도우 8분 이상'),
-    check('첫 망각 전 사용 시간 상한', m.firstUseAvg, '<=', t.firstForgetUseMaxSec, '애착 윈도우 10분 이하'),
+    check('첫 망각 전 사용 시간 하한', m.firstUseAvg, '>=', t.firstForgetUseMinSec, '첫 사이클 3.5분 이상'),
+    check('첫 망각 전 사용 시간 상한', m.firstUseAvg, '<=', t.firstForgetUseMaxSec, '첫 사이클 4.5분 이하'),
+    check('첫 사이클 완주율', m.firstCycleCompletionRate, '>=', t.firstCycleCompletionRateMin, '첫 상실->결손 생존->보충 완료율'),
+    check('2기억 생존율 하한', m.twoMemorySurvivalRate, '>=', t.twoMemorySurvivalRateMin, '결손 구간이 너무 가혹하지 않은지'),
+    check('2기억 생존율 상한', m.twoMemorySurvivalRate, '<=', t.twoMemorySurvivalRateMax, '결손 구간이 너무 안전하지 않은지'),
+    check('잔향 피벗 점수', m.echoPivotScore, '>=', t.echoPivotScoreMin, '잃은 기억이 빌드 변형으로 남는지'),
+    check('기억 보충 도달율', m.refillReachedRate, '>=', t.refillReachedRateMin, '상실 후 보충까지 도달하는 비율'),
     check('빌드 분류 쏠림', m.buildClassMaxShare, '<=', t.maxBuildClassShare, '몰빵/거미줄/느슨 중 한 분류 80% 초과 금지'),
     check('단일 기억 삭제 쏠림', m.memoryDeleteMaxShare, '<=', t.maxSingleMemoryDeleteShare, '특정 기억 삭제율 과다 금지'),
     check('기억 삭제 분포 편차', m.memoryDeleteSpread, '<=', t.maxMemoryDeleteSpread, '특정 기억이 테스트 전체를 과도하게 대표하지 않게 유지'),
@@ -217,7 +242,7 @@ function check(name, value, op, target, note) {
 }
 
 function gateVerdict(checks) {
-  const hardNames = new Set(['아쉬움 분면', '짜증 분면', '예측 일치율', '삭제 직후 즉시 종료율', '초반 재미 점수', '초반 처치 템포']);
+  const hardNames = new Set(['아쉬움 분면', '짜증 분면', '예측 일치율', '삭제 직후 즉시 종료율', '초반 재미 점수', '초반 처치 템포', '첫 사이클 완주율', '2기억 생존율 하한', '잔향 피벗 점수', '기억 보충 도달율']);
   const hardFails = checks.filter((c) => hardNames.has(c.name) && !c.pass);
   const softFails = checks.filter((c) => !hardNames.has(c.name) && !c.pass);
   if (hardFails.length === 0 && softFails.length <= 2) return 'GO_CANDIDATE';
@@ -367,6 +392,7 @@ function runsToCsv(runs) {
     'deletedMemoryName', 'predictedMemoryName', 'leastWantedName', 'predictionMatch', 'deletedWasLeastWanted',
     'q1Pain', 'q2Understanding', 'quadrant', 'immediateQuit', 'restartIntent', 'powerDrop', 'recoveryRatio',
     'earlyFunScore', 'earlyKillTempo', 'earlyCrowdPressure', 'earlyChoiceInterest', 'earlyLevelUps',
+    'cycleCompleted', 'deficitSurvivalChance', 'refillReached', 'echoPivotScore',
     'preForgetPower', 'postDeletePower', 'postReplacementPower', 'replacementName', 'deletionWeights', 'echoPower', 'uiClarity',
     'activeMemoryNamesBefore', 'activeMemoryNamesAfter'
   ];
@@ -406,6 +432,10 @@ function extractCsvValue(run, stage, h) {
     earlyCrowdPressure: stage.earlyLoop?.crowdPressure,
     earlyChoiceInterest: stage.earlyLoop?.choiceInterest,
     earlyLevelUps: stage.earlyLoop?.levelUpsBeforeBoss,
+    cycleCompleted: stage.cycleCompleted,
+    deficitSurvivalChance: stage.deficitSurvivalChance,
+    refillReached: stage.refillReached,
+    echoPivotScore: stage.echoPivotScore,
     preForgetPower: stage.preForgetPower,
     postDeletePower: stage.postDeletePower,
     postReplacementPower: stage.postReplacementPower,
