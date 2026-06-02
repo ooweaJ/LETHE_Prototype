@@ -100,6 +100,8 @@ function checkNpmScripts() {
     'autopilot:preflight',
     'autopilot:preflight:local',
     'autopilot:preflight:dry',
+    'overnight:loop',
+    'overnight:loop:dry',
   ].forEach((name) => {
     add(scripts[name] ? 'pass' : 'fail', `npm script ${name}`, scripts[name] || 'missing', `Add ${name} to package.json.`);
   });

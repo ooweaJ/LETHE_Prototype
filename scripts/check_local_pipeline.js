@@ -48,6 +48,8 @@ function checkPackageScripts() {
     'autopilot:preflight',
     'autopilot:preflight:local',
     'autopilot:preflight:dry',
+    'overnight:loop',
+    'overnight:loop:dry',
     'playtest:summary',
     'playtest:summary:dry',
     'playtest:package',
@@ -86,6 +88,10 @@ function checkRequiredDocs() {
     {
       file: 'docs/review_prompts/README.md',
       tokens: ['## 테스트 결과 기반 자동 파이프라인', 'planning:pipeline:prompt'],
+    },
+    {
+      file: 'docs/research/2026-06-02-roguelike-reference.md',
+      tokens: ['## Purpose', '## Patterns To Adapt', '## New Prototype Target', '## Guardrails'],
     },
   ];
 
@@ -143,8 +149,10 @@ function runDeepChecks() {
     'node --check scripts/summarize_playtests.js',
     'node --check scripts/prepare_playtest_build.js',
     'node --check scripts/autopilot_preflight.js',
+    'node --check scripts/run_overnight_loop.js',
     'npm run planning:pipeline:dry',
     'npm run autopilot:preflight:dry',
+    'npm run overnight:loop:dry',
     'npm run playtest:summary:dry',
     'npm run playtest:package:dry',
     'npm run report:discord:unit:dry',

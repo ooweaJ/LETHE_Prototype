@@ -4,10 +4,10 @@ Last updated: 2026-06-02
 
 ## Current Build
 
-- Project: LETHE HTML Alpha v0.8 core-redesign gate A started.
+- Project: LETHE HTML Alpha v0.9 release-feel loop preparation started.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
-- Current scope: HTML prototype validation. Broad human testing is paused. v0.7 balance evidence was invalidated by user live feedback, so v0.8 now starts with death/danger metrics and core combat-memory redesign.
+- Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
 
 ## Implemented
 
@@ -198,6 +198,40 @@ npm run ai:sweep
 
 ## Latest Planning Verdict
 
+- v0.9 direction: do not proceed directly to v0.8 Gate C as the next product step.
+- New target: release-feel HTML prototype before broad human testing.
+- Reference research added: `docs/research/2026-06-02-roguelike-reference.md`.
+- New planning prompt: `docs/review_prompts/2026-06-02-v09-release-feel-loop.md`.
+- New overnight loop runner:
+  - `npm run overnight:loop:dry`,
+  - `npm run overnight:loop`,
+  - logs to `docs/loop_runs/`,
+  - blocker prompts to `docs/review_prompts/YYYY-MM-DD-overnight-loop-blocker-N.md`.
+- Overnight loop verification:
+  - `node --check scripts/run_overnight_loop.js`: passed,
+  - `npm run overnight:loop:dry`: passed without writing a log file,
+  - `npm run doctor`: 36 pass, 0 warn, 0 fail,
+  - `npm run doctor:deep`: 50 pass, 0 warn, 0 fail,
+  - safe smoke run passed with `--provider none --test none`,
+  - smoke log: `docs/loop_runs/2026-06-02-overnight-163600.md`.
+- Actual v0.9 loop iteration:
+  - command used `--provider double --test quick`,
+  - preflight result: 17 pass, 2 warn, 0 fail with dirty tree allowed,
+  - quick AI test: `GO_CANDIDATE`, Alpha Fun Score `0.8883`, death/fail `40.0%`, echo pivot `0.656`,
+  - Claude response: `docs/review_responses/2026-06-02-v09-release-feel-loop-claude.md`,
+  - Codex CLI response: `docs/review_responses/2026-06-02-v09-release-feel-loop-codex.md`,
+  - synthesis: `docs/review_responses/2026-06-02-v09-release-feel-loop-double-check.md`,
+  - loop log: `docs/loop_runs/2026-06-02-overnight-163806.md`.
+- Selected next implementation scope:
+  - v0.9 Work Package 1 only,
+  - make existing 6-memory build identity readable within 90 seconds,
+  - add current build name, active synergy, most-dependent memory, and JSON/AI identity hooks.
+- v0.9 adaptation focus:
+  - visible build identity inside 90 seconds,
+  - pressure highs and lows,
+  - post-forgetting loss challenge,
+  - small tactical agency inside auto combat,
+  - no content expansion beyond current scope guards.
 - v0.8 Gate B status: `AI_GO_CANDIDATE`, but not a final human-fun verdict.
 - v0.8 Gate B implemented:
   - 9-minute prototype run,

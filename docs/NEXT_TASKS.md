@@ -1,6 +1,6 @@
 # Next Tasks
 
-현재 단계는 v0.5 core-fun human-test ready에서 `FIX_CORE_RUN_STRUCTURE` 판단 대기로 바뀌었다. 사용자의 실제 1인 플레이 확인 결과, 보스까지 가는 시간이 너무 멀고 망각 루프가 늦게 열려 지금 사람 테스트를 진행해도 의미가 약하다고 판단했다.
+현재 단계는 v0.8 Gate C 직행에서 v0.9 release-feel loop 준비로 바뀌었다. 사용자는 지금 브라우저 QA만 보강해 사람 테스트로 넘겨도 재미가 부족할 가능성이 높다고 판단했다. 다음 목표는 장르 레퍼런스를 조사해 LETHE에 맞게 번역하고, 목표-검증-피드백-다음 입력이 밤에도 계속 도는 자동 루프를 만드는 것이다.
 
 이 프로젝트의 현재 목표는 HTML 프로토타입으로 LETHE의 핵심 재미와 가능성을 검증하는 것이다. 충분히 재미가 확인되면 그 결과를 근거로 Unity 구현 단계로 넘어간다.
 
@@ -19,6 +19,13 @@
 - v0.8 direction: start with Gate A (`death bug + real danger metrics`), then continue into short-run/memory-budget/synergy/tag-echo redesign.
 - Actual automation proof for this turn: Discord work-unit report sent successfully, Claude v0.7 prompt sent successfully, Claude response saved successfully.
 - Project direction: HTML prototype validation first, Unity implementation later only if AI/human tests show enough promise.
+- v0.9 direction: broad human testing remains paused until the HTML prototype has stronger release-like build identity, pressure rhythm, post-loss challenge, and visible tactical agency.
+- Reference research: `docs/research/2026-06-02-roguelike-reference.md`.
+- New v0.9 prompt: `docs/review_prompts/2026-06-02-v09-release-feel-loop.md`.
+- Overnight loop command:
+  - `npm run overnight:loop:dry`,
+  - `npm run overnight:loop`,
+  - `node scripts/run_overnight_loop.js --iterations 3 --sleep-minutes 20`.
 
 ## v0.2 Done
 
@@ -130,9 +137,22 @@
 - [x] v0.8 Gate B: 8-10분 런, 90초 미니보스/첫 망각, 기억 예산 평준화, 최소 시너지, 태그 기반 잔향을 구현한다.
 - [x] v0.8 Gate B 자동 루프를 2회 이상 돌려 실패 게이트를 다음 수정 입력으로 사용했다.
 - [x] `npm run ai:test:quick`, `npm run ai:test`, `npm run ai:test:heavy`가 모두 `GO_CANDIDATE`로 통과했다.
-- [ ] v0.8 Gate C: 실제 브라우저 전투 QA를 안정적으로 실행하는 별도 스크립트를 추가한다.
-- [ ] v0.8 Gate C: 기억별 성능 차이와 시너지 체감이 화면에서 충분히 읽히는지 자동/수동 체크리스트를 보강한다.
-- [ ] v0.8 Gate C 통과 후에만 사용자 1인 테스트를 요청한다.
+- [x] v0.9 장르 레퍼런스 조사 문서를 작성한다.
+- [x] v0.9 release-feel loop 기획 프롬프트를 작성한다.
+- [x] 밤샘 루프 실행 스크립트를 추가한다.
+- [x] `doctor`와 `doctor:deep`이 밤샘 루프 명령을 확인하게 한다.
+- [x] `npm run overnight:loop:dry`와 `npm run doctor:deep`을 검증한다.
+- [x] 외부 AI 호출 없는 safe smoke loop를 실행해 `docs/loop_runs/2026-06-02-overnight-163600.md`를 남긴다.
+- [ ] v0.9 프롬프트를 Claude + Codex CLI 더블 체크에 보내 release-feel 작업 단위를 확정한다.
+- [x] v0.9 프롬프트를 Claude + Codex CLI 더블 체크에 보내 release-feel 작업 단위를 확정한다.
+- [x] v0.9 더블 체크 요약에 공통점/충돌점/선택 범위를 정리한다.
+- [ ] v0.9 Work Package 1: 기존 6개 기억 안에서 빌드 정체성과 시너지 체감을 강화한다.
+  - 기억별 주 역할, 태그, 짧은 전투 설명을 명확하게 만든다.
+  - 현재 빌드 이름, 활성 시너지, 의존 중인 기억을 UI에 표시한다.
+  - JSON/AI payload에 build identity 필드를 추가한다.
+- [ ] v0.9 Work Package 2: 압박 고저차와 post-loss challenge를 구현한다.
+- [ ] v0.9 Work Package 3: 자동전투 안의 작은 tactical agency를 구현한다.
+- [ ] v0.9 통과 후에만 실제 브라우저 전투 QA와 사용자 1인 테스트를 요청한다.
 
 ## Pre-Human-Test Polish Gate
 

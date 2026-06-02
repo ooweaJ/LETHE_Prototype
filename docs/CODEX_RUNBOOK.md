@@ -52,6 +52,48 @@ The full preflight checks:
 
 Preflight failures are blockers. Do not start a long automation loop if Claude authentication, fallback readiness, dirty git state, or report notification setup is already known to be broken. Fix the failed item, or generate the prompt/report and ask the user to run the blocked external command from a trusted local terminal.
 
+## Overnight Loop
+
+Use this when the user wants Codex to keep the planning and verification cycle moving while they are away. The loop is intentionally evidence-first: it runs preflight, AI/planning checks, reports, and optional implementation commands, then writes a Markdown log for the next handoff.
+
+Dry-run:
+
+```powershell
+npm run overnight:loop:dry
+```
+
+One planning/verification loop:
+
+```powershell
+npm run overnight:loop
+```
+
+Longer loop:
+
+```powershell
+node scripts/run_overnight_loop.js --iterations 3 --sleep-minutes 20
+```
+
+The default loop uses:
+
+```text
+docs/review_prompts/2026-06-02-v09-release-feel-loop.md
+```
+
+and writes logs to:
+
+```text
+docs/loop_runs/
+```
+
+Default behavior does not let an external model edit project files. If a trusted local terminal should run an implementation command during the loop, pass it explicitly:
+
+```powershell
+node scripts/run_overnight_loop.js --implement-cmd "your safe implementation command"
+```
+
+If any required step fails, the loop writes a blocker prompt under `docs/review_prompts/YYYY-MM-DD-overnight-loop-blocker-N.md` and stops. The next Codex session should read the loop log, blocker prompt, latest planning response, and `docs/CODEX_STATUS.md`.
+
 ## Discord Notices
 
 Daily reports use:

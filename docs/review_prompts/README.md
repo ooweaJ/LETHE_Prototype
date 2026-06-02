@@ -72,6 +72,30 @@ docs/review_responses/YYYY-MM-DD-pipeline-double-check.md
 
 Codex는 두 답변을 모두 읽고 공통점/충돌점을 정리한 뒤 `docs/NEXT_TASKS.md`로 작업화하고 구현을 계속한다.
 
+## 밤샘 루프 프롬프트
+
+사용자가 자는 동안 목표-검증-기획 피드백을 계속 돌리고 싶을 때는 release-feel loop 프롬프트를 사용한다.
+
+```bash
+npm run overnight:loop:dry
+npm run overnight:loop
+node scripts/run_overnight_loop.js --iterations 3 --sleep-minutes 20
+```
+
+현재 기본 프롬프트는 다음 파일이다.
+
+```text
+docs/review_prompts/2026-06-02-v09-release-feel-loop.md
+```
+
+루프 로그는 다음 폴더에 남는다.
+
+```text
+docs/loop_runs/
+```
+
+루프가 막히면 `docs/review_prompts/YYYY-MM-DD-overnight-loop-blocker-N.md`를 생성하고 멈춘다. 다음 Codex 세션은 이 blocker prompt와 loop log를 먼저 읽고 이어간다.
+
 ## 권장 답변 형식
 
 ```markdown

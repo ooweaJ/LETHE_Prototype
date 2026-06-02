@@ -31,6 +31,8 @@
     "autopilot:preflight": "node scripts/autopilot_preflight.js --external",
     "autopilot:preflight:local": "node scripts/autopilot_preflight.js",
     "autopilot:preflight:dry": "node scripts/autopilot_preflight.js --dry-run",
+    "overnight:loop": "node scripts/run_overnight_loop.js",
+    "overnight:loop:dry": "node scripts/run_overnight_loop.js --dry-run",
     "playtest:summary": "node scripts/summarize_playtests.js",
     "playtest:summary:dry": "node scripts/summarize_playtests.js --dry-run",
     "playtest:package": "node scripts/prepare_playtest_build.js",
