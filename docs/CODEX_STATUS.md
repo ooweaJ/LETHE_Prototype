@@ -30,6 +30,7 @@ Last updated: 2026-06-02
 - Browser QA fast mode via `?qa=fast` for result-screen and JSON payload verification.
 - Codex CLI planning-review fallback via `npm run review:codex` and `npm run review:codex:dry`.
 - OpenAI API planning-review fallback via `npm run review:openai` and `npm run review:openai:dry`.
+- Claude review local mock mode via `scripts/ask_claude_review.js --mock-response ...` for offline automation checks.
 - v0.3 combat-readability polish:
   - floating memory names and damage numbers,
   - hit sparks and projectile trails,
@@ -111,6 +112,9 @@ npm run ai:sweep
 - Claude verdict: `ITERATE_BEFORE_TEST`.
 - v0.2 scope: timing, deletion distribution, echo default, clearer feedback, JSON logs, human-test recall question.
 - A v0.3/version-up Claude prompt exists, but actual Claude execution still requires local Claude Code login.
+- This session confirmed the local `claude` command is installed, but direct Claude execution from Codex was not run because it would send repository prompt content to an external service.
+- `npm run review:claude:dry` still selects `docs/review_prompts/2026-06-02.md` and targets `docs/review_responses/2026-06-02-claude.md`.
+- Offline mock verification wrote `alpha_test/outputs/claude-review-mock.md` with `--mock-response`, confirming prompt selection, output directory creation, and response writing without external transmission.
 - Codex CLI can write planning responses to `docs/review_responses/YYYY-MM-DD-codex.md` through `npm run review:codex`.
 - OpenAI fallback automation exists, but actual GPT review requires `OPENAI_API_KEY` in the environment or local `.env`.
 - Human testing is intentionally deferred until combat spectacle and LETHE-system readability feel stronger.

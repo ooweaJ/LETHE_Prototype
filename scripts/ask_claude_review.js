@@ -31,6 +31,12 @@ function main() {
 
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 
+  if (options.mockResponse) {
+    writeResponse(options.mockResponse, outputPath);
+    console.log(`Wrote ${path.relative(process.cwd(), outputPath)} (mock)`);
+    return;
+  }
+
   const result = spawnSync('claude', [
     '-p',
     '--tools',
@@ -54,7 +60,7 @@ function main() {
   const response = result.stdout.trim();
   if (!response) fail('Claude returned an empty response.');
 
-  fs.writeFileSync(outputPath, response.endsWith('\n') ? response : `${response}\n`, 'utf8');
+  writeResponse(response, outputPath);
   console.log(`Wrote ${path.relative(process.cwd(), outputPath)}`);
 }
 
@@ -74,6 +80,7 @@ function parseArgs(args) {
     dryRun: false,
     prompt: '',
     output: '',
+    mockResponse: '',
   };
 
   for (let index = 0; index < args.length; index += 1) {
@@ -90,10 +97,19 @@ function parseArgs(args) {
       index += 1;
     } else if (arg.startsWith('--output=')) {
       parsed.output = arg.slice('--output='.length);
+    } else if (arg === '--mock-response') {
+      parsed.mockResponse = args[index + 1] || '';
+      index += 1;
+    } else if (arg.startsWith('--mock-response=')) {
+      parsed.mockResponse = arg.slice('--mock-response='.length);
     }
   }
 
   return parsed;
+}
+
+function writeResponse(response, targetPath) {
+  fs.writeFileSync(targetPath, response.endsWith('\n') ? response : `${response}\n`, 'utf8');
 }
 
 function latestMarkdown(dir) {

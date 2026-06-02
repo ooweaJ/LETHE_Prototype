@@ -37,6 +37,7 @@
 - [x] 기본 AI/UI 선명도 값을 `ui=0.78`로 올렸다.
 - [x] 브라우저 `?qa=fast`에서 v0.4 결과 화면과 JSON payload를 검증했다.
 - [x] `npm run ai:test:heavy` 5000런/3스테이지에서도 `GO_CANDIDATE`를 확인했다.
+- [x] Claude 자동 리뷰 스크립트의 dry-run과 로컬 mock 저장 검증을 통과했다.
 
 ## Latest AI Criteria
 
@@ -62,6 +63,7 @@
 - [x] 사람 테스트 전 잔향 시스템이 결과 이후 더 분명하게 보이게 만든다.
 - [ ] 5-8명 사람 테스트를 진행한다.
 - [ ] 플레이테스트 후 감정 반응을 기준으로 다음 방향을 결정한다.
+- [ ] 사람 테스트 결과가 모이면 Claude/GPT 검토를 다시 요청한다. 외부 전송 승인이 어려우면 Codex CLI fallback이나 Claude mock 경로로 자동화만 먼저 점검한다.
 
 ## Pre-Human-Test Polish Gate
 
