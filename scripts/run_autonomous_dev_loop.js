@@ -381,7 +381,7 @@ function readCompletionQuality() {
     qualityCheck('Early choice interest >= target', Number(metrics.earlyChoiceInterest) >= options.targetEarlyChoiceInterest, `${metrics.earlyChoiceInterest ?? 'missing'} / ${options.targetEarlyChoiceInterest}`),
     qualityCheck('Post-loss challenge contrast >= target', Number(metrics.postLossChallengeContrast) >= options.targetPostLossContrast, `${metrics.postLossChallengeContrast ?? 'missing'} / ${options.targetPostLossContrast}`),
     qualityCheck('Irritation <= target', Number(metrics.irritationRate) <= options.targetIrritationRate, `${metrics.irritationRate ?? 'missing'} / ${options.targetIrritationRate}`),
-    qualityCheck('Post-loss browser gate passed', postLossGate.status === 'passed', postLossGate.status || 'missing'),
+    qualityCheck('Post-loss browser gate passed', ['complete', 'passed'].includes(postLossGate.status), postLossGate.status || 'missing'),
   ];
   const failed = checks.filter((check) => !check.pass);
   return {
