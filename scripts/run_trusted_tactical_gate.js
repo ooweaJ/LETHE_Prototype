@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
-const BLOCKER_PROMPT = 'docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md';
+const BLOCKER_PROMPT = 'docs/review_prompts/2026-06-03-tactical-browser-transport-blocker.md';
 const RESULT_PATH = 'alpha_test/outputs/tactical-trusted-gate/latest.json';
 
 main();

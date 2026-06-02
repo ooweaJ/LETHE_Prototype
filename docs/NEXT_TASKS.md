@@ -377,11 +377,13 @@
   - 충돌: 실질적인 다음 범위 충돌은 없다. Claude는 `ITERATE_BEFORE_TEST`와 관찰 포인트를 강조했고, Codex CLI는 다음 작업을 `qa:tactical` 차단 해소와 기록으로 더 좁게 제한했다.
   - 선택: 이번 cycle은 docs-only update로 닫는다. 다음 executable scope는 trusted-local `npm run qa:tactical` 하나이며, 통과 전에는 사람 테스트, 새 기억, UI 확장, 밸런스 변경, 추가 gameplay scope를 시작하지 않는다.
 - [ ] trusted local에서 `npm run qa:tactical:trusted`를 재실행하고, 통과하면 WP3 Slice A를 browser-proven으로 기록한다.
-  - 같은 transport 실패가 sandbox 밖에서도 반복되면 `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md`와 같은 방식으로 environment-blocker decision을 먼저 남긴다.
+  - 이번 managed sandbox 재실행 결과: 표준 tactical QA와 30000 ms 재시도 모두 gameplay evaluation 전에 Chrome/CDP `Target.getTargets` timeout 및 `127.0.0.1 listen EPERM`으로 막혔다.
+  - 같은 transport 실패가 sandbox 밖에서도 반복되면 `docs/review_prompts/2026-06-03-tactical-browser-transport-blocker.md`로 WP3 전술 집중용 environment-blocker decision을 먼저 남긴다.
 - [x] tactical QA gate 절차를 한 명령으로 묶고 결과를 자동 루프가 읽을 수 있게 기록한다.
   - `scripts/run_trusted_tactical_gate.js`와 `npm run qa:tactical:trusted`를 추가했다.
   - wrapper는 `npm run qa:tactical` 절차를 먼저 실행하고, Chrome/CDP transport 실패일 때만 `--timeout-ms 30000`으로 한 번 재시도한다.
   - 재시도 후에도 transport blocker면 `alpha_test/outputs/tactical-trusted-gate/latest.json`에 `status: blocked`, `transportFailure: true`, `nextCommand`, `blockerPrompt`를 남긴다.
+  - blocker prompt는 WP3 전술 집중용 `docs/review_prompts/2026-06-03-tactical-browser-transport-blocker.md`로 분리했다.
   - 검증: `node --check scripts/run_trusted_tactical_gate.js`, `node --check scripts/check_local_pipeline.js` 통과.
   - 검증: `npm run qa:tactical:trusted`는 이 managed sandbox에서 `status: blocked`, `transportFailure: true`를 기록하고 실패했다.
   - 다음 실행은 sandbox 밖 trusted local에서 `npm run qa:tactical:trusted`를 실행한다.
