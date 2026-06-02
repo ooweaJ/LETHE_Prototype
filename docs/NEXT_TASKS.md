@@ -2,11 +2,14 @@
 
 현재 단계는 v0.5 core-fun human-test ready 상태다. 사용자의 실제 테스트 피드백에 따라 “망각 감정”보다 먼저 초반 재미, 적 몰림, 런 중 성장 선택을 보완했고, Claude가 요구한 레벨업 UI/`runGrowth` 브라우저 gate도 Chrome headless로 통과했다.
 
+이 프로젝트의 현재 목표는 HTML 프로토타입으로 LETHE의 핵심 재미와 가능성을 검증하는 것이다. 충분히 재미가 확인되면 그 결과를 근거로 Unity 구현 단계로 넘어간다.
+
 ## Current Verdict
 
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the level-up flow and `runGrowth` payload.
 - Codex implementation result: `GO_CANDIDATE` from `npm run ai:test` and `npm run ai:test:heavy`.
+- Project direction: HTML prototype validation first, Unity implementation later only if AI/human tests show enough promise.
 
 ## v0.2 Done
 
@@ -27,7 +30,7 @@
 - [x] 타격 숫자, 스파크, 투사체 trail, 보스 등장/페이즈 impact를 추가했다.
 - [x] 기억 슬롯에 `레테의 시선` 태그와 의존도 퍼센트를 표시한다.
 - [x] 브라우저 `?qa=fast`에서 v0.3 질문/결과/JSON payload 회귀 QA를 통과했다.
-- [x] OpenAI 기획 검토 fallback 명령을 추가했다.
+- [x] Codex CLI 기획 판단 fallback 명령을 추가했다.
 
 ## v0.4 Done
 
@@ -84,7 +87,7 @@
 - [x] 레벨업 일시정지/재개 흐름이 QA 모드에서 정상 완료되는지 확인했다.
 - [ ] 5-8명 사람 테스트를 진행한다.
 - [ ] 플레이테스트 후 감정 반응을 기준으로 다음 방향을 결정한다.
-- [ ] 사람 테스트 결과가 모이면 Claude/GPT 검토를 다시 요청한다. 외부 전송 승인이 어려우면 Codex CLI fallback이나 Claude mock 경로로 자동화만 먼저 점검한다.
+- [ ] 사람 테스트 결과가 모이면 Claude/GPT에 결과를 보고하고 기획 수정 방향을 받는다. 외부 전송 승인이 어려우면 Codex CLI fallback이나 Claude mock 경로로 자동화만 먼저 점검한다.
 
 ## Pre-Human-Test Polish Gate
 
@@ -107,6 +110,18 @@
 - echo 보상을 보고 “완전히 망했다”가 아니라 “잃었지만 이어진다”고 느끼는가?
 - 망각 후 전투력이 약해졌다는 체감이 있는가?
 - replacement 이후 회복이 무효화처럼 느껴지는가, 상처를 안고 적응하는 것처럼 느껴지는가?
+- 플레이어가 “HTML 프로토타입인데도 더 해보고 싶다”는 반응을 보이는가?
+- 이 아이디어를 Unity로 옮기면 더 재미있어질 가능성이 있다고 느끼는가?
+
+## Unity Transition Gate
+
+- 5-8명 사람 테스트에서 초반 1-3분 재미 반응이 대체로 긍정적이어야 한다.
+- 레벨업 선택이 단순 버튼이 아니라 런 중 성장 기대감으로 읽혀야 한다.
+- 첫 망각까지 도달한 플레이어가 “짜증”보다 “아까움/후회/납득”에 가까운 반응을 보여야 한다.
+- 망각 후 잔향과 replacement가 완전한 무효화가 아니라 상실 후 적응으로 읽혀야 한다.
+- 최소 일부 플레이어가 다시 플레이하거나 다른 빌드를 시도하고 싶다고 말해야 한다.
+- 위 조건이 모이면 Claude/GPT에 테스트 결과를 넘겨 Unity 전환 여부와 다음 설계 방향을 판단한다.
+- 조건이 부족하면 Unity 구현으로 넘어가지 않고 HTML v0.6에서 초반 재미, 성장 선택, 망각 감정 중 가장 약한 축을 다시 보완한다.
 
 ## Do Not Build Yet
 

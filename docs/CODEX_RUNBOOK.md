@@ -1,6 +1,8 @@
 # Codex Runbook
 
-This project now uses a normalized Codex workflow: implement, verify, record, notify, commit, and push when safe.
+This project now uses a normalized Codex workflow: implement the HTML prototype, verify, record, notify, commit, and push when safe.
+
+The project goal is to validate LETHE's core fun and player-facing possibility in HTML first. If the prototype shows enough promise through AI and human tests, the next major phase is Unity implementation.
 
 ## Normal Work Loop
 
@@ -88,17 +90,17 @@ If work may be interrupted, record a checkpoint before stopping:
 
 Use `docs/checkpoints/YYYY-MM-DD.md` when the interruption is significant.
 
-## GPT And Claude Review
+## GPT And Claude Planning
 
-GPT is the default reviewer for system direction, implementation priority, and test criteria.
+GPT/Claude are not just generic reviewers. They are planning partners used after AI or human test results are available.
 
-Claude is useful when the question is emotional feel, wording, narrative tone, or whether forgetting feels regrettable instead of irritating.
+Claude is especially useful for interpreting playtest reactions, revising the design direction, deciding what Codex should implement next, and judging whether the HTML prototype is approaching a Unity-worthy shape.
 
-Do not send every prompt to both by default. Send to both only when the decision affects the prototype direction or human-test readiness.
+Do not send every prompt to both by default. Send to them when the decision affects prototype direction, human-test readiness, or the eventual Unity transition.
 
 ## Claude Code Automation
 
-Claude Code can be called from the terminal for non-interactive planning review.
+Claude Code can be called from the terminal for non-interactive planning iteration after test results.
 
 Dry-run:
 

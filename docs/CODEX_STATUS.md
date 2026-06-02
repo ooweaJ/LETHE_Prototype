@@ -7,7 +7,7 @@ Last updated: 2026-06-02
 - Project: LETHE HTML Alpha v0.5 core-fun human-test ready.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
-- Current scope: pre-human-test polish for the forgetting loop. No broad content expansion yet.
+- Current scope: HTML prototype validation. The project is testing whether LETHE's early combat/growth loop and forgetting loop are fun enough to justify moving into Unity implementation.
 
 ## Implemented
 
@@ -49,7 +49,7 @@ Last updated: 2026-06-02
 - Markdown daily reports, generated HTML reports, and Discord report delivery.
 - Work-unit Discord report delivery via `npm run report:discord:unit` and `--section`.
 - Short Discord status notices for Codex work.
-- Claude Code planning-review automation.
+- Claude Code planning-iteration automation for interpreting AI/human test results and deciding next design direction.
 
 ## Latest AI Test Result
 

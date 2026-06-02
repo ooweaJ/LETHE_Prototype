@@ -1,6 +1,8 @@
 # LETHE Project Agent Rules
 
-이 저장소에서 Codex는 구현, 검증, 기록 갱신을 담당한다.
+이 저장소에서 Codex는 HTML 프로토타입 구현, 검증, 기록 갱신을 담당한다.
+
+현재 목표는 LETHE의 핵심 재미와 가능성을 HTML 프로토타입으로 빠르게 검증한 뒤, 충분히 재미가 확인되면 Unity 구현 단계로 넘어갈 근거를 만드는 것이다.
 
 ## Core Workflow
 
@@ -9,12 +11,12 @@
 3. 결과를 `docs/CODEX_STATUS.md`에 반영한다.
 4. 의미 있는 작업 단위가 끝나면 `docs/devlog/YYYY-MM-DD.md`와 `docs/reports/YYYY-MM-DD.md`를 갱신한다.
 5. 보고서 HTML은 Markdown 원본을 기준으로 생성한다.
-6. GPT 기획 검토가 필요한 질문은 `docs/GPT_REVIEW_PROMPT.md` 또는 `docs/NEXT_TASKS.md`에 남긴다.
+6. 테스트 결과를 바탕으로 기획 수정 또는 방향 결정이 필요하면 `docs/review_prompts/`에 Claude/GPT 전달 프롬프트를 남긴다.
 
 ## Role Split
 
-- Codex: code, tests, git, report generation, status updates.
-- GPT: planning review, design direction, prioritization, playtest interpretation.
+- Codex: HTML prototype code, tests, git, report generation, status updates.
+- Claude/GPT: test-result interpretation, planning revision, design direction, prioritization, Unity-transition judgment.
 
 ## Report Requirements
 
@@ -53,12 +55,12 @@ Until GPT or the user explicitly changes scope, do not add:
 - More than the current 6 memories.
 - Multi-region run structure.
 
-The current prototype goal is to verify whether forgetting feels regrettable rather than irritating.
+The current prototype goal is to verify whether the core loop is fun enough to justify a Unity implementation. The forgetting loop should feel regrettable rather than irritating, but only after the early combat/growth loop is fun enough for players to reach it.
 
 ## Claude Code Automation
 
-- Claude Code may be used for planning review through `scripts/ask_claude_review.js`.
+- Claude Code may be used after AI or human tests to interpret results, revise planning, and decide what Codex should implement next.
 - Claude answers should be saved under `docs/review_responses/YYYY-MM-DD-claude.md`.
-- Claude should not edit project files during automated review; it is called with tools disabled.
+- Claude should not edit project files during automated planning; it is called with tools disabled.
 - Codex reads the saved Claude response, updates `docs/NEXT_TASKS.md`, then implements the selected work.
 - Discord is only a status/attention channel. Markdown files are the source of truth.
