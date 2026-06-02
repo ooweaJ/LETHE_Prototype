@@ -31,6 +31,7 @@
     "doctor:deep": "node scripts/check_local_pipeline.js --deep",
     "qa:identity": "node scripts/run_browser_identity_qa.js",
     "qa:pressure": "node scripts/run_browser_pressure_qa.js",
+    "qa:tactical": "node scripts/run_browser_pressure_qa.js --mode tactical",
     "qa:postloss": "node scripts/run_browser_pressure_qa.js --mode postloss",
     "qa:postloss:trusted": "node scripts/run_trusted_postloss_gate.js",
     "autopilot:preflight": "node scripts/autopilot_preflight.js --external",

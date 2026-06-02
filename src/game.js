@@ -242,6 +242,7 @@ const experiment = {
   qaIdentityMode: qaMode.includes("identity"),
   qaPressureMode: qaMode.includes("pressure"),
   qaPostLossMode: qaMode.includes("postloss"),
+  qaTacticalMode: qaMode.includes("tactical"),
 };
 
 if (experiment.qaFastMode) {
@@ -402,6 +403,16 @@ function createRunState() {
       pressurePhaseId: null,
       pressureSegments: [],
       postLossChallenges: [],
+    },
+    tacticalFocus: {
+      cooldownSec: 9,
+      cooldownLeft: 0,
+      durationLeft: 0,
+      memoryId: null,
+      useCount: 0,
+      successfulCount: 0,
+      lastUsedAt: null,
+      history: [],
     },
     questions: {
       protect: null,
@@ -688,6 +699,7 @@ function update(dt) {
   state.player.attackCd = Math.max(0, state.player.attackCd - dt);
 
   movePlayer(dt);
+  updateTacticalFocus(dt);
   updateRefillGate();
   updateSpawning(dt);
   updateBoss(dt);
@@ -700,6 +712,57 @@ function update(dt) {
   if (checkPlayerDeath()) return;
   updateClarity();
   updateUi();
+}
+
+function updateTacticalFocus(dt) {
+  const focus = state.tacticalFocus;
+  focus.cooldownLeft = Math.max(0, focus.cooldownLeft - dt);
+  focus.durationLeft = Math.max(0, focus.durationLeft - dt);
+  if (focus.durationLeft <= 0) focus.memoryId = null;
+}
+
+function requestTacticalFocus(memoryId) {
+  if (!state || state.mode !== "combat") return false;
+  const focus = state.tacticalFocus;
+  if (focus.cooldownLeft > 0) return false;
+  const memory = activeMemories().find((candidate) => candidate.id === memoryId);
+  if (!memory) return false;
+
+  const beforeCooldown = memory.cooldownLeft || 0;
+  focus.cooldownLeft = focus.cooldownSec;
+  focus.durationLeft = 3;
+  focus.memoryId = memory.id;
+  focus.useCount += 1;
+  focus.lastUsedAt = Number(state.elapsed.toFixed(2));
+
+  if (memory.cooldown > 0) {
+    memory.cooldownLeft = Math.min(beforeCooldown, Math.max(0.12, memory.cooldown * 0.18));
+  }
+  const afterCooldown = memory.cooldownLeft || 0;
+  const successful = memory.cooldown === 0 || beforeCooldown - afterCooldown >= 0.05;
+  if (successful) focus.successfulCount += 1;
+
+  const entry = {
+    t: Number(state.elapsed.toFixed(2)),
+    memoryId: memory.id,
+    memoryName: memory.name,
+    beforeCooldown: Number(beforeCooldown.toFixed(2)),
+    afterCooldown: Number(afterCooldown.toFixed(2)),
+    successful,
+  };
+  focus.history.push(entry);
+  addLog(`전술 집중: ${memory.name}`);
+  addFloater("전술 집중", state.player.x, state.player.y - 42, "#e8c15d");
+  addBurst(state.player.x, state.player.y, "#e8c15d", 10, 2.4);
+  logEvent("tactical_focus", entry);
+  renderMemorySlots();
+  renderEchoes();
+  writeTacticalQaResult({ status: "used" });
+  return true;
+}
+
+function activeTacticalFocus(memoryId) {
+  return state?.tacticalFocus?.memoryId === memoryId && state.tacticalFocus.durationLeft > 0;
 }
 
 function movePlayer(dt) {
@@ -1143,11 +1206,12 @@ function updateMemories(dt) {
     if (memory.id === "hungry_blades") {
       memory.metricsTime = (memory.metricsTime || 0) + dt;
       memory.visualCd = Math.max(0, (memory.visualCd || 0) - dt);
-      const radius = 74 * (1 + state.echo.range + state.runGrowth.range);
+      const focusMul = activeTacticalFocus(memory.id) ? 1.16 : 1;
+      const radius = 74 * focusMul * (1 + state.echo.range + state.runGrowth.range);
       let hit = false;
       for (const target of hostiles()) {
         if (distance(p, target) < radius + target.r) {
-          damageHostile(target, 7.4 * (1 + state.echo.dotDamage + state.runGrowth.damage), memory.id);
+          damageHostile(target, 7.4 * focusMul * (1 + state.echo.dotDamage + state.runGrowth.damage), memory.id);
           hit = true;
         }
       }
@@ -1195,9 +1259,10 @@ function basicAttack() {
 
   const blood = state.memories.find((memory) => memory.id === "blood_reflection" && !memory.forgotten);
   if (blood) {
-    const chance = (weapon.id === "twin_blades" ? 0.4 : 0.28) + state.echo.extraHitChance;
+    const focusMul = activeTacticalFocus(blood.id) ? 1.2 : 1;
+    const chance = (weapon.id === "twin_blades" ? 0.4 : 0.28) + state.echo.extraHitChance + (activeTacticalFocus(blood.id) ? 0.18 : 0);
     if (Math.random() < chance) {
-      const extra = 19 * (1 + state.echo.onHitDamage + state.runGrowth.damage);
+      const extra = 19 * focusMul * (1 + state.echo.onHitDamage + state.runGrowth.damage);
       damageHostile(target, extra, blood.id, { bossTrace: true });
       state.player.hp = Math.min(state.player.maxHp, state.player.hp + 1.8);
       recordPresence(blood.id, 0.8);
@@ -2061,6 +2126,7 @@ function collectLogPayload() {
   state.logs.danger = dangerLog();
   state.logs.buildIdentity = buildIdentityFor(activeMemoryIds(), state);
   state.logs.buildIdentitySeenBy90Sec = Boolean(state.logs.buildIdentitySeenBy90Sec);
+  state.logs.tacticalFocus = tacticalFocusLog();
   return state.logs;
 }
 
@@ -2118,8 +2184,24 @@ function runTimelineLog() {
     refillChoices: timeline.refillChoices,
     pressureSegments: timeline.pressureSegments,
     postLossChallenges: timeline.postLossChallenges,
+    tacticalFocus: tacticalFocusLog(),
     activeMemoryIds: activeMemoryIds(),
     activeMemoryNames: activeMemories().map((memory) => memory.name),
+  };
+}
+
+function tacticalFocusLog() {
+  const focus = state.tacticalFocus;
+  return {
+    cooldownSec: focus.cooldownSec,
+    cooldownLeft: Number(focus.cooldownLeft.toFixed(2)),
+    durationLeft: Number(focus.durationLeft.toFixed(2)),
+    memoryId: focus.memoryId,
+    memoryName: memories[focus.memoryId]?.name || null,
+    useCount: focus.useCount,
+    successfulCount: focus.successfulCount,
+    lastUsedAt: focus.lastUsedAt,
+    history: focus.history,
   };
 }
 
@@ -2270,24 +2352,49 @@ function renderMemorySlots() {
     return;
   }
   const maxClarity = Math.max(0, ...source.map((memory) => memory.clarity || 0));
-  for (const memory of source) {
+  source.forEach((memory, index) => {
     const maxCd = memory.cooldown || 1;
     const cdPercent = memory.id === "blood_reflection" ? 100 : (1 - (memory.cooldownLeft || 0) / maxCd) * 100;
     const clarityPercent = (memory.clarity || 0) * 100;
     const watched = state && clarityPercent > 35 && (memory.clarity || 0) >= maxClarity - 0.01;
+    const focused = state && activeTacticalFocus(memory.id);
+    const tacticalStatus = state ? tacticalFocusStatus(memory) : "";
     const slot = document.createElement("div");
-    slot.className = `slot ${watched ? "watched" : ""} ${clarityPercent > 68 ? "cracked" : ""} ${clarityPercent > 88 ? "gazed" : ""}`;
+    slot.className = `slot ${watched ? "watched" : ""} ${focused ? "focused" : ""} ${clarityPercent > 68 ? "cracked" : ""} ${clarityPercent > 88 ? "gazed" : ""}`;
+    if (state) {
+      slot.setAttribute("role", "button");
+      slot.tabIndex = 0;
+    }
     slot.innerHTML = `
       <div class="slot-header"><strong>${memory.name}</strong><small>${memory.role}</small></div>
       <div class="tag-row">${tagBadges(memory.tags)}</div>
       ${watched ? `<div class="risk-tag">레테의 시선</div>` : ""}
       <div class="cooldown-track"><div class="cooldown-fill" style="width:${clamp(cdPercent, 0, 100)}%"></div></div>
       <small>${memory.forgotten ? "망각됨" : memory.desc}</small>
+      ${state ? `<div class="tactical-row"><span>전술 집중</span><span>${tacticalStatus}</span></div>` : ""}
       <div class="clarity-row"><span>의존도</span><span>${Math.round(clarityPercent)}%</span></div>
       <div class="clarity-track"><div class="clarity-fill" style="width:${clarityPercent}%"></div></div>
     `;
+    if (state) {
+      slot.addEventListener("click", () => requestTacticalFocus(memory.id));
+      slot.addEventListener("keydown", (event) => {
+        if (event.code === "Enter" || event.code === "Space") {
+          event.preventDefault();
+          requestTacticalFocus(memory.id);
+        }
+      });
+      slot.dataset.tacticalSlot = String(index + 1);
+    }
     ui.memorySlots.appendChild(slot);
-  }
+  });
+}
+
+function tacticalFocusStatus(memory) {
+  const focus = state.tacticalFocus;
+  if (activeTacticalFocus(memory.id)) return `${focus.durationLeft.toFixed(1)}초`;
+  if (focus.cooldownLeft > 0) return `${focus.cooldownLeft.toFixed(1)}초`;
+  if (memory.cooldown > 0 && (memory.cooldownLeft || 0) <= 0.15) return "즉시";
+  return "준비";
 }
 
 function renderEchoes() {
@@ -2323,8 +2430,16 @@ function renderEchoes() {
   if (growth.damageReduction) growthLines.push(`런 피해감소 +${percent(growth.damageReduction)}`);
   if (growth.xpGain) growthLines.push(`런 경험치 +${percent(growth.xpGain)}`);
   const allLines = [...growthLines, ...lines];
+  if (state.tacticalFocus.useCount > 0) {
+    const focus = state.tacticalFocus;
+    const name = memories[focus.memoryId]?.name || focus.history[focus.history.length - 1]?.memoryName || "기억";
+    allLines.unshift(`전술 집중: ${name} ${focus.durationLeft > 0 ? `${focus.durationLeft.toFixed(1)}초` : "재정비"}`);
+  } else if (state.tacticalFocus.cooldownLeft <= 0) {
+    allLines.unshift("전술 집중 준비");
+  }
   ui.echoList.innerHTML = `${buildIdentityHtml(identity)}${allLines.map((line) => `<div class="echo-line">${line}</div>`).join("")}`;
   writeIdentityQaResult({ status: "visible" });
+  writeTacticalQaResult({ status: state.tacticalFocus.useCount > 0 ? "used" : "visible" });
 }
 
 function draw() {
@@ -2653,6 +2768,12 @@ function insideBounds(point, pad) {
 
 window.addEventListener("keydown", (event) => {
   keys.add(event.code);
+  if (event.target?.matches?.("input, textarea, button")) return;
+  const slotIndex = ["Digit1", "Digit2", "Digit3"].indexOf(event.code);
+  if (slotIndex >= 0 && state?.mode === "combat") {
+    const memory = activeMemories()[slotIndex];
+    if (memory && requestTacticalFocus(memory.id)) event.preventDefault();
+  }
 });
 
 window.addEventListener("keyup", (event) => {
@@ -3107,7 +3228,74 @@ function startPostLossQa() {
   }, 120);
 }
 
-if (experiment.qaFastMode || experiment.qaLevelupMode || experiment.qaV06Mode || experiment.qaDeathMode || experiment.qaIdentityMode || experiment.qaPressureMode || experiment.qaPostLossMode) {
+function writeTacticalQaResult(extra = {}) {
+  if (!experiment.qaTacticalMode) return;
+  const payload = state ? collectLogPayload() : null;
+  const focus = payload?.tacticalFocus || null;
+  const visibleText = `${ui.echoList?.textContent || ""} ${ui.memorySlots?.textContent || ""}`;
+  document.documentElement.dataset.letheTacticalQa = JSON.stringify({
+    version: experiment.version,
+    hasState: Boolean(state),
+    mode: state?.mode || null,
+    elapsed: state ? Number(state.elapsed.toFixed(2)) : 0,
+    tacticalFocus: focus,
+    useCount: focus?.useCount || 0,
+    successfulCount: focus?.successfulCount || 0,
+    historyCount: focus?.history?.length || 0,
+    visibleTextHasTacticalFocus: visibleText.includes("전술 집중"),
+    activeMemoryCount: state ? activeMemoryCount() : 0,
+    ...extra,
+  });
+}
+
+function startTacticalQa() {
+  selectedWeapon = weapons.twin_blades.id;
+  selectedMemories = ["hungry_blades", "shatter_ripple", "stopped_second"];
+  renderSetup();
+  writeTacticalQaResult({ status: "setup_visible" });
+  setTimeout(() => {
+    if (!state) startRun();
+  }, 50);
+
+  let phase = 0;
+  const startedAt = performance.now();
+  const timer = setInterval(() => {
+    if (!state) {
+      writeTacticalQaResult({ status: "waiting_for_run" });
+      return;
+    }
+
+    if (phase === 0 && state.mode === "combat") {
+      updateSpawning(0);
+      const memory = activeMemories()[0];
+      if (memory) requestTacticalFocus(memory.id);
+      phase = 1;
+      writeTacticalQaResult({ status: "running", phase });
+      return;
+    }
+
+    if (phase === 1) {
+      updateMemories(0.2);
+      renderMemorySlots();
+      renderEchoes();
+      const qa = JSON.parse(document.documentElement.dataset.letheTacticalQa || "{}");
+      const complete = qa.useCount >= 1
+        && qa.successfulCount >= 1
+        && qa.historyCount >= 1
+        && qa.visibleTextHasTacticalFocus
+        && qa.tacticalFocus?.history?.[0]?.memoryId;
+      writeTacticalQaResult({ status: complete ? "complete" : "failed", phase });
+      clearInterval(timer);
+      return;
+    }
+
+    const timedOut = performance.now() - startedAt > 12000;
+    writeTacticalQaResult({ status: timedOut ? "timeout" : "running", phase });
+    if (timedOut) clearInterval(timer);
+  }, 120);
+}
+
+if (experiment.qaFastMode || experiment.qaLevelupMode || experiment.qaV06Mode || experiment.qaDeathMode || experiment.qaIdentityMode || experiment.qaPressureMode || experiment.qaPostLossMode || experiment.qaTacticalMode) {
   window.__letheQaLog = () => (state ? JSON.parse(JSON.stringify(collectLogPayload())) : null);
 }
 
@@ -3118,4 +3306,5 @@ if (experiment.qaV06Mode) startV06CycleQa();
 if (experiment.qaDeathMode) startDeathQa();
 if (experiment.qaPressureMode) startPressureQa();
 if (experiment.qaPostLossMode) startPostLossQa();
+if (experiment.qaTacticalMode) startTacticalQa();
 requestAnimationFrame(frame);

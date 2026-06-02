@@ -48,6 +48,7 @@ function checkPackageScripts() {
     'planning:pipeline:auto',
     'qa:identity',
     'qa:pressure',
+    'qa:tactical',
     'qa:postloss',
     'qa:postloss:trusted',
     'autopilot:preflight',

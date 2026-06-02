@@ -209,7 +209,11 @@ async function evaluateQa(cdp, sessionId, url, chromePath) {
 }
 
 function qaFailures(qa, value) {
-  const checks = options.mode === 'postloss' ? postLossChecks(qa) : pressureChecks(qa);
+  const checks = options.mode === 'postloss'
+    ? postLossChecks(qa)
+    : options.mode === 'tactical'
+      ? tacticalChecks(qa)
+      : pressureChecks(qa);
   const failures = checks.filter(([, passed]) => !passed).map(([name]) => name);
   if (value.timedOut) failures.push(`timed out waiting for ${options.mode} QA dataset`);
   return failures;
@@ -242,16 +246,32 @@ function postLossChecks(qa) {
   ];
 }
 
+function tacticalChecks(qa) {
+  return [
+    ['status complete', qa.status === 'complete'],
+    ['version v0.9', qa.version === 'v0.9'],
+    ['browser state exists', qa.hasState],
+    ['3 active memories remain', qa.activeMemoryCount === 3],
+    ['tactical focus payload exists', Boolean(qa.tacticalFocus)],
+    ['tactical focus used', qa.useCount >= 1],
+    ['tactical focus succeeded', qa.successfulCount >= 1],
+    ['tactical focus history exists', qa.historyCount >= 1],
+    ['tactical focus visible in UI', qa.visibleTextHasTacticalFocus],
+  ];
+}
+
 function qaUrl() {
   const file = pathToFileURL(path.resolve('index.html'));
-  const qaName = options.mode === 'postloss' ? 'postloss' : 'pressure';
-  const session = options.mode === 'postloss' ? 'POSTLOSS' : 'PRESSURE';
+  const qaName = options.mode === 'postloss' ? 'postloss' : options.mode === 'tactical' ? 'tactical' : 'pressure';
+  const session = options.mode === 'postloss' ? 'POSTLOSS' : options.mode === 'tactical' ? 'TACTICAL' : 'PRESSURE';
   file.search = `?qa=fast,${qaName}&tester=QA&session=${session}`;
   return file.href;
 }
 
 function datasetName() {
-  return options.mode === 'postloss' ? 'lethePostLossQa' : 'lethePressureQa';
+  if (options.mode === 'postloss') return 'lethePostLossQa';
+  if (options.mode === 'tactical') return 'letheTacticalQa';
+  return 'lethePressureQa';
 }
 
 async function waitForPipePageTarget(cdp, timeoutMs) {
@@ -490,7 +510,11 @@ function isPipeTargetTimeout(error) {
 }
 
 function transportBlockerError(pipeError, portError) {
-  const command = options.mode === 'postloss' ? 'npm run qa:postloss' : 'npm run qa:pressure';
+  const command = options.mode === 'postloss'
+    ? 'npm run qa:postloss'
+    : options.mode === 'tactical'
+      ? 'npm run qa:tactical'
+      : 'npm run qa:pressure';
   const error = new Error([
     `Browser ${options.mode} QA could not reach Chrome through either CDP pipe or remote-debugging-port.`,
     `Pipe failure: ${pipeError.message}`,
@@ -505,8 +529,8 @@ function transportBlockerError(pipeError, portError) {
 function parseArgs(args) {
   const timeoutArg = valueAfter(args, '--timeout-ms');
   const modeArg = valueAfter(args, '--mode') || 'pressure';
-  if (!['pressure', 'postloss'].includes(modeArg)) {
-    throw new Error(`Unknown QA mode: ${modeArg}. Use pressure or postloss.`);
+  if (!['pressure', 'postloss', 'tactical'].includes(modeArg)) {
+    throw new Error(`Unknown QA mode: ${modeArg}. Use pressure, postloss, or tactical.`);
   }
   return {
     timeoutMs: timeoutArg ? Number(timeoutArg) : 8000,

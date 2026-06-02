@@ -352,10 +352,18 @@
   - 통과 기준: `status: passed` 또는 동등한 non-blocked browser gameplay proof.
   - 결과: `status: passed`, browser QA `status: complete`, failures `[]`.
   - 확인: `deficit_breath`, `deficit_trial`, post-loss challenge completion, refill after 2-memory deficit.
-- [ ] v0.9 Work Package 3 Slice A: 자동전투 안의 작은 tactical agency를 구현한다.
+- [x] v0.9 Work Package 3 Slice A: 자동전투 안의 작은 tactical agency를 구현한다.
   - 기존 활성 기억 중 1개를 짧게 집중시키는 선택만 허용한다.
   - 새 기억, 새 슬롯, 상점, 메타 성장, 새 지역, 새 적, 새 무기 추가는 금지한다.
   - 목표 지표는 `earlyChoiceInterest > 0.72`, `postLossChallengeContrast >= 0.30`, 낮은 irritation 유지다.
+  - 구현: 전투 중 기존 기억 슬롯 클릭 또는 `Digit1`-`Digit3`으로 현재 활성 기억 1개에 `전술 집중`을 건다.
+  - 효과: 쿨다운형 기억은 다음 발동이 당겨지고, 상시형 `굶주린 칼무리`/`피의 반사`는 기존 효과만 짧게 보강된다.
+  - 기록: JSON payload와 `runTimeline`에 `tacticalFocus` 사용 횟수, 성공 횟수, 선택 기억, 쿨다운 전후 값이 남는다.
+  - QA: `?qa=fast,tactical`, `npm run qa:tactical`을 추가했다.
+  - 검증: `node --check src/game.js`, `node --check scripts/run_browser_pressure_qa.js`, `node --check scripts/check_local_pipeline.js`, `npm run doctor`, `npm run ai:test:quick` 통과.
+  - 브라우저 자동화 한계: `npm run qa:tactical`은 gameplay evaluation 전 Chrome/CDP `Target.getTargets` timeout과 `127.0.0.1 listen EPERM`으로 실패했다. 현재 managed sandbox transport blocker이며 trusted-local 재실행이 필요하다.
+- [ ] trusted local에서 `npm run qa:tactical`을 재실행하고, 통과하면 WP3 Slice A를 browser-proven으로 기록한다.
+  - 같은 transport 실패가 sandbox 밖에서도 반복되면 `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md`와 같은 방식으로 environment-blocker decision을 먼저 남긴다.
 - [ ] v0.9 통과 후에만 실제 브라우저 전투 QA와 사용자 1인 테스트를 요청한다.
 
 ## Pre-Human-Test Polish Gate

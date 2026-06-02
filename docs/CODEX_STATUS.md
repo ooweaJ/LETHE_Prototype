@@ -4,11 +4,11 @@ Last updated: 2026-06-03
 
 ## Current Build
 
-- Project: LETHE HTML Alpha v0.9 WP2 Slice B minimal post-loss challenge browser-proven.
+- Project: LETHE HTML Alpha v0.9 WP3 Slice A minimal tactical agency implemented; browser automation proof is still blocked by the managed-sandbox Chrome transport.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
-- Latest task-update status: `npm run qa:postloss:trusted` passed on this local run after a QA cleanup fix, so WP2 Slice B can now be treated as browser-proven. Historical reports also follow the larger feature/decision unit policy: `docs/reports/2026-06-02.md` was compressed from 57 tiny loop-step units into 13 feature/gate/decision units, and its generated unit files were regenerated. The autonomous dev loop reports once after implementation, verification, Claude/Codex feedback, and task update are folded together. `npm run report:check` rejects procedural report titles from 2026-06-03 onward. The next gameplay scope is v0.9 WP3 Slice A: a minimal tactical agency hook using only the current memories/combat loop.
+- Latest task-update status: v0.9 WP3 Slice A is code-complete as a minimal tactical agency hook. The player can focus one current active memory from the existing slot UI or `Digit1`-`Digit3`; this briefly accelerates that memory's next impact and records `tacticalFocus` in JSON/QA payloads. `npm run qa:tactical` exists but is not browser-proven in this managed sandbox because Chrome CDP pipe still times out at `Target.getTargets` and the port fallback cannot bind `127.0.0.1` (`EPERM`). `npm run ai:test:quick` remains `GO_CANDIDATE` with Alpha Fun Score `0.8846`.
 
 ## Implemented
 
@@ -90,6 +90,13 @@ Last updated: 2026-06-03
   - `danger` records deficit breath/challenge time and post-loss challenge completions,
   - AI simulator reports `postLossChallengeScore` and `postLossChallengeContrast`,
   - `npm run qa:postloss` script exists for Chrome/CDP post-loss QA.
+- v0.9 Work Package 3 Slice A minimal tactical agency:
+  - existing active memory slots can be clicked during combat to trigger `전술 집중`,
+  - `Digit1`-`Digit3` can focus the corresponding current active memory while preserving the 3-slot limit,
+  - focused cooldown memories have their next trigger pulled forward, while `굶주린 칼무리` and `피의 반사` receive a short existing-effect boost,
+  - `tacticalFocus` is recorded in JSON logs and `runTimeline`,
+  - `?qa=fast,tactical` writes `data-lethe-tactical-qa`,
+  - `npm run qa:tactical` exists for Chrome/CDP tactical QA.
 - v0.9 browser QA runner fallback:
   - `scripts/run_browser_pressure_qa.js` keeps the existing Chrome CDP pipe path,
   - if pipe target lookup times out, it retries once through Chrome remote-debugging-port and a WebSocket CDP client,
@@ -164,16 +171,29 @@ v0.9 WP2 Slice B result:
 - Post-forgetting power drop: `22.9%`
 - Recovery after replacement: `96.8%`
 
+WP3 Slice A quick check:
+
+- `npm run ai:test:quick`: `GO_CANDIDATE`
+- Alpha Fun Score: `0.8846`
+- Early Fun Score: `0.8316`
+- Pressure contrast: `0.4416`
+- Post-loss challenge score: `0.6687`
+- Post-loss challenge contrast: `0.3134`
+- Echo pivot score: `0.6554`
+- Regret proxy: `80.7%`
+- Irritation proxy: `1.0%`
+
 Heavy check:
 
-- Not rerun in the WP2 Slice B loop. Use `npm run ai:test` and `npm run ai:test:quick` results above for this work unit.
+- Not rerun in the WP3 Slice A loop. Use `npm run ai:test` and `npm run ai:test:quick` results above for this work unit.
 
 Remaining note:
 
-- v0.9 WP2 now has both pre-loss pressure rhythm and a minimal post-loss challenge.
+- v0.9 WP2 now has both pre-loss pressure rhythm and a minimal post-loss challenge, and WP3 Slice A has a first minimal tactical agency hook.
 - `npm run qa:postloss:trusted` passed in this local run after making Chrome temp-profile cleanup retryable. The browser QA reached `status: complete`, `failures: []`, confirmed `deficit_breath` and `deficit_trial`, completed the post-loss challenge, and restored 3 active memories after refill.
+- `npm run qa:tactical` failed before gameplay evaluation in this managed sandbox with the same Chrome transport class: CDP pipe `Target.getTargets` timeout and remote-debugging-port `listen EPERM` on `127.0.0.1`. Treat this as missing browser proof, not a gameplay assertion failure.
 - AI proxy evidence remains a planning pass only, not human emotion or Unity-transition proof.
-- WP3 Slice A is now unblocked for one minimal tactical agency hook using only existing memories, existing slots, and the current combat loop. People testing still waits until WP3 and verification are recorded.
+- People testing still waits until tactical browser proof or an explicit environment-blocker decision is recorded.
 
 ## Latest Sweep Note
 
