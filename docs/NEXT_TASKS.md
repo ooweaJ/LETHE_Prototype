@@ -37,6 +37,7 @@
 - Reporting rule update: work reports now use numbered unit headings like `# 2026-06-02-44 - 보고서 단위 번호 체계`; `npm run report` also splits those sections into `docs/reports/units/YYYY-MM-DD/*.md` and `*.html`, `npm run report:check` verifies the generated unit files, and Discord latest-section reports attach the latest unit HTML instead of the full daily HTML.
 - Reporting unit size update: report units should now be feature/decision-sized, not loop-step-sized. The autonomous dev loop reports once after implementation, verification, feedback, and task update are folded together; `npm run report:check` rejects procedural titles such as `Feedback-N 태스크 갱신`, `자동 개발 루프 N차`, and single QA retry titles.
 - Historical report cleanup: `docs/reports/2026-06-02.md` was compressed from 57 small units to 13 feature/gate/decision units. Generated files under `docs/reports/units/2026-06-02/` were regenerated to match.
+- Latest devloop feedback-050050 verdict: `ITERATE_BEFORE_TEST`. WP3 Slice A `전술 집중` is code-complete and scope-valid, with `npm run ai:test:quick` still `GO_CANDIDATE` at Alpha Fun Score `0.8846`, but `npm run qa:tactical` failed before gameplay evaluation through the same managed-sandbox Chrome transport channel. Claude and Codex agree there is no material scope conflict: do not add new features or request people testing until trusted-local `npm run qa:tactical` passes or an explicit environment-blocker decision is recorded.
 - Reference research: `docs/research/2026-06-02-roguelike-reference.md`.
 - New v0.9 prompt: `docs/review_prompts/2026-06-02-v09-release-feel-loop.md`.
 - Overnight loop command:
@@ -113,10 +114,14 @@
   - `npm run report:check`가 heading뿐 아니라 단위 Markdown/HTML과 `latest.json` 존재도 확인하게 했다.
   - `node scripts/send_discord_report.js --latest-section`가 최신 단위 HTML을 첨부하게 했다.
   - `scripts/run_autonomous_dev_loop.js` 프롬프트의 하드코딩 날짜를 루프 날짜 변수로 바꾸고, 단위 파일 생성/Discord 첨부 기준을 명시했다.
-- [ ] 2026-06-03 이후 루프에서 새 보고 단위가 `docs/reports/units/2026-06-03/`에 생성되는지 확인한다.
+- [x] 2026-06-03 이후 루프에서 새 보고 단위가 `docs/reports/units/2026-06-03/`에 생성되는지 확인한다.
   - `npm run report`
   - `npm run report:check`
   - `node scripts/send_discord_report.js --dry-run --latest-section`
+  - Discord 첨부 기준은 일일 누적 HTML이 아니라 `docs/reports/units/2026-06-03/`에 생성되는 최신 단위 HTML이다.
+  - 검증: `npm run report`가 5개 unit report를 생성했다.
+  - 검증: `npm run report:check` 통과, `docs/reports/2026-06-03.md` 5 units.
+  - 검증: Discord dry-run attachment가 `docs/reports/units/2026-06-03/2026-06-03-05-전술-집중-구현과-브라우저-검증-보류-결정.html`을 가리켰다.
 - [x] 보고 단위를 기능/결정 단위로 키운다.
   - 루프가 구현 직후와 피드백 직후에 두 번 보고/Discord를 보내던 흐름을 피드백+태스크 갱신 이후 한 번으로 줄였다.
   - 구현 프롬프트에는 루틴 회차에서 보고 단위를 만들지 말고, 독립 기능/결정이 완결된 예외에서만 보고하라고 명시했다.
@@ -362,6 +367,13 @@
   - QA: `?qa=fast,tactical`, `npm run qa:tactical`을 추가했다.
   - 검증: `node --check src/game.js`, `node --check scripts/run_browser_pressure_qa.js`, `node --check scripts/check_local_pipeline.js`, `npm run doctor`, `npm run ai:test:quick` 통과.
   - 브라우저 자동화 한계: `npm run qa:tactical`은 gameplay evaluation 전 Chrome/CDP `Target.getTargets` timeout과 `127.0.0.1 listen EPERM`으로 실패했다. 현재 managed sandbox transport blocker이며 trusted-local 재실행이 필요하다.
+- [x] `2026-06-03-devloop-050050-feedback-1` Claude/Codex 피드백 공통점과 충돌을 정리했다.
+  - 공통점: WP3 Slice A `전술 집중`은 기존 기억/슬롯/전투 루프만 사용한 scope-valid 구현이다.
+  - 공통점: AI quick 결과는 `GO_CANDIDATE`, Alpha Fun Score `0.8846`, 낮은 irritation으로 planning evidence는 긍정적이지만 browser/user evidence가 아니다.
+  - 공통점: `npm run qa:tactical` 실패는 gameplay assertion이 아니라 Chrome/CDP transport blocker로 보며, 사람 테스트 전 browser proof가 필요하다.
+  - 공통점: `멈춘 초침` 삭제 빈도 outlier는 즉시 보정하지 않고 browser-proven 이후 관찰 대상으로 둔다.
+  - 충돌: 실질적인 다음 범위 충돌은 없다. Claude는 `ITERATE_BEFORE_TEST`와 관찰 포인트를 강조했고, Codex CLI는 다음 작업을 `qa:tactical` 차단 해소와 기록으로 더 좁게 제한했다.
+  - 선택: 이번 cycle은 docs-only update로 닫는다. 다음 executable scope는 trusted-local `npm run qa:tactical` 하나이며, 통과 전에는 사람 테스트, 새 기억, UI 확장, 밸런스 변경, 추가 gameplay scope를 시작하지 않는다.
 - [ ] trusted local에서 `npm run qa:tactical`을 재실행하고, 통과하면 WP3 Slice A를 browser-proven으로 기록한다.
   - 같은 transport 실패가 sandbox 밖에서도 반복되면 `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md`와 같은 방식으로 environment-blocker decision을 먼저 남긴다.
 - [ ] v0.9 통과 후에만 실제 브라우저 전투 QA와 사용자 1인 테스트를 요청한다.

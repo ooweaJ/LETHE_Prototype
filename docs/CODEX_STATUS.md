@@ -8,7 +8,7 @@ Last updated: 2026-06-03
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
-- Latest task-update status: v0.9 WP3 Slice A is code-complete as a minimal tactical agency hook. The player can focus one current active memory from the existing slot UI or `Digit1`-`Digit3`; this briefly accelerates that memory's next impact and records `tacticalFocus` in JSON/QA payloads. `npm run qa:tactical` exists but is not browser-proven in this managed sandbox because Chrome CDP pipe still times out at `Target.getTargets` and the port fallback cannot bind `127.0.0.1` (`EPERM`). `npm run ai:test:quick` remains `GO_CANDIDATE` with Alpha Fun Score `0.8846`.
+- Latest task-update status: v0.9 WP3 Slice A is code-complete as a minimal tactical agency hook, and the `2026-06-03-devloop-050050-feedback-1` Claude/Codex synthesis recorded `ITERATE_BEFORE_TEST`. The player can focus one current active memory from the existing slot UI or `Digit1`-`Digit3`; this briefly accelerates that memory's next impact and records `tacticalFocus` in JSON/QA payloads. `npm run qa:tactical` exists but is not browser-proven in this managed sandbox because Chrome CDP pipe still times out at `Target.getTargets` and the port fallback cannot bind `127.0.0.1` (`EPERM`). `npm run ai:test:quick` remains `GO_CANDIDATE` with Alpha Fun Score `0.8846`. The next executable scope is trusted-local `npm run qa:tactical` only; do not add features or request people testing before that proof or an explicit environment-blocker decision.
 
 ## Implemented
 
@@ -113,6 +113,7 @@ Last updated: 2026-06-03
   - `npm run report` splits each top-level `# YYYY-MM-DD-NN - 작업 제목` section into `docs/reports/units/YYYY-MM-DD/*.md` and `*.html`,
   - `docs/reports/units/YYYY-MM-DD/latest.json` records the latest unit,
   - `node scripts/send_discord_report.js --latest-section` now attaches the latest unit HTML rather than the full daily HTML,
+  - the Discord attachment source of truth is the generated unit HTML under `docs/reports/units/YYYY-MM-DD/`, while the daily report remains the Markdown source,
   - `npm run report:check` verifies headings and generated unit files.
 - Larger report-unit policy:
   - report units should describe a feature, gate, or decision,
@@ -488,6 +489,17 @@ npm run ai:sweep
   - common conclusion: AI proxy data is positive enough for planning (`GO_CANDIDATE`, Alpha Fun Score `0.8846`, regret `0.8073`, irritation `0.0104`, restart `0.90`) but is not browser/user evidence,
   - conflict: no material next-scope conflict; Claude and Codex both require trusted-local post-loss proof or an explicit environment-blocker decision before WP3 or people testing,
   - selected order: run trusted-local `npm run qa:postloss`; if the same transport failure repeats, retry once with `--timeout-ms 30000`, then use `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md` before any new gameplay scope.
+- Latest devloop feedback synthesis for WP3 Slice A tactical focus:
+  - prompt: `docs/review_prompts/2026-06-03-devloop-050050-feedback-1.md`,
+  - Claude response: `docs/review_responses/2026-06-03-devloop-050050-feedback-1-claude.md`,
+  - Codex CLI response: `docs/review_responses/2026-06-03-devloop-050050-feedback-1-codex.md`,
+  - synthesis: `docs/review_responses/2026-06-03-devloop-050050-feedback-1-double-check.md`,
+  - common conclusion: WP3 Slice A `전술 집중` is scope-valid because it uses only existing memories, active slots, and combat systems,
+  - common conclusion: `npm run ai:test:quick` is positive planning evidence (`GO_CANDIDATE`, Alpha Fun Score `0.8846`, low irritation), but it does not replace tactical browser QA or human play evidence,
+  - browser blocker: `npm run qa:tactical` failed before gameplay evaluation through Chrome/CDP `Target.getTargets` timeout and remote-debugging-port `127.0.0.1 listen EPERM`,
+  - watch point: `멈춘 초침` deletion frequency is low versus other memories and should be observed after browser proof rather than tuned from AI proxy alone,
+  - conflict: no material next-scope conflict; Claude and Codex both block people testing and additional gameplay/UI/balance expansion until tactical browser proof or an explicit environment-blocker decision,
+  - selected order: run trusted-local `npm run qa:tactical`; if it passes, record WP3 Slice A as browser-proven, and if transport still fails outside the sandbox, create an environment-blocker decision prompt before changing scope.
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the v0.5 level-up flow and `runGrowth` payload.
 - Planning pipeline prompt generated: `docs/review_prompts/2026-06-02-pipeline.md`.
@@ -526,6 +538,7 @@ npm run ai:sweep
 - Docs-only loop update completed for `2026-06-02-devloop-193946-feedback-1`: WP2 Slice B feedback, common/ conflict synthesis, selected trusted-local QA gate, and WP3 Slice A scope guard are recorded in the double-check summary, `NEXT_TASKS`, status, devlog, and report.
 - Docs-only loop update completed for `2026-06-02-devloop-193946-feedback-2`: post-loss QA runner fallback feedback, common recommendations, lack of material conflict, selected trusted-local QA-only scope, and tests required before balance reporting are recorded in the double-check summary, `NEXT_TASKS`, status, devlog, and report.
 - Docs-only loop update completed for `2026-06-02-devloop-193946-feedback-3`: post-loss transport blocker feedback, common recommendations, lack of material next-scope conflict, selected trusted-local QA-only scope, and tests required before balance reporting are recorded in the double-check summary, `NEXT_TASKS`, status, devlog, and report.
+- Docs-only loop update completed for `2026-06-03-devloop-050050-feedback-1`: WP3 Slice A feedback, common recommendations, lack of material next-scope conflict, selected trusted-local tactical QA-only scope, and required browser proof before balance/human reporting are recorded in the double-check summary, `NEXT_TASKS`, status, devlog, and report.
 - Post-loss QA rerun loop completed with tooling fallback:
   - `npm run qa:postloss`: failed at Chrome/CDP `Target.getTargets`,
   - `npm run qa:postloss -- --timeout-ms 30000`: failed at the same point,
@@ -556,10 +569,10 @@ npm run ai:sweep
   - working tree clean after `f6ee83f feat: 자동 개발 루프 4차 반영`,
   - `npm run autopilot:preflight`: 21 pass, 0 warn, 0 fail,
   - `npm run qa:identity`: `status: complete`, failures `[]`, `buildIdentitySeenBy90Sec: true`.
-- WP1 gate is officially complete for automation purposes. WP2 Slice A pressure rhythm/high-low pacing and WP2 Slice B minimal post-loss challenge are implemented. The next executable gate remains trusted-local `npm run qa:postloss:trusted`; after that, WP3 Slice A may add only a minimal existing-memory tactical agency hook.
+- WP1 gate is officially complete for automation purposes. WP2 Slice A pressure rhythm/high-low pacing and WP2 Slice B minimal post-loss challenge are implemented, and WP2 Slice B has trusted-local browser proof. WP3 Slice A minimal tactical focus is code-complete but not browser-proven. The next executable gate is trusted-local `npm run qa:tactical`.
 - On another local machine, run `npm run doctor` first; run `npm run doctor:deep` before leaving Codex to continue unattended.
 - Before an unattended implement -> Claude feedback -> implement loop, run `npm run autopilot:preflight`.
 - Do not describe AI proxy metrics as real balance feedback.
 - Use Claude + Codex CLI double check for major planning changes.
 - Before reporting balance, separate AI simulator evidence, browser flow QA evidence, and user play evidence.
-- Do not request user 1-person playtest until v0.9 has browser-visible build identity, pressure rhythm, and post-loss challenge evidence.
+- Do not request user 1-person playtest until v0.9 has browser-visible build identity, pressure rhythm, post-loss challenge evidence, and tactical-focus browser proof or a documented environment-blocker decision.
