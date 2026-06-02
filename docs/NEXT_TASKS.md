@@ -229,7 +229,12 @@
   - 기존 `docs/reports/2026-06-02.md` top-level 작업 섹션을 `2026-06-02-01`부터 `2026-06-02-44`까지 번호화했다.
   - `scripts/check_report_units.js`, `npm run report:check`, doctor 검사를 추가했다.
   - autonomous dev loop prompt가 새 보고 섹션을 `# 2026-06-02-NN - 작업 제목` 형식으로 쓰게 했다.
-- [ ] v0.9 Work Package 2 Slice A: 전투 구간별 압박 고저차를 구현한다.
+- [x] v0.9 Work Package 2 Slice A: 전투 구간별 압박 고저차를 구현한다.
+  - 브라우저 전투 스폰이 `숨 고르기 -> 압박 상승 -> 망각 전조`로 움직이게 했다.
+  - `runTimeline.pressureSegments`와 `danger.pressure*Time` 로그를 추가했다.
+  - AI simulator에 `pressureRhythm`, `pressureContrast` 지표를 추가했다.
+  - `npm run qa:pressure`: `status: complete`, failures `[]`, segments `lull/rising/climax`.
+  - `npm run ai:test:quick`: `GO_CANDIDATE`, Alpha Fun Score `0.885`, pressureContrast `0.4417`.
 - [ ] v0.9 Work Package 2 Slice B: 압박 고저차 검증 후 기존 전투 파라미터만 써서 최소 post-loss challenge를 구현한다.
 - [ ] v0.9 Work Package 3: 자동전투 안의 작은 tactical agency를 구현한다.
 - [ ] v0.9 통과 후에만 실제 브라우저 전투 QA와 사용자 1인 테스트를 요청한다.

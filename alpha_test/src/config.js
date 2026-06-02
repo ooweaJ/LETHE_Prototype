@@ -246,6 +246,7 @@ const SIM_DEFAULTS = {
   replacementOffer: true,
   enableHumanEmotionProxy: true,
   earlyEnemyPressure: 0.86,
+  pressureRhythm: true,
   runGrowthChoices: true,
 };
 

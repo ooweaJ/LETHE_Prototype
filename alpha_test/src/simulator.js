@@ -475,8 +475,34 @@ function simulateEmotionProxy(rng, state, snapshot, reliance, deletedMemoryId, p
   return { q1Pain, q2Understanding, quadrant, immediateQuit, restartIntent, quitP: round(quitP, 3), restartP: round(restartP, 3) };
 }
 
-function simulateEarlyFunProxy(rng, state, snapshot, build, options) {
-  const pressure = clamp(options.earlyEnemyPressure ?? 0.45, 0, 1);
+function pressureRhythmProfile(stageIndex, options) {
+  const base = clamp(options.earlyEnemyPressure ?? 0.45, 0, 1);
+  if (!options.pressureRhythm) {
+    return {
+      lull: base,
+      rise: base,
+      climax: base,
+      weightedPressure: base,
+      contrast: 0,
+    };
+  }
+
+  const stageLift = clamp((stageIndex - 1) * 0.04, 0, 0.10);
+  const lull = clamp(base - 0.34 + stageLift * 0.4, 0.30, 0.72);
+  const rise = clamp(base - 0.05 + stageLift, 0.48, 0.88);
+  const climax = clamp(base + 0.10 + stageLift, 0.78, 0.98);
+  return {
+    lull: round(lull, 4),
+    rise: round(rise, 4),
+    climax: round(climax, 4),
+    weightedPressure: round(lull * 0.24 + rise * 0.46 + climax * 0.30, 4),
+    contrast: round(climax - lull, 4),
+  };
+}
+
+function simulateEarlyFunProxy(rng, state, snapshot, build, options, stageIndex) {
+  const rhythm = pressureRhythmProfile(stageIndex, options);
+  const pressure = rhythm.weightedPressure;
   const roomPower = snapshot.room.effectivePower;
   const killTempo = clamp(roomPower / 132 * 0.58 + pressure * 0.42 + rng.noise(0.035), 0, 1);
   const levelUpsBeforeBoss = options.runGrowthChoices
@@ -500,6 +526,8 @@ function simulateEarlyFunProxy(rng, state, snapshot, build, options) {
     crowdPressure: round(crowdPressure, 4),
     choiceInterest: round(choiceInterest, 4),
     levelUpsBeforeBoss,
+    pressureRhythm: rhythm,
+    pressureContrast: rhythm.contrast,
   };
 }
 
@@ -571,7 +599,7 @@ function simulateOneRun(rng, bot, options, runIndex = 0) {
     const bossPower = snapshot.boss.effectivePower;
     const clearCheck = bossClearCheck(rng, state, stageIndex, bossPower);
     const build = classifyBuild(state, snapshot);
-    const earlyLoop = simulateEarlyFunProxy(rng, state, snapshot, build, options);
+    const earlyLoop = simulateEarlyFunProxy(rng, state, snapshot, build, options, stageIndex);
     const reliance = computeReliance(state, snapshot);
 
     if (!clearCheck.clear) {

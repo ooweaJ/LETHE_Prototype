@@ -240,6 +240,7 @@ const experiment = {
   qaV06Mode: qaMode.includes("v06"),
   qaDeathMode: qaMode.includes("death"),
   qaIdentityMode: qaMode.includes("identity"),
+  qaPressureMode: qaMode.includes("pressure"),
 };
 
 if (experiment.qaFastMode) {
@@ -359,6 +360,9 @@ function createRunState() {
       deficitTime: 0,
       deficitLowHpTime: 0,
       deficitDeath: false,
+      pressureLullTime: 0,
+      pressureRiseTime: 0,
+      pressureClimaxTime: 0,
     },
     player: {
       x: canvas.width / 2,
@@ -390,6 +394,8 @@ function createRunState() {
       refillAvailableAt: null,
       cycles: [],
       refillChoices: [],
+      pressurePhaseId: null,
+      pressureSegments: [],
     },
     questions: {
       protect: null,
@@ -707,13 +713,14 @@ function movePlayer(dt) {
 function updateSpawning(dt) {
   if (state.boss) return;
   state.spawnCd -= dt;
-  const deficitPressure = activeMemoryCount() < 3 ? 0.14 : 0;
-  const spawnRate = Math.max(0.38, (state.elapsed < 35 ? 0.62 : state.elapsed < 90 ? 0.54 : 0.72) - deficitPressure);
+  const profile = pressureProfile();
+  updatePressurePhase(profile);
+  const deficitPressure = activeMemoryCount() < 3 ? 0.08 : 0;
+  const spawnRate = Math.max(0.34, profile.spawnRate - deficitPressure);
   if (state.spawnCd <= 0) {
     state.spawnCd = spawnRate;
-    const packSize = activeMemoryCount() < 3 ? 3 : state.elapsed < 30 ? 2 : state.elapsed < 80 ? 3 : 2;
-    const pool = ["eroder", "eroder", "eroder", "drifting_eye", "split_one"];
-    if (state.elapsed > 28) pool.push("void_priest");
+    const packSize = profile.packSize;
+    const pool = pressureEnemyPool(profile);
     for (let i = 0; i < packSize; i += 1) {
       spawnEnemy(pool[Math.floor(Math.random() * pool.length)]);
     }
@@ -723,6 +730,83 @@ function updateSpawning(dt) {
   if (nextBossAt && state.elapsed >= nextBossAt) {
     spawnBoss();
   }
+}
+
+function pressureProfile() {
+  if (activeMemoryCount() < 3) {
+    return {
+      id: "deficit_recover",
+      label: "결손 회복",
+      note: "잃은 기억의 빈자리를 버티는 회복 압박",
+      intensity: 0.56,
+      spawnRate: 0.64,
+      packSize: 3,
+    };
+  }
+
+  const timeline = state.runTimeline;
+  const nextBossAt = timeline.bossScheduleSec[timeline.nextBossIndex] || experiment.runDurationSec;
+  const prevBossAt = timeline.nextBossIndex > 0 ? timeline.bossScheduleSec[timeline.nextBossIndex - 1] : 0;
+  const progress = clamp((state.elapsed - prevBossAt) / Math.max(1, nextBossAt - prevBossAt), 0, 1);
+
+  if (progress < 0.24) {
+    return {
+      id: "lull",
+      label: "숨 고르기",
+      note: "레벨업과 빌드 확인을 위한 낮은 압박",
+      intensity: 0.42,
+      spawnRate: 0.72,
+      packSize: state.elapsed < 24 ? 2 : 3,
+    };
+  }
+
+  if (progress < 0.70) {
+    return {
+      id: "rising",
+      label: "압박 상승",
+      note: "적 밀도가 올라가며 선택한 빌드를 시험",
+      intensity: 0.70,
+      spawnRate: 0.54,
+      packSize: 3,
+    };
+  }
+
+  return {
+    id: "climax",
+    label: "망각 전조",
+    note: "문지기 직전 최고 압박",
+    intensity: 0.92,
+    spawnRate: 0.43,
+    packSize: 4,
+  };
+}
+
+function pressureEnemyPool(profile) {
+  const base = ["eroder", "eroder", "eroder", "drifting_eye", "split_one"];
+  if (profile.id === "lull") return ["eroder", "eroder", "drifting_eye", "split_one"];
+  if (profile.id === "rising") return base.concat(state.elapsed > 28 ? ["void_priest"] : []);
+  if (profile.id === "climax") return base.concat(["drifting_eye", "split_one", "void_priest"]);
+  return ["eroder", "eroder", "split_one", "drifting_eye"];
+}
+
+function updatePressurePhase(profile) {
+  if (state.runTimeline.pressurePhaseId === profile.id) return;
+  state.runTimeline.pressurePhaseId = profile.id;
+  state.phase = profile.label;
+  state.runTimeline.pressureSegments.push({
+    id: profile.id,
+    label: profile.label,
+    at: Number(state.elapsed.toFixed(2)),
+    nextBossIndex: state.runTimeline.nextBossIndex + 1,
+    intensity: profile.intensity,
+  });
+  addLog(`${profile.label}: ${profile.note}`);
+  logEvent("pressure_phase", {
+    id: profile.id,
+    label: profile.label,
+    intensity: profile.intensity,
+    nextBossAt: state.runTimeline.bossScheduleSec[state.runTimeline.nextBossIndex] || null,
+  });
 }
 
 function updateRefillGate() {
@@ -1061,6 +1145,9 @@ function updateDangerMetrics(dt) {
   danger.maxKillGap = Math.max(danger.maxKillGap, danger.currentKillGap);
   if (hpRate <= 0.4) danger.lowHpTime += dt;
   if (state.enemies.length >= 12) danger.enemyPressureTime += dt;
+  if (state.runTimeline.pressurePhaseId === "lull") danger.pressureLullTime += dt;
+  if (state.runTimeline.pressurePhaseId === "rising") danger.pressureRiseTime += dt;
+  if (state.runTimeline.pressurePhaseId === "climax") danger.pressureClimaxTime += dt;
   if (activeMemoryCount() < 3) {
     danger.deficitTime += dt;
     if (hpRate <= 0.4) danger.deficitLowHpTime += dt;
@@ -1938,6 +2025,7 @@ function runTimelineLog() {
     refillAvailableAt: timeline.refillAvailableAt,
     cycles: timeline.cycles,
     refillChoices: timeline.refillChoices,
+    pressureSegments: timeline.pressureSegments,
     activeMemoryIds: activeMemoryIds(),
     activeMemoryNames: activeMemories().map((memory) => memory.name),
   };
@@ -1958,6 +2046,9 @@ function dangerLog() {
     deficitTime: Number(danger.deficitTime.toFixed(2)),
     deficitLowHpTime: Number(danger.deficitLowHpTime.toFixed(2)),
     deficitDeath: danger.deficitDeath,
+    pressureLullTime: Number(danger.pressureLullTime.toFixed(2)),
+    pressureRiseTime: Number(danger.pressureRiseTime.toFixed(2)),
+    pressureClimaxTime: Number(danger.pressureClimaxTime.toFixed(2)),
   };
 }
 
@@ -2746,7 +2837,59 @@ function startIdentityQa() {
   }, 650);
 }
 
-if (experiment.qaFastMode || experiment.qaLevelupMode || experiment.qaV06Mode || experiment.qaDeathMode || experiment.qaIdentityMode) {
+function writePressureQaResult(extra = {}) {
+  if (!experiment.qaPressureMode) return;
+  const payload = state ? collectLogPayload() : null;
+  const segments = payload?.runTimeline?.pressureSegments || [];
+  const ids = segments.map((segment) => segment.id);
+  document.documentElement.dataset.lethePressureQa = JSON.stringify({
+    version: experiment.version,
+    hasState: Boolean(state),
+    elapsed: state ? Number(state.elapsed.toFixed(2)) : 0,
+    pressureSegments: segments,
+    pressureSegmentIds: ids,
+    hasLull: ids.includes("lull"),
+    hasRising: ids.includes("rising"),
+    hasClimax: ids.includes("climax"),
+    danger: payload?.danger || null,
+    ...extra,
+  });
+}
+
+function startPressureQa() {
+  selectedWeapon = weapons.twin_blades.id;
+  selectedMemories = ["hungry_blades", "shatter_ripple", "stopped_second"];
+  renderSetup();
+  setTimeout(() => {
+    if (!state) startRun();
+  }, 50);
+
+  let step = 0;
+  const timer = setInterval(() => {
+    if (!state) {
+      writePressureQaResult({ status: "waiting_for_run" });
+      return;
+    }
+
+    const nextBossAt = state.runTimeline.bossScheduleSec[state.runTimeline.nextBossIndex] || 10;
+    const targets = [0.02, 0.36, 0.78];
+    if (step < targets.length) {
+      state.elapsed = Math.max(state.elapsed, nextBossAt * targets[step]);
+      updateSpawning(0);
+      updateDangerMetrics(0.1);
+      step += 1;
+      writePressureQaResult({ status: "running", step });
+      return;
+    }
+
+    const qa = JSON.parse(document.documentElement.dataset.lethePressureQa || "{}");
+    const complete = qa.hasLull && qa.hasRising && qa.hasClimax;
+    writePressureQaResult({ status: complete ? "complete" : "failed", step });
+    clearInterval(timer);
+  }, 120);
+}
+
+if (experiment.qaFastMode || experiment.qaLevelupMode || experiment.qaV06Mode || experiment.qaDeathMode || experiment.qaIdentityMode || experiment.qaPressureMode) {
   window.__letheQaLog = () => (state ? JSON.parse(JSON.stringify(collectLogPayload())) : null);
 }
 
@@ -2755,4 +2898,5 @@ if (experiment.qaIdentityMode) startIdentityQa();
 if (experiment.qaLevelupMode) startLevelupQa();
 if (experiment.qaV06Mode) startV06CycleQa();
 if (experiment.qaDeathMode) startDeathQa();
+if (experiment.qaPressureMode) startPressureQa();
 requestAnimationFrame(frame);

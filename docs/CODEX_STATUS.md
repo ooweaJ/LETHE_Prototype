@@ -4,11 +4,11 @@ Last updated: 2026-06-02
 
 ## Current Build
 
-- Project: LETHE HTML Alpha v0.9 automation gate closed; ready for WP2 Slice A.
+- Project: LETHE HTML Alpha v0.9 WP2 Slice A pressure rhythm implemented.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
-- Latest task-update status: `2026-06-02-devloop-175642` outputs are recorded and pushed through `f6ee83f`; post-loop `npm run autopilot:preflight` passed with 21 pass / 0 warn / 0 fail; post-loop `npm run qa:identity` passed with `status: complete`, failures `[]`. Report headings are now numbered by work unit and enforced by `npm run report:check`. Next executable scope is v0.9 WP2 Slice A pressure rhythm.
+- Latest task-update status: report headings are numbered by work unit and enforced by `npm run report:check`. v0.9 WP2 Slice A pressure rhythm is implemented: browser spawn pacing now moves through `숨 고르기`, `압박 상승`, and `망각 전조`; `npm run qa:pressure` passed with failures `[]`; `npm run ai:test:quick` stayed `GO_CANDIDATE` with Alpha Fun Score `0.885`.
 
 ## Implemented
 
@@ -460,7 +460,7 @@ npm run ai:sweep
   - working tree clean after `f6ee83f feat: 자동 개발 루프 4차 반영`,
   - `npm run autopilot:preflight`: 21 pass, 0 warn, 0 fail,
   - `npm run qa:identity`: `status: complete`, failures `[]`, `buildIdentitySeenBy90Sec: true`.
-- WP1 gate is officially complete for automation purposes. Next implementation candidate is v0.9 Work Package 2 Slice A: pressure rhythm/high-low pacing. Minimal post-loss challenge follows only after that slice is verified.
+- WP1 gate is officially complete for automation purposes. WP2 Slice A pressure rhythm/high-low pacing is now implemented. Minimal post-loss challenge is the next candidate and should use existing combat parameters only.
 - On another local machine, run `npm run doctor` first; run `npm run doctor:deep` before leaving Codex to continue unattended.
 - Before an unattended implement -> Claude feedback -> implement loop, run `npm run autopilot:preflight`.
 - Do not describe AI proxy metrics as real balance feedback.

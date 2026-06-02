@@ -79,6 +79,7 @@ function summarize(batch) {
   const earlyKillTempo = mean(stages.map(({ stage }) => stage.earlyLoop?.killTempo || 0));
   const earlyCrowdPressure = mean(stages.map(({ stage }) => stage.earlyLoop?.crowdPressure || 0));
   const earlyChoiceInterest = mean(stages.map(({ stage }) => stage.earlyLoop?.choiceInterest || 0));
+  const pressureContrast = mean(stages.map(({ stage }) => stage.earlyLoop?.pressureContrast || 0));
   const earlyLevelUps = mean(stages.map(({ stage }) => stage.earlyLoop?.levelUpsBeforeBoss || 0));
   const cycleCompletionRate = pct(stages.filter(({ stage }) => stage.cycleCompleted).length, stageCount);
   const firstCycleCompletionRate = pct(firstStages.filter((stage) => stage.cycleCompleted).length, firstStages.length);
@@ -179,6 +180,7 @@ function summarize(batch) {
       earlyKillTempo: round(earlyKillTempo, 4),
       earlyCrowdPressure: round(earlyCrowdPressure, 4),
       earlyChoiceInterest: round(earlyChoiceInterest, 4),
+      pressureContrast: round(pressureContrast, 4),
       earlyLevelUps: round(earlyLevelUps, 2),
       firstCycleCompletionRate: round(firstCycleCompletionRate, 4),
       cycleCompletionRate: round(cycleCompletionRate, 4),
