@@ -5,6 +5,9 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
+const DEFAULT_PREFLIGHT = 'npm run autopilot:preflight:local';
+const DIRTY_PREFLIGHT = 'node scripts/autopilot_preflight.js --allow-dirty';
+
 const options = parseArgs(process.argv.slice(2));
 const startedAt = new Date();
 const date = options.date || todayString();
@@ -22,11 +25,10 @@ function main() {
   }
 
   checkInitialGitState();
+  const preflight = runPreflightBeforeLog();
   fs.mkdirSync(logDir, { recursive: true });
-  writeLogHeader();
+  writeLogHeader(preflight);
   sendNotice('start', '자동 개발 루프 시작', `iterations=${options.iterations}, duration=${options.durationMinutes}m`);
-
-  runRequired('preflight', options.preflight);
 
   for (let iteration = 1; iteration <= options.iterations; iteration += 1) {
     if (Date.now() >= deadline) {
@@ -77,7 +79,7 @@ function main() {
   console.log(`Autonomous dev loop log: ${path.relative(process.cwd(), runLogPath)}`);
 }
 
-function writeLogHeader() {
+function writeLogHeader(preflight) {
   fs.writeFileSync(runLogPath, [
     `# Autonomous Dev Loop - ${runId}`,
     '',
@@ -90,6 +92,12 @@ function writeLogHeader() {
     `- Commit: ${options.commit}`,
     `- Push: ${options.push}`,
     '',
+    '### preflight',
+    '',
+    `\`${options.preflight}\``,
+    '',
+    fence('stdout', trimOutput(preflight.stdout || '')),
+    preflight.stderr ? fence('stderr', trimOutput(preflight.stderr)) : '',
   ].join('\n'), 'utf8');
 }
 
@@ -122,6 +130,23 @@ function checkInitialGitState() {
   console.error('Autonomous dev loop requires a clean working tree before it creates loop logs.');
   console.error(status);
   process.exit(1);
+}
+
+function runPreflightBeforeLog() {
+  const result = spawnSync(options.preflight, {
+    cwd: process.cwd(),
+    encoding: 'utf8',
+    shell: true,
+    maxBuffer: 1024 * 1024 * 30,
+  });
+  if (result.status !== 0 || result.error) {
+    const detail = result.error ? result.error.message : firstLine(result.stderr || result.stdout);
+    console.error(`Autonomous dev loop preflight failed before log creation: ${detail}`);
+    if (result.stdout) console.error(result.stdout.trim());
+    if (result.stderr) console.error(result.stderr.trim());
+    process.exit(1);
+  }
+  return result;
 }
 
 function readLoopContext(iteration) {
@@ -451,7 +476,7 @@ function parseArgs(args) {
     iterations: 6,
     logDir: '',
     noDiscord: false,
-    preflight: 'node scripts/autopilot_preflight.js --allow-dirty',
+    preflight: DEFAULT_PREFLIGHT,
     provider: 'double',
     push: true,
     sleepMinutes: 0,
@@ -484,6 +509,10 @@ function parseArgs(args) {
     else if (arg === '--sleep-minutes') parsed.sleepMinutes = nonNegativeNumber(args[++index], 'sleep-minutes');
     else if (arg.startsWith('--sleep-minutes=')) parsed.sleepMinutes = nonNegativeNumber(arg.slice('--sleep-minutes='.length), 'sleep-minutes');
     else fail(`Unknown option: ${arg}`);
+  }
+
+  if (parsed.allowDirty && parsed.preflight === DEFAULT_PREFLIGHT) {
+    parsed.preflight = DIRTY_PREFLIGHT;
   }
 
   return parsed;

@@ -21,6 +21,7 @@
 - Project direction: HTML prototype validation first, Unity implementation later only if AI/human tests show enough promise.
 - v0.9 direction: broad human testing remains paused until the HTML prototype has stronger release-like build identity, pressure rhythm, post-loss challenge, and visible tactical agency.
 - Latest devloop feedback verdict: the `2026-06-02-devloop-175642` automation prompt cleanup is valid, WP1 should not be reopened for new gameplay work, and the next executable scope remains gate cleanup: record/track current loop-run outputs and rerun trusted-local `npm run qa:identity` before WP2 or unattended automation.
+- Latest devloop feedback-2 verdict: `ITERATE_BEFORE_TEST`. The preflight-order cleanup is code-complete, but WP1 is not officially closed until the current loop-run outputs are recorded/cleaned, `npm run autopilot:preflight:local` passes on a clean tree, and trusted-local `npm run qa:identity` passes.
 - Reference research: `docs/research/2026-06-02-roguelike-reference.md`.
 - New v0.9 prompt: `docs/review_prompts/2026-06-02-v09-release-feel-loop.md`.
 - Overnight loop command:
@@ -178,7 +179,22 @@
   - 공통점: 현재 `docs/loop_runs/2026-06-02-devloop-175642*` 산출물 정리와 trusted-local `npm run qa:identity` 재확인이 다음 blocker다.
   - 충돌: Claude는 `qa:identity` 통과 후 사람 테스트 체크리스트를 만들고 `GO_TO_HUMAN_TEST`로 가자고 했고, Codex CLI는 WP2 진입 게이트 정리 후 WP2 Slice A 압박 리듬을 먼저 권장했다.
   - 선택: 이번 사이클은 docs-only update로 닫는다. 다음 실행 작업은 loop-run 산출물 기록/정리와 trusted-local identity QA이며, 그 뒤에는 사용자가 바꾸지 않는 한 기존 순서대로 WP2 Slice A 압박 고저차를 시작한다.
+- [x] autonomous dev loop가 자기 로그를 만든 뒤 dirty preflight를 `--allow-dirty`로 통과시키는 구조를 정리했다.
+  - `scripts/run_autonomous_dev_loop.js` 기본 preflight를 `npm run autopilot:preflight:local`로 바꿨다.
+  - dev loop가 Markdown 로그를 만들기 전에 preflight를 먼저 실행하게 했다.
+  - preflight가 통과하면 그 stdout/stderr를 생성된 loop log header에 기록한다.
+  - `--allow-dirty`를 명시한 dry-run에서만 dirty 허용 preflight 명령으로 바뀌게 했다.
+  - 검증: `node --check scripts/run_autonomous_dev_loop.js`, `npm run dev:loop:dry`, `node scripts/run_autonomous_dev_loop.js --dry-run --allow-dirty --no-commit --no-push --discord-dry-run`, `npm run doctor`, `npm run ai:test:quick`, `git diff --check` 통과.
+  - 현재 `npm run autopilot:preflight:local`은 기존 dirty loop-run 산출물과 이번 코드 변경 때문에 실패하는 것이 정상이며, unattended loop 전에는 아래 blocker를 계속 처리해야 한다.
+- [x] `2026-06-02-devloop-175642-feedback-2` Claude/Codex 피드백 공통점과 충돌을 정리했다.
+  - 공통점: preflight-order cleanup은 방향이 맞고 dry-run/doctor/quick AI evidence가 안정적이지만, dirty tree 때문에 WP1 공식 완료와 unattended loop 재개는 아직 보류한다.
+  - 공통점: 다음 실행 작업은 `docs/loop_runs/2026-06-02-devloop-175642*.md` 산출물 기록/정리, clean-tree `npm run autopilot:preflight:local`, trusted-local `npm run qa:identity` 재확인이다.
+  - 공통점: quick AI test의 `GO_CANDIDATE`, Alpha Fun Score `0.8883`, irritation `0.0104`는 planning pass일 뿐 실제 사람 감정이나 밸런스 판정이 아니다.
+  - 공통점: echoPivotScore `0.656`과 earlyChoiceInterest `0.654`는 사람 테스트 또는 WP2 관찰에서 계속 봐야 한다.
+  - 충돌: Claude는 다음 1개 작업을 WP1 gate cleanup으로 강하게 제한하고 WP2 착수를 금지했다. Codex CLI도 gate cleanup을 먼저 보되, 통과 후 기존 WP2 Slice A 압박 리듬으로 복귀하는 순서를 명시했다.
+  - 선택: 이번 cycle은 docs-only update로 닫는다. 다음 executable scope는 WP1 마무리 gate cleanup 하나이며, 통과 후에만 WP2 Slice A를 시작한다.
 - [ ] 현재 루프가 생성한 `docs/loop_runs/2026-06-02-devloop-175642*.md` 파일을 wrapper가 커밋하거나, 다음 unattended loop 전에 정리해 `npm run autopilot:preflight:local` blocker를 제거한다.
+- [ ] clean tree에서 `npm run autopilot:preflight:local`을 재실행하고 pass를 기록한다.
 - [ ] trusted local에서 `npm run qa:identity`를 재실행하고 `status: complete`, failures `[]`를 확인한다.
 - [ ] v0.9 Work Package 2 Slice A: 전투 구간별 압박 고저차를 구현한다.
 - [ ] v0.9 Work Package 2 Slice B: 압박 고저차 검증 후 기존 전투 파라미터만 써서 최소 post-loss challenge를 구현한다.
