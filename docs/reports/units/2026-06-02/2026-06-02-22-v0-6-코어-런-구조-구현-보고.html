@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-02-22 - v0.6 코어 런 구조 구현 보고</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-02-22 - v0.6 코어 런 구조 구현 보고</h1>
+      <p class="meta">Generated from 2026-06-02-22-v0-6-코어-런-구조-구현-보고.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-02-22 - v0.6 코어 런 구조 구현 보고</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>LETHE HTML alpha는 v0.6 core run-structure solo-test candidate 상태다.</li>
+<li>v0.5의 9분 첫 망각 구조를 버리고, 4분 첫 보스/첫 망각으로 LETHE의 고유 훅을 앞당겼다.</li>
+<li>넓은 사람 테스트는 아직 보류하지만, 사용자 1인 체감 테스트 후보까지는 올라왔다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>브라우저 표기와 experiment version을 <code>v0.6</code>으로 변경했다.</li>
+<li>총 런 구조를 20분 기준으로 바꿨다.</li>
+<li>보스 스케줄을 <code>4 / 8 / 12 / 16 / 20분</code>으로 설정했다.</li>
+<li>보스 처치 후 의존도 기반으로 기억 1개를 잃고, 즉시 결과 종료가 아니라 기억 2개 결손 생존 구간에 들어가게 했다.</li>
+<li>결손 생존 구간 이후 새 기억 후보 3개 중 1개를 선택해 다시 3개 슬롯으로 복귀하게 했다.</li>
+<li><code>runTimeline</code> JSON payload에 boss schedule, cycle, forgotten history, refill choices를 추가했다.</li>
+<li>AI 테스트에 v0.6 cycle 지표를 추가했다:</li>
+<li>first cycle completion,</li>
+<li>two-memory survival,</li>
+<li>echo pivot score,</li>
+<li>refill reached rate.</li>
+<li><code>?qa=fast,v06</code> 브라우저 QA 모드를 추가했다.</li>
+<li>v0.6 결과 판단 프롬프트 <code>docs/review_prompts/2026-06-02-v06-cycle-eval.md</code>를 작성했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>npm run autopilot:preflight</code>: 17 pass, 0 warn, 0 fail.</li>
+<li><code>node --check src/game.js</code>: 통과.</li>
+<li><code>node --check alpha_test/src/config.js</code>: 통과.</li>
+<li><code>node --check alpha_test/src/simulator.js</code>: 통과.</li>
+<li><code>node --check alpha_test/src/metrics.js</code>: 통과.</li>
+<li><code>node --check alpha_test/src/report.js</code>: 통과.</li>
+<li><code>node --check alpha_test/src/run_alpha.js</code>: 통과.</li>
+<li><code>npm run ai:test:quick</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score <code>0.9237</code>, first cycle completion <code>80.0%</code>, two-memory survival <code>80.5%</code>, echo pivot <code>0.7459</code>.</li>
+<li><code>npm run ai:test</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score <code>0.9093</code>, first cycle completion <code>82.4%</code>, two-memory survival <code>80.5%</code>, echo pivot <code>0.7456</code>.</li>
+<li><code>npm run ai:test:heavy</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score <code>0.9095</code>, first cycle completion <code>81.8%</code>, two-memory survival <code>80.2%</code>, echo pivot <code>0.7415</code>.</li>
+<li>Chrome headless <code>?qa=fast,v06</code>:</li>
+<li><code>status: complete</code>,</li>
+<li><code>bossSpawned: true</code>,</li>
+<li><code>forgotten: true</code>,</li>
+<li><code>deficitStarted: true</code>,</li>
+<li><code>refillSeen: true</code>,</li>
+<li><code>refilled: true</code>,</li>
+<li><code>hasTimelinePayload: true</code>,</li>
+<li><code>cycleCount: 1</code>,</li>
+<li><code>refillCount: 1</code>.</li>
+<li>Chrome headless <code>?qa=fast,levelup&amp;tester=T01&amp;session=S01</code>:</li>
+<li><code>status: complete</code>,</li>
+<li><code>levelUpSeen: true</code>,</li>
+<li><code>resumedAfterUpgrade: true</code>,</li>
+<li><code>hasRunGrowthPayload: true</code>.</li>
+</ul>
+<h2>4. 결정 사항</h2>
+<ul>
+<li>v0.6은 자동 지표 기준으로는 <code>GO_TO_SOLO_PLAYTEST_CANDIDATE</code>로 둔다.</li>
+<li>Claude v0.6 피드백은 현재 Codex 세션에서 외부 전송 정책으로 차단되어 받지 못했다.</li>
+<li>Claude 피드백이 필요하면 사용자의 신뢰된 로컬 터미널에서 같은 프롬프트를 실행한다.</li>
+<li>Claude 없이 진행한다면 다음 단계는 1인 체감 테스트다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>실제 플레이 감각은 아직 확인하지 않았다.</li>
+<li>quick 기준 prediction match가 <code>92.5%</code>로 높아, 예측이 너무 정답 맞히기처럼 느껴질 수 있다.</li>
+<li>결손 생존 105초가 “다른 모드로 버틴다”인지 “그냥 기다린다”인지는 실제 체감이 필요하다.</li>
+<li>잔향은 기존 echo 기반이므로, 기억별 변형이 눈에 충분히 띄는지는 더 확인해야 한다.</li>
+<li>Claude 피드백 자동 루프는 이 세션에서 외부 전송 정책에 막혔다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<ul>
+<li>v0.6 결과 프롬프트는 준비됐다: <code>docs/review_prompts/2026-06-02-v06-cycle-eval.md</code>.</li>
+<li>차단 기록은 <code>docs/review_responses/2026-06-02-v06-cycle-claude-blocked.md</code>에 저장했다.</li>
+<li>신뢰된 로컬 터미널에서 다음 명령으로 Claude 피드백을 받을 수 있다:</li>
+</ul>
+<p>  <code>node scripts/ask_claude_review.js --prompt docs/review_prompts/2026-06-02-v06-cycle-eval.md --output docs/review_responses/2026-06-02-v06-cycle-claude.md</code></p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>Claude v0.6 응답이 생기면 읽고 v0.7 자동 보완 여부를 결정한다.</li>
+<li>Claude 응답 없이 진행한다면 사용자 1인 체감 테스트를 요청한다.</li>
+<li>1인 테스트에서 첫 4분, 첫 망각, 2기억 결손 생존, 기억 보충, 잔향 피벗, 재시작 의향을 본다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: v0.5는 AI 지표가 좋아도 첫 망각이 늦어 게임의 정체성이 늦게 열렸다.</li>
+<li>방향: LETHE의 핵심을 4분 안에 열고, 상실 후 결손 생존과 보충 사이클을 반복되는 런 리듬으로 만든다.</li>
+<li>실행: v0.6에서 20분 보스 스케줄, 결손 생존, 기억 보충, runTimeline 로그, cycle AI 지표, 브라우저 QA를 구현했다.</li>
+<li>결과: 자동 지표와 브라우저 QA는 통과했고, 다음 판단은 Claude 피드백 또는 사용자 1인 체감 테스트다.</li>
+</ul>
+<p>---</p>
+  </main>
+</body>
+</html>

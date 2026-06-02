@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-02-54 - v0.9 Trusted Post-loss QA Gate Wrapper</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-02-54 - v0.9 Trusted Post-loss QA Gate Wrapper</h1>
+      <p class="meta">Generated from 2026-06-02-54-v0-9-trusted-post-loss-qa-gate-wrapper.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-02-54 - v0.9 Trusted Post-loss QA Gate Wrapper</h1>
+<h2>1. Current build status</h2>
+<ul>
+<li>v0.9 WP2 Slice B remains implementation-complete and scope-valid.</li>
+<li>Latest status remains <code>ITERATE_BEFORE_TEST</code>.</li>
+<li>Browser proof is still missing.</li>
+<li>WP3 Slice A and people testing remain blocked.</li>
+</ul>
+<h2>2. What changed today</h2>
+<ul>
+<li>Added <code>scripts/run_trusted_postloss_gate.js</code>.</li>
+<li>Added <code>npm run qa:postloss:trusted</code>.</li>
+<li>The wrapper runs standard post-loss QA, retries once with <code>--timeout-ms 30000</code> only for Chrome/CDP transport failures, then points to the environment-blocker prompt if transport is still blocked.</li>
+<li>Added the new script to <code>doctor</code> script checks.</li>
+<li>No gameplay code, memories, slots, shops, meta progression, regions, enemies, or weapons were added.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li><code>node --check scripts/run_trusted_postloss_gate.js</code>: passed.</li>
+<li><code>node --check scripts/check_local_pipeline.js</code>: passed.</li>
+<li><code>npm run doctor</code>: 44 pass, 0 warn, 0 fail.</li>
+<li><code>npm run doctor:deep</code>: 64 pass, 0 warn, 0 fail.</li>
+<li><code>npm run qa:postloss:trusted</code>: failed before gameplay evaluation after both the standard run and the 30000 ms retry.</li>
+<li>Latest failure shape:</li>
+<li>pipe failure: <code>Timed out waiting for CDP response to Target.getTargets</code>,</li>
+<li>port fallback failure: <code>listen EPERM: operation not permitted 127.0.0.1</code>.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>Treat the wrapper result as transport/environment evidence, not gameplay failure evidence.</li>
+<li>Keep the original trusted-local post-loss browser proof task open.</li>
+<li>Prefer <code>npm run qa:postloss:trusted</code> for the next trusted-local run because it enforces the agreed retry and blocker-prompt order.</li>
+<li>Do not start WP3 Slice A until browser proof or a reviewed environment-blocker decision exists.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>This managed sandbox still cannot produce post-loss browser proof.</li>
+<li>Trusted-local behavior is still unknown.</li>
+<li>WP2 Slice B is still supported by AI proxy metrics only, not browser/user evidence.</li>
+<li>The wrapper reduces procedure error but does not solve the underlying Chrome/CDP transport blocker.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>The next executable scope stayed on the post-loss QA gate.</li>
+<li>Codex added a wrapper so trusted-local execution follows the exact selected order: standard QA, one 30000 ms transport retry, then blocker prompt.</li>
+<li>The sandbox result still blocks before gameplay evaluation, so WP3 and people testing remain blocked.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>Run <code>npm run qa:postloss:trusted</code> on a trusted local machine outside this managed sandbox.</li>
+<li>If it passes, proceed only to WP3 Slice A with one existing active-memory tactical agency hook.</li>
+<li>If it fails on gameplay assertions, fix only the post-loss QA/flow issue.</li>
+<li>If it fails on the same transport path, use <code>docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md</code> before starting new gameplay work.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: the post-loss challenge still lacks browser proof, and repeated manual retry instructions are easy to execute inconsistently.</li>
+<li>Direction: turn the evidence gate into a repeatable command without widening gameplay scope.</li>
+<li>Action: added a trusted-local QA wrapper and recorded the sandbox blocker result.</li>
+<li>Result: the next local run is clearer, but browser proof remains pending outside this sandbox.</li>
+</ul>
+  </main>
+</body>
+</html>

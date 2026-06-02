@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-02-33 - v0.9 WP1 Identity QA 통과 보고</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-02-33 - v0.9 WP1 Identity QA 통과 보고</h1>
+      <p class="meta">Generated from 2026-06-02-33-v0-9-wp1-identity-qa-통과-보고.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-02-33 - v0.9 WP1 Identity QA 통과 보고</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>v0.9 Work Package 1의 identity hook과 identity QA runner가 모두 구현됐다.</li>
+<li><code>npm run qa:identity</code>가 현재 로컬에서 통과했다.</li>
+<li>WP1의 남은 후보 작업은 기억 카드 설명 문구 압축이다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>Chrome DevTools pipe 연결 방향을 수정했다.</li>
+<li>QA runner가 <code>status: complete</code>만 기다리지 않고, 핵심 identity 필드가 모두 보이면 통과로 판정하게 했다.</li>
+<li><code>data-lethe-identity-qa</code>에서 빌드명, 활성 시너지, 의존 기억, payload, 90초 노출 여부를 확인한다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>node --check scripts/run_browser_identity_qa.js</code>: 통과.</li>
+<li><code>npm run qa:identity</code>: 통과.</li>
+<li>결과:</li>
+<li><code>status: complete</code>,</li>
+<li>failures <code>[]</code>,</li>
+<li><code>buildNameVisible: true</code>,</li>
+<li><code>synergyVisible: true</code>,</li>
+<li><code>dependencyVisible: true</code>,</li>
+<li><code>hasBuildIdentityPayload: true</code>,</li>
+<li><code>buildIdentitySeenBy90Sec: true</code>.</li>
+<li><code>npm run doctor</code>: 39 pass, 0 warn, 0 fail.</li>
+</ul>
+<h2>4. 결정 사항</h2>
+<ul>
+<li><code>?qa=fast,identity</code> 검증 항목은 완료 처리한다.</li>
+<li>아직 WP2로 바로 넘어가지 않고, 필요하면 기억 설명 문구를 한 번 더 압축한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li><code>qa:identity</code>는 DOM/payload 노출 검증이지, 사람이 실제로 읽기 쉽다고 느끼는 검증은 아니다.</li>
+<li>WP2 post-loss challenge로 가기 전, 카드 문구가 너무 길면 한 번 더 줄이는 편이 안전하다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<ul>
+<li>Claude는 문구 압축을 다음 후보로 봤고, Codex CLI는 identity QA runner를 먼저 권장했다.</li>
+<li>identity QA runner가 통과했으므로 다음 선택지는 문구 압축 또는 WP1 종료 판단이다.</li>
+</ul>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>기억 카드 설명 문구를 더 압축할지 판단한다.</li>
+<li>압축 후 <code>npm run qa:identity</code>, <code>npm run ai:test:quick</code>를 다시 확인한다.</li>
+<li>문제가 없으면 WP1을 닫고 WP2 post-loss challenge로 이동한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: UI/payload hook은 있었지만 브라우저에서 실제로 보이는지 자동 증거가 없었다.</li>
+<li>방향: headless Chrome CDP로 QA URL의 dataset을 읽어, 사람이 보기 전 최소 노출 조건을 확인한다.</li>
+<li>실행: pipe 기반 runner를 수정하고 통과 조건을 core identity visible 기준으로 바꿨다.</li>
+<li>결과: v0.9 WP1은 빌드 정체성 표시를 브라우저 데이터로 검증할 수 있게 됐다.</li>
+</ul>
+<p>---</p>
+  </main>
+</body>
+</html>

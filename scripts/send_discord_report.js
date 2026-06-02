@@ -8,7 +8,7 @@ const options = parseArgs(process.argv.slice(2));
 const dryRun = options.dryRun;
 const input = options.input || latestMarkdownReport();
 const markdownPath = path.resolve(input);
-const htmlPath = markdownPath.replace(/\.md$/i, '.html');
+const dailyHtmlPath = markdownPath.replace(/\.md$/i, '.html');
 const promptPath = resolvePromptPath(options.prompt, markdownPath);
 
 loadDotEnv(path.resolve('.env'));
@@ -23,20 +23,21 @@ async function main() {
     throw new Error(`Report markdown not found: ${path.relative(process.cwd(), markdownPath)}`);
   }
 
-  if (!fs.existsSync(htmlPath)) {
-    throw new Error(`Report HTML not found. Run the report builder first: ${path.relative(process.cwd(), htmlPath)}`);
+  if (!fs.existsSync(dailyHtmlPath)) {
+    throw new Error(`Report HTML not found. Run the report builder first: ${path.relative(process.cwd(), dailyHtmlPath)}`);
   }
 
   const fullMarkdown = fs.readFileSync(markdownPath, 'utf8');
   const reportScope = selectReportScope(fullMarkdown, options);
+  const attachmentHtmlPath = resolveAttachmentHtmlPath(markdownPath, reportScope, options);
   const markdown = reportScope.markdown;
-  const html = fs.readFileSync(htmlPath);
+  const html = fs.readFileSync(attachmentHtmlPath);
   const prompt = promptPath ? fs.readFileSync(promptPath) : null;
-  const message = buildMessage(markdown, markdownPath, htmlPath, promptPath, reportScope.title);
+  const message = buildMessage(markdown, markdownPath, attachmentHtmlPath, promptPath, reportScope.title);
 
   if (dryRun) {
     console.log(message);
-    console.log(`Attachment: ${path.relative(process.cwd(), htmlPath)} (${html.length} bytes)`);
+    console.log(`Attachment: ${path.relative(process.cwd(), attachmentHtmlPath)} (${html.length} bytes)`);
     if (promptPath) {
       console.log(`Attachment: ${path.relative(process.cwd(), promptPath)} (${prompt.length} bytes)`);
     }
@@ -55,7 +56,7 @@ async function main() {
     content: message,
     allowed_mentions: { parse: [] },
   }));
-  form.append('files[0]', new Blob([html], { type: 'text/html' }), path.basename(htmlPath));
+  form.append('files[0]', new Blob([html], { type: 'text/html' }), path.basename(attachmentHtmlPath));
   if (promptPath) {
     form.append('files[1]', new Blob([prompt], { type: 'text/markdown' }), path.basename(promptPath));
   }
@@ -70,7 +71,7 @@ async function main() {
     throw new Error(`Discord upload failed: ${response.status} ${response.statusText}\n${body}`);
   }
 
-  console.log(`Uploaded ${path.relative(process.cwd(), htmlPath)} to Discord.`);
+  console.log(`Uploaded ${path.relative(process.cwd(), attachmentHtmlPath)} to Discord.`);
 }
 
 function buildMessage(markdown, markdownFile, htmlFile, reviewPromptPath, sectionTitle = '') {
@@ -180,6 +181,36 @@ function selectReportScope(markdown, opts) {
   return {
     title: '',
     markdown,
+  };
+}
+
+function resolveAttachmentHtmlPath(reportPath, reportScope, opts) {
+  if (!opts.latestSection && !opts.section) return reportPath.replace(/\.md$/i, '.html');
+
+  const unit = unitReportForTitle(reportPath, reportScope.title);
+  if (unit && fs.existsSync(unit.htmlPath)) return unit.htmlPath;
+
+  return reportPath.replace(/\.md$/i, '.html');
+}
+
+function unitReportForTitle(reportPath, title) {
+  const date = path.basename(reportPath, '.md');
+  const match = String(title || '').match(new RegExp(`^${escapeRegExp(date)}-(\\d{2})\\s+-\\s+(.+)$`));
+  if (!match) return null;
+
+  const unitDir = path.join(path.dirname(reportPath), 'units', date);
+  const prefix = `${date}-${match[1]}-`;
+  if (!fs.existsSync(unitDir)) return null;
+
+  const htmlFile = fs.readdirSync(unitDir)
+    .filter((file) => file.startsWith(prefix) && file.endsWith('.html'))
+    .sort()[0];
+  if (!htmlFile) return null;
+
+  const htmlPath = path.join(unitDir, htmlFile);
+  return {
+    htmlPath,
+    markdownPath: htmlPath.replace(/\.html$/i, '.md'),
   };
 }
 

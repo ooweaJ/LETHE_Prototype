@@ -1,6 +1,6 @@
 # Codex Status
 
-Last updated: 2026-06-02
+Last updated: 2026-06-03
 
 ## Current Build
 
@@ -8,7 +8,7 @@ Last updated: 2026-06-02
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
-- Latest task-update status: feedback-6 synthesis confirms no material Claude/Codex scope conflict. The trusted post-loss gate JSON logging is valid QA evidence cleanup, but the latest managed-sandbox JSON still records `status: blocked` and `transportFailure: true` after the standard run plus the 30000 ms retry. WP2 Slice B remains implementation-complete but not browser-proven; WP3, people testing, balance changes, and UI/gameplay expansion remain blocked until trusted-local `npm run qa:postloss:trusted` passes or an explicit environment-blocker decision exists.
+- Latest task-update status: report delivery has been corrected from "numbered sections inside one large daily report only" to "numbered daily sections plus generated per-unit Markdown/HTML files." `npm run report` now writes `docs/reports/units/YYYY-MM-DD/`, `npm run report:check` verifies those unit files, and Discord latest-section delivery attaches the latest unit HTML instead of the full daily HTML. WP2 Slice B remains implementation-complete but not browser-proven; WP3, people testing, balance changes, and UI/gameplay expansion remain blocked until trusted-local `npm run qa:postloss:trusted` passes or an explicit environment-blocker decision exists.
 
 ## Implemented
 
@@ -102,6 +102,11 @@ Last updated: 2026-06-02
 - Codex/GPT/Claude workflow docs.
 - Markdown daily reports, generated HTML reports, and Discord report delivery.
 - Work-unit Discord report delivery via `npm run report:discord:unit` and `--section`.
+- Generated per-unit report files:
+  - `npm run report` splits each top-level `# YYYY-MM-DD-NN - 작업 제목` section into `docs/reports/units/YYYY-MM-DD/*.md` and `*.html`,
+  - `docs/reports/units/YYYY-MM-DD/latest.json` records the latest unit,
+  - `node scripts/send_discord_report.js --latest-section` now attaches the latest unit HTML rather than the full daily HTML,
+  - `npm run report:check` verifies headings and generated unit files.
 - Short Discord status notices for Codex work.
 - Claude Code planning-iteration automation for interpreting AI/human test results and deciding next design direction.
 - Test-result planning pipeline via `npm run planning:pipeline`, with Claude first and Codex CLI fallback.

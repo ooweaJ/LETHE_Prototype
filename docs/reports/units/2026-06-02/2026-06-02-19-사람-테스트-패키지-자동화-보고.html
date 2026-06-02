@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-02-19 - 사람 테스트 패키지 자동화 보고</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-02-19 - 사람 테스트 패키지 자동화 보고</h1>
+      <p class="meta">Generated from 2026-06-02-19-사람-테스트-패키지-자동화-보고.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-02-19 - 사람 테스트 패키지 자동화 보고</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>LETHE HTML alpha v0.5는 사람 테스트 준비 상태다.</li>
+<li>사람 테스트용 정적 폴더를 한 명령으로 생성할 수 있게 됐다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>scripts/prepare_playtest_build.js</code>를 추가했다.</li>
+<li><code>playtest:package</code>, <code>playtest:package:dry</code> npm 명령을 추가했다.</li>
+<li><code>dist/</code>를 <code>.gitignore</code>에 추가했다.</li>
+<li><code>npm run playtest:package</code>가 <code>dist/lethe-v0.5-playtest</code>에 정적 게임 파일, 가이드, 노트 템플릿, README를 복사한다.</li>
+<li><code>docs/HUMAN_PLAYTEST_GUIDE.md</code>와 <code>docs/CODEX_RUNBOOK.md</code>에 package 절차를 추가했다.</li>
+<li>doctor deep에 package dry-run 검사를 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>node --check scripts/prepare_playtest_build.js</code>: 통과.</li>
+<li><code>node --check scripts/check_local_pipeline.js</code>: 통과.</li>
+<li><code>npm run playtest:package:dry</code>: 출력 파일 목록 확인.</li>
+<li><code>npm run playtest:package</code>: <code>dist/lethe-v0.5-playtest</code> 생성.</li>
+<li><code>npm run doctor:deep</code>: 38 pass, 0 warn, 0 fail.</li>
+</ul>
+<h2>4. 결정 사항</h2>
+<ul>
+<li>배포용 <code>dist/</code> 산출물은 git에 올리지 않는다.</li>
+<li>테스트 공유 전에는 <code>npm run playtest:package</code>로 최신 정적 폴더를 다시 만든다.</li>
+<li>테스트 후 JSON 로그는 <code>playtest_logs/</code>에 모으고 <code>npm run playtest:summary</code>로 다음 Claude/GPT 판단으로 넘긴다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>현재 package는 zip을 만들지 않고 폴더만 만든다.</li>
+<li>브라우저 보안 설정에 따라 file URL 실행이 막히는 환경에서는 로컬 서버가 필요할 수 있다.</li>
+<li>실제 사람 테스트가 없으면 패키지 자동화만으로 product gate가 통과되지는 않는다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<ul>
+<li>사람 테스트 준비는 실행 패키지, 원본 로그 폴더, 요약 스크립트, human-test prompt 생성까지 연결됐다.</li>
+<li>다음 Claude/GPT 인계는 실제 사람 테스트 결과가 모인 뒤 진행한다.</li>
+</ul>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>5-8명 사람 테스트를 진행한다.</li>
+<li>필요한 경우 테스트 실행용 로컬 서버 명령을 추가한다.</li>
+<li>테스트 로그가 쌓이면 <code>npm run playtest:summary</code>를 실행한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 사람 테스트를 할 때 매번 어떤 파일을 공유하고 어떤 로그를 받아야 하는지 흐려질 수 있다.</li>
+<li>방향: 실행 패키지, 테스트 가이드, 로그 수집, 결과 요약을 명령으로 연결한다.</li>
+<li>실행: playtest package script와 doctor 검증을 추가했다.</li>
+<li>결과: 다른 로컬에서도 <code>doctor -&gt; package -&gt; test -&gt; summary -&gt; planning</code> 흐름을 재현할 수 있다.</li>
+</ul>
+<p>---</p>
+  </main>
+</body>
+</html>

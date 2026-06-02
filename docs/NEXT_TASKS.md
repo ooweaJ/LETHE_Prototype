@@ -34,7 +34,7 @@
 - Latest devloop feedback-193946-feedback-5 verdict: `ITERATE_BEFORE_TEST`. Claude and Codex agree the trusted post-loss wrapper is scope-valid gate tooling and that AI proxy metrics remain a positive planning pass only. There is no material scope conflict: the next executable unit is sandbox 밖 trusted-local `npm run qa:postloss:trusted`; WP3 Slice A, people testing, and any balance/UI/gameplay expansion remain blocked until browser proof passes or `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md` produces an explicit environment decision.
 - Latest trusted post-loss gate logging: `npm run qa:postloss:trusted` now writes `alpha_test/outputs/postloss-trusted-gate/latest.json` with `status`, `transportFailure`, run summaries, `nextCommand`, and `blockerPrompt`. The latest managed-sandbox run still produced `status: blocked`, `transportFailure: true`, so this is only gate evidence cleanup, not browser proof.
 - Latest devloop feedback-193946-feedback-6 verdict: `ITERATE_BEFORE_TEST`. Claude and Codex agree the JSON logging change is scope-valid QA evidence cleanup and that the positive AI proxy remains planning evidence only. There is no material next-scope conflict: the next executable unit remains sandbox 밖 trusted-local `npm run qa:postloss:trusted`; WP3 Slice A, people testing, balance changes, and UI/gameplay expansion stay blocked until browser proof passes or the existing environment-blocker prompt produces an explicit decision.
-- Reporting rule update: work reports now use numbered unit headings like `# 2026-06-02-44 - 보고서 단위 번호 체계`; `npm run report:check` and `doctor` enforce this so Discord latest-section reports are task-readable.
+- Reporting rule update: work reports now use numbered unit headings like `# 2026-06-02-44 - 보고서 단위 번호 체계`; `npm run report` also splits those sections into `docs/reports/units/YYYY-MM-DD/*.md` and `*.html`, `npm run report:check` verifies the generated unit files, and Discord latest-section reports attach the latest unit HTML instead of the full daily HTML.
 - Reference research: `docs/research/2026-06-02-roguelike-reference.md`.
 - New v0.9 prompt: `docs/review_prompts/2026-06-02-v09-release-feel-loop.md`.
 - Overnight loop command:
@@ -104,6 +104,17 @@
 - [x] Max single memory deletion share: 목표 `35%` 이하, 현재 `28.8%`.
 
 ## Next Codex Tasks
+
+- [x] 보고서 방식을 작업 단위 파일 기준으로 고친다.
+  - 기존 루프 수정은 `docs/reports/YYYY-MM-DD.md` 안의 top-level heading 번호화까지만 했다.
+  - 2026-06-03 수정으로 `npm run report`가 `docs/reports/units/YYYY-MM-DD/`에 단위별 Markdown/HTML을 생성하게 했다.
+  - `npm run report:check`가 heading뿐 아니라 단위 Markdown/HTML과 `latest.json` 존재도 확인하게 했다.
+  - `node scripts/send_discord_report.js --latest-section`가 최신 단위 HTML을 첨부하게 했다.
+  - `scripts/run_autonomous_dev_loop.js` 프롬프트의 하드코딩 날짜를 루프 날짜 변수로 바꾸고, 단위 파일 생성/Discord 첨부 기준을 명시했다.
+- [ ] 2026-06-03 이후 루프에서 새 보고 단위가 `docs/reports/units/2026-06-03/`에 생성되는지 확인한다.
+  - `npm run report`
+  - `npm run report:check`
+  - `node scripts/send_discord_report.js --dry-run --latest-section`
 
 - [x] 브라우저에서 v0.2 화면 QA를 한다.
 - [x] 결과 화면에서 텍스트가 겹치지 않는지 확인한다.

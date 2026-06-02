@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-02-35 - Devloop 피드백 태스크 갱신 보고</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-02-35 - Devloop 피드백 태스크 갱신 보고</h1>
+      <p class="meta">Generated from 2026-06-02-35-devloop-피드백-태스크-갱신-보고.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-02-35 - Devloop 피드백 태스크 갱신 보고</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>LETHE HTML alpha v0.9 WP1은 identity hook, identity QA runner, 기억 문구 압축까지 구현된 상태다.</li>
+<li>이번 작업은 문서 갱신만 수행했으며 코드 기능 변경은 하지 않았다.</li>
+<li>WP2 착수 전 blocker는 두 가지다:</li>
+<li><code>docs/loop_runs/2026-06-02-devloop-173350*.md</code> 미추적 파일로 인한 preflight 실패,</li>
+<li>이번 Codex 세션에서 <code>npm run qa:identity</code>가 Chrome CDP pipe timeout으로 재통과하지 못한 점.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>docs/review_responses/2026-06-02-devloop-173350-feedback-1-double-check.md</code>의 synthesis 항목을 채웠다.</li>
+<li><code>docs/NEXT_TASKS.md</code>에 Claude/Codex 공통점, 충돌, 선택 순서를 기록했다.</li>
+<li><code>docs/CODEX_STATUS.md</code>에 최신 devloop 피드백 verdict와 남은 blocker를 반영했다.</li>
+<li><code>docs/devlog/2026-06-02.md</code>에 docs-only task update 기록을 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>이번 패스에서는 새 테스트를 실행하지 않았다. 요청 범위가 문서 갱신이었고 코드 기능 변경을 하지 않았기 때문이다.</li>
+<li>근거로 사용한 최신 구현 검증:</li>
+<li><code>node --check src/game.js</code>: 통과,</li>
+<li><code>node --check scripts/run_browser_identity_qa.js</code>: 통과,</li>
+<li><code>npm run ai:test:quick</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score <code>0.8883</code>,</li>
+<li><code>npm run ai:test</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score <code>0.8909</code>,</li>
+<li>정적 문구 길이 확인: 6개 기억 요약 20-26자.</li>
+<li>남은 검증 공백:</li>
+<li>최신 <code>npm run qa:identity</code> 재실행은 이 Codex 세션에서 실패했으므로 trusted local 재확인이 필요하다.</li>
+</ul>
+<h2>4. 결정 사항</h2>
+<ul>
+<li>WP1 copy compression은 구현 완료로 본다.</li>
+<li>AI 지표만으로 브라우저 읽기성이나 실제 재미를 확정하지 않는다.</li>
+<li>다음 구현은 바로 post-loss challenge로 크게 열지 않는다.</li>
+<li>선택된 순서는 preflight 정리, trusted-local identity QA, WP2 Slice A 압박 고저차, 최소 post-loss challenge 후속 작업이다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>preflight blocker가 살아 있어 unattended automation을 시작하면 안 된다.</li>
+<li><code>qa:identity</code>는 이전 통과 기록이 있지만 이번 세션에서 재현되지 않았다.</li>
+<li>Claude와 Codex CLI가 WP2 첫 구현 순서에서 갈렸다.</li>
+<li>실제 사람이 90초 안에 기억 문구를 더 잘 읽는지는 아직 검증되지 않았다.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>Claude/Codex 공통점: WP1은 더 붙잡기보다 다음 검증 축으로 넘어갈 수 있지만, preflight와 identity QA가 먼저다.</li>
+<li>충돌: Claude는 압박 고저차 먼저, Codex CLI는 최소 post-loss challenge 먼저를 권장했다.</li>
+<li>Codex 선택: 새 범위를 늘리지 않고 WP2를 압박 고저차 first slice로 쪼갠다. post-loss challenge는 기존 전투 파라미터만 쓰는 최소 후속 작업으로 둔다.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>미추적 <code>docs/loop_runs/2026-06-02-devloop-173350*.md</code> 파일을 정리해 preflight blocker를 제거한다.</li>
+<li>trusted local에서 <code>npm run qa:identity</code>를 재실행한다.</li>
+<li>통과하면 v0.9 WP2 Slice A, 전투 구간별 압박 고저차를 구현한다.</li>
+<li>WP2 압박 리듬 검증 후 최소 post-loss challenge를 구현한다.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>문제: 자동 루프가 구현과 피드백을 만들었지만, 다음 태스크 전환 기준이 preflight/QA blocker와 설계 충돌 때문에 흐려졌다.</li>
+<li>방향: Claude/Codex 의견을 공통점과 충돌로 분리하고, 가장 작은 다음 작업 순서로 다시 정렬한다.</li>
+<li>실행: double-check, NEXT_TASKS, CODEX_STATUS, devlog, report를 같은 결론으로 맞췄다.</li>
+<li>결과: 다음 루프는 기능 확장이 아니라 preflight 정리와 identity QA 재확인에서 시작하도록 source-of-truth 문서가 갱신됐다.</li>
+</ul>
+<p>---</p>
+  </main>
+</body>
+</html>

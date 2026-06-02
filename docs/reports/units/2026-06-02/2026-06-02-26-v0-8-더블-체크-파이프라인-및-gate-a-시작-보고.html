@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-02-26 - v0.8 더블 체크 파이프라인 및 Gate A 시작 보고</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-02-26 - v0.8 더블 체크 파이프라인 및 Gate A 시작 보고</h1>
+      <p class="meta">Generated from 2026-06-02-26-v0-8-더블-체크-파이프라인-및-gate-a-시작-보고.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-02-26 - v0.8 더블 체크 파이프라인 및 Gate A 시작 보고</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>LETHE HTML alpha는 v0.8 core-redesign Gate A에 들어갔다.</li>
+<li>큰 기획 변경은 이제 Claude + Codex CLI 더블 체크를 기본 파이프라인으로 사용한다.</li>
+<li>v0.8 Gate A는 HP 사망 버그와 실제 위험 지표를 먼저 고치는 단계다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>scripts/run_planning_pipeline.js</code> 기본 provider를 <code>double</code>로 바꿨다.</li>
+<li><code>planning:pipeline:double</code>과 <code>planning:pipeline:auto</code> npm 명령을 추가했다.</li>
+<li>custom <code>--prompt</code>가 기존 프롬프트를 덮어쓰지 않고 그대로 사용하도록 고쳤다.</li>
+<li>최신 Codex CLI에서 제거된 <code>--ask-for-approval</code> 옵션을 제거했다.</li>
+<li>v0.8 재기획 프롬프트를 작성했다: <code>docs/review_prompts/2026-06-02-v08-core-redesign.md</code>.</li>
+<li>Claude와 Codex CLI 양쪽 답변을 받았다.</li>
+<li>더블 체크 요약을 작성했다: <code>docs/review_responses/2026-06-02-v08-core-redesign-double-check.md</code>.</li>
+<li>브라우저 버전과 experiment version을 <code>v0.8</code>로 올렸다.</li>
+<li>HP 1 고정 생존 로직을 제거했다.</li>
+<li>실제 사망 처리, death overlay, <code>death</code>/<code>danger</code> JSON payload를 추가했다.</li>
+<li><code>?qa=fast,death</code> QA 모드를 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>node --check src/game.js</code>: 통과.</li>
+<li><code>node --check scripts/run_planning_pipeline.js</code>: 통과.</li>
+<li><code>node --check scripts/ask_codex_review.js</code>: 통과.</li>
+<li><code>node --check scripts/check_local_pipeline.js</code>: 통과.</li>
+<li><code>npm run planning:pipeline:dry -- --prompt docs\review_prompts\2026-06-02-v08-core-redesign.md --skip-tests</code>: v0.8 프롬프트와 double provider 확인.</li>
+<li><code>npm run doctor</code>: 33 pass, 0 warn, 0 fail.</li>
+<li>Claude v0.8 response: <code>FIX_TEST_MODEL_FIRST</code>.</li>
+<li>Codex CLI v0.8 response: <code>REDESIGN_V08_CORE</code>.</li>
+<li>Double-check resolution: v0.8을 두 gate로 진행한다.</li>
+<li>Gate A: death bug and real danger metrics.</li>
+<li>Gate B: short run, memory budget, minimal synergies, tag echo.</li>
+<li>Chrome headless <code>?qa=fast,v06</code>: v0.8 cycle flow complete.</li>
+<li>Chrome headless <code>?qa=fast,levelup&amp;tester=T01&amp;session=S01</code>: v0.8 level-up regression complete.</li>
+<li>Chrome headless <code>?qa=fast,death</code>: <code>mode: dead</code>, <code>hasDeathPayload: true</code>, <code>hasDangerPayload: true</code>.</li>
+</ul>
+<h2>4. 결정 사항</h2>
+<ul>
+<li>v0.8은 수치 튜닝 버전이 아니라 코어 재설계 버전이다.</li>
+<li>더블 체크에서 충돌이 있으면 사용자 실제 플레이 피드백과 브라우저 전투 증거를 우선한다.</li>
+<li>AI <code>GO</code>는 앞으로 <code>AI planning pass</code>일 뿐이며 밸런스 통과로 보고하지 않는다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>AI simulator는 아직 실제 브라우저 전투 압박을 충분히 반영하지 못한다.</li>
+<li>v0.8 Gate A는 시작됐지만, Gate B의 기억 예산/시너지/태그 잔향은 아직 구현 전이다.</li>
+<li>기존 <code>?qa=fast,v06</code> 이름은 cycle QA로 남아 있어 추후 명칭 정리가 필요하다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<ul>
+<li>Claude와 Codex CLI 모두 v0.7.1 소규모 튜닝이 아니라 v0.8 코어 재설계를 권장했다.</li>
+<li>공통 1순위는 HP 사망 버그 수정과 실제 위험 지표 추가다.</li>
+<li>다음 인계는 v0.8 Gate A 결과와 브라우저 combat QA 보강 결과를 바탕으로 한다.</li>
+</ul>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>AI simulator와 browser combat QA에 사망률, 평균 사망 시각, 처치 공백, 적 누적, 저HP 시간, 결손 사망률을 반영한다.</li>
+<li>v0.8 Gate B로 8-10분 런, 90초 미니보스, 기억 예산 평준화, 최소 시너지, 태그 기반 잔향을 구현한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 단일 AI 답변과 proxy 지표만으로 밸런스 판단을 내려 실제 플레이와 어긋났다.</li>
+<li>방향: 큰 기획 변경은 Claude와 Codex CLI를 나눠 더블 체크하고, 현재 Codex가 공통점/충돌점을 정리해 구현한다.</li>
+<li>실행: 더블 체크 파이프라인을 기본값으로 만들고 v0.8 Gate A를 시작했다.</li>
+<li>결과: LETHE 자동화는 “AI 하나가 판단”하는 구조에서 “감정/기획 + 시스템/테스트 더블 체크 후 구현” 구조로 이동했다.</li>
+</ul>
+<p>---</p>
+  </main>
+</body>
+</html>

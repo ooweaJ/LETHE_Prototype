@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-02-34 - v0.9 WP1 기억 문구 압축 보고</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-02-34 - v0.9 WP1 기억 문구 압축 보고</h1>
+      <p class="meta">Generated from 2026-06-02-34-v0-9-wp1-기억-문구-압축-보고.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-02-34 - v0.9 WP1 기억 문구 압축 보고</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>v0.9 Work Package 1의 마지막 구현 후보였던 기억 설명 문구 압축을 적용했다.</li>
+<li>기존 6개 기억, 3개 슬롯, 기존 무기 범위만 유지했다.</li>
+<li>WP1의 코드 구현 범위는 identity hook, identity QA runner, 기억 카드 압축까지 완료됐다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>6개 기억의 전투 설명을 짧은 판독 문구로 줄였다.</li>
+<li>선택/보충 카드 표시를 <code>역할 · 짧은 설명</code> 형식으로 통일했다.</li>
+<li>카드 요약 렌더링을 <code>memoryChoiceHtml(memory)</code>로 공통화했다.</li>
+<li><code>.choice-summary</code>에 2줄 클램프를 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>npm run autopilot:preflight:local</code>: 실패.</li>
+<li>원인: 기존 미추적 파일 <code>docs/loop_runs/2026-06-02-devloop-173350-iteration-1-implement-prompt.md</code>, <code>docs/loop_runs/2026-06-02-devloop-173350.md</code>.</li>
+<li><code>node --check src/game.js</code>: 통과.</li>
+<li><code>node --check scripts/run_browser_identity_qa.js</code>: 통과.</li>
+<li>정적 문구 길이 확인: 6개 기억 요약이 20-26자 범위.</li>
+<li><code>npm run ai:test:quick</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score <code>0.8883</code>, regret <code>80.8%</code>, irritation <code>1.0%</code>, prediction <code>85.5%</code>, death/fail <code>40.0%</code>.</li>
+<li><code>npm run ai:test</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score <code>0.8909</code>, regret <code>81.6%</code>, irritation <code>0.7%</code>, prediction <code>85.1%</code>, death/fail <code>45.1%</code>.</li>
+<li><code>npm run qa:identity</code>: 이번 Codex 세션에서는 Chrome CDP pipe가 <code>Target.getTargets</code> 응답을 받지 못해 실패.</li>
+</ul>
+<h2>4. 결정 사항</h2>
+<ul>
+<li>WP1 문구 압축 항목은 완료 처리한다.</li>
+<li>이번 세션의 CDP 실패는 게임 코드 회귀로 단정하지 않고, 브라우저 검증 환경 제한으로 기록한다.</li>
+<li>장기 자동 루프나 WP2 착수 전 trusted local에서 <code>npm run qa:identity</code>를 다시 확인하는 것이 안전하다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li><code>qa:identity</code>가 이전에는 통과했지만 이번 세션에서는 재현되지 않았다.</li>
+<li>AI quick 점수는 유지됐지만, 실제 사람이 더 빨리 읽는지는 아직 플레이 반응으로 검증되지 않았다.</li>
+<li>preflight 실패가 남아 있어 unattended automation은 아직 시작하면 안 된다.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>WP1 구현은 닫을 수 있는 수준이다: 빌드 정체성 표시, payload hook, QA runner, 기억 문구 압축이 모두 들어갔다.</li>
+<li>다만 최신 세션에서 브라우저 QA 재실행이 실패했으므로, WP2 전에 trusted local <code>npm run qa:identity</code> 재확인을 권장한다.</li>
+<li>다음 설계 판단은 WP2의 압박 고저차와 post-loss challenge에 집중하면 된다.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>미추적 <code>docs/loop_runs/2026-06-02-devloop-173350*.md</code> 파일을 정리해 preflight blocker를 제거한다.</li>
+<li>trusted local에서 <code>npm run qa:identity</code>를 재실행한다.</li>
+<li>통과하면 v0.9 WP2: 압박 고저차와 post-loss challenge를 구현한다.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>문제: WP1 UI가 기능적으로 보이더라도 기억 설명이 길면 90초 안에 빌드 정체성이 늦게 읽힐 수 있었다.</li>
+<li>방향: 새 콘텐츠를 추가하지 않고 기존 6개 기억의 역할/효과 문구를 더 짧게 만든다.</li>
+<li>실행: memory card copy를 압축하고 카드 렌더링을 공통화했다.</li>
+<li>결과: 6개 기억 요약이 20-26자 범위로 줄었고 AI quick 기준은 유지됐다.</li>
+</ul>
+<p>---</p>
+  </main>
+</body>
+</html>

@@ -17,6 +17,53 @@ const markdown = fs.readFileSync(inputPath, 'utf8');
 const html = renderPage(markdown, path.basename(inputPath));
 fs.writeFileSync(outputPath, html, 'utf8');
 console.log(`Wrote ${path.relative(process.cwd(), outputPath)}`);
+writeUnitReports(markdown, inputPath);
+
+function writeUnitReports(md, sourcePath) {
+  const date = path.basename(sourcePath, '.md');
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return;
+
+  const unitDir = path.join(path.dirname(sourcePath), 'units', date);
+  fs.mkdirSync(unitDir, { recursive: true });
+
+  fs.readdirSync(unitDir)
+    .filter((file) => file.startsWith(`${date}-`) || file === 'latest.json')
+    .forEach((file) => fs.rmSync(path.join(unitDir, file), { force: true }));
+
+  const units = topLevelSections(md)
+    .filter((section) => new RegExp(`^${escapeRegExp(date)}-\\d{2}\\s+-\\s+.+$`).test(section.title));
+
+  let latest = null;
+  units.forEach((unit) => {
+    const match = unit.title.match(new RegExp(`^${escapeRegExp(date)}-(\\d{2})\\s+-\\s+(.+)$`));
+    if (!match) return;
+
+    const number = match[1];
+    const title = match[2].trim();
+    const baseName = `${date}-${number}-${slug(title)}`;
+    const markdownPath = path.join(unitDir, `${baseName}.md`);
+    const htmlPath = path.join(unitDir, `${baseName}.html`);
+
+    fs.writeFileSync(markdownPath, `${unit.markdown.trim()}\n`, 'utf8');
+    fs.writeFileSync(htmlPath, renderPage(unit.markdown, path.basename(markdownPath)), 'utf8');
+    latest = {
+      title: unit.title,
+      number,
+      markdownPath: path.relative(process.cwd(), markdownPath),
+      htmlPath: path.relative(process.cwd(), htmlPath),
+    };
+  });
+
+  if (latest) {
+    fs.writeFileSync(path.join(unitDir, 'latest.json'), `${JSON.stringify({
+      source: path.relative(process.cwd(), sourcePath),
+      generatedAt: new Date().toISOString(),
+      unitCount: units.length,
+      latest,
+    }, null, 2)}\n`, 'utf8');
+    console.log(`Wrote ${units.length} unit report(s) to ${path.relative(process.cwd(), unitDir)}`);
+  }
+}
 
 function renderPage(md, fileName) {
   const title = firstHeading(md) || fileName;
@@ -155,6 +202,23 @@ function firstHeading(md) {
   return match ? match[1].trim() : '';
 }
 
+function topLevelSections(md) {
+  const lines = md.split(/\r?\n/);
+  const headings = [];
+  for (let index = 0; index < lines.length; index += 1) {
+    const match = lines[index].match(/^#\s+(.+)$/);
+    if (match) headings.push({ index, title: stripMarkdown(match[1]).trim() });
+  }
+
+  return headings.map((heading, idx) => {
+    const end = headings[idx + 1]?.index ?? lines.length;
+    return {
+      title: heading.title,
+      markdown: lines.slice(heading.index, end).join('\n'),
+    };
+  });
+}
+
 function renderMarkdown(md) {
   const lines = md.split(/\r?\n/);
   const out = [];
@@ -261,6 +325,27 @@ function inline(text) {
     .replace(/`([^`]+)`/g, '<code>$1</code>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+}
+
+function stripMarkdown(text) {
+  return String(text || '')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+}
+
+function slug(text) {
+  return String(text || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[`"'“”‘’]/g, '')
+    .replace(/[^a-z0-9가-힣]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 80) || 'unit';
+}
+
+function escapeRegExp(text) {
+  return String(text).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 function escapeHtml(text) {

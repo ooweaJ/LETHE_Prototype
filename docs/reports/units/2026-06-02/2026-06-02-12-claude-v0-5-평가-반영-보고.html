@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-02-12 - Claude v0.5 평가 반영 보고</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-02-12 - Claude v0.5 평가 반영 보고</h1>
+      <p class="meta">Generated from 2026-06-02-12-claude-v0-5-평가-반영-보고.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-02-12 - Claude v0.5 평가 반영 보고</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>LETHE HTML alpha는 v0.5 core-fun human-test candidate 상태다.</li>
+<li>Claude v0.5 평가 verdict는 <code>ITERATE_BEFORE_TEST</code>다.</li>
+<li>단, 설계 문제가 아니라 실제 브라우저 검증이 아직 없어서 보류라는 판단이다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>docs/review_prompts/2026-06-02.md</code>를 v0.5 구현 후 평가 요청으로 갱신했다.</li>
+<li>Claude 응답 <code>docs/review_responses/2026-06-02-claude-v05-eval.md</code>를 확인했다.</li>
+<li><code>docs/NEXT_TASKS.md</code>에 Claude가 요구한 사람 테스트 전 필수 검증 3가지를 추가했다.</li>
+<li><code>docs/CODEX_STATUS.md</code>에 Claude v0.5 평가 verdict와 남은 gate를 반영했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>npm run review:claude:dry</code>: v0.5 평가 프롬프트 선택 확인.</li>
+<li>Claude 평가 파일 확인: <code>docs/review_responses/2026-06-02-claude-v05-eval.md</code>.</li>
+<li>Claude 판단: AI 지표는 충분하지만, 레벨업 3택 UI와 <code>runGrowth</code> JSON을 실제 브라우저에서 확인해야 한다.</li>
+</ul>
+<h2>4. 결정 사항</h2>
+<ul>
+<li>지금은 새 기능을 더 만들지 않는다.</li>
+<li><code>post-forgetting power drop</code> 28%는 지금 보정하지 않고 사람 테스트에서 체감 확인한다.</li>
+<li>기억별 투자-망각 상호작용은 v0.6 후보로 보류한다.</li>
+<li>사람 테스트 전 남은 gate는 v0.5 브라우저 동작 검증이다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>이 Codex 세션에서는 Browser 플러그인이 Windows sandbox 오류로 열리지 않았다.</li>
+<li>실제 플레이어가 만질 레벨업 화면이 깨져 있으면 사람 테스트 전체가 무효가 된다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<ul>
+<li>Claude는 <code>GO_TO_HUMAN_TEST</code>가 아니라 <code>ITERATE_BEFORE_TEST</code>를 선택했다.</li>
+<li>이유는 설계 부족이 아니라 브라우저 동작 검증 미완이다.</li>
+<li>검증 통과 시 바로 사람 테스트로 가도 된다는 판단이다.</li>
+</ul>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>로컬 브라우저에서 레벨업 3택 UI가 뜨는지 확인한다.</li>
+<li>선택 후 전투가 정상 재개되는지 확인한다.</li>
+<li>한 런 완료 후 JSON <code>runGrowth</code>가 실제 선택과 일치하는지 확인한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: AI 지표는 통과했지만, 신규 UX인 레벨업 화면을 실제 브라우저에서 보지 못했다.</li>
+<li>방향: 새 기능 추가가 아니라 사람 테스트 전 실행 신뢰성을 확보한다.</li>
+<li>실행: Claude 평가를 받아 남은 gate를 브라우저 QA 1건으로 좁혔다.</li>
+<li>결과: v0.5는 브라우저 검증 통과 후 바로 사람 테스트로 갈 수 있는 상태로 정리됐다.</li>
+</ul>
+<p>---</p>
+  </main>
+</body>
+</html>

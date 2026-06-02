@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-03-01 - 보고서 단위 파일화 수정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-03-01 - 보고서 단위 파일화 수정</h1>
+      <p class="meta">Generated from 2026-06-03-01-보고서-단위-파일화-수정.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-03-01 - 보고서 단위 파일화 수정</h1>
+<h2>1. Current build status</h2>
+<ul>
+<li>Project remains LETHE HTML Alpha v0.9.</li>
+<li>v0.9 WP2 Slice A pressure rhythm is implemented.</li>
+<li>v0.9 WP2 Slice B minimal post-loss challenge is implemented but not browser-proven.</li>
+<li>WP3 Slice A, people testing, balance changes, and UI/gameplay expansion remain blocked until trusted-local post-loss browser proof passes or an explicit environment-blocker decision exists.</li>
+</ul>
+<h2>2. What changed today</h2>
+<ul>
+<li>Fixed the report workflow gap the user pointed out.</li>
+<li>Previous loop changed only the heading format inside one large daily report.</li>
+<li><code>npm run report</code> now also generates per-work-unit Markdown/HTML files under <code>docs/reports/units/YYYY-MM-DD/</code>.</li>
+<li><code>node scripts/send_discord_report.js --latest-section</code> now attaches the latest unit HTML when available instead of the full daily HTML.</li>
+<li><code>npm run report:check</code> now verifies generated unit Markdown/HTML files and <code>latest.json</code>.</li>
+<li>Autonomous dev-loop prompts now use the loop date variable instead of hard-coded <code>2026-06-02</code>, and they explicitly mention unit report file generation.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li><code>node --check scripts/build_report.js</code>: passed.</li>
+<li><code>node --check scripts/send_discord_report.js</code>: passed.</li>
+<li><code>node --check scripts/check_report_units.js</code>: passed.</li>
+<li><code>node --check scripts/run_autonomous_dev_loop.js</code>: passed.</li>
+<li><code>npm run report</code>: generated daily HTML plus 57 unit reports for 2026-06-02.</li>
+<li><code>npm run report:check</code>: passed, 57 units.</li>
+<li><code>node scripts/send_discord_report.js --dry-run --latest-section</code>: attachment now points to <code>docs/reports/units/2026-06-02/2026-06-02-57-devloop-193946-feedback-6-태스크-갱신.html</code>.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>Keep the daily report as the source document.</li>
+<li>Generate per-unit files from the daily report instead of asking Codex to manually maintain many files.</li>
+<li>Treat the generated unit HTML as the Discord latest-section attachment.</li>
+<li>Keep WP3 blocked until post-loss browser proof is resolved.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>The previous report change was incomplete for the user's intended workflow.</li>
+<li>The generated unit files must be kept in sync by running <code>npm run report</code> after report edits.</li>
+<li>The current project gameplay blocker is still Chrome/CDP transport in this managed sandbox, not a post-loss gameplay assertion.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>보고서 방식 수정은 이제 heading 번호화가 아니라 단위 파일 생성까지 포함한다.</li>
+<li>다음 루프는 <code>docs/reports/units/YYYY-MM-DD/</code> 생성 여부와 Discord latest-section 첨부 파일을 확인해야 한다.</li>
+<li>게임 진행은 여전히 trusted-local <code>npm run qa:postloss:trusted</code> 통과 전까지 막혀 있다.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>Run <code>npm run report</code>, <code>npm run report:check</code>, and Discord latest-section dry-run after any report update.</li>
+<li>Run <code>npm run qa:postloss:trusted</code> outside this managed sandbox.</li>
+<li>If post-loss gate passes, record WP2 Slice B as browser-proven before starting only minimal WP3 Slice A.</li>
+<li>If the same transport failure repeats outside this sandbox, use <code>docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md</code>.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: daily reports became too large and the user could not tell which task each report belonged to.</li>
+<li>Direction: keep one source report but generate task-sized report artifacts automatically.</li>
+<li>Action: added unit report generation, verification, Discord unit attachment, and loop prompt wording.</li>
+<li>Result: latest-section Discord delivery now attaches a task-sized HTML file, and generated unit files are checked by <code>report:check</code>.</li>
+</ul>
+  </main>
+</body>
+</html>

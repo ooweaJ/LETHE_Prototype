@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-02-30 - v0.9 Work Package 1 빌드 정체성 Hook 보고</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-02-30 - v0.9 Work Package 1 빌드 정체성 Hook 보고</h1>
+      <p class="meta">Generated from 2026-06-02-30-v0-9-work-package-1-빌드-정체성-hook-보고.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-02-30 - v0.9 Work Package 1 빌드 정체성 Hook 보고</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>HTML Alpha Prototype 표기를 <code>v0.9</code>로 올렸다.</li>
+<li>v0.9 Work Package 1의 첫 구현 단위가 들어갔다.</li>
+<li>새 기억, 새 슬롯, 상점, 메타 진행, 새 지역, 대형 무기 확장은 추가하지 않았다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>기존 6개 기억의 태그/시너지로 <code>buildIdentity</code>를 계산한다.</li>
+<li>선택 화면과 전투 HUD의 잔향 패널 상단에 다음 정보를 표시한다:</li>
+<li>현재 빌드 이름,</li>
+<li>활성 시너지,</li>
+<li>의존 중인 기억.</li>
+<li>기억 선택 카드에 태그 칩을 추가해 역할/태그/짧은 설명이 한 번에 보이게 했다.</li>
+<li>JSON payload와 이벤트 로그에 <code>buildIdentity</code>, <code>buildIdentitySeenBy90Sec</code>를 추가했다.</li>
+<li>AI raw-run payload의 <code>stage.build</code>에도 <code>buildName</code>, <code>activeSynergyDetails</code>, <code>mostDependentMemory</code>를 추가했다.</li>
+<li><code>?qa=fast,identity</code> QA hook을 추가해 <code>data-lethe-identity-qa</code>에서 UI/payload 노출 여부를 읽을 수 있게 했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>npm run autopilot:preflight:local</code>: 실패. 기존 미추적 파일 <code>docs/loop_runs/2026-06-02-devloop-170139*.md</code> 2개 때문에 clean tree 조건을 통과하지 못했다.</li>
+<li><code>node --check src/game.js</code>: 통과.</li>
+<li><code>node --check alpha_test/src/simulator.js</code>: 통과.</li>
+<li><code>npm run ai:test:quick</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score <code>0.8883</code>.</li>
+<li><code>npm run ai:test</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score <code>0.8909</code>.</li>
+<li>quick raw-run payload에서 <code>stage.build.buildName</code>, <code>stage.build.mostDependentMemory</code>, <code>stage.build.activeSynergyDetails</code> 존재를 확인했다.</li>
+<li>정적 hook 확인: <code>buildIdentity</code>, <code>letheIdentityQa</code>, v0.9 label, build-card CSS 존재 확인.</li>
+<li>브라우저 QA는 미완료다. 인앱 Browser는 <code>iab</code>가 없었고, Chrome headless <code>--dump-dom</code>은 빈 출력을 반환했다.</li>
+</ul>
+<h2>4. 결정 사항</h2>
+<ul>
+<li>WP1을 완전 종료하지 않는다.</li>
+<li>이번 단위는 “빌드 정체성 UI/payload hook 구현”으로 완료 처리한다.</li>
+<li>다음에는 안정적인 브라우저/headless runner로 <code>?qa=fast,identity</code>를 먼저 검증한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>실제 화면에서 빌드 카드가 90초 안에 충분히 읽히는지는 아직 시각 검증되지 않았다.</li>
+<li>AI simulator는 이번 UI/payload 변경의 재미 체감을 직접 평가하지 않는다.</li>
+<li>unattended automation 전에는 미추적 loop-run 파일을 처리하거나 의도적으로 <code>--allow-dirty</code>를 써야 한다.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>v0.9 WP1 첫 단위로 기존 태그/시너지 기반 <code>buildIdentity</code>를 추가했다.</li>
+<li>플레이어가 현재 빌드, 활성 시너지, 가장 의존 중인 기억을 선택 화면과 HUD에서 볼 수 있게 했다.</li>
+<li>다음 판단은 브라우저 증거가 필요하며, AI 점수만으로 WP1 통과를 선언하지 않는다.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li><code>?qa=fast,identity</code>를 안정적인 브라우저/headless runner에서 검증한다.</li>
+<li>필요하면 빌드 카드 문구와 기억 설명을 더 압축한다.</li>
+<li>그 뒤에도 WP1 읽기성이 충분하면 Work Package 2의 post-loss challenge로 넘어간다.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>문제: 자동 기억 발동은 작동하지만 플레이어가 자기 빌드가 무엇인지 빠르게 읽기 어렵다.</li>
+<li>방향: 콘텐츠 추가 없이 기존 6개 기억의 태그와 시너지를 빌드 정체성으로 번역한다.</li>
+<li>실행: UI/HUD/payload에 동일한 <code>buildIdentity</code>를 연결했다.</li>
+<li>결과: 90초 빌드 읽기성 검증을 시작할 수 있는 계측과 화면 표식이 생겼다.</li>
+</ul>
+<p>---</p>
+  </main>
+</body>
+</html>

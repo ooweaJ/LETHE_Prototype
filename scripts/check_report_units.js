@@ -21,6 +21,7 @@ const headings = markdown
 
 const errors = [];
 let previousNumber = 0;
+const units = [];
 
 headings.forEach((heading, index) => {
   const text = heading.line.replace(/^#\s+/, '').trim();
@@ -38,7 +39,13 @@ headings.forEach((heading, index) => {
     errors.push(`${heading.lineNumber}: expected unit ${String(previousNumber + 1).padStart(2, '0')}, got ${match[1]}`);
   }
   previousNumber = number;
+  units.push({
+    number: match[1],
+    title: match[2],
+  });
 });
+
+verifyUnitFiles(units);
 
 if (errors.length) {
   console.error(`Report unit heading check failed: ${path.relative(process.cwd(), reportPath)}`);
@@ -48,6 +55,32 @@ if (errors.length) {
 }
 
 console.log(`Report unit headings ok: ${path.relative(process.cwd(), reportPath)} (${previousNumber} units)`);
+
+function verifyUnitFiles(unitList) {
+  if (!unitList.length) return;
+
+  const unitDir = path.join(path.dirname(reportPath), 'units', date);
+  if (!fs.existsSync(unitDir)) {
+    errors.push(`missing unit report directory: ${path.relative(process.cwd(), unitDir)}`);
+    return;
+  }
+
+  unitList.forEach((unit) => {
+    const prefix = `${date}-${unit.number}-`;
+    const files = fs.readdirSync(unitDir).filter((file) => file.startsWith(prefix));
+    if (!files.some((file) => file.endsWith('.md'))) {
+      errors.push(`missing unit markdown file for ${date}-${unit.number}`);
+    }
+    if (!files.some((file) => file.endsWith('.html'))) {
+      errors.push(`missing unit html file for ${date}-${unit.number}`);
+    }
+  });
+
+  const latestPath = path.join(unitDir, 'latest.json');
+  if (!fs.existsSync(latestPath)) {
+    errors.push(`missing unit latest metadata: ${path.relative(process.cwd(), latestPath)}`);
+  }
+}
 
 function reportDate(filePath) {
   const match = path.basename(filePath).match(/^(\d{4}-\d{2}-\d{2})\.md$/);
