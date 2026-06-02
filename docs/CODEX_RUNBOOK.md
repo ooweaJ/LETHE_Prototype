@@ -124,6 +124,45 @@ Claude is called with tools disabled, so it should only answer the planning prom
 
 If Claude exits with `401 Invalid authentication credentials`, run `claude` in a local terminal and complete login/authentication, then retry `npm run review:claude`.
 
+## Planning Pipeline
+
+Use this when the current build has AI or human test evidence and the next design direction should be decided before more implementation.
+
+Dry-run:
+
+```powershell
+npm run planning:pipeline:dry
+```
+
+Prompt-only, no external model call:
+
+```powershell
+npm run planning:pipeline:prompt
+```
+
+Actual pipeline:
+
+```powershell
+npm run planning:pipeline
+```
+
+The pipeline runs a quick AI test by default, writes a fresh prompt to:
+
+```text
+docs/review_prompts/YYYY-MM-DD-pipeline.md
+```
+
+Then it asks Claude first and falls back to Codex CLI if Claude fails. Responses are saved to:
+
+```text
+docs/review_responses/YYYY-MM-DD-pipeline-claude.md
+docs/review_responses/YYYY-MM-DD-pipeline-codex.md
+```
+
+After the response is saved, Codex should read it, update `docs/NEXT_TASKS.md`, implement the selected work, verify, report, commit, and push when safe.
+
+If the current Codex session cannot export repository prompts to external services, use `planning:pipeline:prompt` and run `npm run planning:pipeline` from the user's trusted local terminal.
+
 ## Codex CLI Review Fallback
 
 Use this when the user wants a GPT/Codex terminal answer without manually setting an OpenAI API key.

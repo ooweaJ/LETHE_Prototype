@@ -85,6 +85,9 @@
 - [x] 레벨업 3택 화면이 실제 브라우저 DOM에 뜨고, 선택 후 전투가 정상 재개되는지 확인했다.
 - [x] JSON payload에 `runGrowth` 선택 내역이 실제 선택과 일치하는지 확인했다.
 - [x] 레벨업 일시정지/재개 흐름이 QA 모드에서 정상 완료되는지 확인했다.
+- [x] 테스트 결과 기반 Claude/Codex 기획 파이프라인을 추가한다.
+- [x] `npm run planning:pipeline:prompt`로 quick AI test와 `docs/review_prompts/2026-06-02-pipeline.md` 생성을 확인했다.
+- [ ] 필요 시 `npm run planning:pipeline`을 실행해 v0.5 이후 방향을 Claude/Codex에 묻는다.
 - [ ] 5-8명 사람 테스트를 진행한다.
 - [ ] 플레이테스트 후 감정 반응을 기준으로 다음 방향을 결정한다.
 - [ ] 사람 테스트 결과가 모이면 Claude/GPT에 결과를 보고하고 기획 수정 방향을 받는다. 외부 전송 승인이 어려우면 Codex CLI fallback이나 Claude mock 경로로 자동화만 먼저 점검한다.

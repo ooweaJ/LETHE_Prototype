@@ -65,9 +65,10 @@ function main() {
 
 function buildPrompt(prompt) {
   return [
-    '너는 LETHE 프로젝트의 기획 검토자다.',
+    '너는 LETHE 프로젝트의 테스트 결과 기반 기획 파트너다.',
     '반드시 한국어로 답변한다.',
-    '코드 수정은 하지 말고, Codex가 바로 구현할 수 있는 기획 판단과 작업 목록만 작성한다.',
+    '코드 수정은 하지 말고, AI/사람 테스트 결과를 해석해 Codex가 바로 구현할 수 있는 기획 판단과 작업 목록만 작성한다.',
+    '현재 목표는 HTML 프로토타입으로 핵심 재미와 가능성을 검증하고, 충분히 가능성이 보이면 Unity 구현 단계로 넘어갈 근거를 만드는 것이다.',
     '답변에는 반드시 "앞으로 해야 할 일" 섹션을 포함한다.',
     '',
     prompt.trim(),
@@ -132,11 +133,15 @@ function latestMarkdown(dir) {
   if (!fs.existsSync(fullDir)) fail(`Directory not found: ${dir}`);
 
   const files = fs.readdirSync(fullDir)
-    .filter((file) => /^\d{4}-\d{2}-\d{2}\.md$/.test(file))
-    .sort();
+    .filter((file) => /^\d{4}-\d{2}-\d{2}(?:-[a-z0-9-]+)?\.md$/i.test(file))
+    .map((file) => ({
+      file,
+      mtimeMs: fs.statSync(path.join(fullDir, file)).mtimeMs,
+    }))
+    .sort((a, b) => a.mtimeMs - b.mtimeMs || a.file.localeCompare(b.file));
 
   if (files.length === 0) fail(`No dated Markdown prompts found in ${dir}`);
-  return path.join(dir, files[files.length - 1]);
+  return path.join(dir, files[files.length - 1].file);
 }
 
 function defaultOutputPath(inputPath) {

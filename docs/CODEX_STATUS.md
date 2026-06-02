@@ -50,6 +50,7 @@ Last updated: 2026-06-02
 - Work-unit Discord report delivery via `npm run report:discord:unit` and `--section`.
 - Short Discord status notices for Codex work.
 - Claude Code planning-iteration automation for interpreting AI/human test results and deciding next design direction.
+- Test-result planning pipeline via `npm run planning:pipeline`, with Claude first and Codex CLI fallback.
 
 ## Latest AI Test Result
 
@@ -127,6 +128,8 @@ npm run ai:sweep
 
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the v0.5 level-up flow and `runGrowth` payload.
+- Planning pipeline prompt generated: `docs/review_prompts/2026-06-02-pipeline.md`.
+- This Codex session could not run the external Claude/Codex provider step because exporting repository prompt content to external services was blocked. Run `npm run planning:pipeline` from the user's trusted local terminal to send it.
 - v0.2 scope: timing, deletion distribution, echo default, clearer feedback, JSON logs, human-test recall question.
 - A v0.3/version-up Claude prompt exists, but actual Claude execution still requires local Claude Code login.
 - This session confirmed the local `claude` command is installed: `claude --version` returned `2.1.153 (Claude Code)`.
@@ -140,6 +143,8 @@ npm run ai:sweep
 
 ## Next Codex Tasks
 
-- Human playtest is now the next gate.
+- Run `npm run planning:pipeline` when the next direction needs AI-test-based Claude/Codex planning before more implementation.
+- If external calls are blocked in Codex, run `npm run planning:pipeline:prompt` here and `npm run planning:pipeline` locally.
+- Human playtest is still the next product gate unless the pipeline response explicitly asks for a small HTML v0.6 iteration first.
 - Use `docs/HUMAN_PLAYTEST_GUIDE.md` for a 5-8 player test focused on regret vs irritation.
 - During testing, watch whether the 27.8-28.0% power drop feels too safe or still regretful enough.

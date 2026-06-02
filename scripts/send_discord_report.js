@@ -217,8 +217,18 @@ function resolvePromptPath(explicitPrompt, reportPath) {
   }
 
   const date = path.basename(reportPath, '.md');
-  const defaultPath = path.resolve('docs', 'review_prompts', `${date}.md`);
-  return fs.existsSync(defaultPath) ? defaultPath : '';
+  const promptsDir = path.resolve('docs', 'review_prompts');
+  if (!fs.existsSync(promptsDir)) return '';
+
+  const prompts = fs.readdirSync(promptsDir)
+    .filter((file) => new RegExp(`^${escapeRegExp(date)}(?:-[a-z0-9-]+)?\\.md$`, 'i').test(file))
+    .map((file) => ({
+      file,
+      mtimeMs: fs.statSync(path.join(promptsDir, file)).mtimeMs,
+    }))
+    .sort((a, b) => a.mtimeMs - b.mtimeMs || a.file.localeCompare(b.file));
+
+  return prompts.length ? path.join(promptsDir, prompts[prompts.length - 1].file) : '';
 }
 
 function bulletsFromSections(markdown, headingNames, limit) {
@@ -269,6 +279,10 @@ function fit(text, maxLength) {
 
 function normalize(text) {
   return stripMarkdown(text).trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+function escapeRegExp(text) {
+  return String(text).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 function stripMarkdown(text) {

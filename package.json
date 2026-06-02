@@ -18,7 +18,12 @@
     "review:claude": "node scripts/ask_claude_review.js",
     "review:claude:dry": "node scripts/ask_claude_review.js --dry-run",
     "review:codex": "node scripts/ask_codex_review.js",
-    "review:codex:dry": "node scripts/ask_codex_review.js --dry-run"
+    "review:codex:dry": "node scripts/ask_codex_review.js --dry-run",
+    "planning:pipeline": "node scripts/run_planning_pipeline.js",
+    "planning:pipeline:dry": "node scripts/run_planning_pipeline.js --dry-run",
+    "planning:pipeline:prompt": "node scripts/run_planning_pipeline.js --provider none",
+    "planning:pipeline:codex": "node scripts/run_planning_pipeline.js --provider codex",
+    "planning:pipeline:claude": "node scripts/run_planning_pipeline.js --provider claude"
   },
   "engines": {
     "node": ">=18.0.0"
