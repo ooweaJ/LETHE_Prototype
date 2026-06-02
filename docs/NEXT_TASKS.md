@@ -20,6 +20,7 @@
 - Actual automation proof for this turn: Discord work-unit report sent successfully, Claude v0.7 prompt sent successfully, Claude response saved successfully.
 - Project direction: HTML prototype validation first, Unity implementation later only if AI/human tests show enough promise.
 - v0.9 direction: broad human testing remains paused until the HTML prototype has stronger release-like build identity, pressure rhythm, post-loss challenge, and visible tactical agency.
+- Latest devloop feedback verdict: WP1 copy compression is implemented and AI-stable, but `docs/loop_runs/2026-06-02-devloop-173350*.md` preflight blockers and trusted-local identity QA revalidation must be handled before WP2 or unattended automation.
 - Reference research: `docs/research/2026-06-02-roguelike-reference.md`.
 - New v0.9 prompt: `docs/review_prompts/2026-06-02-v09-release-feel-loop.md`.
 - Overnight loop command:
@@ -143,13 +144,13 @@
 - [x] `doctor`와 `doctor:deep`이 밤샘 루프 명령을 확인하게 한다.
 - [x] `npm run overnight:loop:dry`와 `npm run doctor:deep`을 검증한다.
 - [x] 외부 AI 호출 없는 safe smoke loop를 실행해 `docs/loop_runs/2026-06-02-overnight-163600.md`를 남긴다.
-- [ ] v0.9 프롬프트를 Claude + Codex CLI 더블 체크에 보내 release-feel 작업 단위를 확정한다.
+- [x] v0.9 프롬프트를 Claude + Codex CLI 더블 체크에 보내 release-feel 작업 단위를 확정한다.
 - [x] v0.9 프롬프트를 Claude + Codex CLI 더블 체크에 보내 release-feel 작업 단위를 확정한다.
 - [x] v0.9 더블 체크 요약에 공통점/충돌점/선택 범위를 정리한다.
 - [x] 밤샘 루프 Discord 진행 알림을 기본값으로 고정한다.
 - [x] 실제 구현까지 반복하는 autonomous dev loop를 추가한다.
 - [x] `doctor`와 `doctor:deep`이 autonomous dev loop dry-run을 확인하게 한다.
-- [ ] v0.9 Work Package 1: 기존 6개 기억 안에서 빌드 정체성과 시너지 체감을 강화한다.
+- [x] v0.9 Work Package 1: 기존 6개 기억 안에서 빌드 정체성과 시너지 체감을 강화한다.
   - [x] 기억 선택 카드와 슬롯에서 기억별 주 역할, 태그, 짧은 전투 설명을 함께 보이게 했다.
   - [x] 현재 빌드 이름, 활성 시너지, 의존 중인 기억을 선택 화면/HUD에 표시한다.
   - [x] JSON payload, 이벤트 로그, AI raw-run payload에 build identity 필드를 추가한다.
@@ -157,8 +158,22 @@
   - [x] `npm run qa:identity` 전용 Chrome/CDP identity QA runner를 추가했다.
   - [x] `?qa=fast,identity`를 실제 브라우저 또는 안정적인 headless runner에서 검증한다.
     - `npm run qa:identity`: `status: complete`, failures `[]`.
-  - [ ] 필요하면 기억별 설명 문구를 더 압축해 90초 안에 더 쉽게 읽히게 한다.
-- [ ] v0.9 Work Package 2: 압박 고저차와 post-loss challenge를 구현한다.
+  - [x] 기억별 설명 문구를 더 압축해 90초 안에 더 쉽게 읽히게 했다.
+    - 6개 기억 선택/보충 카드 요약은 `역할 · 짧은 설명` 형식으로 통일했다.
+    - 요약 문구는 20-26자 범위로 줄였다.
+    - `npm run ai:test:quick`: `GO_CANDIDATE`, Alpha Fun Score `0.8883`.
+    - `npm run ai:test`: `GO_CANDIDATE`, Alpha Fun Score `0.8909`.
+    - 이번 Codex 세션의 `npm run qa:identity` 재실행은 Chrome CDP pipe가 `Target.getTargets` 응답을 받지 못해 실패했다. 이전 통과 기록은 유지하되, WP2 착수 전 trusted local 재확인이 안전하다.
+- [x] Claude/Codex 피드백 공통점과 충돌을 정리했다.
+  - 공통점: WP1 문구 압축은 AI 지표를 해치지 않았고, 새 콘텐츠 추가 없이 다음 검증 축으로 넘어갈 수 있다.
+  - 공통점: 미추적 loop-run 파일 때문에 preflight가 막혀 있으며, unattended loop 전에 정리해야 한다.
+  - 공통점: trusted local에서 `npm run qa:identity`를 재확인해야 한다.
+  - 충돌: Claude는 WP2 압박 고저차를 먼저 검증하고 post-loss challenge를 보류하자고 했고, Codex CLI는 최소 post-loss challenge를 다음 구현으로 제안했다.
+  - 선택: preflight 정리와 identity QA를 먼저 처리한 뒤, WP2는 압박 고저차를 첫 slice로 시작한다. post-loss challenge는 WP2 안의 최소 후속 작업으로만 유지한다.
+- [ ] 미추적 `docs/loop_runs/2026-06-02-devloop-173350*.md` 파일을 커밋/정리/ignore 중 하나로 처리해 `npm run autopilot:preflight:local` blocker를 제거한다.
+- [ ] trusted local에서 `npm run qa:identity`를 재실행하고 `status: complete`, failures `[]`를 확인한다.
+- [ ] v0.9 Work Package 2 Slice A: 전투 구간별 압박 고저차를 구현한다.
+- [ ] v0.9 Work Package 2 Slice B: 압박 고저차 검증 후 기존 전투 파라미터만 써서 최소 post-loss challenge를 구현한다.
 - [ ] v0.9 Work Package 3: 자동전투 안의 작은 tactical agency를 구현한다.
 - [ ] v0.9 통과 후에만 실제 브라우저 전투 QA와 사용자 1인 테스트를 요청한다.
 

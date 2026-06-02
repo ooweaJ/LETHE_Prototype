@@ -4,10 +4,11 @@ Last updated: 2026-06-02
 
 ## Current Build
 
-- Project: LETHE HTML Alpha v0.9 build-identity hook implemented.
+- Project: LETHE HTML Alpha v0.9 Work Package 1 text-compression pass implemented.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
+- Latest task-update status: docs-only synthesis completed for `2026-06-02-devloop-173350-feedback-1`; WP1 remains implemented, but WP2 should wait for preflight cleanup and trusted-local identity QA revalidation.
 
 ## Implemented
 
@@ -73,6 +74,11 @@ Last updated: 2026-06-02
   - added `scripts/run_browser_identity_qa.js`,
   - added `npm run qa:identity`,
   - local doctor now checks the identity QA script entry and syntax.
+- v0.9 Work Package 1 text-compression pass:
+  - compressed the six existing memory combat descriptions,
+  - setup/refill memory cards now use one shared `role · short description` summary,
+  - choice summaries are visually capped at two lines,
+  - no new memories, slots, shop, meta progression, region, or weapon expansion was added.
 - AI alpha test tool under `alpha_test/`.
 - Codex/GPT/Claude workflow docs.
 - Markdown daily reports, generated HTML reports, and Discord report delivery.
@@ -317,6 +323,25 @@ npm run ai:sweep
   - `npm run qa:identity`: passed,
   - result: `status: complete`, failures `[]`,
   - confirmed visible build name, active synergy, dependent memory, buildIdentity payload, and `buildIdentitySeenBy90Sec`.
+- Latest v0.9 WP1 text-compression verification:
+  - `npm run autopilot:preflight:local`: failed because existing untracked files keep the working tree dirty:
+    - `docs/loop_runs/2026-06-02-devloop-173350-iteration-1-implement-prompt.md`,
+    - `docs/loop_runs/2026-06-02-devloop-173350.md`,
+  - `node --check src/game.js`: passed,
+  - `node --check scripts/run_browser_identity_qa.js`: passed,
+  - static summary-length check: six memory summaries are 20-26 characters,
+  - `npm run ai:test:quick`: `GO_CANDIDATE`, Alpha Fun Score `0.8883`, regret `80.8%`, irritation `1.0%`, prediction `85.5%`, death/fail `40.0%`,
+  - `npm run ai:test`: `GO_CANDIDATE`, Alpha Fun Score `0.8909`, regret `81.6%`, irritation `0.7%`, prediction `85.1%`, death/fail `45.1%`,
+  - `npm run qa:identity`: failed in this Codex session because Chrome CDP pipe timed out waiting for `Target.getTargets`,
+  - in-app Browser fallback was unavailable because `iab` was not provided in this session.
+- Latest devloop feedback synthesis:
+  - prompt: `docs/review_prompts/2026-06-02-devloop-173350-feedback-1.md`,
+  - Claude response: `docs/review_responses/2026-06-02-devloop-173350-feedback-1-claude.md`,
+  - Codex CLI response: `docs/review_responses/2026-06-02-devloop-173350-feedback-1-codex.md`,
+  - synthesis: `docs/review_responses/2026-06-02-devloop-173350-feedback-1-double-check.md`,
+  - common conclusion: WP1 copy compression is implemented and AI-stable, but unattended automation is blocked by untracked loop-run files and identity QA should be rerun from trusted local,
+  - conflict: Claude wants WP2 pressure high/low before post-loss challenge, while Codex CLI proposed a minimal post-loss challenge first,
+  - selected order: preflight cleanup, trusted-local `npm run qa:identity`, then WP2 Slice A pressure rhythm; post-loss challenge remains a minimal WP2 follow-up.
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the v0.5 level-up flow and `runGrowth` payload.
 - Planning pipeline prompt generated: `docs/review_prompts/2026-06-02-pipeline.md`.
@@ -347,11 +372,12 @@ npm run ai:sweep
 
 ## Next Codex Tasks
 
-- v0.9 Work Package 1 remains the current product gate until browser evidence confirms build identity is visible within 90 seconds.
-- `?qa=fast,identity` browser/headless runner passed on this machine.
-- Next v0.9 WP1 task: compress memory card descriptions if needed, then decide whether WP1 can close before WP2.
+- v0.9 Work Package 1 implementation is complete: identity hook, identity QA runner, and compressed existing-memory card copy are all in place.
+- Docs-only loop update completed for the latest Claude/Codex feedback synthesis: `docs/NEXT_TASKS.md`, `docs/CODEX_STATUS.md`, devlog, and report now reflect the selected order.
+- Before starting unattended automation or treating WP1 as a fresh browser-verification pass, rerun `npm run qa:identity` from a trusted local terminal because this Codex session hit a Chrome CDP pipe timeout.
+- Next implementation candidate after that verification is v0.9 Work Package 2 Slice A: pressure rhythm/high-low pacing. Minimal post-loss challenge follows only after that slice is verified.
 - Resolve the dirty working tree before unattended automation:
-  - existing untracked files: `docs/loop_runs/2026-06-02-devloop-170139-iteration-1-implement-prompt.md`, `docs/loop_runs/2026-06-02-devloop-170139.md`,
+  - existing untracked files: `docs/loop_runs/2026-06-02-devloop-173350-iteration-1-implement-prompt.md`, `docs/loop_runs/2026-06-02-devloop-173350.md`,
   - next command before unattended automation: clean, commit, stash, ignore, or intentionally run with `--allow-dirty` from a trusted local terminal.
 - On another local machine, run `npm run doctor` first; run `npm run doctor:deep` before leaving Codex to continue unattended.
 - Before an unattended implement -> Claude feedback -> implement loop, run `npm run autopilot:preflight`.

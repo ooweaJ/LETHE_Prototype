@@ -100,7 +100,7 @@ const memories = {
     id: "execution_flash",
     name: "처형자의 섬광",
     role: "버스트",
-    desc: "주기적으로 가장 위협적인 적에게 백색 섬광 강타.",
+    desc: "위협 적 하나에 주기적 강타.",
     cooldown: 3.15,
     tags: ["burst"],
     echo: "치명타 확률 +12%, 치명타 피해 +35%",
@@ -110,7 +110,7 @@ const memories = {
     id: "hungry_blades",
     name: "굶주린 칼무리",
     role: "근접 도트",
-    desc: "주변을 도는 칼무리가 가까운 적을 지속적으로 벤다.",
+    desc: "근접 적을 계속 베는 칼날.",
     cooldown: 0.34,
     tags: ["area", "dot"],
     echo: "공격속도 +18%, 지속 피해 +35%",
@@ -120,7 +120,7 @@ const memories = {
     id: "stalker_oath",
     name: "추적자의 맹세",
     role: "추적 다중",
-    desc: "멀거나 위협적인 적을 따라가는 기억 투사체 발사.",
+    desc: "위협 적을 쫓는 투사체.",
     cooldown: 2.2,
     tags: ["burst"],
     echo: "투사체 수 +1, 투사체 속도 +25%",
@@ -130,7 +130,7 @@ const memories = {
     id: "shatter_ripple",
     name: "파쇄의 파문",
     role: "광역 / 넉백",
-    desc: "충격파를 일으켜 주변 적을 밀치고 충돌 피해를 준다.",
+    desc: "주변 적을 밀치고 충돌 피해.",
     cooldown: 4.55,
     tags: ["area", "control"],
     echo: "범위 +18%, 넉백 +25%, 피해 감소 +6%",
@@ -140,7 +140,7 @@ const memories = {
     id: "blood_reflection",
     name: "피의 반사",
     role: "온힛 증폭",
-    desc: "기본 공격 명중 시 붉은 추가타가 자동으로 반사된다.",
+    desc: "기본 공격마다 붉은 추가타.",
     cooldown: 0,
     tags: ["survival", "dot"],
     echo: "추가타 확률 +12%, 온힛 피해 +22%",
@@ -150,7 +150,7 @@ const memories = {
     id: "stopped_second",
     name: "멈춘 초침",
     role: "제어",
-    desc: "주변 시간을 늦추고 기억 발동 주기를 조금 당긴다.",
+    desc: "주변 둔화, 기억 쿨 단축.",
     cooldown: 7.25,
     tags: ["control", "dot"],
     echo: "쿨다운 감소 +12%, 둔화 지속 +35%",
@@ -446,7 +446,7 @@ function initSetup() {
     const button = document.createElement("button");
     button.className = `choice ${selectedMemories.includes(memory.id) ? "selected" : ""}`;
     button.type = "button";
-    button.innerHTML = `<strong>${memory.name}</strong><span>${memory.role}<br>${memory.desc}</span><div class="tag-row">${tagBadges(memory.tags)}</div>`;
+    button.innerHTML = memoryChoiceHtml(memory);
     button.addEventListener("click", () => toggleMemory(memory.id));
     ui.memoryChoices.appendChild(button);
   });
@@ -454,6 +454,10 @@ function initSetup() {
   ui.startRunButton.addEventListener("click", startRun);
   bindPlaytestMetaInputs();
   renderSetup();
+}
+
+function memoryChoiceHtml(memory) {
+  return `<strong>${memory.name}</strong><span class="choice-summary">${memory.role} · ${memory.desc}</span><div class="tag-row">${tagBadges(memory.tags)}</div>`;
 }
 
 function bindPlaytestMetaInputs() {
@@ -1616,7 +1620,7 @@ function showRefillOverlay() {
     const button = document.createElement("button");
     button.className = "choice";
     button.type = "button";
-    button.innerHTML = `<strong>${memory.name}</strong><span>${memory.role}<br>${memory.desc}</span><div class="tag-row">${tagBadges(memory.tags)}</div>`;
+    button.innerHTML = memoryChoiceHtml(memory);
     button.addEventListener("click", () => applyMemoryRefill(id));
     container.appendChild(button);
   });

@@ -249,6 +249,13 @@ canvas {
   line-height: 1.45;
 }
 
+.choice-summary {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
 .tag-row {
   display: flex;
   flex-wrap: wrap;
