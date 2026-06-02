@@ -38,6 +38,7 @@
 - Reporting unit size update: report units should now be feature/decision-sized, not loop-step-sized. The autonomous dev loop reports once after implementation, verification, feedback, and task update are folded together; `npm run report:check` rejects procedural titles such as `Feedback-N 태스크 갱신`, `자동 개발 루프 N차`, and single QA retry titles.
 - Historical report cleanup: `docs/reports/2026-06-02.md` was compressed from 57 small units to 13 feature/gate/decision units. Generated files under `docs/reports/units/2026-06-02/` were regenerated to match.
 - Latest devloop feedback-050050 verdict: `ITERATE_BEFORE_TEST`. WP3 Slice A `전술 집중` is code-complete and scope-valid, with `npm run ai:test:quick` still `GO_CANDIDATE` at Alpha Fun Score `0.8846`, but `npm run qa:tactical` failed before gameplay evaluation through the same managed-sandbox Chrome transport channel. Claude and Codex agree there is no material scope conflict: do not add new features or request people testing until trusted-local `npm run qa:tactical` passes or an explicit environment-blocker decision is recorded.
+- Latest tactical gate logging: `npm run qa:tactical:trusted` now writes `alpha_test/outputs/tactical-trusted-gate/latest.json` with `status`, `transportFailure`, run summaries, `nextCommand`, and `blockerPrompt`. The latest managed-sandbox run produced `status: blocked`, `transportFailure: true` after the standard tactical QA and one 30000 ms retry, so this is only gate evidence cleanup, not browser proof.
 - Reference research: `docs/research/2026-06-02-roguelike-reference.md`.
 - New v0.9 prompt: `docs/review_prompts/2026-06-02-v09-release-feel-loop.md`.
 - Overnight loop command:
@@ -374,8 +375,15 @@
   - 공통점: `멈춘 초침` 삭제 빈도 outlier는 즉시 보정하지 않고 browser-proven 이후 관찰 대상으로 둔다.
   - 충돌: 실질적인 다음 범위 충돌은 없다. Claude는 `ITERATE_BEFORE_TEST`와 관찰 포인트를 강조했고, Codex CLI는 다음 작업을 `qa:tactical` 차단 해소와 기록으로 더 좁게 제한했다.
   - 선택: 이번 cycle은 docs-only update로 닫는다. 다음 executable scope는 trusted-local `npm run qa:tactical` 하나이며, 통과 전에는 사람 테스트, 새 기억, UI 확장, 밸런스 변경, 추가 gameplay scope를 시작하지 않는다.
-- [ ] trusted local에서 `npm run qa:tactical`을 재실행하고, 통과하면 WP3 Slice A를 browser-proven으로 기록한다.
+- [ ] trusted local에서 `npm run qa:tactical:trusted`를 재실행하고, 통과하면 WP3 Slice A를 browser-proven으로 기록한다.
   - 같은 transport 실패가 sandbox 밖에서도 반복되면 `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md`와 같은 방식으로 environment-blocker decision을 먼저 남긴다.
+- [x] tactical QA gate 절차를 한 명령으로 묶고 결과를 자동 루프가 읽을 수 있게 기록한다.
+  - `scripts/run_trusted_tactical_gate.js`와 `npm run qa:tactical:trusted`를 추가했다.
+  - wrapper는 `npm run qa:tactical` 절차를 먼저 실행하고, Chrome/CDP transport 실패일 때만 `--timeout-ms 30000`으로 한 번 재시도한다.
+  - 재시도 후에도 transport blocker면 `alpha_test/outputs/tactical-trusted-gate/latest.json`에 `status: blocked`, `transportFailure: true`, `nextCommand`, `blockerPrompt`를 남긴다.
+  - 검증: `node --check scripts/run_trusted_tactical_gate.js`, `node --check scripts/check_local_pipeline.js` 통과.
+  - 검증: `npm run qa:tactical:trusted`는 이 managed sandbox에서 `status: blocked`, `transportFailure: true`를 기록하고 실패했다.
+  - 다음 실행은 sandbox 밖 trusted local에서 `npm run qa:tactical:trusted`를 실행한다.
 - [ ] v0.9 통과 후에만 실제 브라우저 전투 QA와 사용자 1인 테스트를 요청한다.
 
 ## Pre-Human-Test Polish Gate

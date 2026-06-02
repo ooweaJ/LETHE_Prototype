@@ -8,7 +8,7 @@ Last updated: 2026-06-03
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
-- Latest task-update status: v0.9 WP3 Slice A is code-complete as a minimal tactical agency hook, and the `2026-06-03-devloop-050050-feedback-1` Claude/Codex synthesis recorded `ITERATE_BEFORE_TEST`. The player can focus one current active memory from the existing slot UI or `Digit1`-`Digit3`; this briefly accelerates that memory's next impact and records `tacticalFocus` in JSON/QA payloads. `npm run qa:tactical` exists but is not browser-proven in this managed sandbox because Chrome CDP pipe still times out at `Target.getTargets` and the port fallback cannot bind `127.0.0.1` (`EPERM`). `npm run ai:test:quick` remains `GO_CANDIDATE` with Alpha Fun Score `0.8846`. The next executable scope is trusted-local `npm run qa:tactical` only; do not add features or request people testing before that proof or an explicit environment-blocker decision.
+- Latest task-update status: v0.9 WP3 Slice A is code-complete as a minimal tactical agency hook, and the `2026-06-03-devloop-050050-feedback-1` Claude/Codex synthesis recorded `ITERATE_BEFORE_TEST`. The player can focus one current active memory from the existing slot UI or `Digit1`-`Digit3`; this briefly accelerates that memory's next impact and records `tacticalFocus` in JSON/QA payloads. `npm run qa:tactical` still is not browser-proven in this managed sandbox because Chrome CDP pipe times out at `Target.getTargets` and the port fallback cannot bind `127.0.0.1` (`EPERM`). This loop added `npm run qa:tactical:trusted`, which runs standard tactical QA, retries once at 30000 ms on transport failure, and writes `alpha_test/outputs/tactical-trusted-gate/latest.json`; the current managed-sandbox result is `status: blocked`, `transportFailure: true`. `npm run ai:test:quick` remains `GO_CANDIDATE` with Alpha Fun Score `0.8846`. The next executable scope is sandbox-outside trusted-local `npm run qa:tactical:trusted` or an explicit environment-blocker decision; do not add features or request people testing before that proof/decision.
 
 ## Implemented
 
@@ -104,6 +104,7 @@ Last updated: 2026-06-03
   - port fallback now asks the OS for a confirmed free `127.0.0.1` port and shares stable headless Chrome flags with the pipe path,
   - `scripts/run_trusted_postloss_gate.js` and `npm run qa:postloss:trusted` run the selected trusted-local post-loss gate as one command: standard post-loss QA, one 30000 ms retry for transport failures, then the blocker prompt if transport still fails,
   - the trusted wrapper writes `alpha_test/outputs/postloss-trusted-gate/latest.json` with `status`, `transportFailure`, run summaries, `nextCommand`, and `blockerPrompt` for loop/report handoff,
+  - `scripts/run_trusted_tactical_gate.js` and `npm run qa:tactical:trusted` mirror that gate for WP3 Slice A tactical browser proof and write `alpha_test/outputs/tactical-trusted-gate/latest.json`,
   - this is a QA tooling change only and does not alter gameplay scope.
 - AI alpha test tool under `alpha_test/`.
 - Codex/GPT/Claude workflow docs.
@@ -193,6 +194,7 @@ Remaining note:
 - v0.9 WP2 now has both pre-loss pressure rhythm and a minimal post-loss challenge, and WP3 Slice A has a first minimal tactical agency hook.
 - `npm run qa:postloss:trusted` passed in this local run after making Chrome temp-profile cleanup retryable. The browser QA reached `status: complete`, `failures: []`, confirmed `deficit_breath` and `deficit_trial`, completed the post-loss challenge, and restored 3 active memories after refill.
 - `npm run qa:tactical` failed before gameplay evaluation in this managed sandbox with the same Chrome transport class: CDP pipe `Target.getTargets` timeout and remote-debugging-port `listen EPERM` on `127.0.0.1`. Treat this as missing browser proof, not a gameplay assertion failure.
+- `npm run qa:tactical:trusted` now records that blocker as `alpha_test/outputs/tactical-trusted-gate/latest.json`; the latest managed-sandbox run is `status: blocked`, `transportFailure: true` after the standard run and one 30000 ms retry.
 - AI proxy evidence remains a planning pass only, not human emotion or Unity-transition proof.
 - People testing still waits until tactical browser proof or an explicit environment-blocker decision is recorded.
 
@@ -557,6 +559,13 @@ npm run ai:sweep
   - `npm run doctor:deep`: 64 pass, 0 warn, 0 fail,
   - `npm run qa:postloss:trusted`: failed before gameplay evaluation in this sandbox after standard run plus 30000 ms retry,
   - next execution remains sandbox outside trusted-local `npm run qa:postloss:trusted` or equivalent manual `qa:postloss` plus one timeout retry.
+- Trusted-local tactical gate wrapper completed:
+  - `scripts/run_trusted_tactical_gate.js` and `npm run qa:tactical:trusted` added,
+  - `node --check scripts/run_trusted_tactical_gate.js`: passed,
+  - `node --check scripts/check_local_pipeline.js`: passed,
+  - `npm run qa:tactical`: failed before gameplay evaluation in this sandbox with CDP `Target.getTargets` timeout and `127.0.0.1 listen EPERM`,
+  - `npm run qa:tactical:trusted`: wrote `alpha_test/outputs/tactical-trusted-gate/latest.json` with `status: blocked`, `transportFailure: true` after standard run plus 30000 ms retry,
+  - next execution remains sandbox-outside trusted-local `npm run qa:tactical:trusted`.
 - Current dev-loop prompt cleanup is implemented: future nested implementation prompts should not keep re-selecting WP1 after WP1 is complete.
 - Current dev-loop preflight-order cleanup is implemented: future clean-tree dev loops should run preflight before creating their own loop log, and should not mask dirty-tree state with `--allow-dirty` by default.
 - Current autopilot preflight diagnosis now gives exact loop-run artifact cleanup guidance when `docs/loop_runs/*.md` blocks a clean unattended loop.
@@ -569,7 +578,7 @@ npm run ai:sweep
   - working tree clean after `f6ee83f feat: 자동 개발 루프 4차 반영`,
   - `npm run autopilot:preflight`: 21 pass, 0 warn, 0 fail,
   - `npm run qa:identity`: `status: complete`, failures `[]`, `buildIdentitySeenBy90Sec: true`.
-- WP1 gate is officially complete for automation purposes. WP2 Slice A pressure rhythm/high-low pacing and WP2 Slice B minimal post-loss challenge are implemented, and WP2 Slice B has trusted-local browser proof. WP3 Slice A minimal tactical focus is code-complete but not browser-proven. The next executable gate is trusted-local `npm run qa:tactical`.
+- WP1 gate is officially complete for automation purposes. WP2 Slice A pressure rhythm/high-low pacing and WP2 Slice B minimal post-loss challenge are implemented, and WP2 Slice B has trusted-local browser proof. WP3 Slice A minimal tactical focus is code-complete but not browser-proven. The next executable gate is sandbox-outside trusted-local `npm run qa:tactical:trusted`.
 - On another local machine, run `npm run doctor` first; run `npm run doctor:deep` before leaving Codex to continue unattended.
 - Before an unattended implement -> Claude feedback -> implement loop, run `npm run autopilot:preflight`.
 - Do not describe AI proxy metrics as real balance feedback.
