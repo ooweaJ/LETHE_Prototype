@@ -52,6 +52,7 @@ function main() {
   console.log(`Playability: ${summary.playability.label} (${summary.playability.riskLevel})`);
   console.log(`Alpha Fun Score: ${summary.gate.alphaFunScore}`);
   console.log(`Regret: ${(summary.headlineMetrics.regretRate * 100).toFixed(1)}% / Irritation: ${(summary.headlineMetrics.irritationRate * 100).toFixed(1)}% / Prediction: ${(summary.headlineMetrics.predictionMatchRate * 100).toFixed(1)}%`);
+  console.log(`Early Fun: ${summary.headlineMetrics.earlyFunScore} / Kill Tempo: ${summary.headlineMetrics.earlyKillTempo} / Level-ups: ${summary.headlineMetrics.earlyLevelUps}`);
   console.log(`Next: ${summary.playability.nextStep}`);
   console.log(`Outputs: ${outDir}`);
 }

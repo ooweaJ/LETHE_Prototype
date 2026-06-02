@@ -4,7 +4,7 @@ Last updated: 2026-06-02
 
 ## Current Build
 
-- Project: LETHE HTML Alpha v0.4 human-test candidate.
+- Project: LETHE HTML Alpha v0.5 core-fun human-test candidate.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: pre-human-test polish for the forgetting loop. No broad content expansion yet.
@@ -40,6 +40,11 @@ Last updated: 2026-06-02
   - result screen separates lost action from remaining echo transformation,
   - JSON payload includes `echoTransformation`,
   - default UI clarity raised to `0.78` to match the stronger dependency/forgetting UI.
+- v0.5 core-fun pass:
+  - denser early enemy waves,
+  - kill XP and in-run level-up choices,
+  - run-only stat growth without meta progression or shops,
+  - AI early-fun metrics for pressure, kill tempo, and pre-boss level-ups.
 - AI alpha test tool under `alpha_test/`.
 - Codex/GPT/Claude workflow docs.
 - Markdown daily reports, generated HTML reports, and Discord report delivery.
@@ -59,24 +64,27 @@ Result:
 - Verdict: `GO_CANDIDATE`
 - Playability: `AI 기준 사람 테스트 진입 가능`
 - Risk Level: `LOW`
-- Alpha Fun Score: `0.8261`
-- Regret proxy: `85.6%`
-- Irritation proxy: `0.4%`
-- Prediction match: `85.8%`
+- Alpha Fun Score: `0.8531`
+- Early Fun Score: `0.8669`
+- Early kill tempo: `0.9620`
+- Pre-boss level-ups: `4.08`
+- Regret proxy: `81.6%`
+- Irritation proxy: `0.3%`
+- Prediction match: `84.8%`
 - Immediate quit: `0.7%`
-- Restart intent: `70.9%`
+- Restart intent: `76.1%`
 - First forgetting time: `9.00 min`
-- Post-forgetting power drop: `29.6%`
-- Recovery after replacement: `96.6%`
-- Max single memory deletion share: `34.1%`
+- Post-forgetting power drop: `28.0%`
+- Recovery after replacement: `97.5%`
+- Max single memory deletion share: `28.8%`
 
 Heavy check:
 
-- `npm run ai:test:heavy`: `GO_CANDIDATE`, Alpha Fun Score `0.8369`, regret `87.6%`, irritation `0.3%`, prediction `87.7%`.
+- `npm run ai:test:heavy`: `GO_CANDIDATE`, Alpha Fun Score `0.8509`, Early Fun Score `0.8672`, regret `81.4%`, irritation `0.3%`, prediction `84.6%`.
 
 Remaining note:
 
-- Power drop is still just under the 30% target (`29.4-29.6%`). It is the only soft warning left and should be observed in human testing rather than over-tuned now.
+- Power drop is now below the 30% target (`27.8-28.0%`) because v0.5 prioritizes early fun and smoother growth. It should be observed directly in human testing before over-tuning.
 
 ## Latest Sweep Note
 
@@ -98,6 +106,7 @@ npm run ai:sweep
   - result panel fits without internal scroll at desktop QA viewport,
   - JSON payload includes selected memory names, predicted/protected names, forgotten memory name, deletion weights, survey, echo, experiment, and echo transformation fields,
   - payload experiment version is `v0.4`.
+- Browser plugin QA for v0.5 was attempted, but the in-app browser connection failed with a Windows sandbox startup error. Static syntax checks and AI tests passed; visual QA should be rerun locally before or during the first human-test session.
 - The game is static HTML and can be run by opening `index.html`.
 - Default browser boss/forgetting timing now matches the 9-minute v0.2 target; `?qa=fast` is only for QA.
 - Generated AI test outputs are ignored by git under `alpha_test/outputs/`.

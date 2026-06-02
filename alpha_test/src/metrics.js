@@ -74,6 +74,11 @@ function summarize(batch) {
   const avgRecovery = mean(stages.map(({ stage }) => stage.recoveryRatio));
   const medRecovery = median(stages.map(({ stage }) => stage.recoveryRatio));
   const firstUseAvg = mean(firstStages.map((s) => s.stageTimeSec));
+  const earlyFunScore = mean(stages.map(({ stage }) => stage.earlyLoop?.earlyFunScore || 0));
+  const earlyKillTempo = mean(stages.map(({ stage }) => stage.earlyLoop?.killTempo || 0));
+  const earlyCrowdPressure = mean(stages.map(({ stage }) => stage.earlyLoop?.crowdPressure || 0));
+  const earlyChoiceInterest = mean(stages.map(({ stage }) => stage.earlyLoop?.choiceInterest || 0));
+  const earlyLevelUps = mean(stages.map(({ stage }) => stage.earlyLoop?.levelUpsBeforeBoss || 0));
 
   const buildDiversity = normalizedDiversity(buildClasses, stageCount);
   const memoryDeleteMaxShare = maxShare(deletedMemories, stageCount);
@@ -81,12 +86,13 @@ function summarize(batch) {
   const memoryDeleteSpread = Math.max(0, memoryDeleteMaxShare - memoryDeleteMinShare);
   const buildClassMaxShare = maxShare(buildClasses, stageCount);
   const alphaFunScore = clamp01(
-    regretRate * 0.32
-      + predictionMatchRate * 0.22
-      + (1 - immediateQuitRate) * 0.16
-      + restartRate * 0.16
+    regretRate * 0.23
+      + predictionMatchRate * 0.18
+      + earlyFunScore * 0.19
+      + (1 - immediateQuitRate) * 0.14
+      + restartRate * 0.14
       + buildDiversity * 0.08
-      + clamp01(1 - Math.abs(avgPowerDrop - 0.40) / 0.40) * 0.06,
+      + clamp01(1 - Math.abs(avgPowerDrop - 0.40) / 0.40) * 0.04,
   );
 
   const targetChecks = makeTargetChecks({
@@ -103,6 +109,9 @@ function summarize(batch) {
     avgPowerDrop,
     avgRecovery,
     echoPower: batch.options.echoPower,
+    earlyFunScore,
+    earlyLevelUps,
+    earlyKillTempo,
   });
   const verdict = gateVerdict(targetChecks);
 
@@ -126,6 +135,11 @@ function summarize(batch) {
       restartRate,
       avgPowerDrop,
       avgRecovery,
+      earlyFunScore,
+      earlyKillTempo,
+      earlyCrowdPressure,
+      earlyChoiceInterest,
+      earlyLevelUps,
       targetChecks,
     }),
     headlineMetrics: {
@@ -142,6 +156,11 @@ function summarize(batch) {
       medPowerDrop: round(medPowerDrop, 4),
       avgRecovery: round(avgRecovery, 4),
       medRecovery: round(medRecovery, 4),
+      earlyFunScore: round(earlyFunScore, 4),
+      earlyKillTempo: round(earlyKillTempo, 4),
+      earlyCrowdPressure: round(earlyCrowdPressure, 4),
+      earlyChoiceInterest: round(earlyChoiceInterest, 4),
+      earlyLevelUps: round(earlyLevelUps, 2),
       firstForgetUseAvgSec: round(firstUseAvg, 1),
       buildDiversity: round(buildDiversity, 4),
       buildClassMaxShare: round(buildClassMaxShare, 4),
@@ -173,6 +192,9 @@ function makeTargetChecks(m) {
     check('예측 일치율 상한', m.predictionMatchRate, '<=', t.predictionMatchMax, '정답 확인처럼 느껴지는 위험 방지'),
     check('삭제 직후 즉시 종료율', m.immediateQuitRate, '<=', t.immediateQuitMax, '무력감/레이지퀏 프록시'),
     check('런 재시작 의향', m.restartRate, '>=', t.restartRateMin, '한 판 더 욕구 프록시'),
+    check('초반 재미 점수', m.earlyFunScore, '>=', t.earlyFunScoreMin, '초반 압박/처치/성장 선택 프록시'),
+    check('초반 레벨업 수', m.earlyLevelUps, '>=', t.earlyLevelUpsMin, '보스 전 런 중 성장 선택 횟수'),
+    check('초반 처치 템포', m.earlyKillTempo, '>=', t.earlyKillTempoMin, '적 처치 리듬과 밀도 프록시'),
     check('첫 망각 전 사용 시간 하한', m.firstUseAvg, '>=', t.firstForgetUseMinSec, '애착 윈도우 8분 이상'),
     check('첫 망각 전 사용 시간 상한', m.firstUseAvg, '<=', t.firstForgetUseMaxSec, '애착 윈도우 10분 이하'),
     check('빌드 분류 쏠림', m.buildClassMaxShare, '<=', t.maxBuildClassShare, '몰빵/거미줄/느슨 중 한 분류 80% 초과 금지'),
@@ -195,7 +217,7 @@ function check(name, value, op, target, note) {
 }
 
 function gateVerdict(checks) {
-  const hardNames = new Set(['아쉬움 분면', '짜증 분면', '예측 일치율', '삭제 직후 즉시 종료율']);
+  const hardNames = new Set(['아쉬움 분면', '짜증 분면', '예측 일치율', '삭제 직후 즉시 종료율', '초반 재미 점수', '초반 처치 템포']);
   const hardFails = checks.filter((c) => hardNames.has(c.name) && !c.pass);
   const softFails = checks.filter((c) => !hardNames.has(c.name) && !c.pass);
   if (hardFails.length === 0 && softFails.length <= 2) return 'GO_CANDIDATE';
@@ -205,7 +227,7 @@ function gateVerdict(checks) {
 
 function makePlayabilityAssessment(m) {
   const failed = m.targetChecks.filter((c) => !c.pass);
-  const hardNames = new Set(['아쉬움 분면', '짜증 분면', '예측 일치율', '삭제 직후 즉시 종료율']);
+  const hardNames = new Set(['아쉬움 분면', '짜증 분면', '예측 일치율', '삭제 직후 즉시 종료율', '초반 재미 점수', '초반 처치 템포']);
   const hardFails = failed.filter((c) => hardNames.has(c.name)).map((c) => c.name);
   const softFails = failed.filter((c) => !hardNames.has(c.name)).map((c) => c.name);
   let label = '튜닝 후 재검증';
@@ -248,6 +270,9 @@ function makeTuningSuggestions(checks, dist) {
   const suggestions = [];
   if (failed.has('아쉬움 분면') || failed.has('무덤덤 분면')) {
     suggestions.push('애착 부족: 첫 망각 전 시간을 늘리거나, 기억 발동 이펙트/시너지 체감을 키우고, 3슬롯 조합 완성 후 보스에 들어가게 한다.');
+  }
+  if (failed.has('초반 재미 점수') || failed.has('초반 처치 템포') || failed.has('초반 레벨업 수')) {
+    suggestions.push('초반 루즈함: 1분 안에 적 밀도를 높이고, 처치 경험치와 3지선다 런 성장 선택을 보장해 보스 전 2회 이상 성장하게 한다.');
   }
   if (failed.has('짜증 분면') || failed.has('예측 일치율')) {
     suggestions.push('납득 부족: 전투 중 선명도 UI를 강화하고, 의존도 공식에서 숨은 대체불가능성 가중치를 낮추거나 보스전 흔적 가중치를 올린다.');
@@ -341,6 +366,7 @@ function runsToCsv(runs) {
     'runIndex', 'botId', 'weaponName', 'stageIndex', 'buildClass', 'concentrationIndex', 'synergyConnectivity',
     'deletedMemoryName', 'predictedMemoryName', 'leastWantedName', 'predictionMatch', 'deletedWasLeastWanted',
     'q1Pain', 'q2Understanding', 'quadrant', 'immediateQuit', 'restartIntent', 'powerDrop', 'recoveryRatio',
+    'earlyFunScore', 'earlyKillTempo', 'earlyCrowdPressure', 'earlyChoiceInterest', 'earlyLevelUps',
     'preForgetPower', 'postDeletePower', 'postReplacementPower', 'replacementName', 'deletionWeights', 'echoPower', 'uiClarity',
     'activeMemoryNamesBefore', 'activeMemoryNamesAfter'
   ];
@@ -375,6 +401,11 @@ function extractCsvValue(run, stage, h) {
     restartIntent: stage.emotion.restartIntent,
     powerDrop: stage.powerDrop,
     recoveryRatio: stage.recoveryRatio,
+    earlyFunScore: stage.earlyLoop?.earlyFunScore,
+    earlyKillTempo: stage.earlyLoop?.killTempo,
+    earlyCrowdPressure: stage.earlyLoop?.crowdPressure,
+    earlyChoiceInterest: stage.earlyLoop?.choiceInterest,
+    earlyLevelUps: stage.earlyLoop?.levelUpsBeforeBoss,
     preForgetPower: stage.preForgetPower,
     postDeletePower: stage.postDeletePower,
     postReplacementPower: stage.postReplacementPower,

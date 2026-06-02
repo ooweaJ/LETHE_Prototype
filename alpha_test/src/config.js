@@ -51,7 +51,7 @@ const MEMORIES = {
     name: '처형자의 섬광',
     role: 'burst',
     active: '주기적 강타',
-    baseDps: 21,
+    baseDps: 22,
     burst: 1.00,
     dot: 0.00,
     projectile: 0.25,
@@ -69,7 +69,7 @@ const MEMORIES = {
     name: '굶주린 칼무리',
     role: 'dot',
     active: '근접 지속 피해 오라',
-    baseDps: 18,
+    baseDps: 18.5,
     burst: 0.08,
     dot: 0.95,
     projectile: 0.00,
@@ -87,7 +87,7 @@ const MEMORIES = {
     name: '추적자의 맹세',
     role: 'projectile',
     active: '자동 유도 투사체',
-    baseDps: 17,
+    baseDps: 18,
     burst: 0.35,
     dot: 0.00,
     projectile: 1.00,
@@ -105,7 +105,7 @@ const MEMORIES = {
     name: '파쇄의 파문',
     role: 'area',
     active: '원형 충격파와 넉백',
-    baseDps: 16,
+    baseDps: 17,
     burst: 0.20,
     dot: 0.10,
     projectile: 0.00,
@@ -123,7 +123,7 @@ const MEMORIES = {
     name: '피의 반사',
     role: 'onhit',
     active: '공격 시 추가타',
-    baseDps: 15,
+    baseDps: 16,
     burst: 0.15,
     dot: 0.20,
     projectile: 0.05,
@@ -141,7 +141,7 @@ const MEMORIES = {
     name: '멈춘 초침',
     role: 'control',
     active: '둔화/시간 균열',
-    baseDps: 11,
+    baseDps: 12,
     burst: 0.05,
     dot: 0.10,
     projectile: 0.10,
@@ -157,9 +157,12 @@ const MEMORIES = {
 };
 
 const MEMORY_FORGET_BIAS = {
-  execution_flash: 0.72,
-  hungry_blades: 0.90,
+  execution_flash: 0.74,
+  hungry_blades: 0.82,
   tracker_oath: 0.98,
+  shattering_ripple: 1.06,
+  blood_reflection: 1.08,
+  stopped_second: 1.10,
 };
 
 const SYNERGIES = [
@@ -227,6 +230,9 @@ const DEFAULT_TARGETS = {
   postForgetDropMax: 0.40,
   recoveryMin: 0.90,
   recoveryMax: 1.10,
+  earlyFunScoreMin: 0.72,
+  earlyLevelUpsMin: 2,
+  earlyKillTempoMin: 0.68,
 };
 
 const SIM_DEFAULTS = {
@@ -237,6 +243,8 @@ const SIM_DEFAULTS = {
   uiClarity: 0.78,
   replacementOffer: true,
   enableHumanEmotionProxy: true,
+  earlyEnemyPressure: 0.86,
+  runGrowthChoices: true,
 };
 
 module.exports = {

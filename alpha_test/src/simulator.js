@@ -407,6 +407,34 @@ function simulateEmotionProxy(rng, state, snapshot, reliance, deletedMemoryId, p
   return { q1Pain, q2Understanding, quadrant, immediateQuit, restartIntent, quitP: round(quitP, 3), restartP: round(restartP, 3) };
 }
 
+function simulateEarlyFunProxy(rng, state, snapshot, build, options) {
+  const pressure = clamp(options.earlyEnemyPressure ?? 0.45, 0, 1);
+  const roomPower = snapshot.room.effectivePower;
+  const killTempo = clamp(roomPower / 132 * 0.58 + pressure * 0.42 + rng.noise(0.035), 0, 1);
+  const levelUpsBeforeBoss = options.runGrowthChoices
+    ? clamp(Math.round(1 + killTempo * 2.7 + build.synergyConnectivity * 1.1 + rng.noise(0.35)), 1, 5)
+    : 0;
+  const choiceInterest = options.runGrowthChoices
+    ? clamp(0.50 + build.synergyConnectivity * 0.28 + state.bot.novelty * 0.18 + rng.noise(0.04), 0, 1)
+    : 0;
+  const crowdPressure = clamp(pressure * 0.72 + snapshot.room.survival * 0.20 + rng.noise(0.03), 0, 1);
+  const earlyFunScore = clamp(
+    killTempo * 0.40
+      + choiceInterest * 0.28
+      + crowdPressure * 0.22
+      + clamp(levelUpsBeforeBoss / 4, 0, 1) * 0.10,
+    0,
+    1,
+  );
+  return {
+    earlyFunScore: round(earlyFunScore, 4),
+    killTempo: round(killTempo, 4),
+    crowdPressure: round(crowdPressure, 4),
+    choiceInterest: round(choiceInterest, 4),
+    levelUpsBeforeBoss,
+  };
+}
+
 function bossClearCheck(rng, state, stageIndex, power) {
   const difficulty = 108 + stageIndex * 18;
   const margin = (power - difficulty) / difficulty;
@@ -446,6 +474,7 @@ function simulateOneRun(rng, bot, options, runIndex = 0) {
     const bossPower = snapshot.boss.effectivePower;
     const clearCheck = bossClearCheck(rng, state, stageIndex, bossPower);
     const build = classifyBuild(state, snapshot);
+    const earlyLoop = simulateEarlyFunProxy(rng, state, snapshot, build, options);
     const reliance = computeReliance(state, snapshot);
 
     if (!clearCheck.clear) {
@@ -461,6 +490,7 @@ function simulateOneRun(rng, bot, options, runIndex = 0) {
         activeMemories: state.activeMemories.slice(),
         activeMemoryNames: memoryNames(state.activeMemories),
         build,
+        earlyLoop,
         snapshot: minimalSnapshot(snapshot),
       });
       break;
@@ -502,6 +532,7 @@ function simulateOneRun(rng, bot, options, runIndex = 0) {
       forgottenBefore: forgottenIds.slice(0, -1),
       echoesBefore: preEchoes,
       build,
+      earlyLoop,
       snapshot: minimalSnapshot(snapshot),
       reliance: minimalReliance(reliance),
       reviewTargets: {

@@ -18,6 +18,58 @@ const ui = {
   combatLog: document.getElementById("combatLog"),
 };
 
+const levelUpChoices = {
+  attack_speed: {
+    id: "attack_speed",
+    name: "칼날 가속",
+    desc: "기본 공격과 기억 발동 호흡이 빨라집니다.",
+    apply() {
+      state.runGrowth.attackSpeed += 0.11;
+      state.runGrowth.cooldownReduction += 0.04;
+    },
+    log: "공격 속도 +11%, 기억 호흡 +4%",
+  },
+  damage: {
+    id: "damage",
+    name: "검은 물의 힘",
+    desc: "기본 공격과 기억 피해가 강해집니다.",
+    apply() {
+      state.runGrowth.damage += 0.14;
+    },
+    log: "피해 +14%",
+  },
+  area: {
+    id: "area",
+    name: "파문 확장",
+    desc: "공격 범위가 넓어지고 포위 대응이 쉬워집니다.",
+    apply() {
+      state.runGrowth.range += 0.12;
+      state.runGrowth.knockback += 0.08;
+    },
+    log: "범위 +12%, 넉백 +8%",
+  },
+  survival: {
+    id: "survival",
+    name: "가라앉지 않는 숨",
+    desc: "최대 체력과 회복력이 올라갑니다.",
+    apply() {
+      state.player.maxHp += 12;
+      state.player.hp = Math.min(state.player.maxHp, state.player.hp + 18);
+      state.runGrowth.damageReduction += 0.04;
+    },
+    log: "최대 HP +12, 즉시 회복, 피해 감소 +4%",
+  },
+  magnet: {
+    id: "magnet",
+    name: "기억 흡입",
+    desc: "처치 경험치가 더 빠르게 모입니다.",
+    apply() {
+      state.runGrowth.xpGain += 0.16;
+    },
+    log: "경험치 획득 +16%",
+  },
+};
+
 const weapons = {
   twin_blades: {
     id: "twin_blades",
@@ -145,7 +197,7 @@ const enemyTypes = {
 };
 
 const experiment = {
-  version: "v0.4",
+  version: "v0.5",
   echoPower: 0.5,
   uiClarity: 0.78,
   bossSpawnTimeSec: 540,
@@ -221,6 +273,23 @@ function createRunState() {
     weapon: weapons[selectedWeapon],
     memories: activeMemories,
     echo: { ...baseEcho },
+    runGrowth: {
+      level: 1,
+      xp: 0,
+      nextXp: 8,
+      damage: 0,
+      attackSpeed: 0,
+      cooldownReduction: 0,
+      range: 0,
+      knockback: 0,
+      damageReduction: 0,
+      xpGain: 0,
+      choicesTaken: [],
+      pendingChoices: [],
+      earlyKills: 0,
+      maxEnemies: 0,
+      levelUpsBeforeBoss: 0,
+    },
     player: {
       x: canvas.width / 2,
       y: canvas.height / 2,
@@ -253,6 +322,7 @@ function createRunState() {
     logs: {
       version: experiment.version,
       experiment: { ...experiment },
+      runGrowth: null,
       startedAt: new Date().toISOString(),
       weapon: selectedWeapon,
       memories: [...selectedMemories],
@@ -357,6 +427,7 @@ function update(dt) {
   updateSpawning(dt);
   updateBoss(dt);
   updateEnemies(dt);
+  state.runGrowth.maxEnemies = Math.max(state.runGrowth.maxEnemies, state.enemies.length);
   updateProjectiles(dt);
   updateMemories(dt);
   updateEffects(dt);
@@ -387,12 +458,15 @@ function movePlayer(dt) {
 function updateSpawning(dt) {
   if (state.bossSpawned) return;
   state.spawnCd -= dt;
-  const spawnRate = state.elapsed < 22 ? 1.45 : 0.92;
+  const spawnRate = state.elapsed < 18 ? 0.72 : state.elapsed < 55 ? 0.58 : 0.76;
   if (state.spawnCd <= 0) {
     state.spawnCd = spawnRate;
-    const pool = ["eroder", "eroder", "drifting_eye", "split_one"];
-    if (state.elapsed > 16) pool.push("void_priest");
-    spawnEnemy(pool[Math.floor(Math.random() * pool.length)]);
+    const packSize = state.elapsed < 30 ? 2 : state.elapsed < 80 ? 3 : 2;
+    const pool = ["eroder", "eroder", "eroder", "drifting_eye", "split_one"];
+    if (state.elapsed > 28) pool.push("void_priest");
+    for (let i = 0; i < packSize; i += 1) {
+      spawnEnemy(pool[Math.floor(Math.random() * pool.length)]);
+    }
   }
 
   if (state.elapsed >= experiment.bossSpawnTimeSec) {
@@ -407,8 +481,8 @@ function spawnEnemy(typeId, x = null, y = null, child = false) {
     ...type,
     x: pos.x,
     y: pos.y,
-    hp: child ? Math.round(type.hp * 0.45) : type.hp,
-    maxHp: child ? Math.round(type.hp * 0.45) : type.hp,
+    hp: child ? Math.round(type.hp * 0.38) : type.hp,
+    maxHp: child ? Math.round(type.hp * 0.38) : type.hp,
     r: child ? Math.max(8, type.radius * 0.68) : type.radius,
     shotCd: 1.4 + Math.random(),
     healCd: 1.8,
@@ -576,7 +650,7 @@ function updateEnemies(dt) {
     }
 
     if (dist < enemy.r + p.r && p.invuln <= 0) {
-      const reduced = 1 - state.echo.damageReduction;
+      const reduced = 1 - state.echo.damageReduction - state.runGrowth.damageReduction;
       p.hp -= enemy.damage * reduced;
       p.invuln = 0.52;
     }
@@ -591,6 +665,7 @@ function updateEnemies(dt) {
     }
     const killer = enemy.killedBy;
     if (killer && state.metrics[killer]) state.metrics[killer].kills += 1;
+    grantXp(enemy);
     if (enemy.splitter && !enemy.child) {
       spawnEnemy("eroder", enemy.x - 12, enemy.y + 4, true);
       spawnEnemy("eroder", enemy.x + 12, enemy.y - 4, true);
@@ -613,7 +688,7 @@ function updateProjectiles(dt) {
 
     if (projectile.hostile) {
       if (distance(projectile, state.player) < projectile.r + state.player.r && state.player.invuln <= 0) {
-        state.player.hp -= projectile.damage * (1 - state.echo.damageReduction);
+        state.player.hp -= projectile.damage * (1 - state.echo.damageReduction - state.runGrowth.damageReduction);
         state.player.invuln = 0.44;
         projectile.life = 0;
       }
@@ -634,16 +709,16 @@ function updateMemories(dt) {
 
   for (const memory of state.memories) {
     if (memory.forgotten) continue;
-    const cdMul = 1 - state.echo.cooldownReduction;
+    const cdMul = 1 - state.echo.cooldownReduction - state.runGrowth.cooldownReduction;
     memory.cooldownLeft = Math.max(0, memory.cooldownLeft - dt);
     if (memory.id === "hungry_blades") {
       memory.metricsTime = (memory.metricsTime || 0) + dt;
       memory.visualCd = Math.max(0, (memory.visualCd || 0) - dt);
-      const radius = 74 * (1 + state.echo.range);
+      const radius = 74 * (1 + state.echo.range + state.runGrowth.range);
       let hit = false;
       for (const target of hostiles()) {
         if (distance(p, target) < radius + target.r) {
-          damageHostile(target, 5.8 * (1 + state.echo.dotDamage), memory.id);
+          damageHostile(target, 6.5 * (1 + state.echo.dotDamage + state.runGrowth.damage), memory.id);
           hit = true;
         }
       }
@@ -667,15 +742,15 @@ function updateMemories(dt) {
 function basicAttack() {
   const p = state.player;
   const weapon = state.weapon;
-  const interval = Math.max(0.18, weapon.interval / (1 + state.echo.attackSpeed));
+  const interval = Math.max(0.16, weapon.interval / (1 + state.echo.attackSpeed + state.runGrowth.attackSpeed));
   if (p.attackCd > 0) return;
 
-  const target = nearestHostile(p.x, p.y, weapon.range * (1 + state.echo.range));
+  const target = nearestHostile(p.x, p.y, weapon.range * (1 + state.echo.range + state.runGrowth.range));
   if (!target) return;
   p.attackCd = interval;
   p.facing = angleTo(p, target);
 
-  let damage = weapon.damage;
+  let damage = weapon.damage * (1 + state.runGrowth.damage);
   if (Math.random() < state.echo.critChance) damage *= 1 + state.echo.critDamage;
   damageHostile(target, damage, "weapon");
   state.effects.push({
@@ -692,7 +767,7 @@ function basicAttack() {
   if (blood) {
     const chance = (weapon.id === "twin_blades" ? 0.4 : 0.28) + state.echo.extraHitChance;
     if (Math.random() < chance) {
-      const extra = 16 * (1 + state.echo.onHitDamage);
+      const extra = 19 * (1 + state.echo.onHitDamage + state.runGrowth.damage);
       damageHostile(target, extra, blood.id, { bossTrace: true });
       recordPresence(blood.id, 0.8);
       state.metrics[blood.id].activeCount += 1;
@@ -710,7 +785,7 @@ function activateMemory(memory) {
   if (memory.id === "execution_flash") {
     const target = highestThreat();
     if (!target) return;
-    const damage = 74 * (state.weapon.id === "greatsword" ? 1.12 : 1);
+    const damage = 84 * (state.weapon.id === "greatsword" ? 1.12 : 1) * (1 + state.runGrowth.damage);
     damageHostile(target, damage, memory.id, { bossTrace: true, groggyBonus: true });
     addFloater(memory.name, target.x, target.y - 26, "#eef8ff");
     addBurst(target.x, target.y, "#eef8ff", 18, 4.8);
@@ -731,7 +806,7 @@ function activateMemory(memory) {
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
         r: 6,
-        damage: 31,
+        damage: 36 * (1 + state.runGrowth.damage),
         hostile: false,
         source: memory.id,
         target,
@@ -743,17 +818,17 @@ function activateMemory(memory) {
   }
 
   if (memory.id === "shatter_ripple") {
-    const radius = 132 * (1 + state.echo.range);
+    const radius = 132 * (1 + state.echo.range + state.runGrowth.range);
     addFloater(memory.name, p.x, p.y - 28, "#6ddfd2");
     state.shake = Math.max(state.shake, 4);
     for (const target of hostiles()) {
       const dist = distance(p, target);
       if (dist < radius + target.r) {
-        const push = (48 + state.echo.knockback * 48) * (1 - dist / (radius + target.r));
+        const push = (48 + (state.echo.knockback + state.runGrowth.knockback) * 48) * (1 - dist / (radius + target.r));
         const angle = angleTo(p, target);
         target.x += Math.cos(angle) * push;
         target.y += Math.sin(angle) * push;
-        damageHostile(target, 38, memory.id, { bossTrace: true });
+        damageHostile(target, 45 * (1 + state.runGrowth.damage), memory.id, { bossTrace: true });
         state.metrics[memory.id].status += push;
       }
     }
@@ -762,7 +837,7 @@ function activateMemory(memory) {
   }
 
   if (memory.id === "stopped_second") {
-    const radius = 150 * (1 + state.echo.range);
+    const radius = 150 * (1 + state.echo.range + state.runGrowth.range);
     const duration = 2.4 * (1 + state.echo.slowDuration);
     addFloater(memory.name, p.x, p.y - 28, "#a98cff");
     for (const target of hostiles()) {
@@ -800,6 +875,92 @@ function damageHostile(target, amount, source, options = {}) {
       if (state.boss?.groggy || options.groggyBonus) state.metrics[source].groggyDamage += actual;
     }
   }
+}
+
+function grantXp(enemy) {
+  if (!state || state.mode !== "combat") return;
+  const growth = state.runGrowth;
+  const gained = Math.max(1, Math.round(enemy.score * (enemy.child ? 0.55 : 1) * (1 + growth.xpGain)));
+  growth.xp += gained;
+  if (state.elapsed <= 180) growth.earlyKills += 1;
+  addFloater(`+${gained}`, enemy.x, enemy.y - enemy.r - 16, "#72e49b");
+  logEvent("enemy_killed", {
+    enemy: enemy.id,
+    enemyName: enemy.name,
+    xp: gained,
+    totalXp: growth.xp,
+    level: growth.level,
+  });
+  if (growth.xp >= growth.nextXp) queueLevelUp();
+}
+
+function queueLevelUp() {
+  const growth = state.runGrowth;
+  growth.xp -= growth.nextXp;
+  growth.level += 1;
+  growth.nextXp = Math.round(growth.nextXp * 1.42 + 4);
+  if (!state.bossSpawned) growth.levelUpsBeforeBoss += 1;
+  growth.pendingChoices = chooseLevelUpChoices();
+  state.mode = "upgrade";
+  state.running = false;
+  addLog(`${growth.level}레벨. 검은 물이 새 힘을 건넨다.`);
+  logEvent("level_up_available", {
+    level: growth.level,
+    choices: growth.pendingChoices,
+    nextXp: growth.nextXp,
+  });
+  showLevelUpOverlay();
+}
+
+function chooseLevelUpChoices() {
+  const taken = new Set(state.runGrowth.choicesTaken.map((choice) => choice.id));
+  const pool = Object.values(levelUpChoices)
+    .sort(() => Math.random() - 0.5)
+    .sort((a, b) => Number(taken.has(a.id)) - Number(taken.has(b.id)));
+  return pool.slice(0, 3).map((choice) => choice.id);
+}
+
+function showLevelUpOverlay() {
+  overlay.innerHTML = `
+    <div class="panel upgrade-panel">
+      <p class="eyebrow">런 성장</p>
+      <h2>기억이 피를 먹고 선명해졌다.</h2>
+      <p class="panel-copy">이번 런 동안만 유지되는 힘을 하나 고르세요.</p>
+      <div id="levelUpChoices" class="choice-list upgrade-list"></div>
+    </div>
+  `;
+  overlay.classList.add("show");
+  const container = overlay.querySelector("#levelUpChoices");
+  state.runGrowth.pendingChoices.forEach((id) => {
+    const choice = levelUpChoices[id];
+    const button = document.createElement("button");
+    button.className = "choice";
+    button.type = "button";
+    button.innerHTML = `<strong>${choice.name}</strong><span>${choice.desc}<br>${choice.log}</span>`;
+    button.addEventListener("click", () => applyLevelUpChoice(id));
+    container.appendChild(button);
+  });
+}
+
+function applyLevelUpChoice(id) {
+  const choice = levelUpChoices[id];
+  if (!choice || state.mode !== "upgrade") return;
+  choice.apply();
+  state.runGrowth.choicesTaken.push({ id, name: choice.name, level: state.runGrowth.level });
+  state.runGrowth.pendingChoices = [];
+  overlay.classList.remove("show");
+  overlay.innerHTML = "";
+  state.mode = "combat";
+  state.running = true;
+  addLog(`${choice.name}: ${choice.log}`);
+  addFloater(choice.name, state.player.x, state.player.y - 36, "#72e49b");
+  logEvent("level_up_choice", {
+    level: state.runGrowth.level,
+    choice: id,
+    choiceName: choice.name,
+    runGrowth: runGrowthLog(),
+  });
+  renderEchoes();
 }
 
 function recordPresence(memoryId, amount) {
@@ -1125,8 +1286,29 @@ function collectLogPayload() {
   state.logs.deletionWeights = dependencyWeights();
   state.logs.echo = state.echo;
   state.logs.echoPower = experiment.echoPower;
+  state.logs.runGrowth = runGrowthLog();
   state.logs.echoTransformation = echoTransformationLog(state.forgotten);
   return state.logs;
+}
+
+function runGrowthLog() {
+  const growth = state.runGrowth;
+  return {
+    level: growth.level,
+    xp: growth.xp,
+    nextXp: growth.nextXp,
+    damage: growth.damage,
+    attackSpeed: growth.attackSpeed,
+    cooldownReduction: growth.cooldownReduction,
+    range: growth.range,
+    knockback: growth.knockback,
+    damageReduction: growth.damageReduction,
+    xpGain: growth.xpGain,
+    choicesTaken: growth.choicesTaken,
+    earlyKills: growth.earlyKills,
+    maxEnemies: growth.maxEnemies,
+    levelUpsBeforeBoss: growth.levelUpsBeforeBoss,
+  };
 }
 
 function downloadLog() {
@@ -1177,7 +1359,9 @@ function updateClarity() {
 }
 
 function updateUi() {
-  ui.phaseLabel.textContent = state.boss ? `보스 ${state.boss.phase}페이즈` : state.phase;
+  const growth = state.runGrowth;
+  const xpText = `Lv.${growth.level} ${growth.xp}/${growth.nextXp}`;
+  ui.phaseLabel.textContent = state.boss ? `보스 ${state.boss.phase}페이즈 · ${xpText}` : `${state.phase} · ${xpText}`;
   ui.timerLabel.textContent = formatTime(state.elapsed);
   ui.hpLabel.textContent = `HP ${Math.ceil(state.player.hp)} / ${state.player.maxHp}`;
   ui.weaponCard.innerHTML = weaponCardHtml(state.weapon);
@@ -1224,7 +1408,16 @@ function renderEchoes() {
   if (state.echo.range) lines.push(`범위 +${percent(state.echo.range)}`);
   if (state.echo.extraHitChance) lines.push(`추가타 +${percent(state.echo.extraHitChance)}`);
   if (state.echo.cooldownReduction) lines.push(`쿨다운 -${percent(state.echo.cooldownReduction)}`);
-  ui.echoList.innerHTML = lines.length ? lines.map((line) => `<div class="echo-line">${line}</div>`).join("") : "아직 남은 잔향이 없습니다.";
+  const growth = state.runGrowth;
+  const growthLines = [];
+  if (growth.damage) growthLines.push(`런 피해 +${percent(growth.damage)}`);
+  if (growth.attackSpeed) growthLines.push(`런 공격속도 +${percent(growth.attackSpeed)}`);
+  if (growth.cooldownReduction) growthLines.push(`런 쿨다운 -${percent(growth.cooldownReduction)}`);
+  if (growth.range) growthLines.push(`런 범위 +${percent(growth.range)}`);
+  if (growth.damageReduction) growthLines.push(`런 피해감소 +${percent(growth.damageReduction)}`);
+  if (growth.xpGain) growthLines.push(`런 경험치 +${percent(growth.xpGain)}`);
+  const allLines = [...growthLines, ...lines];
+  ui.echoList.innerHTML = allLines.length ? allLines.map((line) => `<div class="echo-line">${line}</div>`).join("") : "아직 남은 잔향이 없습니다.";
 }
 
 function draw() {

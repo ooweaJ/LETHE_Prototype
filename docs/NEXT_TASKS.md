@@ -1,6 +1,6 @@
 # Next Tasks
 
-현재 단계는 v0.4 human-test candidate 상태다. AI 기준으로는 사람 테스트 진입 가능하며, 다음 큰 판단은 실제 플레이어 5-8명 반응이다.
+현재 단계는 v0.5 core-fun human-test candidate 상태다. 사용자의 실제 테스트 피드백에 따라 “망각 감정”보다 먼저 초반 재미, 적 몰림, 런 중 성장 선택을 보완했다. AI 기준으로는 다시 사람 테스트 진입 가능하다.
 
 ## Current Verdict
 
@@ -39,6 +39,18 @@
 - [x] `npm run ai:test:heavy` 5000런/3스테이지에서도 `GO_CANDIDATE`를 확인했다.
 - [x] Claude 자동 리뷰 스크립트의 dry-run과 로컬 mock 저장 검증을 통과했다.
 
+## v0.5 Done
+
+- [x] 사용자 피드백을 반영해 기획 프롬프트를 초반 재미/로그라이크 맛 중심으로 갱신했다.
+- [x] 실제 Claude 호출은 외부 전송 정책으로 차단되어 Codex가 같은 프롬프트 기준으로 구현을 진행했다.
+- [x] 초반 적 스폰 밀도를 올려 1분 안에 몰려오는 압박을 강화했다.
+- [x] 처치 XP와 런 중 레벨업 3지선다 스탯 선택을 추가했다.
+- [x] 런 성장은 메타 진행/상점/새 기억 추가 없이 해당 런 안에서만 유지되게 했다.
+- [x] JSON payload에 `runGrowth`를 추가했다.
+- [x] AI test에 `Early Fun Score`, `earlyKillTempo`, `earlyLevelUps` 게이트를 추가했다.
+- [x] `npm run ai:test`: `GO_CANDIDATE`, Alpha Fun Score `0.8531`, Early Fun `0.8669`.
+- [x] `npm run ai:test:heavy`: `GO_CANDIDATE`, Alpha Fun Score `0.8509`, Early Fun `0.8672`.
+
 ## Latest AI Criteria
 
 - [x] Verdict: `GO_CANDIDATE`.
@@ -61,6 +73,7 @@
 - [x] 사람 테스트 전 전투 연출을 더 화려하게 만든다.
 - [x] 사람 테스트 전 기억 의존도/망각 위험이 플레이 중 더 분명하게 보이게 만든다.
 - [x] 사람 테스트 전 잔향 시스템이 결과 이후 더 분명하게 보이게 만든다.
+- [ ] v0.5 브라우저 시각 QA를 로컬에서 다시 확인한다. 이 세션의 Browser 플러그인은 Windows sandbox 오류로 열리지 않았다.
 - [ ] 5-8명 사람 테스트를 진행한다.
 - [ ] 플레이테스트 후 감정 반응을 기준으로 다음 방향을 결정한다.
 - [ ] 사람 테스트 결과가 모이면 Claude/GPT 검토를 다시 요청한다. 외부 전송 승인이 어려우면 Codex CLI fallback이나 Claude mock 경로로 자동화만 먼저 점검한다.
@@ -75,6 +88,9 @@
 
 ## Human Test Focus
 
+- 초반 1-3분이 루즈하지 않고 적을 계속 잡고 싶게 만드는가?
+- 첫 레벨업 선택이 “로그라이크/뱀서식 성장”으로 읽히는가?
+- 보스 전 평균 2회 이상 성장 선택을 체감하는가?
 - “방금 사라진 기억이 아까웠나요, 짜증났나요, 아니면 별 감정이 없었나요?”
 - 플레이어가 첫 망각 전에 선택한 기억 3개 중 최소 1개에 애착이나 전략적 기대를 보이는가?
 - 플레이어가 삭제될 기억을 예측할 때 자기 나름의 이유를 말하는가?

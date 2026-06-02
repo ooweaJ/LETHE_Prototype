@@ -53,6 +53,9 @@ function makeMarkdown(summary) {
   lines.push(`| 예측 일치율 | ${pct(m.predictionMatchRate)} | 목표: 60~65% 이상 |`);
   lines.push(`| 삭제 직후 즉시 종료율 | ${pct(m.immediateQuitRate)} | 목표: 15% 미만 |`);
   lines.push(`| 런 재시작 의향 | ${pct(m.restartRate)} | 목표: 60% 이상 |`);
+  lines.push(`| 초반 재미 점수 | ${num(m.earlyFunScore, 3)} | 목표: 0.72 이상 |`);
+  lines.push(`| 초반 처치 템포 | ${num(m.earlyKillTempo, 3)} | 목표: 0.68 이상 |`);
+  lines.push(`| 보스 전 레벨업 | ${num(m.earlyLevelUps, 2)}회 | 목표: 2회 이상 |`);
   lines.push(`| 망각 직후 전투력 딥 | ${pct(m.avgPowerDrop)} | 목표: 30~50% |`);
   lines.push(`| 새 기억 후 회복률 | ${pct(m.avgRecovery)} | 목표: 85~110% |`);
   lines.push(`| 첫 망각 전 사용 시간 | ${num(m.firstForgetUseAvgSec / 60, 2)}분 | 목표: 8~10분 |`);
@@ -142,6 +145,7 @@ function makeHtml(summary) {
     <div class="grid">
       ${metricCard('아쉬움', summary.headlineMetrics.regretRate, 0.60, true)}
       ${metricCard('짜증', summary.headlineMetrics.irritationRate, 0.20, false)}
+      ${metricCard('초반 재미', summary.headlineMetrics.earlyFunScore, 0.72, true)}
       ${metricCard('예측 일치', summary.headlineMetrics.predictionMatchRate, 0.625, true)}
       ${metricCard('즉시 종료', summary.headlineMetrics.immediateQuitRate, 0.15, false)}
       ${metricCard('전투력 딥', summary.headlineMetrics.avgPowerDrop, 0.40, null)}
