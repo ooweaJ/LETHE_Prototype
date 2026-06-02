@@ -102,6 +102,8 @@ function checkNpmScripts() {
     'autopilot:preflight:dry',
     'overnight:loop',
     'overnight:loop:dry',
+    'dev:loop',
+    'dev:loop:dry',
   ].forEach((name) => {
     add(scripts[name] ? 'pass' : 'fail', `npm script ${name}`, scripts[name] || 'missing', `Add ${name} to package.json.`);
   });

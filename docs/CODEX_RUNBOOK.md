@@ -108,6 +108,56 @@ node scripts/run_overnight_loop.js --implement-cmd "your safe implementation com
 
 If any required step fails, the loop sends a blocked notice, writes a blocker prompt under `docs/review_prompts/YYYY-MM-DD-overnight-loop-blocker-N.md`, and stops. The next Codex session should read the loop log, blocker prompt, latest planning response, and `docs/CODEX_STATUS.md`.
 
+## Autonomous Dev Loop
+
+Use this when the user wants the project to continue through real implementation cycles while they are away.
+
+This is the actual loop shape:
+
+```text
+task/NEXT_TASKS -> Codex implementation -> verification -> report/Discord
+-> Claude + Codex feedback -> task/status/report update -> commit/push -> next task
+```
+
+Dry-run:
+
+```powershell
+npm run dev:loop:dry
+```
+
+Actual long-running loop:
+
+```powershell
+npm run dev:loop
+```
+
+The default loop is configured for an overnight block:
+
+- up to 6 iterations,
+- up to 360 minutes,
+- Codex implementation through `codex exec --sandbox workspace-write`,
+- `npm run doctor`,
+- `npm run ai:test:quick`,
+- Markdown/HTML report regeneration,
+- Discord work-unit report upload,
+- Claude + Codex CLI planning feedback,
+- Codex task/status/report update,
+- git commit,
+- git push.
+
+Useful variants:
+
+```powershell
+node scripts/run_autonomous_dev_loop.js --iterations 3 --duration-minutes 180
+node scripts/run_autonomous_dev_loop.js --no-push
+node scripts/run_autonomous_dev_loop.js --no-commit --discord-dry-run
+node scripts/run_autonomous_dev_loop.js --allow-dirty --no-push
+```
+
+The loop requires a clean tree by default. Use `--allow-dirty` only when deliberately smoke-testing the loop. If verification fails, the loop sends a blocked notice, writes `docs/review_prompts/YYYY-MM-DD-autodev-blocker-*.md`, and stops instead of committing.
+
+This loop is powerful: do not use it for broad scope expansion. It should consume the current `docs/NEXT_TASKS.md` queue and the current scope guards.
+
 ## Discord Notices
 
 Daily reports use:

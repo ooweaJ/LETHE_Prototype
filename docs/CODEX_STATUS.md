@@ -228,6 +228,22 @@ npm run ai:sweep
   - `--discord-dry-run` previews messages without sending,
   - `--no-discord` disables notices only for deliberate local debugging,
   - notification smoke log: `docs/loop_runs/2026-06-02-overnight-164700.md`.
+- Autonomous development loop added:
+  - `npm run dev:loop:dry`,
+  - `npm run dev:loop`,
+  - loop shape is task/NEXT_TASKS -> Codex implementation -> verification -> report/Discord -> Claude + Codex feedback -> task update -> commit/push -> next task,
+  - default budget is 6 iterations / 360 minutes,
+  - implementation uses `codex exec --sandbox workspace-write`,
+  - verification uses `npm run doctor` and `npm run ai:test:quick`,
+  - feedback uses `node scripts/run_planning_pipeline.js --provider double --test none`,
+  - task update uses a second Codex docs-only pass,
+  - successful iterations commit and push by default,
+  - blocked iterations write `docs/review_prompts/YYYY-MM-DD-autodev-blocker-*.md`.
+- Autonomous dev loop verification:
+  - `node --check scripts/run_autonomous_dev_loop.js`: passed,
+  - `npm run dev:loop:dry`: passed,
+  - `npm run doctor`: 38 pass, 0 warn, 0 fail,
+  - `npm run doctor:deep`: 54 pass, 0 warn, 0 fail.
 - Selected next implementation scope:
   - v0.9 Work Package 1 only,
   - make existing 6-memory build identity readable within 90 seconds,
