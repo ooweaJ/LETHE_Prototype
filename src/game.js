@@ -77,20 +77,20 @@ const weapons = {
     id: "twin_blades",
     name: "절단쌍검",
     role: "빠른 근접 / 온힛",
-    desc: "짧은 사거리, 빠른 타격. 붙어서 긁고 빠질수록 피의 반사와 칼무리가 선명해진다.",
-    range: 74,
-    damage: 12,
-    interval: 0.42,
+    desc: "빠른 타격과 넓어진 기본 베기. 기억을 잃어도 쫄몹을 정리할 수 있는 안정형 무기.",
+    range: 86,
+    damage: 15,
+    interval: 0.36,
     arc: Math.PI * 0.66,
   },
   greatsword: {
     id: "greatsword",
     name: "장송대검",
     role: "느린 강타 / 폭딜",
-    desc: "긴 사거리, 무거운 단타. 보스 딜타임과 처형자의 섬광, 파쇄의 파문에 잘 맞는다.",
-    range: 112,
-    damage: 34,
-    interval: 1.18,
+    desc: "긴 사거리와 강한 전방 정리. 기억 결손 구간에서 한 줄을 뚫어내는 돌파형 무기.",
+    range: 128,
+    damage: 42,
+    interval: 1.02,
     arc: Math.PI * 0.84,
   },
 };
@@ -201,7 +201,7 @@ const enemyTypes = {
 const qaMode = new URLSearchParams(window.location.search).get("qa") || "";
 
 const experiment = {
-  version: "v0.6",
+  version: "v0.7",
   echoPower: 0.5,
   uiClarity: 0.78,
   runDurationSec: 1200,
@@ -247,6 +247,11 @@ const baseEcho = {
   onHitDamage: 0,
   cooldownReduction: 0,
   slowDuration: 0,
+  weaponFlashChance: 0,
+  weaponBleedDamage: 0,
+  weaponHomingChance: 0,
+  weaponShockwaveChance: 0,
+  weaponSlowChance: 0,
 };
 
 function createMemoryInstance(id) {
@@ -329,7 +334,7 @@ function createRunState() {
     spawnCd: 0,
     metrics: createMetricSeed(selectedMemories),
     runTimeline: {
-      version: "v0.6",
+      version: experiment.version,
       totalRunSec: experiment.runDurationSec,
       bossScheduleSec: [...experiment.bossScheduleSec],
       nextBossIndex: 0,
@@ -827,6 +832,7 @@ function basicAttack() {
   let damage = weapon.damage * (1 + state.runGrowth.damage);
   if (Math.random() < state.echo.critChance) damage *= 1 + state.echo.critDamage;
   damageHostile(target, damage, "weapon");
+  applyWeaponEchoEffects(target, damage);
   state.effects.push({
     type: weapon.id === "greatsword" ? "slash_heavy" : "slash_fast",
     x: p.x,
@@ -847,6 +853,65 @@ function basicAttack() {
       state.metrics[blood.id].activeCount += 1;
       state.effects.push({ type: "blood", x: target.x, y: target.y, r: 10, maxR: 34, life: 0.28, maxLife: 0.28 });
     }
+  }
+}
+
+function applyWeaponEchoEffects(target, baseDamage) {
+  if (!target) return;
+  const p = state.player;
+
+  if (state.echo.weaponFlashChance && Math.random() < state.echo.weaponFlashChance) {
+    const flashTarget = nearestHostile(target.x, target.y, 180, [target]) || target;
+    damageHostile(flashTarget, 20 + baseDamage * 0.48, "weapon_echo");
+    addFloater("섬광 잔향", flashTarget.x, flashTarget.y - 18, "#eef8ff");
+    addBurst(flashTarget.x, flashTarget.y, "#eef8ff", 8, 2.2);
+  }
+
+  if (state.echo.weaponBleedDamage) {
+    damageHostile(target, 4 + state.echo.weaponBleedDamage * 18, "weapon_echo");
+    addFloater("칼무리 잔향", target.x, target.y - 10, "#e8c15d");
+  }
+
+  if (state.echo.weaponHomingChance && Math.random() < state.echo.weaponHomingChance) {
+    const homingTarget = nearestHostile(p.x, p.y, 420, [target]);
+    if (homingTarget) {
+      const angle = angleTo(p, homingTarget);
+      addProjectile({
+        x: p.x,
+        y: p.y,
+        vx: Math.cos(angle) * 280,
+        vy: Math.sin(angle) * 280,
+        r: 5,
+        damage: 18 + baseDamage * 0.38,
+        hostile: false,
+        life: 2.5,
+        color: "#a98cff",
+        source: "weapon_echo",
+        trail: true,
+      });
+      addFloater("추적 잔향", p.x, p.y - 20, "#a98cff");
+    }
+  }
+
+  if (state.echo.weaponShockwaveChance && Math.random() < state.echo.weaponShockwaveChance) {
+    const radius = 82 * (1 + state.echo.range + state.runGrowth.range);
+    for (const enemy of state.enemies) {
+      const dist = distance(p, enemy);
+      if (dist < radius + enemy.r) {
+        damageHostile(enemy, 12 + baseDamage * 0.28, "weapon_echo");
+        const push = 34 * (1 - dist / (radius + enemy.r));
+        const angle = angleTo(p, enemy);
+        enemy.x += Math.cos(angle) * push;
+        enemy.y += Math.sin(angle) * push;
+      }
+    }
+    addBurst(p.x, p.y, "#6ddfd2", 18, 3.0);
+    addFloater("파문 잔향", p.x, p.y - 28, "#6ddfd2");
+  }
+
+  if (state.echo.weaponSlowChance && Math.random() < state.echo.weaponSlowChance) {
+    target.slow = Math.max(target.slow || 0, 1.2 + state.echo.slowDuration);
+    addFloater("초침 잔향", target.x, target.y - 18, "#a98cff");
   }
 }
 
@@ -1148,27 +1213,33 @@ function applyEcho(memoryId) {
   if (memoryId === "execution_flash") {
     state.echo.critChance += 0.12 * experiment.echoPower;
     state.echo.critDamage += 0.35 * experiment.echoPower;
+    state.echo.weaponFlashChance += 0.18 * experiment.echoPower;
   }
   if (memoryId === "hungry_blades") {
     state.echo.attackSpeed += 0.18 * experiment.echoPower;
     state.echo.dotDamage += 0.35 * experiment.echoPower;
+    state.echo.weaponBleedDamage += 0.9 * experiment.echoPower;
   }
   if (memoryId === "stalker_oath") {
     state.echo.projectileCount += 1 * experiment.echoPower;
     state.echo.projectileSpeed += 0.25 * experiment.echoPower;
+    state.echo.weaponHomingChance += 0.24 * experiment.echoPower;
   }
   if (memoryId === "shatter_ripple") {
     state.echo.range += 0.18 * experiment.echoPower;
     state.echo.knockback += 0.25 * experiment.echoPower;
     state.echo.damageReduction += 0.06 * experiment.echoPower;
+    state.echo.weaponShockwaveChance += 0.18 * experiment.echoPower;
   }
   if (memoryId === "blood_reflection") {
     state.echo.extraHitChance += 0.12 * experiment.echoPower;
     state.echo.onHitDamage += 0.22 * experiment.echoPower;
+    state.echo.weaponBleedDamage += 0.35 * experiment.echoPower;
   }
   if (memoryId === "stopped_second") {
     state.echo.cooldownReduction += 0.12 * experiment.echoPower;
     state.echo.slowDuration += 0.35 * experiment.echoPower;
+    state.echo.weaponSlowChance += 0.22 * experiment.echoPower;
   }
 }
 
@@ -1424,23 +1495,23 @@ function echoTransformationLog(memoryId) {
   const map = {
     execution_flash: {
       lost: "가장 위협적인 적을 찍어 누르던 백색 강타",
-      summary: "큰 한 방은 사라지고, 남은 모든 공격에 치명적인 섬광의 흔적이 붙습니다.",
-      stats: ["치명률", "치명 피해", "폭딜 운용"],
+      summary: "큰 한 방은 사라지고, 무기 공격에 작은 섬광 연쇄가 붙어 결손 구간의 마무리 힘을 보탭니다.",
+      stats: ["치명률", "치명 피해", "무기 섬광"],
     },
     hungry_blades: {
       lost: "가까운 적을 계속 긁던 칼무리 오라",
-      summary: "상시 오라는 사라지고, 몸에 남은 칼날 감각이 공격 속도와 지속 피해를 밀어줍니다.",
-      stats: ["공격 속도", "지속 피해", "근접 유지"],
+      summary: "상시 오라는 사라지고, 무기 타격마다 칼무리 잔흔이 남아 쫄몹을 계속 갉아먹습니다.",
+      stats: ["공격 속도", "무기 출혈", "근접 유지"],
     },
     stalker_oath: {
       lost: "멀리 있는 표적을 쫓던 유도 투사체",
-      summary: "추적 발사는 사라지고, 남은 투사체 계열이 더 많이, 더 빠르게 날아갑니다.",
-      stats: ["투사체 수", "탄속", "카이팅"],
+      summary: "추적 발사는 사라지고, 무기 타격 중 일부가 보라색 잔탄을 불러 다른 적을 쫓습니다.",
+      stats: ["투사체 수", "무기 유도탄", "카이팅"],
     },
     shatter_ripple: {
       lost: "주변을 밀어내던 충격파",
-      summary: "즉발 파문은 사라지고, 몸 주변의 전투 범위와 버티는 힘이 넓어집니다.",
-      stats: ["범위", "넉백", "피해 감소"],
+      summary: "즉발 파문은 사라지고, 무기 타격 중 일부가 작은 충격파로 번져 포위를 밀어냅니다.",
+      stats: ["범위", "무기 파문", "피해 감소"],
     },
     blood_reflection: {
       lost: "기본 공격마다 되돌아오던 붉은 추가타",
@@ -1449,8 +1520,8 @@ function echoTransformationLog(memoryId) {
     },
     stopped_second: {
       lost: "주변 시간을 늦추던 시간 균열",
-      summary: "즉시 둔화 장은 사라지고, 남은 기억들이 더 짧은 호흡으로 돌아옵니다.",
-      stats: ["쿨다운", "둔화 지속", "제어 운용"],
+      summary: "즉시 둔화 장은 사라지고, 무기 타격에 짧은 정지감이 남아 추격을 늦춥니다.",
+      stats: ["쿨다운", "무기 둔화", "제어 운용"],
     },
   };
   return map[memoryId] || {
@@ -1703,6 +1774,11 @@ function renderEchoes() {
   if (state.echo.range) lines.push(`범위 +${percent(state.echo.range)}`);
   if (state.echo.extraHitChance) lines.push(`추가타 +${percent(state.echo.extraHitChance)}`);
   if (state.echo.cooldownReduction) lines.push(`쿨다운 -${percent(state.echo.cooldownReduction)}`);
+  if (state.echo.weaponFlashChance) lines.push(`무기 섬광 +${percent(state.echo.weaponFlashChance)}`);
+  if (state.echo.weaponBleedDamage) lines.push(`무기 출혈 +${percent(state.echo.weaponBleedDamage)}`);
+  if (state.echo.weaponHomingChance) lines.push(`무기 유도탄 +${percent(state.echo.weaponHomingChance)}`);
+  if (state.echo.weaponShockwaveChance) lines.push(`무기 파문 +${percent(state.echo.weaponShockwaveChance)}`);
+  if (state.echo.weaponSlowChance) lines.push(`무기 둔화 +${percent(state.echo.weaponSlowChance)}`);
   const growth = state.runGrowth;
   const growthLines = [];
   if (growth.damage) growthLines.push(`런 피해 +${percent(growth.damage)}`);
@@ -1961,10 +2037,12 @@ function farHostile() {
   return hostiles().sort((a, b) => distance(b, p) - distance(a, p))[0];
 }
 
-function nearestHostile(x, y, maxDistance = Infinity) {
+function nearestHostile(x, y, maxDistance = Infinity, excluded = []) {
+  const excludedSet = new Set(excluded);
   let best = null;
   let bestDist = maxDistance;
   for (const target of hostiles()) {
+    if (excludedSet.has(target)) continue;
     const dist = Math.hypot(target.x - x, target.y - y);
     if (dist < bestDist) {
       best = target;

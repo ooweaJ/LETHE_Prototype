@@ -53,7 +53,7 @@ function main() {
   console.log(`Alpha Fun Score: ${summary.gate.alphaFunScore}`);
   console.log(`Regret: ${(summary.headlineMetrics.regretRate * 100).toFixed(1)}% / Irritation: ${(summary.headlineMetrics.irritationRate * 100).toFixed(1)}% / Prediction: ${(summary.headlineMetrics.predictionMatchRate * 100).toFixed(1)}%`);
   console.log(`Early Fun: ${summary.headlineMetrics.earlyFunScore} / Kill Tempo: ${summary.headlineMetrics.earlyKillTempo} / Level-ups: ${summary.headlineMetrics.earlyLevelUps}`);
-  console.log(`v0.6 Cycle: first ${(summary.headlineMetrics.firstCycleCompletionRate * 100).toFixed(1)}% / 2-memory ${(summary.headlineMetrics.twoMemorySurvivalRate * 100).toFixed(1)}% / echo pivot ${summary.headlineMetrics.echoPivotScore}`);
+  console.log(`Cycle: first ${(summary.headlineMetrics.firstCycleCompletionRate * 100).toFixed(1)}% / 2-memory ${(summary.headlineMetrics.twoMemorySurvivalRate * 100).toFixed(1)}% / echo pivot ${summary.headlineMetrics.echoPivotScore}`);
   console.log(`Next: ${summary.playability.nextStep}`);
   console.log(`Outputs: ${outDir}`);
 }

@@ -58,6 +58,7 @@ function emptyStats() {
     onHitDamage: 0,
     cooldownReduction: 0,
     slowDuration: 0,
+    weaponResidue: 0,
   };
 }
 
@@ -84,7 +85,8 @@ function weaponScalar(weapon, stats) {
   const extraHitTerm = 1 + (stats.extraHitChance + stats.onHitDamage * 0.45) * weapon.affinities.extraHit;
   const areaTerm = 1 + (weapon.areaBias + stats.area * 0.75) * 0.32;
   const cooldownTerm = 1 + stats.cooldownReduction * 0.38;
-  return Math.max(0.45, critTerm * speedTerm * extraHitTerm * areaTerm * cooldownTerm);
+  const residueTerm = 1 + stats.weaponResidue * 0.55;
+  return Math.max(0.45, critTerm * speedTerm * extraHitTerm * areaTerm * cooldownTerm * residueTerm);
 }
 
 function memoryEchoScalar(memory, weapon, stats) {
@@ -147,7 +149,7 @@ function calculateContributions(state, encounterName) {
 
   const weaponDps = weapon.baseDps * weaponScalar(weapon, stats);
   const synergyCount = getActiveSynergies(active).length;
-  const survival = clamp(weapon.survival + stats.survival + stats.slowDuration * 0.08 + stats.knockback * 0.04 - encounter.danger * 0.10 + state.bot.skill * 0.10, 0.40, 1.25);
+  const survival = clamp(weapon.survival + stats.survival + stats.slowDuration * 0.08 + stats.knockback * 0.04 + stats.weaponResidue * 0.08 - encounter.danger * 0.10 + state.bot.skill * 0.10, 0.40, 1.25);
   const effectivePower = (weaponDps + totalActive) * (0.82 + survival * 0.20) * (1 + synergyCount * 0.018);
 
   return {

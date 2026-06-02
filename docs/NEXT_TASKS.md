@@ -12,6 +12,7 @@
 - User direct playtest verdict: pause broad human testing and redesign the core run structure before more testing.
 - New planning prompt: `docs/review_prompts/2026-06-02-run-structure-redesign.md`.
 - v0.6 implementation verdict: `GO_TO_SOLO_PLAYTEST_CANDIDATE` by local Codex evidence. Claude v0.6 external feedback is blocked in this Codex session and must be run from a trusted local terminal if required.
+- v0.7 implementation verdict: `GO_TO_SOLO_PLAYTEST_CANDIDATE` by local Codex evidence after weapon baseline and lost-memory weapon echo pass.
 - Project direction: HTML prototype validation first, Unity implementation later only if AI/human tests show enough promise.
 
 ## v0.2 Done
@@ -104,8 +105,11 @@
 - [x] v0.6에서 첫 보스/첫 망각 타이밍, 보스 주기, 기억 상실 후 치환 보상, 기억 보충 타이밍을 구현한다.
 - [x] v0.6 구현 후 AI/브라우저 QA를 다시 실행한다.
 - [x] v0.6 결과 보고 프롬프트를 작성한다: `docs/review_prompts/2026-06-02-v06-cycle-eval.md`.
+- [x] v0.6 1인 피드백을 바탕으로 v0.7 무기 바닥 성능과 잃은 기억의 무기 잔향 시너지를 보강한다.
+- [x] v0.7 AI/브라우저 QA를 실행하고 자동 밸런스 결과를 기록한다.
 - [ ] 신뢰된 로컬 터미널에서 Claude v0.6 피드백을 실행한다. 현재 Codex 세션에서는 외부 전송 정책으로 차단됐다.
-- [ ] Claude가 `GO_TO_SOLO_PLAYTEST`를 주거나, 사용자가 로컬 피드백 없이 진행을 승인하면 1인 체감 테스트를 진행한다.
+- [ ] v0.7을 사용자 1인 체감 테스트로 실행한다.
+- [ ] 1인 테스트에서 기억 상실 후 쫄몹 처리가 여전히 무너지면 v0.7.1 자동 밸런스 루프를 실행한다.
 
 ## Pre-Human-Test Polish Gate
 

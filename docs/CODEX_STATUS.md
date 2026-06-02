@@ -4,10 +4,10 @@ Last updated: 2026-06-02
 
 ## Current Build
 
-- Project: LETHE HTML Alpha v0.6 core run-structure solo-test candidate.
+- Project: LETHE HTML Alpha v0.7 weapon/echo balance solo-test candidate.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
-- Current scope: HTML prototype validation. The project is testing whether LETHE's early combat/growth loop and forgetting loop are fun enough to justify moving into Unity implementation. Broad human testing is paused; v0.6 is now ready for user 1-person feel testing once Claude feedback is either obtained from a trusted local terminal or explicitly skipped.
+- Current scope: HTML prototype validation. The project is testing whether LETHE's early combat/growth loop and forgetting loop are fun enough to justify moving into Unity implementation. Broad human testing is paused; v0.7 is now ready for user 1-person feel testing focused on whether memory loss no longer makes basic mob clearing collapse.
 
 ## Implemented
 
@@ -51,6 +51,11 @@ Last updated: 2026-06-02
   - memory refill from 3 candidates after the deficit segment,
   - `runTimeline` JSON payload with cycles and refill choices,
   - `?qa=fast,v06` browser QA gate.
+- v0.7 weapon/echo balance pass:
+  - buffed the two existing weapon baselines,
+  - added weapon-facing echo effects for lost memories,
+  - added side-panel echo labels for weapon residue effects,
+  - updated AI simulator weapon baseDps and weapon residue proxy.
 - AI alpha test tool under `alpha_test/`.
 - Codex/GPT/Claude workflow docs.
 - Markdown daily reports, generated HTML reports, and Discord report delivery.
@@ -72,21 +77,21 @@ Command:
 npm run ai:test
 ```
 
-v0.6 result:
+v0.7 result:
 
 - Verdict: `GO_CANDIDATE`
 - Playability: `AI 기준 사람 테스트 진입 가능`
 - Risk Level: `LOW`
-- Alpha Fun Score: `0.9093`
-- Early Fun Score: `0.8670`
-- Early kill tempo: `0.9619`
-- Pre-boss level-ups: `4.08`
-- First cycle completion: `82.4%`
-- Two-memory survival: `80.5%`
-- Echo pivot score: `0.7456`
-- Regret proxy: `84.8%`
-- Irritation proxy: `0.1%`
-- Prediction match: `87.7%`
+- Alpha Fun Score: `0.9131`
+- Early Fun Score: `0.8793`
+- Early kill tempo: `0.9847`
+- Pre-boss level-ups: `4.16`
+- First cycle completion: `84.1%`
+- Two-memory survival: `81.5%`
+- Echo pivot score: `0.7349`
+- Regret proxy: `84.0%`
+- Irritation proxy: `0.4%`
+- Prediction match: `87.6%`
 - Immediate quit: `0.7%`
 - Restart intent: `76.1%`
 - First forgetting time: `4.00 min`
@@ -96,12 +101,13 @@ v0.6 result:
 
 Heavy check:
 
-- `npm run ai:test:heavy`: `GO_CANDIDATE`, Alpha Fun Score `0.9095`, Early Fun Score `0.8661`, first cycle completion `81.8%`, two-memory survival `80.2%`, echo pivot `0.7415`, regret `85.2%`, irritation `0.3%`, prediction `88.3%`.
+- `npm run ai:test:heavy`: `GO_CANDIDATE`, Alpha Fun Score `0.9136`, Early Fun Score `0.8787`, first cycle completion `82.7%`, two-memory survival `81.1%`, echo pivot `0.7286`, regret `84.5%`, irritation `0.3%`, prediction `88.1%`.
 
 Remaining note:
 
 - v0.6 fixed the previous 9-minute first-forgetting delay by opening the first cycle at 4 minutes.
 - Prediction match is still high and should be watched during 1-person feel testing.
+- v0.7 improves weapon baseline and mob-clearing proxy, but echo pivot score dropped slightly; watch whether the player feels "weapon solved it" instead of "lost memory changed the build."
 
 ## Latest Sweep Note
 
@@ -137,6 +143,8 @@ npm run ai:sweep
   - payload `playtest.sessionId: S01`.
 - Chrome headless QA passed for v0.6 cycle gate:
   - `file:///C:/jaewoo/LETHE_Prototype/index.html?qa=fast,v06`,
+  - version `v0.7`,
+  - runTimeline version `v0.7`,
   - `status: complete`,
   - `bossSpawned: true`,
   - `forgotten: true`,
@@ -195,12 +203,14 @@ npm run ai:sweep
 - Human testing is paused until Claude/GPT or the user chooses the v0.6 run structure.
 - v0.6 Claude evaluation prompt generated: `docs/review_prompts/2026-06-02-v06-cycle-eval.md`.
 - Actual Claude call for v0.6 was blocked by outbound transfer policy in this Codex session. Block note: `docs/review_responses/2026-06-02-v06-cycle-claude-blocked.md`.
+- v0.7 balance evaluation prompt generated: `docs/review_prompts/2026-06-02-v07-balance-eval.md`.
+- Local Codex v0.7 judgment saved: `docs/review_responses/2026-06-02-v07-balance-codex.md`.
 
 ## Next Codex Tasks
 
-- v0.6 solo feel-test decision is the next product gate.
+- v0.7 solo feel-test decision is the next product gate.
 - On another local machine, run `npm run doctor` first; run `npm run doctor:deep` before leaving Codex to continue unattended.
 - Before an unattended implement -> Claude feedback -> implement loop, run `npm run autopilot:preflight`. If live Claude transmission is blocked in the current session, run `npm run autopilot:preflight:local` and stop at prompt/report generation.
 - If Claude feedback is required, run the v0.6 prompt from a trusted local terminal:
   `node scripts/ask_claude_review.js --prompt docs/review_prompts/2026-06-02-v06-cycle-eval.md --output docs/review_responses/2026-06-02-v06-cycle-claude.md`
-- If proceeding on local evidence, run user 1-person feel testing against v0.6 before any broader playtest.
+- If proceeding on local evidence, run user 1-person feel testing against v0.7 before any broader playtest.
