@@ -1,11 +1,11 @@
 {
   "source": "docs/reports/2026-06-03.md",
-  "generatedAt": "2026-06-02T20:47:30.218Z",
-  "unitCount": 5,
+  "generatedAt": "2026-06-02T20:57:24.207Z",
+  "unitCount": 6,
   "latest": {
-    "title": "2026-06-03-05 - 전술 집중 구현과 브라우저 검증 보류 결정",
-    "number": "05",
-    "markdownPath": "docs/reports/units/2026-06-03/2026-06-03-05-전술-집중-구현과-브라우저-검증-보류-결정.md",
-    "htmlPath": "docs/reports/units/2026-06-03/2026-06-03-05-전술-집중-구현과-브라우저-검증-보류-결정.html"
+    "title": "2026-06-03-06 - 전술 집중 검증 통과와 루프 기준 회복",
+    "number": "06",
+    "markdownPath": "docs/reports/units/2026-06-03/2026-06-03-06-전술-집중-검증-통과와-루프-기준-회복.md",
+    "htmlPath": "docs/reports/units/2026-06-03/2026-06-03-06-전술-집중-검증-통과와-루프-기준-회복.html"
   }
 }

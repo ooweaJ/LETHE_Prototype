@@ -249,6 +249,7 @@ const SIM_DEFAULTS = {
   pressureRhythm: true,
   postLossChallenge: true,
   runGrowthChoices: true,
+  tacticalFocus: true,
 };
 
 module.exports = {

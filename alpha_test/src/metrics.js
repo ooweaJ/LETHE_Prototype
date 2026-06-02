@@ -79,6 +79,8 @@ function summarize(batch) {
   const earlyKillTempo = mean(stages.map(({ stage }) => stage.earlyLoop?.killTempo || 0));
   const earlyCrowdPressure = mean(stages.map(({ stage }) => stage.earlyLoop?.crowdPressure || 0));
   const earlyChoiceInterest = mean(stages.map(({ stage }) => stage.earlyLoop?.choiceInterest || 0));
+  const tacticalFocusAgency = mean(stages.map(({ stage }) => stage.earlyLoop?.tacticalFocus?.agencyScore || 0));
+  const tacticalFocusUseRate = mean(stages.map(({ stage }) => stage.earlyLoop?.tacticalFocus?.useRate || 0));
   const pressureContrast = mean(stages.map(({ stage }) => stage.earlyLoop?.pressureContrast || 0));
   const earlyLevelUps = mean(stages.map(({ stage }) => stage.earlyLoop?.levelUpsBeforeBoss || 0));
   const cycleCompletionRate = pct(stages.filter(({ stage }) => stage.cycleCompleted).length, stageCount);
@@ -154,6 +156,8 @@ function summarize(batch) {
       earlyKillTempo,
       earlyCrowdPressure,
       earlyChoiceInterest,
+      tacticalFocusAgency,
+      tacticalFocusUseRate,
       earlyLevelUps,
       firstCycleCompletionRate,
       cycleCompletionRate,
@@ -182,6 +186,8 @@ function summarize(batch) {
       earlyKillTempo: round(earlyKillTempo, 4),
       earlyCrowdPressure: round(earlyCrowdPressure, 4),
       earlyChoiceInterest: round(earlyChoiceInterest, 4),
+      tacticalFocusAgency: round(tacticalFocusAgency, 4),
+      tacticalFocusUseRate: round(tacticalFocusUseRate, 4),
       pressureContrast: round(pressureContrast, 4),
       earlyLevelUps: round(earlyLevelUps, 2),
       firstCycleCompletionRate: round(firstCycleCompletionRate, 4),
@@ -403,7 +409,8 @@ function runsToCsv(runs) {
     'runIndex', 'botId', 'weaponName', 'stageIndex', 'buildClass', 'concentrationIndex', 'synergyConnectivity',
     'deletedMemoryName', 'predictedMemoryName', 'leastWantedName', 'predictionMatch', 'deletedWasLeastWanted',
     'q1Pain', 'q2Understanding', 'quadrant', 'immediateQuit', 'restartIntent', 'powerDrop', 'recoveryRatio',
-    'earlyFunScore', 'earlyKillTempo', 'earlyCrowdPressure', 'earlyChoiceInterest', 'earlyLevelUps',
+    'earlyFunScore', 'earlyKillTempo', 'earlyCrowdPressure', 'earlyChoiceInterest',
+    'tacticalFocusAgency', 'tacticalFocusUseRate', 'tacticalFocusMemoryName', 'earlyLevelUps',
     'cycleCompleted', 'deficitSurvivalChance', 'postLossChallengeScore', 'postLossChallengeContrast', 'refillReached', 'echoPivotScore',
     'preForgetPower', 'postDeletePower', 'postReplacementPower', 'replacementName', 'deletionWeights', 'echoPower', 'uiClarity',
     'activeMemoryNamesBefore', 'activeMemoryNamesAfter'
@@ -443,6 +450,9 @@ function extractCsvValue(run, stage, h) {
     earlyKillTempo: stage.earlyLoop?.killTempo,
     earlyCrowdPressure: stage.earlyLoop?.crowdPressure,
     earlyChoiceInterest: stage.earlyLoop?.choiceInterest,
+    tacticalFocusAgency: stage.earlyLoop?.tacticalFocus?.agencyScore,
+    tacticalFocusUseRate: stage.earlyLoop?.tacticalFocus?.useRate,
+    tacticalFocusMemoryName: stage.earlyLoop?.tacticalFocus?.focusedMemoryName,
     earlyLevelUps: stage.earlyLoop?.levelUpsBeforeBoss,
     cycleCompleted: stage.cycleCompleted,
     deficitSurvivalChance: stage.deficitSurvivalChance,

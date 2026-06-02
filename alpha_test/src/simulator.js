@@ -521,6 +521,84 @@ function postLossChallengeProfile(stageIndex, options) {
   };
 }
 
+function tacticalFocusProfile(state, snapshot, build, options, pressure) {
+  if (!options.tacticalFocus) {
+    return {
+      enabled: false,
+      agencyScore: 0,
+      choiceInterestBoost: 0,
+      useRate: 0,
+      focusedMemoryId: null,
+      focusedMemoryName: null,
+    };
+  }
+
+  const ranked = state.activeMemories
+    .map((id) => {
+      const memory = MEMORIES[id];
+      const botTaste = state.bot.memoryWeights[id] || 1;
+      const roomShare = snapshot.room.shares[id] || 0;
+      const bossShare = snapshot.boss.shares[id] || 0;
+      const synergy = activeSynergyBonus(id, state.activeMemories);
+      const score = roomShare * 0.38
+        + bossShare * 0.22
+        + memory.presence * 0.16
+        + synergy * 0.16
+        + clamp((botTaste - 1) * 0.18, -0.04, 0.10);
+      return { id, score };
+    })
+    .sort((a, b) => b.score - a.score);
+
+  const focused = ranked[0] || { id: null, score: 0 };
+  const avgPresence = state.activeMemories.length
+    ? state.activeMemories.reduce((sumPresence, id) => sumPresence + MEMORIES[id].presence, 0) / state.activeMemories.length
+    : 0;
+  const optionClarity = clamp(
+    0.44
+      + build.synergyConnectivity * 0.22
+      + state.bot.perception * 0.16
+      + avgPresence * 0.12,
+    0,
+    1,
+  );
+  const timingAppeal = clamp(
+    0.48
+      + pressure * 0.18
+      + Math.max(0, state.bot.concentrationPreference) * 0.16
+      + state.bot.novelty * 0.08
+      + focused.score * 0.18,
+    0,
+    1,
+  );
+  const agencyScore = clamp(optionClarity * 0.46 + timingAppeal * 0.54, 0, 1);
+  const useRate = clamp(
+    0.50
+      + agencyScore * 0.34
+      + state.bot.skill * 0.08
+      - state.bot.risk * 0.03,
+    0,
+    1,
+  );
+  const choiceInterestBoost = clamp(
+    0.055
+      + agencyScore * 0.075
+      + build.synergyConnectivity * 0.025,
+    0,
+    0.14,
+  );
+
+  return {
+    enabled: true,
+    agencyScore: round(agencyScore, 4),
+    choiceInterestBoost: round(choiceInterestBoost, 4),
+    useRate: round(useRate, 4),
+    focusedMemoryId: focused.id,
+    focusedMemoryName: focused.id ? MEMORIES[focused.id].name : null,
+    optionClarity: round(optionClarity, 4),
+    timingAppeal: round(timingAppeal, 4),
+  };
+}
+
 function simulateEarlyFunProxy(rng, state, snapshot, build, options, stageIndex) {
   const rhythm = pressureRhythmProfile(stageIndex, options);
   const pressure = rhythm.weightedPressure;
@@ -529,15 +607,25 @@ function simulateEarlyFunProxy(rng, state, snapshot, build, options, stageIndex)
   const levelUpsBeforeBoss = options.runGrowthChoices
     ? clamp(Math.round(1 + killTempo * 2.7 + build.synergyConnectivity * 1.1 + rng.noise(0.35)), 1, 5)
     : 0;
+  const tacticalFocus = tacticalFocusProfile(state, snapshot, build, options, pressure);
   const choiceInterest = options.runGrowthChoices
-    ? clamp(0.50 + build.synergyConnectivity * 0.28 + state.bot.novelty * 0.18 + rng.noise(0.04), 0, 1)
+    ? clamp(
+      0.50
+        + build.synergyConnectivity * 0.28
+        + state.bot.novelty * 0.18
+        + tacticalFocus.choiceInterestBoost
+        + rng.noise(0.04),
+      0,
+      1,
+    )
     : 0;
   const crowdPressure = clamp(pressure * 0.72 + snapshot.room.survival * 0.20 + rng.noise(0.03), 0, 1);
   const earlyFunScore = clamp(
-    killTempo * 0.40
-      + choiceInterest * 0.28
-      + crowdPressure * 0.22
-      + clamp(levelUpsBeforeBoss / 4, 0, 1) * 0.10,
+    killTempo * 0.37
+      + choiceInterest * 0.31
+      + crowdPressure * 0.20
+      + clamp(levelUpsBeforeBoss / 4, 0, 1) * 0.09
+      + tacticalFocus.agencyScore * 0.04,
     0,
     1,
   );
@@ -547,6 +635,7 @@ function simulateEarlyFunProxy(rng, state, snapshot, build, options, stageIndex)
     crowdPressure: round(crowdPressure, 4),
     choiceInterest: round(choiceInterest, 4),
     levelUpsBeforeBoss,
+    tacticalFocus,
     pressureRhythm: rhythm,
     pressureContrast: rhythm.contrast,
   };

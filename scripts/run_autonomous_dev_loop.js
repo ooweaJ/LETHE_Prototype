@@ -373,6 +373,7 @@ function commitAndMaybePush(iteration) {
 function readCompletionQuality() {
   const summary = readJsonIfExists('alpha_test/outputs/quick/summary.json') || {};
   const postLossGate = readJsonIfExists('alpha_test/outputs/postloss-trusted-gate/latest.json') || {};
+  const tacticalGate = readJsonIfExists('alpha_test/outputs/tactical-trusted-gate/latest.json') || {};
   const metrics = summary.headlineMetrics || {};
   const gate = summary.gate || {};
   const checks = [
@@ -382,6 +383,7 @@ function readCompletionQuality() {
     qualityCheck('Post-loss challenge contrast >= target', Number(metrics.postLossChallengeContrast) >= options.targetPostLossContrast, `${metrics.postLossChallengeContrast ?? 'missing'} / ${options.targetPostLossContrast}`),
     qualityCheck('Irritation <= target', Number(metrics.irritationRate) <= options.targetIrritationRate, `${metrics.irritationRate ?? 'missing'} / ${options.targetIrritationRate}`),
     qualityCheck('Post-loss browser gate passed', ['complete', 'passed'].includes(postLossGate.status), postLossGate.status || 'missing'),
+    qualityCheck('Tactical browser gate passed', ['complete', 'passed'].includes(tacticalGate.status), tacticalGate.status || 'missing'),
   ];
   const failed = checks.filter((check) => !check.pass);
   return {

@@ -3230,6 +3230,14 @@ function startPostLossQa() {
 
 function writeTacticalQaResult(extra = {}) {
   if (!experiment.qaTacticalMode) return;
+  let previous = null;
+  try {
+    previous = JSON.parse(document.documentElement.dataset.letheTacticalQa || "null");
+  } catch {}
+  const previousTerminal = previous && ["complete", "failed"].includes(previous.status);
+  const nextTerminal = ["complete", "failed"].includes(extra.status);
+  if (previousTerminal && !nextTerminal) return;
+
   const payload = state ? collectLogPayload() : null;
   const focus = payload?.tacticalFocus || null;
   const visibleText = `${ui.echoList?.textContent || ""} ${ui.memorySlots?.textContent || ""}`;
