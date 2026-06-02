@@ -126,8 +126,13 @@
 - [x] v0.8 더블 체크 요약을 작성했다: `docs/review_responses/2026-06-02-v08-core-redesign-double-check.md`.
 - [x] v0.8 Gate A를 시작했다: HP 1 고정 제거, 실제 사망 처리, death/danger 로그 추가.
 - [x] v0.8 death QA를 추가했다: `?qa=fast,death`.
-- [ ] v0.8 Gate A 다음 작업: AI proxy와 실제 브라우저 전투 체감의 차이를 줄이는 테스트/지표를 보강한다.
-- [ ] v0.8 Gate B: 8-10분 런, 90초 미니보스/첫 망각, 기억 예산 평준화, 최소 시너지, 태그 기반 잔향을 구현한다.
+- [x] v0.8 Gate A 다음 작업: AI proxy와 실제 브라우저 전투 체감의 차이를 줄이는 테스트/지표를 보강한다.
+- [x] v0.8 Gate B: 8-10분 런, 90초 미니보스/첫 망각, 기억 예산 평준화, 최소 시너지, 태그 기반 잔향을 구현한다.
+- [x] v0.8 Gate B 자동 루프를 2회 이상 돌려 실패 게이트를 다음 수정 입력으로 사용했다.
+- [x] `npm run ai:test:quick`, `npm run ai:test`, `npm run ai:test:heavy`가 모두 `GO_CANDIDATE`로 통과했다.
+- [ ] v0.8 Gate C: 실제 브라우저 전투 QA를 안정적으로 실행하는 별도 스크립트를 추가한다.
+- [ ] v0.8 Gate C: 기억별 성능 차이와 시너지 체감이 화면에서 충분히 읽히는지 자동/수동 체크리스트를 보강한다.
+- [ ] v0.8 Gate C 통과 후에만 사용자 1인 테스트를 요청한다.
 
 ## Pre-Human-Test Polish Gate
 

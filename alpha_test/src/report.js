@@ -47,6 +47,7 @@ function makeMarkdown(summary) {
   lines.push(`| 지표 | 값 | 해석 |`);
   lines.push(`|---|---:|---|`);
   lines.push(`| 클리어율 | ${pct(m.clearRate)} | 난이도 기준선 |`);
+  lines.push(`| 사망/실패율 | ${pct(m.failureRate)} | 목표: 25~70% |`);
   lines.push(`| 아쉬움 분면 | ${pct(m.regretRate)} | 목표: 60% 이상 |`);
   lines.push(`| 짜증 분면 | ${pct(m.irritationRate)} | 목표: 20% 미만 |`);
   lines.push(`| 무덤덤 분면 | ${pct(m.dullRate)} | 목표: 25% 미만 |`);

@@ -102,6 +102,7 @@ const memories = {
     role: "버스트",
     desc: "주기적으로 가장 위협적인 적에게 백색 섬광 강타.",
     cooldown: 3.15,
+    tags: ["burst"],
     echo: "치명타 확률 +12%, 치명타 피해 +35%",
     direction: "대검, 단발 공격, 폭딜 기억이 강해진다.",
   },
@@ -111,6 +112,7 @@ const memories = {
     role: "근접 도트",
     desc: "주변을 도는 칼무리가 가까운 적을 지속적으로 벤다.",
     cooldown: 0.34,
+    tags: ["area", "dot"],
     echo: "공격속도 +18%, 지속 피해 +35%",
     direction: "쌍검, 도트, 근접 유지 빌드가 강해진다.",
   },
@@ -120,6 +122,7 @@ const memories = {
     role: "추적 다중",
     desc: "멀거나 위협적인 적을 따라가는 기억 투사체 발사.",
     cooldown: 2.2,
+    tags: ["burst"],
     echo: "투사체 수 +1, 투사체 속도 +25%",
     direction: "중거리 투사체 기억과 카이팅 운용이 강해진다.",
   },
@@ -129,6 +132,7 @@ const memories = {
     role: "광역 / 넉백",
     desc: "충격파를 일으켜 주변 적을 밀치고 충돌 피해를 준다.",
     cooldown: 4.55,
+    tags: ["area", "control"],
     echo: "범위 +18%, 넉백 +25%, 피해 감소 +6%",
     direction: "포위 대응, 광역 제어, 대검 접근전이 강해진다.",
   },
@@ -138,6 +142,7 @@ const memories = {
     role: "온힛 증폭",
     desc: "기본 공격 명중 시 붉은 추가타가 자동으로 반사된다.",
     cooldown: 0,
+    tags: ["survival", "dot"],
     echo: "추가타 확률 +12%, 온힛 피해 +22%",
     direction: "평타 기반 무기와 빠른 타격 운용이 강해진다.",
   },
@@ -147,10 +152,32 @@ const memories = {
     role: "제어",
     desc: "주변 시간을 늦추고 기억 발동 주기를 조금 당긴다.",
     cooldown: 7.25,
+    tags: ["control", "dot"],
     echo: "쿨다운 감소 +12%, 둔화 지속 +35%",
     direction: "쿨다운형 기억, 생존형 제어 빌드가 강해진다.",
   },
 };
+
+const synergyRules = [
+  {
+    id: "area_control",
+    name: "압축 파문",
+    tags: ["area", "control"],
+    desc: "둔화되거나 밀린 적에게 광역 피해가 증가합니다.",
+  },
+  {
+    id: "dot_control",
+    name: "느린 출혈",
+    tags: ["dot", "control"],
+    desc: "둔화된 적에게 지속 피해가 강해집니다.",
+  },
+  {
+    id: "burst_survival",
+    name: "피 묻은 결의",
+    tags: ["burst", "survival"],
+    desc: "큰 피해를 넣으면 짧게 회복합니다.",
+  },
+];
 
 const enemyTypes = {
   eroder: {
@@ -204,10 +231,10 @@ const experiment = {
   version: "v0.8",
   echoPower: 0.5,
   uiClarity: 0.78,
-  runDurationSec: 1200,
-  bossScheduleSec: [240, 480, 720, 960, 1200],
-  bossHp: 760,
-  deficitDurationSec: 105,
+  runDurationSec: 540,
+  bossScheduleSec: [90, 210, 360, 510],
+  bossHp: 560,
+  deficitDurationSec: 75,
   qaFastMode: qaMode.includes("fast"),
   qaLevelupMode: qaMode.includes("levelup"),
   qaV06Mode: qaMode.includes("v06"),
@@ -216,7 +243,7 @@ const experiment = {
 
 if (experiment.qaFastMode) {
   experiment.runDurationSec = 72;
-  experiment.bossScheduleSec = [12, 28, 44, 60, 72];
+  experiment.bossScheduleSec = [10, 24, 42, 62];
   experiment.bossHp = 180;
   experiment.deficitDurationSec = 5;
 }
@@ -298,6 +325,8 @@ function createRunState() {
     weapon: weapons[selectedWeapon],
     memories: activeMemories,
     echo: { ...baseEcho },
+    tagEchoes: [],
+    activeSynergies: [],
     runGrowth: {
       level: 1,
       xp: 0,
@@ -457,6 +486,7 @@ function renderSetup() {
   ui.startRunButton.disabled = selectedMemories.length !== 3;
   ui.weaponCard.innerHTML = weaponCardHtml(weapons[selectedWeapon]);
   renderMemorySlots();
+  renderSetupSynergies();
 }
 
 function initChoiceSelection(container, selection) {
@@ -472,9 +502,56 @@ function weaponCardHtml(weapon) {
   return `<strong>${weapon.name}</strong><br>${weapon.role}<br>${weapon.desc}`;
 }
 
+function activeSynergiesFor(memoryIds) {
+  const tagSet = new Set();
+  memoryIds.forEach((id) => (memories[id]?.tags || []).forEach((tag) => tagSet.add(tag)));
+  return synergyRules.filter((rule) => rule.tags.every((tag) => tagSet.has(tag)));
+}
+
+function refreshActiveSynergies() {
+  if (!state) return [];
+  state.activeSynergies = activeSynergiesFor(activeMemoryIds());
+  return state.activeSynergies;
+}
+
+function hasSynergy(id) {
+  return Boolean(state?.activeSynergies?.some((rule) => rule.id === id));
+}
+
+function tagBadges(tags = []) {
+  return tags.map((tag) => `<span class="tag-chip">${tagLabel(tag)}</span>`).join("");
+}
+
+function tagLabel(tag) {
+  const labels = {
+    burst: "폭딜",
+    area: "광역",
+    dot: "지속",
+    control: "제어",
+    survival: "생존",
+  };
+  return labels[tag] || tag;
+}
+
+function renderSetupSynergies() {
+  if (state) return;
+  if (!selectedMemories.length) {
+    ui.echoList.textContent = "기억 태그를 조합하면 시너지가 열립니다.";
+    return;
+  }
+  const active = activeSynergiesFor(selectedMemories);
+  const tags = selectedMemories.flatMap((id) => memories[id]?.tags || []);
+  const tagText = [...new Set(tags)].map((tag) => `<span class="tag-chip">${tagLabel(tag)}</span>`).join("");
+  const synergyText = active.length
+    ? active.map((rule) => `<div class="echo-line"><strong>${rule.name}</strong><br>${rule.desc}</div>`).join("")
+    : `<div class="echo-line">활성 시너지 없음</div>`;
+  ui.echoList.innerHTML = `<div class="tag-row">${tagText}</div>${synergyText}`;
+}
+
 function startRun() {
   playtestMeta = currentPlaytestMeta();
   state = createRunState();
+  refreshActiveSynergies();
   overlay.classList.remove("show");
   addLog(experiment.qaFastMode ? "QA fast mode: 검은 물이 빠르게 차오른다." : "검은 물 위로 기억이 떠올랐다.");
   logEvent("run_start", { playtest: state.logs.playtest });
@@ -576,18 +653,19 @@ function spawnBoss() {
   state.bossSpawned = true;
   const bossIndex = state.runTimeline.nextBossIndex + 1;
   const isFinal = bossIndex >= state.runTimeline.bossScheduleSec.length;
+  const miniBoss = bossIndex === 1;
   state.runTimeline.currentBossIndex = bossIndex;
   state.runTimeline.nextBossIndex += 1;
-  state.phase = isFinal ? "최종 문지기" : `${bossIndex}차 문지기`;
+  state.phase = miniBoss ? "첫 망각 문지기" : isFinal ? "최종 문지기" : `${bossIndex}차 문지기`;
   state.enemies.length = Math.min(state.enemies.length, 8);
   state.shake = Math.max(state.shake, 12);
   state.boss = {
     id: "boss",
-    name: isFinal ? "끝의 문지기" : `기억을 씹는 자 ${bossIndex}`,
+    name: miniBoss ? "작은 문지기" : isFinal ? "끝의 문지기" : `기억을 씹는 자 ${bossIndex}`,
     x: canvas.width / 2,
     y: 96,
-    hp: Math.round(experiment.bossHp * (1 + (bossIndex - 1) * 0.22)),
-    maxHp: Math.round(experiment.bossHp * (1 + (bossIndex - 1) * 0.22)),
+    hp: Math.round((miniBoss ? experiment.bossHp * 0.68 : experiment.bossHp) * (1 + Math.max(0, bossIndex - 2) * 0.18)),
+    maxHp: Math.round((miniBoss ? experiment.bossHp * 0.68 : experiment.bossHp) * (1 + Math.max(0, bossIndex - 2) * 0.18)),
     r: 32,
     phase: 1,
     phaseTimer: 0,
@@ -597,14 +675,16 @@ function spawnBoss() {
     aoeCd: 4,
     cycleIndex: bossIndex,
     final: isFinal,
+    miniBoss,
   };
   addLog(`${state.boss.name}가 검은 물을 갈랐다.`);
-  addFloater(isFinal ? "최종 문지기" : `${bossIndex}차 문지기`, canvas.width / 2, 84, "#ff5d6c");
+  addFloater(miniBoss ? "첫 망각 문지기" : isFinal ? "최종 문지기" : `${bossIndex}차 문지기`, canvas.width / 2, 84, "#ff5d6c");
   addBurst(canvas.width / 2, 96, "#ff5d6c", 28, 6.8);
   logEvent("boss_spawn", {
     cycleIndex: bossIndex,
     bossName: state.boss.name,
     final: isFinal,
+    miniBoss,
     activeMemoryCount: activeMemoryCount(),
   });
 }
@@ -811,7 +891,7 @@ function updateMemories(dt) {
       let hit = false;
       for (const target of hostiles()) {
         if (distance(p, target) < radius + target.r) {
-          damageHostile(target, 6.5 * (1 + state.echo.dotDamage + state.runGrowth.damage), memory.id);
+          damageHostile(target, 7.4 * (1 + state.echo.dotDamage + state.runGrowth.damage), memory.id);
           hit = true;
         }
       }
@@ -863,6 +943,7 @@ function basicAttack() {
     if (Math.random() < chance) {
       const extra = 19 * (1 + state.echo.onHitDamage + state.runGrowth.damage);
       damageHostile(target, extra, blood.id, { bossTrace: true });
+      state.player.hp = Math.min(state.player.maxHp, state.player.hp + 1.8);
       recordPresence(blood.id, 0.8);
       state.metrics[blood.id].activeCount += 1;
       state.effects.push({ type: "blood", x: target.x, y: target.y, r: 10, maxR: 34, life: 0.28, maxLife: 0.28 });
@@ -989,7 +1070,7 @@ function activateMemory(memory) {
   if (memory.id === "execution_flash") {
     const target = highestThreat();
     if (!target) return;
-    const damage = 84 * (state.weapon.id === "greatsword" ? 1.12 : 1) * (1 + state.runGrowth.damage);
+    const damage = 76 * (state.weapon.id === "greatsword" ? 1.12 : 1) * (1 + state.runGrowth.damage);
     damageHostile(target, damage, memory.id, { bossTrace: true, groggyBonus: true });
     addFloater(memory.name, target.x, target.y - 26, "#eef8ff");
     addBurst(target.x, target.y, "#eef8ff", 18, 4.8);
@@ -1032,7 +1113,7 @@ function activateMemory(memory) {
         const angle = angleTo(p, target);
         target.x += Math.cos(angle) * push;
         target.y += Math.sin(angle) * push;
-        damageHostile(target, 45 * (1 + state.runGrowth.damage), memory.id, { bossTrace: true });
+        damageHostile(target, 49 * (1 + state.runGrowth.damage), memory.id, { bossTrace: true, pushed: true });
         state.metrics[memory.id].status += push;
       }
     }
@@ -1047,6 +1128,7 @@ function activateMemory(memory) {
     for (const target of hostiles()) {
       if (distance(p, target) < radius + target.r) {
         target.slow = Math.max(target.slow || 0, duration);
+        damageHostile(target, 24 * (1 + state.runGrowth.damage), memory.id, { bossTrace: true, controlHit: true });
         if (target.id === "boss") state.metrics[memory.id].bossControls += 1;
         state.metrics[memory.id].status += 24;
       }
@@ -1062,6 +1144,7 @@ function activateMemory(memory) {
 }
 
 function damageHostile(target, amount, source, options = {}) {
+  amount = applySynergyDamage(source, target, amount, options);
   const before = target.hp;
   target.hp -= amount;
   const actual = Math.max(0, before - Math.max(0, target.hp));
@@ -1078,6 +1161,30 @@ function damageHostile(target, amount, source, options = {}) {
       state.metrics[source].bossDamage += actual;
       if (state.boss?.groggy || options.groggyBonus) state.metrics[source].groggyDamage += actual;
     }
+  }
+  applySynergyAfterDamage(source, target, actual);
+}
+
+function applySynergyDamage(source, target, amount, options = {}) {
+  if (!source || !state?.metrics[source]) return amount;
+  const tags = memories[source]?.tags || [];
+  let nextAmount = amount;
+  if (hasSynergy("area_control") && tags.includes("area") && (target.slow > 0 || options.pushed || options.controlHit)) {
+    nextAmount *= 1.22;
+  }
+  if (hasSynergy("dot_control") && tags.includes("dot") && target.slow > 0) {
+    nextAmount *= 1.28;
+  }
+  return nextAmount;
+}
+
+function applySynergyAfterDamage(source, target, actual) {
+  if (!source || !state?.metrics[source] || actual <= 0) return;
+  const tags = memories[source]?.tags || [];
+  if (hasSynergy("burst_survival") && tags.includes("burst") && actual >= 42) {
+    const before = state.player.hp;
+    state.player.hp = Math.min(state.player.maxHp, state.player.hp + 5);
+    if (state.player.hp > before) addFloater("결의", state.player.x, state.player.y - 34, "#ff5d6c");
   }
 }
 
@@ -1244,6 +1351,7 @@ function forgetMostDependent() {
     activeBefore: ranked.map((memory) => memory.id),
   });
   applyEcho(forgotten.id);
+  refreshActiveSynergies();
   renderEchoes();
   const cycle = {
     cycleIndex: state.runTimeline.currentBossIndex,
@@ -1275,36 +1383,43 @@ function forgetMostDependent() {
 }
 
 function applyEcho(memoryId) {
+  const tags = memories[memoryId]?.tags || [];
+  state.tagEchoes.push({
+    memoryId,
+    memoryName: memories[memoryId]?.name || memoryId,
+    tags: tags.slice(0, 1),
+    power: 0.35,
+  });
   if (memoryId === "execution_flash") {
-    state.echo.critChance += 0.12 * experiment.echoPower;
-    state.echo.critDamage += 0.35 * experiment.echoPower;
-    state.echo.weaponFlashChance += 0.18 * experiment.echoPower;
+    state.echo.critChance += 0.05 * experiment.echoPower;
+    state.echo.critDamage += 0.12 * experiment.echoPower;
+    state.echo.weaponFlashChance += 0.09 * experiment.echoPower;
   }
   if (memoryId === "hungry_blades") {
-    state.echo.attackSpeed += 0.18 * experiment.echoPower;
-    state.echo.dotDamage += 0.35 * experiment.echoPower;
-    state.echo.weaponBleedDamage += 0.9 * experiment.echoPower;
+    state.echo.attackSpeed += 0.07 * experiment.echoPower;
+    state.echo.dotDamage += 0.13 * experiment.echoPower;
+    state.echo.weaponBleedDamage += 0.36 * experiment.echoPower;
   }
   if (memoryId === "stalker_oath") {
-    state.echo.projectileCount += 1 * experiment.echoPower;
-    state.echo.projectileSpeed += 0.25 * experiment.echoPower;
-    state.echo.weaponHomingChance += 0.24 * experiment.echoPower;
+    state.echo.projectileCount += 0.42 * experiment.echoPower;
+    state.echo.projectileSpeed += 0.11 * experiment.echoPower;
+    state.echo.weaponHomingChance += 0.10 * experiment.echoPower;
   }
   if (memoryId === "shatter_ripple") {
-    state.echo.range += 0.18 * experiment.echoPower;
-    state.echo.knockback += 0.25 * experiment.echoPower;
-    state.echo.damageReduction += 0.06 * experiment.echoPower;
-    state.echo.weaponShockwaveChance += 0.18 * experiment.echoPower;
+    state.echo.range += 0.07 * experiment.echoPower;
+    state.echo.knockback += 0.11 * experiment.echoPower;
+    state.echo.damageReduction += 0.025 * experiment.echoPower;
+    state.echo.weaponShockwaveChance += 0.09 * experiment.echoPower;
   }
   if (memoryId === "blood_reflection") {
-    state.echo.extraHitChance += 0.12 * experiment.echoPower;
-    state.echo.onHitDamage += 0.22 * experiment.echoPower;
-    state.echo.weaponBleedDamage += 0.35 * experiment.echoPower;
+    state.echo.extraHitChance += 0.05 * experiment.echoPower;
+    state.echo.onHitDamage += 0.10 * experiment.echoPower;
+    state.echo.weaponBleedDamage += 0.14 * experiment.echoPower;
   }
   if (memoryId === "stopped_second") {
-    state.echo.cooldownReduction += 0.12 * experiment.echoPower;
-    state.echo.slowDuration += 0.35 * experiment.echoPower;
-    state.echo.weaponSlowChance += 0.22 * experiment.echoPower;
+    state.echo.cooldownReduction += 0.05 * experiment.echoPower;
+    state.echo.slowDuration += 0.14 * experiment.echoPower;
+    state.echo.weaponSlowChance += 0.10 * experiment.echoPower;
   }
 }
 
@@ -1400,7 +1515,7 @@ function showRefillOverlay() {
     const button = document.createElement("button");
     button.className = "choice";
     button.type = "button";
-    button.innerHTML = `<strong>${memory.name}</strong><span>${memory.role}<br>${memory.desc}</span>`;
+    button.innerHTML = `<strong>${memory.name}</strong><span>${memory.role}<br>${memory.desc}</span><div class="tag-row">${tagBadges(memory.tags)}</div>`;
     button.addEventListener("click", () => applyMemoryRefill(id));
     container.appendChild(button);
   });
@@ -1417,6 +1532,7 @@ function applyMemoryRefill(id) {
   memory.joinedAt = Number(state.elapsed.toFixed(2));
   state.memories.push(memory);
   if (!state.metrics[id]) state.metrics[id] = createMetricSeed([id])[id];
+  refreshActiveSynergies();
   const choice = {
     cycleIndex: state.runTimeline.currentBossIndex,
     t: Number(state.elapsed.toFixed(2)),
@@ -1647,6 +1763,8 @@ function collectLogPayload() {
   state.logs.metrics = state.metrics;
   state.logs.deletionWeights = dependencyWeights();
   state.logs.echo = state.echo;
+  state.logs.tagEchoes = state.tagEchoes;
+  state.logs.activeSynergies = state.activeSynergies;
   state.logs.echoPower = experiment.echoPower;
   state.logs.runGrowth = runGrowthLog();
   state.logs.runTimeline = runTimelineLog();
@@ -1861,6 +1979,7 @@ function renderMemorySlots() {
     slot.className = `slot ${watched ? "watched" : ""} ${clarityPercent > 68 ? "cracked" : ""} ${clarityPercent > 88 ? "gazed" : ""}`;
     slot.innerHTML = `
       <div class="slot-header"><strong>${memory.name}</strong><small>${memory.role}</small></div>
+      <div class="tag-row">${tagBadges(memory.tags)}</div>
       ${watched ? `<div class="risk-tag">레테의 시선</div>` : ""}
       <div class="cooldown-track"><div class="cooldown-fill" style="width:${clamp(cdPercent, 0, 100)}%"></div></div>
       <small>${memory.forgotten ? "망각됨" : memory.desc}</small>
@@ -1877,6 +1996,12 @@ function renderEchoes() {
     return;
   }
   const lines = [];
+  if (state.activeSynergies?.length) {
+    state.activeSynergies.forEach((rule) => lines.push(`시너지: ${rule.name}`));
+  }
+  if (state.tagEchoes?.length) {
+    state.tagEchoes.forEach((echo) => lines.push(`태그 잔향: ${echo.memoryName} -> ${echo.tags.map(tagLabel).join("/")}`));
+  }
   if (state.echo.critChance > baseEcho.critChance) lines.push(`치명 +${percent(state.echo.critChance - baseEcho.critChance)}`);
   if (state.echo.attackSpeed) lines.push(`공격속도 +${percent(state.echo.attackSpeed)}`);
   if (state.echo.projectileCount) lines.push(`투사체 +${state.echo.projectileCount}`);

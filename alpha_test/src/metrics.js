@@ -46,6 +46,7 @@ function summarize(batch) {
   const stages = flattenStages(runs);
   const totalRuns = runs.length;
   const completedRuns = runs.filter((r) => !r.failed).length;
+  const failureRate = pct(totalRuns - completedRuns, totalRuns);
   const firstStages = runs.map((r) => r.stageLogs.find((s) => !s.failedBeforeForget)).filter(Boolean);
 
   const quadrants = histogram(stages.map(({ stage }) => stage.emotion.quadrant));
@@ -122,6 +123,7 @@ function summarize(batch) {
     twoMemorySurvivalRate,
     echoPivotScore,
     refillReachedRate,
+    failureRate,
   });
   const verdict = gateVerdict(targetChecks);
 
@@ -155,10 +157,12 @@ function summarize(batch) {
       twoMemorySurvivalRate,
       refillReachedRate,
       echoPivotScore,
+      failureRate,
       targetChecks,
     }),
     headlineMetrics: {
       clearRate: round(clearRate, 4),
+      failureRate: round(failureRate, 4),
       regretRate: round(regretRate, 4),
       unstableRegretRate: round(unstableRegretRate, 4),
       irritationRate: round(irritationRate, 4),
@@ -212,6 +216,8 @@ function makeTargetChecks(m) {
     check('예측 일치율 상한', m.predictionMatchRate, '<=', t.predictionMatchMax, '정답 확인처럼 느껴지는 위험 방지'),
     check('삭제 직후 즉시 종료율', m.immediateQuitRate, '<=', t.immediateQuitMax, '무력감/레이지퀏 프록시'),
     check('런 재시작 의향', m.restartRate, '>=', t.restartRateMin, '한 판 더 욕구 프록시'),
+    check('사망/실패율 하한', m.failureRate, '>=', t.failureRateMin, '실제 위험이 없는 과안전 상태 방지'),
+    check('사망/실패율 상한', m.failureRate, '<=', t.failureRateMax, '즉사/불합리 난이도 방지'),
     check('초반 재미 점수', m.earlyFunScore, '>=', t.earlyFunScoreMin, '초반 압박/처치/성장 선택 프록시'),
     check('초반 레벨업 수', m.earlyLevelUps, '>=', t.earlyLevelUpsMin, '보스 전 런 중 성장 선택 횟수'),
     check('초반 처치 템포', m.earlyKillTempo, '>=', t.earlyKillTempoMin, '적 처치 리듬과 밀도 프록시'),
@@ -242,7 +248,7 @@ function check(name, value, op, target, note) {
 }
 
 function gateVerdict(checks) {
-  const hardNames = new Set(['아쉬움 분면', '짜증 분면', '예측 일치율', '삭제 직후 즉시 종료율', '초반 재미 점수', '초반 처치 템포', '첫 사이클 완주율', '2기억 생존율 하한', '잔향 피벗 점수', '기억 보충 도달율']);
+  const hardNames = new Set(['아쉬움 분면', '짜증 분면', '예측 일치율', '삭제 직후 즉시 종료율', '사망/실패율 하한', '사망/실패율 상한', '초반 재미 점수', '초반 처치 템포', '첫 사이클 완주율', '2기억 생존율 하한', '잔향 피벗 점수', '기억 보충 도달율']);
   const hardFails = checks.filter((c) => hardNames.has(c.name) && !c.pass);
   const softFails = checks.filter((c) => !hardNames.has(c.name) && !c.pass);
   if (hardFails.length === 0 && softFails.length <= 2) return 'GO_CANDIDATE';
@@ -252,7 +258,7 @@ function gateVerdict(checks) {
 
 function makePlayabilityAssessment(m) {
   const failed = m.targetChecks.filter((c) => !c.pass);
-  const hardNames = new Set(['아쉬움 분면', '짜증 분면', '예측 일치율', '삭제 직후 즉시 종료율', '초반 재미 점수', '초반 처치 템포']);
+  const hardNames = new Set(['아쉬움 분면', '짜증 분면', '예측 일치율', '삭제 직후 즉시 종료율', '사망/실패율 하한', '사망/실패율 상한', '초반 재미 점수', '초반 처치 템포']);
   const hardFails = failed.filter((c) => hardNames.has(c.name)).map((c) => c.name);
   const softFails = failed.filter((c) => !hardNames.has(c.name)).map((c) => c.name);
   let label = '튜닝 후 재검증';

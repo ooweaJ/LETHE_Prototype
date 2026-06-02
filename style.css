@@ -249,6 +249,23 @@ canvas {
   line-height: 1.45;
 }
 
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 7px;
+}
+
+.tag-chip {
+  border: 1px solid rgba(109, 223, 210, 0.34);
+  border-radius: 999px;
+  color: var(--memory);
+  font-size: 11px;
+  line-height: 1;
+  padding: 4px 7px;
+  background: rgba(109, 223, 210, 0.08);
+}
+
 .primary-btn,
 .secondary-btn {
   min-height: 42px;

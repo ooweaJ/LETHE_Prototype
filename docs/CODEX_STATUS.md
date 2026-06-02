@@ -198,6 +198,29 @@ npm run ai:sweep
 
 ## Latest Planning Verdict
 
+- v0.8 Gate B status: `AI_GO_CANDIDATE`, but not a final human-fun verdict.
+- v0.8 Gate B implemented:
+  - 9-minute prototype run,
+  - first mini-boss/first forgetting at 90 seconds,
+  - later bosses at 210 / 360 / 510 seconds,
+  - memory tag badges,
+  - three minimal synergies: area+control, dot+control, burst+survival,
+  - tag echo display after forgetting,
+  - reduced generic stat refund from echoes,
+  - actual death/failure rate as an AI gate.
+- v0.8 automation loop evidence:
+  - first Gate B quick run failed after probabilistic deletion made forgetting feel random: `NO_GO_FIX_CORE`,
+  - deletion was restored to deterministic highest-dependence memory loss,
+  - post-forget drop gate was corrected from `30-40%` to `20-35%` because the user's real play feedback was already "too weak after loss",
+  - heavy 5000-run test initially failed on death/failure rate `70.7% > 70%`,
+  - boss difficulty/late boss HP scaling was softened,
+  - final quick/default/heavy runs all returned `GO_CANDIDATE`.
+- Latest AI test evidence:
+  - `npm run ai:test:quick`: `GO_CANDIDATE`, Alpha Fun Score `0.8883`, regret `80.8%`, irritation `1.0%`, prediction `85.5%`, death/fail `40.0%`.
+  - `npm run ai:test`: `GO_CANDIDATE`, Alpha Fun Score `0.8909`, regret `81.6%`, irritation `0.7%`, prediction `85.1%`, death/fail `45.1%`.
+  - `npm run ai:test:heavy`: `GO_CANDIDATE`, Alpha Fun Score `0.8893`, regret `81.8%`, irritation `0.8%`, prediction `84.8%`, death/fail `67.7%`.
+- Latest Discord work-unit delivery succeeded with `npm run report:discord:unit`.
+- Browser plugin QA was not available in this session (`iab` unavailable). Chrome CLI also returned no dump output because it handed off to an existing user browser session, so the next gate must add a stable browser QA runner rather than treating flow QA as complete.
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the v0.5 level-up flow and `runGrowth` payload.
 - Planning pipeline prompt generated: `docs/review_prompts/2026-06-02-pipeline.md`.
@@ -228,10 +251,11 @@ npm run ai:sweep
 
 ## Next Codex Tasks
 
-- v0.8 gate A is the current product gate.
+- v0.8 Gate C is the current product gate.
 - On another local machine, run `npm run doctor` first; run `npm run doctor:deep` before leaving Codex to continue unattended.
 - Before an unattended implement -> Claude feedback -> implement loop, run `npm run autopilot:preflight`.
 - Do not describe AI proxy metrics as real balance feedback.
 - Use Claude + Codex CLI double check for major planning changes.
-- Before reporting balance, improve the test model or browser balance QA so the automation catches the mismatch the user just found.
-- Continue v0.8 Gate B only after Gate A death/danger metrics are stable.
+- Before reporting balance, separate AI simulator evidence, browser flow QA evidence, and user play evidence.
+- Add a stable browser combat QA runner for v0.8 Gate C.
+- Do not request user 1-person playtest until Gate C can show the HTML flow is executable and the AI simulator stays in `GO_CANDIDATE`.

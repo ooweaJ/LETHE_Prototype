@@ -231,7 +231,6 @@ function computeReliance(state, snapshot) {
     deletionRaw[id] = (normalized[id] || 0) * (MEMORY_FORGET_BIAS[id] ?? 1);
   }
   const deletionWeights = normalizeMap(deletionRaw);
-  const deletedMemoryId = Object.entries(deletionWeights).sort((a, b) => b[1] - a[1])[0][0];
   const sorted = Object.entries(normalized).sort((a, b) => b[1] - a[1]);
   return {
     combat,
@@ -241,9 +240,14 @@ function computeReliance(state, snapshot) {
     score: normalized,
     deletionRaw,
     deletionWeights,
-    deletedMemoryId,
     clarityGap: sorted.length > 1 ? round(sorted[0][1] - sorted[1][1], 4) : 1,
   };
+}
+
+function chooseDeletion(rng, deletionWeights) {
+  const ids = Object.keys(deletionWeights || {});
+  if (!ids.length) return null;
+  return ids.sort((a, b) => (deletionWeights[b] || 0) - (deletionWeights[a] || 0))[0];
 }
 
 function classifyBuild(state, snapshot) {
@@ -254,7 +258,7 @@ function classifyBuild(state, snapshot) {
   const synergyConnectivity = activeSynergies.length / maxPairs;
   let buildClass = '분산-느슨';
   if (concentrationIndex >= 0.50) buildClass = '몰빵';
-  else if (synergyConnectivity >= 0.45) buildClass = '분산-거미줄';
+  else if (synergyConnectivity >= 0.30) buildClass = '분산-거미줄';
   return {
     buildClass,
     concentrationIndex: round(concentrationIndex, 4),
@@ -327,7 +331,7 @@ function predictDeletion(rng, state, reliance, options) {
       + 0.16 * (reliance.presence[id] || 0);
     // UI clarity exposes part of the deletion weight without making prediction a pure answer key.
     const visibleTruth = reliance.deletionWeights[id] || reliance.score[id] || 0;
-    const clarity = Math.min(0.88, options.uiClarity * 1.16);
+    const clarity = Math.min(0.76, options.uiClarity * 0.98);
     visible[id] = visible[id] * (1 - clarity) + visibleTruth * clarity;
     visible[id] += rng.noise((1 - state.bot.perception) * 0.045 + 0.006);
   }
@@ -438,7 +442,7 @@ function simulateEarlyFunProxy(rng, state, snapshot, build, options) {
 }
 
 function bossClearCheck(rng, state, stageIndex, power) {
-  const difficulty = 96 + stageIndex * 14;
+  const difficulty = 94 + stageIndex * 13;
   const margin = (power - difficulty) / difficulty;
   const p = clamp(0.66 + margin * 0.95 + state.bot.skill * 0.18 - state.bot.risk * 0.04, 0.08, 0.98);
   return { clear: rng.bool(p), clearChance: round(p, 3), difficulty };
@@ -527,7 +531,8 @@ function simulateOneRun(rng, bot, options, runIndex = 0) {
       break;
     }
 
-    const deletedMemoryId = reliance.deletedMemoryId;
+    const deletedMemoryId = chooseDeletion(rng, reliance.deletionWeights);
+    reliance.deletedMemoryId = deletedMemoryId;
     const predictedMemoryId = predictDeletion(rng, state, reliance, options);
     const leastWantedId = chooseLeastWantedToLose(rng, state, snapshot, reliance);
 
