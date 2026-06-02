@@ -93,6 +93,7 @@
 - [x] AI 협업 포트폴리오 문서와 ADR을 추가한다.
 - [x] 다른 로컬에서 파이프라인 준비 상태를 확인하는 `npm run doctor` 라인을 추가한다.
 - [x] 사람 테스트 JSON 로그를 요약하고 Claude/GPT용 human-test 프롬프트를 생성하는 `npm run playtest:summary` 라인을 추가한다.
+- [x] 사람 테스트용 정적 배포 폴더를 만드는 `npm run playtest:package` 라인을 추가한다.
 - [ ] 5-8명 사람 테스트를 진행한다.
 - [ ] 플레이테스트 후 감정 반응을 기준으로 다음 방향을 결정한다.
 - [ ] 사람 테스트 결과가 모이면 Claude/GPT에 결과를 보고하고 기획 수정 방향을 받는다. 외부 전송 승인이 어려우면 Codex CLI fallback이나 Claude mock 경로로 자동화만 먼저 점검한다.

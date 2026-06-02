@@ -35,13 +35,14 @@ Do not evaluate or request:
 
 ## Setup
 
-1. Open `index.html` in a browser.
-2. Enter tester ID and session number, for example `T01` and `S01`.
-3. Ask the tester to choose one weapon and exactly three memories.
-4. Do not explain the deletion formula.
-5. Tell the tester only this: movement is manual, basic attack and memories trigger automatically, and level-up choices last only for this run.
-6. Let the tester play until the boss is defeated and the forgetting result screen appears.
-7. Ask the tester to complete Q1/Q2/Q3 and download the JSON log.
+1. Optional: run `npm run playtest:package` to create a shareable static playtest folder under `dist/`.
+2. Open `index.html` in a browser.
+3. Enter tester ID and session number, for example `T01` and `S01`.
+4. Ask the tester to choose one weapon and exactly three memories.
+5. Do not explain the deletion formula.
+6. Tell the tester only this: movement is manual, basic attack and memories trigger automatically, and level-up choices last only for this run.
+7. Let the tester play until the boss is defeated and the forgetting result screen appears.
+8. Ask the tester to complete Q1/Q2/Q3 and download the JSON log.
 
 ## Observation Focus
 

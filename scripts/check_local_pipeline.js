@@ -45,6 +45,8 @@ function checkPackageScripts() {
     'planning:pipeline',
     'playtest:summary',
     'playtest:summary:dry',
+    'playtest:package',
+    'playtest:package:dry',
   ].forEach((name) => {
     add(scripts[name] ? 'pass' : 'fail', `npm script ${name}`, scripts[name] || 'missing', `Add ${name} to package.json scripts.`);
   });
@@ -134,8 +136,10 @@ function runDeepChecks() {
     'node --check scripts/ask_codex_review.js',
     'node --check scripts/send_discord_report.js',
     'node --check scripts/summarize_playtests.js',
+    'node --check scripts/prepare_playtest_build.js',
     'npm run planning:pipeline:dry',
     'npm run playtest:summary:dry',
+    'npm run playtest:package:dry',
     'npm run report:discord:unit:dry',
   ].forEach((command) => {
     const result = run(command, { maxBuffer: 1024 * 1024 * 8 });

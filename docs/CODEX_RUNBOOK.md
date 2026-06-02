@@ -174,6 +174,13 @@ If the current Codex session cannot export repository prompts to external servic
 
 ## Human Playtest Summary
 
+Before human sessions, prepare a static playtest folder:
+
+```powershell
+npm run playtest:package:dry
+npm run playtest:package
+```
+
 After human sessions, put downloaded JSON logs in:
 
 ```text

@@ -27,7 +27,9 @@
     "doctor": "node scripts/check_local_pipeline.js",
     "doctor:deep": "node scripts/check_local_pipeline.js --deep",
     "playtest:summary": "node scripts/summarize_playtests.js",
-    "playtest:summary:dry": "node scripts/summarize_playtests.js --dry-run"
+    "playtest:summary:dry": "node scripts/summarize_playtests.js --dry-run",
+    "playtest:package": "node scripts/prepare_playtest_build.js",
+    "playtest:package:dry": "node scripts/prepare_playtest_build.js --dry-run"
   },
   "engines": {
     "node": ">=18.0.0"

@@ -54,6 +54,7 @@ Last updated: 2026-06-02
 - Local pipeline doctor via `npm run doctor` and `npm run doctor:deep`.
 - AI collaboration portfolio docs under `docs/ai/`, `docs/adr/`, and `docs/portfolio/`.
 - Human playtest summary automation via `npm run playtest:summary`.
+- Human playtest package generation via `npm run playtest:package`.
 
 ## Latest AI Test Result
 
@@ -124,12 +125,16 @@ npm run ai:sweep
   - payload `playtest.sessionId: S01`.
 - Local doctor passed on this machine:
   - `npm run doctor`: 26 pass, 0 warn, 0 fail,
-  - `npm run doctor:deep`: 34 pass, 0 warn, 0 fail.
+  - `npm run doctor:deep`: 38 pass, 0 warn, 0 fail.
 - Human playtest summary preparation passed:
   - `npm run playtest:summary:dry`,
   - `npm run playtest:summary`,
   - generated `docs/playtest_summaries/2026-06-02.md`,
   - generated `docs/review_prompts/2026-06-02-human-playtest.md`.
+- Human playtest package preparation passed:
+  - `npm run playtest:package:dry`,
+  - `npm run playtest:package`,
+  - generated `dist/lethe-v0.5-playtest` (ignored by git).
 - The game is static HTML and can be run by opening `index.html`.
 - Default browser boss/forgetting timing now matches the 9-minute v0.2 target; `?qa=fast` is only for QA.
 - Generated AI test outputs are ignored by git under `alpha_test/outputs/`.
