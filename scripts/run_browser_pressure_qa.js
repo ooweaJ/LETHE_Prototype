@@ -21,7 +21,11 @@ async function main() {
   } catch (error) {
     if (!isPipeTargetTimeout(error)) throw error;
     console.error(`Chrome CDP pipe target lookup failed; retrying with remote debugging port: ${error.message}`);
-    await runPortQa(chromePath, url);
+    try {
+      await runPortQa(chromePath, url);
+    } catch (portError) {
+      throw transportBlockerError(error, portError);
+    }
   }
 }
 
@@ -441,6 +445,19 @@ async function fetchJson(url) {
 function isPipeTargetTimeout(error) {
   return error.message.includes('Timed out waiting for Chrome page target')
     || error.message.includes('Timed out waiting for CDP response to Target.getTargets');
+}
+
+function transportBlockerError(pipeError, portError) {
+  const command = options.mode === 'postloss' ? 'npm run qa:postloss' : 'npm run qa:pressure';
+  const error = new Error([
+    `Browser ${options.mode} QA could not reach Chrome through either CDP pipe or remote-debugging-port.`,
+    `Pipe failure: ${pipeError.message}`,
+    `Port fallback failure: ${portError.message}`,
+    `Next trusted-local command: ${command}`,
+    `If the same transport failure repeats outside this managed sandbox, record it as an environment blocker before starting new gameplay scope.`,
+  ].join('\n'));
+  error.name = 'BrowserQaTransportError';
+  return error;
 }
 
 function parseArgs(args) {

@@ -8,7 +8,7 @@ Last updated: 2026-06-02
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
-- Latest task-update status: v0.9 WP2 Slice B is implementation-complete and scope-valid, but still `ITERATE_BEFORE_TEST` because trusted browser proof is missing. This loop reran `npm run qa:postloss`, retried with `--timeout-ms 30000`, and cross-checked `npm run qa:pressure`; both QA modes still failed before gameplay evaluation at Chrome/CDP `Target.getTargets`. `scripts/run_browser_pressure_qa.js` now has a remote-debugging-port fallback for trusted local machines, but this managed sandbox also blocks the fallback HTTP fetch path. The `2026-06-02-devloop-193946-feedback-2` Claude/Codex synthesis agrees there is no new gameplay scope to add yet: run trusted-local `npm run qa:postloss` again before WP3 or people testing.
+- Latest task-update status: v0.9 WP2 Slice B is implementation-complete and scope-valid, but still `ITERATE_BEFORE_TEST` because trusted browser proof is missing. This loop reran `npm run qa:postloss`, retried with `--timeout-ms 30000`, and cross-checked `npm run qa:pressure`; all still failed before gameplay evaluation through the same Chrome transport channel. `scripts/run_browser_pressure_qa.js` now emits an explicit `BrowserQaTransportError` when CDP pipe and remote-debugging-port fallback both fail, and `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md` records the environment-blocker decision prompt. The latest feedback-3 synthesis found no material Claude/Codex scope conflict: both keep WP3 and people testing blocked until trusted-local post-loss proof or an explicit environment-blocker decision exists.
 
 ## Implemented
 
@@ -93,6 +93,7 @@ Last updated: 2026-06-02
 - v0.9 browser QA runner fallback:
   - `scripts/run_browser_pressure_qa.js` keeps the existing Chrome CDP pipe path,
   - if pipe target lookup times out, it retries once through Chrome remote-debugging-port and a WebSocket CDP client,
+  - if both transport paths fail, it now reports `BrowserQaTransportError` with the pipe failure, port failure, and next trusted-local command,
   - this is a QA tooling change only and does not alter gameplay scope.
 - AI alpha test tool under `alpha_test/`.
 - Codex/GPT/Claude workflow docs.
@@ -444,6 +445,15 @@ npm run ai:sweep
   - common conclusion: AI proxy data remains a planning pass only; `earlyChoiceInterest`, `echoPivotScore`, and `postLossChallengeScore` are observation targets, not reasons to add new systems,
   - conflict: no material scope conflict in this feedback round; both Claude and Codex block WP3 until trusted-local post-loss browser proof or a documented environment decision,
   - selected order: run trusted-local `npm run qa:postloss` outside the managed sandbox; if gameplay assertions fail, fix only that post-loss flow; if transport still fails, document the environment blocker before asking whether to proceed.
+- Latest devloop feedback-3 synthesis for post-loss transport blocker:
+  - prompt: `docs/review_prompts/2026-06-02-devloop-193946-feedback-3.md`,
+  - Claude response: `docs/review_responses/2026-06-02-devloop-193946-feedback-3-claude.md`,
+  - Codex CLI response: `docs/review_responses/2026-06-02-devloop-193946-feedback-3-codex.md`,
+  - synthesis: `docs/review_responses/2026-06-02-devloop-193946-feedback-3-double-check.md`,
+  - common conclusion: WP2 Slice B and `BrowserQaTransportError` diagnostic work are scope-valid, but the slice is still not browser-proven,
+  - common conclusion: AI proxy data is positive enough for planning (`GO_CANDIDATE`, Alpha Fun Score `0.8846`, regret `0.8073`, irritation `0.0104`, restart `0.90`) but is not browser/user evidence,
+  - conflict: no material next-scope conflict; Claude and Codex both require trusted-local post-loss proof or an explicit environment-blocker decision before WP3 or people testing,
+  - selected order: run trusted-local `npm run qa:postloss`; if the same transport failure repeats, retry once with `--timeout-ms 30000`, then use `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md` before any new gameplay scope.
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the v0.5 level-up flow and `runGrowth` payload.
 - Planning pipeline prompt generated: `docs/review_prompts/2026-06-02-pipeline.md`.
@@ -481,12 +491,18 @@ npm run ai:sweep
 - Docs-only loop update completed for `2026-06-02-devloop-175642-feedback-4`: missing-result diagnosis feedback, wrapper-result-created status, remaining artifact-cleanup blocker, and required verification are recorded in the double-check summary, `NEXT_TASKS`, status, devlog, and report.
 - Docs-only loop update completed for `2026-06-02-devloop-193946-feedback-1`: WP2 Slice B feedback, common/ conflict synthesis, selected trusted-local QA gate, and WP3 Slice A scope guard are recorded in the double-check summary, `NEXT_TASKS`, status, devlog, and report.
 - Docs-only loop update completed for `2026-06-02-devloop-193946-feedback-2`: post-loss QA runner fallback feedback, common recommendations, lack of material conflict, selected trusted-local QA-only scope, and tests required before balance reporting are recorded in the double-check summary, `NEXT_TASKS`, status, devlog, and report.
+- Docs-only loop update completed for `2026-06-02-devloop-193946-feedback-3`: post-loss transport blocker feedback, common recommendations, lack of material next-scope conflict, selected trusted-local QA-only scope, and tests required before balance reporting are recorded in the double-check summary, `NEXT_TASKS`, status, devlog, and report.
 - Post-loss QA rerun loop completed with tooling fallback:
   - `npm run qa:postloss`: failed at Chrome/CDP `Target.getTargets`,
   - `npm run qa:postloss -- --timeout-ms 30000`: failed at the same point,
   - `npm run qa:pressure`: failed at the same point,
   - after adding the remote-debugging-port fallback, `npm run qa:postloss` still could not produce proof in this managed sandbox because the fallback HTTP fetch path failed,
   - trusted-local `npm run qa:postloss` remains the next gate before WP3.
+- Post-loss transport blocker documentation loop completed:
+  - `node --check scripts/run_browser_pressure_qa.js`: passed,
+  - latest `npm run qa:postloss` now fails with explicit `BrowserQaTransportError`,
+  - environment blocker prompt added: `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md`,
+  - WP3 remains blocked until trusted-local post-loss browser proof or a reviewed environment-blocker decision.
 - Current dev-loop prompt cleanup is implemented: future nested implementation prompts should not keep re-selecting WP1 after WP1 is complete.
 - Current dev-loop preflight-order cleanup is implemented: future clean-tree dev loops should run preflight before creating their own loop log, and should not mask dirty-tree state with `--allow-dirty` by default.
 - Current autopilot preflight diagnosis now gives exact loop-run artifact cleanup guidance when `docs/loop_runs/*.md` blocks a clean unattended loop.
