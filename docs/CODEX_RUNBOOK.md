@@ -133,7 +133,20 @@ GPT/Claude are not just generic reviewers. They are planning partners used after
 
 Claude is especially useful for interpreting playtest reactions, revising the design direction, deciding what Codex should implement next, and judging whether the HTML prototype is approaching a Unity-worthy shape.
 
-Do not send every prompt to both by default. Send to them when the decision affects prototype direction, human-test readiness, or the eventual Unity transition.
+For small follow-up checks, a single provider can be enough. For major prototype direction changes, combat/core redesign, human-test readiness, or Unity transition decisions, use the fixed double-check pipeline: Claude plus Codex CLI.
+
+Role split for double checks:
+
+- Claude: player emotion, pacing, regret/irritation, whether the loop sounds fun.
+- Codex CLI: systems design, balance model risk, implementation order, testability.
+- Current Codex: read both, summarize common points and conflicts, then implement only the selected scope.
+
+Decision priority:
+
+1. User live play feedback.
+2. Browser combat or human-test evidence.
+3. Automated proxy metrics.
+4. Claude/Codex planning opinions.
 
 ## Claude Code Automation
 
@@ -187,10 +200,22 @@ Prompt-only, no external model call:
 npm run planning:pipeline:prompt
 ```
 
-Actual pipeline:
+Actual double-check pipeline:
 
 ```powershell
 npm run planning:pipeline
+```
+
+Explicit double-check pipeline:
+
+```powershell
+npm run planning:pipeline:double
+```
+
+Legacy Claude-first fallback pipeline:
+
+```powershell
+npm run planning:pipeline:auto
 ```
 
 The pipeline runs a quick AI test by default, writes a fresh prompt to:
@@ -199,14 +224,15 @@ The pipeline runs a quick AI test by default, writes a fresh prompt to:
 docs/review_prompts/YYYY-MM-DD-pipeline.md
 ```
 
-Then it asks Claude first and falls back to Codex CLI if Claude fails. Responses are saved to:
+By default, it asks both Claude and Codex CLI. Responses and the double-check handoff are saved to:
 
 ```text
 docs/review_responses/YYYY-MM-DD-pipeline-claude.md
 docs/review_responses/YYYY-MM-DD-pipeline-codex.md
+docs/review_responses/YYYY-MM-DD-pipeline-double-check.md
 ```
 
-After the response is saved, Codex should read it, update `docs/NEXT_TASKS.md`, implement the selected work, verify, report, commit, and push when safe.
+After the responses are saved, Codex should read both, update the double-check summary with common points and conflicts, update `docs/NEXT_TASKS.md`, implement the selected work, verify, report, commit, and push when safe.
 
 If the current Codex session cannot export repository prompts to external services, use `planning:pipeline:prompt` and run `npm run planning:pipeline` from the user's trusted local terminal.
 

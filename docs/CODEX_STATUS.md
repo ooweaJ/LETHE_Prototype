@@ -4,10 +4,10 @@ Last updated: 2026-06-02
 
 ## Current Build
 
-- Project: LETHE HTML Alpha v0.7 weapon/echo balance solo-test candidate.
+- Project: LETHE HTML Alpha v0.8 core-redesign gate A started.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
-- Current scope: HTML prototype validation. The project is testing whether LETHE's early combat/growth loop and forgetting loop are fun enough to justify moving into Unity implementation. Broad human testing is paused; Claude v0.7 feedback says the automated balance loop should stop and move to user 1-person feel testing.
+- Current scope: HTML prototype validation. Broad human testing is paused. v0.7 balance evidence was invalidated by user live feedback, so v0.8 now starts with death/danger metrics and core combat-memory redesign.
 
 ## Implemented
 
@@ -56,6 +56,12 @@ Last updated: 2026-06-02
   - added weapon-facing echo effects for lost memories,
   - added side-panel echo labels for weapon residue effects,
   - updated AI simulator weapon baseDps and weapon residue proxy.
+- v0.8 gate A:
+  - browser label and experiment version moved to `v0.8`,
+  - removed HP 1 death-prevention behavior,
+  - added real death/run-end handling,
+  - added `death` and `danger` JSON payload fields,
+  - added `?qa=fast,death` death QA mode.
 - AI alpha test tool under `alpha_test/`.
 - Codex/GPT/Claude workflow docs.
 - Markdown daily reports, generated HTML reports, and Discord report delivery.
@@ -222,9 +228,10 @@ npm run ai:sweep
 
 ## Next Codex Tasks
 
-- v0.7 balance reality check is the next product gate.
+- v0.8 gate A is the current product gate.
 - On another local machine, run `npm run doctor` first; run `npm run doctor:deep` before leaving Codex to continue unattended.
 - Before an unattended implement -> Claude feedback -> implement loop, run `npm run autopilot:preflight`.
 - Do not describe AI proxy metrics as real balance feedback.
-- Before v0.7.1 tuning, improve the test model or browser balance QA so the automation catches the mismatch the user just found.
-- Then run a focused v0.7.1 combat/balance iteration.
+- Use Claude + Codex CLI double check for major planning changes.
+- Before reporting balance, improve the test model or browser balance QA so the automation catches the mismatch the user just found.
+- Continue v0.8 Gate B only after Gate A death/danger metrics are stable.

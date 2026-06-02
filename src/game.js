@@ -201,7 +201,7 @@ const enemyTypes = {
 const qaMode = new URLSearchParams(window.location.search).get("qa") || "";
 
 const experiment = {
-  version: "v0.7",
+  version: "v0.8",
   echoPower: 0.5,
   uiClarity: 0.78,
   runDurationSec: 1200,
@@ -211,6 +211,7 @@ const experiment = {
   qaFastMode: qaMode.includes("fast"),
   qaLevelupMode: qaMode.includes("levelup"),
   qaV06Mode: qaMode.includes("v06"),
+  qaDeathMode: qaMode.includes("death"),
 };
 
 if (experiment.qaFastMode) {
@@ -314,6 +315,21 @@ function createRunState() {
       maxEnemies: 0,
       levelUpsBeforeBoss: 0,
     },
+    danger: {
+      deaths: 0,
+      deathAt: null,
+      deathPhase: null,
+      deathActiveMemoryCount: null,
+      lowHpTime: 0,
+      enemyPressureTime: 0,
+      maxEnemies: 0,
+      lastKillAt: 0,
+      maxKillGap: 0,
+      currentKillGap: 0,
+      deficitTime: 0,
+      deficitLowHpTime: 0,
+      deficitDeath: false,
+    },
     player: {
       x: canvas.width / 2,
       y: canvas.height / 2,
@@ -351,6 +367,7 @@ function createRunState() {
     },
     forgotten: null,
     forgottenHistory: [],
+    death: null,
     survey: {
       sadness: null,
       fairness: null,
@@ -485,17 +502,13 @@ function update(dt) {
   updateBoss(dt);
   updateEnemies(dt);
   state.runGrowth.maxEnemies = Math.max(state.runGrowth.maxEnemies, state.enemies.length);
+  updateDangerMetrics(dt);
   updateProjectiles(dt);
   updateMemories(dt);
   updateEffects(dt);
+  if (checkPlayerDeath()) return;
   updateClarity();
   updateUi();
-
-  if (state.player.hp <= 0) {
-    state.player.hp = 1;
-    addLog("프로토타입 보호: 쓰러지기 직전 강물이 밀어냈다.");
-    logEvent("debug_death_prevented");
-  }
 }
 
 function movePlayer(dt) {
@@ -744,6 +757,7 @@ function updateEnemies(dt) {
     }
     const killer = enemy.killedBy;
     if (killer && state.metrics[killer]) state.metrics[killer].kills += 1;
+    recordKillPressure();
     grantXp(enemy);
     if (enemy.splitter && !enemy.child) {
       spawnEnemy("eroder", enemy.x - 12, enemy.y + 4, true);
@@ -854,6 +868,57 @@ function basicAttack() {
       state.effects.push({ type: "blood", x: target.x, y: target.y, r: 10, maxR: 34, life: 0.28, maxLife: 0.28 });
     }
   }
+}
+
+function updateDangerMetrics(dt) {
+  const danger = state.danger;
+  const hpRate = state.player.hp / state.player.maxHp;
+  danger.maxEnemies = Math.max(danger.maxEnemies, state.enemies.length);
+  danger.currentKillGap = Math.max(0, state.elapsed - danger.lastKillAt);
+  danger.maxKillGap = Math.max(danger.maxKillGap, danger.currentKillGap);
+  if (hpRate <= 0.4) danger.lowHpTime += dt;
+  if (state.enemies.length >= 12) danger.enemyPressureTime += dt;
+  if (activeMemoryCount() < 3) {
+    danger.deficitTime += dt;
+    if (hpRate <= 0.4) danger.deficitLowHpTime += dt;
+  }
+}
+
+function recordKillPressure() {
+  if (!state?.danger) return;
+  const gap = Math.max(0, state.elapsed - state.danger.lastKillAt);
+  state.danger.maxKillGap = Math.max(state.danger.maxKillGap, gap);
+  state.danger.lastKillAt = state.elapsed;
+  state.danger.currentKillGap = 0;
+}
+
+function checkPlayerDeath() {
+  if (!state || state.player.hp > 0 || state.death) return false;
+  state.player.hp = 0;
+  state.running = false;
+  state.mode = "dead";
+  state.death = {
+    at: Number(state.elapsed.toFixed(2)),
+    phase: state.phase,
+    activeMemoryCount: activeMemoryCount(),
+    enemyCount: state.enemies.length,
+    bossActive: Boolean(state.boss),
+    deficit: activeMemoryCount() < 3,
+  };
+  state.danger.deaths += 1;
+  state.danger.deathAt = state.death.at;
+  state.danger.deathPhase = state.death.phase;
+  state.danger.deathActiveMemoryCount = state.death.activeMemoryCount;
+  state.danger.deficitDeath = state.death.deficit;
+  addLog("검은 물이 플레이어를 삼켰다.");
+  logEvent("player_death", {
+    death: state.death,
+    danger: dangerLog(),
+  });
+  updateClarity();
+  updateUi();
+  showDeathOverlay();
+  return true;
 }
 
 function applyWeaponEchoEffects(target, baseDamage) {
@@ -1586,7 +1651,9 @@ function collectLogPayload() {
   state.logs.runGrowth = runGrowthLog();
   state.logs.runTimeline = runTimelineLog();
   state.logs.forgottenHistory = state.forgottenHistory;
-  state.logs.echoTransformation = echoTransformationLog(state.forgotten);
+  state.logs.echoTransformation = state.forgotten ? echoTransformationLog(state.forgotten) : null;
+  state.logs.death = state.death;
+  state.logs.danger = dangerLog();
   return state.logs;
 }
 
@@ -1645,6 +1712,48 @@ function runTimelineLog() {
     activeMemoryIds: activeMemoryIds(),
     activeMemoryNames: activeMemories().map((memory) => memory.name),
   };
+}
+
+function dangerLog() {
+  const danger = state.danger;
+  return {
+    deaths: danger.deaths,
+    deathAt: danger.deathAt,
+    deathPhase: danger.deathPhase,
+    deathActiveMemoryCount: danger.deathActiveMemoryCount,
+    lowHpTime: Number(danger.lowHpTime.toFixed(2)),
+    enemyPressureTime: Number(danger.enemyPressureTime.toFixed(2)),
+    maxEnemies: danger.maxEnemies,
+    maxKillGap: Number(danger.maxKillGap.toFixed(2)),
+    currentKillGap: Number(danger.currentKillGap.toFixed(2)),
+    deficitTime: Number(danger.deficitTime.toFixed(2)),
+    deficitLowHpTime: Number(danger.deficitLowHpTime.toFixed(2)),
+    deficitDeath: danger.deficitDeath,
+  };
+}
+
+function showDeathOverlay() {
+  overlay.innerHTML = `
+    <div class="panel result-panel">
+      <p class="eyebrow">런 종료</p>
+      <h2>검은 물이 플레이어를 삼켰다.</h2>
+      <div class="result-summary">
+        <div class="result-card loss-card"><strong>사망 시각</strong><br>${formatTime(state.death.at)}</div>
+        <div class="result-card"><strong>구간</strong><br>${state.death.phase || "-"}</div>
+        <div class="result-card"><strong>위험도</strong><br>최대 적 ${state.danger.maxEnemies} / 최대 처치 공백 ${state.danger.maxKillGap.toFixed(1)}초</div>
+        <div class="result-card"><strong>기억 수</strong><br>${state.death.activeMemoryCount}개 상태에서 사망</div>
+      </div>
+      <div class="button-row">
+        <button id="downloadLogButton" class="secondary-btn" type="button">JSON 로그 다운로드</button>
+        <button id="restartButton" class="primary-btn" type="button">다시 테스트</button>
+      </div>
+    </div>
+  `;
+  overlay.classList.add("show");
+  overlay.querySelector("#downloadLogButton").addEventListener("click", downloadLog);
+  overlay.querySelector("#restartButton").addEventListener("click", () => {
+    window.location.reload();
+  });
 }
 
 function downloadLog() {
@@ -2227,6 +2336,19 @@ function writeV06QaResult(extra = {}) {
   document.documentElement.dataset.letheV06Qa = JSON.stringify(payload);
 }
 
+function writeDeathQaResult(extra = {}) {
+  const payload = {
+    version: experiment.version,
+    hasState: Boolean(state),
+    mode: state?.mode || null,
+    elapsed: state ? Number(state.elapsed.toFixed(2)) : 0,
+    death: state?.death || null,
+    danger: state ? dangerLog() : null,
+    ...extra,
+  };
+  document.documentElement.dataset.letheDeathQa = JSON.stringify(payload);
+}
+
 function startV06CycleQa() {
   selectedWeapon = weapons.twin_blades.id;
   selectedMemories = ["hungry_blades", "stalker_oath", "blood_reflection"];
@@ -2324,11 +2446,31 @@ function startV06CycleQa() {
   }, 120);
 }
 
-if (experiment.qaFastMode || experiment.qaLevelupMode || experiment.qaV06Mode) {
+function startDeathQa() {
+  selectedWeapon = weapons.twin_blades.id;
+  selectedMemories = ["hungry_blades", "stalker_oath", "blood_reflection"];
+  renderSetup();
+  setTimeout(() => {
+    if (!state) startRun();
+    state.player.hp = 0;
+    checkPlayerDeath();
+    const payload = collectLogPayload();
+    writeDeathQaResult({
+      status: state.mode === "dead" && payload.death && payload.danger?.deaths === 1 ? "complete" : "failed",
+      hasDeathPayload: Boolean(payload.death),
+      hasDangerPayload: Boolean(payload.danger),
+      deathAt: payload.death?.at,
+      deaths: payload.danger?.deaths,
+    });
+  }, 50);
+}
+
+if (experiment.qaFastMode || experiment.qaLevelupMode || experiment.qaV06Mode || experiment.qaDeathMode) {
   window.__letheQaLog = () => (state ? JSON.parse(JSON.stringify(collectLogPayload())) : null);
 }
 
 initSetup();
 if (experiment.qaLevelupMode) startLevelupQa();
 if (experiment.qaV06Mode) startV06CycleQa();
+if (experiment.qaDeathMode) startDeathQa();
 requestAnimationFrame(frame);

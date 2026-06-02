@@ -43,6 +43,8 @@ function checkPackageScripts() {
     'planning:pipeline:dry',
     'planning:pipeline:prompt',
     'planning:pipeline',
+    'planning:pipeline:double',
+    'planning:pipeline:auto',
     'autopilot:preflight',
     'autopilot:preflight:local',
     'autopilot:preflight:dry',

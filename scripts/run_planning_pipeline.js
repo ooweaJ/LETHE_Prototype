@@ -8,6 +8,7 @@ const { spawnSync } = require('child_process');
 const options = parseArgs(process.argv.slice(2));
 const today = options.date || todayString();
 const promptPath = path.resolve(options.prompt || path.join('docs', 'review_prompts', `${today}-pipeline.md`));
+const usingExistingPrompt = Boolean(options.prompt);
 
 main();
 
@@ -18,7 +19,9 @@ function main() {
     steps.push(runNpmScript(testScript(options.test)));
   }
 
-  const prompt = buildPlanningPrompt({
+  const prompt = usingExistingPrompt && fs.existsSync(promptPath)
+    ? fs.readFileSync(promptPath, 'utf8')
+    : buildPlanningPrompt({
     date: today,
     aiSummary: readJsonIfExists(summaryPathFor(options.test)),
     status: readTextIfExists('docs/CODEX_STATUS.md'),
@@ -39,13 +42,18 @@ function main() {
     return;
   }
 
-  fs.mkdirSync(path.dirname(promptPath), { recursive: true });
-  fs.writeFileSync(promptPath, prompt, 'utf8');
-  console.log(`Wrote ${path.relative(process.cwd(), promptPath)}`);
+  if (usingExistingPrompt && fs.existsSync(promptPath)) {
+    console.log(`Using existing prompt ${path.relative(process.cwd(), promptPath)}`);
+  } else {
+    fs.mkdirSync(path.dirname(promptPath), { recursive: true });
+    fs.writeFileSync(promptPath, prompt, 'utf8');
+    console.log(`Wrote ${path.relative(process.cwd(), promptPath)}`);
+  }
 
   const response = runPlanningProvider(options.provider, promptPath, today);
   if (response) {
-    console.log(`Planning response: ${path.relative(process.cwd(), response.outputPath)}`);
+    if (response.outputPath) console.log(`Planning response: ${path.relative(process.cwd(), response.outputPath)}`);
+    if (response.summaryPath) console.log(`Double-check summary: ${path.relative(process.cwd(), response.summaryPath)}`);
   } else {
     console.log('Planning provider skipped. Prompt is ready for a local external call.');
   }
@@ -72,15 +80,30 @@ function runNpmScript(script) {
 
 function runPlanningProvider(provider, prompt, date) {
   if (provider === 'none') return null;
-  if (provider === 'claude') return runReviewScript('claude', prompt, responsePath(date, 'claude'));
-  if (provider === 'codex') return runReviewScript('codex', prompt, responsePath(date, 'codex'));
+  if (provider === 'claude') return runReviewScript('claude', prompt, responsePathForPrompt(prompt, date, 'claude'));
+  if (provider === 'codex') return runReviewScript('codex', prompt, responsePathForPrompt(prompt, date, 'codex'));
+  if (provider === 'double') return runDoubleCheck(prompt, date);
 
-  const claude = runReviewScript('claude', prompt, responsePath(date, 'claude'), { allowFailure: true });
+  const claude = runReviewScript('claude', prompt, responsePathForPrompt(prompt, date, 'claude'), { allowFailure: true });
   if (claude.ok) return claude;
 
   console.warn('Claude planning failed. Falling back to Codex CLI.');
   console.warn(claude.errorMessage);
-  return runReviewScript('codex', prompt, responsePath(date, 'codex'));
+  return runReviewScript('codex', prompt, responsePathForPrompt(prompt, date, 'codex'));
+}
+
+function runDoubleCheck(prompt, date) {
+  const claude = runReviewScript('claude', prompt, responsePathForPrompt(prompt, date, 'claude'));
+  const codex = runReviewScript('codex', prompt, responsePathForPrompt(prompt, date, 'codex'));
+  const summaryPath = doubleCheckSummaryPath(prompt, date);
+  fs.writeFileSync(summaryPath, buildDoubleCheckSummary(prompt, claude, codex), 'utf8');
+  return {
+    ok: true,
+    outputPath: codex.outputPath,
+    summaryPath,
+    claude,
+    codex,
+  };
 }
 
 function runReviewScript(provider, prompt, output, opts = {}) {
@@ -237,8 +260,54 @@ function summaryPathFor(test) {
   return path.join('alpha_test', 'outputs', 'default', 'summary.json');
 }
 
-function responsePath(date, provider) {
-  return path.resolve(path.join('docs', 'review_responses', `${date}-pipeline-${provider}.md`));
+function responsePathForPrompt(prompt, date, provider) {
+  const stem = promptStem(prompt, date);
+  return path.resolve(path.join('docs', 'review_responses', `${stem}-${provider}.md`));
+}
+
+function doubleCheckSummaryPath(prompt, date) {
+  const stem = promptStem(prompt, date);
+  return path.resolve(path.join('docs', 'review_responses', `${stem}-double-check.md`));
+}
+
+function promptStem(prompt, date) {
+  const stem = path.basename(String(prompt), '.md');
+  if (/^\d{4}-\d{2}-\d{2}(?:-[a-z0-9-]+)?$/i.test(stem)) return stem;
+  return `${date}-pipeline`;
+}
+
+function buildDoubleCheckSummary(prompt, claude, codex) {
+  const promptFile = path.relative(process.cwd(), prompt);
+  const claudeFile = path.relative(process.cwd(), claude.outputPath);
+  const codexFile = path.relative(process.cwd(), codex.outputPath);
+  return [
+    `# Double Check Summary - ${path.basename(prompt, '.md')}`,
+    '',
+    '## Prompt',
+    '',
+    `- ${promptFile}`,
+    '',
+    '## Responses',
+    '',
+    `- Claude: ${claudeFile}`,
+    `- Codex CLI: ${codexFile}`,
+    '',
+    '## Decision Rules',
+    '',
+    '- User live play feedback outranks AI planning opinions.',
+    '- Browser combat evidence outranks aggregate AI proxy metrics.',
+    '- If Claude and Codex disagree, Codex should summarize the conflict before implementation.',
+    '- Large design changes require both responses to be read before editing game code.',
+    '- A `GO` from either AI is only `AI planning pass` until browser combat QA or user play validates it.',
+    '',
+    '## Codex Synthesis Required',
+    '',
+    '- [ ] Common recommendations:',
+    '- [ ] Conflicts:',
+    '- [ ] Selected vNext scope:',
+    '- [ ] Tests required before reporting balance:',
+    '',
+  ].join('\n');
 }
 
 function testScript(test) {
@@ -250,6 +319,12 @@ function testScript(test) {
 function reviewCommandPreview(provider, prompt) {
   if (provider === 'codex') return `node scripts/ask_codex_review.js --prompt ${path.relative(process.cwd(), prompt)}`;
   if (provider === 'claude') return `node scripts/ask_claude_review.js --prompt ${path.relative(process.cwd(), prompt)}`;
+  if (provider === 'double') {
+    return [
+      `node scripts/ask_claude_review.js --prompt ${path.relative(process.cwd(), prompt)}`,
+      `node scripts/ask_codex_review.js --prompt ${path.relative(process.cwd(), prompt)}`,
+    ].join('\n');
+  }
   return `node scripts/ask_claude_review.js --prompt ${path.relative(process.cwd(), prompt)} || node scripts/ask_codex_review.js --prompt ${path.relative(process.cwd(), prompt)}`;
 }
 
@@ -258,7 +333,7 @@ function parseArgs(args) {
     date: '',
     dryRun: false,
     prompt: '',
-    provider: 'auto',
+    provider: 'double',
     skipTests: false,
     test: 'quick',
   };
@@ -296,8 +371,8 @@ function parseArgs(args) {
 }
 
 function normalizeProvider(value) {
-  if (['auto', 'claude', 'codex', 'none'].includes(value)) return value;
-  fail(`Unknown provider: ${value}. Use auto, claude, codex, or none.`);
+  if (['auto', 'double', 'claude', 'codex', 'none'].includes(value)) return value;
+  fail(`Unknown provider: ${value}. Use auto, double, claude, codex, or none.`);
 }
 
 function normalizeTest(value) {

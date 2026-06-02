@@ -20,6 +20,8 @@
     "review:codex": "node scripts/ask_codex_review.js",
     "review:codex:dry": "node scripts/ask_codex_review.js --dry-run",
     "planning:pipeline": "node scripts/run_planning_pipeline.js",
+    "planning:pipeline:auto": "node scripts/run_planning_pipeline.js --provider auto",
+    "planning:pipeline:double": "node scripts/run_planning_pipeline.js --provider double",
     "planning:pipeline:dry": "node scripts/run_planning_pipeline.js --dry-run",
     "planning:pipeline:prompt": "node scripts/run_planning_pipeline.js --provider none",
     "planning:pipeline:codex": "node scripts/run_planning_pipeline.js --provider codex",

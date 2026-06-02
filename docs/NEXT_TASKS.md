@@ -15,6 +15,8 @@
 - v0.7 implementation verdict: `GO_TO_SOLO_PLAYTEST_CANDIDATE` by local Codex evidence after weapon baseline and lost-memory weapon echo pass.
 - Claude v0.7 balance verdict: `GO_TO_SOLO_PLAYTEST`, but this was based on AI proxy metrics rather than live balance play.
 - User v0.7 direct feedback invalidated the balance verdict: balance is not close enough and the automatic balance proxy must be fixed before trusting the loop.
+- v0.8 double-check planning is now the default for major design changes: Claude plus Codex CLI.
+- v0.8 direction: start with Gate A (`death bug + real danger metrics`), then continue into short-run/memory-budget/synergy/tag-echo redesign.
 - Actual automation proof for this turn: Discord work-unit report sent successfully, Claude v0.7 prompt sent successfully, Claude response saved successfully.
 - Project direction: HTML prototype validation first, Unity implementation later only if AI/human tests show enough promise.
 
@@ -117,8 +119,15 @@
 - [x] v0.7 사용자 직접 피드백을 받았다: 밸런스가 맞지 않는다.
 - [x] v0.7 자동 밸런스 판정을 실패 사례로 기록한다.
 - [x] v0.7.1 밸런스 현실 검증 프롬프트를 작성한다: `docs/review_prompts/2026-06-02-v071-balance-reality-check.md`.
-- [ ] v0.7.1 전에 AI proxy와 실제 브라우저 전투 체감의 차이를 줄이는 테스트/지표를 보강한다.
-- [ ] v0.7.1은 사용자 피드백 기준으로 결손 구간 스폰 압박, 적 HP/피해, 무기 역할, 위기 탈출 수단 중 가장 큰 원인부터 좁게 수정한다.
+- [x] 큰 기획 변경은 Claude + Codex CLI 더블 체크를 고정 파이프라인으로 바꾼다.
+- [x] v0.8 전투/기억 코어 재기획 프롬프트를 작성한다: `docs/review_prompts/2026-06-02-v08-core-redesign.md`.
+- [x] Claude v0.8 답변을 받았다: `docs/review_responses/2026-06-02-v08-core-redesign-claude.md`.
+- [x] Codex CLI v0.8 답변을 받았다: `docs/review_responses/2026-06-02-v08-core-redesign-codex.md`.
+- [x] v0.8 더블 체크 요약을 작성했다: `docs/review_responses/2026-06-02-v08-core-redesign-double-check.md`.
+- [x] v0.8 Gate A를 시작했다: HP 1 고정 제거, 실제 사망 처리, death/danger 로그 추가.
+- [x] v0.8 death QA를 추가했다: `?qa=fast,death`.
+- [ ] v0.8 Gate A 다음 작업: AI proxy와 실제 브라우저 전투 체감의 차이를 줄이는 테스트/지표를 보강한다.
+- [ ] v0.8 Gate B: 8-10분 런, 90초 미니보스/첫 망각, 기억 예산 평준화, 최소 시너지, 태그 기반 잔향을 구현한다.
 
 ## Pre-Human-Test Polish Gate
 

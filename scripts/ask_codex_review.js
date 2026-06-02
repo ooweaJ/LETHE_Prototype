@@ -62,8 +62,6 @@ function buildCodexArgs(outputPathValue) {
     process.cwd(),
     '--sandbox',
     'read-only',
-    '--ask-for-approval',
-    'never',
     '--output-last-message',
     outputPathValue,
   ];
