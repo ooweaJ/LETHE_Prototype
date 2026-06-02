@@ -222,6 +222,12 @@ npm run ai:sweep
   - Codex CLI response: `docs/review_responses/2026-06-02-v09-release-feel-loop-codex.md`,
   - synthesis: `docs/review_responses/2026-06-02-v09-release-feel-loop-double-check.md`,
   - loop log: `docs/loop_runs/2026-06-02-overnight-163806.md`.
+- Discord progress tracking fixed for overnight loops:
+  - real `overnight:loop` sends start/status/checkpoint/blocked/done Codex notices by default,
+  - real `overnight:loop` uploads the latest work-unit report by default,
+  - `--discord-dry-run` previews messages without sending,
+  - `--no-discord` disables notices only for deliberate local debugging,
+  - notification smoke log: `docs/loop_runs/2026-06-02-overnight-164700.md`.
 - Selected next implementation scope:
   - v0.9 Work Package 1 only,
   - make existing 6-memory build identity readable within 90 seconds,

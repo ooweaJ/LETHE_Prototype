@@ -23,9 +23,11 @@ function main() {
 
   fs.mkdirSync(logDir, { recursive: true });
   writeRunHeader();
+  sendNotice('start', '밤샘 루프 시작', `provider=${options.provider}, test=${options.test}, iterations=${options.iterations}`);
 
   for (let iteration = 1; iteration <= options.iterations; iteration += 1) {
     log(`\n## Iteration ${iteration}\n`);
+    sendNotice('status', `밤샘 루프 ${iteration}/${options.iterations}`, '반복 실행을 시작했습니다.');
 
     const steps = [
       {
@@ -68,10 +70,12 @@ function main() {
         skip: options.skipReport,
       },
       {
-        name: 'discord unit dry-run',
-        command: 'npm run report:discord:unit:dry',
+        name: options.discordDryRun ? 'discord unit dry-run' : 'discord unit report',
+        command: options.discordDryRun
+          ? 'node scripts/send_discord_report.js --dry-run --latest-section'
+          : 'node scripts/send_discord_report.js --latest-section',
         required: false,
-        skip: options.skipDiscordDry,
+        skip: options.noDiscord,
       },
     ];
 
@@ -90,6 +94,7 @@ function main() {
         const detail = blockedByDirtyTree ? result.stdout.trim() : firstLine(result.stderr || result.stdout);
         log(`- FAIL ${step.name}: ${detail || 'no output'}\n`);
         writeBlockerPrompt(iteration, step.name, detail || `exit ${result.status}`);
+        sendNotice('blocked', `밤샘 루프 중단: ${step.name}`, detail || `exit ${result.status}`);
         if (step.required) break;
       } else {
         log(`- PASS ${step.name}\n`);
@@ -102,6 +107,8 @@ function main() {
       break;
     }
 
+    sendNotice('checkpoint', `밤샘 루프 ${iteration}/${options.iterations} 완료`, '반복 실행이 정상 종료되었습니다.');
+
     if (iteration < options.iterations) {
       log(`\nSleeping ${options.sleepMinutes} minute(s) before next iteration.\n`);
       sleep(options.sleepMinutes * 60 * 1000);
@@ -109,6 +116,7 @@ function main() {
   }
 
   log('\n## Result\n\nLoop finished. Review this log, the latest planning response, and docs/CODEX_STATUS.md before editing scope.\n');
+  sendNotice('done', '밤샘 루프 완료', '루프가 종료되었습니다.', path.relative(process.cwd(), runLogPath));
   console.log(`Overnight loop log: ${path.relative(process.cwd(), runLogPath)}`);
 }
 
@@ -131,12 +139,18 @@ function printDryRun() {
   const commands = [
     options.allowDirty ? 'git status --short (dirty tree allowed)' : 'git status --short (dirty tree blocks loop)',
     options.skipPreflight ? 'skip preflight' : options.preflight,
+    options.noDiscord ? 'skip Discord start notice' : noticePreview('start', '밤샘 루프 시작'),
     planningCommand(1),
     options.implementCmd ? options.implementCmd : 'skip implementation command',
     'npm run doctor',
     options.skipPostAi ? 'skip post-loop ai quick' : 'npm run ai:test:quick',
     options.skipReport ? 'skip report build' : 'npm run report',
-    options.skipDiscordDry ? 'skip Discord dry-run' : 'npm run report:discord:unit:dry',
+    options.noDiscord
+      ? 'skip Discord report'
+      : options.discordDryRun
+        ? 'node scripts/send_discord_report.js --dry-run --latest-section'
+        : 'node scripts/send_discord_report.js --latest-section',
+    options.noDiscord ? 'skip Discord done notice' : noticePreview('done', '밤샘 루프 완료'),
   ];
 
   console.log('LETHE overnight loop dry-run');
@@ -170,6 +184,31 @@ function runStep(name, command) {
   if (result.stdout) log(fence('stdout', trimOutput(result.stdout)));
   if (result.stderr) log(fence('stderr', trimOutput(result.stderr)));
   return result;
+}
+
+function sendNotice(type, title, summary, file = '') {
+  if (options.noDiscord) return;
+  const args = [
+    'node',
+    'scripts/send_codex_notice.js',
+    `--type=${quoteArg(type)}`,
+    `--title=${quoteArg(title)}`,
+    `--summary=${quoteArg(summary)}`,
+  ];
+  if (file) args.push(`--file=${quoteArg(file)}`);
+  if (options.discordDryRun) args.push('--dry-run');
+
+  const command = args.join(' ');
+  const result = runStep(`discord notice ${type}`, command);
+  if (result.status !== 0) {
+    log(`- WARN discord notice ${type}: ${firstLine(result.stderr || result.stdout)}\n`);
+  } else {
+    log(`- PASS discord notice ${type}\n`);
+  }
+}
+
+function noticePreview(type, title) {
+  return `node scripts/send_codex_notice.js --type=${type} --title="${title}"`;
 }
 
 function writeBlockerPrompt(iteration, stepName, detail) {
@@ -208,14 +247,15 @@ function parseArgs(args) {
   const parsed = {
     allowDirty: false,
     date: '',
+    discordDryRun: false,
     dryRun: false,
     implementCmd: '',
     iterations: 1,
     logDir: '',
+    noDiscord: false,
     preflight: 'npm run autopilot:preflight:local',
     prompt: '',
     provider: 'double',
-    skipDiscordDry: false,
     skipPostAi: false,
     skipPreflight: false,
     skipReport: false,
@@ -226,8 +266,10 @@ function parseArgs(args) {
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
     if (arg === '--allow-dirty') parsed.allowDirty = true;
+    else if (arg === '--discord-dry-run') parsed.discordDryRun = true;
     else if (arg === '--dry-run') parsed.dryRun = true;
-    else if (arg === '--skip-discord-dry') parsed.skipDiscordDry = true;
+    else if (arg === '--no-discord') parsed.noDiscord = true;
+    else if (arg === '--skip-discord-dry') parsed.noDiscord = true;
     else if (arg === '--skip-post-ai') parsed.skipPostAi = true;
     else if (arg === '--skip-preflight') parsed.skipPreflight = true;
     else if (arg === '--skip-report') parsed.skipReport = true;
@@ -304,6 +346,10 @@ function quote(value) {
   const stringValue = String(value);
   if (process.platform === 'win32') return `"${stringValue.replace(/"/g, '\\"')}"`;
   return `'${stringValue.replace(/'/g, "'\\''")}'`;
+}
+
+function quoteArg(value) {
+  return quote(String(value).replace(/\r?\n/g, ' '));
 }
 
 function todayString() {

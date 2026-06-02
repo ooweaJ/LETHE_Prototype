@@ -56,6 +56,8 @@ Preflight failures are blockers. Do not start a long automation loop if Claude a
 
 Use this when the user wants Codex to keep the planning and verification cycle moving while they are away. The loop is intentionally evidence-first: it runs preflight, AI/planning checks, reports, and optional implementation commands, then writes a Markdown log for the next handoff.
 
+Discord progress tracking is on by default for the real loop. The user should receive a `start` notice, per-iteration `status` and `checkpoint` notices, a `blocked` notice if a required step fails, a final `done` notice, and a latest work-unit report upload.
+
 Dry-run:
 
 ```powershell
@@ -72,6 +74,18 @@ Longer loop:
 
 ```powershell
 node scripts/run_overnight_loop.js --iterations 3 --sleep-minutes 20
+```
+
+Preview Discord messages without sending them:
+
+```powershell
+node scripts/run_overnight_loop.js --discord-dry-run
+```
+
+Disable Discord only for deliberate local debugging:
+
+```powershell
+node scripts/run_overnight_loop.js --no-discord
 ```
 
 The default loop uses:
@@ -92,7 +106,7 @@ Default behavior does not let an external model edit project files. If a trusted
 node scripts/run_overnight_loop.js --implement-cmd "your safe implementation command"
 ```
 
-If any required step fails, the loop writes a blocker prompt under `docs/review_prompts/YYYY-MM-DD-overnight-loop-blocker-N.md` and stops. The next Codex session should read the loop log, blocker prompt, latest planning response, and `docs/CODEX_STATUS.md`.
+If any required step fails, the loop sends a blocked notice, writes a blocker prompt under `docs/review_prompts/YYYY-MM-DD-overnight-loop-blocker-N.md`, and stops. The next Codex session should read the loop log, blocker prompt, latest planning response, and `docs/CODEX_STATUS.md`.
 
 ## Discord Notices
 
