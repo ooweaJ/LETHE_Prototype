@@ -1,17 +1,27 @@
-# LETHE v0.2 Human Playtest Guide
+# LETHE v0.5 Human Playtest Guide
 
-Purpose: verify whether forgetting feels regrettable, understandable, and recoverable instead of irritating.
+Purpose: verify whether v0.5 is fun enough in HTML prototype form to justify continued iteration toward a possible Unity implementation.
 
 ## Test Size
 
 - Target testers: 5-8 players.
-- Build: LETHE HTML alpha v0.2 tuning candidate.
+- Build: LETHE HTML alpha v0.5 core-fun human-test ready.
 - Session length: 12-18 minutes per tester.
 - Required artifact: downloaded JSON log after the result survey.
+- Required metadata: tester ID and session number on the start screen before each run.
 
 ## Scope
 
-Test only the current forgetting loop.
+Test only the current HTML prototype loop:
+
+- weapon + 3 memories,
+- early enemy pressure,
+- kill XP and run-only level-up choices,
+- first boss,
+- prediction question,
+- dependency-based forgetting,
+- echo/replacement recovery,
+- result survey and JSON log.
 
 Do not evaluate or request:
 
@@ -20,24 +30,34 @@ Do not evaluate or request:
 - final boss,
 - more memories,
 - more regions,
-- long-term save/load.
+- long-term save/load,
+- Unity implementation quality.
 
 ## Setup
 
 1. Open `index.html` in a browser.
-2. Ask the tester to choose one weapon and exactly three memories.
-3. Do not explain the deletion formula.
-4. Tell the tester only this: basic attack and memories trigger automatically, and movement is manual.
-5. Let the tester play until the boss is defeated and the forgetting result screen appears.
+2. Enter tester ID and session number, for example `T01` and `S01`.
+3. Ask the tester to choose one weapon and exactly three memories.
+4. Do not explain the deletion formula.
+5. Tell the tester only this: movement is manual, basic attack and memories trigger automatically, and level-up choices last only for this run.
+6. Let the tester play until the boss is defeated and the forgetting result screen appears.
+7. Ask the tester to complete Q1/Q2/Q3 and download the JSON log.
 
 ## Observation Focus
+
+During the first 2-3 minutes, watch for:
+
+- whether enemies feel like they are arriving fast enough,
+- whether the tester says they feel stronger after level-up choices,
+- whether level-up choices are considered or clicked at random,
+- whether the tester seems bored before the first boss.
 
 Before forgetting, watch for:
 
 - whether the tester names or points to a favorite memory,
 - whether they form a build plan around one memory,
 - whether they can explain why a memory feels important,
-- whether the boss timing gives enough time to care about the chosen memories.
+- whether the 9 minute first-forgetting window gives enough time to care about the chosen memories.
 
 At the question screen, record:
 
@@ -50,19 +70,23 @@ After forgetting, record:
 - first spoken reaction,
 - whether the reaction sounds like regret, irritation, confusion, or no emotion,
 - whether the tester understands why the memory disappeared,
-- whether the echo reward feels like a continuation or a consolation prize,
-- whether the remaining build still feels playable.
+- whether the 28% power dip feels too weak, too harsh, or about right,
+- whether the echo/replacement recovery feels like adaptation rather than full cancellation,
+- whether the tester wants to restart or try a different build.
 
 ## Required Questions
 
 Ask these after the in-game Q1/Q2/Q3 survey:
 
-1. What did you feel when that memory disappeared?
-2. Did it feel like a fair result, a random punishment, or something else?
-3. Did the echo reward make you want to keep playing?
-4. Did you feel weaker after forgetting? If yes, was it too much, too little, or about right?
-5. Before it disappeared, did you remember that memory's name or only its effect?
-6. Would you restart to try protecting or changing that memory choice?
+1. Was the first 2-3 minutes fun, boring, or unclear?
+2. Did the level-up choices make you feel like you were shaping a run?
+3. Did you think about the 3 choices, or did you click anything?
+4. What did you feel when that memory disappeared?
+5. Did it feel like a fair result, a random punishment, or something else?
+6. Did you feel weaker after forgetting? If yes, was it too much, too little, or about right?
+7. Did the echo/replacement make you want to keep playing?
+8. Would you restart to try another build?
+9. Does this feel promising enough that a Unity version could be worth making?
 
 ## Scoring Notes
 
@@ -73,21 +97,29 @@ Use these labels in `docs/PLAYTEST_NOTES.md` after each session:
 - `neutral`: the tester noticed the result but did not care.
 - `unclear`: the tester could not identify what happened.
 
-The v0.2 loop is promising if most testers land in `regret` or `regret + understandable loss`, and risky if two or more testers land in `irritation` or `unclear`.
+The v0.5 loop is promising if:
+
+- most testers reach the first forgetting without boredom,
+- most testers treat level-up choices as meaningful,
+- regret beats irritation by at least 2:1,
+- 60% or more show restart intent or say they want to try another build,
+- at least some testers say the idea feels worth expanding beyond HTML.
 
 ## Stop Conditions
 
 Stop and revise before adding content if:
 
+- half or more testers are bored before the first boss,
+- most testers click level-up choices randomly,
 - testers cannot remember any selected memory by name or effect,
-- testers do not understand the result screen,
-- JSON logs are missing selected, predicted, deleted, or deletion weight fields,
-- the forgotten memory feels irrelevant to the build,
-- echo makes the loss feel fully canceled.
+- two or more testers call the forgetting result irritating or unfair,
+- testers do not feel the post-forgetting power dip at all,
+- echo/replacement makes the loss feel fully canceled.
 
 ## After Each Session
 
-1. Save the JSON log.
+1. Save the JSON log. The filename should include tester/session if entered.
 2. Add notes to `docs/PLAYTEST_NOTES.md`.
 3. Keep AI alpha test results separate from human notes.
-4. After 5-8 sessions, summarize the pattern before deciding v0.3.
+4. After 5-8 sessions, summarize the pattern.
+5. Run the planning pipeline again with the human-test summary before deciding HTML v0.6 or Unity transition groundwork.

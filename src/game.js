@@ -8,6 +8,8 @@ const ui = {
   phaseLabel: document.getElementById("phaseLabel"),
   timerLabel: document.getElementById("timerLabel"),
   hpLabel: document.getElementById("hpLabel"),
+  testerIdInput: document.getElementById("testerIdInput"),
+  sessionIdInput: document.getElementById("sessionIdInput"),
   weaponChoices: document.getElementById("weaponChoices"),
   memoryChoices: document.getElementById("memoryChoices"),
   slotCount: document.getElementById("slotCount"),
@@ -222,6 +224,7 @@ const forgetBias = {
 const keys = new Set();
 let selectedWeapon = weapons.twin_blades.id;
 let selectedMemories = [];
+let playtestMeta = readPlaytestMetaFromUrl();
 let state = null;
 let lastFrame = performance.now();
 
@@ -325,6 +328,7 @@ function createRunState() {
     logs: {
       version: experiment.version,
       experiment: { ...experiment },
+      playtest: currentPlaytestMeta(),
       runGrowth: null,
       startedAt: new Date().toISOString(),
       weapon: selectedWeapon,
@@ -369,7 +373,23 @@ function initSetup() {
   });
 
   ui.startRunButton.addEventListener("click", startRun);
+  bindPlaytestMetaInputs();
   renderSetup();
+}
+
+function bindPlaytestMetaInputs() {
+  if (ui.testerIdInput) {
+    ui.testerIdInput.value = playtestMeta.testerId;
+    ui.testerIdInput.addEventListener("input", () => {
+      playtestMeta.testerId = ui.testerIdInput.value.trim();
+    });
+  }
+  if (ui.sessionIdInput) {
+    ui.sessionIdInput.value = playtestMeta.sessionId;
+    ui.sessionIdInput.addEventListener("input", () => {
+      playtestMeta.sessionId = ui.sessionIdInput.value.trim();
+    });
+  }
 }
 
 function toggleMemory(id) {
@@ -404,10 +424,11 @@ function weaponCardHtml(weapon) {
 }
 
 function startRun() {
+  playtestMeta = currentPlaytestMeta();
   state = createRunState();
   overlay.classList.remove("show");
   addLog(experiment.qaFastMode ? "QA fast mode: 검은 물이 빠르게 차오른다." : "검은 물 위로 기억이 떠올랐다.");
-  logEvent("run_start");
+  logEvent("run_start", { playtest: state.logs.playtest });
 }
 
 function addLog(text) {
@@ -1278,6 +1299,7 @@ function updateDownloadEnabled() {
 
 function collectLogPayload() {
   calculateDependency();
+  state.logs.playtest = currentPlaytestMeta();
   state.logs.completedAt = new Date().toISOString();
   state.logs.elapsed = Number(state.elapsed.toFixed(2));
   state.logs.questions = state.questions;
@@ -1323,9 +1345,39 @@ function downloadLog() {
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = `lethe-${experiment.version}-log-${Date.now()}.json`;
+  a.download = logFileName(payload);
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+function currentPlaytestMeta() {
+  return {
+    testerId: sanitizeMetaValue(ui.testerIdInput?.value || playtestMeta.testerId),
+    sessionId: sanitizeMetaValue(ui.sessionIdInput?.value || playtestMeta.sessionId),
+  };
+}
+
+function readPlaytestMetaFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    testerId: sanitizeMetaValue(params.get("tester") || params.get("testerId") || ""),
+    sessionId: sanitizeMetaValue(params.get("session") || params.get("sessionId") || ""),
+  };
+}
+
+function sanitizeMetaValue(value) {
+  return String(value || "").trim().slice(0, 40);
+}
+
+function safeFilePart(value) {
+  return sanitizeMetaValue(value).replace(/[^a-z0-9가-힣_-]+/gi, "-").replace(/^-+|-+$/g, "") || "";
+}
+
+function logFileName(payload) {
+  const tester = safeFilePart(payload.playtest?.testerId);
+  const session = safeFilePart(payload.playtest?.sessionId);
+  const parts = ["lethe", experiment.version, tester, session, "log", String(Date.now())].filter(Boolean);
+  return `${parts.join("-")}.json`;
 }
 
 function renderScaleState() {
@@ -1826,6 +1878,7 @@ function startLevelupQa() {
         resumedAfterUpgrade: qa.resumedAfterUpgrade,
         hasRunGrowthPayload: Boolean(logPayload.runGrowth),
         payloadChoicesTaken: logPayload.runGrowth?.choicesTaken || [],
+        playtest: logPayload.playtest,
         forgotten: logPayload.forgotten,
       });
       clearInterval(timer);
