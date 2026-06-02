@@ -134,27 +134,3 @@ docs/review_responses/YYYY-MM-DD-codex.md
 ```
 
 It calls `codex exec` in read-only mode with approvals disabled, so it should not edit files. It uses the local Codex CLI login/session and any applicable ChatGPT/Codex plan limits. Set `CODEX_REVIEW_MODEL` to override the model.
-
-## OpenAI Review Fallback
-
-If Claude Code and Codex CLI are blocked or the user explicitly wants API execution, use the OpenAI API fallback.
-
-Dry-run:
-
-```powershell
-npm run review:openai:dry
-```
-
-Actual review:
-
-```powershell
-npm run review:openai
-```
-
-The script reads the latest dated file in `docs/review_prompts/` and writes the response to:
-
-```text
-docs/review_responses/YYYY-MM-DD-openai.md
-```
-
-It requires `OPENAI_API_KEY` in the environment or local `.env`. The default model is `gpt-5.2`; set `OPENAI_REVIEW_MODEL` to override it.
