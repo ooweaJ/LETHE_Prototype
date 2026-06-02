@@ -37,6 +37,7 @@ function checkPackageScripts() {
   [
     'ai:test:quick',
     'report',
+    'report:check',
     'report:discord:unit:dry',
     'review:claude:dry',
     'review:codex:dry',
@@ -141,6 +142,9 @@ function checkEnvironment() {
 
   const prompt = latestMatchingFile('docs/review_prompts', /^\d{4}-\d{2}-\d{2}(?:-[a-z0-9-]+)?\.md$/i);
   add(prompt ? 'pass' : 'fail', 'latest review prompt', prompt || 'missing', 'Run npm run planning:pipeline:prompt to generate one.');
+
+  const reportCheck = run('node scripts/check_report_units.js');
+  add(reportCheck.status === 0 ? 'pass' : 'fail', 'report unit headings', reportCheck.status === 0 ? firstLine(reportCheck.stdout) : firstLine(reportCheck.stderr || reportCheck.stdout), 'Use top-level headings like "# 2026-06-02-01 - 작업 제목".');
 }
 
 function runDeepChecks() {
@@ -162,6 +166,7 @@ function runDeepChecks() {
     'npm run playtest:summary:dry',
     'npm run playtest:package:dry',
     'npm run report:discord:unit:dry',
+    'npm run report:check',
   ].forEach((command) => {
     const result = run(command, { maxBuffer: 1024 * 1024 * 8 });
     add(result.status === 0 ? 'pass' : 'fail', `deep ${command}`, result.status === 0 ? 'ok' : firstLine(result.stderr || result.stdout), `Run ${command} directly for full output.`);

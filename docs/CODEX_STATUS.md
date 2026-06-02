@@ -8,7 +8,7 @@ Last updated: 2026-06-02
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
-- Latest task-update status: `2026-06-02-devloop-175642` outputs are recorded and pushed through `f6ee83f`; post-loop `npm run autopilot:preflight` passed with 21 pass / 0 warn / 0 fail; post-loop `npm run qa:identity` passed with `status: complete`, failures `[]`. Next executable scope is v0.9 WP2 Slice A pressure rhythm.
+- Latest task-update status: `2026-06-02-devloop-175642` outputs are recorded and pushed through `f6ee83f`; post-loop `npm run autopilot:preflight` passed with 21 pass / 0 warn / 0 fail; post-loop `npm run qa:identity` passed with `status: complete`, failures `[]`. Report headings are now numbered by work unit and enforced by `npm run report:check`. Next executable scope is v0.9 WP2 Slice A pressure rhythm.
 
 ## Implemented
 
@@ -451,6 +451,11 @@ npm run ai:sweep
 - Current dev-loop prompt cleanup is implemented: future nested implementation prompts should not keep re-selecting WP1 after WP1 is complete.
 - Current dev-loop preflight-order cleanup is implemented: future clean-tree dev loops should run preflight before creating their own loop log, and should not mask dirty-tree state with `--allow-dirty` by default.
 - Current autopilot preflight diagnosis now gives exact loop-run artifact cleanup guidance when `docs/loop_runs/*.md` blocks a clean unattended loop.
+- Report work-unit heading rule:
+  - daily reports still live in `docs/reports/YYYY-MM-DD.md`,
+  - each top-level work section after the daily title must be `# YYYY-MM-DD-NN - 작업 제목`,
+  - `npm run report:check` and `doctor` enforce the latest report,
+  - Discord `--latest-section` should now send a clearly named task/unit instead of an ambiguous daily tail.
 - Post-loop gate closure:
   - working tree clean after `f6ee83f feat: 자동 개발 루프 4차 반영`,
   - `npm run autopilot:preflight`: 21 pass, 0 warn, 0 fail,

@@ -25,6 +25,7 @@
 - Latest devloop feedback-3 verdict: AI planning evidence supports `GO_CANDIDATE` / Claude `GO_TO_HUMAN_TEST`, but the selected Codex scope remains gate cleanup only. Do not start WP2 or human-test checklist work until loop-run artifacts are recorded/cleaned, clean-tree `npm run autopilot:preflight:local` passes, and trusted-local `npm run qa:identity` passes.
 - Latest devloop feedback-4 verdict: `GO_CANDIDATE` remains an AI planning pass, not human emotion or balance proof. The missing-result diagnosis worked and the wrapper result now exists, so the next executable scope is still artifact 정합성 정리: record/track or remove the `docs/loop_runs/2026-06-02-devloop-175642*` outputs, then pass clean-tree `npm run autopilot:preflight:local` and trusted-local `npm run qa:identity` before WP2.
 - Post-loop gate closure: `2026-06-02-devloop-175642*` outputs are committed, `npm run autopilot:preflight` passed with 21 pass / 0 warn / 0 fail, and `npm run qa:identity` passed with `status: complete`, failures `[]`. Next executable scope is v0.9 Work Package 2 Slice A.
+- Reporting rule update: work reports now use numbered unit headings like `# 2026-06-02-44 - 보고서 단위 번호 체계`; `npm run report:check` and `doctor` enforce this so Discord latest-section reports are task-readable.
 - Reference research: `docs/research/2026-06-02-roguelike-reference.md`.
 - New v0.9 prompt: `docs/review_prompts/2026-06-02-v09-release-feel-loop.md`.
 - Overnight loop command:
@@ -224,6 +225,10 @@
   - 후속 full check: `npm run autopilot:preflight` passed, 21 pass / 0 warn / 0 fail.
 - [x] trusted local에서 `npm run qa:identity`를 재실행하고 `status: complete`, failures `[]`를 확인한다.
   - `npm run qa:identity`: `status: complete`, failures `[]`, `buildIdentitySeenBy90Sec: true`.
+- [x] 보고서를 작업 단위별로 읽히게 하기 위해 numbered work-unit heading 규칙을 추가한다.
+  - 기존 `docs/reports/2026-06-02.md` top-level 작업 섹션을 `2026-06-02-01`부터 `2026-06-02-44`까지 번호화했다.
+  - `scripts/check_report_units.js`, `npm run report:check`, doctor 검사를 추가했다.
+  - autonomous dev loop prompt가 새 보고 섹션을 `# 2026-06-02-NN - 작업 제목` 형식으로 쓰게 했다.
 - [ ] v0.9 Work Package 2 Slice A: 전투 구간별 압박 고저차를 구현한다.
 - [ ] v0.9 Work Package 2 Slice B: 압박 고저차 검증 후 기존 전투 파라미터만 써서 최소 post-loss challenge를 구현한다.
 - [ ] v0.9 Work Package 3: 자동전투 안의 작은 tactical agency를 구현한다.
