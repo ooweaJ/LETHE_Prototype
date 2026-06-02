@@ -4,7 +4,7 @@ Last updated: 2026-06-02
 
 ## Current Build
 
-- Project: LETHE HTML Alpha v0.5 core-fun human-test candidate.
+- Project: LETHE HTML Alpha v0.5 core-fun human-test ready.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: pre-human-test polish for the forgetting loop. No broad content expansion yet.
@@ -107,6 +107,13 @@ npm run ai:sweep
   - JSON payload includes selected memory names, predicted/protected names, forgotten memory name, deletion weights, survey, echo, experiment, and echo transformation fields,
   - payload experiment version is `v0.4`.
 - Browser plugin QA for v0.5 was attempted, but the in-app browser connection failed with a Windows sandbox startup error. Static syntax checks and AI tests passed; visual QA should be rerun locally before or during the first human-test session.
+- Chrome headless QA passed for v0.5 level-up gate:
+  - `file:///C:/jaewoo/LETHE_Prototype/index.html?qa=fast,levelup`,
+  - `status: complete`,
+  - `levelUpSeen: true`,
+  - `resumedAfterUpgrade: true`,
+  - `hasRunGrowthPayload: true`,
+  - selected upgrade recorded in both `choicesTaken` and payload `runGrowth.choicesTaken`.
 - The game is static HTML and can be run by opening `index.html`.
 - Default browser boss/forgetting timing now matches the 9-minute v0.2 target; `?qa=fast` is only for QA.
 - Generated AI test outputs are ignored by git under `alpha_test/outputs/`.
@@ -119,7 +126,7 @@ npm run ai:sweep
 ## Latest Planning Verdict
 
 - GPT verdict: `ITERATE_BEFORE_TEST`.
-- Claude v0.5 evaluation: `ITERATE_BEFORE_TEST`, but only due to missing real-browser verification of the v0.5 level-up flow and `runGrowth` payload. Claude says passing that check should move the build to `GO_TO_HUMAN_TEST`.
+- Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the v0.5 level-up flow and `runGrowth` payload.
 - v0.2 scope: timing, deletion distribution, echo default, clearer feedback, JSON logs, human-test recall question.
 - A v0.3/version-up Claude prompt exists, but actual Claude execution still requires local Claude Code login.
 - This session confirmed the local `claude` command is installed: `claude --version` returned `2.1.153 (Claude Code)`.
@@ -129,11 +136,10 @@ npm run ai:sweep
 - Offline mock verification wrote `alpha_test/outputs/claude-review-mock.md` with `--mock-response`, confirming prompt selection, output directory creation, and response writing without external transmission.
 - Codex CLI can write planning responses to `docs/review_responses/YYYY-MM-DD-codex.md` through `npm run review:codex`.
 - OpenAI API fallback has been removed by request. The review order is now Claude Code first, then Codex CLI fallback.
-- Human testing should proceed after local v0.5 browser QA confirms the level-up flow.
+- Human testing can proceed.
 
 ## Next Codex Tasks
 
-- Local v0.5 browser QA is now the one remaining gate before human playtest.
-- Confirm level-up 3-choice UI appears, selection resumes combat, and `runGrowth` JSON matches actual choices.
+- Human playtest is now the next gate.
 - Use `docs/HUMAN_PLAYTEST_GUIDE.md` for a 5-8 player test focused on regret vs irritation.
 - During testing, watch whether the 27.8-28.0% power drop feels too safe or still regretful enough.

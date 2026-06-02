@@ -1,11 +1,11 @@
 # Next Tasks
 
-현재 단계는 v0.5 core-fun human-test candidate 상태다. 사용자의 실제 테스트 피드백에 따라 “망각 감정”보다 먼저 초반 재미, 적 몰림, 런 중 성장 선택을 보완했다. AI 기준으로는 다시 사람 테스트 진입 가능하다.
+현재 단계는 v0.5 core-fun human-test ready 상태다. 사용자의 실제 테스트 피드백에 따라 “망각 감정”보다 먼저 초반 재미, 적 몰림, 런 중 성장 선택을 보완했고, Claude가 요구한 레벨업 UI/`runGrowth` 브라우저 gate도 Chrome headless로 통과했다.
 
 ## Current Verdict
 
 - GPT verdict: `ITERATE_BEFORE_TEST`.
-- Claude v0.5 evaluation: `ITERATE_BEFORE_TEST`, but only because browser/runtime verification is still missing. If v0.5 level-up flow and `runGrowth` JSON pass in a real browser, proceed to `GO_TO_HUMAN_TEST`.
+- Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the level-up flow and `runGrowth` payload.
 - Codex implementation result: `GO_CANDIDATE` from `npm run ai:test` and `npm run ai:test:heavy`.
 
 ## v0.2 Done
@@ -51,6 +51,7 @@
 - [x] `npm run ai:test`: `GO_CANDIDATE`, Alpha Fun Score `0.8531`, Early Fun `0.8669`.
 - [x] `npm run ai:test:heavy`: `GO_CANDIDATE`, Alpha Fun Score `0.8509`, Early Fun `0.8672`.
 - [x] Claude v0.5 구현 후 평가를 저장했다: `docs/review_responses/2026-06-02-claude-v05-eval.md`.
+- [x] `?qa=fast,levelup` Chrome headless QA를 추가하고 통과했다.
 
 ## Latest AI Criteria
 
@@ -77,10 +78,10 @@
 - [x] 사람 테스트 전 전투 연출을 더 화려하게 만든다.
 - [x] 사람 테스트 전 기억 의존도/망각 위험이 플레이 중 더 분명하게 보이게 만든다.
 - [x] 사람 테스트 전 잔향 시스템이 결과 이후 더 분명하게 보이게 만든다.
-- [ ] v0.5 브라우저 시각 QA를 로컬에서 다시 확인한다. 이 세션의 Browser 플러그인은 Windows sandbox 오류로 열리지 않았다.
-- [ ] 레벨업 3택 화면이 실제 브라우저에서 뜨고, 선택 후 전투가 정상 재개되는지 확인한다.
-- [ ] 한 런 완료 후 JSON 다운로드에 `runGrowth` 선택 내역이 실제 선택과 일치하는지 확인한다.
-- [ ] 레벨업 일시정지 중 타이머/스폰이 멈추고 재개 후 입력이 정상인지 확인한다.
+- [x] v0.5 브라우저 QA를 Chrome headless로 확인했다. Browser 플러그인은 Windows sandbox 오류로 열리지 않았지만, 설치된 Chrome으로 실제 HTML/JS를 실행했다.
+- [x] 레벨업 3택 화면이 실제 브라우저 DOM에 뜨고, 선택 후 전투가 정상 재개되는지 확인했다.
+- [x] JSON payload에 `runGrowth` 선택 내역이 실제 선택과 일치하는지 확인했다.
+- [x] 레벨업 일시정지/재개 흐름이 QA 모드에서 정상 완료되는지 확인했다.
 - [ ] 5-8명 사람 테스트를 진행한다.
 - [ ] 플레이테스트 후 감정 반응을 기준으로 다음 방향을 결정한다.
 - [ ] 사람 테스트 결과가 모이면 Claude/GPT 검토를 다시 요청한다. 외부 전송 승인이 어려우면 Codex CLI fallback이나 Claude mock 경로로 자동화만 먼저 점검한다.

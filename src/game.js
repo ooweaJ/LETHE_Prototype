@@ -196,13 +196,16 @@ const enemyTypes = {
   },
 };
 
+const qaMode = new URLSearchParams(window.location.search).get("qa") || "";
+
 const experiment = {
   version: "v0.5",
   echoPower: 0.5,
   uiClarity: 0.78,
   bossSpawnTimeSec: 540,
   bossHp: 1750,
-  qaFastMode: new URLSearchParams(window.location.search).get("qa") === "fast",
+  qaFastMode: qaMode.includes("fast"),
+  qaLevelupMode: qaMode.includes("levelup"),
 };
 
 if (experiment.qaFastMode) {
@@ -1750,9 +1753,99 @@ window.addEventListener("keyup", (event) => {
   keys.delete(event.code);
 });
 
-if (experiment.qaFastMode) {
+function writeLevelupQaResult(extra = {}) {
+  if (!experiment.qaLevelupMode) return;
+  const payload = {
+    version: experiment.version,
+    hasState: Boolean(state),
+    mode: state?.mode || null,
+    elapsed: state ? Number(state.elapsed.toFixed(2)) : 0,
+    level: state?.runGrowth?.level || 0,
+    choicesTaken: state?.runGrowth?.choicesTaken || [],
+    levelUpsBeforeBoss: state?.runGrowth?.levelUpsBeforeBoss || 0,
+    runGrowth: state ? runGrowthLog() : null,
+    overlayHasUpgradeChoices: Boolean(document.querySelector("#levelUpChoices .choice")),
+    ...extra,
+  };
+  document.documentElement.dataset.letheLevelupQa = JSON.stringify(payload);
+}
+
+function startLevelupQa() {
+  selectedWeapon = weapons.twin_blades.id;
+  selectedMemories = ["hungry_blades", "stalker_oath", "blood_reflection"];
+  renderSetup();
+  setTimeout(() => {
+    if (!state) {
+      startRun();
+      setTimeout(() => {
+        if (state?.mode === "combat" && state.runGrowth.level === 1) {
+          state.runGrowth.xp = state.runGrowth.nextXp;
+          queueLevelUp();
+        }
+      }, 300);
+    }
+  }, 50);
+
+  const qa = {
+    levelUpSeen: false,
+    resumedAfterUpgrade: false,
+    resultLogged: false,
+    answered: false,
+    startedAt: performance.now(),
+  };
+
+  const timer = setInterval(() => {
+    if (!state) {
+      writeLevelupQaResult({ status: "waiting_for_run" });
+      return;
+    }
+
+    if (state.mode === "upgrade" && state.runGrowth.pendingChoices.length) {
+      qa.levelUpSeen = document.querySelectorAll("#levelUpChoices .choice").length === 3;
+      applyLevelUpChoice(state.runGrowth.pendingChoices[0]);
+      qa.resumedAfterUpgrade = state.mode === "combat" && state.running;
+    }
+
+    if (qa.resumedAfterUpgrade && !qa.answered) {
+      qa.answered = true;
+      state.questions.protect = state.memories[0].id;
+      state.questions.predict = state.memories[0].id;
+      forgetMostDependent();
+      showResultOverlay();
+    }
+
+    if (state.forgotten && !qa.resultLogged) {
+      qa.resultLogged = true;
+      state.survey.sadness = 3;
+      state.survey.fairness = 3;
+      state.survey.memoryRecall = memories[state.forgotten]?.name || "";
+      const logPayload = collectLogPayload();
+      writeLevelupQaResult({
+        status: "complete",
+        levelUpSeen: qa.levelUpSeen,
+        resumedAfterUpgrade: qa.resumedAfterUpgrade,
+        hasRunGrowthPayload: Boolean(logPayload.runGrowth),
+        payloadChoicesTaken: logPayload.runGrowth?.choicesTaken || [],
+        forgotten: logPayload.forgotten,
+      });
+      clearInterval(timer);
+      return;
+    }
+
+    const timedOut = performance.now() - qa.startedAt > 45000;
+    writeLevelupQaResult({
+      status: timedOut ? "timeout" : "running",
+      levelUpSeen: qa.levelUpSeen,
+      resumedAfterUpgrade: qa.resumedAfterUpgrade,
+    });
+    if (timedOut) clearInterval(timer);
+  }, 120);
+}
+
+if (experiment.qaFastMode || experiment.qaLevelupMode) {
   window.__letheQaLog = () => (state ? JSON.parse(JSON.stringify(collectLogPayload())) : null);
 }
 
 initSetup();
+if (experiment.qaLevelupMode) startLevelupQa();
 requestAnimationFrame(frame);
