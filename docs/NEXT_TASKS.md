@@ -150,9 +150,12 @@
 - [x] 실제 구현까지 반복하는 autonomous dev loop를 추가한다.
 - [x] `doctor`와 `doctor:deep`이 autonomous dev loop dry-run을 확인하게 한다.
 - [ ] v0.9 Work Package 1: 기존 6개 기억 안에서 빌드 정체성과 시너지 체감을 강화한다.
-  - 기억별 주 역할, 태그, 짧은 전투 설명을 명확하게 만든다.
-  - 현재 빌드 이름, 활성 시너지, 의존 중인 기억을 UI에 표시한다.
-  - JSON/AI payload에 build identity 필드를 추가한다.
+  - [x] 기억 선택 카드와 슬롯에서 기억별 주 역할, 태그, 짧은 전투 설명을 함께 보이게 했다.
+  - [x] 현재 빌드 이름, 활성 시너지, 의존 중인 기억을 선택 화면/HUD에 표시한다.
+  - [x] JSON payload, 이벤트 로그, AI raw-run payload에 build identity 필드를 추가한다.
+  - [x] Claude/Codex 피드백을 받아 WP1 다음 작업을 identity QA runner로 확정한다.
+  - [ ] `?qa=fast,identity`를 실제 브라우저 또는 안정적인 headless runner에서 검증한다.
+  - [ ] 필요하면 기억별 설명 문구를 더 압축해 90초 안에 더 쉽게 읽히게 한다.
 - [ ] v0.9 Work Package 2: 압박 고저차와 post-loss challenge를 구현한다.
 - [ ] v0.9 Work Package 3: 자동전투 안의 작은 tactical agency를 구현한다.
 - [ ] v0.9 통과 후에만 실제 브라우저 전투 QA와 사용자 1인 테스트를 요청한다.

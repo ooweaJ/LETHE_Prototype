@@ -85,6 +85,7 @@ function writeLogHeader() {
     `- Started: ${startedAt.toISOString()}`,
     `- Iterations: ${options.iterations}`,
     `- Duration minutes: ${options.durationMinutes}`,
+    `- Codex timeout minutes: ${options.codexTimeoutMinutes}`,
     `- Provider: ${options.provider}`,
     `- Codex sandbox: ${options.codexSandbox}`,
     `- Commit: ${options.commit}`,
@@ -155,6 +156,7 @@ function runCodexImplementation(iteration, context) {
     input: prompt,
     shell: true,
     maxBuffer: 1024 * 1024 * 30,
+    timeout: options.codexTimeoutMinutes * 60 * 1000,
   });
   recordResult('codex implementation', result);
   if (result.status !== 0) failLoop('codex implementation', firstLine(result.stderr || result.stdout));
@@ -307,6 +309,7 @@ function runCodexTaskUpdate(iteration, feedbackPrompt) {
     input: prompt,
     shell: true,
     maxBuffer: 1024 * 1024 * 30,
+    timeout: options.codexTimeoutMinutes * 60 * 1000,
   });
   recordResult('codex task update', result);
   if (result.status !== 0) failLoop('codex task update', firstLine(result.stderr || result.stdout));
@@ -410,6 +413,7 @@ function writeBlockerPrompt(iteration, stepName, detail) {
 function parseArgs(args) {
   const parsed = {
     allowDirty: false,
+    codexTimeoutMinutes: 20,
     codexSandbox: 'workspace-write',
     commit: true,
     date: '',
@@ -428,6 +432,8 @@ function parseArgs(args) {
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
     if (arg === '--allow-dirty') parsed.allowDirty = true;
+    else if (arg === '--codex-timeout-minutes') parsed.codexTimeoutMinutes = positiveInteger(args[++index], 'codex-timeout-minutes');
+    else if (arg.startsWith('--codex-timeout-minutes=')) parsed.codexTimeoutMinutes = positiveInteger(arg.slice('--codex-timeout-minutes='.length), 'codex-timeout-minutes');
     else if (arg === '--discord-dry-run') parsed.discordDryRun = true;
     else if (arg === '--dry-run') parsed.dryRun = true;
     else if (arg === '--no-commit') parsed.commit = false;

@@ -266,6 +266,35 @@ canvas {
   background: rgba(109, 223, 210, 0.08);
 }
 
+.build-card {
+  border: 1px solid rgba(232, 193, 93, 0.42);
+  border-radius: 6px;
+  background: rgba(33, 29, 18, 0.78);
+  padding: 10px;
+}
+
+.build-card-row {
+  display: grid;
+  grid-template-columns: 82px minmax(0, 1fr);
+  gap: 8px;
+  align-items: baseline;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.build-card-row + .build-card-row {
+  margin-top: 7px;
+}
+
+.build-card-row span {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.build-card-row strong {
+  color: var(--gold);
+}
+
 .primary-btn,
 .secondary-btn {
   min-height: 42px;

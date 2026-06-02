@@ -31,6 +31,13 @@ function pairKey(a, b) {
 }
 
 const SYNERGY_MAP = new Map(SYNERGIES.map((s) => [pairKey(s.a, s.b), s]));
+const TAG_LABELS = {
+  burst: '폭딜',
+  area: '광역',
+  dot: '지속',
+  control: '제어',
+  survival: '생존',
+};
 
 function getActiveSynergies(memoryIds) {
   const out = [];
@@ -254,16 +261,71 @@ function classifyBuild(state, snapshot) {
   const shares = Object.values(snapshot.totalShares).sort((a, b) => b - a);
   const concentrationIndex = shares[0] || 0;
   const activeSynergies = getActiveSynergies(state.activeMemories);
+  const tagCounts = countBuildTags(state.activeMemories);
+  const primaryTag = Object.entries(tagCounts).sort((a, b) => b[1] - a[1] || tagLabel(a[0]).localeCompare(tagLabel(b[0]), 'ko'))[0]?.[0] || null;
+  const mostDependentMemory = mostDependentMemoryForBuild(state.activeMemories, snapshot);
   const maxPairs = Math.max(1, (state.activeMemories.length * (state.activeMemories.length - 1)) / 2);
   const synergyConnectivity = activeSynergies.length / maxPairs;
   let buildClass = '분산-느슨';
   if (concentrationIndex >= 0.50) buildClass = '몰빵';
   else if (synergyConnectivity >= 0.30) buildClass = '분산-거미줄';
   return {
+    buildName: buildNameFor(tagCounts, activeSynergies),
     buildClass,
+    primaryTag,
+    primaryTagLabel: primaryTag ? tagLabel(primaryTag) : null,
+    tags: Object.keys(tagCounts),
+    tagLabels: Object.keys(tagCounts).map(tagLabel),
     concentrationIndex: round(concentrationIndex, 4),
     synergyConnectivity: round(synergyConnectivity, 4),
     activeSynergies: activeSynergies.map((s) => s.name),
+    activeSynergyDetails: activeSynergies.map((s) => ({
+      name: s.name,
+      tags: s.tags,
+    })),
+    mostDependentMemory,
+    memoryIds: state.activeMemories.slice(),
+    memoryNames: memoryNames(state.activeMemories),
+  };
+}
+
+function countBuildTags(memoryIds) {
+  const counts = {};
+  memoryIds.forEach((id) => {
+    (MEMORIES[id]?.echoTags || []).forEach((tag) => {
+      counts[tag] = (counts[tag] || 0) + 1;
+    });
+  });
+  return counts;
+}
+
+function tagLabel(tag) {
+  return TAG_LABELS[tag] || tag;
+}
+
+function buildNameFor(tagCounts, activeSynergies) {
+  if (activeSynergies.some((s) => s.name === '압축 파문')) return '압축 제어 빌드';
+  if (activeSynergies.some((s) => s.name === '느린 출혈')) return '느린 출혈 빌드';
+  if (activeSynergies.some((s) => s.name === '피 묻은 결의')) return '피 묻은 결의 빌드';
+  if ((tagCounts.burst || 0) >= 2) return '집중 처형 빌드';
+  if ((tagCounts.dot || 0) >= 2) return '지속 절삭 빌드';
+  if ((tagCounts.control || 0) >= 2) return '시간 제어 빌드';
+  if ((tagCounts.area || 0) >= 2) return '광역 압박 빌드';
+  return '느슨한 기억 조합';
+}
+
+function mostDependentMemoryForBuild(memoryIds, snapshot) {
+  const ranked = memoryIds
+    .map((id) => ({
+      id,
+      name: MEMORIES[id]?.name || id,
+      score: round(snapshot.totalShares[id] || 0, 4),
+    }))
+    .sort((a, b) => b.score - a.score);
+  return ranked[0] || {
+    id: null,
+    name: '계산 중',
+    score: 0,
   };
 }
 

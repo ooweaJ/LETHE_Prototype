@@ -135,6 +135,7 @@ The default loop is configured for an overnight block:
 
 - up to 6 iterations,
 - up to 360 minutes,
+- 20-minute timeout for each nested Codex implementation/task-update call,
 - Codex implementation through `codex exec --sandbox workspace-write`,
 - `npm run doctor`,
 - `npm run ai:test:quick`,
@@ -149,6 +150,7 @@ Useful variants:
 
 ```powershell
 node scripts/run_autonomous_dev_loop.js --iterations 3 --duration-minutes 180
+node scripts/run_autonomous_dev_loop.js --codex-timeout-minutes 30
 node scripts/run_autonomous_dev_loop.js --no-push
 node scripts/run_autonomous_dev_loop.js --no-commit --discord-dry-run
 node scripts/run_autonomous_dev_loop.js --allow-dirty --no-push

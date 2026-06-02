@@ -228,7 +228,7 @@ const enemyTypes = {
 const qaMode = new URLSearchParams(window.location.search).get("qa") || "";
 
 const experiment = {
-  version: "v0.8",
+  version: "v0.9",
   echoPower: 0.5,
   uiClarity: 0.78,
   runDurationSec: 540,
@@ -239,6 +239,7 @@ const experiment = {
   qaLevelupMode: qaMode.includes("levelup"),
   qaV06Mode: qaMode.includes("v06"),
   qaDeathMode: qaMode.includes("death"),
+  qaIdentityMode: qaMode.includes("identity"),
 };
 
 if (experiment.qaFastMode) {
@@ -445,7 +446,7 @@ function initSetup() {
     const button = document.createElement("button");
     button.className = `choice ${selectedMemories.includes(memory.id) ? "selected" : ""}`;
     button.type = "button";
-    button.innerHTML = `<strong>${memory.name}</strong><span>${memory.role}<br>${memory.desc}</span>`;
+    button.innerHTML = `<strong>${memory.name}</strong><span>${memory.role}<br>${memory.desc}</span><div class="tag-row">${tagBadges(memory.tags)}</div>`;
     button.addEventListener("click", () => toggleMemory(memory.id));
     ui.memoryChoices.appendChild(button);
   });
@@ -508,6 +509,96 @@ function activeSynergiesFor(memoryIds) {
   return synergyRules.filter((rule) => rule.tags.every((tag) => tagSet.has(tag)));
 }
 
+function buildIdentityFor(memoryIds, sourceState = state) {
+  const ids = memoryIds.filter((id) => memories[id]);
+  const activeSynergies = activeSynergiesFor(ids);
+  const tagCounts = ids.reduce((counts, id) => {
+    (memories[id].tags || []).forEach((tag) => {
+      counts[tag] = (counts[tag] || 0) + 1;
+    });
+    return counts;
+  }, {});
+  const primaryTag = Object.entries(tagCounts).sort((a, b) => b[1] - a[1] || tagLabel(a[0]).localeCompare(tagLabel(b[0]), "ko"))[0]?.[0] || null;
+  const mostDependentMemory = mostDependentMemoryFor(ids, sourceState);
+  return {
+    buildName: buildNameFor(tagCounts, activeSynergies),
+    primaryTag,
+    primaryTagLabel: primaryTag ? tagLabel(primaryTag) : null,
+    tags: Object.keys(tagCounts),
+    tagLabels: Object.keys(tagCounts).map(tagLabel),
+    activeSynergies: activeSynergies.map((rule) => ({
+      id: rule.id,
+      name: rule.name,
+      desc: rule.desc,
+    })),
+    mostDependentMemory,
+    memoryIds: ids,
+    memoryNames: ids.map((id) => memories[id].name),
+    visibleBy90Sec: sourceState ? sourceState.elapsed <= 90 || sourceState.logs?.buildIdentitySeenBy90Sec : ids.length === 3,
+  };
+}
+
+function buildNameFor(tagCounts, activeSynergies) {
+  if (activeSynergies.some((rule) => rule.id === "area_control")) return "압축 제어 빌드";
+  if (activeSynergies.some((rule) => rule.id === "dot_control")) return "느린 출혈 빌드";
+  if (activeSynergies.some((rule) => rule.id === "burst_survival")) return "피 묻은 결의 빌드";
+  if ((tagCounts.burst || 0) >= 2) return "집중 처형 빌드";
+  if ((tagCounts.dot || 0) >= 2) return "지속 절삭 빌드";
+  if ((tagCounts.control || 0) >= 2) return "시간 제어 빌드";
+  if ((tagCounts.area || 0) >= 2) return "광역 압박 빌드";
+  return "느슨한 기억 조합";
+}
+
+function mostDependentMemoryFor(memoryIds, sourceState = state) {
+  if (!sourceState) {
+    return {
+      id: null,
+      name: "전투 중 계산",
+      score: 0,
+      deletionWeight: 0,
+    };
+  }
+  const ranked = memoryIds
+    .filter((id) => sourceState.metrics[id])
+    .map((id) => ({
+      id,
+      name: memories[id].name,
+      score: sourceState.metrics[id].score || 0,
+      deletionWeight: sourceState.metrics[id].deletionWeight || 0,
+    }))
+    .sort((a, b) => b.score - a.score || b.deletionWeight - a.deletionWeight);
+  return ranked[0] || {
+    id: null,
+    name: "계산 중",
+    score: 0,
+    deletionWeight: 0,
+  };
+}
+
+function buildIdentityHtml(identity) {
+  const synergyLine = identity.activeSynergies.length
+    ? identity.activeSynergies.map((rule) => rule.name).join(" / ")
+    : "활성 시너지 없음";
+  const dependent = identity.mostDependentMemory;
+  const dependentScore = dependent?.score ? ` ${Math.round(dependent.score)}점` : "";
+  return `
+    <div class="build-card">
+      <div class="build-card-row">
+        <span>현재 빌드</span>
+        <strong>${identity.buildName}</strong>
+      </div>
+      <div class="build-card-row">
+        <span>활성 시너지</span>
+        <strong>${synergyLine}</strong>
+      </div>
+      <div class="build-card-row">
+        <span>의존 중인 기억</span>
+        <strong>${dependent?.name || "계산 중"}${dependentScore}</strong>
+      </div>
+    </div>
+  `;
+}
+
 function refreshActiveSynergies() {
   if (!state) return [];
   state.activeSynergies = activeSynergiesFor(activeMemoryIds());
@@ -539,22 +630,29 @@ function renderSetupSynergies() {
     ui.echoList.textContent = "기억 태그를 조합하면 시너지가 열립니다.";
     return;
   }
+  const identity = buildIdentityFor(selectedMemories, null);
   const active = activeSynergiesFor(selectedMemories);
   const tags = selectedMemories.flatMap((id) => memories[id]?.tags || []);
   const tagText = [...new Set(tags)].map((tag) => `<span class="tag-chip">${tagLabel(tag)}</span>`).join("");
   const synergyText = active.length
     ? active.map((rule) => `<div class="echo-line"><strong>${rule.name}</strong><br>${rule.desc}</div>`).join("")
     : `<div class="echo-line">활성 시너지 없음</div>`;
-  ui.echoList.innerHTML = `<div class="tag-row">${tagText}</div>${synergyText}`;
+  ui.echoList.innerHTML = `${buildIdentityHtml(identity)}<div class="tag-row">${tagText}</div>${synergyText}`;
 }
 
 function startRun() {
   playtestMeta = currentPlaytestMeta();
   state = createRunState();
   refreshActiveSynergies();
+  state.logs.buildIdentity = buildIdentityFor(activeMemoryIds(), state);
+  state.logs.buildIdentitySeenBy90Sec = true;
   overlay.classList.remove("show");
   addLog(experiment.qaFastMode ? "QA fast mode: 검은 물이 빠르게 차오른다." : "검은 물 위로 기억이 떠올랐다.");
-  logEvent("run_start", { playtest: state.logs.playtest });
+  logEvent("run_start", {
+    playtest: state.logs.playtest,
+    buildIdentity: state.logs.buildIdentity,
+  });
+  writeIdentityQaResult({ status: "started" });
 }
 
 function addLog(text) {
@@ -1352,6 +1450,8 @@ function forgetMostDependent() {
   });
   applyEcho(forgotten.id);
   refreshActiveSynergies();
+  const buildIdentity = buildIdentityFor(activeMemoryIds(), state);
+  state.logs.buildIdentity = buildIdentity;
   renderEchoes();
   const cycle = {
     cycleIndex: state.runTimeline.currentBossIndex,
@@ -1378,6 +1478,7 @@ function forgetMostDependent() {
     echo: state.echo,
     echoTransformation: echoTransformationLog(forgotten.id),
     activeMemoryCount: activeMemoryCount(),
+    buildIdentity,
   });
   return forgotten;
 }
@@ -1533,12 +1634,15 @@ function applyMemoryRefill(id) {
   state.memories.push(memory);
   if (!state.metrics[id]) state.metrics[id] = createMetricSeed([id])[id];
   refreshActiveSynergies();
+  const buildIdentity = buildIdentityFor(activeMemoryIds(), state);
+  state.logs.buildIdentity = buildIdentity;
   const choice = {
     cycleIndex: state.runTimeline.currentBossIndex,
     t: Number(state.elapsed.toFixed(2)),
     memoryId: id,
     memoryName: memories[id].name,
     activeAfter: activeMemoryIds(),
+    buildIdentity,
   };
   state.runTimeline.refillChoices.push(choice);
   const cycle = state.runTimeline.cycles[state.runTimeline.cycles.length - 1];
@@ -1554,6 +1658,7 @@ function applyMemoryRefill(id) {
   addLog(`${memories[id].name} 기억이 빈 슬롯을 채웠다.`);
   addFloater("기억 보충", state.player.x, state.player.y - 34, "#6ddfd2");
   logEvent("memory_refilled", choice);
+  logEvent("build_identity_updated", { buildIdentity });
   updateUi();
   renderMemorySlots();
 }
@@ -1772,6 +1877,8 @@ function collectLogPayload() {
   state.logs.echoTransformation = state.forgotten ? echoTransformationLog(state.forgotten) : null;
   state.logs.death = state.death;
   state.logs.danger = dangerLog();
+  state.logs.buildIdentity = buildIdentityFor(activeMemoryIds(), state);
+  state.logs.buildIdentitySeenBy90Sec = Boolean(state.logs.buildIdentitySeenBy90Sec);
   return state.logs;
 }
 
@@ -1949,6 +2056,8 @@ function updateClarity() {
   state.memories.forEach((memory) => {
     memory.clarity = clamp(state.metrics[memory.id].score / maxScore, 0, 1);
   });
+  state.logs.buildIdentity = buildIdentityFor(activeMemoryIds(), state);
+  if (state.elapsed <= 90) state.logs.buildIdentitySeenBy90Sec = true;
 }
 
 function updateUi() {
@@ -1995,9 +2104,10 @@ function renderEchoes() {
     ui.echoList.textContent = "아직 남은 잔향이 없습니다.";
     return;
   }
+  const identity = buildIdentityFor(activeMemoryIds(), state);
   const lines = [];
   if (state.activeSynergies?.length) {
-    state.activeSynergies.forEach((rule) => lines.push(`시너지: ${rule.name}`));
+    state.activeSynergies.forEach((rule) => lines.push(`<strong>시너지: ${rule.name}</strong><br>${rule.desc}`));
   }
   if (state.tagEchoes?.length) {
     state.tagEchoes.forEach((echo) => lines.push(`태그 잔향: ${echo.memoryName} -> ${echo.tags.map(tagLabel).join("/")}`));
@@ -2022,7 +2132,8 @@ function renderEchoes() {
   if (growth.damageReduction) growthLines.push(`런 피해감소 +${percent(growth.damageReduction)}`);
   if (growth.xpGain) growthLines.push(`런 경험치 +${percent(growth.xpGain)}`);
   const allLines = [...growthLines, ...lines];
-  ui.echoList.innerHTML = allLines.length ? allLines.map((line) => `<div class="echo-line">${line}</div>`).join("") : "아직 남은 잔향이 없습니다.";
+  ui.echoList.innerHTML = `${buildIdentityHtml(identity)}${allLines.map((line) => `<div class="echo-line">${line}</div>`).join("")}`;
+  writeIdentityQaResult({ status: "visible" });
 }
 
 function draw() {
@@ -2590,11 +2701,53 @@ function startDeathQa() {
   }, 50);
 }
 
-if (experiment.qaFastMode || experiment.qaLevelupMode || experiment.qaV06Mode || experiment.qaDeathMode) {
+function writeIdentityQaResult(extra = {}) {
+  if (!experiment.qaIdentityMode) return;
+  const payload = state ? collectLogPayload() : null;
+  const identity = payload?.buildIdentity || buildIdentityFor(selectedMemories, state);
+  const visibleText = ui.echoList?.textContent || "";
+  document.documentElement.dataset.letheIdentityQa = JSON.stringify({
+    version: experiment.version,
+    hasState: Boolean(state),
+    elapsed: state ? Number(state.elapsed.toFixed(2)) : 0,
+    buildNameVisible: Boolean(identity?.buildName && visibleText.includes(identity.buildName)),
+    synergyVisible: identity?.activeSynergies?.length
+      ? identity.activeSynergies.some((rule) => visibleText.includes(rule.name))
+      : visibleText.includes("활성 시너지 없음"),
+    dependencyVisible: visibleText.includes(identity?.mostDependentMemory?.name || "전투 중 계산"),
+    hasBuildIdentityPayload: Boolean(payload?.buildIdentity?.buildName),
+    buildIdentitySeenBy90Sec: Boolean(payload?.buildIdentitySeenBy90Sec),
+    buildIdentity: identity,
+    visibleText,
+    ...extra,
+  });
+}
+
+function startIdentityQa() {
+  selectedWeapon = weapons.twin_blades.id;
+  selectedMemories = ["hungry_blades", "shatter_ripple", "stopped_second"];
+  renderSetup();
+  writeIdentityQaResult({ status: "setup_visible" });
+  setTimeout(() => {
+    if (!state) startRun();
+  }, 50);
+  setTimeout(() => {
+    const qa = JSON.parse(document.documentElement.dataset.letheIdentityQa || "{}");
+    const complete = qa.buildNameVisible
+      && qa.synergyVisible
+      && qa.dependencyVisible
+      && qa.hasBuildIdentityPayload
+      && qa.buildIdentitySeenBy90Sec;
+    writeIdentityQaResult({ status: complete ? "complete" : "failed" });
+  }, 650);
+}
+
+if (experiment.qaFastMode || experiment.qaLevelupMode || experiment.qaV06Mode || experiment.qaDeathMode || experiment.qaIdentityMode) {
   window.__letheQaLog = () => (state ? JSON.parse(JSON.stringify(collectLogPayload())) : null);
 }
 
 initSetup();
+if (experiment.qaIdentityMode) startIdentityQa();
 if (experiment.qaLevelupMode) startLevelupQa();
 if (experiment.qaV06Mode) startV06CycleQa();
 if (experiment.qaDeathMode) startDeathQa();

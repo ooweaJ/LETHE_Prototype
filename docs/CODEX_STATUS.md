@@ -4,7 +4,7 @@ Last updated: 2026-06-02
 
 ## Current Build
 
-- Project: LETHE HTML Alpha v0.9 release-feel loop preparation started.
+- Project: LETHE HTML Alpha v0.9 build-identity hook implemented.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
@@ -62,6 +62,13 @@ Last updated: 2026-06-02
   - added real death/run-end handling,
   - added `death` and `danger` JSON payload fields,
   - added `?qa=fast,death` death QA mode.
+- v0.9 Work Package 1 first implementation unit:
+  - browser label and experiment version moved to `v0.9`,
+  - memory selection cards show role, short combat description, and tag chips,
+  - setup side panel and combat HUD show current build name, active synergy, and most-dependent memory,
+  - JSON/event payloads include `buildIdentity` and `buildIdentitySeenBy90Sec`,
+  - AI raw-run payload `stage.build` includes `buildName`, `activeSynergyDetails`, and `mostDependentMemory`,
+  - `?qa=fast,identity` writes `data-lethe-identity-qa` for build identity QA.
 - AI alpha test tool under `alpha_test/`.
 - Codex/GPT/Claude workflow docs.
 - Markdown daily reports, generated HTML reports, and Discord report delivery.
@@ -244,10 +251,26 @@ npm run ai:sweep
   - `npm run dev:loop:dry`: passed,
   - `npm run doctor`: 38 pass, 0 warn, 0 fail,
   - `npm run doctor:deep`: 54 pass, 0 warn, 0 fail.
+- Autonomous dev loop first implementation attempt:
+  - started `node scripts/run_autonomous_dev_loop.js --iterations 1 --duration-minutes 90`,
+  - loop log: `docs/loop_runs/2026-06-02-devloop-170139.md`,
+  - implementation result: `docs/loop_runs/2026-06-02-devloop-170139-iteration-1-implement-result.md`,
+  - implemented v0.9 WP1 identity hook and UI/payload fields,
+  - nested Codex process did not return cleanly, so the loop was manually recovered,
+  - added nested Codex timeout option: `--codex-timeout-minutes` default `20`.
+- v0.9 WP1 identity hook verification:
+  - `node --check src/game.js`: passed,
+  - `node --check alpha_test/src/simulator.js`: passed,
+  - `npm run ai:test:quick`: `GO_CANDIDATE`, Alpha Fun Score `0.8883`,
+  - `npm run ai:test`: `GO_CANDIDATE`, Alpha Fun Score `0.8909`,
+  - feedback prompt: `docs/review_prompts/2026-06-02-autodev-feedback-1.md`,
+  - Claude feedback: `docs/review_responses/2026-06-02-autodev-feedback-1-claude.md`,
+  - Codex feedback: `docs/review_responses/2026-06-02-autodev-feedback-1-codex.md`,
+  - synthesis: `docs/review_responses/2026-06-02-autodev-feedback-1-double-check.md`.
 - Selected next implementation scope:
-  - v0.9 Work Package 1 only,
-  - make existing 6-memory build identity readable within 90 seconds,
-  - add current build name, active synergy, most-dependent memory, and JSON/AI identity hooks.
+  - keep v0.9 Work Package 1 open,
+  - next smallest task is a stable `?qa=fast,identity` browser/headless smoke test,
+  - do not move to WP2 post-loss challenge until identity UI/payload visibility is verified.
 - v0.9 adaptation focus:
   - visible build identity inside 90 seconds,
   - pressure highs and lows,
@@ -272,6 +295,13 @@ npm run ai:sweep
   - boss difficulty/late boss HP scaling was softened,
   - final quick/default/heavy runs all returned `GO_CANDIDATE`.
 - Latest AI test evidence:
+  - v0.9 identity hook verification:
+    - `npm run autopilot:preflight:local`: failed because existing untracked `docs/loop_runs/2026-06-02-devloop-170139*.md` files made the working tree dirty,
+    - `node --check src/game.js`: passed,
+    - `node --check alpha_test/src/simulator.js`: passed,
+    - quick raw-run payload confirmed `stage.build.buildName`, `stage.build.mostDependentMemory`, and `stage.build.activeSynergyDetails`,
+    - static hook check confirmed `buildIdentity`, `letheIdentityQa`, v0.9 labels, and build-card CSS are present,
+    - browser visual QA remains incomplete because the in-app Browser reported `iab` unavailable and Chrome headless `--dump-dom` returned empty output.
   - `npm run ai:test:quick`: `GO_CANDIDATE`, Alpha Fun Score `0.8883`, regret `80.8%`, irritation `1.0%`, prediction `85.5%`, death/fail `40.0%`.
   - `npm run ai:test`: `GO_CANDIDATE`, Alpha Fun Score `0.8909`, regret `81.6%`, irritation `0.7%`, prediction `85.1%`, death/fail `45.1%`.
   - `npm run ai:test:heavy`: `GO_CANDIDATE`, Alpha Fun Score `0.8893`, regret `81.8%`, irritation `0.8%`, prediction `84.8%`, death/fail `67.7%`.
@@ -307,11 +337,14 @@ npm run ai:sweep
 
 ## Next Codex Tasks
 
-- v0.8 Gate C is the current product gate.
+- v0.9 Work Package 1 remains the current product gate until browser evidence confirms build identity is visible within 90 seconds.
+- Verify `?qa=fast,identity` in a stable browser/headless runner.
+- Resolve the dirty working tree before unattended automation:
+  - existing untracked files: `docs/loop_runs/2026-06-02-devloop-170139-iteration-1-implement-prompt.md`, `docs/loop_runs/2026-06-02-devloop-170139.md`,
+  - next command before unattended automation: clean, commit, stash, ignore, or intentionally run with `--allow-dirty` from a trusted local terminal.
 - On another local machine, run `npm run doctor` first; run `npm run doctor:deep` before leaving Codex to continue unattended.
 - Before an unattended implement -> Claude feedback -> implement loop, run `npm run autopilot:preflight`.
 - Do not describe AI proxy metrics as real balance feedback.
 - Use Claude + Codex CLI double check for major planning changes.
 - Before reporting balance, separate AI simulator evidence, browser flow QA evidence, and user play evidence.
-- Add a stable browser combat QA runner for v0.8 Gate C.
-- Do not request user 1-person playtest until Gate C can show the HTML flow is executable and the AI simulator stays in `GO_CANDIDATE`.
+- Do not request user 1-person playtest until v0.9 has browser-visible build identity, pressure rhythm, and post-loss challenge evidence.
