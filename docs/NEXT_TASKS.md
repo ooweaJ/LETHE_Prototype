@@ -20,7 +20,7 @@
 - Actual automation proof for this turn: Discord work-unit report sent successfully, Claude v0.7 prompt sent successfully, Claude response saved successfully.
 - Project direction: HTML prototype validation first, Unity implementation later only if AI/human tests show enough promise.
 - v0.9 direction: broad human testing remains paused until the HTML prototype has stronger release-like build identity, pressure rhythm, post-loss challenge, and visible tactical agency.
-- Latest devloop feedback verdict: WP1 copy compression is implemented and AI-stable, but `docs/loop_runs/2026-06-02-devloop-173350*.md` preflight blockers and trusted-local identity QA revalidation must be handled before WP2 or unattended automation.
+- Latest devloop feedback verdict: the `2026-06-02-devloop-175642` automation prompt cleanup is valid, WP1 should not be reopened for new gameplay work, and the next executable scope remains gate cleanup: record/track current loop-run outputs and rerun trusted-local `npm run qa:identity` before WP2 or unattended automation.
 - Reference research: `docs/research/2026-06-02-roguelike-reference.md`.
 - New v0.9 prompt: `docs/review_prompts/2026-06-02-v09-release-feel-loop.md`.
 - Overnight loop command:
@@ -170,7 +170,15 @@
   - 공통점: trusted local에서 `npm run qa:identity`를 재확인해야 한다.
   - 충돌: Claude는 WP2 압박 고저차를 먼저 검증하고 post-loss challenge를 보류하자고 했고, Codex CLI는 최소 post-loss challenge를 다음 구현으로 제안했다.
   - 선택: preflight 정리와 identity QA를 먼저 처리한 뒤, WP2는 압박 고저차를 첫 slice로 시작한다. post-loss challenge는 WP2 안의 최소 후속 작업으로만 유지한다.
-- [ ] 미추적 `docs/loop_runs/2026-06-02-devloop-173350*.md` 파일을 커밋/정리/ignore 중 하나로 처리해 `npm run autopilot:preflight:local` blocker를 제거한다.
+- [x] 자동 개발 루프 구현 프롬프트가 완료된 WP1에 계속 고정되지 않도록 `scripts/run_autonomous_dev_loop.js`의 WP1 하드코딩을 제거했다.
+- [x] 기존 `docs/loop_runs/2026-06-02-devloop-173350*.md` 파일은 현재 git 추적 상태임을 확인했다.
+- [x] `2026-06-02-devloop-175642` Claude/Codex 피드백 공통점과 충돌을 정리했다.
+  - 공통점: WP1은 새 게임플레이 작업으로 재오픈하지 않는다. 이번 구현은 완료된 WP1을 반복 선택하지 않게 하는 자동화 프롬프트 정리로 적절하다.
+  - 공통점: AI quick 결과는 `GO_CANDIDATE`, Alpha Fun Score `0.8883`, low irritation, hard fail 없음으로 planning 기준은 안정적이다.
+  - 공통점: 현재 `docs/loop_runs/2026-06-02-devloop-175642*` 산출물 정리와 trusted-local `npm run qa:identity` 재확인이 다음 blocker다.
+  - 충돌: Claude는 `qa:identity` 통과 후 사람 테스트 체크리스트를 만들고 `GO_TO_HUMAN_TEST`로 가자고 했고, Codex CLI는 WP2 진입 게이트 정리 후 WP2 Slice A 압박 리듬을 먼저 권장했다.
+  - 선택: 이번 사이클은 docs-only update로 닫는다. 다음 실행 작업은 loop-run 산출물 기록/정리와 trusted-local identity QA이며, 그 뒤에는 사용자가 바꾸지 않는 한 기존 순서대로 WP2 Slice A 압박 고저차를 시작한다.
+- [ ] 현재 루프가 생성한 `docs/loop_runs/2026-06-02-devloop-175642*.md` 파일을 wrapper가 커밋하거나, 다음 unattended loop 전에 정리해 `npm run autopilot:preflight:local` blocker를 제거한다.
 - [ ] trusted local에서 `npm run qa:identity`를 재실행하고 `status: complete`, failures `[]`를 확인한다.
 - [ ] v0.9 Work Package 2 Slice A: 전투 구간별 압박 고저차를 구현한다.
 - [ ] v0.9 Work Package 2 Slice B: 압박 고저차 검증 후 기존 전투 파라미터만 써서 최소 post-loss challenge를 구현한다.

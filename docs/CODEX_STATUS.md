@@ -8,7 +8,7 @@ Last updated: 2026-06-02
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
-- Latest task-update status: docs-only synthesis completed for `2026-06-02-devloop-173350-feedback-1`; WP1 remains implemented, but WP2 should wait for preflight cleanup and trusted-local identity QA revalidation.
+- Latest task-update status: docs-only synthesis completed for `2026-06-02-devloop-175642-feedback-1`; WP1 remains implemented, the automation prompt cleanup is accepted, and the next executable scope remains loop-run cleanup plus trusted-local identity QA before WP2 or unattended automation.
 
 ## Implemented
 
@@ -88,6 +88,7 @@ Last updated: 2026-06-02
 - Test-result planning pipeline via `npm run planning:pipeline`, with Claude first and Codex CLI fallback.
 - Local pipeline doctor via `npm run doctor` and `npm run doctor:deep`.
 - Autopilot readiness preflight via `npm run autopilot:preflight`, `npm run autopilot:preflight:local`, and `npm run autopilot:preflight:dry`.
+- Autonomous dev loop prompt cleanup: `scripts/run_autonomous_dev_loop.js` now points nested Codex at the foremost unfinished v0.9 item in `docs/NEXT_TASKS.md` instead of hard-coding v0.9 WP1.
 - AI collaboration portfolio docs under `docs/ai/`, `docs/adr/`, and `docs/portfolio/`.
 - Human playtest summary automation via `npm run playtest:summary`.
 - Human playtest package generation via `npm run playtest:package`.
@@ -342,6 +343,14 @@ npm run ai:sweep
   - common conclusion: WP1 copy compression is implemented and AI-stable, but unattended automation is blocked by untracked loop-run files and identity QA should be rerun from trusted local,
   - conflict: Claude wants WP2 pressure high/low before post-loss challenge, while Codex CLI proposed a minimal post-loss challenge first,
   - selected order: preflight cleanup, trusted-local `npm run qa:identity`, then WP2 Slice A pressure rhythm; post-loss challenge remains a minimal WP2 follow-up.
+- Latest devloop feedback synthesis for prompt cleanup:
+  - prompt: `docs/review_prompts/2026-06-02-devloop-175642-feedback-1.md`,
+  - Claude response: `docs/review_responses/2026-06-02-devloop-175642-feedback-1-claude.md`,
+  - Codex CLI response: `docs/review_responses/2026-06-02-devloop-175642-feedback-1-codex.md`,
+  - synthesis: `docs/review_responses/2026-06-02-devloop-175642-feedback-1-double-check.md`,
+  - common conclusion: prompt cleanup was appropriate, WP1 should not be reopened for new gameplay work, AI proxy evidence remains planning-stable, and dirty loop-run outputs plus trusted-local identity QA are the next blockers,
+  - conflict: Claude recommends `GO_TO_HUMAN_TEST` after identity QA with a human-test checklist, while Codex CLI recommends gate cleanup followed by WP2 Slice A pressure rhythm before people testing,
+  - selected order: docs-only update in this pass, then record/track `2026-06-02-devloop-175642*` outputs, rerun trusted-local `npm run qa:identity`, and keep the existing `NEXT_TASKS.md` WP2 Slice A order unless the user overrides it.
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the v0.5 level-up flow and `runGrowth` payload.
 - Planning pipeline prompt generated: `docs/review_prompts/2026-06-02-pipeline.md`.
@@ -373,11 +382,12 @@ npm run ai:sweep
 ## Next Codex Tasks
 
 - v0.9 Work Package 1 implementation is complete: identity hook, identity QA runner, and compressed existing-memory card copy are all in place.
-- Docs-only loop update completed for the latest Claude/Codex feedback synthesis: `docs/NEXT_TASKS.md`, `docs/CODEX_STATUS.md`, devlog, and report now reflect the selected order.
+- Docs-only loop update completed for the latest `2026-06-02-devloop-175642-feedback-1` Claude/Codex synthesis: `docs/NEXT_TASKS.md`, `docs/CODEX_STATUS.md`, devlog, report, and the double-check summary now reflect the selected order.
+- Current dev-loop prompt cleanup is implemented: future nested implementation prompts should not keep re-selecting WP1 after WP1 is complete.
 - Before starting unattended automation or treating WP1 as a fresh browser-verification pass, rerun `npm run qa:identity` from a trusted local terminal because this Codex session hit a Chrome CDP pipe timeout.
 - Next implementation candidate after that verification is v0.9 Work Package 2 Slice A: pressure rhythm/high-low pacing. Minimal post-loss challenge follows only after that slice is verified.
 - Resolve the dirty working tree before unattended automation:
-  - existing untracked files: `docs/loop_runs/2026-06-02-devloop-173350-iteration-1-implement-prompt.md`, `docs/loop_runs/2026-06-02-devloop-173350.md`,
+  - existing untracked files are current wrapper outputs such as `docs/loop_runs/2026-06-02-devloop-175642.md` and `docs/loop_runs/2026-06-02-devloop-175642-iteration-1-implement-prompt.md` until the wrapper records them,
   - next command before unattended automation: clean, commit, stash, ignore, or intentionally run with `--allow-dirty` from a trusted local terminal.
 - On another local machine, run `npm run doctor` first; run `npm run doctor:deep` before leaving Codex to continue unattended.
 - Before an unattended implement -> Claude feedback -> implement loop, run `npm run autopilot:preflight`.
