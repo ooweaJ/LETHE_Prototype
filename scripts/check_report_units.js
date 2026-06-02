@@ -34,6 +34,12 @@ headings.forEach((heading, index) => {
     return;
   }
 
+  const title = match[2].trim();
+  const titleIssue = enforceTitlePolicy(date) ? reportTitleIssue(title) : '';
+  if (titleIssue) {
+    errors.push(`${heading.lineNumber}: report unit title is too small/procedural: "${title}" (${titleIssue})`);
+  }
+
   const number = Number(match[1]);
   if (number !== previousNumber + 1) {
     errors.push(`${heading.lineNumber}: expected unit ${String(previousNumber + 1).padStart(2, '0')}, got ${match[1]}`);
@@ -41,7 +47,7 @@ headings.forEach((heading, index) => {
   previousNumber = number;
   units.push({
     number: match[1],
-    title: match[2],
+    title,
   });
 });
 
@@ -89,6 +95,25 @@ function reportDate(filePath) {
     process.exit(1);
   }
   return match[1];
+}
+
+function reportTitleIssue(title) {
+  const value = String(title || '').trim();
+  const bannedPatterns = [
+    { pattern: /feedback-\d+\s*태스크\s*갱신/i, reason: 'feedback update should be folded into the feature/decision report unit' },
+    { pattern: /devloop\s+\d+\s+feedback-\d+/i, reason: 'loop feedback is an internal step, not a report unit' },
+    { pattern: /자동\s*개발\s*루프\s*\d+차/i, reason: 'loop iteration is a commit/log unit, not a report unit' },
+    { pattern: /구현\s*결과$/i, reason: 'implementation result should include verification and feedback before reporting' },
+    { pattern: /태스크\s*갱신$/i, reason: 'task update should be folded into the feature/decision report unit' },
+    { pattern: /qa\s*재시도\s*\d*회?/i, reason: 'single QA retry is too small for a report unit' },
+  ];
+
+  const match = bannedPatterns.find((entry) => entry.pattern.test(value));
+  return match ? match.reason : '';
+}
+
+function enforceTitlePolicy(reportDay) {
+  return reportDay >= '2026-06-03';
 }
 
 function latestMarkdownReport() {

@@ -35,6 +35,7 @@
 - Latest trusted post-loss gate logging: `npm run qa:postloss:trusted` now writes `alpha_test/outputs/postloss-trusted-gate/latest.json` with `status`, `transportFailure`, run summaries, `nextCommand`, and `blockerPrompt`. The latest managed-sandbox run still produced `status: blocked`, `transportFailure: true`, so this is only gate evidence cleanup, not browser proof.
 - Latest devloop feedback-193946-feedback-6 verdict: `ITERATE_BEFORE_TEST`. Claude and Codex agree the JSON logging change is scope-valid QA evidence cleanup and that the positive AI proxy remains planning evidence only. There is no material next-scope conflict: the next executable unit remains sandbox 밖 trusted-local `npm run qa:postloss:trusted`; WP3 Slice A, people testing, balance changes, and UI/gameplay expansion stay blocked until browser proof passes or the existing environment-blocker prompt produces an explicit decision.
 - Reporting rule update: work reports now use numbered unit headings like `# 2026-06-02-44 - 보고서 단위 번호 체계`; `npm run report` also splits those sections into `docs/reports/units/YYYY-MM-DD/*.md` and `*.html`, `npm run report:check` verifies the generated unit files, and Discord latest-section reports attach the latest unit HTML instead of the full daily HTML.
+- Reporting unit size update: report units should now be feature/decision-sized, not loop-step-sized. The autonomous dev loop reports once after implementation, verification, feedback, and task update are folded together; `npm run report:check` rejects procedural titles such as `Feedback-N 태스크 갱신`, `자동 개발 루프 N차`, and single QA retry titles.
 - Reference research: `docs/research/2026-06-02-roguelike-reference.md`.
 - New v0.9 prompt: `docs/review_prompts/2026-06-02-v09-release-feel-loop.md`.
 - Overnight loop command:
@@ -115,6 +116,11 @@
   - `npm run report`
   - `npm run report:check`
   - `node scripts/send_discord_report.js --dry-run --latest-section`
+- [x] 보고 단위를 기능/결정 단위로 키운다.
+  - 루프가 구현 직후와 피드백 직후에 두 번 보고/Discord를 보내던 흐름을 피드백+태스크 갱신 이후 한 번으로 줄였다.
+  - 구현 프롬프트에는 루틴 회차에서 보고 단위를 만들지 말고, 독립 기능/결정이 완결된 예외에서만 보고하라고 명시했다.
+  - task-update 프롬프트에는 구현+검증+피드백+다음 결정을 한 보고 단위에 묶으라고 명시했다.
+  - `npm run report:check`가 `Feedback-N 태스크 갱신`, `자동 개발 루프 N차`, `구현 결과`, 단일 QA 재시도 같은 작은 절차 제목을 막는다.
 
 - [x] 브라우저에서 v0.2 화면 QA를 한다.
 - [x] 결과 화면에서 텍스트가 겹치지 않는지 확인한다.

@@ -8,7 +8,7 @@ Last updated: 2026-06-03
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
-- Latest task-update status: report delivery has been corrected from "numbered sections inside one large daily report only" to "numbered daily sections plus generated per-unit Markdown/HTML files." `npm run report` now writes `docs/reports/units/YYYY-MM-DD/`, `npm run report:check` verifies those unit files, and Discord latest-section delivery attaches the latest unit HTML instead of the full daily HTML. WP2 Slice B remains implementation-complete but not browser-proven; WP3, people testing, balance changes, and UI/gameplay expansion remain blocked until trusted-local `npm run qa:postloss:trusted` passes or an explicit environment-blocker decision exists.
+- Latest task-update status: report delivery now uses larger feature/decision units instead of tiny loop-step units. The autonomous dev loop no longer sends a report/Discord attachment immediately after implementation; it reports once after implementation, verification, Claude/Codex feedback, and task update are folded together. `npm run report:check` now rejects procedural report titles such as `Feedback-N 태스크 갱신`, `자동 개발 루프 N차`, or single QA retries. WP2 Slice B remains implementation-complete but not browser-proven; WP3, people testing, balance changes, and UI/gameplay expansion remain blocked until trusted-local `npm run qa:postloss:trusted` passes or an explicit environment-blocker decision exists.
 
 ## Implemented
 
@@ -107,6 +107,10 @@ Last updated: 2026-06-03
   - `docs/reports/units/YYYY-MM-DD/latest.json` records the latest unit,
   - `node scripts/send_discord_report.js --latest-section` now attaches the latest unit HTML rather than the full daily HTML,
   - `npm run report:check` verifies headings and generated unit files.
+- Larger report-unit policy:
+  - report units should describe a feature, gate, or decision,
+  - one report unit should include implementation, verification, feedback, and next-task decision,
+  - commit/log units may stay small, but Discord/report units should not be `Feedback-N 태스크 갱신` or loop-step titles.
 - Short Discord status notices for Codex work.
 - Claude Code planning-iteration automation for interpreting AI/human test results and deciding next design direction.
 - Test-result planning pipeline via `npm run planning:pipeline`, with Claude first and Codex CLI fallback.
