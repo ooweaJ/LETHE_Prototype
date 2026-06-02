@@ -4,11 +4,11 @@ Last updated: 2026-06-03
 
 ## Current Build
 
-- Project: LETHE HTML Alpha v0.9 WP2 Slice B minimal post-loss challenge implemented.
+- Project: LETHE HTML Alpha v0.9 WP2 Slice B minimal post-loss challenge browser-proven.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
-- Latest task-update status: historical reports now follow the larger feature/decision unit policy too. `docs/reports/2026-06-02.md` was compressed from 57 tiny loop-step units into 13 feature/gate/decision units, and its generated unit files were regenerated. The autonomous dev loop reports once after implementation, verification, Claude/Codex feedback, and task update are folded together. `npm run report:check` rejects procedural report titles from 2026-06-03 onward. WP2 Slice B remains implementation-complete but not browser-proven; WP3, people testing, balance changes, and UI/gameplay expansion remain blocked until trusted-local `npm run qa:postloss:trusted` passes or an explicit environment-blocker decision exists.
+- Latest task-update status: `npm run qa:postloss:trusted` passed on this local run after a QA cleanup fix, so WP2 Slice B can now be treated as browser-proven. Historical reports also follow the larger feature/decision unit policy: `docs/reports/2026-06-02.md` was compressed from 57 tiny loop-step units into 13 feature/gate/decision units, and its generated unit files were regenerated. The autonomous dev loop reports once after implementation, verification, Claude/Codex feedback, and task update are folded together. `npm run report:check` rejects procedural report titles from 2026-06-03 onward. The next gameplay scope is v0.9 WP3 Slice A: a minimal tactical agency hook using only the current memories/combat loop.
 
 ## Implemented
 
@@ -170,10 +170,10 @@ Heavy check:
 
 Remaining note:
 
-- v0.9 WP2 now has both pre-loss pressure rhythm and a minimal post-loss challenge proxy.
-- The current browser automation channel failed before gameplay evaluation: CDP pipe timed out at `Target.getTargets`, and the remote-debugging-port fallback cannot bind `127.0.0.1` in this managed sandbox. The latest trusted gate run wrote `alpha_test/outputs/postloss-trusted-gate/latest.json` with `status: blocked` and `transportFailure: true`. Rerun `npm run qa:postloss:trusted` on a trusted local before treating this as browser-proven.
+- v0.9 WP2 now has both pre-loss pressure rhythm and a minimal post-loss challenge.
+- `npm run qa:postloss:trusted` passed in this local run after making Chrome temp-profile cleanup retryable. The browser QA reached `status: complete`, `failures: []`, confirmed `deficit_breath` and `deficit_trial`, completed the post-loss challenge, and restored 3 active memories after refill.
 - AI proxy evidence remains a planning pass only, not human emotion or Unity-transition proof.
-- Latest feedback-6 synthesis found no material next-scope conflict: keep the next executable unit limited to sandbox-outside trusted-local `npm run qa:postloss:trusted`, which already encodes the standard run, one 30000 ms transport retry, JSON result logging, and blocker-prompt handoff. Use `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md` before any WP3 or people-test step if the same transport failure repeats outside this sandbox.
+- WP3 Slice A is now unblocked for one minimal tactical agency hook using only existing memories, existing slots, and the current combat loop. People testing still waits until WP3 and verification are recorded.
 
 ## Latest Sweep Note
 

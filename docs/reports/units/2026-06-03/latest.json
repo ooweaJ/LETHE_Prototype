@@ -1,11 +1,11 @@
 {
   "source": "docs/reports/2026-06-03.md",
-  "generatedAt": "2026-06-02T17:56:18.509Z",
-  "unitCount": 3,
+  "generatedAt": "2026-06-02T19:59:55.969Z",
+  "unitCount": 4,
   "latest": {
-    "title": "2026-06-03-03 - 2026-06-02 보고서 압축",
-    "number": "03",
-    "markdownPath": "docs/reports/units/2026-06-03/2026-06-03-03-2026-06-02-보고서-압축.md",
-    "htmlPath": "docs/reports/units/2026-06-03/2026-06-03-03-2026-06-02-보고서-압축.html"
+    "title": "2026-06-03-04 - Post-loss 브라우저 게이트 통과와 루프 종료 기준",
+    "number": "04",
+    "markdownPath": "docs/reports/units/2026-06-03/2026-06-03-04-post-loss-브라우저-게이트-통과와-루프-종료-기준.md",
+    "htmlPath": "docs/reports/units/2026-06-03/2026-06-03-04-post-loss-브라우저-게이트-통과와-루프-종료-기준.html"
   }
 }

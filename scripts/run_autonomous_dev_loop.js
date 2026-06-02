@@ -66,6 +66,15 @@ function main() {
       commitAndMaybePush(iteration);
     }
 
+    if (options.stopWhenSatisfied) {
+      const quality = readCompletionQuality();
+      logQualityCheck(iteration, quality);
+      if (quality.satisfied) {
+        sendNotice('done', '자동 개발 루프 기준 만족', quality.summary, path.relative(process.cwd(), runLogPath), { record: false });
+        break;
+      }
+    }
+
     if (iteration < options.iterations && options.sleepMinutes > 0) {
       log(`\nSleeping ${options.sleepMinutes} minute(s).\n`);
       sleep(options.sleepMinutes * 60 * 1000);
@@ -111,6 +120,7 @@ function printDryRun() {
     options.noDiscord ? 'skip Discord work-unit report' : 'node scripts/send_discord_report.js --latest-section',
     options.commit ? 'git add + git commit' : 'skip commit',
     options.push ? 'git push' : 'skip push',
+    options.stopWhenSatisfied ? 'stop when quality criteria are satisfied' : 'stop only by iterations/duration/blocker',
   ];
 
   console.log('LETHE autonomous dev loop dry-run');
@@ -360,6 +370,42 @@ function commitAndMaybePush(iteration) {
   }
 }
 
+function readCompletionQuality() {
+  const summary = readJsonIfExists('alpha_test/outputs/quick/summary.json') || {};
+  const postLossGate = readJsonIfExists('alpha_test/outputs/postloss-trusted-gate/latest.json') || {};
+  const metrics = summary.headlineMetrics || {};
+  const gate = summary.gate || {};
+  const checks = [
+    qualityCheck('AI verdict GO_CANDIDATE', gate.verdict === 'GO_CANDIDATE', gate.verdict || 'missing'),
+    qualityCheck('Alpha Fun Score >= target', Number(gate.alphaFunScore) >= options.targetAlphaFun, `${gate.alphaFunScore ?? 'missing'} / ${options.targetAlphaFun}`),
+    qualityCheck('Early choice interest >= target', Number(metrics.earlyChoiceInterest) >= options.targetEarlyChoiceInterest, `${metrics.earlyChoiceInterest ?? 'missing'} / ${options.targetEarlyChoiceInterest}`),
+    qualityCheck('Post-loss challenge contrast >= target', Number(metrics.postLossChallengeContrast) >= options.targetPostLossContrast, `${metrics.postLossChallengeContrast ?? 'missing'} / ${options.targetPostLossContrast}`),
+    qualityCheck('Irritation <= target', Number(metrics.irritationRate) <= options.targetIrritationRate, `${metrics.irritationRate ?? 'missing'} / ${options.targetIrritationRate}`),
+    qualityCheck('Post-loss browser gate passed', postLossGate.status === 'passed', postLossGate.status || 'missing'),
+  ];
+  const failed = checks.filter((check) => !check.pass);
+  return {
+    checks,
+    failed,
+    satisfied: failed.length === 0,
+    summary: failed.length
+      ? `미달 기준: ${failed.map((check) => check.name).join(', ')}`
+      : 'AI/브라우저 기준이 모두 만족되었습니다.',
+  };
+}
+
+function qualityCheck(name, pass, value) {
+  return { name, pass: Boolean(pass), value };
+}
+
+function logQualityCheck(iteration, quality) {
+  log(`\n### completion quality check ${iteration}\n\n`);
+  quality.checks.forEach((check) => {
+    log(`- ${check.pass ? 'PASS' : 'FAIL'} ${check.name}: ${check.value}\n`);
+  });
+  log(`\n${quality.satisfied ? 'Completion criteria satisfied.' : quality.summary}\n`);
+}
+
 function sendWorkUnitReport() {
   if (options.noDiscord) return;
   const command = options.discordDryRun
@@ -483,6 +529,11 @@ function parseArgs(args) {
     provider: 'double',
     push: true,
     sleepMinutes: 0,
+    stopWhenSatisfied: false,
+    targetAlphaFun: 0.89,
+    targetEarlyChoiceInterest: 0.72,
+    targetIrritationRate: 0.03,
+    targetPostLossContrast: 0.30,
   };
 
   for (let index = 0; index < args.length; index += 1) {
@@ -495,6 +546,7 @@ function parseArgs(args) {
     else if (arg === '--no-commit') parsed.commit = false;
     else if (arg === '--no-discord') parsed.noDiscord = true;
     else if (arg === '--no-push') parsed.push = false;
+    else if (arg === '--stop-when-satisfied') parsed.stopWhenSatisfied = true;
     else if (arg === '--date') parsed.date = args[++index] || '';
     else if (arg.startsWith('--date=')) parsed.date = arg.slice('--date='.length);
     else if (arg === '--duration-minutes') parsed.durationMinutes = positiveInteger(args[++index], 'duration-minutes');
@@ -511,6 +563,14 @@ function parseArgs(args) {
     else if (arg.startsWith('--sandbox=')) parsed.codexSandbox = normalizeSandbox(arg.slice('--sandbox='.length));
     else if (arg === '--sleep-minutes') parsed.sleepMinutes = nonNegativeNumber(args[++index], 'sleep-minutes');
     else if (arg.startsWith('--sleep-minutes=')) parsed.sleepMinutes = nonNegativeNumber(arg.slice('--sleep-minutes='.length), 'sleep-minutes');
+    else if (arg === '--target-alpha-fun') parsed.targetAlphaFun = nonNegativeNumber(args[++index], 'target-alpha-fun');
+    else if (arg.startsWith('--target-alpha-fun=')) parsed.targetAlphaFun = nonNegativeNumber(arg.slice('--target-alpha-fun='.length), 'target-alpha-fun');
+    else if (arg === '--target-early-choice-interest') parsed.targetEarlyChoiceInterest = nonNegativeNumber(args[++index], 'target-early-choice-interest');
+    else if (arg.startsWith('--target-early-choice-interest=')) parsed.targetEarlyChoiceInterest = nonNegativeNumber(arg.slice('--target-early-choice-interest='.length), 'target-early-choice-interest');
+    else if (arg === '--target-irritation-rate') parsed.targetIrritationRate = nonNegativeNumber(args[++index], 'target-irritation-rate');
+    else if (arg.startsWith('--target-irritation-rate=')) parsed.targetIrritationRate = nonNegativeNumber(arg.slice('--target-irritation-rate='.length), 'target-irritation-rate');
+    else if (arg === '--target-postloss-contrast') parsed.targetPostLossContrast = nonNegativeNumber(args[++index], 'target-postloss-contrast');
+    else if (arg.startsWith('--target-postloss-contrast=')) parsed.targetPostLossContrast = nonNegativeNumber(arg.slice('--target-postloss-contrast='.length), 'target-postloss-contrast');
     else fail(`Unknown option: ${arg}`);
   }
 

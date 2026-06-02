@@ -33,7 +33,7 @@
 - Latest devloop feedback-193946-feedback-4 verdict: `ITERATE_BEFORE_TEST`. Claude and Codex agree the port fallback hardening is scope-valid QA/gate work and the AI proxy remains positive planning evidence only. There is no material next-scope conflict: WP2 Slice B is implementation-complete but not browser-proven, so the next executable unit remains sandbox 밖 trusted-local `npm run qa:postloss`; if the same transport failure repeats, retry once with `--timeout-ms 30000`, then use `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md` before WP3 or people testing.
 - Latest devloop feedback-193946-feedback-5 verdict: `ITERATE_BEFORE_TEST`. Claude and Codex agree the trusted post-loss wrapper is scope-valid gate tooling and that AI proxy metrics remain a positive planning pass only. There is no material scope conflict: the next executable unit is sandbox 밖 trusted-local `npm run qa:postloss:trusted`; WP3 Slice A, people testing, and any balance/UI/gameplay expansion remain blocked until browser proof passes or `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md` produces an explicit environment decision.
 - Latest trusted post-loss gate logging: `npm run qa:postloss:trusted` now writes `alpha_test/outputs/postloss-trusted-gate/latest.json` with `status`, `transportFailure`, run summaries, `nextCommand`, and `blockerPrompt`. The latest managed-sandbox run still produced `status: blocked`, `transportFailure: true`, so this is only gate evidence cleanup, not browser proof.
-- Latest devloop feedback-193946-feedback-6 verdict: `ITERATE_BEFORE_TEST`. Claude and Codex agree the JSON logging change is scope-valid QA evidence cleanup and that the positive AI proxy remains planning evidence only. There is no material next-scope conflict: the next executable unit remains sandbox 밖 trusted-local `npm run qa:postloss:trusted`; WP3 Slice A, people testing, balance changes, and UI/gameplay expansion stay blocked until browser proof passes or the existing environment-blocker prompt produces an explicit decision.
+- Latest post-loss browser proof: `npm run qa:postloss:trusted` passed on the current local run after Chrome temp-profile cleanup was made retryable. WP2 Slice B is now browser-proven; the next executable gameplay scope is v0.9 WP3 Slice A, limited to one minimal tactical agency hook using only existing memories, slots, and combat systems.
 - Reporting rule update: work reports now use numbered unit headings like `# 2026-06-02-44 - 보고서 단위 번호 체계`; `npm run report` also splits those sections into `docs/reports/units/YYYY-MM-DD/*.md` and `*.html`, `npm run report:check` verifies the generated unit files, and Discord latest-section reports attach the latest unit HTML instead of the full daily HTML.
 - Reporting unit size update: report units should now be feature/decision-sized, not loop-step-sized. The autonomous dev loop reports once after implementation, verification, feedback, and task update are folded together; `npm run report:check` rejects procedural titles such as `Feedback-N 태스크 갱신`, `자동 개발 루프 N차`, and single QA retry titles.
 - Historical report cleanup: `docs/reports/2026-06-02.md` was compressed from 57 small units to 13 feature/gate/decision units. Generated files under `docs/reports/units/2026-06-02/` were regenerated to match.
@@ -348,11 +348,11 @@
   - pipe/port Chrome launch args를 공통화하고 `--disable-dev-shm-usage`, `--no-sandbox`를 추가했다.
   - 검증: `node --check scripts/run_browser_pressure_qa.js` 통과.
   - 재검증: `npm run qa:postloss`, `npm run qa:postloss -- --timeout-ms 30000` 모두 gameplay evaluation 전 transport blocker로 실패했다.
-- [ ] sandbox 밖 trusted local에서 `npm run qa:postloss:trusted`를 실행하고 `alpha_test/outputs/postloss-trusted-gate/latest.json` 결과를 기록한다.
+- [x] sandbox 밖 trusted local에서 `npm run qa:postloss:trusted`를 실행하고 `alpha_test/outputs/postloss-trusted-gate/latest.json` 결과를 기록한다.
   - 통과 기준: `status: passed` 또는 동등한 non-blocked browser gameplay proof.
-  - gameplay assertion 실패 시: post-loss QA/flow 문제 하나만 고친다.
-  - 동일 transport blocker 반복 시: 새 gameplay 작업 없이 `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md`로 environment-blocker 판단을 받는다.
-- [ ] v0.9 Work Package 3 Slice A: 자동전투 안의 작은 tactical agency를 구현한다. 단, `npm run qa:postloss:trusted`가 trusted local에서 통과하거나 environment-blocker decision이 먼저 기록된 뒤에만 시작한다.
+  - 결과: `status: passed`, browser QA `status: complete`, failures `[]`.
+  - 확인: `deficit_breath`, `deficit_trial`, post-loss challenge completion, refill after 2-memory deficit.
+- [ ] v0.9 Work Package 3 Slice A: 자동전투 안의 작은 tactical agency를 구현한다.
   - 기존 활성 기억 중 1개를 짧게 집중시키는 선택만 허용한다.
   - 새 기억, 새 슬롯, 상점, 메타 성장, 새 지역, 새 적, 새 무기 추가는 금지한다.
   - 목표 지표는 `earlyChoiceInterest > 0.72`, `postLossChallengeContrast >= 0.30`, 낮은 irritation 유지다.

@@ -306,6 +306,72 @@
 <li>Action: compressed 57 historical units into 13 functional units.</li>
 <li>Result: the report now shows the actual project arc instead of every loop mechanic.</li>
 </ul>
+<h1>2026-06-03-04 - Post-loss 브라우저 게이트 통과와 루프 종료 기준</h1>
+<h2>1. Current build status</h2>
+<ul>
+<li>LETHE HTML Alpha remains v0.9.</li>
+<li>WP2 Slice B is now browser-proven, not only implementation-complete.</li>
+<li>WP3 Slice A is unblocked for one minimal tactical agency hook using only existing memories, existing slots, and the current combat loop.</li>
+</ul>
+<h2>2. What changed today</h2>
+<ul>
+<li>Fixed a QA cleanup issue in <code>scripts/run_browser_pressure_qa.js</code>.</li>
+<li>Chrome is now stopped before temp-profile cleanup, and temp-profile cleanup is retried.</li>
+<li>Added <code>--stop-when-satisfied</code> support to <code>scripts/run_autonomous_dev_loop.js</code>.</li>
+<li>The autonomous loop can now stop when quality criteria are met instead of only by iteration or duration limits.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li>First <code>npm run qa:postloss:trusted</code> rerun reached browser QA <code>status: complete</code> with failures <code>[]</code>, but exited nonzero because Chrome temp-profile cleanup hit <code>ENOTEMPTY</code>.</li>
+<li><code>node --check scripts/run_browser_pressure_qa.js</code>: passed.</li>
+<li>Second <code>npm run qa:postloss:trusted</code>: passed.</li>
+<li>Browser QA evidence:</li>
+<li>version <code>v0.9</code>,</li>
+<li>post-loss challenge count <code>1</code>,</li>
+<li><code>deficit_breath</code> present,</li>
+<li><code>deficit_trial</code> present,</li>
+<li>challenge completed and survived,</li>
+<li>refill restored 3 active memories,</li>
+<li>failures <code>[]</code>.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>Treat WP2 Slice B as browser-proven.</li>
+<li>Open WP3 Slice A as the next gameplay loop target.</li>
+<li>Keep WP3 small: one tactical agency hook only, no new memories, no new slots, no shop, no meta progression, no new region, no new weapon.</li>
+<li>Use loop stop criteria:</li>
+<li><code>GO_CANDIDATE</code>,</li>
+<li>Alpha Fun <code>0.89+</code>,</li>
+<li>early choice interest <code>0.72+</code>,</li>
+<li>post-loss contrast <code>0.30+</code>,</li>
+<li>irritation <code>0.03</code> or lower,</li>
+<li>post-loss browser gate passed.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>AI proxy and browser QA still do not prove human emotion.</li>
+<li>WP3 must improve agency without making the automatic combat feel like a new control scheme.</li>
+<li>The current <code>earlyChoiceInterest</code> proxy is below the new target, so the next loop needs a real agency improvement.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>The post-loss blocker is closed.</li>
+<li>The next implementation loop should start WP3 Slice A.</li>
+<li>The loop may run with a high iteration count and stop when target quality criteria are satisfied.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>Run the autonomous dev loop with many iterations and <code>--stop-when-satisfied</code>.</li>
+<li>Implement WP3 Slice A as the first gameplay target.</li>
+<li>Verify each loop with doctor, quick AI test, report check, and the relevant browser QA when needed.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: the project had a gameplay gate that looked blocked even though the browser flow could complete.</li>
+<li>Direction: separate QA cleanup failures from gameplay proof and then reopen the smallest next gameplay step.</li>
+<li>Action: fixed Chrome cleanup, passed the trusted post-loss gate, and added loop completion criteria.</li>
+<li>Result: LETHE can continue toward a release-feel prototype through an automated quality-gated loop.</li>
+</ul>
   </main>
 </body>
 </html>

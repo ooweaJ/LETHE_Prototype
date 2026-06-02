@@ -98,8 +98,8 @@ async function runPipeQa(chromePath, url) {
     if (stderr.trim()) console.error(stderr.trim().split('\n').slice(-8).join('\n'));
     throw error;
   } finally {
-    chrome.kill('SIGKILL');
-    fs.rmSync(userDataDir, { recursive: true, force: true });
+    await stopChrome(chrome);
+    await cleanupTempDir(userDataDir);
   }
 }
 
@@ -138,9 +138,35 @@ async function runPortQa(chromePath, url) {
       throw error;
     }
   } finally {
-    chrome.kill('SIGKILL');
-    fs.rmSync(userDataDir, { recursive: true, force: true });
+    await stopChrome(chrome);
+    await cleanupTempDir(userDataDir);
   }
+}
+
+async function stopChrome(chrome) {
+  if (chrome.exitCode !== null || chrome.signalCode !== null) return;
+  chrome.kill('SIGKILL');
+  await new Promise((resolve) => {
+    const timer = setTimeout(resolve, 500);
+    chrome.once('exit', () => {
+      clearTimeout(timer);
+      resolve();
+    });
+  });
+}
+
+async function cleanupTempDir(dir) {
+  let lastError = null;
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    try {
+      fs.rmSync(dir, { recursive: true, force: true });
+      return;
+    } catch (error) {
+      lastError = error;
+      await sleep(100 * (attempt + 1));
+    }
+  }
+  throw lastError;
 }
 
 async function evaluateQa(cdp, sessionId, url, chromePath) {
