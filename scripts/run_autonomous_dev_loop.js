@@ -419,7 +419,7 @@ function parseArgs(args) {
     iterations: 6,
     logDir: '',
     noDiscord: false,
-    preflight: 'npm run autopilot:preflight:local',
+    preflight: 'node scripts/autopilot_preflight.js --allow-dirty',
     provider: 'double',
     push: true,
     sleepMinutes: 0,
