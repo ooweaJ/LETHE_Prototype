@@ -8,7 +8,7 @@ Last updated: 2026-06-02
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
-- Latest task-update status: v0.9 WP2 Slice B is implementation-complete and scope-valid, but still `ITERATE_BEFORE_TEST` because trusted browser proof is missing. Claude/Codex feedback agrees the post-loss challenge uses existing combat parameters only and AI proxy evidence remains stable (`GO_CANDIDATE`, Alpha Fun Score `0.8846` quick / `0.8879` full, post-loss contrast about `0.313`, 2-memory survival about `79%`), but `qa:postloss` must pass on a trusted local before WP3 or people testing. Next scope is not broader content; it is trusted-local `npm run qa:postloss`, then a minimal WP3 Slice A tactical agency hook using one existing active memory.
+- Latest task-update status: v0.9 WP2 Slice B is implementation-complete and scope-valid, but still `ITERATE_BEFORE_TEST` because trusted browser proof is missing. This loop reran `npm run qa:postloss`, retried with `--timeout-ms 30000`, and cross-checked `npm run qa:pressure`; both QA modes still failed before gameplay evaluation at Chrome/CDP `Target.getTargets`. `scripts/run_browser_pressure_qa.js` now has a remote-debugging-port fallback for trusted local machines, but this managed sandbox also blocks the fallback HTTP fetch path. The `2026-06-02-devloop-193946-feedback-2` Claude/Codex synthesis agrees there is no new gameplay scope to add yet: run trusted-local `npm run qa:postloss` again before WP3 or people testing.
 
 ## Implemented
 
@@ -90,6 +90,10 @@ Last updated: 2026-06-02
   - `danger` records deficit breath/challenge time and post-loss challenge completions,
   - AI simulator reports `postLossChallengeScore` and `postLossChallengeContrast`,
   - `npm run qa:postloss` script exists for Chrome/CDP post-loss QA.
+- v0.9 browser QA runner fallback:
+  - `scripts/run_browser_pressure_qa.js` keeps the existing Chrome CDP pipe path,
+  - if pipe target lookup times out, it retries once through Chrome remote-debugging-port and a WebSocket CDP client,
+  - this is a QA tooling change only and does not alter gameplay scope.
 - AI alpha test tool under `alpha_test/`.
 - Codex/GPT/Claude workflow docs.
 - Markdown daily reports, generated HTML reports, and Discord report delivery.
@@ -431,6 +435,15 @@ npm run ai:sweep
   - watch points: `earlyChoiceInterest` remains the weakest current fun metric, while `postLossChallengeScore` around `0.67` and contrast around `0.313` mean the new post-loss beat is present but not human-proven,
   - conflict: Claude proposes a stage-entry two-choice "기억 집중" moment, while Codex CLI proposes HUD/number-key active-memory focus during combat,
   - selected order: rerun trusted-local `npm run qa:postloss`; if it passes, start WP3 Slice A as one minimal existing-memory tactical focus hook and decide the UI surface from the smallest stable implementation path.
+- Latest devloop feedback-2 synthesis for post-loss QA fallback:
+  - prompt: `docs/review_prompts/2026-06-02-devloop-193946-feedback-2.md`,
+  - Claude response: `docs/review_responses/2026-06-02-devloop-193946-feedback-2-claude.md`,
+  - Codex CLI response: `docs/review_responses/2026-06-02-devloop-193946-feedback-2-codex.md`,
+  - synthesis: `docs/review_responses/2026-06-02-devloop-193946-feedback-2-double-check.md`,
+  - common conclusion: the QA runner fallback is valid tooling and keeps scope intact, but WP2 Slice B remains not browser-proven,
+  - common conclusion: AI proxy data remains a planning pass only; `earlyChoiceInterest`, `echoPivotScore`, and `postLossChallengeScore` are observation targets, not reasons to add new systems,
+  - conflict: no material scope conflict in this feedback round; both Claude and Codex block WP3 until trusted-local post-loss browser proof or a documented environment decision,
+  - selected order: run trusted-local `npm run qa:postloss` outside the managed sandbox; if gameplay assertions fail, fix only that post-loss flow; if transport still fails, document the environment blocker before asking whether to proceed.
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the v0.5 level-up flow and `runGrowth` payload.
 - Planning pipeline prompt generated: `docs/review_prompts/2026-06-02-pipeline.md`.
@@ -467,6 +480,13 @@ npm run ai:sweep
 - Docs-only loop update completed for `2026-06-02-devloop-175642-feedback-3`: AI planning pass evidence, Claude/Codex conflict, selected gate-cleanup-only scope, and required verification are recorded in the double-check summary, `NEXT_TASKS`, status, devlog, and report.
 - Docs-only loop update completed for `2026-06-02-devloop-175642-feedback-4`: missing-result diagnosis feedback, wrapper-result-created status, remaining artifact-cleanup blocker, and required verification are recorded in the double-check summary, `NEXT_TASKS`, status, devlog, and report.
 - Docs-only loop update completed for `2026-06-02-devloop-193946-feedback-1`: WP2 Slice B feedback, common/ conflict synthesis, selected trusted-local QA gate, and WP3 Slice A scope guard are recorded in the double-check summary, `NEXT_TASKS`, status, devlog, and report.
+- Docs-only loop update completed for `2026-06-02-devloop-193946-feedback-2`: post-loss QA runner fallback feedback, common recommendations, lack of material conflict, selected trusted-local QA-only scope, and tests required before balance reporting are recorded in the double-check summary, `NEXT_TASKS`, status, devlog, and report.
+- Post-loss QA rerun loop completed with tooling fallback:
+  - `npm run qa:postloss`: failed at Chrome/CDP `Target.getTargets`,
+  - `npm run qa:postloss -- --timeout-ms 30000`: failed at the same point,
+  - `npm run qa:pressure`: failed at the same point,
+  - after adding the remote-debugging-port fallback, `npm run qa:postloss` still could not produce proof in this managed sandbox because the fallback HTTP fetch path failed,
+  - trusted-local `npm run qa:postloss` remains the next gate before WP3.
 - Current dev-loop prompt cleanup is implemented: future nested implementation prompts should not keep re-selecting WP1 after WP1 is complete.
 - Current dev-loop preflight-order cleanup is implemented: future clean-tree dev loops should run preflight before creating their own loop log, and should not mask dirty-tree state with `--allow-dirty` by default.
 - Current autopilot preflight diagnosis now gives exact loop-run artifact cleanup guidance when `docs/loop_runs/*.md` blocks a clean unattended loop.
@@ -479,7 +499,7 @@ npm run ai:sweep
   - working tree clean after `f6ee83f feat: 자동 개발 루프 4차 반영`,
   - `npm run autopilot:preflight`: 21 pass, 0 warn, 0 fail,
   - `npm run qa:identity`: `status: complete`, failures `[]`, `buildIdentitySeenBy90Sec: true`.
-- WP1 gate is officially complete for automation purposes. WP2 Slice A pressure rhythm/high-low pacing and WP2 Slice B minimal post-loss challenge are implemented. The next executable gate is trusted-local `npm run qa:postloss`; after that, WP3 Slice A may add only a minimal existing-memory tactical agency hook.
+- WP1 gate is officially complete for automation purposes. WP2 Slice A pressure rhythm/high-low pacing and WP2 Slice B minimal post-loss challenge are implemented. The next executable gate remains trusted-local `npm run qa:postloss`; after that, WP3 Slice A may add only a minimal existing-memory tactical agency hook.
 - On another local machine, run `npm run doctor` first; run `npm run doctor:deep` before leaving Codex to continue unattended.
 - Before an unattended implement -> Claude feedback -> implement loop, run `npm run autopilot:preflight`.
 - Do not describe AI proxy metrics as real balance feedback.

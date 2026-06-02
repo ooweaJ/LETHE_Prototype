@@ -26,6 +26,7 @@
 - Latest devloop feedback-4 verdict: `GO_CANDIDATE` remains an AI planning pass, not human emotion or balance proof. The missing-result diagnosis worked and the wrapper result now exists, so the next executable scope is still artifact 정합성 정리: record/track or remove the `docs/loop_runs/2026-06-02-devloop-175642*` outputs, then pass clean-tree `npm run autopilot:preflight:local` and trusted-local `npm run qa:identity` before WP2.
 - Post-loop gate closure: `2026-06-02-devloop-175642*` outputs are committed, `npm run autopilot:preflight` passed with 21 pass / 0 warn / 0 fail, and `npm run qa:identity` passed with `status: complete`, failures `[]`. Next executable scope is v0.9 Work Package 2 Slice A.
 - Latest devloop feedback-193946 verdict: `ITERATE_BEFORE_TEST`. WP2 Slice B is implementation-complete and scope-valid, but not browser-proven because local Chrome/CDP `qa:postloss` failed at `Target.getTargets`. Before WP3 or people testing, rerun trusted-local `npm run qa:postloss`; if it passes, proceed only to a minimal WP3 Slice A tactical agency hook using the current active memories and current combat loop.
+- Latest devloop feedback-193946-feedback-2 verdict: `ITERATE_BEFORE_TEST`. The post-loss QA runner fallback is valid tooling and does not widen gameplay scope, but it still did not produce browser proof in the managed sandbox. Claude and Codex agree the next executable unit remains trusted-local `npm run qa:postloss` only; WP3 Slice A and people testing stay blocked until that proof or a documented environment decision exists.
 - Reporting rule update: work reports now use numbered unit headings like `# 2026-06-02-44 - 보고서 단위 번호 체계`; `npm run report:check` and `doctor` enforce this so Discord latest-section reports are task-readable.
 - Reference research: `docs/research/2026-06-02-roguelike-reference.md`.
 - New v0.9 prompt: `docs/review_prompts/2026-06-02-v09-release-feel-loop.md`.
@@ -254,7 +255,18 @@
   - 공통점: `earlyChoiceInterest`와 `postLossChallengeContrast`는 아직 약하므로 사람 테스트/밸런스 근거로 과장하지 않는다.
   - 충돌: Claude는 스테이지 진입 전 2지선다 "기억 집중"을 권장했고, Codex CLI는 HUD/숫자키 기반 전투 중 집중 기억 지정을 권장했다.
   - 선택: trusted-local `npm run qa:postloss`를 먼저 통과시킨 뒤, WP3 Slice A는 기존 활성 기억 1개를 짧게 집중시키는 최소 tactical agency로만 진행한다. UI 표면은 구현 시 기존 구조에 가장 작게 맞는 쪽으로 결정한다.
+- [x] `2026-06-02-devloop-193946-feedback-2` Claude/Codex 피드백 공통점과 충돌을 정리했다.
+  - 공통점: WP2 Slice B와 QA runner fallback은 범위에 맞고, 새 gameplay content를 늘리지 않았다.
+  - 공통점: AI proxy의 `GO_CANDIDATE`, Alpha Fun Score 약 `0.885`, 낮은 irritation, restart intent `0.90`은 planning pass일 뿐 browser/user evidence가 아니다.
+  - 공통점: `qa:postloss`는 managed sandbox에서 pipe와 port fallback 모두 막혔으므로 trusted-local에서 다시 실행해야 한다.
+  - 공통점: `earlyChoiceInterest`, `echoPivotScore`, `postLossChallengeScore`는 관찰 대상이며 지금 새 시스템으로 보정하지 않는다.
+  - 충돌: 이번 feedback-2에는 실질적인 범위 충돌이 없다. Claude와 Codex 모두 WP3 이전 trusted-local post-loss QA를 최우선으로 본다.
+  - 선택: 이번 cycle은 docs-only update로 닫는다. 다음 executable scope는 sandbox 밖 trusted-local `npm run qa:postloss` 하나이며, 통과 전에는 WP3, 사람 테스트, UI/튜토리얼/밸런스 변경을 시작하지 않는다.
 - [ ] trusted local에서 `npm run qa:postloss`를 재실행한다. 같은 CDP timeout이면 `npm run qa:postloss -- --timeout-ms 30000`을 한 번만 재시도하고, 필요하면 `npm run qa:pressure`로 자동화 채널 문제를 대조한다.
+  - 이번 Codex 세션 결과: `npm run qa:postloss`와 `npm run qa:postloss -- --timeout-ms 30000`는 모두 Chrome/CDP `Target.getTargets` timeout으로 실패했다.
+  - 대조 결과: `npm run qa:pressure`도 같은 지점에서 실패해 Slice B 로직 실패보다 현재 브라우저 자동화 채널 문제로 본다.
+  - 보강: `scripts/run_browser_pressure_qa.js`에 CDP pipe 실패 시 remote-debugging-port/WebSocket CDP fallback을 추가했다.
+  - 현재 sandbox 한계: fallback도 `Chrome port page target: fetch failed`로 막혔다. 다음 실행은 sandbox 밖 trusted local에서 `npm run qa:postloss`를 다시 돌린다.
 - [ ] v0.9 Work Package 3 Slice A: 자동전투 안의 작은 tactical agency를 구현한다.
   - 기존 활성 기억 중 1개를 짧게 집중시키는 선택만 허용한다.
   - 새 기억, 새 슬롯, 상점, 메타 성장, 새 지역, 새 적, 새 무기 추가는 금지한다.
