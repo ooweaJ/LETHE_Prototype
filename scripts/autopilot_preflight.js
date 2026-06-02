@@ -74,12 +74,33 @@ function checkGitState() {
     return;
   }
 
+  const dirtyLines = dirty.split(/\r?\n/).filter(Boolean);
   add(
     options.allowDirty ? 'warn' : 'fail',
     'git working tree',
-    dirty.split(/\r?\n/).slice(0, 5).join(' / '),
-    'Commit, stash, ignore, or move unrelated files before unattended automation. Use --allow-dirty only for deliberate local checks.'
+    dirtySummary(dirtyLines),
+    dirtyFix(dirtyLines)
   );
+}
+
+function dirtySummary(lines) {
+  const shown = lines.slice(0, 5).join(' / ');
+  const extra = lines.length > 5 ? ` / ... +${lines.length - 5} more` : '';
+  return `${shown}${extra}`;
+}
+
+function dirtyFix(lines) {
+  const loopRunLines = lines.filter((line) => /docs\/loop_runs\/.+\.md$/.test(line));
+  if (loopRunLines.length) {
+    return [
+      'Loop-run artifacts are pending.',
+      'Let the wrapper finish any missing result files, then run `git add docs/loop_runs && git commit -m "docs: 자동 개발 루프 산출물 기록"` or remove abandoned artifacts.',
+      'Next check: `npm run autopilot:preflight:local`.',
+      'Use --allow-dirty only for deliberate local smoke checks.',
+    ].join(' ');
+  }
+
+  return 'Commit, stash, ignore, or move unrelated files before unattended automation. Use --allow-dirty only for deliberate local checks.';
 }
 
 function checkNpmScripts() {

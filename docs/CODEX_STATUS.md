@@ -4,11 +4,11 @@ Last updated: 2026-06-02
 
 ## Current Build
 
-- Project: LETHE HTML Alpha v0.9 autonomous dev-loop preflight-order cleanup implemented.
+- Project: LETHE HTML Alpha v0.9 loop-run preflight blocker diagnosis implemented.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
-- Latest task-update status: completed the docs-only feedback-2 synthesis for `2026-06-02-devloop-175642`. The preflight-order cleanup is code-complete, but WP1 is not officially closed until the current loop-run outputs are recorded/cleaned, `npm run autopilot:preflight:local` passes on a clean tree, and trusted-local `npm run qa:identity` passes before WP2.
+- Latest task-update status: completed the docs-only synthesis for `2026-06-02-devloop-175642-feedback-3`. Claude and Codex both treat the AI proxy evidence as a planning pass, but the selected Codex scope remains gate cleanup only. The blocker stays open until the current loop-run outputs are recorded/cleaned, clean-tree preflight passes, and trusted-local `npm run qa:identity` passes before WP2 or human-test checklist work.
 
 ## Implemented
 
@@ -94,6 +94,10 @@ Last updated: 2026-06-02
   - preflight now runs before the dev loop creates its Markdown log,
   - successful preflight output is copied into the loop log header after the log is created,
   - this prevents a clean tree from becoming dirty only because the loop wrote its own log before preflight.
+- Autopilot preflight loop-run blocker diagnosis:
+  - `scripts/autopilot_preflight.js` now summarizes dirty trees with a bounded file list,
+  - when dirty files include `docs/loop_runs/*.md`, the fix text points to finishing wrapper result files, recording/removing abandoned artifacts, and rerunning `npm run autopilot:preflight:local`,
+  - this is a diagnostic gate-cleanup change only; it does not commit or delete existing loop-run outputs.
 - AI collaboration portfolio docs under `docs/ai/`, `docs/adr/`, and `docs/portfolio/`.
 - Human playtest summary automation via `npm run playtest:summary`.
 - Human playtest package generation via `npm run playtest:package`.
@@ -375,6 +379,25 @@ npm run ai:sweep
   - watch points: echoPivotScore `0.656` and earlyChoiceInterest `0.654` remain weak enough to observe in WP2 or human testing,
   - conflict: Claude limits the next executable unit to WP1 gate cleanup and forbids WP2 before clean preflight plus identity QA, while Codex CLI points back to WP2 Slice A after that gate passes,
   - selected order: docs-only update in this pass, then loop-run output recording/cleanup, clean-tree `npm run autopilot:preflight:local`, trusted-local `npm run qa:identity`, and only then WP2 Slice A pressure rhythm.
+- Latest loop-run blocker diagnosis verification:
+  - `node --check scripts/autopilot_preflight.js`: passed,
+  - `npm run doctor`: 39 pass, 0 warn, 0 fail,
+  - `npm run autopilot:preflight:local`: failed as expected because the tree is still dirty, but now reports the loop-run-artifact-specific fix:
+    - finish missing wrapper result files,
+    - run `git add docs/loop_runs && git commit -m "docs: 자동 개발 루프 산출물 기록"` or remove abandoned artifacts,
+    - rerun `npm run autopilot:preflight:local`,
+  - current dirty files include `M docs/loop_runs/2026-06-02-devloop-175642.md`, `M scripts/autopilot_preflight.js`, and `?? docs/loop_runs/2026-06-02-devloop-175642-iteration-3-implement-prompt.md`.
+- Latest devloop feedback synthesis for blocker diagnosis:
+  - prompt: `docs/review_prompts/2026-06-02-devloop-175642-feedback-3.md`,
+  - Claude response: `docs/review_responses/2026-06-02-devloop-175642-feedback-3-claude.md`,
+  - Codex CLI response: `docs/review_responses/2026-06-02-devloop-175642-feedback-3-codex.md`,
+  - synthesis: `docs/review_responses/2026-06-02-devloop-175642-feedback-3-double-check.md`,
+  - common conclusion: AI proxy data is positive enough for a planning pass, but it is not human emotion or balance proof,
+  - common conclusion: the latest implementation is infrastructure/gate cleanup, so WP1 should not be reopened for new gameplay work,
+  - common conclusion: the next executable blocker remains loop-run artifact recording/cleanup, clean-tree `npm run autopilot:preflight:local`, and trusted-local `npm run qa:identity`,
+  - watch points: echoPivotScore `0.656` and earlyChoiceInterest `0.654` should be observed rather than patched from AI numbers alone,
+  - conflict: Claude recommends human-test checklist and `GO_TO_HUMAN_TEST` after gate cleanup, while Codex CLI keeps the existing WP2 Slice A pressure-rhythm order after gate cleanup,
+  - selected order: docs-only update in this pass, then gate cleanup only; do not start WP2, human-test checklist, tutorial/UI changes, or balance changes until the cleanup checks pass.
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the v0.5 level-up flow and `runGrowth` payload.
 - Planning pipeline prompt generated: `docs/review_prompts/2026-06-02-pipeline.md`.
@@ -408,8 +431,10 @@ npm run ai:sweep
 - v0.9 Work Package 1 implementation is complete: identity hook, identity QA runner, and compressed existing-memory card copy are all in place.
 - Docs-only loop update completed for the latest `2026-06-02-devloop-175642-feedback-1` Claude/Codex synthesis: `docs/NEXT_TASKS.md`, `docs/CODEX_STATUS.md`, devlog, report, and the double-check summary now reflect the selected order.
 - Docs-only loop update completed for `2026-06-02-devloop-175642-feedback-2`: Claude/Codex common points, conflict, selected vNext scope, and required tests are recorded in the double-check summary, `NEXT_TASKS`, status, devlog, and report.
+- Docs-only loop update completed for `2026-06-02-devloop-175642-feedback-3`: AI planning pass evidence, Claude/Codex conflict, selected gate-cleanup-only scope, and required verification are recorded in the double-check summary, `NEXT_TASKS`, status, devlog, and report.
 - Current dev-loop prompt cleanup is implemented: future nested implementation prompts should not keep re-selecting WP1 after WP1 is complete.
 - Current dev-loop preflight-order cleanup is implemented: future clean-tree dev loops should run preflight before creating their own loop log, and should not mask dirty-tree state with `--allow-dirty` by default.
+- Current autopilot preflight diagnosis now gives exact loop-run artifact cleanup guidance when `docs/loop_runs/*.md` blocks a clean unattended loop.
 - Before starting unattended automation or treating WP1 as a fresh browser-verification pass, rerun `npm run qa:identity` from a trusted local terminal because this Codex session hit a Chrome CDP pipe timeout.
 - Next implementation candidate after that verification is v0.9 Work Package 2 Slice A: pressure rhythm/high-low pacing. Minimal post-loss challenge follows only after that slice is verified.
 - Resolve the dirty working tree before unattended automation:
