@@ -29,6 +29,8 @@
 - Latest devloop feedback-193946-feedback-2 verdict: `ITERATE_BEFORE_TEST`. The post-loss QA runner fallback is valid tooling and does not widen gameplay scope, but it still did not produce browser proof in the managed sandbox. Claude and Codex agree the next executable unit remains trusted-local `npm run qa:postloss` only; WP3 Slice A and people testing stay blocked until that proof or a documented environment decision exists.
 - Latest post-loss transport update: this loop reran `npm run qa:postloss`, retried `npm run qa:postloss -- --timeout-ms 30000`, and cross-checked `npm run qa:pressure`; all still failed before gameplay evaluation through the same Chrome transport channel. `scripts/run_browser_pressure_qa.js` now emits an explicit `BrowserQaTransportError`, and an environment-blocker decision prompt exists at `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md`.
 - Latest devloop feedback-193946-feedback-3 verdict: `ITERATE_BEFORE_TEST`. Claude and Codex agree the implementation and diagnostic work are scope-valid, the AI proxy remains a planning pass only, and the next executable unit is still trusted-local `npm run qa:postloss`. There is no material scope conflict in this round; if the same transport failure repeats outside the sandbox, use `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md` before starting WP3 or people testing.
+- Latest post-loss QA hardening: this loop kept the same foremost v0.9 gate, added a more deterministic remote-debugging-port fallback by using an OS-confirmed free localhost port and shared headless Chrome sandbox flags, then reran `npm run qa:postloss` and `npm run qa:postloss -- --timeout-ms 30000`. Both still failed before gameplay evaluation. The pipe path timed out at `Target.getTargets`; the port fallback now shows the managed sandbox cannot bind `127.0.0.1` (`listen EPERM`). WP3 remains blocked.
+- Latest devloop feedback-193946-feedback-4 verdict: `ITERATE_BEFORE_TEST`. Claude and Codex agree the port fallback hardening is scope-valid QA/gate work and the AI proxy remains positive planning evidence only. There is no material next-scope conflict: WP2 Slice B is implementation-complete but not browser-proven, so the next executable unit remains sandbox 밖 trusted-local `npm run qa:postloss`; if the same transport failure repeats, retry once with `--timeout-ms 30000`, then use `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md` before WP3 or people testing.
 - Reporting rule update: work reports now use numbered unit headings like `# 2026-06-02-44 - 보고서 단위 번호 체계`; `npm run report:check` and `doctor` enforce this so Discord latest-section reports are task-readable.
 - Reference research: `docs/research/2026-06-02-roguelike-reference.md`.
 - New v0.9 prompt: `docs/review_prompts/2026-06-02-v09-release-feel-loop.md`.
@@ -271,16 +273,29 @@
   - 공통점: `earlyChoiceInterest`, `echoPivotScore`, `postLossChallengeScore`, 메모리 삭제 분포는 지금 새 시스템으로 보정하지 않고 browser gate 이후 관찰한다.
   - 충돌: 실질적인 다음 범위 충돌은 없다. Claude와 Codex 모두 WP3와 사람 테스트를 trusted-local post-loss proof 또는 명시적 environment-blocker 결정 전까지 막는다.
   - 선택: 이번 cycle은 docs-only update로 닫는다. 다음 executable scope는 trusted-local `npm run qa:postloss` 하나이며, 같은 transport 실패가 반복되면 `--timeout-ms 30000` 재시도 후 blocker prompt로 판단을 넘긴다.
+- [x] `2026-06-02-devloop-193946-feedback-4` Claude/Codex 피드백 공통점과 충돌을 정리했다.
+  - 공통점: WP2 Slice B와 post-loss QA port fallback hardening은 범위 적합한 QA/gate 작업이며 새 기억, 슬롯, 상점, 메타 진행, 지역, 무기, WP3 전술 시스템을 추가하지 않았다.
+  - 공통점: AI proxy는 `GO_CANDIDATE`, Alpha Fun Score `0.8846`, regret `0.8073`, irritation `0.0104`, restart `0.90`로 사람 테스트 진입 가능성을 지지하지만 browser/user evidence는 아니다.
+  - 공통점: WP2 Slice B는 implementation-complete지만 `npm run qa:postloss`가 gameplay evaluation 전에 CDP pipe timeout과 sandbox localhost bind `EPERM`으로 막혔으므로 아직 browser-proven이 아니다.
+  - 공통점: `echoPivotScore`, `postLossChallengeScore`, `postLossChallengeContrast`는 관찰 대상으로 두고 지금 새 시스템으로 보정하지 않는다.
+  - 충돌: 실질적인 다음 범위 충돌은 없다. Claude는 기술 blocker 해소 뒤 사람 테스트 가능성을 더 강하게 보지만, Codex CLI도 browser proof 또는 environment-blocker decision 전 WP3/사람 테스트 금지에 동의한다.
+  - 선택: 이번 cycle은 docs-only update로 닫는다. 다음 executable scope는 trusted-local `npm run qa:postloss` 하나이며, 같은 transport 실패가 반복되면 `--timeout-ms 30000` 1회 재시도 후 blocker prompt로 판단을 넘긴다.
 - [ ] trusted local에서 `npm run qa:postloss`를 재실행한다. 같은 CDP timeout이면 `npm run qa:postloss -- --timeout-ms 30000`을 한 번만 재시도하고, 필요하면 `npm run qa:pressure`로 자동화 채널 문제를 대조한다.
   - 이번 Codex 세션 결과: `npm run qa:postloss`와 `npm run qa:postloss -- --timeout-ms 30000`는 모두 Chrome/CDP `Target.getTargets` timeout으로 실패했다.
   - 대조 결과: `npm run qa:pressure`도 같은 지점에서 실패해 Slice B 로직 실패보다 현재 브라우저 자동화 채널 문제로 본다.
   - 보강: `scripts/run_browser_pressure_qa.js`에 CDP pipe 실패 시 remote-debugging-port/WebSocket CDP fallback을 추가했다.
-  - 현재 sandbox 한계: fallback도 `Chrome port page target: fetch failed`로 막혔다. 다음 실행은 sandbox 밖 trusted local에서 `npm run qa:postloss`를 다시 돌린다.
-  - feedback-3 결정: sandbox 밖에서도 같은 transport 실패가 반복되면 새 gameplay 구현 없이 `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md`로 진행 여부를 판단한다.
+  - 추가 보강: port fallback이 랜덤 포트 대신 OS가 비어 있다고 확인한 `127.0.0.1` 포트를 쓰고, pipe/port 경로가 동일한 headless sandbox flags를 공유하게 했다.
+  - 현재 sandbox 한계: 보강 후에도 pipe는 `Target.getTargets` timeout으로 막히고, fallback은 `listen EPERM: operation not permitted 127.0.0.1`로 막혔다. 다음 실행은 sandbox 밖 trusted local에서 `npm run qa:postloss`를 다시 돌린다.
+  - feedback-4 결정: sandbox 밖에서도 같은 transport 실패가 반복되면 `npm run qa:postloss -- --timeout-ms 30000`을 한 번만 재시도하고, 그래도 실패하면 새 gameplay 구현 없이 `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md`로 진행 여부를 판단한다.
 - [x] 반복 transport 실패를 gameplay 실패와 구분하도록 QA runner 진단과 planning handoff를 보강한다.
   - `scripts/run_browser_pressure_qa.js`가 pipe와 port fallback 모두 실패하면 `BrowserQaTransportError`를 출력하게 했다.
   - 최신 `npm run qa:postloss` 출력은 다음 trusted-local command와 environment blocker 기록 조건을 함께 보여준다.
   - 환경 blocker 판단 프롬프트를 추가했다: `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md`.
+- [x] post-loss QA runner의 remote-debugging-port fallback을 더 결정적으로 만든다.
+  - `findOpenPort()`가 랜덤 포트 추정 대신 OS-confirmed free port를 사용한다.
+  - pipe/port Chrome launch args를 공통화하고 `--disable-dev-shm-usage`, `--no-sandbox`를 추가했다.
+  - 검증: `node --check scripts/run_browser_pressure_qa.js` 통과.
+  - 재검증: `npm run qa:postloss`, `npm run qa:postloss -- --timeout-ms 30000` 모두 gameplay evaluation 전 transport blocker로 실패했다.
 - [ ] v0.9 Work Package 3 Slice A: 자동전투 안의 작은 tactical agency를 구현한다.
   - 기존 활성 기억 중 1개를 짧게 집중시키는 선택만 허용한다.
   - 새 기억, 새 슬롯, 상점, 메타 성장, 새 지역, 새 적, 새 무기 추가는 금지한다.

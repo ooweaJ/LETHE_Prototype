@@ -4,6 +4,7 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const net = require('net');
 const { pathToFileURL } = require('url');
 const { spawn, spawnSync } = require('child_process');
 
@@ -32,13 +33,8 @@ async function main() {
 async function runPipeQa(chromePath, url) {
   const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), `lethe-${options.mode}-qa-`));
   const chrome = spawn(chromePath, [
-    '--headless=new',
-    '--disable-gpu',
-    '--disable-extensions',
-    '--no-first-run',
-    '--no-default-browser-check',
+    ...commonChromeArgs(userDataDir),
     '--remote-debugging-pipe',
-    `--user-data-dir=${userDataDir}`,
     url,
   ], {
     stdio: ['ignore', 'ignore', 'pipe', 'pipe', 'pipe'],
@@ -115,13 +111,8 @@ async function runPortQa(chromePath, url) {
   const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), `lethe-${options.mode}-qa-port-`));
   const port = await findOpenPort();
   const chrome = spawn(chromePath, [
-    '--headless=new',
-    '--disable-gpu',
-    '--disable-extensions',
-    '--no-first-run',
-    '--no-default-browser-check',
+    ...commonChromeArgs(userDataDir),
     `--remote-debugging-port=${port}`,
-    `--user-data-dir=${userDataDir}`,
     url,
   ], {
     stdio: ['ignore', 'ignore', 'pipe'],
@@ -426,8 +417,33 @@ function findChrome() {
   return '';
 }
 
+function commonChromeArgs(userDataDir) {
+  return [
+    '--headless=new',
+    '--disable-gpu',
+    '--disable-extensions',
+    '--disable-dev-shm-usage',
+    '--no-sandbox',
+    '--no-first-run',
+    '--no-default-browser-check',
+    `--user-data-dir=${userDataDir}`,
+  ];
+}
+
 async function findOpenPort() {
-  return 40000 + Math.floor(Math.random() * 20000);
+  return new Promise((resolve, reject) => {
+    const server = net.createServer();
+    server.unref();
+    server.on('error', reject);
+    server.listen(0, '127.0.0.1', () => {
+      const address = server.address();
+      const port = typeof address === 'object' && address ? address.port : 0;
+      server.close((error) => {
+        if (error) reject(error);
+        else resolve(port);
+      });
+    });
+  });
 }
 
 async function fetchJson(url) {

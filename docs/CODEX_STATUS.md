@@ -8,7 +8,7 @@ Last updated: 2026-06-02
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
-- Latest task-update status: v0.9 WP2 Slice B is implementation-complete and scope-valid, but still `ITERATE_BEFORE_TEST` because trusted browser proof is missing. This loop reran `npm run qa:postloss`, retried with `--timeout-ms 30000`, and cross-checked `npm run qa:pressure`; all still failed before gameplay evaluation through the same Chrome transport channel. `scripts/run_browser_pressure_qa.js` now emits an explicit `BrowserQaTransportError` when CDP pipe and remote-debugging-port fallback both fail, and `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md` records the environment-blocker decision prompt. The latest feedback-3 synthesis found no material Claude/Codex scope conflict: both keep WP3 and people testing blocked until trusted-local post-loss proof or an explicit environment-blocker decision exists.
+- Latest task-update status: completed the docs-only synthesis for `2026-06-02-devloop-193946-feedback-4`. Claude and Codex agree the post-loss QA port fallback hardening is scope-valid QA/gate work, but WP2 Slice B is still `ITERATE_BEFORE_TEST` because trusted browser proof is missing. AI proxy evidence remains positive planning evidence only (`GO_CANDIDATE`, Alpha Fun Score `0.8846`, regret `0.8073`, irritation `0.0104`, restart `0.90`). The latest managed-sandbox blocker is still transport-level: CDP pipe times out at `Target.getTargets`, and the port fallback cannot bind `127.0.0.1` (`listen EPERM`). WP3 and people testing remain blocked until trusted-local `npm run qa:postloss` passes or an explicit environment-blocker decision exists.
 
 ## Implemented
 
@@ -94,6 +94,7 @@ Last updated: 2026-06-02
   - `scripts/run_browser_pressure_qa.js` keeps the existing Chrome CDP pipe path,
   - if pipe target lookup times out, it retries once through Chrome remote-debugging-port and a WebSocket CDP client,
   - if both transport paths fail, it now reports `BrowserQaTransportError` with the pipe failure, port failure, and next trusted-local command,
+  - port fallback now asks the OS for a confirmed free `127.0.0.1` port and shares stable headless Chrome flags with the pipe path,
   - this is a QA tooling change only and does not alter gameplay scope.
 - AI alpha test tool under `alpha_test/`.
 - Codex/GPT/Claude workflow docs.
@@ -158,8 +159,9 @@ Heavy check:
 Remaining note:
 
 - v0.9 WP2 now has both pre-loss pressure rhythm and a minimal post-loss challenge proxy.
-- The current browser automation channel failed at Chrome/CDP `Target.getTargets`; rerun `npm run qa:postloss` on a trusted local before treating this as browser-proven.
+- The current browser automation channel failed before gameplay evaluation: CDP pipe timed out at `Target.getTargets`, and the remote-debugging-port fallback cannot bind `127.0.0.1` in this managed sandbox. Rerun `npm run qa:postloss` on a trusted local before treating this as browser-proven.
 - AI proxy evidence remains a planning pass only, not human emotion or Unity-transition proof.
+- Latest feedback-4 synthesis found no material next-scope conflict: keep the next executable unit limited to trusted-local post-loss QA, retry once with `--timeout-ms 30000` only if the same transport failure repeats, then use `docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md` before any WP3 or people-test step.
 
 ## Latest Sweep Note
 
