@@ -17,6 +17,7 @@ function main() {
     ['src/game.js', 'src/game.js'],
     ['docs/HUMAN_PLAYTEST_GUIDE.md', 'HUMAN_PLAYTEST_GUIDE.md'],
     ['docs/PLAYTEST_NOTES.md', 'PLAYTEST_NOTES_TEMPLATE.md'],
+    ['docs/playtest/2026-06-02-solo.md', 'SOLO_PLAYTEST_SHEET.md'],
     ['docs/playtest_summaries/README.md', 'PLAYTEST_SUMMARY_README.md'],
   ];
 
@@ -74,7 +75,9 @@ function buildReadme() {
     '',
     'Do not evaluate Unity implementation quality yet. This build validates early fun, run growth, forgetting emotion, and whether the idea is promising enough to continue.',
     '',
-    'See `HUMAN_PLAYTEST_GUIDE.md` for the full test protocol.',
+    'For the current v0.7 solo gate, use `SOLO_PLAYTEST_SHEET.md` first.',
+    '',
+    'See `HUMAN_PLAYTEST_GUIDE.md` for the broader test protocol.',
     '',
   ].join('\n');
 }

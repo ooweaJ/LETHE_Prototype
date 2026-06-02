@@ -11,8 +11,10 @@
 - Codex implementation result: `GO_CANDIDATE` from `npm run ai:test` and `npm run ai:test:heavy`.
 - User direct playtest verdict: pause broad human testing and redesign the core run structure before more testing.
 - New planning prompt: `docs/review_prompts/2026-06-02-run-structure-redesign.md`.
-- v0.6 implementation verdict: `GO_TO_SOLO_PLAYTEST_CANDIDATE` by local Codex evidence. Claude v0.6 external feedback is blocked in this Codex session and must be run from a trusted local terminal if required.
+- v0.6 implementation verdict: `GO_TO_SOLO_PLAYTEST_CANDIDATE` by local Codex evidence.
 - v0.7 implementation verdict: `GO_TO_SOLO_PLAYTEST_CANDIDATE` by local Codex evidence after weapon baseline and lost-memory weapon echo pass.
+- Claude v0.7 balance verdict: `GO_TO_SOLO_PLAYTEST`. The automated loop should stop here and collect user solo feel-test data before any v0.7.1 tuning.
+- Actual automation proof for this turn: Discord work-unit report sent successfully, Claude v0.7 prompt sent successfully, Claude response saved successfully.
 - Project direction: HTML prototype validation first, Unity implementation later only if AI/human tests show enough promise.
 
 ## v0.2 Done
@@ -107,9 +109,13 @@
 - [x] v0.6 결과 보고 프롬프트를 작성한다: `docs/review_prompts/2026-06-02-v06-cycle-eval.md`.
 - [x] v0.6 1인 피드백을 바탕으로 v0.7 무기 바닥 성능과 잃은 기억의 무기 잔향 시너지를 보강한다.
 - [x] v0.7 AI/브라우저 QA를 실행하고 자동 밸런스 결과를 기록한다.
-- [ ] 신뢰된 로컬 터미널에서 Claude v0.6 피드백을 실행한다. 현재 Codex 세션에서는 외부 전송 정책으로 차단됐다.
+- [x] 실제 Discord work-unit report를 전송했다: `npm run report:discord:unit`.
+- [x] 실제 Claude v0.7 balance feedback을 받았다: `docs/review_responses/2026-06-02-v07-balance-claude.md`.
+- [x] Claude v0.7 verdict를 다음 gate로 반영한다: `GO_TO_SOLO_PLAYTEST`.
+- [x] v0.7 1인 체감 테스트 시트를 만든다: `docs/playtest/2026-06-02-solo.md`.
 - [ ] v0.7을 사용자 1인 체감 테스트로 실행한다.
 - [ ] 1인 테스트에서 기억 상실 후 쫄몹 처리가 여전히 무너지면 v0.7.1 자동 밸런스 루프를 실행한다.
+- [ ] 1인 테스트에서 전투력은 괜찮지만 잔향이 안 보이면 수치가 아니라 표시 중심 v0.7.1을 실행한다.
 
 ## Pre-Human-Test Polish Gate
 

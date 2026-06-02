@@ -4,13 +4,15 @@
 
 테스트 진행 기준은 `docs/HUMAN_PLAYTEST_GUIDE.md`를 따른다.
 
+Current gate: v0.7 is not a broad 5-8 player test yet. Claude v0.7 feedback says to run a user solo feel test first with `docs/playtest/2026-06-02-solo.md`.
+
 ## Session Template
 
 ```text
 Date:
 Tester ID:
 Session ID:
-Build: LETHE HTML alpha v0.5
+Build: LETHE HTML alpha v0.7
 Weapon:
 Memories:
 JSON log file:

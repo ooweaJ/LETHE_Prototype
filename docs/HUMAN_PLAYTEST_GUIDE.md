@@ -1,11 +1,13 @@
-# LETHE v0.5 Human Playtest Guide
+# LETHE Human Playtest Guide
 
-Purpose: verify whether v0.5 is fun enough in HTML prototype form to justify continued iteration toward a possible Unity implementation.
+Purpose: verify whether the current HTML prototype is fun enough to justify continued iteration toward a possible Unity implementation.
+
+Current gate: v0.7 is first going through a user solo feel test, not a 5-8 player test. Use `docs/playtest/2026-06-02-solo.md` before recruiting broader testers.
 
 ## Test Size
 
 - Target testers: 5-8 players.
-- Build: LETHE HTML alpha v0.5 core-fun human-test ready.
+- Build: LETHE HTML alpha v0.7 solo-test candidate, then broader human-test build only after solo approval.
 - Session length: 12-18 minutes per tester.
 - Required artifact: downloaded JSON log after the result survey.
 - Required metadata: tester ID and session number on the start screen before each run.

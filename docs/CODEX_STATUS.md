@@ -7,7 +7,7 @@ Last updated: 2026-06-02
 - Project: LETHE HTML Alpha v0.7 weapon/echo balance solo-test candidate.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
-- Current scope: HTML prototype validation. The project is testing whether LETHE's early combat/growth loop and forgetting loop are fun enough to justify moving into Unity implementation. Broad human testing is paused; v0.7 is now ready for user 1-person feel testing focused on whether memory loss no longer makes basic mob clearing collapse.
+- Current scope: HTML prototype validation. The project is testing whether LETHE's early combat/growth loop and forgetting loop are fun enough to justify moving into Unity implementation. Broad human testing is paused; Claude v0.7 feedback says the automated balance loop should stop and move to user 1-person feel testing.
 
 ## Implemented
 
@@ -108,6 +108,9 @@ Remaining note:
 - v0.6 fixed the previous 9-minute first-forgetting delay by opening the first cycle at 4 minutes.
 - Prediction match is still high and should be watched during 1-person feel testing.
 - v0.7 improves weapon baseline and mob-clearing proxy, but echo pivot score dropped slightly; watch whether the player feels "weapon solved it" instead of "lost memory changed the build."
+- Actual Claude v0.7 review succeeded and saved `docs/review_responses/2026-06-02-v07-balance-claude.md`.
+- Claude verdict: `GO_TO_SOLO_PLAYTEST`.
+- Solo test sheet: `docs/playtest/2026-06-02-solo.md`.
 
 ## Latest Sweep Note
 
@@ -157,9 +160,15 @@ npm run ai:sweep
 - Local doctor passed on this machine:
   - `npm run doctor`: 26 pass, 0 warn, 0 fail,
   - `npm run doctor:deep`: 43 pass, 0 warn, 0 fail.
+- Latest package check:
+  - `npm run playtest:package`: generated `dist\lethe-v0.7-playtest` with `SOLO_PLAYTEST_SHEET.md`.
 - Autopilot preflight checks passed:
   - `npm run autopilot:preflight:dry`,
-  - `node scripts/autopilot_preflight.js --allow-dirty`: 15 pass, 2 warn, 0 fail.
+  - `node scripts/autopilot_preflight.js --allow-dirty`: 15 pass, 2 warn, 0 fail,
+  - `npm run autopilot:preflight`: 17 pass, 0 warn, 0 fail before v0.7 automation.
+- Actual Discord work-unit delivery succeeded in this session:
+  - `npm run report:discord:unit`,
+  - output: `Uploaded docs\reports\2026-06-02.html to Discord.`
 - Full preflight intentionally checks Claude auth before starting unattended implement/test/report loops.
 - Human playtest summary preparation passed:
   - `npm run playtest:summary:dry`,
@@ -205,12 +214,15 @@ npm run ai:sweep
 - Actual Claude call for v0.6 was blocked by outbound transfer policy in this Codex session. Block note: `docs/review_responses/2026-06-02-v06-cycle-claude-blocked.md`.
 - v0.7 balance evaluation prompt generated: `docs/review_prompts/2026-06-02-v07-balance-eval.md`.
 - Local Codex v0.7 judgment saved: `docs/review_responses/2026-06-02-v07-balance-codex.md`.
+- Actual Claude v0.7 judgment saved: `docs/review_responses/2026-06-02-v07-balance-claude.md`.
+- Claude v0.7 verdict: `GO_TO_SOLO_PLAYTEST`.
+- Claude says do not add new weapons, special skills, or v0.7.1 numeric tuning before solo human-feel data. Watch post-loss 30 seconds, weapon echo visibility, prediction causes, and restart desire.
 
 ## Next Codex Tasks
 
 - v0.7 solo feel-test decision is the next product gate.
 - On another local machine, run `npm run doctor` first; run `npm run doctor:deep` before leaving Codex to continue unattended.
-- Before an unattended implement -> Claude feedback -> implement loop, run `npm run autopilot:preflight`. If live Claude transmission is blocked in the current session, run `npm run autopilot:preflight:local` and stop at prompt/report generation.
-- If Claude feedback is required, run the v0.6 prompt from a trusted local terminal:
-  `node scripts/ask_claude_review.js --prompt docs/review_prompts/2026-06-02-v06-cycle-eval.md --output docs/review_responses/2026-06-02-v06-cycle-claude.md`
-- If proceeding on local evidence, run user 1-person feel testing against v0.7 before any broader playtest.
+- Before an unattended implement -> Claude feedback -> implement loop, run `npm run autopilot:preflight`.
+- Run user 1-person feel testing against v0.7 before any broader playtest.
+- Use `docs/playtest/2026-06-02-solo.md` during the run.
+- Only start v0.7.1 if the solo notes say post-loss mob clearing is still too hard, echo effects are not visible, or the loss feels like no big deal.
