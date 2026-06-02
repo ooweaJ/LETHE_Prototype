@@ -40,6 +40,8 @@
 - Latest devloop feedback-050050 verdict: `ITERATE_BEFORE_TEST`. WP3 Slice A `전술 집중` is code-complete and scope-valid, with `npm run ai:test:quick` still `GO_CANDIDATE` at Alpha Fun Score `0.8846`, but `npm run qa:tactical` failed before gameplay evaluation through the same managed-sandbox Chrome transport channel. Claude and Codex agree there is no material scope conflict: do not add new features or request people testing until trusted-local `npm run qa:tactical` passes or an explicit environment-blocker decision is recorded.
 - Latest tactical gate logging: `npm run qa:tactical:trusted` now writes `alpha_test/outputs/tactical-trusted-gate/latest.json` with `status`, `transportFailure`, run summaries, `nextCommand`, and `blockerPrompt`. The latest managed-sandbox run produced `status: blocked`, `transportFailure: true` after the standard tactical QA and one 30000 ms retry, so this is only gate evidence cleanup, not browser proof.
 - Latest devloop feedback-050050-feedback-2 verdict: `ITERATE_BEFORE_TEST`. Claude and Codex agree the tactical hook and trusted gate logging are scope-valid, AI proxy metrics are positive planning evidence only, and browser proof is still missing. The material conflict is next scope: Claude proposes a one-line echo-pivot hint to improve `echoPivotScore`, while Codex CLI limits the next action to trusted-local `npm run qa:tactical:trusted`. Current selected scope follows the stricter gate because this cycle must not widen implementation: run trusted-local tactical QA, record browser proof or environment blocker, and defer hint/balance/UI changes until that decision.
+- Latest tactical blocker prompt update: `qa:tactical:trusted` now points repeated tactical transport failures to `docs/review_prompts/2026-06-03-tactical-browser-transport-blocker.md`, not the older post-loss blocker prompt. The latest managed-sandbox result remains `status: blocked`, `transportFailure: true`, so this is handoff cleanup only, not browser proof.
+- Latest devloop feedback-050050-feedback-3 verdict: `ITERATE_BEFORE_TEST`. Claude and Codex agree the WP3 tactical blocker prompt split is scope-valid gate cleanup and that `GO_CANDIDATE` / Alpha Fun Score `0.8846` remains planning evidence only. There is no material next-scope conflict: Claude highlights `멈춘 초침` deletion outlier and echo-pivot/post-loss scores as observation risks, while Codex CLI keeps the next executable scope to sandbox-outside trusted-local `npm run qa:tactical:trusted`. Do not add hint text, tune memories, start people testing, or widen gameplay scope before tactical browser proof or an explicit environment-blocker decision.
 - Reference research: `docs/research/2026-06-02-roguelike-reference.md`.
 - New v0.9 prompt: `docs/review_prompts/2026-06-02-v09-release-feel-loop.md`.
 - Overnight loop command:
@@ -393,6 +395,13 @@
   - 공통점: tactical QA는 managed sandbox Chrome transport blocker로 gameplay evaluation 전 막혔으므로 WP3 Slice A는 아직 browser-proven이 아니다.
   - 충돌: Claude는 `echoPivotScore 0.6554`와 random 봇 예측률 개선을 위해 망각 이벤트 화면에 잔향 피벗 힌트 1줄을 다음 최소 구현으로 제안했고, Codex CLI는 브라우저 증명 전에는 새 UI/gameplay/balance 변경 없이 trusted-local gate 결과만 기록하자고 했다.
   - 선택: 이번 cycle은 docs-only update로 닫고 새 구현 범위를 늘리지 않는다. 다음 executable scope는 sandbox 밖 trusted-local `npm run qa:tactical:trusted` 하나이며, 잔향 피벗 힌트와 `멈춘 초침` 조정은 browser proof 또는 명시적 새 범위 결정 전까지 보류한다.
+- [x] `2026-06-03-devloop-050050-feedback-3` Claude/Codex 피드백 공통점과 충돌을 정리했다.
+  - 공통점: WP3 Slice A `전술 집중`은 scope-valid이고, WP3 전용 blocker prompt 분리는 올바른 gate/handoff cleanup이다.
+  - 공통점: `npm run ai:test:quick`의 `GO_CANDIDATE`, Alpha Fun Score `0.8846`, regret `0.8073`, irritation `0.0104`는 긍정적 planning evidence지만 browser/user/balance/Unity-transition proof가 아니다.
+  - 공통점: `npm run qa:tactical:trusted` 최신 managed-sandbox 결과는 `status: blocked`, `transportFailure: true`이므로 gameplay failure가 아니라 transport blocker 기록이다.
+  - 공통점: 사람 테스트, echo-pivot 힌트, `멈춘 초침` 밸런스 조정, 추가 UI/gameplay scope는 browser proof 또는 explicit environment-blocker decision 전까지 보류한다.
+  - 충돌: 실질적인 다음 실행 범위 충돌은 없다. Claude는 `멈춘 초침` 삭제 빈도 outlier와 echo-pivot/post-loss 점수를 관찰 리스크로 강조하고, Codex CLI는 다음 실행을 trusted-local tactical browser proof 하나로 더 좁게 제한한다.
+  - 선택: 이번 cycle은 docs-only update로 닫고 새 구현 범위를 늘리지 않는다. 다음 executable scope는 sandbox 밖 trusted-local `npm run qa:tactical:trusted` 하나이며, 같은 transport 실패가 반복되면 `docs/review_prompts/2026-06-03-tactical-browser-transport-blocker.md`로 environment-blocker decision을 먼저 남긴다.
 - [ ] v0.9 통과 후에만 실제 브라우저 전투 QA와 사용자 1인 테스트를 요청한다.
 
 ## Pre-Human-Test Polish Gate

@@ -128,6 +128,7 @@
 <li>WP3 Slice A <code>전술 집중</code> is code-complete as a minimal tactical agency hook.</li>
 <li>The slice is not browser-proven yet because <code>npm run qa:tactical</code> failed before gameplay evaluation in the managed sandbox Chrome transport.</li>
 <li>The trusted tactical gate wrapper also recorded the same managed-sandbox transport blocker, so the latest evidence is still gate logging rather than browser proof.</li>
+<li>The latest <code>2026-06-03-devloop-050050-feedback-3</code> Claude/Codex synthesis keeps the verdict at <code>ITERATE_BEFORE_TEST</code>.</li>
 <li>People testing, new gameplay scope, UI expansion, and balance changes remain blocked until trusted-local tactical browser proof passes or an explicit environment-blocker decision exists.</li>
 </ul>
 <h2>2. What changed today</h2>
@@ -139,6 +140,8 @@
 <li>Added <code>tacticalFocus</code> records to JSON logs and <code>runTimeline</code>.</li>
 <li>Added <code>?qa=fast,tactical</code> and <code>npm run qa:tactical</code>.</li>
 <li>Added <code>npm run qa:tactical:trusted</code> so automated loops can read a structured tactical gate result from <code>alpha_test/outputs/tactical-trusted-gate/latest.json</code>.</li>
+<li>Split repeated tactical transport handoff to the WP3-specific blocker prompt <code>docs/review_prompts/2026-06-03-tactical-browser-transport-blocker.md</code>.</li>
+<li>Folded feedback-3 into this same feature/decision report unit instead of creating a procedural report unit.</li>
 <li>No new memory, slot, shop, meta progression, region, enemy, weapon, or boss scope was added.</li>
 </ul>
 <h2>3. Test results and evidence</h2>
@@ -150,6 +153,7 @@
 <li><code>npm run ai:test:quick</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score <code>0.8846</code>, irritation <code>1.0%</code>, post-loss challenge contrast <code>0.3134</code>.</li>
 <li><code>npm run qa:tactical</code>: failed before gameplay evaluation through Chrome CDP <code>Target.getTargets</code> timeout and remote-debugging-port <code>127.0.0.1 listen EPERM</code>.</li>
 <li><code>node --check scripts/run_trusted_tactical_gate.js</code>: passed.</li>
+<li><code>npm run doctor</code>: passed after the tactical blocker prompt handoff cleanup, 46 pass / 0 warn / 0 fail.</li>
 <li><code>npm run qa:tactical:trusted</code>: wrote <code>alpha_test/outputs/tactical-trusted-gate/latest.json</code> with <code>status: blocked</code>, <code>transportFailure: true</code> after standard tactical QA plus one 30000 ms retry.</li>
 <li>In-app Browser verification was unavailable in this session because <code>iab</code> was not available.</li>
 <li><code>npm run report</code>: generated <code>docs/reports/2026-06-03.html</code> and 5 unit reports under <code>docs/reports/units/2026-06-03/</code>.</li>
@@ -163,6 +167,7 @@
 <li>Select trusted-local <code>npm run qa:tactical:trusted</code> as the next executable scope.</li>
 <li>If the same transport failure repeats outside the sandbox, create an environment-blocker decision prompt before changing scope.</li>
 <li>Claude's proposed one-line echo-pivot hint is recorded as a deferred candidate, not the selected next implementation scope.</li>
+<li>Feedback-3 has no material next-scope conflict: Claude flags <code>멈춘 초침</code> deletion frequency and echo-pivot/post-loss scores as observation risks, while Codex CLI keeps the next executable action to browser proof.</li>
 <li>Keep the report unit feature/decision-sized: this unit combines implementation, verification, Claude/Codex feedback, and next-task decision.</li>
 </ul>
 <h2>5. Problems or risks</h2>
@@ -170,13 +175,15 @@
 <li>The tactical focus input path has not been proven in browser gameplay yet.</li>
 <li>The managed sandbox still blocks Chrome automation through both CDP pipe and localhost port fallback.</li>
 <li><code>멈춘 초침</code> was deleted far less often than other memories in the AI quick distribution, so it should be observed after browser proof rather than tuned immediately.</li>
+<li>Echo-pivot and post-loss challenge scores remain observation targets, not implementation permission.</li>
 <li>AI proxy metrics do not prove human emotion, balance, or Unity-transition readiness.</li>
 </ul>
 <h2>6. GPT handoff summary</h2>
 <ul>
 <li>Claude and Codex agree that <code>전술 집중</code> is scope-valid but still <code>ITERATE_BEFORE_TEST</code>.</li>
-<li>Claude and Codex agree that the trusted tactical gate logging is scope-valid and does not prove browser gameplay.</li>
-<li>There is now a concrete next-scope conflict: Claude proposes adding a one-line echo-pivot hint to improve <code>echoPivotScore</code>, while Codex CLI limits the next step to trusted-local browser proof.</li>
+<li>Claude and Codex agree that the trusted tactical gate logging and WP3-specific blocker prompt are scope-valid and do not prove browser gameplay.</li>
+<li>Feedback-2 had a concrete next-scope conflict: Claude proposed adding a one-line echo-pivot hint to improve <code>echoPivotScore</code>, while Codex CLI limited the next step to trusted-local browser proof.</li>
+<li>Feedback-3 no longer has a material next-scope conflict; Claude's extra points are observation risks, and Codex CLI's executable next action remains the selected scope.</li>
 <li>Browser combat evidence outranks aggregate AI proxy metrics.</li>
 <li>Selected next Codex action is only trusted-local <code>npm run qa:tactical:trusted</code>; no new hint text, balance change, UI expansion, or gameplay scope should be added before that result or an environment-blocker decision is recorded.</li>
 </ul>
@@ -187,7 +194,7 @@
 <li>If it passes, update status, tasks, devlog, and report to mark WP3 Slice A browser-proven.</li>
 <li>If it fails with the same transport blocker outside this sandbox, record an environment-blocker decision prompt before people testing or further gameplay work.</li>
 <li>Keep the echo-pivot hint and <code>멈춘 초침</code> tuning deferred until browser proof or a separate explicit scope decision.</li>
-<li>After future report edits, run <code>npm run report</code> and <code>npm run report:check</code> so <code>docs/reports/units/2026-06-03/</code> contains the latest Markdown/HTML unit. Discord latest-section attachments should use that generated unit HTML rather than the full daily report HTML.</li>
+<li>After future report edits, run <code>npm run report</code> and <code>npm run report:check</code> so <code>docs/reports/units/2026-06-03/</code> contains the latest Markdown/HTML unit. Discord latest-section attachments should use that generated unit HTML rather than the full daily cumulative report HTML.</li>
 </ul>
 <h2>8. Portfolio notes</h2>
 <ul>
