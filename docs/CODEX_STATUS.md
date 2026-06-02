@@ -51,6 +51,8 @@ Last updated: 2026-06-02
 - Short Discord status notices for Codex work.
 - Claude Code planning-iteration automation for interpreting AI/human test results and deciding next design direction.
 - Test-result planning pipeline via `npm run planning:pipeline`, with Claude first and Codex CLI fallback.
+- Local pipeline doctor via `npm run doctor` and `npm run doctor:deep`.
+- AI collaboration portfolio docs under `docs/ai/`, `docs/adr/`, and `docs/portfolio/`.
 
 ## Latest AI Test Result
 
@@ -119,10 +121,14 @@ npm run ai:sweep
   - `file:///C:/jaewoo/LETHE_Prototype/index.html?qa=fast,levelup&tester=T01&session=S01`,
   - payload `playtest.testerId: T01`,
   - payload `playtest.sessionId: S01`.
+- Local doctor passed on this machine:
+  - `npm run doctor`: 24 pass, 0 warn, 0 fail,
+  - `npm run doctor:deep`: 30 pass, 0 warn, 0 fail.
 - The game is static HTML and can be run by opening `index.html`.
 - Default browser boss/forgetting timing now matches the 9-minute v0.2 target; `?qa=fast` is only for QA.
 - Generated AI test outputs are ignored by git under `alpha_test/outputs/`.
 - Report HTML can be generated from Markdown with `npm run report`.
+- Local setup can be checked with `npm run doctor`.
 - Discord report delivery can be previewed with `npm run report:discord:dry`.
 - Work-unit Discord reports can be previewed with `npm run report:discord:unit:dry` or `node scripts/send_discord_report.js docs/reports/YYYY-MM-DD.md --dry-run --section "섹션 제목"`.
 - Local `.env` and `.env.*` are ignored by Git.
@@ -150,5 +156,6 @@ npm run ai:sweep
 ## Next Codex Tasks
 
 - Human playtest is the next product gate.
+- On another local machine, run `npm run doctor` first; run `npm run doctor:deep` before leaving Codex to continue unattended.
 - Use `docs/HUMAN_PLAYTEST_GUIDE.md` for a 5-8 player test focused on early fun, growth choice quality, regret vs irritation, and Unity transition signals.
 - During testing, watch whether the 27.8-28.0% power drop feels too safe or still regretful enough.

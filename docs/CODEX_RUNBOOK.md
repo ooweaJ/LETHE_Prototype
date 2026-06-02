@@ -128,6 +128,15 @@ If Claude exits with `401 Invalid authentication credentials`, run `claude` in a
 
 Use this when the current build has AI or human test evidence and the next design direction should be decided before more implementation.
 
+Before using a new local machine, run:
+
+```powershell
+npm run doctor
+npm run doctor:deep
+```
+
+`doctor` checks required tools, npm scripts, and role/rule docs. `doctor:deep` also runs safe dry-runs so missing local setup is visible before a long unattended task.
+
 Dry-run:
 
 ```powershell

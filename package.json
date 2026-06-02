@@ -23,7 +23,9 @@
     "planning:pipeline:dry": "node scripts/run_planning_pipeline.js --dry-run",
     "planning:pipeline:prompt": "node scripts/run_planning_pipeline.js --provider none",
     "planning:pipeline:codex": "node scripts/run_planning_pipeline.js --provider codex",
-    "planning:pipeline:claude": "node scripts/run_planning_pipeline.js --provider claude"
+    "planning:pipeline:claude": "node scripts/run_planning_pipeline.js --provider claude",
+    "doctor": "node scripts/check_local_pipeline.js",
+    "doctor:deep": "node scripts/check_local_pipeline.js --deep"
   },
   "engines": {
     "node": ">=18.0.0"
