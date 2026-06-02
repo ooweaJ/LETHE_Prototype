@@ -2945,6 +2945,133 @@
 <li>Action: added pressure phases, logs, AI metrics, and browser QA.</li>
 <li>Result: the prototype now has a measurable pre-forgetting pressure arc.</li>
 </ul>
+<h1>2026-06-02-46 - v0.9 WP2 Slice B 결손 압박</h1>
+<h2>1. Current build status</h2>
+<ul>
+<li>v0.9 WP2 Slice B is implemented in the HTML prototype.</li>
+<li>Broad human testing remains paused.</li>
+<li>The build now has a minimal post-loss challenge after the first memory loss, but browser automation proof is still blocked on this local Chrome/CDP channel.</li>
+</ul>
+<h2>2. What changed today</h2>
+<ul>
+<li>Changed the 2-memory deficit segment from one flat recovery pressure into:</li>
+<li><code>결손 정비</code>,</li>
+<li><code>결손 압박</code>.</li>
+<li>Reused only existing enemy types and spawn parameters.</li>
+<li>Added <code>runTimeline.postLossChallenges</code>.</li>
+<li>Added <code>danger.deficitBreathTime</code>, <code>danger.deficitChallengeTime</code>, <code>danger.deficitChallengeLowHpTime</code>, and <code>danger.postLossChallengeCompletions</code>.</li>
+<li>Added <code>post_loss_challenge_phase</code> and <code>post_loss_challenge_completed</code> events.</li>
+<li>Added <code>?qa=fast,postloss</code> and <code>npm run qa:postloss</code>.</li>
+<li>Added AI proxy metrics <code>postLossChallengeScore</code> and <code>postLossChallengeContrast</code>.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li><code>node --check src/game.js</code>: pass.</li>
+<li><code>node --check scripts/run_browser_pressure_qa.js</code>: pass.</li>
+<li><code>node --check alpha_test/src/simulator.js</code>: pass.</li>
+<li><code>node --check alpha_test/src/metrics.js</code>: pass.</li>
+<li><code>node --check alpha_test/src/run_alpha.js</code>: pass.</li>
+<li><code>node --check alpha_test/src/report.js</code>: pass.</li>
+<li><code>npm run ai:test:quick</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score <code>0.8846</code>, post-loss challenge <code>0.6687</code>, contrast <code>0.3134</code>, 2-memory survival <code>79.0%</code>.</li>
+<li><code>npm run ai:test</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score <code>0.8879</code>, post-loss challenge <code>0.6692</code>, contrast <code>0.3135</code>, 2-memory survival <code>78.8%</code>.</li>
+<li><code>npm run doctor</code>: 43 pass, 0 warn, 0 fail.</li>
+<li><code>npm run qa:postloss -- --timeout-ms 15000</code>: failed at Chrome/CDP <code>Target.getTargets</code>.</li>
+<li><code>npm run qa:pressure -- --timeout-ms 15000</code>: failed at the same Chrome/CDP point, so the failure is treated as local browser automation channel risk rather than Slice B-specific proof of failure.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>Keep Slice B minimal and do not add new content.</li>
+<li>Treat AI quick as planning evidence only.</li>
+<li>Do not request human testing until trusted-local browser QA can prove the post-loss flow.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>Browser QA is not currently trusted on this machine because Chrome pipe did not respond.</li>
+<li>The new post-loss challenge is measured by proxy, not human feel.</li>
+<li>Alpha Fun Score moved from <code>0.885</code> to <code>0.8846</code>, still stable but worth watching.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>WP2 Slice B is code-complete as a minimal existing-parameter post-loss challenge.</li>
+<li>The next design review should focus on whether <code>결손 정비 -&gt; 결손 압박</code> makes loss feel regrettable and playable, not merely survivable.</li>
+<li>Browser QA must be rerun on a trusted local before using this as gameplay evidence.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>Rerun <code>npm run qa:postloss</code> on a trusted local Chrome/CDP environment.</li>
+<li>If browser QA passes, proceed to v0.9 Work Package 3 tactical agency.</li>
+<li>Keep WP3 scoped to existing memories and current combat loop.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: after losing a memory, the deficit segment risked feeling like a timer wait instead of a meaningful test.</li>
+<li>Direction: make the player briefly read the loss, then survive a sharper 2-memory pressure segment.</li>
+<li>Action: added post-loss challenge phases, payload evidence, QA entry, and AI proxy metrics.</li>
+<li>Result: the prototype now has a measurable post-loss survival beat without expanding content scope.</li>
+</ul>
+<h1>2026-06-02-47 - Devloop 193946 Feedback-1 태스크 갱신</h1>
+<h2>1. Current build status</h2>
+<ul>
+<li>v0.9 WP2 Slice B is implemented and scope-valid.</li>
+<li>Broad human testing remains paused.</li>
+<li>The latest planning status is <code>ITERATE_BEFORE_TEST</code> because trusted-local browser QA for <code>qa:postloss</code> has not passed yet.</li>
+<li>This pass changed documentation only; no game code or feature scope was changed.</li>
+</ul>
+<h2>2. What changed today</h2>
+<ul>
+<li>Filled <code>docs/review_responses/2026-06-02-devloop-193946-feedback-1-double-check.md</code>.</li>
+<li>Summarized Claude/Codex common recommendations and conflicts in <code>docs/NEXT_TASKS.md</code>.</li>
+<li>Updated <code>docs/CODEX_STATUS.md</code> with the WP2 Slice B feedback synthesis and selected next gate.</li>
+<li>Added this feedback cycle to <code>docs/devlog/2026-06-02.md</code>.</li>
+<li>Added this numbered report unit.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li>No new code tests were run in this docs-only pass.</li>
+<li>Latest implementation evidence used:</li>
+<li><code>npm run ai:test:quick</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score <code>0.8846</code>, post-loss challenge <code>0.6687</code>, contrast <code>0.3134</code>,</li>
+<li><code>npm run ai:test</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score <code>0.8879</code>, post-loss challenge <code>0.6692</code>, contrast <code>0.3135</code>,</li>
+<li><code>npm run doctor</code>: 43 pass, 0 warn, 0 fail.</li>
+<li>Browser QA remains unresolved:</li>
+<li><code>npm run qa:postloss -- --timeout-ms 15000</code> failed at Chrome/CDP <code>Target.getTargets</code>,</li>
+<li><code>npm run qa:pressure -- --timeout-ms 15000</code> failed at the same point.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>Treat WP2 Slice B as implementation-complete but not browser-proven.</li>
+<li>Treat AI proxy evidence as planning evidence only, not human emotion, real balance, or Unity-transition proof.</li>
+<li>Rerun trusted-local <code>npm run qa:postloss</code> before WP3 or people testing.</li>
+<li>If browser QA passes, proceed only to WP3 Slice A: a minimal tactical agency hook using one existing active memory.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>Current local Chrome/CDP automation is blocked at <code>Target.getTargets</code>.</li>
+<li><code>earlyChoiceInterest</code> remains the weakest current fun metric.</li>
+<li><code>postLossChallengeScore</code> around <code>0.67</code> and contrast around <code>0.313</code> prove the beat exists in proxy data, not that humans will feel it strongly.</li>
+<li>Claude and Codex CLI differ on whether the focus UI should be a stage-entry choice or an in-combat HUD/number-key action.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>공통점: WP2 Slice B는 기존 전투 파라미터만 사용한 범위 적합 구현이다.</li>
+<li>공통점: AI proxy는 stable planning pass지만 browser/user evidence보다 낮은 근거다.</li>
+<li>공통점: <code>qa:postloss</code>는 trusted local에서 다시 확인해야 한다.</li>
+<li>충돌: Claude는 스테이지 진입 전 2지선다 &quot;기억 집중&quot;을 제안했고, Codex CLI는 전투 중 HUD/숫자키 기반 집중 기억 지정을 제안했다.</li>
+<li>Codex 선택: 먼저 trusted-local <code>qa:postloss</code>를 통과시키고, 그 뒤 WP3 Slice A를 기존 활성 기억 1개 집중이라는 최소 범위로만 연다.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>Rerun <code>npm run qa:postloss</code> on a trusted local Chrome/CDP environment.</li>
+<li>If the same CDP timeout recurs, retry once with <code>npm run qa:postloss -- --timeout-ms 30000</code>.</li>
+<li>If browser QA passes, implement WP3 Slice A without new memories, slots, shops, meta progression, regions, enemies, or weapons.</li>
+<li>Track <code>earlyChoiceInterest &gt; 0.72</code> while keeping <code>postLossChallengeContrast &gt;= 0.30</code> and irritation low.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: WP2 Slice B had promising proxy metrics, but no trusted browser proof.</li>
+<li>Direction: separate implementation completion from browser evidence and human-fun evidence.</li>
+<li>Action: recorded Claude/Codex agreement, conflict, selected scope, and required QA gate across task/status/report docs.</li>
+<li>Result: the next loop is constrained to trusted-local post-loss QA first, then one minimal tactical agency slice if the gate passes.</li>
+</ul>
   </main>
 </body>
 </html>

@@ -86,6 +86,8 @@ function summarize(batch) {
   const twoMemorySurvivalRate = mean(stages.map(({ stage }) => stage.deficitSurvivalChance || 0));
   const refillReachedRate = pct(stages.filter(({ stage }) => stage.refillReached).length, stageCount);
   const echoPivotScore = mean(stages.map(({ stage }) => stage.echoPivotScore || 0));
+  const postLossChallengeScore = mean(stages.map(({ stage }) => stage.postLossChallenge?.score || 0));
+  const postLossChallengeContrast = mean(stages.map(({ stage }) => stage.postLossChallenge?.contrast || 0));
 
   const buildDiversity = normalizedDiversity(buildClasses, stageCount);
   const memoryDeleteMaxShare = maxShare(deletedMemories, stageCount);
@@ -187,6 +189,8 @@ function summarize(batch) {
       twoMemorySurvivalRate: round(twoMemorySurvivalRate, 4),
       refillReachedRate: round(refillReachedRate, 4),
       echoPivotScore: round(echoPivotScore, 4),
+      postLossChallengeScore: round(postLossChallengeScore, 4),
+      postLossChallengeContrast: round(postLossChallengeContrast, 4),
       firstForgetUseAvgSec: round(firstUseAvg, 1),
       buildDiversity: round(buildDiversity, 4),
       buildClassMaxShare: round(buildClassMaxShare, 4),
@@ -400,7 +404,7 @@ function runsToCsv(runs) {
     'deletedMemoryName', 'predictedMemoryName', 'leastWantedName', 'predictionMatch', 'deletedWasLeastWanted',
     'q1Pain', 'q2Understanding', 'quadrant', 'immediateQuit', 'restartIntent', 'powerDrop', 'recoveryRatio',
     'earlyFunScore', 'earlyKillTempo', 'earlyCrowdPressure', 'earlyChoiceInterest', 'earlyLevelUps',
-    'cycleCompleted', 'deficitSurvivalChance', 'refillReached', 'echoPivotScore',
+    'cycleCompleted', 'deficitSurvivalChance', 'postLossChallengeScore', 'postLossChallengeContrast', 'refillReached', 'echoPivotScore',
     'preForgetPower', 'postDeletePower', 'postReplacementPower', 'replacementName', 'deletionWeights', 'echoPower', 'uiClarity',
     'activeMemoryNamesBefore', 'activeMemoryNamesAfter'
   ];
@@ -442,6 +446,8 @@ function extractCsvValue(run, stage, h) {
     earlyLevelUps: stage.earlyLoop?.levelUpsBeforeBoss,
     cycleCompleted: stage.cycleCompleted,
     deficitSurvivalChance: stage.deficitSurvivalChance,
+    postLossChallengeScore: stage.postLossChallenge?.score,
+    postLossChallengeContrast: stage.postLossChallenge?.contrast,
     refillReached: stage.refillReached,
     echoPivotScore: stage.echoPivotScore,
     preForgetPower: stage.preForgetPower,

@@ -48,6 +48,7 @@ function checkPackageScripts() {
     'planning:pipeline:auto',
     'qa:identity',
     'qa:pressure',
+    'qa:postloss',
     'autopilot:preflight',
     'autopilot:preflight:local',
     'autopilot:preflight:dry',

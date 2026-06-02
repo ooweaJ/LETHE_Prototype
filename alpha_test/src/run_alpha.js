@@ -55,6 +55,7 @@ function main() {
   console.log(`Clear: ${(summary.headlineMetrics.clearRate * 100).toFixed(1)}% / Death-Fail: ${(summary.headlineMetrics.failureRate * 100).toFixed(1)}%`);
   console.log(`Early Fun: ${summary.headlineMetrics.earlyFunScore} / Kill Tempo: ${summary.headlineMetrics.earlyKillTempo} / Level-ups: ${summary.headlineMetrics.earlyLevelUps}`);
   console.log(`Pressure: crowd ${summary.headlineMetrics.earlyCrowdPressure} / contrast ${summary.headlineMetrics.pressureContrast}`);
+  console.log(`Post-loss: challenge ${summary.headlineMetrics.postLossChallengeScore} / contrast ${summary.headlineMetrics.postLossChallengeContrast}`);
   console.log(`Cycle: first ${(summary.headlineMetrics.firstCycleCompletionRate * 100).toFixed(1)}% / 2-memory ${(summary.headlineMetrics.twoMemorySurvivalRate * 100).toFixed(1)}% / echo pivot ${summary.headlineMetrics.echoPivotScore}`);
   console.log(`Next: ${summary.playability.nextStep}`);
   console.log(`Outputs: ${outDir}`);

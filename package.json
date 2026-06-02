@@ -31,6 +31,7 @@
     "doctor:deep": "node scripts/check_local_pipeline.js --deep",
     "qa:identity": "node scripts/run_browser_identity_qa.js",
     "qa:pressure": "node scripts/run_browser_pressure_qa.js",
+    "qa:postloss": "node scripts/run_browser_pressure_qa.js --mode postloss",
     "autopilot:preflight": "node scripts/autopilot_preflight.js --external",
     "autopilot:preflight:local": "node scripts/autopilot_preflight.js",
     "autopilot:preflight:dry": "node scripts/autopilot_preflight.js --dry-run",

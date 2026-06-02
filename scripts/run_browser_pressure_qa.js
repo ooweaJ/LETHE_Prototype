@@ -12,11 +12,11 @@ const options = parseArgs(process.argv.slice(2));
 async function main() {
   const chromePath = findChrome();
   if (!chromePath) {
-    throw new Error('Chrome/Chromium executable not found. Set CHROME_PATH to run browser pressure QA.');
+    throw new Error(`Chrome/Chromium executable not found. Set CHROME_PATH to run browser ${options.mode} QA.`);
   }
 
-  const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'lethe-pressure-qa-'));
-  const url = pressureQaUrl();
+  const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), `lethe-${options.mode}-qa-`));
+  const url = qaUrl();
   const chrome = spawn(chromePath, [
     '--headless=new',
     '--disable-gpu',
@@ -52,7 +52,7 @@ async function main() {
           new Promise((resolve) => {
             const deadline = Date.now() + ${Math.max(500, options.timeoutMs - 1000)};
             const read = () => {
-              const raw = document.documentElement.dataset.lethePressureQa || "";
+              const raw = document.documentElement.dataset.${datasetName()} || "";
               let qa = null;
               try { qa = raw ? JSON.parse(raw) : null; } catch {}
               if (qa && (qa.status === "complete" || qa.status === "failed")) {
@@ -71,7 +71,7 @@ async function main() {
       }, sessionId);
       const value = result.result?.value || {};
       const qa = value.qa || {};
-      const failures = pressureFailures(qa, value);
+      const failures = qaFailures(qa, value);
       const output = {
         url,
         chromePath,
@@ -93,8 +93,15 @@ async function main() {
   }
 }
 
-function pressureFailures(qa, value) {
-  const checks = [
+function qaFailures(qa, value) {
+  const checks = options.mode === 'postloss' ? postLossChecks(qa) : pressureChecks(qa);
+  const failures = checks.filter(([, passed]) => !passed).map(([name]) => name);
+  if (value.timedOut) failures.push(`timed out waiting for ${options.mode} QA dataset`);
+  return failures;
+}
+
+function pressureChecks(qa) {
+  return [
     ['status complete', qa.status === 'complete'],
     ['version v0.9', qa.version === 'v0.9'],
     ['browser state exists', qa.hasState],
@@ -103,15 +110,33 @@ function pressureFailures(qa, value) {
     ['climax segment exists', qa.hasClimax],
     ['pressure segments payload exists', (qa.pressureSegments || []).length >= 3],
   ];
-  const failures = checks.filter(([, passed]) => !passed).map(([name]) => name);
-  if (value.timedOut) failures.push('timed out waiting for pressure QA dataset');
-  return failures;
 }
 
-function pressureQaUrl() {
+function postLossChecks(qa) {
+  return [
+    ['status complete', qa.status === 'complete'],
+    ['version v0.9', qa.version === 'v0.9'],
+    ['browser state exists', qa.hasState],
+    ['post-loss challenge payload exists', qa.postLossChallengeCount >= 1],
+    ['deficit breath segment exists', qa.hasDeficitBreath],
+    ['deficit trial segment exists', qa.hasDeficitTrial],
+    ['challenge completed', qa.challengeCompleted],
+    ['challenge survived', qa.challengeSurvived],
+    ['refill restored 3 active memories', qa.activeMemoryCount === 3],
+    ['danger post-loss completion counted', (qa.danger?.postLossChallengeCompletions || 0) >= 1],
+  ];
+}
+
+function qaUrl() {
   const file = pathToFileURL(path.resolve('index.html'));
-  file.search = '?qa=fast,pressure&tester=QA&session=PRESSURE';
+  const qaName = options.mode === 'postloss' ? 'postloss' : 'pressure';
+  const session = options.mode === 'postloss' ? 'POSTLOSS' : 'PRESSURE';
+  file.search = `?qa=fast,${qaName}&tester=QA&session=${session}`;
   return file.href;
+}
+
+function datasetName() {
+  return options.mode === 'postloss' ? 'lethePostLossQa' : 'lethePressureQa';
 }
 
 async function waitForPipePageTarget(cdp, timeoutMs) {
@@ -220,8 +245,13 @@ function findChrome() {
 
 function parseArgs(args) {
   const timeoutArg = valueAfter(args, '--timeout-ms');
+  const modeArg = valueAfter(args, '--mode') || 'pressure';
+  if (!['pressure', 'postloss'].includes(modeArg)) {
+    throw new Error(`Unknown QA mode: ${modeArg}. Use pressure or postloss.`);
+  }
   return {
     timeoutMs: timeoutArg ? Number(timeoutArg) : 8000,
+    mode: modeArg,
   };
 }
 

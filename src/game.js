@@ -241,6 +241,7 @@ const experiment = {
   qaDeathMode: qaMode.includes("death"),
   qaIdentityMode: qaMode.includes("identity"),
   qaPressureMode: qaMode.includes("pressure"),
+  qaPostLossMode: qaMode.includes("postloss"),
 };
 
 if (experiment.qaFastMode) {
@@ -360,6 +361,10 @@ function createRunState() {
       deficitTime: 0,
       deficitLowHpTime: 0,
       deficitDeath: false,
+      deficitBreathTime: 0,
+      deficitChallengeTime: 0,
+      deficitChallengeLowHpTime: 0,
+      postLossChallengeCompletions: 0,
       pressureLullTime: 0,
       pressureRiseTime: 0,
       pressureClimaxTime: 0,
@@ -396,6 +401,7 @@ function createRunState() {
       refillChoices: [],
       pressurePhaseId: null,
       pressureSegments: [],
+      postLossChallenges: [],
     },
     questions: {
       protect: null,
@@ -715,8 +721,7 @@ function updateSpawning(dt) {
   state.spawnCd -= dt;
   const profile = pressureProfile();
   updatePressurePhase(profile);
-  const deficitPressure = activeMemoryCount() < 3 ? 0.08 : 0;
-  const spawnRate = Math.max(0.34, profile.spawnRate - deficitPressure);
+  const spawnRate = Math.max(0.34, profile.spawnRate);
   if (state.spawnCd <= 0) {
     state.spawnCd = spawnRate;
     const packSize = profile.packSize;
@@ -734,13 +739,29 @@ function updateSpawning(dt) {
 
 function pressureProfile() {
   if (activeMemoryCount() < 3) {
+    const timeline = state.runTimeline;
+    const start = timeline.deficitStartedAt ?? state.elapsed;
+    const end = timeline.refillAvailableAt ?? start + experiment.deficitDurationSec;
+    const progress = clamp((state.elapsed - start) / Math.max(1, end - start), 0, 1);
+    if (progress < 0.30) {
+      return {
+        id: "deficit_breath",
+        label: "결손 정비",
+        note: "잃은 기억의 빈자리를 확인하는 짧은 숨 고르기",
+        intensity: 0.48,
+        spawnRate: 0.72,
+        packSize: 2,
+        postLossChallenge: true,
+      };
+    }
     return {
-      id: "deficit_recover",
-      label: "결손 회복",
-      note: "잃은 기억의 빈자리를 버티는 회복 압박",
-      intensity: 0.56,
-      spawnRate: 0.64,
-      packSize: 3,
+      id: "deficit_trial",
+      label: "결손 압박",
+      note: "기억 2개와 잔향만으로 버티는 짧은 테스트",
+      intensity: 0.82,
+      spawnRate: progress > 0.72 ? 0.44 : 0.50,
+      packSize: progress > 0.72 ? 4 : 3,
+      postLossChallenge: true,
     };
   }
 
@@ -786,6 +807,8 @@ function pressureEnemyPool(profile) {
   if (profile.id === "lull") return ["eroder", "eroder", "drifting_eye", "split_one"];
   if (profile.id === "rising") return base.concat(state.elapsed > 28 ? ["void_priest"] : []);
   if (profile.id === "climax") return base.concat(["drifting_eye", "split_one", "void_priest"]);
+  if (profile.id === "deficit_breath") return ["eroder", "eroder", "drifting_eye", "split_one"];
+  if (profile.id === "deficit_trial") return base.concat(["drifting_eye", "void_priest"]);
   return ["eroder", "eroder", "split_one", "drifting_eye"];
 }
 
@@ -807,12 +830,59 @@ function updatePressurePhase(profile) {
     intensity: profile.intensity,
     nextBossAt: state.runTimeline.bossScheduleSec[state.runTimeline.nextBossIndex] || null,
   });
+  if (profile.postLossChallenge) recordPostLossChallengePhase(profile);
+}
+
+function currentPostLossChallenge() {
+  const challenges = state.runTimeline.postLossChallenges;
+  return challenges[challenges.length - 1] || null;
+}
+
+function recordPostLossChallengePhase(profile) {
+  const challenge = currentPostLossChallenge();
+  if (!challenge || challenge.completedAt) return;
+  if (!challenge.segments.some((segment) => segment.id === profile.id)) {
+    challenge.segments.push({
+      id: profile.id,
+      label: profile.label,
+      at: Number(state.elapsed.toFixed(2)),
+      intensity: profile.intensity,
+    });
+  }
+  if (profile.id === "deficit_trial" && challenge.challengeStartedAt === null) {
+    challenge.challengeStartedAt = Number(state.elapsed.toFixed(2));
+  }
+  logEvent("post_loss_challenge_phase", {
+    cycleIndex: challenge.cycleIndex,
+    id: profile.id,
+    label: profile.label,
+    intensity: profile.intensity,
+  });
+}
+
+function completePostLossChallenge() {
+  const challenge = currentPostLossChallenge();
+  if (!challenge || challenge.completedAt) return;
+  challenge.completedAt = Number(state.elapsed.toFixed(2));
+  challenge.survived = !state.death && activeMemoryCount() < 3;
+  challenge.remainingHp = Number(state.player.hp.toFixed(1));
+  challenge.activeMemoryCount = activeMemoryCount();
+  challenge.durationSec = Number((challenge.completedAt - challenge.startedAt).toFixed(2));
+  state.danger.postLossChallengeCompletions += challenge.survived ? 1 : 0;
+  logEvent("post_loss_challenge_completed", {
+    cycleIndex: challenge.cycleIndex,
+    survived: challenge.survived,
+    remainingHp: challenge.remainingHp,
+    durationSec: challenge.durationSec,
+    activeMemoryIds: activeMemoryIds(),
+  });
 }
 
 function updateRefillGate() {
   const timeline = state.runTimeline;
   if (!timeline.refillAvailableAt || state.elapsed < timeline.refillAvailableAt) return;
   if (state.boss || activeMemoryCount() >= 3) return;
+  completePostLossChallenge();
   timeline.refillAvailableAt = null;
   showRefillOverlay();
 }
@@ -1151,6 +1221,11 @@ function updateDangerMetrics(dt) {
   if (activeMemoryCount() < 3) {
     danger.deficitTime += dt;
     if (hpRate <= 0.4) danger.deficitLowHpTime += dt;
+    if (state.runTimeline.pressurePhaseId === "deficit_breath") danger.deficitBreathTime += dt;
+    if (state.runTimeline.pressurePhaseId === "deficit_trial") {
+      danger.deficitChallengeTime += dt;
+      if (hpRate <= 0.4) danger.deficitChallengeLowHpTime += dt;
+    }
   }
 }
 
@@ -1679,11 +1754,27 @@ function showCycleResultOverlay(forgotten) {
     state.mode = "combat";
     state.running = true;
     state.phase = "결손 생존";
+    const challenge = {
+      cycleIndex: state.runTimeline.currentBossIndex,
+      startedAt: Number(state.elapsed.toFixed(2)),
+      challengeStartedAt: null,
+      refillAvailableAt: Number(refillAt.toFixed(2)),
+      completedAt: null,
+      survived: false,
+      forgotten: forgotten.id,
+      forgottenName: forgotten.name,
+      activeMemoryIds: activeMemoryIds(),
+      activeMemoryNames: activeMemories().map((memory) => memory.name),
+      segments: [],
+    };
+    state.runTimeline.postLossChallenges.push(challenge);
+    if (cycle) cycle.postLossChallenge = challenge;
     addLog(`${forgotten.name}의 잔향만 남았다. 기억 ${activeMemoryCount()}개로 버텨라.`);
     logEvent("deficit_started", {
       cycleIndex: state.runTimeline.currentBossIndex,
       refillAvailableAt: Number(refillAt.toFixed(2)),
       activeMemoryIds: activeMemoryIds(),
+      postLossChallenge: challenge,
     });
   });
 }
@@ -2026,6 +2117,7 @@ function runTimelineLog() {
     cycles: timeline.cycles,
     refillChoices: timeline.refillChoices,
     pressureSegments: timeline.pressureSegments,
+    postLossChallenges: timeline.postLossChallenges,
     activeMemoryIds: activeMemoryIds(),
     activeMemoryNames: activeMemories().map((memory) => memory.name),
   };
@@ -2046,6 +2138,10 @@ function dangerLog() {
     deficitTime: Number(danger.deficitTime.toFixed(2)),
     deficitLowHpTime: Number(danger.deficitLowHpTime.toFixed(2)),
     deficitDeath: danger.deficitDeath,
+    deficitBreathTime: Number(danger.deficitBreathTime.toFixed(2)),
+    deficitChallengeTime: Number(danger.deficitChallengeTime.toFixed(2)),
+    deficitChallengeLowHpTime: Number(danger.deficitChallengeLowHpTime.toFixed(2)),
+    postLossChallengeCompletions: danger.postLossChallengeCompletions,
     pressureLullTime: Number(danger.pressureLullTime.toFixed(2)),
     pressureRiseTime: Number(danger.pressureRiseTime.toFixed(2)),
     pressureClimaxTime: Number(danger.pressureClimaxTime.toFixed(2)),
@@ -2889,7 +2985,129 @@ function startPressureQa() {
   }, 120);
 }
 
-if (experiment.qaFastMode || experiment.qaLevelupMode || experiment.qaV06Mode || experiment.qaDeathMode || experiment.qaIdentityMode || experiment.qaPressureMode) {
+function writePostLossQaResult(extra = {}) {
+  if (!experiment.qaPostLossMode) return;
+  const payload = state ? collectLogPayload() : null;
+  const challenges = payload?.runTimeline?.postLossChallenges || [];
+  const challenge = challenges[challenges.length - 1] || null;
+  const segmentIds = (challenge?.segments || []).map((segment) => segment.id);
+  document.documentElement.dataset.lethePostLossQa = JSON.stringify({
+    version: experiment.version,
+    hasState: Boolean(state),
+    elapsed: state ? Number(state.elapsed.toFixed(2)) : 0,
+    activeMemoryCount: state ? activeMemoryCount() : 0,
+    postLossChallenge: challenge,
+    postLossChallengeCount: challenges.length,
+    postLossSegmentIds: segmentIds,
+    hasDeficitBreath: segmentIds.includes("deficit_breath"),
+    hasDeficitTrial: segmentIds.includes("deficit_trial"),
+    challengeCompleted: Boolean(challenge?.completedAt),
+    challengeSurvived: Boolean(challenge?.survived),
+    refillChoices: payload?.runTimeline?.refillChoices || [],
+    danger: payload?.danger || null,
+    ...extra,
+  });
+}
+
+function startPostLossQa() {
+  selectedWeapon = weapons.twin_blades.id;
+  selectedMemories = ["hungry_blades", "shatter_ripple", "stopped_second"];
+  renderSetup();
+  setTimeout(() => {
+    if (!state) startRun();
+  }, 50);
+
+  let phase = 0;
+  const startedAt = performance.now();
+  const timer = setInterval(() => {
+    if (!state) {
+      writePostLossQaResult({ status: "waiting_for_run" });
+      return;
+    }
+
+    if (phase === 0 && !state.boss && state.mode === "combat") {
+      const nextBossAt = state.runTimeline.bossScheduleSec[state.runTimeline.nextBossIndex] || 0;
+      state.elapsed = Math.max(state.elapsed, nextBossAt);
+      updateSpawning(0);
+      phase = 1;
+      writePostLossQaResult({ status: "running", phase });
+      return;
+    }
+
+    if (phase === 1 && state.boss) {
+      state.boss.hp = 0;
+      updateBoss(0);
+      phase = 2;
+      writePostLossQaResult({ status: "running", phase });
+      return;
+    }
+
+    if (phase === 2 && state.mode === "questions") {
+      const active = activeMemories();
+      state.questions.protect = active[0].id;
+      state.questions.predict = active[0].id;
+      const forgotten = forgetMostDependent();
+      showCycleResultOverlay(forgotten);
+      phase = 3;
+      writePostLossQaResult({ status: "running", phase });
+      return;
+    }
+
+    const continueButton = document.querySelector("#continueCycleButton");
+    if (phase === 3 && continueButton) {
+      continueButton.click();
+      updateSpawning(0);
+      updateDangerMetrics(0.5);
+      phase = 4;
+      writePostLossQaResult({ status: "running", phase });
+      return;
+    }
+
+    if (phase === 4 && state.runTimeline.refillAvailableAt) {
+      const start = state.runTimeline.deficitStartedAt || state.elapsed;
+      state.elapsed = Math.max(state.elapsed, start + experiment.deficitDurationSec * 0.68);
+      updateSpawning(0);
+      updateDangerMetrics(1.5);
+      phase = 5;
+      writePostLossQaResult({ status: "running", phase });
+      return;
+    }
+
+    if (phase === 5 && state.runTimeline.refillAvailableAt) {
+      state.elapsed = Math.max(state.elapsed, state.runTimeline.refillAvailableAt);
+      updateRefillGate();
+      phase = 6;
+      writePostLossQaResult({ status: "running", phase });
+      return;
+    }
+
+    if (phase === 6 && state.mode === "refill") {
+      const candidates = refillCandidates();
+      if (candidates.length) applyMemoryRefill(candidates[0]);
+      phase = 7;
+      writePostLossQaResult({ status: "running", phase });
+      return;
+    }
+
+    const qa = JSON.parse(document.documentElement.dataset.lethePostLossQa || "{}");
+    const complete = qa.hasDeficitBreath
+      && qa.hasDeficitTrial
+      && qa.challengeCompleted
+      && qa.challengeSurvived
+      && activeMemoryCount() === 3;
+    if (phase >= 7 || complete) {
+      writePostLossQaResult({ status: complete ? "complete" : "failed", phase });
+      clearInterval(timer);
+      return;
+    }
+
+    const timedOut = performance.now() - startedAt > 45000;
+    writePostLossQaResult({ status: timedOut ? "timeout" : "running", phase });
+    if (timedOut) clearInterval(timer);
+  }, 120);
+}
+
+if (experiment.qaFastMode || experiment.qaLevelupMode || experiment.qaV06Mode || experiment.qaDeathMode || experiment.qaIdentityMode || experiment.qaPressureMode || experiment.qaPostLossMode) {
   window.__letheQaLog = () => (state ? JSON.parse(JSON.stringify(collectLogPayload())) : null);
 }
 
@@ -2899,4 +3117,5 @@ if (experiment.qaLevelupMode) startLevelupQa();
 if (experiment.qaV06Mode) startV06CycleQa();
 if (experiment.qaDeathMode) startDeathQa();
 if (experiment.qaPressureMode) startPressureQa();
+if (experiment.qaPostLossMode) startPostLossQa();
 requestAnimationFrame(frame);

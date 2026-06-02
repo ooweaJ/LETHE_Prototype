@@ -4,11 +4,11 @@ Last updated: 2026-06-02
 
 ## Current Build
 
-- Project: LETHE HTML Alpha v0.9 WP2 Slice A pressure rhythm implemented.
+- Project: LETHE HTML Alpha v0.9 WP2 Slice B minimal post-loss challenge implemented.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
-- Latest task-update status: report headings are numbered by work unit and enforced by `npm run report:check`. v0.9 WP2 Slice A pressure rhythm is implemented: browser spawn pacing now moves through `숨 고르기`, `압박 상승`, and `망각 전조`; `npm run qa:pressure` passed with failures `[]`; `npm run ai:test:quick` stayed `GO_CANDIDATE` with Alpha Fun Score `0.885`.
+- Latest task-update status: v0.9 WP2 Slice B is implementation-complete and scope-valid, but still `ITERATE_BEFORE_TEST` because trusted browser proof is missing. Claude/Codex feedback agrees the post-loss challenge uses existing combat parameters only and AI proxy evidence remains stable (`GO_CANDIDATE`, Alpha Fun Score `0.8846` quick / `0.8879` full, post-loss contrast about `0.313`, 2-memory survival about `79%`), but `qa:postloss` must pass on a trusted local before WP3 or people testing. Next scope is not broader content; it is trusted-local `npm run qa:postloss`, then a minimal WP3 Slice A tactical agency hook using one existing active memory.
 
 ## Implemented
 
@@ -79,6 +79,17 @@ Last updated: 2026-06-02
   - setup/refill memory cards now use one shared `role · short description` summary,
   - choice summaries are visually capped at two lines,
   - no new memories, slots, shop, meta progression, region, or weapon expansion was added.
+- v0.9 Work Package 2 Slice A pressure rhythm:
+  - browser spawn pacing moves through `숨 고르기`, `압박 상승`, and `망각 전조`,
+  - `runTimeline.pressureSegments` and `danger.pressure*Time` fields record the pressure rhythm,
+  - AI simulator reports `pressureRhythm` and headline `pressureContrast`,
+  - `npm run qa:pressure` script exists for Chrome/CDP pressure QA.
+- v0.9 Work Package 2 Slice B minimal post-loss challenge:
+  - after memory loss, the 2-memory deficit segment uses existing enemies/spawn parameters to move through `결손 정비` and `결손 압박`,
+  - `runTimeline.postLossChallenges` records started/completed/survived state, active memories, HP, and segment ids,
+  - `danger` records deficit breath/challenge time and post-loss challenge completions,
+  - AI simulator reports `postLossChallengeScore` and `postLossChallengeContrast`,
+  - `npm run qa:postloss` script exists for Chrome/CDP post-loss QA.
 - AI alpha test tool under `alpha_test/`.
 - Codex/GPT/Claude workflow docs.
 - Markdown daily reports, generated HTML reports, and Discord report delivery.
@@ -114,40 +125,36 @@ Command:
 npm run ai:test
 ```
 
-v0.7 result:
+v0.9 WP2 Slice B result:
 
 - Verdict: `GO_CANDIDATE`
 - Playability: `AI 기준 사람 테스트 진입 가능`
 - Risk Level: `LOW`
-- Alpha Fun Score: `0.9131`
-- Early Fun Score: `0.8793`
-- Early kill tempo: `0.9847`
-- Pre-boss level-ups: `4.16`
-- First cycle completion: `84.1%`
-- Two-memory survival: `81.5%`
-- Echo pivot score: `0.7349`
-- Regret proxy: `84.0%`
-- Irritation proxy: `0.4%`
-- Prediction match: `87.6%`
-- Immediate quit: `0.7%`
-- Restart intent: `76.1%`
-- First forgetting time: `4.00 min`
-- Post-forgetting power drop: `28.0%`
-- Recovery after replacement: `97.5%`
-- Max single memory deletion share: `28.8%`
+- Alpha Fun Score: `0.8879`
+- Early Fun Score: `0.8339`
+- Early kill tempo: `0.9624`
+- Pre-boss level-ups: `3.85`
+- First cycle completion: `80.9%`
+- Two-memory survival: `78.8%`
+- Post-loss challenge score: `0.6692`
+- Post-loss challenge contrast: `0.3135`
+- Echo pivot score: `0.6527`
+- Regret proxy: `81.6%`
+- Irritation proxy: `0.6%`
+- Prediction match: `85.2%`
+- Death/fail: `47.0%`
+- Post-forgetting power drop: `22.9%`
+- Recovery after replacement: `96.8%`
 
 Heavy check:
 
-- `npm run ai:test:heavy`: `GO_CANDIDATE`, Alpha Fun Score `0.9136`, Early Fun Score `0.8787`, first cycle completion `82.7%`, two-memory survival `81.1%`, echo pivot `0.7286`, regret `84.5%`, irritation `0.3%`, prediction `88.1%`.
+- Not rerun in the WP2 Slice B loop. Use `npm run ai:test` and `npm run ai:test:quick` results above for this work unit.
 
 Remaining note:
 
-- v0.6 fixed the previous 9-minute first-forgetting delay by opening the first cycle at 4 minutes.
-- Prediction match is still high and should be watched during 1-person feel testing.
-- v0.7 improves weapon baseline and mob-clearing proxy, but echo pivot score dropped slightly; watch whether the player feels "weapon solved it" instead of "lost memory changed the build."
-- Actual Claude v0.7 review succeeded and saved `docs/review_responses/2026-06-02-v07-balance-claude.md`.
-- Claude verdict: `GO_TO_SOLO_PLAYTEST`, now superseded by user live balance feedback.
-- Solo test sheet: `docs/playtest/2026-06-02-solo.md`.
+- v0.9 WP2 now has both pre-loss pressure rhythm and a minimal post-loss challenge proxy.
+- The current browser automation channel failed at Chrome/CDP `Target.getTargets`; rerun `npm run qa:postloss` on a trusted local before treating this as browser-proven.
+- AI proxy evidence remains a planning pass only, not human emotion or Unity-transition proof.
 
 ## Latest Sweep Note
 
@@ -413,6 +420,17 @@ npm run ai:sweep
   - watch points: `멈춘 초침` deletion-rate outlier, earlyChoiceInterest `0.654`, and echoPivotScore `0.656` should be observed rather than patched from AI proxy data alone,
   - conflict: Claude frames the build as a people-test preparation candidate after cleanup, while Codex CLI limits the next executable unit to loop-run artifact 정합성 정리 and warns it is not Unity-transition evidence,
   - selected order: docs-only update in this pass, artifact cleanup next, then clean preflight and identity QA; WP2 Slice A pressure rhythm starts only after those pass.
+- Latest devloop feedback synthesis for WP2 Slice B:
+  - prompt: `docs/review_prompts/2026-06-02-devloop-193946-feedback-1.md`,
+  - Claude response: `docs/review_responses/2026-06-02-devloop-193946-feedback-1-claude.md`,
+  - Codex CLI response: `docs/review_responses/2026-06-02-devloop-193946-feedback-1-codex.md`,
+  - synthesis: `docs/review_responses/2026-06-02-devloop-193946-feedback-1-double-check.md`,
+  - common conclusion: WP2 Slice B is within the selected scope and should not be expanded with new memories, slots, shops, meta progression, regions, enemies, or weapons,
+  - common conclusion: AI proxy evidence is stable enough for planning but remains weaker than browser combat evidence or user play evidence,
+  - browser blocker: `npm run qa:postloss` and `npm run qa:pressure` both failed at Chrome/CDP `Target.getTargets`, so trusted-local browser QA is required before treating Slice B as browser-proven,
+  - watch points: `earlyChoiceInterest` remains the weakest current fun metric, while `postLossChallengeScore` around `0.67` and contrast around `0.313` mean the new post-loss beat is present but not human-proven,
+  - conflict: Claude proposes a stage-entry two-choice "기억 집중" moment, while Codex CLI proposes HUD/number-key active-memory focus during combat,
+  - selected order: rerun trusted-local `npm run qa:postloss`; if it passes, start WP3 Slice A as one minimal existing-memory tactical focus hook and decide the UI surface from the smallest stable implementation path.
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the v0.5 level-up flow and `runGrowth` payload.
 - Planning pipeline prompt generated: `docs/review_prompts/2026-06-02-pipeline.md`.
@@ -448,6 +466,7 @@ npm run ai:sweep
 - Docs-only loop update completed for `2026-06-02-devloop-175642-feedback-2`: Claude/Codex common points, conflict, selected vNext scope, and required tests are recorded in the double-check summary, `NEXT_TASKS`, status, devlog, and report.
 - Docs-only loop update completed for `2026-06-02-devloop-175642-feedback-3`: AI planning pass evidence, Claude/Codex conflict, selected gate-cleanup-only scope, and required verification are recorded in the double-check summary, `NEXT_TASKS`, status, devlog, and report.
 - Docs-only loop update completed for `2026-06-02-devloop-175642-feedback-4`: missing-result diagnosis feedback, wrapper-result-created status, remaining artifact-cleanup blocker, and required verification are recorded in the double-check summary, `NEXT_TASKS`, status, devlog, and report.
+- Docs-only loop update completed for `2026-06-02-devloop-193946-feedback-1`: WP2 Slice B feedback, common/ conflict synthesis, selected trusted-local QA gate, and WP3 Slice A scope guard are recorded in the double-check summary, `NEXT_TASKS`, status, devlog, and report.
 - Current dev-loop prompt cleanup is implemented: future nested implementation prompts should not keep re-selecting WP1 after WP1 is complete.
 - Current dev-loop preflight-order cleanup is implemented: future clean-tree dev loops should run preflight before creating their own loop log, and should not mask dirty-tree state with `--allow-dirty` by default.
 - Current autopilot preflight diagnosis now gives exact loop-run artifact cleanup guidance when `docs/loop_runs/*.md` blocks a clean unattended loop.
@@ -460,7 +479,7 @@ npm run ai:sweep
   - working tree clean after `f6ee83f feat: 자동 개발 루프 4차 반영`,
   - `npm run autopilot:preflight`: 21 pass, 0 warn, 0 fail,
   - `npm run qa:identity`: `status: complete`, failures `[]`, `buildIdentitySeenBy90Sec: true`.
-- WP1 gate is officially complete for automation purposes. WP2 Slice A pressure rhythm/high-low pacing is now implemented. Minimal post-loss challenge is the next candidate and should use existing combat parameters only.
+- WP1 gate is officially complete for automation purposes. WP2 Slice A pressure rhythm/high-low pacing and WP2 Slice B minimal post-loss challenge are implemented. The next executable gate is trusted-local `npm run qa:postloss`; after that, WP3 Slice A may add only a minimal existing-memory tactical agency hook.
 - On another local machine, run `npm run doctor` first; run `npm run doctor:deep` before leaving Codex to continue unattended.
 - Before an unattended implement -> Claude feedback -> implement loop, run `npm run autopilot:preflight`.
 - Do not describe AI proxy metrics as real balance feedback.

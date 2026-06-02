@@ -247,6 +247,7 @@ const SIM_DEFAULTS = {
   enableHumanEmotionProxy: true,
   earlyEnemyPressure: 0.86,
   pressureRhythm: true,
+  postLossChallenge: true,
   runGrowthChoices: true,
 };
 

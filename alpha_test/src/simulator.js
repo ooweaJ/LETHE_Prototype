@@ -500,6 +500,27 @@ function pressureRhythmProfile(stageIndex, options) {
   };
 }
 
+function postLossChallengeProfile(stageIndex, options) {
+  if (!options.postLossChallenge) {
+    return {
+      breath: 0.52,
+      trial: 0.52,
+      weightedPressure: 0.52,
+      contrast: 0,
+    };
+  }
+
+  const stageLift = clamp((stageIndex - 1) * 0.05, 0, 0.12);
+  const breath = clamp(0.44 + stageLift * 0.35, 0.40, 0.58);
+  const trial = clamp(0.74 + stageLift, 0.68, 0.90);
+  return {
+    breath: round(breath, 4),
+    trial: round(trial, 4),
+    weightedPressure: round(breath * 0.30 + trial * 0.70, 4),
+    contrast: round(trial - breath, 4),
+  };
+}
+
 function simulateEarlyFunProxy(rng, state, snapshot, build, options, stageIndex) {
   const rhythm = pressureRhythmProfile(stageIndex, options);
   const pressure = rhythm.weightedPressure;
@@ -538,9 +559,10 @@ function bossClearCheck(rng, state, stageIndex, power) {
   return { clear: rng.bool(p), clearChance: round(p, 3), difficulty };
 }
 
-function twoMemorySurvivalCheck(rng, state, stageIndex, postDeletePower, preForgetPower, build) {
+function twoMemorySurvivalCheck(rng, state, stageIndex, postDeletePower, preForgetPower, build, options) {
   const powerRatio = preForgetPower > 0 ? postDeletePower / preForgetPower : 0.7;
-  const pressure = 0.52 + stageIndex * 0.06;
+  const challenge = postLossChallengeProfile(stageIndex, options);
+  const pressure = challenge.weightedPressure;
   const p = clamp(
     0.46
       + powerRatio * 0.42
@@ -552,7 +574,20 @@ function twoMemorySurvivalCheck(rng, state, stageIndex, postDeletePower, preForg
     0.12,
     0.96,
   );
-  return { survived: rng.bool(p), survivalChance: round(p, 4) };
+  const challengeScore = clamp(
+    challenge.contrast * 0.45
+      + clamp(1 - Math.abs(p - 0.76) / 0.76, 0, 1) * 0.55,
+    0,
+    1,
+  );
+  return {
+    survived: rng.bool(p),
+    survivalChance: round(p, 4),
+    postLossChallenge: {
+      ...challenge,
+      score: round(challengeScore, 4),
+    },
+  };
 }
 
 function echoPivotScore(state, build, powerDrop, recoveryRatio) {
@@ -637,7 +672,7 @@ function simulateOneRun(rng, bot, options, runIndex = 0) {
     const postDeletePower = calculatePower(state);
     const powerDrop = preForgetPower > 0 ? clamp((preForgetPower - postDeletePower) / preForgetPower, -1, 1) : 0;
 
-    const deficit = twoMemorySurvivalCheck(rng, state, stageIndex, postDeletePower, preForgetPower, build);
+    const deficit = twoMemorySurvivalCheck(rng, state, stageIndex, postDeletePower, preForgetPower, build, options);
 
     let replacementId = null;
     if (options.replacementOffer && deficit.survived && state.activeMemories.length < 3) {
@@ -683,6 +718,7 @@ function simulateOneRun(rng, bot, options, runIndex = 0) {
       powerDrop: round(powerDrop, 4),
       recoveryRatio: round(recoveryRatio, 4),
       deficitSurvivalChance: deficit.survivalChance,
+      postLossChallenge: deficit.postLossChallenge,
       cycleCompleted: deficit.survived && Boolean(replacementId),
       refillReached: deficit.survived,
       echoPivotScore: pivotScore,

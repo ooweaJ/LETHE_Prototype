@@ -25,6 +25,7 @@
 - Latest devloop feedback-3 verdict: AI planning evidence supports `GO_CANDIDATE` / Claude `GO_TO_HUMAN_TEST`, but the selected Codex scope remains gate cleanup only. Do not start WP2 or human-test checklist work until loop-run artifacts are recorded/cleaned, clean-tree `npm run autopilot:preflight:local` passes, and trusted-local `npm run qa:identity` passes.
 - Latest devloop feedback-4 verdict: `GO_CANDIDATE` remains an AI planning pass, not human emotion or balance proof. The missing-result diagnosis worked and the wrapper result now exists, so the next executable scope is still artifact 정합성 정리: record/track or remove the `docs/loop_runs/2026-06-02-devloop-175642*` outputs, then pass clean-tree `npm run autopilot:preflight:local` and trusted-local `npm run qa:identity` before WP2.
 - Post-loop gate closure: `2026-06-02-devloop-175642*` outputs are committed, `npm run autopilot:preflight` passed with 21 pass / 0 warn / 0 fail, and `npm run qa:identity` passed with `status: complete`, failures `[]`. Next executable scope is v0.9 Work Package 2 Slice A.
+- Latest devloop feedback-193946 verdict: `ITERATE_BEFORE_TEST`. WP2 Slice B is implementation-complete and scope-valid, but not browser-proven because local Chrome/CDP `qa:postloss` failed at `Target.getTargets`. Before WP3 or people testing, rerun trusted-local `npm run qa:postloss`; if it passes, proceed only to a minimal WP3 Slice A tactical agency hook using the current active memories and current combat loop.
 - Reporting rule update: work reports now use numbered unit headings like `# 2026-06-02-44 - 보고서 단위 번호 체계`; `npm run report:check` and `doctor` enforce this so Discord latest-section reports are task-readable.
 - Reference research: `docs/research/2026-06-02-roguelike-reference.md`.
 - New v0.9 prompt: `docs/review_prompts/2026-06-02-v09-release-feel-loop.md`.
@@ -235,8 +236,29 @@
   - AI simulator에 `pressureRhythm`, `pressureContrast` 지표를 추가했다.
   - `npm run qa:pressure`: `status: complete`, failures `[]`, segments `lull/rising/climax`.
   - `npm run ai:test:quick`: `GO_CANDIDATE`, Alpha Fun Score `0.885`, pressureContrast `0.4417`.
-- [ ] v0.9 Work Package 2 Slice B: 압박 고저차 검증 후 기존 전투 파라미터만 써서 최소 post-loss challenge를 구현한다.
-- [ ] v0.9 Work Package 3: 자동전투 안의 작은 tactical agency를 구현한다.
+- [x] v0.9 Work Package 2 Slice B: 압박 고저차 검증 후 기존 전투 파라미터만 써서 최소 post-loss challenge를 구현한다.
+  - 기억 상실 후 2기억 결손 구간이 `결손 정비 -> 결손 압박`으로 움직이게 했다.
+  - 새 기억, 새 슬롯, 상점, 메타 진행, 새 지역, 무기 확장 없이 기존 적/스폰 파라미터만 사용했다.
+  - `runTimeline.postLossChallenges`와 `danger.deficitBreathTime`, `danger.deficitChallengeTime`, `danger.postLossChallengeCompletions` 로그를 추가했다.
+  - AI simulator에 `postLossChallengeScore`, `postLossChallengeContrast` 지표를 추가했다.
+  - `npm run qa:postloss` 브라우저 QA entry를 추가했다.
+  - 검증: `node --check src/game.js`, `node --check scripts/run_browser_pressure_qa.js`, `node --check alpha_test/src/simulator.js`, `node --check alpha_test/src/metrics.js`, `node --check alpha_test/src/run_alpha.js`, `node --check alpha_test/src/report.js` 통과.
+  - 검증: `npm run ai:test:quick`: `GO_CANDIDATE`, Alpha Fun Score `0.8846`, post-loss challenge `0.6687`, contrast `0.3134`, 2-memory survival `79.0%`.
+  - 검증: `npm run ai:test`: `GO_CANDIDATE`, Alpha Fun Score `0.8879`, post-loss challenge `0.6692`, contrast `0.3135`, 2-memory survival `78.8%`.
+  - 검증: `npm run doctor`: 43 pass, 0 warn, 0 fail.
+  - 현재 로컬 Chrome/CDP pipe는 `Target.getTargets` 응답 timeout으로 `npm run qa:postloss -- --timeout-ms 15000`와 `npm run qa:pressure -- --timeout-ms 15000`가 모두 실패했다. trusted local에서 브라우저 QA를 재확인해야 한다.
+- [x] `2026-06-02-devloop-193946-feedback-1` Claude/Codex 피드백 공통점과 충돌을 정리했다.
+  - 공통점: WP2 Slice B는 새 기억/슬롯/상점/메타/지역/무기 없이 기존 전투 파라미터만 쓴 범위 적합 구현이다.
+  - 공통점: AI proxy는 `GO_CANDIDATE`, 낮은 irritation, 높은 restart intent, 2기억 생존율 약 `79%`로 planning 기준은 안정적이다.
+  - 공통점: `qa:postloss` 실패는 `qa:pressure`와 같은 Chrome/CDP `Target.getTargets` 지점에서 발생했으므로 Slice B 로직 실패보다 로컬 브라우저 자동화 채널 blocker로 본다.
+  - 공통점: `earlyChoiceInterest`와 `postLossChallengeContrast`는 아직 약하므로 사람 테스트/밸런스 근거로 과장하지 않는다.
+  - 충돌: Claude는 스테이지 진입 전 2지선다 "기억 집중"을 권장했고, Codex CLI는 HUD/숫자키 기반 전투 중 집중 기억 지정을 권장했다.
+  - 선택: trusted-local `npm run qa:postloss`를 먼저 통과시킨 뒤, WP3 Slice A는 기존 활성 기억 1개를 짧게 집중시키는 최소 tactical agency로만 진행한다. UI 표면은 구현 시 기존 구조에 가장 작게 맞는 쪽으로 결정한다.
+- [ ] trusted local에서 `npm run qa:postloss`를 재실행한다. 같은 CDP timeout이면 `npm run qa:postloss -- --timeout-ms 30000`을 한 번만 재시도하고, 필요하면 `npm run qa:pressure`로 자동화 채널 문제를 대조한다.
+- [ ] v0.9 Work Package 3 Slice A: 자동전투 안의 작은 tactical agency를 구현한다.
+  - 기존 활성 기억 중 1개를 짧게 집중시키는 선택만 허용한다.
+  - 새 기억, 새 슬롯, 상점, 메타 성장, 새 지역, 새 적, 새 무기 추가는 금지한다.
+  - 목표 지표는 `earlyChoiceInterest > 0.72`, `postLossChallengeContrast >= 0.30`, 낮은 irritation 유지다.
 - [ ] v0.9 통과 후에만 실제 브라우저 전투 QA와 사용자 1인 테스트를 요청한다.
 
 ## Pre-Human-Test Polish Gate

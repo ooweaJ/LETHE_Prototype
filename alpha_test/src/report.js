@@ -59,6 +59,8 @@ function makeMarkdown(summary) {
   lines.push(`| 보스 전 레벨업 | ${num(m.earlyLevelUps, 2)}회 | 목표: 2회 이상 |`);
   lines.push(`| 첫 사이클 완주율 | ${pct(m.firstCycleCompletionRate)} | 목표: 70% 이상 |`);
   lines.push(`| 2기억 생존율 | ${pct(m.twoMemorySurvivalRate)} | 목표: 65~88% |`);
+  lines.push(`| 결손 압박 테스트 | ${num(m.postLossChallengeScore, 3)} | 정비 후 압박 구간 proxy |`);
+  lines.push(`| 결손 압박 contrast | ${num(m.postLossChallengeContrast, 3)} | 결손 정비/압박 고저차 |`);
   lines.push(`| 잔향 피벗 점수 | ${num(m.echoPivotScore, 3)} | 목표: 0.62 이상 |`);
   lines.push(`| 기억 보충 도달율 | ${pct(m.refillReachedRate)} | 목표: 70% 이상 |`);
   lines.push(`| 망각 직후 전투력 딥 | ${pct(m.avgPowerDrop)} | 목표: 30~50% |`);
