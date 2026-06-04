@@ -122,72 +122,72 @@
   </header>
   <main>
     <h1>2026-06-04-03 - v0.11 기억 획득과 무기 진화 구현</h1>
-<h2>1. Current build status</h2>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
-<li>LETHE HTML Alpha is now <code>v0.11</code>.</li>
-<li>The current planning source is <code>docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md</code>.</li>
-<li>The prototype now implements the v0.11 growth loop: starting memory 1, hunting/level-up acquisition, active memory upgrades, weighted-random forgetting, weapon echoes, and two weapon evolutions.</li>
+<li>LETHE HTML Alpha가 <code>v0.11</code>로 올라갔다.</li>
+<li>현재 기획 원본은 <code>docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md</code>다.</li>
+<li>프로토타입은 이제 시작 기억 1개, 사냥/레벨업 기억 획득, 보유 기억 강화, 가중 랜덤 망각, 무기 잔향, 무기 진화 2종을 구현한다.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
-<li>Changed setup from 3 starting memories to 1 starting memory.</li>
-<li>Reworked level-up choices into new memory acquisition, owned memory upgrade, run stat, and <code>잔향 증폭</code>.</li>
-<li>Added active memory levels and scaling.</li>
-<li>Replaced the v0.10 <code>망각 갈림길</code> with weighted-random forgetting and prediction-only input.</li>
-<li>Added forget-probability UI during omen/question phases.</li>
-<li>Added leveled <code>echoState</code> and weapon evolutions:</li>
+<li>시작 세팅을 시작 기억 3개에서 시작 기억 1개로 바꿨다.</li>
+<li>레벨업 선택지를 새 기억 획득, 보유 기억 강화, 런 성장, <code>잔향 증폭</code>으로 개편했다.</li>
+<li>능동 기억 레벨과 레벨별 피해/범위/지속/쿨다운 보정을 추가했다.</li>
+<li>v0.10의 <code>망각 갈림길</code>을 제거하고, 예측만 입력한 뒤 가중 랜덤으로 실제 망각이 결정되게 했다.</li>
+<li>전조/질문 단계에서 망각 확률 UI를 표시한다.</li>
+<li>레벨이 누적되는 <code>echoState</code>와 무기 진화 2종을 추가했다:</li>
 <li><code>피의 늪</code>,</li>
 <li><code>파쇄 각인</code>.</li>
-<li>Added result-survey Q5 for growth feel.</li>
-<li>Updated README/status/tasks/Discord reporting docs and the v0.11 planning document.</li>
+<li>결과 설문에 Q5 성장 체감 문항을 추가했다.</li>
+<li>README, 상태 문서, 다음 작업, Discord 보고 문서, v0.11 기획서를 갱신했다.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
-<li><code>node --check src/game.js</code>: passed.</li>
-<li><code>node --check scripts/run_browser_identity_qa.js</code>: passed.</li>
-<li><code>node --check scripts/run_browser_pressure_qa.js</code>: passed.</li>
-<li><code>powershell -ExecutionPolicy Bypass -File scripts/update_design_doc_from_markdown.ps1</code>: regenerated the Word planning document from v0.11 Markdown.</li>
-<li><code>npm run report</code>: generated daily HTML and 4 unit files.</li>
-<li><code>npm run report:check</code>: passed.</li>
-<li><code>npm run doctor</code>: passed, 46 pass / 0 warn / 0 fail.</li>
-<li><code>npm run report:discord:unit:dry</code>: passed and summarized the latest reporting unit.</li>
-<li><code>node scripts/send_discord_report.js docs/reports/2026-06-04.md --dry-run --section &quot;2026-06-04-03 - v0.11 기억 획득과 무기 진화 구현&quot;</code>: passed and summarized the v0.11 implementation unit.</li>
-<li><code>npm run qa:identity</code>: blocked before browser assertion because Chrome/Chromium executable was not found and <code>CHROME_PATH</code> is not set.</li>
-<li><code>npm run qa:pressure</code>: blocked for the same Chrome/<code>CHROME_PATH</code> reason.</li>
+<li><code>node --check src/game.js</code>: 통과.</li>
+<li><code>node --check scripts/run_browser_identity_qa.js</code>: 통과.</li>
+<li><code>node --check scripts/run_browser_pressure_qa.js</code>: 통과.</li>
+<li><code>powershell -ExecutionPolicy Bypass -File scripts/update_design_doc_from_markdown.ps1</code>: v0.11 Markdown 기준 Word 기획서 재생성 완료.</li>
+<li><code>npm run report</code>: 일일 HTML과 단위 보고서 4개 생성.</li>
+<li><code>npm run report:check</code>: 통과.</li>
+<li><code>npm run doctor</code>: 46 pass / 0 warn / 0 fail.</li>
+<li><code>npm run report:discord:unit:dry</code>: 최신 보고 단위 미리보기 통과.</li>
+<li><code>node scripts/send_discord_report.js docs/reports/2026-06-04.md --dry-run --section &quot;2026-06-04-03 - v0.11 기억 획득과 무기 진화 구현&quot;</code>: v0.11 구현 단위 요약과 첨부 확인.</li>
+<li><code>npm run qa:identity</code>: Chrome/Chromium 실행 파일을 찾지 못했고 <code>CHROME_PATH</code>가 없어 브라우저 검증 전 차단.</li>
+<li><code>npm run qa:pressure</code>: 같은 Chrome/<code>CHROME_PATH</code> 사유로 차단.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
-<li>Follow v0.11 over v0.10: remove player-chosen release fork and use weighted-random forgetting.</li>
-<li>Keep 8 memories, 2 weapons, 3 active slots, 600-second run, and bosses at 180 / 340 / 490 / 600.</li>
-<li>Implement only two weapon evolutions for the prototype.</li>
-<li>Keep AI metrics as planning evidence only until the simulator models the v0.11 loop.</li>
+<li>v0.10의 선택형 망각 갈림길보다 v0.11의 가중 랜덤 망각을 따른다.</li>
+<li>기억 8종, 무기 2종, 활성 슬롯 3개, 600초 런, 180 / 340 / 490 / 600초 보스 스케줄을 유지한다.</li>
+<li>프로토타입 무기 진화는 <code>피의 늪</code>, <code>파쇄 각인</code> 2종만 구현한다.</li>
+<li>AI 지표는 v0.11 루프를 시뮬레이터가 반영하기 전까지 기획 참고 근거로만 본다.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
-<li>Balance is provisional because active memory acquisition and weapon evolution are new.</li>
-<li>Existing browser QA scripts are version-updated but do not yet deeply assert all v0.11 mechanics.</li>
-<li>The managed environment currently blocks browser QA because Chrome/Chromium is unavailable.</li>
-<li>The alpha simulator still needs recalibration for memory acquisition, weighted forgetting, and weapon evolution.</li>
+<li>기억 획득/강화와 무기 진화가 새로 들어가서 밸런스는 임시값이다.</li>
+<li>기존 브라우저 QA 스크립트는 v0.11 버전 확인까지만 맞췄고, 획득/망각/진화 전용 assertion은 아직 부족하다.</li>
+<li>현재 관리 환경은 Chrome/Chromium을 찾지 못해 브라우저 QA가 막힌다.</li>
+<li>알파 시뮬레이터는 기억 획득, 가중 망각, 무기 진화 모델을 다시 맞춰야 한다.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
-<li>v0.11 reframes forgetting as weapon growth, not a fork choice.</li>
-<li>The key test question is whether players feel &quot;I grew my build, lost a relied-on active memory, but my weapon became a new body&quot; rather than &quot;the game deleted my best thing.&quot;</li>
-<li>GPT/Claude should review browser/playtest logs for growth feel, probability comprehension, echo/evolution comprehension, and post-loss irritation.</li>
+<li>v0.11은 망각을 선택 갈림길이 아니라 무기 성장으로 재정의한다.</li>
+<li>핵심 검증 질문은 “내가 키운 빌드에서 의존하던 능동 기억을 잃었지만, 무기가 그 기억을 받아 새 몸이 됐다”로 느껴지는지다.</li>
+<li>GPT/Claude는 브라우저/플레이테스트 로그에서 성장 체감, 확률 이해, 잔향/진화 이해, 망각 후 짜증 정도를 봐야 한다.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
-<li>Regenerate the Word 기획서 from v0.11 Markdown.</li>
-<li>Run <code>npm run report</code>, <code>npm run report:check</code>, <code>npm run doctor</code>, and <code>npm run report:discord:unit:dry</code>.</li>
-<li>Run trusted-local browser QA once Chrome/Chromium is available.</li>
-<li>Add v0.11-specific browser assertions for acquisition/upgrade, weighted forgetting, echo state, and weapon evolution.</li>
+<li>Chrome/Chromium 또는 <code>CHROME_PATH</code>가 준비된 환경에서 브라우저 QA를 실행한다.</li>
+<li>획득/강화, 가중 망각, 잔향 상태, 무기 진화 전용 v0.11 브라우저 assertion을 추가한다.</li>
+<li>v0.11 루프를 반영하도록 AI 시뮬레이터를 재보정한다.</li>
+<li>1인 브라우저 플레이테스트로 성장감과 망각 후 피벗 감정을 확인한다.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 노트</h2>
 <ul>
-<li>Problem: v0.10 improved agency but still did not fully solve the growth fantasy before loss.</li>
-<li>Direction: make memories a hunted/leveled build and make loss become weapon evolution.</li>
-<li>Action: implemented hunting acquisition, active levels, weighted forgetting, leveled echoes, and two weapon evolutions.</li>
-<li>Result: the prototype now tests whether forgetting can feel like transformation and build pivot rather than punishment.</li>
+<li>문제: v0.10은 선택권은 좋아졌지만, 망각 전에 빌드를 키우는 성장 판타지가 아직 약했다.</li>
+<li>방향: 기억을 사냥으로 얻고 강화하는 빌드로 만들고, 상실을 무기 진화로 전환한다.</li>
+<li>행동: 기억 획득, 능동 레벨, 가중 망각, 레벨 잔향, 무기 진화 2종을 구현했다.</li>
+<li>결과: 프로토타입은 이제 망각이 처벌이 아니라 변형과 빌드 피벗으로 읽히는지 검증할 수 있다.</li>
 </ul>
   </main>
 </body>

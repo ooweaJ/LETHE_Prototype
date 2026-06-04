@@ -122,54 +122,61 @@
   </header>
   <main>
     <h1>2026-06-04-04 - 수동 보고와 Discord 기록 경로 정리</h1>
-<h2>1. Current build status</h2>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
-<li>Reporting scripts already support daily reports, work-unit reports, latest-section attachments, and Discord dry-run.</li>
-<li>Autonomous loops call Discord work-unit reporting, but manual Codex implementation turns require an explicit report/Discord command at the end.</li>
+<li>보고 스크립트는 일일 보고, 작업 단위 보고, 최신 섹션 첨부, Discord dry-run을 이미 지원한다.</li>
+<li>자동 루프는 Discord 작업 단위 보고를 호출하지만, 일반 수동 Codex 구현 턴은 마지막에 보고/Discord 명령을 명시적으로 실행해야 한다.</li>
+<li>v0.11 구현 보고는 <code>dry-run</code>만 됐던 상태에서 실제 Discord 전송까지 보정 완료했다.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
-<li>Documented the manual reporting path in <code>docs/DISCORD_REPORTING.md</code>.</li>
-<li>Recorded that <code>docs/ai/</code> is static collaboration/failure-case documentation, not an automatic per-work append log.</li>
-<li>Clarified that per-work AI 활용 records should be written to devlog, daily report, review prompts, and review responses.</li>
-<li>Fixed Discord report summary extraction for numbered section headings such as <code>## 2. What changed today</code>.</li>
+<li><code>docs/DISCORD_REPORTING.md</code>에 수동 보고 절차를 문서화했다.</li>
+<li><code>docs/ai/</code>는 매 작업 자동 누적 로그가 아니라 AI 협업 규칙/실패 사례를 보관하는 정적 문서라고 기록했다.</li>
+<li>작업별 AI 활용 기록은 devlog, daily report, review prompt, review response에 남긴다고 정리했다.</li>
+<li><code>## 2. 오늘 바뀐 것</code>처럼 번호가 붙은 섹션도 Discord 요약이 인식하도록 <code>scripts/send_discord_report.js</code>를 고쳤다.</li>
+<li>v0.11 구현 보고와 수동 보고 경로 정리 보고서를 한국어로 다시 작성했다.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
-<li>Script search confirmed <code>run_autonomous_dev_loop.js</code> calls <code>sendWorkUnitReport()</code>.</li>
-<li>Script search confirmed <code>report:discord:unit:dry</code> and <code>report:discord:unit</code> already exist.</li>
-<li><code>node scripts/send_discord_report.js docs/reports/2026-06-04.md --dry-run --section &quot;2026-06-04-03 - v0.11 기억 획득과 무기 진화 구현&quot;</code> now extracts real work/status/problem/handoff summary text and attaches the v0.11 unit HTML.</li>
+<li>스크립트 검색으로 <code>run_autonomous_dev_loop.js</code>가 <code>sendWorkUnitReport()</code>를 호출하는 것을 확인했다.</li>
+<li><code>report:discord:unit:dry</code>와 <code>report:discord:unit</code> 명령이 이미 존재하는 것도 확인했다.</li>
+<li><code>node scripts/send_discord_report.js docs/reports/2026-06-04.md --dry-run --section &quot;2026-06-04-03 - v0.11 기억 획득과 무기 진화 구현&quot;</code>이 실제 작업/상태/문제/인계 요약을 뽑고 v0.11 단위 HTML을 첨부하는 것을 확인했다.</li>
+<li><code>node scripts/send_discord_report.js docs/reports/2026-06-04.md --section &quot;2026-06-04-03 - v0.11 기억 획득과 무기 진화 구현&quot;</code>로 v0.11 구현 보고 실제 Discord 전송을 완료했다.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
-<li>Do not treat missing Discord upload after manual implementation as automatic failure of the script.</li>
-<li>Use <code>npm run report:discord:unit:dry</code> as the default proof in Codex-managed sessions.</li>
-<li>Use <code>npm run report:discord:unit</code> only in trusted local environments where real webhook sending is intended.</li>
+<li>수동 구현 후 Discord 업로드가 없었다고 해서 스크립트 자체가 자동 실패한 것으로 보지 않는다.</li>
+<li>Codex 관리 세션에서는 기본 증거로 <code>npm run report:discord:unit:dry</code>를 실행한다.</li>
+<li>실제 webhook 전송은 의도된 trusted local 환경에서 <code>npm run report:discord:unit</code> 또는 특정 섹션 전송으로 수행한다.</li>
+<li>v0.11 구현처럼 사용자가 완료 알림을 기대하는 큰 단위는 <code>dry-run</code>에서 멈추지 않고 실제 전송 결과까지 확인한다.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
-<li>Real Discord upload needs <code>.env</code> with <code>DISCORD_WEBHOOK_URL</code> and network access.</li>
-<li>If Codex forgets to run the dry-run after manual work, Discord/latest-section evidence will lag behind the actual implementation.</li>
-<li>AI collaboration docs can look stale if readers expect them to be per-work logs.</li>
+<li>실제 Discord 업로드는 <code>.env</code>의 <code>DISCORD_WEBHOOK_URL</code>과 네트워크 접근이 필요하다.</li>
+<li>수동 작업 후 Codex가 dry-run에서 멈추면 Discord/latest-section 증거가 구현보다 뒤처진다.</li>
+<li><code>docs/ai/</code>를 작업별 로그로 기대하면 문서가 오래된 것처럼 보일 수 있다.</li>
+<li>latest-section은 항상 마지막 보고 단위를 잡기 때문에, v0.11 구현 보고처럼 특정 단위를 보내려면 <code>--section</code>을 명시해야 한다.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
-<li>The reporting system exists, but its automatic path belongs to autonomous loops.</li>
-<li>Manual implementation should close with report generation, report check, and Discord latest-section dry-run.</li>
-<li>AI utilization evidence for each work unit belongs in reports/devlogs and review prompt/response files.</li>
+<li>보고 시스템은 존재하지만 자동 전송 경로는 자동 루프에 묶여 있다.</li>
+<li>수동 구현은 보고서 생성, 보고서 체크, Discord dry-run 또는 실제 전송까지 닫아야 한다.</li>
+<li>작업별 AI 활용 증거는 reports/devlogs와 review prompt/response 파일에 남긴다.</li>
+<li>이번 누락은 dry-run을 실제 전송으로 착각한 Codex 운용 실수이며, v0.11 구현 보고는 실제 전송으로 보정됐다.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
-<li>After every manual implementation unit, run the report/check/dry-run trio.</li>
-<li>Consider adding a single wrapper command later if manual closure keeps being missed.</li>
-<li>Keep Discord real-send as an explicit trusted-local action.</li>
+<li>매 수동 구현 단위 후 보고서 생성/체크/dry-run 또는 실제 전송을 실행한다.</li>
+<li>같은 실수가 반복되면 수동 종료용 wrapper 명령을 추가한다.</li>
+<li>Discord 실제 전송은 명시적인 trusted-local 작업으로 유지한다.</li>
+<li>큰 기능 구현 단위는 Discord 전송 후 <code>Uploaded ... to Discord.</code> 출력까지 확인한다.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 노트</h2>
 <ul>
-<li>Problem: work completion and AI usage records were expected to move automatically after manual Codex work.</li>
-<li>Direction: distinguish autonomous-loop automation from manual-turn closure.</li>
-<li>Action: documented the actual command path and source-of-truth locations.</li>
-<li>Result: future work can show a clear paper trail without assuming Discord upload happens implicitly.</li>
+<li>문제: 수동 Codex 작업 후 완료 보고와 AI 활용 기록이 자동으로 움직인다고 기대했지만 실제 구조는 그렇지 않았다.</li>
+<li>방향: 자동 루프의 자동화와 수동 작업의 종료 절차를 분리해 명확히 한다.</li>
+<li>행동: 실제 명령 경로와 기록 원본 위치를 문서화했다.</li>
+<li>결과: 앞으로 Discord 업로드가 암묵적으로 일어난다고 가정하지 않고도 작업 흔적을 명확히 남길 수 있다.</li>
 </ul>
   </main>
 </body>
