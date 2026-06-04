@@ -1,15 +1,16 @@
 # Next Tasks
 
-현재 단계는 v0.11 target slice 구현/검증이다. v0.11 기획서는 시작 기억 1개, 사냥 기반 기억 획득/강화, 가중 랜덤 망각, 무기 잔향, 잔향 조합 무기 진화를 검증하라고 지시한다. 다음 목표는 v0.11 구현을 trusted-local browser QA와 controlled 1-person browser playtest로 검증하는 것이다.
+현재 단계는 v0.12 1차 밸런스 기준선 검증이다. v0.11의 기억 획득/망각/무기 진화 루프는 유지하고, `굶주린 칼무리` dt 버그, 적 스케일링, telemetry, 전술 집중 망각 가중치, `피의 늪` 폭주 위험을 먼저 정리했다. 다음 목표는 Chrome/`CHROME_PATH`가 준비된 trusted local 환경에서 브라우저 로그를 뽑아 보스 TTK와 기억별 DPS를 실제로 확인하는 것이다.
 
 이 프로젝트의 현재 목표는 HTML 프로토타입으로 LETHE의 핵심 재미와 가능성을 검증하는 것이다. 충분히 재미가 확인되면 그 결과를 근거로 Unity 구현 단계로 넘어간다.
 
 ## Current Verdict
 
 - v0.11 target document: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md`.
-- v0.11 implementation status: target slice implemented in HTML prototype with 8 memories, active memory levels, 4 synergies, 600-second schedule, weighted-random forgetting, forget-probability meter, leveled weapon echoes, `피의 늪`/`파쇄 각인` weapon evolutions, Q5 growth survey, and v0.11 log fields.
-- Current balance source: `docs/BALANCE_TABLE_v0_11.md`.
-- Current selected next scope: first balance pass before broader playtest. Start with `굶주린 칼무리` per-frame damage risk, then check first-180-sec growth pace, `피의 늪` proc/tick strength, and boss HP. This environment may still fail browser QA if Chrome/Chromium is not found and `CHROME_PATH` is not set. Do not add more memories, slots, shops, meta progression, regions, weapons, enemies, final boss completion, or multi-region structure.
+- v0.12 balance sources: `docs/BALANCE_TABLE_v0_12.md`, `docs/LETHE_v0.12_밸런스_개선_제안서.md`, Gemini balance review notes.
+- v0.12 implementation status: first balance pass implemented in HTML prototype with `굶주린 칼무리` DPS/dt fix, hybrid enemy scaling, JSON telemetry/boss TTK logs, tactical-focus forgetting weight reduction, and `피의 늪` proc/tick/cap nerf.
+- Current balance source: `docs/BALANCE_TABLE_v0_12.md`.
+- Current selected next scope: trusted-local browser balance proof. Run a v0.12 browser session, download JSON, then read `telemetry.damageBySource`, `telemetry.dpsBySource`, `telemetry.bossFights[].ttk`, `telemetry.levelUpTimestamps`, and `telemetry.slotsFilledAt` before changing boss HP or XP curve. This environment may still fail browser QA if Chrome/Chromium is not found and `CHROME_PATH` is not set. Do not add more memories, slots, shops, meta progression, regions, weapons, enemies, final boss completion, or multi-region structure.
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the level-up flow and `runGrowth` payload.
 - Codex implementation result: `GO_CANDIDATE` from `npm run ai:test` and `npm run ai:test:heavy`.
@@ -56,7 +57,26 @@
 - Overnight loop command:
   - `npm run overnight:loop:dry`,
   - `npm run overnight:loop`,
-  - `node scripts/run_overnight_loop.js --iterations 3 --sleep-minutes 20`.
+- `node scripts/run_overnight_loop.js --iterations 3 --sleep-minutes 20`.
+
+## v0.12 Started
+
+- [x] `굶주린 칼무리`를 초당 피해 기준으로 교정했다.
+  - 기준: `28 DPS * dt`.
+  - 근접 타깃 우선 soft cap을 적용해 5번째 이후 타깃 피해는 낮춘다.
+- [x] 일반 적에 시간+레벨 하이브리드 스케일링을 적용했다.
+  - HP는 시간 계수와 레벨 보조 계수를 곱한다.
+  - 피해량은 시간+레벨 보조 계수 후 상한을 둔다.
+- [x] 로그 payload에 v0.12 telemetry를 추가했다.
+  - `damageBySource`, `dpsBySource`, `bossFights[].ttk`, `focusedDps`, `levelUpTimestamps`, `slotsFilledAt`, `enemyScaling`, 5초 샘플을 남긴다.
+- [x] 전술 집중 망각 가중치를 12배에서 3배로 낮췄다.
+- [x] `피의 늪` 1차 안전장치를 적용했다.
+  - 쌍검 30%, 대검 20% 발동률.
+  - 지속 시간/틱/피해를 낮추고 최대 활성 장판 5개를 둔다.
+- [ ] Chrome/`CHROME_PATH`가 있는 trusted local 환경에서 v0.12 브라우저 로그를 수집한다.
+- [ ] 수집한 `telemetry.bossFights[].ttk`와 `telemetry.dpsBySource`로 첫 보스 HP 목표를 역산한다.
+- [ ] `telemetry.levelUpTimestamps`와 `slotsFilledAt`로 첫 180초 성장 페이스를 재조정한다.
+- [ ] 브라우저 로그 기반으로 시너지 배율과 XP 곡선을 v0.12 2차 패스로 조정한다.
 
 ## v0.2 Done
 

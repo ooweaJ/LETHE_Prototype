@@ -280,7 +280,7 @@ const startingMemorySlots = 1;
 const maxActiveMemorySlots = 3;
 
 const experiment = {
-  version: "v0.11",
+  version: "v0.12",
   echoPower: 0.5,
   uiClarity: 0.78,
   runDurationSec: 600,
@@ -334,6 +334,35 @@ const baseEcho = {
   weaponSlowChance: 0,
   weaponCounterChance: 0,
   weaponMarkChance: 0,
+};
+
+const balance = {
+  version: "v0.12-balance-1",
+  hungryBlades: {
+    dps: 28,
+    radius: 72,
+    targetSoftCap: 4,
+    overflowDamageMul: 0.55,
+  },
+  enemyScaling: {
+    hpTimePerMinute: 0.12,
+    hpLevelPerLevel: 0.05,
+    damageTimePerMinute: 0.04,
+    damageLevelPerLevel: 0.02,
+    damageCap: 2.2,
+  },
+  bloodMarsh: {
+    twinBladesProc: 0.3,
+    greatswordProc: 0.2,
+    maxPools: 5,
+    durationSec: 2.1,
+    tickSec: 0.48,
+    baseDamage: 5,
+    weaponDamageMul: 0.08,
+    slowSec: 0.5,
+  },
+  telemetrySampleSec: 5,
+  tacticalFocusForgetWeight: 3,
 };
 
 function createMemoryInstance(id) {
@@ -470,6 +499,25 @@ function createRunState() {
       successfulCount: 0,
       lastUsedAt: null,
       history: [],
+    },
+    telemetry: {
+      sampleIntervalSec: balance.telemetrySampleSec,
+      lastSampleAt: 0,
+      lastSampleDamage: 0,
+      lastSampleKills: 0,
+      damageTotal: 0,
+      killCount: 0,
+      damageBySource: {},
+      bossDamageBySource: {},
+      levelUpTimestamps: [],
+      slotsFilledAt: activeMemories.length >= maxActiveMemorySlots ? 0 : null,
+      bossFights: [],
+      samples: [],
+      enemyScaling: {
+        latest: null,
+        maxHpMul: 1,
+        maxDamageMul: 1,
+      },
     },
     questions: {
       protect: null,
@@ -788,6 +836,7 @@ function update(dt) {
   updateEffects(dt);
   if (checkPlayerDeath()) return;
   updateClarity();
+  updateTelemetry();
   updateUi();
 }
 
@@ -1032,22 +1081,68 @@ function updateRefillGate() {
   showRefillOverlay();
 }
 
+function enemyScaleForSpawn() {
+  const minutes = Math.max(0, state.elapsed / 60);
+  const levelDelta = Math.max(0, state.runGrowth.level - 1);
+  const hpMul = (1 + minutes * balance.enemyScaling.hpTimePerMinute)
+    * (1 + levelDelta * balance.enemyScaling.hpLevelPerLevel);
+  const damageMul = Math.min(
+    balance.enemyScaling.damageCap,
+    1 + minutes * balance.enemyScaling.damageTimePerMinute + levelDelta * balance.enemyScaling.damageLevelPerLevel,
+  );
+  const scale = {
+    t: Number(state.elapsed.toFixed(2)),
+    level: state.runGrowth.level,
+    hpMul: Number(hpMul.toFixed(3)),
+    damageMul: Number(damageMul.toFixed(3)),
+  };
+  if (state.telemetry) {
+    state.telemetry.enemyScaling.latest = scale;
+    state.telemetry.enemyScaling.maxHpMul = Math.max(state.telemetry.enemyScaling.maxHpMul, scale.hpMul);
+    state.telemetry.enemyScaling.maxDamageMul = Math.max(state.telemetry.enemyScaling.maxDamageMul, scale.damageMul);
+  }
+  return scale;
+}
+
 function spawnEnemy(typeId, x = null, y = null, child = false) {
   const type = enemyTypes[typeId];
   const pos = x === null ? edgePosition() : { x, y };
+  const scale = enemyScaleForSpawn();
+  const baseHp = child ? Math.round(type.hp * 0.38) : type.hp;
+  const scaledHp = Math.max(1, Math.round(baseHp * scale.hpMul));
   state.enemies.push({
     ...type,
     x: pos.x,
     y: pos.y,
-    hp: child ? Math.round(type.hp * 0.38) : type.hp,
-    maxHp: child ? Math.round(type.hp * 0.38) : type.hp,
+    hp: scaledHp,
+    maxHp: scaledHp,
+    damage: Number((type.damage * scale.damageMul).toFixed(2)),
     r: child ? Math.max(8, type.radius * 0.68) : type.radius,
     shotCd: 1.4 + Math.random(),
     healCd: 1.8,
     slow: 0,
     hitBy: new Set(),
     child,
+    scale,
   });
+}
+
+function recordBossFightStart(boss) {
+  if (!state?.telemetry || !boss) return;
+  state.telemetry.bossFights.push({
+    cycleIndex: boss.cycleIndex,
+    bossName: boss.name,
+    spawnedAt: Number(state.elapsed.toFixed(2)),
+    maxHp: boss.maxHp,
+    defeatedAt: null,
+    ttk: null,
+    damage: 0,
+    damageBySource: {},
+  });
+}
+
+function latestBossTelemetry() {
+  return state?.telemetry?.bossFights?.[state.telemetry.bossFights.length - 1] || null;
 }
 
 function spawnBoss() {
@@ -1078,6 +1173,7 @@ function spawnBoss() {
     final: isFinal,
     miniBoss,
   };
+  recordBossFightStart(state.boss);
   addLog(`${state.boss.name}가 검은 물을 갈랐다.`);
   addFloater(miniBoss ? "첫 망각 문지기" : isFinal ? "최종 문지기" : `${bossIndex}차 문지기`, canvas.width / 2, 84, "#ff5d6c");
   addBurst(canvas.width / 2, 96, "#ff5d6c", 28, 6.8);
@@ -1343,13 +1439,21 @@ function updateMemories(dt) {
       memory.visualCd = Math.max(0, (memory.visualCd || 0) - dt);
       const focusMul = activeTacticalFocus(memory.id) ? 1.16 : 1;
       const power = memoryPower(memory);
-      const radius = 74 * focusMul * power * (1 + state.echo.range + state.runGrowth.range);
+      const radius = balance.hungryBlades.radius * focusMul * power * (1 + state.echo.range + state.runGrowth.range);
+      const targets = hostiles()
+        .filter((target) => distance(p, target) < radius + target.r)
+        .sort((a, b) => distance(p, a) - distance(p, b));
       let hit = false;
-      for (const target of hostiles()) {
-        if (distance(p, target) < radius + target.r) {
-          damageHostile(target, 7.4 * focusMul * power * (1 + state.echo.dotDamage + state.runGrowth.damage), memory.id);
-          hit = true;
-        }
+      for (const [index, target] of targets.entries()) {
+        const overflowMul = index < balance.hungryBlades.targetSoftCap ? 1 : balance.hungryBlades.overflowDamageMul;
+        const damage = balance.hungryBlades.dps
+          * dt
+          * focusMul
+          * power
+          * overflowMul
+          * (1 + state.echo.dotDamage + state.runGrowth.damage);
+        damageHostile(target, damage, memory.id);
+        hit = true;
       }
       if (hit) recordPresence(memory.id, dt * 2.2);
       if (hit && memory.visualCd <= 0) {
@@ -1542,18 +1646,22 @@ function applyWeaponEchoEffects(target, baseDamage) {
   }
 
   if (hasWeaponEvolution("blood_marsh")) {
-    const pulse = state.weapon.id === "twin_blades" ? 0.42 : 0.28;
+    const pulse = state.weapon.id === "twin_blades" ? balance.bloodMarsh.twinBladesProc : balance.bloodMarsh.greatswordProc;
     if (Math.random() < pulse) {
+      const activePools = state.effects.filter((effect) => effect.type === "blood_pool");
+      if (activePools.length >= balance.bloodMarsh.maxPools) {
+        activePools[0].life = 0;
+      }
       state.effects.push({
         type: "blood_pool",
         x: target.x,
         y: target.y,
         r: 18,
         maxR: 66 * (1 + state.echo.range + state.runGrowth.range),
-        life: 2.6,
-        maxLife: 2.6,
+        life: balance.bloodMarsh.durationSec,
+        maxLife: balance.bloodMarsh.durationSec,
         tick: 0,
-        damage: 8 + baseDamage * 0.12,
+        damage: balance.bloodMarsh.baseDamage + baseDamage * balance.bloodMarsh.weaponDamageMul,
       });
       addFloater("피의 늪", target.x, target.y - 24, "#ff5d6c");
     }
@@ -1678,6 +1786,7 @@ function damageHostile(target, amount, source, options = {}) {
     if (actual >= 12 || Math.random() < 0.12) addFloater(String(Math.round(actual)), target.x, target.y - target.r - 6, color);
     if (actual >= 20) addBurst(target.x, target.y, color, source === "weapon" ? 5 : 8, source === "weapon" ? 1.4 : 2.1);
   }
+  recordTelemetryDamage(source, actual, target);
   if (source && state.metrics[source]) {
     state.metrics[source].damage += actual;
     target.hitBy?.add(source);
@@ -1688,6 +1797,88 @@ function damageHostile(target, amount, source, options = {}) {
     }
   }
   applySynergyAfterDamage(source, target, actual);
+}
+
+function recordTelemetryDamage(source, actual, target) {
+  if (!state?.telemetry || actual <= 0) return;
+  const key = source || "unknown";
+  const telemetry = state.telemetry;
+  telemetry.damageTotal += actual;
+  telemetry.damageBySource[key] = (telemetry.damageBySource[key] || 0) + actual;
+  if (target?.id === "boss") {
+    telemetry.bossDamageBySource[key] = (telemetry.bossDamageBySource[key] || 0) + actual;
+    const bossFight = latestBossTelemetry();
+    if (bossFight) {
+      bossFight.damage += actual;
+      bossFight.damageBySource[key] = (bossFight.damageBySource[key] || 0) + actual;
+    }
+  }
+}
+
+function roundNumberMap(map) {
+  return Object.fromEntries(
+    Object.entries(map || {}).map(([key, value]) => [key, Number(value.toFixed(2))]),
+  );
+}
+
+function updateTelemetry(force = false) {
+  if (!state?.telemetry) return;
+  const telemetry = state.telemetry;
+  const elapsed = Math.max(0.01, state.elapsed);
+  const delta = elapsed - telemetry.lastSampleAt;
+  if (!force && delta < telemetry.sampleIntervalSec) return;
+  const damageDelta = telemetry.damageTotal - telemetry.lastSampleDamage;
+  const killDelta = telemetry.killCount - telemetry.lastSampleKills;
+  telemetry.samples.push({
+    t: Number(state.elapsed.toFixed(2)),
+    level: state.runGrowth.level,
+    activeMemoryCount: activeMemoryCount(),
+    hp: Number(state.player.hp.toFixed(1)),
+    enemiesAlive: state.enemies.length,
+    projectilesAlive: state.projectiles.length,
+    effectsAlive: state.effects.length,
+    totalDps: Number((damageDelta / Math.max(0.01, delta)).toFixed(2)),
+    killsPerSecond: Number((killDelta / Math.max(0.01, delta)).toFixed(2)),
+    damageBySource: roundNumberMap(telemetry.damageBySource),
+    enemyScaling: telemetry.enemyScaling.latest,
+  });
+  telemetry.lastSampleAt = elapsed;
+  telemetry.lastSampleDamage = telemetry.damageTotal;
+  telemetry.lastSampleKills = telemetry.killCount;
+}
+
+function telemetryLog() {
+  if (!state?.telemetry) return null;
+  updateTelemetry(true);
+  const telemetry = state.telemetry;
+  const elapsed = Math.max(0.01, state.elapsed);
+  return {
+    version: balance.version,
+    sampleIntervalSec: telemetry.sampleIntervalSec,
+    damageTotal: Number(telemetry.damageTotal.toFixed(2)),
+    dpsAverage: Number((telemetry.damageTotal / elapsed).toFixed(2)),
+    killCount: telemetry.killCount,
+    killsPerMinute: Number((telemetry.killCount / elapsed * 60).toFixed(2)),
+    damageBySource: roundNumberMap(telemetry.damageBySource),
+    dpsBySource: Object.fromEntries(
+      Object.entries(telemetry.damageBySource).map(([key, value]) => [key, Number((value / elapsed).toFixed(2))]),
+    ),
+    bossDamageBySource: roundNumberMap(telemetry.bossDamageBySource),
+    bossFights: telemetry.bossFights.map((fight) => ({
+      ...fight,
+      damage: Number(fight.damage.toFixed(2)),
+      focusedDps: fight.ttk ? Number((fight.damage / Math.max(0.01, fight.ttk)).toFixed(2)) : null,
+      damageBySource: roundNumberMap(fight.damageBySource),
+    })),
+    levelUpTimestamps: telemetry.levelUpTimestamps,
+    slotsFilledAt: telemetry.slotsFilledAt,
+    enemyScaling: {
+      latest: telemetry.enemyScaling.latest,
+      maxHpMul: Number(telemetry.enemyScaling.maxHpMul.toFixed(3)),
+      maxDamageMul: Number(telemetry.enemyScaling.maxDamageMul.toFixed(3)),
+    },
+    samples: telemetry.samples,
+  };
 }
 
 function applySynergyDamage(source, target, amount, options = {}) {
@@ -1724,6 +1915,7 @@ function grantXp(enemy) {
   const growth = state.runGrowth;
   const gained = Math.max(1, Math.round(enemy.score * (enemy.child ? 0.55 : 1) * (1 + growth.xpGain)));
   growth.xp += gained;
+  if (state.telemetry) state.telemetry.killCount += 1;
   if (state.elapsed <= 180) growth.earlyKills += 1;
   addFloater(`+${gained}`, enemy.x, enemy.y - enemy.r - 16, "#72e49b");
   logEvent("enemy_killed", {
@@ -1742,6 +1934,7 @@ function queueLevelUp() {
   growth.level += 1;
   growth.nextXp = Math.round(growth.nextXp * 1.42 + 4);
   if (!state.bossSpawned) growth.levelUpsBeforeBoss += 1;
+  if (state.telemetry) state.telemetry.levelUpTimestamps.push(Number(state.elapsed.toFixed(2)));
   growth.pendingChoices = chooseLevelUpChoices();
   state.mode = "upgrade";
   state.running = false;
@@ -1851,6 +2044,7 @@ function applyLevelUpChoice(choice) {
     stat.apply();
   }
   refreshActiveSynergies();
+  markSlotsFilled(choice.kind);
   state.logs.buildIdentity = buildIdentityFor(activeMemoryIds(), state);
   state.runGrowth.choicesTaken.push({ ...choice, name: view.name, level: state.runGrowth.level });
   state.runGrowth.pendingChoices = [];
@@ -1894,11 +2088,28 @@ function recordPresence(memoryId, amount) {
   if (state.metrics[memoryId]) state.metrics[memoryId].presenceTime += amount;
 }
 
+function markSlotsFilled(source) {
+  if (!state?.telemetry || state.telemetry.slotsFilledAt !== null) return;
+  if (activeMemoryCount() < maxActiveMemorySlots) return;
+  state.telemetry.slotsFilledAt = Number(state.elapsed.toFixed(2));
+  logEvent("memory_slots_filled", {
+    source,
+    slotsFilledAt: state.telemetry.slotsFilledAt,
+    activeMemoryIds: activeMemoryIds(),
+  });
+}
+
 function defeatBoss() {
   state.mode = "questions";
   state.running = false;
   calculateDependency();
   const defeated = state.boss;
+  const bossTelemetry = latestBossTelemetry();
+  if (bossTelemetry && !bossTelemetry.defeatedAt) {
+    bossTelemetry.defeatedAt = Number(state.elapsed.toFixed(2));
+    bossTelemetry.ttk = Number((state.elapsed - bossTelemetry.spawnedAt).toFixed(2));
+    bossTelemetry.remainingHp = 0;
+  }
   state.boss = null;
   state.bossSpawned = false;
   addLog("문지기가 쓰러지고, 소리가 강 아래로 빨려 들어갔다.");
@@ -1906,6 +2117,12 @@ function defeatBoss() {
     elapsed: Number(state.elapsed.toFixed(2)),
     cycleIndex: defeated?.cycleIndex || state.runTimeline.currentBossIndex,
     final: Boolean(defeated?.final),
+    telemetry: bossTelemetry ? {
+      ttk: bossTelemetry.ttk,
+      damage: Number(bossTelemetry.damage.toFixed(2)),
+      focusedDps: bossTelemetry.ttk ? Number((bossTelemetry.damage / Math.max(0.01, bossTelemetry.ttk)).toFixed(2)) : null,
+      damageBySource: roundNumberMap(bossTelemetry.damageBySource),
+    } : null,
   });
   if (defeated?.final) {
     state.mode = "result";
@@ -1919,7 +2136,7 @@ function calculateDependency() {
   const ids = state.memories.filter((m) => !m.forgotten).map((m) => m.id);
   const relianceValues = ids.map((id) => {
     const m = state.metrics[id];
-    return m.damage + m.kills * 30 + m.assists * 8 + m.focusDependency * 12;
+    return m.damage + m.kills * 30 + m.assists * 8 + m.focusDependency * balance.tacticalFocusForgetWeight;
   });
   const bossValues = ids.map((id) => {
     const m = state.metrics[id];
@@ -2371,6 +2588,7 @@ function applyMemoryRefill(id) {
   if (!state.metrics[id]) state.metrics[id] = createMetricSeed([id])[id];
   recordMemoryAcquisition("acquire", id, "refill", { cycleIndex: state.runTimeline.currentBossIndex, level: memory.level });
   refreshActiveSynergies();
+  markSlotsFilled("refill");
   const buildIdentity = buildIdentityFor(activeMemoryIds(), state);
   state.logs.buildIdentity = buildIdentity;
   const choice = {
@@ -2710,6 +2928,7 @@ function collectLogPayload() {
   state.logs.playtest = currentPlaytestMeta();
   state.logs.completedAt = new Date().toISOString();
   state.logs.elapsed = Number(state.elapsed.toFixed(2));
+  state.logs.balance = structuredCloneSafe(balance);
   state.logs.questions = state.questions;
   state.logs.questionNames = questionNames();
   state.logs.forkChoice = state.forkChoice;
@@ -2739,6 +2958,7 @@ function collectLogPayload() {
   state.logs.buildIdentity = buildIdentityFor(activeMemoryIds(), state);
   state.logs.buildIdentitySeenBy90Sec = Boolean(state.logs.buildIdentitySeenBy90Sec);
   state.logs.tacticalFocus = tacticalFocusLog();
+  state.logs.telemetry = telemetryLog();
   return state.logs;
 }
 
@@ -2929,10 +3149,10 @@ function updateEffects(dt) {
       effect.r = lerp(effect.r, effect.maxR, 0.12);
       effect.tick -= dt;
       if (effect.tick <= 0) {
-        effect.tick = 0.34;
+        effect.tick = balance.bloodMarsh.tickSec;
         for (const target of hostiles()) {
           if (distance(effect, target) < effect.r + target.r) {
-            target.slow = Math.max(target.slow || 0, 0.7 + state.echo.slowDuration);
+            target.slow = Math.max(target.slow || 0, balance.bloodMarsh.slowSec + state.echo.slowDuration);
             damageHostile(target, effect.damage * (1 + state.echo.dotDamage + state.runGrowth.damage), "weapon_evolution", { controlHit: true });
           }
         }

@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-04-06 - v012 밸런스 기준선 1차 구현</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-04-06 - v012 밸런스 기준선 1차 구현</h1>
+      <p class="meta">Generated from 2026-06-04-06-v012-밸런스-기준선-1차-구현.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-04-06 - v012 밸런스 기준선 1차 구현</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>LETHE HTML Alpha는 <code>v0.12</code> 첫 밸런스 기준선 구현 상태다.</li>
+<li>v0.11의 기억 획득, 가중 망각, 무기 잔향, 무기 진화 구조는 유지했다.</li>
+<li>이번 패스는 새 기능 확장이 아니라 <code>굶주린 칼무리</code>, 적 스케일링, telemetry, 전술 집중 가중치, <code>피의 늪</code> 폭주 위험을 먼저 정리했다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>브라우저 라벨과 QA 기대 버전을 <code>v0.12</code>로 올렸다.</li>
+<li><code>굶주린 칼무리</code>를 <code>28 DPS * dt</code>로 교정하고 가까운 타깃 우선 soft cap을 적용했다.</li>
+<li>일반 적 HP/피해에 시간+레벨 하이브리드 스케일링을 추가했다.</li>
+<li>JSON 로그에 <code>balance</code>와 <code>telemetry</code>를 추가했다.</li>
+<li>telemetry는 피해원별 누적 피해/DPS, 보스 TTK/집중 DPS, 레벨업 시각, 3슬롯 완성 시각, 적 스케일링, 5초 샘플을 남긴다.</li>
+<li>전술 집중의 망각 가중치 반영을 12배에서 3배로 낮췄다.</li>
+<li><code>피의 늪</code>은 쌍검 30%, 대검 20% 발동률로 낮추고, 지속 시간/틱/피해를 줄였으며 최대 활성 장판 5개 제한을 넣었다.</li>
+<li><code>docs/CODEX_STATUS.md</code>, <code>docs/NEXT_TASKS.md</code>, <code>docs/devlog/2026-06-04.md</code>를 v0.12 기준으로 갱신했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>node --check src/game.js</code>: 통과.</li>
+<li><code>node --check scripts/run_browser_identity_qa.js</code>: 통과.</li>
+<li><code>node --check scripts/run_browser_pressure_qa.js</code>: 통과.</li>
+<li><code>npm run doctor</code>: 46 pass / 0 warn / 0 fail.</li>
+<li><code>npm run ai:test:quick</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score <code>0.8904</code>.</li>
+<li><code>npm run qa:identity</code>: Chrome/Chromium 실행 파일을 찾지 못했고 <code>CHROME_PATH</code>가 없어 브라우저 assertion 전에 차단.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>보스 HP는 이번 패스에서 올리지 않는다.</li>
+<li>먼저 실제 브라우저 로그의 <code>telemetry.bossFights[].ttk</code>, <code>focusedDps</code>, <code>dpsBySource</code>를 보고 첫 보스 HP 목표를 역산한다.</li>
+<li>순수 레벨 비례 스케일링은 성장 벌칙처럼 느껴질 수 있어 시간+레벨 하이브리드로 간다.</li>
+<li>실제 Discord 전송은 사용자 명시 요청이 있을 때만 실행하고, 이번 작업은 dry-run 확인 대상으로 둔다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>브라우저 QA는 현재 환경에서 Chrome/<code>CHROME_PATH</code> 문제로 막혀 있어 실제 플레이 assertion은 아직 없다.</li>
+<li>AI 시뮬레이터는 v0.12 코드 telemetry를 직접 실행하는 검증이 아니므로 밸런스 증거로 과신하면 안 된다.</li>
+<li><code>굶주린 칼무리</code> DPS 교정으로 초반 체감이 급격히 약해질 수 있다.</li>
+<li>보스 HP와 XP 곡선은 telemetry 로그를 본 뒤 2차 패스로 조정해야 한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<ul>
+<li>v0.12 1차 패스는 세 리뷰의 공통 우선순위를 반영했다.</li>
+<li>Claude/GPT 계열 제안의 구조화된 수치표와 안전장치, Gemini의 엔진/하이브리드 스케일링 관점을 합쳤다.</li>
+<li>다음 리뷰는 추상 수치표가 아니라 실제 JSON의 <code>telemetry</code> 필드를 기준으로 봐야 한다.</li>
+<li>특히 보스 TTK, 기억별 DPS, 첫 180초 레벨업 시각, 3슬롯 완성 시각을 기준으로 XP/보스/시너지 2차 조정을 판단한다.</li>
+</ul>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>Chrome/<code>CHROME_PATH</code>가 준비된 trusted local 환경에서 v0.12 브라우저 로그를 수집한다.</li>
+<li>수집한 JSON의 <code>telemetry.bossFights[].ttk</code>와 <code>telemetry.dpsBySource</code>로 보스 HP를 역산한다.</li>
+<li><code>telemetry.levelUpTimestamps</code>와 <code>slotsFilledAt</code>로 첫 180초 성장 페이스를 조정한다.</li>
+<li>그 뒤 시너지 배율과 XP 곡선을 v0.12 2차 패스로 조정한다.</li>
+</ul>
+<h2>8. 포트폴리오 노트</h2>
+<ul>
+<li>문제: 구조는 잡혔지만 한 기억의 dt 버그와 진화 장판 폭주가 전체 밸런스 판단을 오염시킬 수 있었다.</li>
+<li>방향: 감으로 보스 HP를 올리기 전에 피해원별 DPS와 보스 TTK를 기록하는 기준선을 만든다.</li>
+<li>행동: dt 교정, 하이브리드 스케일링, telemetry, 망각 가중치 완화, 장판 cap을 구현했다.</li>
+<li>결과: 다음 밸런스 패스는 실제 로그를 기준으로 보스/XP/시너지를 조정할 수 있다.</li>
+</ul>
+  </main>
+</body>
+</html>

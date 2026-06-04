@@ -1,11 +1,11 @@
 {
   "source": "docs\\reports\\2026-06-04.md",
-  "generatedAt": "2026-06-04T06:19:10.027Z",
-  "unitCount": 5,
+  "generatedAt": "2026-06-04T08:03:14.333Z",
+  "unitCount": 6,
   "latest": {
-    "title": "2026-06-04-05 - v011 밸런스 수치표 정리",
-    "number": "05",
-    "markdownPath": "docs\\reports\\units\\2026-06-04\\2026-06-04-05-v011-밸런스-수치표-정리.md",
-    "htmlPath": "docs\\reports\\units\\2026-06-04\\2026-06-04-05-v011-밸런스-수치표-정리.html"
+    "title": "2026-06-04-06 - v012 밸런스 기준선 1차 구현",
+    "number": "06",
+    "markdownPath": "docs\\reports\\units\\2026-06-04\\2026-06-04-06-v012-밸런스-기준선-1차-구현.md",
+    "htmlPath": "docs\\reports\\units\\2026-06-04\\2026-06-04-06-v012-밸런스-기준선-1차-구현.html"
   }
 }

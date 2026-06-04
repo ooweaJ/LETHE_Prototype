@@ -4,20 +4,27 @@ Last updated: 2026-06-04
 
 ## Current Build
 
-- Project: LETHE HTML Alpha v0.11 target slice is implemented from `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md`.
+- Project: LETHE HTML Alpha v0.12 first balance pass is implemented from `docs/BALANCE_TABLE_v0_12.md`, `docs/LETHE_v0.12_밸런스_개선_제안서.md`, and Gemini balance review notes.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
-- Current scope: HTML prototype validation. v0.11 changes the core loop to start with 1 memory, gain/upgrade memories through hunting, lose a weighted-random memory after bosses 1-3, engrave the lost memory as weapon echo, and unlock weapon evolutions from echo tag combinations.
-- Latest task-update status: v0.11 now includes 8 memories, 4 active synergies, 2 weapons, 2 weapon evolutions (`피의 늪`, `파쇄 각인`), active memory levels, `잔향 증폭`, forget-probability meter/logs, echo-state logs, weapon-evolution logs, and Q5 growth-feel survey. Scope remains inside the v0.11 document limits: no shop, meta progression, new region, extra weapon count, enemy expansion, final boss content expansion, multi-region structure, or active slot expansion above 3.
-- Latest verification status: syntax checks, DOCX regeneration, report generation/check, doctor, and Discord dry-runs pass. Browser QA is blocked in this environment because Chrome/Chromium executable was not found and `CHROME_PATH` is not set.
-- Planning document status: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md` is now the Markdown source of truth, and `docs/LETHE_망각의_군주_완성형_기획서_v6.docx` should be regenerated from it after this unit.
-- Balance status: current code-based v0.11 numbers are collected in `docs/BALANCE_TABLE_v0_11.md`. First suspected balance blocker is `굶주린 칼무리` applying damage per frame instead of per second.
+- Current scope: HTML prototype validation. v0.12 keeps the v0.11 loop, but moves the build into a measurable balance baseline before broader playtesting.
+- Latest task-update status: v0.12 first pass fixes `굶주린 칼무리` from frame damage to `28 DPS * dt`, adds time+level enemy scaling, records telemetry/boss TTK in JSON logs, reduces tactical-focus forgetting weight from 12x to 3x, and caps/nerfs `피의 늪`.
+- Latest verification status: `node --check src/game.js`, `node --check` for browser QA scripts, `npm run doctor`, and `npm run ai:test:quick` pass. Browser QA is blocked in this environment because Chrome/Chromium executable was not found and `CHROME_PATH` is not set.
+- Planning document status: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md` remains the loop source, while v0.12 balance sources are `docs/BALANCE_TABLE_v0_12.md` and `docs/LETHE_v0.12_밸런스_개선_제안서.md`.
+- Balance status: v0.12 first-pass baseline is in code. Boss HP is intentionally not raised yet; next step is reading `telemetry.bossFights[].ttk` and `focusedDps` from real browser logs before setting first-boss target HP.
 
 ## Implemented
 
 - Static browser prototype: `index.html`, `style.css`, `src/game.js`.
 - Current planning source: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md`, mirrored into the existing Word 기획서 DOCX.
-- Current balance source: `docs/BALANCE_TABLE_v0_11.md`.
+- Current balance source: `docs/BALANCE_TABLE_v0_12.md` plus `docs/LETHE_v0.12_밸런스_개선_제안서.md`.
+- v0.12 first balance pass:
+  - browser label and experiment version moved to `v0.12`,
+  - `굶주린 칼무리` now deals DPS with `dt` and uses nearest-target soft cap,
+  - normal enemies receive hybrid time+level HP and damage scaling with a damage cap,
+  - JSON logs include `balance` and `telemetry` with damage by source, average DPS, boss TTK/focused DPS, level-up timestamps, slot-fill timing, and scaling samples,
+  - tactical-focus dependency in forgetting score uses the v0.12 3x weight,
+  - `피의 늪` uses lower proc rates, lower tick strength, shorter duration, and max 5 active pools.
 - v0.11 target slice:
   - browser label and experiment version moved to `v0.11`,
   - setup starts with weapon 1 and starting memory 1,
