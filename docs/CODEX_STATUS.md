@@ -1,6 +1,6 @@
 # Codex Status
 
-Last updated: 2026-06-03
+Last updated: 2026-06-04
 
 ## Current Build
 
@@ -9,10 +9,12 @@ Last updated: 2026-06-03
 - Branch: `main`
 - Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
 - Latest task-update status: the tactical QA terminal-state overwrite was fixed, and `npm run qa:tactical:trusted` now passes with `status: complete`, `transportFailure: false`, one successful `전술 집중` use, visible tactical-focus text, and zero failures. The AI simulator now models the implemented tactical-focus choice as an existing-memory agency moment, records `tacticalFocusAgency` and `tacticalFocusUseRate`, and keeps it within current scope: no new memory, slot, shop, meta progression, region, weapon, enemy, or boss. `npm run ai:test:quick` is `GO_CANDIDATE` with Alpha Fun Score `0.8904`, early choice interest `0.7684`, tactical focus agency `0.7309`, post-loss challenge contrast `0.3134`, and irritation `0.0104`. `npm run ai:test` is `GO_CANDIDATE` with Alpha Fun Score `0.8937` and irritation `0.006`. `npm run qa:postloss:trusted` remains passed with `status: complete`. The autonomous loop completion check now also requires the tactical browser gate to pass, so the current release-feel loop has AI quick criteria plus WP2/WP3 trusted browser gates satisfied. Next scope should be a final preflight/report/Discord pass and then a controlled 1-person browser playtest prompt, not more blocker paperwork.
+- Planning document status: the old v6 Word 기획서 was not aligned with the current game. `docs/LETHE_망각의_군주_프로토타입_기획서_v0.9.md` is now the Markdown source of truth, and `docs/LETHE_망각의_군주_완성형_기획서_v6.docx` has been updated from that source to describe the current v0.9 HTML prototype rather than the older v0.2/v6 complete-game scope.
 
 ## Implemented
 
 - Static browser prototype: `index.html`, `style.css`, `src/game.js`.
+- Current planning source: `docs/LETHE_망각의_군주_프로토타입_기획서_v0.9.md`, mirrored into the existing Word 기획서 DOCX.
 - Weapons: twin blades, greatsword.
 - Memories: 6 total, 3 active slots.
 - Auto basic attack and auto memory activation.

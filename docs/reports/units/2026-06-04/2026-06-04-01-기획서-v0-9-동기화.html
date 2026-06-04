@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-04-01 - 기획서 v0.9 동기화</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-04-01 - 기획서 v0.9 동기화</h1>
+      <p class="meta">Generated from 2026-06-04-01-기획서-v0-9-동기화.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-04-01 - 기획서 v0.9 동기화</h1>
+<h2>1. Current build status</h2>
+<ul>
+<li>LETHE HTML Alpha remains v0.9.</li>
+<li>Current game and the old v6 Word 기획서 were not aligned.</li>
+<li>The release-feel prototype currently includes build identity, pressure rhythm, post-loss challenge, memory refill, and tactical focus.</li>
+<li>AI/browser gate evidence remains sufficient for controlled 1-person browser playtest preparation, not Unity transition.</li>
+</ul>
+<h2>2. What changed today</h2>
+<ul>
+<li>Added <code>docs/LETHE_망각의_군주_프로토타입_기획서_v0.9.md</code> as the current Markdown planning source.</li>
+<li>Updated <code>docs/LETHE_망각의_군주_완성형_기획서_v6.docx</code> from the Markdown source.</li>
+<li>Added <code>scripts/update_design_doc_from_markdown.ps1</code> for repeatable DOCX regeneration.</li>
+<li>Updated <code>README.md</code> to reference the v0.9 planning source and current implemented scope.</li>
+<li>Updated <code>docs/CODEX_STATUS.md</code> with the planning-document sync note.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li>DOCX text extraction after regeneration confirmed the v0.9 title, current loop, tactical focus, post-loss challenge, and scope guard sections.</li>
+<li><code>node --check src/game.js</code>: passed.</li>
+<li><code>npm run report</code>: generated daily HTML and unit files.</li>
+<li><code>npm run report:check</code>: passed.</li>
+<li>DOCX visual render QA was skipped because LibreOffice/<code>soffice</code> is not installed in this environment.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>Treat the Markdown v0.9 planning file as the source of truth.</li>
+<li>Keep the existing Word 기획서 filename for continuity, but update its contents to v0.9.</li>
+<li>Record that the older complete-game/meta-progression sections are not current prototype scope.</li>
+<li>Do not add gameplay while syncing the document.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>The DOCX could not be visually rendered here, so formatting was validated structurally rather than by page PNG inspection.</li>
+<li>The DOCX filename still says <code>v6</code>; its contents now identify the document as the v0.9 prototype planning update.</li>
+<li>Future design changes should update the Markdown source first, then regenerate the DOCX.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>기존 기획서와 현재 게임은 달랐다.</li>
+<li>최신 기준은 v0.9 HTML prototype: 2 weapons, 6 memories, 3 active slots, boss cycles, dependency forgetting, echo, 75-second deficit survival, refill, build identity, and tactical focus.</li>
+<li>Unity 전환은 아직 자동 지표만으로 판단하지 않는다. 다음 근거는 controlled 1-person browser playtest다.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>Use <code>docs/LETHE_망각의_군주_프로토타입_기획서_v0.9.md</code> for future planning diffs.</li>
+<li>If planning changes again, run <code>pwsh scripts/update_design_doc_from_markdown.ps1</code>.</li>
+<li>Continue with final preflight/report/Discord and controlled 1-person playtest preparation when the user is ready.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: the project had a working v0.9 prototype but an older planning document, creating ambiguity about what was actually current.</li>
+<li>Direction: make the latest HTML prototype design explicit and diffable.</li>
+<li>Action: created a Markdown source, regenerated the Word planning document, and updated project references.</li>
+<li>Result: implementation, planning, and handoff docs now describe the same v0.9 scope.</li>
+</ul>
+  </main>
+</body>
+</html>
