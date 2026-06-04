@@ -58,11 +58,13 @@ npm run report:check
 npm run report:discord:unit:dry
 ```
 
-실제 전송은 `.env`의 `DISCORD_WEBHOOK_URL`이 설정된 trusted local 환경에서만 아래 명령으로 수행한다.
+사용자가 수동 Codex 구현 단위도 매번 Discord로 보고하라고 지정했으므로, 의미 있는 구현/밸런스/문서화 단위가 끝나면 dry-run을 최종 단계로 보지 않는다. dry-run은 본문/첨부 확인용이고, `.env`의 `DISCORD_WEBHOOK_URL`이 설정된 trusted local 환경에서는 아래 실제 전송까지 완료한다.
 
 ```powershell
 npm run report:discord:unit
 ```
+
+예외는 사용자가 명시적으로 전송하지 말라고 했거나, webhook/네트워크/권한 문제로 실제 전송이 실패한 경우다. 이때는 실패 원인과 다음 실행 명령을 보고서와 devlog에 남긴다.
 
 `docs/ai/` 문서는 AI 협업 규약과 실패 사례를 보존하는 정적 운영 문서다. 매 작업마다 자동으로 append되지 않는다. 작업별 AI 활용 내역은 `docs/devlog/YYYY-MM-DD.md`, `docs/reports/YYYY-MM-DD.md`, `docs/review_prompts/`, `docs/review_responses/`에 남긴다.
 
