@@ -8,8 +8,8 @@ Last updated: 2026-06-04
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. v0.12 keeps the v0.11 loop, but moves the build into a measurable balance baseline before broader playtesting.
-- Latest task-update status: v0.12 first pass fixes `굶주린 칼무리` from frame damage to `28 DPS * dt`, adds time+level enemy scaling, records telemetry/boss TTK in JSON logs, reduces tactical-focus forgetting weight from 12x to 3x, and caps/nerfs `피의 늪`.
-- Latest verification status: `node --check src/game.js`, `node --check` for browser QA scripts, `npm run doctor`, and `npm run ai:test:quick` pass. Browser QA is blocked in this environment because Chrome/Chromium executable was not found and `CHROME_PATH` is not set.
+- Latest task-update status: v0.12 first pass fixes `굶주린 칼무리` from frame damage to `28 DPS * dt`, adds time+level enemy scaling, records telemetry/boss TTK in JSON logs, reduces tactical-focus forgetting weight from 12x to 3x, caps/nerfs `피의 늪`, and adds a telemetry-only balance automation loop.
+- Latest verification status: `node --check src/game.js`, `node --check` for balance scripts, `npm run doctor`, `npm run qa:balance:dry`, `npm run balance:loop:dry`, `npm run qa:balance`, and `npm run balance:loop` pass as executable commands. The current balance verdict is `ITERATE_BALANCE`: first boss clear `0%`, full clear `0%`, death `100%`, pre-boss level-up median `3`, top DPS share median `51.2%`.
 - Planning document status: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md` remains the loop source, while v0.12 balance sources are `docs/BALANCE_TABLE_v0_12.md` and `docs/LETHE_v0.12_밸런스_개선_제안서.md`.
 - Balance status: v0.12 first-pass baseline is in code. Boss HP is intentionally not raised yet; next step is reading `telemetry.bossFights[].ttk` and `focusedDps` from real browser logs before setting first-boss target HP.
 
@@ -25,6 +25,11 @@ Last updated: 2026-06-04
   - JSON logs include `balance` and `telemetry` with damage by source, average DPS, boss TTK/focused DPS, level-up timestamps, slot-fill timing, and scaling samples,
   - tactical-focus dependency in forgetting score uses the v0.12 3x weight,
   - `피의 늪` uses lower proc rates, lower tick strength, shorter duration, and max 5 active pools.
+- v0.12 balance automation:
+  - `npm run qa:balance` runs browser telemetry balance QA without emotion proxy,
+  - `npm run balance:loop` runs balance QA and writes `docs/review_prompts/YYYY-MM-DD-balance-loop.md`,
+  - outputs live under `alpha_test/outputs/balance/` and `docs/balance/`,
+  - default targets track first-boss clear rate, full clear rate, first-boss TTK median, pre-boss level-ups, slot-fill timing, and top DPS share.
 - v0.11 target slice:
   - browser label and experiment version moved to `v0.11`,
   - setup starts with weapon 1 and starting memory 1,

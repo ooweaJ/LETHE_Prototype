@@ -295,6 +295,7 @@ const experiment = {
   qaPressureMode: qaMode.includes("pressure"),
   qaPostLossMode: qaMode.includes("postloss"),
   qaTacticalMode: qaMode.includes("tactical"),
+  qaBalanceMode: qaMode.includes("balance"),
 };
 
 if (experiment.qaFastMode) {
@@ -4160,7 +4161,153 @@ function startTacticalQa() {
   }, 120);
 }
 
-if (experiment.qaFastMode || experiment.qaLevelupMode || experiment.qaV06Mode || experiment.qaDeathMode || experiment.qaIdentityMode || experiment.qaPressureMode || experiment.qaPostLossMode || experiment.qaTacticalMode) {
+function writeBalanceQaResult(extra = {}) {
+  if (!experiment.qaBalanceMode) return;
+  const payload = state ? collectLogPayload() : null;
+  const telemetry = payload?.telemetry || null;
+  const firstBoss = telemetry?.bossFights?.[0] || null;
+  const levelUpsBeforeFirstBoss = (telemetry?.levelUpTimestamps || [])
+    .filter((t) => t <= (experiment.bossScheduleSec[0] || 180)).length;
+  const dpsEntries = Object.entries(telemetry?.dpsBySource || {}).sort((a, b) => b[1] - a[1]);
+  const totalDps = dpsEntries.reduce((acc, [, value]) => acc + value, 0);
+  document.documentElement.dataset.letheBalanceQa = JSON.stringify({
+    version: experiment.version,
+    balanceVersion: balance.version,
+    hasState: Boolean(state),
+    status: extra.status || "running",
+    mode: state?.mode || null,
+    elapsed: state ? Number(state.elapsed.toFixed(2)) : 0,
+    runResult: state?.mode === "result" ? "clear" : state?.mode === "dead" ? "death" : "running",
+    firstBossCleared: Boolean(firstBoss?.defeatedAt),
+    firstBossTtk: firstBoss?.ttk || null,
+    firstBossFocusedDps: firstBoss?.focusedDps || null,
+    finalClear: state?.mode === "result" && !state?.death,
+    death: state?.death || null,
+    level: state?.runGrowth?.level || 0,
+    levelUpsBeforeFirstBoss,
+    slotsFilledAt: telemetry?.slotsFilledAt ?? null,
+    activeMemoryCount: state ? activeMemoryCount() : 0,
+    topDpsSource: dpsEntries[0]?.[0] || null,
+    topDps: dpsEntries[0]?.[1] || 0,
+    topDpsShare: totalDps > 0 ? Number((dpsEntries[0][1] / totalDps).toFixed(4)) : 0,
+    dpsBySource: telemetry?.dpsBySource || {},
+    damageBySource: telemetry?.damageBySource || {},
+    bossFights: telemetry?.bossFights || [],
+    telemetry,
+    balance: payload?.balance || balance,
+    danger: payload?.danger || null,
+    runGrowth: payload?.runGrowth || null,
+    ...extra,
+  });
+}
+
+function chooseBalanceLevelUpChoice() {
+  const choices = state?.runGrowth?.pendingChoices || [];
+  if (!choices.length) return null;
+  if (activeMemoryCount() < maxActiveMemorySlots) {
+    return choices.find((choice) => choice.kind === "memory_new") || choices[0];
+  }
+  return choices.find((choice) => choice.kind === "memory_upgrade")
+    || choices.find((choice) => choice.kind === "stat")
+    || choices[0];
+}
+
+function setBalanceMovementKeys() {
+  keys.clear();
+  if (!state || state.mode !== "combat") return;
+  const p = state.player;
+  const threats = hostiles().filter((target) => distance(target, p) < 180);
+  const nearest = threats.sort((a, b) => distance(a, p) - distance(b, p))[0];
+  const centerBiasX = p.x < canvas.width * 0.32 ? 1 : p.x > canvas.width * 0.68 ? -1 : 0;
+  const centerBiasY = p.y < canvas.height * 0.32 ? 1 : p.y > canvas.height * 0.68 ? -1 : 0;
+  let dx = centerBiasX;
+  let dy = centerBiasY;
+  if (nearest) {
+    dx += p.x - nearest.x;
+    dy += p.y - nearest.y;
+  } else if (state.boss) {
+    dx += Math.sin(state.elapsed * 1.7);
+    dy += Math.cos(state.elapsed * 1.3) * 0.5;
+  }
+  if (Math.abs(dx) > 0.1) keys.add(dx > 0 ? "KeyD" : "KeyA");
+  if (Math.abs(dy) > 0.1) keys.add(dy > 0 ? "KeyS" : "KeyW");
+}
+
+function resolveBalanceInterrupts() {
+  if (!state) return;
+  if (state.mode === "upgrade") {
+    const choice = chooseBalanceLevelUpChoice();
+    if (choice) applyLevelUpChoice(choice);
+    return;
+  }
+  if (state.mode === "questions") {
+    const active = activeMemories();
+    if (!active.length) return;
+    state.questions.protect = active[0].id;
+    state.questions.predict = active[0].id;
+    const forgotten = forgetWeightedMemory();
+    showCycleResultOverlay(forgotten);
+    return;
+  }
+  const continueButton = document.querySelector("#continueCycleButton");
+  if (continueButton) {
+    continueButton.click();
+    return;
+  }
+  if (state.mode === "refill") {
+    const candidates = refillCandidates();
+    if (candidates.length) applyMemoryRefill(candidates[0]);
+  }
+}
+
+function startBalanceQa() {
+  const params = new URLSearchParams(window.location.search);
+  selectedWeapon = weapons[params.get("weapon")]?.id || weapons.twin_blades.id;
+  const memoryId = memories[params.get("memory")] ? params.get("memory") : "hungry_blades";
+  selectedMemories = [memoryId];
+  renderSetup();
+  writeBalanceQaResult({ status: "setup_visible" });
+  setTimeout(() => {
+    if (!state) startRun();
+  }, 50);
+
+  const startedAt = performance.now();
+  const maxRuntimeMs = Number(params.get("balanceTimeoutMs") || 45000);
+  const maxElapsed = Number(params.get("balanceRunSec") || experiment.runDurationSec + 8);
+  const stepDt = 1 / 30;
+  const stepsPerTick = Number(params.get("balanceStepsPerTick") || 90);
+  const timer = setInterval(() => {
+    if (!state) {
+      writeBalanceQaResult({ status: "waiting_for_run" });
+      return;
+    }
+
+    for (let i = 0; i < stepsPerTick; i += 1) {
+      resolveBalanceInterrupts();
+      if (!state || ["dead", "result"].includes(state.mode)) break;
+      if (state.mode === "combat") {
+        setBalanceMovementKeys();
+        update(stepDt);
+      } else {
+        resolveBalanceInterrupts();
+      }
+      if (state.elapsed >= maxElapsed) break;
+    }
+    keys.clear();
+
+    const terminal = state.mode === "dead" || state.mode === "result" || state.elapsed >= maxElapsed;
+    const timedOut = performance.now() - startedAt > maxRuntimeMs;
+    if (terminal || timedOut) {
+      const status = state.mode === "result" || state.mode === "dead" ? "complete" : timedOut ? "timeout" : "failed";
+      writeBalanceQaResult({ status, timedOut, maxElapsedReached: state.elapsed >= maxElapsed });
+      clearInterval(timer);
+      return;
+    }
+    writeBalanceQaResult({ status: "running" });
+  }, 16);
+}
+
+if (experiment.qaFastMode || experiment.qaLevelupMode || experiment.qaV06Mode || experiment.qaDeathMode || experiment.qaIdentityMode || experiment.qaPressureMode || experiment.qaPostLossMode || experiment.qaTacticalMode || experiment.qaBalanceMode) {
   window.__letheQaLog = () => (state ? JSON.parse(JSON.stringify(collectLogPayload())) : null);
 }
 
@@ -4172,4 +4319,5 @@ if (experiment.qaDeathMode) startDeathQa();
 if (experiment.qaPressureMode) startPressureQa();
 if (experiment.qaPostLossMode) startPostLossQa();
 if (experiment.qaTacticalMode) startTacticalQa();
+if (experiment.qaBalanceMode) startBalanceQa();
 requestAnimationFrame(frame);

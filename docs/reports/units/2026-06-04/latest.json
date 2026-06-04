@@ -1,11 +1,11 @@
 {
   "source": "docs\\reports\\2026-06-04.md",
-  "generatedAt": "2026-06-04T08:21:09.320Z",
-  "unitCount": 6,
+  "generatedAt": "2026-06-04T08:53:12.812Z",
+  "unitCount": 7,
   "latest": {
-    "title": "2026-06-04-06 - v012 밸런스 기준선 1차 구현",
-    "number": "06",
-    "markdownPath": "docs\\reports\\units\\2026-06-04\\2026-06-04-06-v012-밸런스-기준선-1차-구현.md",
-    "htmlPath": "docs\\reports\\units\\2026-06-04\\2026-06-04-06-v012-밸런스-기준선-1차-구현.html"
+    "title": "2026-06-04-07 - v012 밸런스 자동 측정 루프",
+    "number": "07",
+    "markdownPath": "docs\\reports\\units\\2026-06-04\\2026-06-04-07-v012-밸런스-자동-측정-루프.md",
+    "htmlPath": "docs\\reports\\units\\2026-06-04\\2026-06-04-07-v012-밸런스-자동-측정-루프.html"
   }
 }
