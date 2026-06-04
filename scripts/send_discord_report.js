@@ -33,15 +33,18 @@ async function main() {
   const markdown = reportScope.markdown;
   const html = fs.readFileSync(attachmentHtmlPath);
   const prompt = promptPath ? fs.readFileSync(promptPath) : null;
-  const jsonAttachmentName = jsonSummaryFileName(markdownPath, reportScope.title);
   const messagePayload = buildMessagePayload(markdown, markdownPath, attachmentHtmlPath, promptPath, reportScope.title);
-  messagePayload.attachments.unshift(jsonAttachmentName);
+  const jsonAttachmentPath = writeJsonSummary(attachmentHtmlPath, messagePayload);
+  const jsonAttachmentName = path.basename(jsonAttachmentPath);
+  messagePayload.attachments[0] = jsonAttachmentName;
+  fs.writeFileSync(jsonAttachmentPath, `${JSON.stringify(messagePayload, null, 2)}\n`, 'utf8');
   const message = formatMessagePayload(messagePayload);
-  const jsonAttachment = Buffer.from(JSON.stringify(messagePayload, null, 2), 'utf8');
+  const jsonAttachment = fs.readFileSync(jsonAttachmentPath);
 
   if (dryRun) {
     console.log(message);
-    console.log(`Attachment: ${jsonAttachmentName} (${jsonAttachment.length} bytes)`);
+    console.log(`Attachment: ${path.relative(process.cwd(), jsonAttachmentPath)} (${jsonAttachment.length} bytes)`);
+    console.log('상세 HTML 보고서 파일입니다.');
     console.log(`Attachment: ${path.relative(process.cwd(), attachmentHtmlPath)} (${html.length} bytes)`);
     if (promptPath) {
       console.log(`Attachment: ${path.relative(process.cwd(), promptPath)} (${prompt.length} bytes)`);
@@ -62,22 +65,20 @@ async function main() {
     allowed_mentions: { parse: [] },
   }));
   form.append('files[0]', new Blob([jsonAttachment], { type: 'application/json' }), jsonAttachmentName);
-  form.append('files[1]', new Blob([html], { type: 'text/html' }), path.basename(attachmentHtmlPath));
+  await postDiscordForm(webhookUrl, form, 'Discord JSON summary upload failed');
+
+  const htmlForm = new FormData();
+  htmlForm.append('payload_json', JSON.stringify({
+    content: '상세 HTML 보고서 파일입니다.',
+    allowed_mentions: { parse: [] },
+  }));
+  htmlForm.append('files[0]', new Blob([html], { type: 'text/html' }), path.basename(attachmentHtmlPath));
   if (promptPath) {
-    form.append('files[2]', new Blob([prompt], { type: 'text/markdown' }), path.basename(promptPath));
+    htmlForm.append('files[1]', new Blob([prompt], { type: 'text/markdown' }), path.basename(promptPath));
   }
+  await postDiscordForm(webhookUrl, htmlForm, 'Discord HTML report upload failed');
 
-  const response = await fetch(webhookUrl, {
-    method: 'POST',
-    body: form,
-  });
-
-  if (!response.ok) {
-    const body = await response.text();
-    throw new Error(`Discord upload failed: ${response.status} ${response.statusText}\n${body}`);
-  }
-
-  console.log(`Uploaded ${path.relative(process.cwd(), attachmentHtmlPath)} to Discord.`);
+  console.log(`Uploaded ${path.relative(process.cwd(), jsonAttachmentPath)} and ${path.relative(process.cwd(), attachmentHtmlPath)} to Discord.`);
 }
 
 function buildMessagePayload(markdown, markdownFile, htmlFile, reviewPromptPath, sectionTitle = '') {
@@ -117,43 +118,91 @@ function buildMessagePayload(markdown, markdownFile, htmlFile, reviewPromptPath,
     'planning handoff',
     'gpt 전달',
   ], 2);
-  const planningLine = reviewPromptPath
-    ? `있음 - ${path.relative(process.cwd(), reviewPromptPath)}`
-    : handoff.length > 0
-      ? fit(joinBullets(handoff), 220)
-      : '없음';
+  const tests = bulletsFromSections(markdown, [
+    '3. 테스트 결과와 근거',
+    '테스트 결과와 근거',
+    '검증',
+    'test results and evidence',
+  ], 3);
+  const decisions = bulletsFromSections(markdown, [
+    '4. 결정한 것',
+    '결정한 것',
+    'decisions made',
+  ], 2);
   return {
-    title: sectionTitle ? 'LETHE 작업 보고' : 'LETHE 일일 보고서',
-    date: reportDate,
-    section: sectionTitle || null,
-    status: fit(joinBullets(status) || 'HTML 보고서 생성 완료', 180),
-    work: fit(joinBullets(work) || '보고서가 갱신되었습니다.', 240),
-    risks: fit(joinBullets(problems) || '새로 기록된 문제 없음', 180),
-    planning: planningLine,
+    project: 'LETHE Prototype',
+    type: sectionTitle ? 'work_unit_report' : 'daily_report',
+    title: sectionTitle || `LETHE 일일 보고서 - ${reportDate}`,
+    기준: `${reportDate} 기준`,
+    어떤_작업: work.length ? work : ['보고서가 갱신되었습니다.'],
+    진행_내용: [...tests, ...decisions].slice(0, 4),
+    결과: status.length ? status : ['HTML 보고서 생성 완료'],
+    문제: problems.length ? problems : ['새로 기록된 문제 없음'],
+    기획질문: reviewPromptPath
+      ? [`있음 - ${path.relative(process.cwd(), reviewPromptPath)}`]
+      : handoff.length ? handoff : ['없음'],
     attachments: [
+      jsonSummaryFileName(markdownFile, sectionTitle),
       path.basename(htmlFile),
       ...(reviewPromptPath ? [path.basename(reviewPromptPath)] : []),
     ],
+    source: path.relative(process.cwd(), htmlFile),
+    generatedAt: new Date().toISOString(),
   };
 }
 
 function formatMessagePayload(payload) {
-  const json = JSON.stringify(payload, null, 2);
-  if (json.length <= 1800) return `\`\`\`json\n${json}\n\`\`\``;
+  const lines = [
+    `**${payload.project} 진행 상태**`,
+    `기준: ${payload.기준}`,
+    '',
+    '**어떤 작업**',
+    ...payload.어떤_작업.slice(0, 4).map((item) => `• ${fit(item, 180)}`),
+    '',
+    '**진행 내용**',
+    ...(payload.진행_내용.length ? payload.진행_내용 : ['상세 내용은 첨부 JSON/HTML 참고']).slice(0, 4).map((item) => `• ${fit(item, 180)}`),
+    '',
+    '**결과**',
+    ...payload.결과.slice(0, 4).map((item) => `• ${fit(item, 180)}`),
+    '',
+    `${payload.source} 기준으로 생성됨 · ${displayTime(new Date())}`,
+  ];
 
-  payload.status = fit(payload.status, 120);
-  payload.work = fit(payload.work, 160);
-  payload.risks = fit(payload.risks, 120);
-  payload.planning = fit(payload.planning, 140);
-  return `\`\`\`json\n${JSON.stringify(payload, null, 2)}\n\`\`\``.slice(0, 1900);
+  return lines.join('\n').slice(0, 1800);
 }
 
 function jsonSummaryFileName(markdownFile, sectionTitle = '') {
   const reportDate = path.basename(markdownFile, '.md');
   if (!sectionTitle) return `${reportDate}-discord-summary.json`;
   const unit = unitReportForTitle(markdownFile, sectionTitle);
-  if (unit) return path.basename(unit.htmlPath).replace(/\.html$/i, '.json');
+  if (unit) return path.basename(unit.htmlPath).replace(/\.html$/i, '.summary.json');
   return `${reportDate}-discord-summary.json`;
+}
+
+function writeJsonSummary(htmlPath, payload) {
+  const jsonPath = htmlPath.replace(/\.html$/i, '.summary.json');
+  fs.writeFileSync(jsonPath, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
+  return jsonPath;
+}
+
+async function postDiscordForm(webhookUrl, form, label) {
+  const response = await fetch(webhookUrl, {
+    method: 'POST',
+    body: form,
+  });
+
+  if (!response.ok) {
+    const body = await response.text();
+    throw new Error(`${label}: ${response.status} ${response.statusText}\n${body}`);
+  }
+}
+
+function displayTime(date) {
+  const hours = date.getHours();
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const suffix = hours < 12 ? '오전' : '오후';
+  const hour12 = hours % 12 || 12;
+  return `오늘 ${suffix} ${hour12}:${minutes}`;
 }
 
 function parseArgs(args) {
