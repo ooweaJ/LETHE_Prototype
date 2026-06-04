@@ -11,11 +11,13 @@ Last updated: 2026-06-04
 - Latest task-update status: v0.11 now includes 8 memories, 4 active synergies, 2 weapons, 2 weapon evolutions (`피의 늪`, `파쇄 각인`), active memory levels, `잔향 증폭`, forget-probability meter/logs, echo-state logs, weapon-evolution logs, and Q5 growth-feel survey. Scope remains inside the v0.11 document limits: no shop, meta progression, new region, extra weapon count, enemy expansion, final boss content expansion, multi-region structure, or active slot expansion above 3.
 - Latest verification status: syntax checks, DOCX regeneration, report generation/check, doctor, and Discord dry-runs pass. Browser QA is blocked in this environment because Chrome/Chromium executable was not found and `CHROME_PATH` is not set.
 - Planning document status: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md` is now the Markdown source of truth, and `docs/LETHE_망각의_군주_완성형_기획서_v6.docx` should be regenerated from it after this unit.
+- Balance status: current code-based v0.11 numbers are collected in `docs/BALANCE_TABLE_v0_11.md`. First suspected balance blocker is `굶주린 칼무리` applying damage per frame instead of per second.
 
 ## Implemented
 
 - Static browser prototype: `index.html`, `style.css`, `src/game.js`.
 - Current planning source: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md`, mirrored into the existing Word 기획서 DOCX.
+- Current balance source: `docs/BALANCE_TABLE_v0_11.md`.
 - v0.11 target slice:
   - browser label and experiment version moved to `v0.11`,
   - setup starts with weapon 1 and starting memory 1,

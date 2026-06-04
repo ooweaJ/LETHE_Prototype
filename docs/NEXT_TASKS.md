@@ -8,7 +8,8 @@
 
 - v0.11 target document: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md`.
 - v0.11 implementation status: target slice implemented in HTML prototype with 8 memories, active memory levels, 4 synergies, 600-second schedule, weighted-random forgetting, forget-probability meter, leveled weapon echoes, `피의 늪`/`파쇄 각인` weapon evolutions, Q5 growth survey, and v0.11 log fields.
-- Current selected next scope: run trusted-local browser QA focused on memory acquisition/upgrade, weighted forgetting, post-loss refill, echo state, and weapon evolution. This environment may still fail browser QA if Chrome/Chromium is not found and `CHROME_PATH` is not set. After browser evidence, prepare controlled 1-person browser playtest. Do not add more memories, slots, shops, meta progression, regions, weapons, enemies, final boss completion, or multi-region structure.
+- Current balance source: `docs/BALANCE_TABLE_v0_11.md`.
+- Current selected next scope: first balance pass before broader playtest. Start with `굶주린 칼무리` per-frame damage risk, then check first-180-sec growth pace, `피의 늪` proc/tick strength, and boss HP. This environment may still fail browser QA if Chrome/Chromium is not found and `CHROME_PATH` is not set. Do not add more memories, slots, shops, meta progression, regions, weapons, enemies, final boss completion, or multi-region structure.
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the level-up flow and `runGrowth` payload.
 - Codex implementation result: `GO_CANDIDATE` from `npm run ai:test` and `npm run ai:test:heavy`.

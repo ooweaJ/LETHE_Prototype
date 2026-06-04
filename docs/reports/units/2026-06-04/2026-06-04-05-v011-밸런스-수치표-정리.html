@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-04-05 - v011 밸런스 수치표 정리</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-04-05 - v011 밸런스 수치표 정리</h1>
+      <p class="meta">Generated from 2026-06-04-05-v011-밸런스-수치표-정리.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-04-05 - v011 밸런스 수치표 정리</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>LETHE HTML Alpha는 v0.11 구조 구현 이후 첫 밸런스 점검 단계다.</li>
+<li>별도 밸런스 수치표는 없었고, 실제 수치는 <code>src/game.js</code>와 기획서에 흩어져 있었다.</li>
+<li>현재 코드 기준 수치표는 <code>docs/BALANCE_TABLE_v0_11.md</code>에 새로 정리했다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>docs/BALANCE_TABLE_v0_11.md</code>를 추가했다.</li>
+<li>수치표에 런 구조, 플레이어, 무기, 기억, 적, 스폰, 보스, 시너지, 망각 확률, 잔향, 무기 진화를 정리했다.</li>
+<li>README, <code>docs/CODEX_STATUS.md</code>, <code>docs/NEXT_TASKS.md</code>에 밸런스 수치표 위치와 다음 밸런스 범위를 연결했다.</li>
+<li>첫 번째 의심 원인으로 <code>굶주린 칼무리</code>가 프레임마다 피해를 주는 문제를 기록했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>코드 검색으로 현재 실제 수치가 독립 문서가 아니라 <code>src/game.js</code>에 흩어져 있음을 확인했다.</li>
+<li><code>src/game.js</code> 기준으로 무기/기억/적/보스/잔향/진화 수치를 수치표에 옮겼다.</li>
+<li><code>굶주린 칼무리</code>는 <code>dt</code> 없이 업데이트마다 7.4 피해를 적용하고 있어, 60fps 기준 단일 대상 약 444 DPS까지 튈 수 있음을 확인했다.</li>
+<li><code>npm run report</code>: 일일 HTML과 단위 보고서 5개 생성.</li>
+<li><code>npm run report:check</code>: 통과.</li>
+<li><code>node scripts/send_discord_report.js docs/reports/2026-06-04.md --dry-run --section &quot;2026-06-04-05 - v011 밸런스 수치표 정리&quot;</code>: 한국어 Discord 본문과 수치표 보고 단위 HTML 첨부를 확인.</li>
+<li>실제 Discord 전송은 이번 새 밸런스 수치표 작업에 대한 사용자 명시 요청이 없어 보류했다.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>밸런스 조정 기준 문서는 <code>docs/BALANCE_TABLE_v0_11.md</code>로 둔다.</li>
+<li>다음 구현은 새 기능보다 첫 밸런스 패스를 우선한다.</li>
+<li>첫 밸런스 패스는 <code>굶주린 칼무리</code>, 첫 180초 성장 속도, <code>피의 늪</code>, 보스 HP를 우선 본다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>현재 수치는 v0.11 구조 검증용 임시값이라 실제 플레이 감각과 맞지 않을 가능성이 높다.</li>
+<li><code>굶주린 칼무리</code>가 다른 기억 대비 압도적으로 강하면 기억 획득/망각/진화 테스트가 왜곡된다.</li>
+<li><code>피의 늪</code>은 쌍검 발동률과 틱 피해가 높아 후반 화면 장악으로 이어질 수 있다.</li>
+<li>Chrome/<code>CHROME_PATH</code> 문제 때문에 자동 브라우저 QA는 아직 막혀 있다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<ul>
+<li>기획 구조는 v0.11로 어느 정도 잡혔지만, 수치 밸런스는 아직 정리/검증 전이었다.</li>
+<li>현재 가장 먼저 의심할 수치는 <code>굶주린 칼무리</code>의 프레임 단위 피해다.</li>
+<li>GPT/Claude는 밸런스 리뷰 시 수치표를 기준으로 기억별 역할 대비 DPS/유틸/리스크가 맞는지 봐야 한다.</li>
+</ul>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li><code>굶주린 칼무리</code>를 초당 피해 기준으로 고친다.</li>
+<li>첫 보스 전 목표를 평균 레벨업 2-3회, 기억 2-3개 완성으로 맞춘다.</li>
+<li><code>피의 늪</code> 발동률/틱 피해를 낮춰 기준선을 만든다.</li>
+<li>v0.11 전용 브라우저/AI 밸런스 체크를 추가한다.</li>
+</ul>
+<h2>8. 포트폴리오 노트</h2>
+<ul>
+<li>문제: 게임 구조는 잡혔지만 수치가 흩어져 있어 밸런스 판단 기준이 없었다.</li>
+<li>방향: 코드 기준 실제 수치를 표로 모아 조정 가능한 기준선을 만든다.</li>
+<li>행동: v0.11 수치표를 만들고 최우선 밸런스 위험을 표시했다.</li>
+<li>결과: 다음 작업은 감으로 튜닝하는 대신 수치표 기준으로 밸런스 패스를 시작할 수 있다.</li>
+</ul>
+  </main>
+</body>
+</html>
