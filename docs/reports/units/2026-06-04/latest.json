@@ -1,11 +1,11 @@
 {
   "source": "docs\\reports\\2026-06-04.md",
-  "generatedAt": "2026-06-04T00:41:16.578Z",
-  "unitCount": 1,
+  "generatedAt": "2026-06-04T01:49:18.704Z",
+  "unitCount": 2,
   "latest": {
-    "title": "2026-06-04-01 - 기획서 v0.9 동기화",
-    "number": "01",
-    "markdownPath": "docs\\reports\\units\\2026-06-04\\2026-06-04-01-기획서-v0-9-동기화.md",
-    "htmlPath": "docs\\reports\\units\\2026-06-04\\2026-06-04-01-기획서-v0-9-동기화.html"
+    "title": "2026-06-04-02 - v0.10 망각 갈림길 구현",
+    "number": "02",
+    "markdownPath": "docs\\reports\\units\\2026-06-04\\2026-06-04-02-v0-10-망각-갈림길-구현.md",
+    "htmlPath": "docs\\reports\\units\\2026-06-04\\2026-06-04-02-v0-10-망각-갈림길-구현.html"
   }
 }

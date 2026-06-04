@@ -115,7 +115,7 @@ function runTacticalQa(extraArgs) {
 function writeGateResult(result) {
   const payload = {
     generatedAt: new Date().toISOString(),
-    gate: 'v0.9-tactical-trusted',
+    gate: 'v0.10-tactical-trusted',
     resultPath: RESULT_PATH,
     ...result,
     first: summarizeRun(result.first),

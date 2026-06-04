@@ -1,11 +1,14 @@
 # Next Tasks
 
-현재 단계는 v0.8 Gate C 직행에서 v0.9 release-feel loop 준비로 바뀌었다. 사용자는 지금 브라우저 QA만 보강해 사람 테스트로 넘겨도 재미가 부족할 가능성이 높다고 판단했다. 다음 목표는 장르 레퍼런스를 조사해 LETHE에 맞게 번역하고, 목표-검증-피드백-다음 입력이 밤에도 계속 도는 자동 루프를 만드는 것이다.
+현재 단계는 v0.10 target slice 구현/검증이다. v0.9 release-feel loop는 AI/browser gate를 통과했지만, v0.10 기획서는 망각을 자동 처벌이 아니라 플레이어가 선택하는 `망각 갈림길`과 강한 잔향 피벗으로 바꾸라고 지시한다. 다음 목표는 v0.10 구현을 브라우저 QA와 controlled 1-person browser playtest로 검증하는 것이다.
 
 이 프로젝트의 현재 목표는 HTML 프로토타입으로 LETHE의 핵심 재미와 가능성을 검증하는 것이다. 충분히 재미가 확인되면 그 결과를 근거로 Unity 구현 단계로 넘어간다.
 
 ## Current Verdict
 
+- v0.10 target document: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_10.md`.
+- v0.10 implementation status: target slice implemented in HTML prototype with 8 memories, 4 synergies, 600-second schedule, top-2 forgetting fork, echo unlock routes, simplified dependency scoring, real-time dependency meter, prediction accuracy payload, and tactical-focus dependency tradeoff.
+- Current selected next scope: run v0.10 trusted-local browser QA focused on fork choice, post-loss/refill, and tactical focus. This environment currently cannot start browser QA because Chrome/Chromium is not found and `CHROME_PATH` is not set. After browser evidence, prepare controlled 1-person browser playtest. Do not add more memories, slots, shops, meta progression, regions, weapons, enemies, final boss completion, or multi-region structure.
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the level-up flow and `runGrowth` payload.
 - Codex implementation result: `GO_CANDIDATE` from `npm run ai:test` and `npm run ai:test:heavy`.

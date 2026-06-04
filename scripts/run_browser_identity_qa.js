@@ -111,7 +111,7 @@ function identityFailures(qa, value) {
   );
   const checks = [
     ['status complete or core identity visible', qa.status === 'complete' || coreComplete],
-    ['version v0.9', qa.version === 'v0.9'],
+    ['version v0.10', qa.version === 'v0.10'],
     ['browser state exists', qa.hasState],
     ['build name visible', qa.buildNameVisible],
     ['synergy visible', qa.synergyVisible],

@@ -115,7 +115,7 @@ function runPostLossQa(extraArgs) {
 function writeGateResult(result) {
   const payload = {
     generatedAt: new Date().toISOString(),
-    gate: 'v0.9-postloss-trusted',
+    gate: 'v0.10-postloss-trusted',
     resultPath: RESULT_PATH,
     ...result,
     first: summarizeRun(result.first),

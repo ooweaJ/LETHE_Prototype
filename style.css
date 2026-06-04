@@ -233,6 +233,36 @@ canvas {
   background: rgba(32, 71, 79, 0.72);
 }
 
+.fork-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.fork-choice {
+  min-height: 142px;
+}
+
+.fork-choice.strong-fork {
+  border-color: rgba(255, 93, 108, 0.46);
+}
+
+.fork-choice.safe-fork {
+  border-color: rgba(232, 193, 93, 0.46);
+}
+
+.fork-preview {
+  margin-top: 10px;
+  border: 1px solid rgba(109, 223, 210, 0.22);
+  border-radius: 6px;
+  background: rgba(109, 223, 210, 0.07);
+  color: var(--memory);
+  padding: 8px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
 .choice strong {
   display: block;
   margin-bottom: 5px;
@@ -410,6 +440,10 @@ button:disabled {
   overflow: hidden;
 }
 
+.omen-track {
+  box-shadow: 0 0 16px rgba(255, 93, 108, 0.2);
+}
+
 .cooldown-fill,
 .clarity-fill,
 .hp-fill {
@@ -484,6 +518,12 @@ button:disabled {
 .echo-transform-card {
   border-color: rgba(109, 223, 210, 0.42);
   background: linear-gradient(180deg, rgba(109, 223, 210, 0.12), rgba(17, 25, 35, 0.96));
+}
+
+.echo-unlock-card {
+  grid-column: 1 / -1;
+  border-color: rgba(232, 193, 93, 0.5);
+  background: linear-gradient(180deg, rgba(232, 193, 93, 0.13), rgba(17, 25, 35, 0.96));
 }
 
 .echo-transform-card p {
@@ -614,6 +654,10 @@ summary {
   }
 
   .result-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .fork-choice-grid {
     grid-template-columns: 1fr;
   }
 

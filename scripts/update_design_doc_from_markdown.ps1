@@ -1,5 +1,5 @@
 param(
-  [string]$MarkdownPath = "docs\LETHE_망각의_군주_프로토타입_기획서_v0.9.md",
+  [string]$MarkdownPath = "docs\LETHE_망각의_군주_프로토타입_기획서_v0_10.md",
   [string]$DocxPath = "docs\LETHE_망각의_군주_완성형_기획서_v6.docx"
 )
 

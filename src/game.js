@@ -156,6 +156,26 @@ const memories = {
     echo: "쿨다운 감소 +12%, 둔화 지속 +35%",
     direction: "쿨다운형 기억, 생존형 제어 빌드가 강해진다.",
   },
+  ashen_guard: {
+    id: "ashen_guard",
+    name: "잿빛 보호막",
+    role: "보호 / 반격",
+    desc: "주기적 보호막, 파열 시 주변 피해.",
+    cooldown: 8.4,
+    tags: ["survival", "area"],
+    echo: "보호막 지속 +20%, 무기 반격 +10%",
+    direction: "결손 생존, 광역 반격, 무기 방어 피벗이 강해진다.",
+  },
+  oblivion_brand: {
+    id: "oblivion_brand",
+    name: "망각의 낙인",
+    role: "표식 / 증폭",
+    desc: "위협 적에 낙인, 받는 피해 증가.",
+    cooldown: 5.2,
+    tags: ["burst", "control"],
+    echo: "낙인 지속 +20%, 무기 표식 +10%",
+    direction: "폭딜 제어, 단일 표식, 보스 딜타임 피벗이 강해진다.",
+  },
 };
 
 const synergyRules = [
@@ -176,6 +196,12 @@ const synergyRules = [
     name: "피 묻은 결의",
     tags: ["burst", "survival"],
     desc: "큰 피해를 넣으면 짧게 회복합니다.",
+  },
+  {
+    id: "brand_chain",
+    name: "각인 연쇄",
+    tags: ["burst", "control"],
+    desc: "약화되거나 낙인된 적에게 단발 폭딜이 증가합니다.",
   },
 ];
 
@@ -228,11 +254,11 @@ const enemyTypes = {
 const qaMode = new URLSearchParams(window.location.search).get("qa") || "";
 
 const experiment = {
-  version: "v0.9",
+  version: "v0.10",
   echoPower: 0.5,
   uiClarity: 0.78,
-  runDurationSec: 540,
-  bossScheduleSec: [90, 210, 360, 510],
+  runDurationSec: 600,
+  bossScheduleSec: [180, 340, 490, 600],
   bossHp: 560,
   deficitDurationSec: 75,
   qaFastMode: qaMode.includes("fast"),
@@ -246,17 +272,11 @@ const experiment = {
 };
 
 if (experiment.qaFastMode) {
-  experiment.runDurationSec = 72;
-  experiment.bossScheduleSec = [10, 24, 42, 62];
+  experiment.runDurationSec = 96;
+  experiment.bossScheduleSec = [18, 38, 62, 88];
   experiment.bossHp = 180;
   experiment.deficitDurationSec = 5;
 }
-
-const forgetBias = {
-  execution_flash: 0.72,
-  hungry_blades: 0.90,
-  stalker_oath: 0.98,
-};
 
 const keys = new Set();
 let selectedWeapon = weapons.twin_blades.id;
@@ -279,11 +299,15 @@ const baseEcho = {
   onHitDamage: 0,
   cooldownReduction: 0,
   slowDuration: 0,
+  shieldDuration: 0,
+  markDuration: 0,
   weaponFlashChance: 0,
   weaponBleedDamage: 0,
   weaponHomingChance: 0,
   weaponShockwaveChance: 0,
   weaponSlowChance: 0,
+  weaponCounterChance: 0,
+  weaponMarkChance: 0,
 };
 
 function createMemoryInstance(id) {
@@ -309,6 +333,7 @@ function createMetricSeed(memoryIds) {
       bossControls: 0,
       activeCount: 0,
       presenceTime: 0,
+      focusDependency: 0,
       score: 0,
       components: {},
     };
@@ -380,6 +405,8 @@ function createRunState() {
       attackCd: 0,
       invuln: 0,
       facing: 0,
+      shield: 0,
+      maxShield: 0,
     },
     enemies: [],
     projectiles: [],
@@ -409,6 +436,8 @@ function createRunState() {
       cooldownLeft: 0,
       durationLeft: 0,
       memoryId: null,
+      overheatSec: 9,
+      dependencyBonus: {},
       useCount: 0,
       successfulCount: 0,
       lastUsedAt: null,
@@ -417,7 +446,10 @@ function createRunState() {
     questions: {
       protect: null,
       predict: null,
+      release: null,
     },
+    forkChoice: null,
+    echoUnlocks: [],
     forgotten: null,
     forgottenHistory: [],
     death: null,
@@ -561,7 +593,7 @@ function buildIdentityFor(memoryIds, sourceState = state) {
     mostDependentMemory,
     memoryIds: ids,
     memoryNames: ids.map((id) => memories[id].name),
-    visibleBy90Sec: sourceState ? sourceState.elapsed <= 90 || sourceState.logs?.buildIdentitySeenBy90Sec : ids.length === 3,
+    visibleBy90Sec: sourceState ? sourceState.elapsed <= 180 || sourceState.logs?.buildIdentitySeenBy90Sec : ids.length === 3,
   };
 }
 
@@ -569,6 +601,7 @@ function buildNameFor(tagCounts, activeSynergies) {
   if (activeSynergies.some((rule) => rule.id === "area_control")) return "압축 제어 빌드";
   if (activeSynergies.some((rule) => rule.id === "dot_control")) return "느린 출혈 빌드";
   if (activeSynergies.some((rule) => rule.id === "burst_survival")) return "피 묻은 결의 빌드";
+  if (activeSynergies.some((rule) => rule.id === "brand_chain")) return "각인 처형 빌드";
   if ((tagCounts.burst || 0) >= 2) return "집중 처형 빌드";
   if ((tagCounts.dot || 0) >= 2) return "지속 절삭 빌드";
   if ((tagCounts.control || 0) >= 2) return "시간 제어 빌드";
@@ -732,14 +765,17 @@ function requestTacticalFocus(memoryId) {
   focus.cooldownLeft = focus.cooldownSec;
   focus.durationLeft = 3;
   focus.memoryId = memory.id;
+  focus.dependencyBonus[memory.id] = (focus.dependencyBonus[memory.id] || 0) + 18;
+  state.metrics[memory.id].focusDependency += 18;
   focus.useCount += 1;
   focus.lastUsedAt = Number(state.elapsed.toFixed(2));
 
   if (memory.cooldown > 0) {
-    memory.cooldownLeft = Math.min(beforeCooldown, Math.max(0.12, memory.cooldown * 0.18));
+    memory.cooldownLeft = Math.min(beforeCooldown, Math.max(0.12, memory.cooldown * 0.24));
   }
   const afterCooldown = memory.cooldownLeft || 0;
-  const successful = memory.cooldown === 0 || beforeCooldown - afterCooldown >= 0.05;
+  const synergyBoosted = activeSynergiesFor(activeMemoryIds()).some((rule) => (memory.tags || []).some((tag) => rule.tags.includes(tag)));
+  const successful = memory.cooldown === 0 || beforeCooldown - afterCooldown >= 0.05 || synergyBoosted;
   if (successful) focus.successfulCount += 1;
 
   const entry = {
@@ -748,6 +784,8 @@ function requestTacticalFocus(memoryId) {
     memoryName: memory.name,
     beforeCooldown: Number(beforeCooldown.toFixed(2)),
     afterCooldown: Number(afterCooldown.toFixed(2)),
+    dependencyAdded: 18,
+    synergyBoosted,
     successful,
   };
   focus.history.push(entry);
@@ -1011,6 +1049,8 @@ function spawnBoss() {
 function updateBoss(dt) {
   const boss = state.boss;
   if (!boss) return;
+  boss.marked = Math.max(0, (boss.marked || 0) - dt);
+  boss.vulnerable = Math.max(0, (boss.vulnerable || 0) - dt);
 
   boss.phaseTimer += dt;
   boss.actionCd -= dt;
@@ -1098,6 +1138,8 @@ function updateEnemies(dt) {
   const p = state.player;
   for (const enemy of state.enemies) {
     enemy.slow = Math.max(0, enemy.slow - dt);
+    enemy.marked = Math.max(0, (enemy.marked || 0) - dt);
+    enemy.vulnerable = Math.max(0, (enemy.vulnerable || 0) - dt);
     enemy.shotCd -= dt;
     enemy.healCd -= dt;
     const slowMul = enemy.slow > 0 ? 0.45 : 1;
@@ -1142,7 +1184,7 @@ function updateEnemies(dt) {
 
     if (dist < enemy.r + p.r && p.invuln <= 0) {
       const reduced = 1 - state.echo.damageReduction - state.runGrowth.damageReduction;
-      p.hp -= enemy.damage * reduced;
+      damagePlayer(enemy.damage * reduced, enemy);
       p.invuln = 0.52;
     }
   }
@@ -1180,7 +1222,7 @@ function updateProjectiles(dt) {
 
     if (projectile.hostile) {
       if (distance(projectile, state.player) < projectile.r + state.player.r && state.player.invuln <= 0) {
-        state.player.hp -= projectile.damage * (1 - state.echo.damageReduction - state.runGrowth.damageReduction);
+        damagePlayer(projectile.damage * (1 - state.echo.damageReduction - state.runGrowth.damageReduction), projectile);
         state.player.invuln = 0.44;
         projectile.life = 0;
       }
@@ -1193,6 +1235,33 @@ function updateProjectiles(dt) {
     }
   }
   state.projectiles = state.projectiles.filter((projectile) => projectile.life > 0 && insideBounds(projectile, 80));
+}
+
+function damagePlayer(amount, source = null) {
+  const p = state.player;
+  const shieldAbsorb = Math.min(p.shield || 0, amount);
+  if (shieldAbsorb > 0) {
+    p.shield -= shieldAbsorb;
+    amount -= shieldAbsorb;
+    addFloater("보호", p.x, p.y - 32, "#c8c8c8");
+    if (p.shield <= 0) burstAshenGuard(source);
+  }
+  if (amount > 0) p.hp -= amount;
+}
+
+function burstAshenGuard(source = null) {
+  const guard = state.memories.find((memory) => memory.id === "ashen_guard" && !memory.forgotten);
+  if (!guard) return;
+  const radius = 118 * (1 + state.echo.range + state.runGrowth.range);
+  for (const target of hostiles()) {
+    if (distance(state.player, target) < radius + target.r) {
+      damageHostile(target, 30 * (1 + state.runGrowth.damage), guard.id, { pushed: true });
+    }
+  }
+  state.metrics[guard.id].status += 30;
+  addBurst(state.player.x, state.player.y, "#c8c8c8", 18, 3.4);
+  addFloater("잿빛 파열", state.player.x, state.player.y - 42, "#c8c8c8");
+  logEvent("ashen_guard_burst", { source: source?.id || source?.type || null });
 }
 
 function updateMemories(dt) {
@@ -1388,6 +1457,21 @@ function applyWeaponEchoEffects(target, baseDamage) {
     target.slow = Math.max(target.slow || 0, 1.2 + state.echo.slowDuration);
     addFloater("초침 잔향", target.x, target.y - 18, "#a98cff");
   }
+
+  if (state.echo.weaponCounterChance && Math.random() < state.echo.weaponCounterChance) {
+    const radius = 74 * (1 + state.echo.range + state.runGrowth.range);
+    for (const enemy of state.enemies) {
+      if (distance(p, enemy) < radius + enemy.r) damageHostile(enemy, 10 + baseDamage * 0.22, "weapon_echo");
+    }
+    state.player.shield = Math.max(state.player.shield || 0, 8);
+    addFloater("보호 잔향", p.x, p.y - 32, "#c8c8c8");
+  }
+
+  if (state.echo.weaponMarkChance && Math.random() < state.echo.weaponMarkChance) {
+    target.marked = Math.max(target.marked || 0, 1.9 + state.echo.markDuration);
+    target.vulnerable = Math.max(target.vulnerable || 0, 1.9 + state.echo.markDuration);
+    addFloater("낙인 잔향", target.x, target.y - 20, "#ff7c90");
+  }
 }
 
 function activateMemory(memory) {
@@ -1470,15 +1554,40 @@ function activateMemory(memory) {
     addBurst(p.x, p.y, "#a98cff", 12, 2.7);
     state.effects.push({ type: "clock", x: p.x, y: p.y, r: 18, maxR: radius, life: 0.72, maxLife: 0.72 });
   }
+
+  if (memory.id === "ashen_guard") {
+    const focusMul = activeTacticalFocus(memory.id) ? 1.25 : 1;
+    const shield = Math.round(22 * focusMul * (1 + state.echo.shieldDuration));
+    p.maxShield = Math.max(p.maxShield || 0, shield);
+    p.shield = Math.max(p.shield || 0, shield);
+    state.metrics[memory.id].status += shield;
+    addFloater(memory.name, p.x, p.y - 30, "#c8c8c8");
+    addBurst(p.x, p.y, "#c8c8c8", 12, 2.4);
+  }
+
+  if (memory.id === "oblivion_brand") {
+    const target = highestThreat();
+    if (!target) return;
+    const duration = 4.2 * (1 + state.echo.markDuration);
+    target.marked = Math.max(target.marked || 0, duration);
+    target.vulnerable = Math.max(target.vulnerable || 0, duration);
+    target.slow = Math.max(target.slow || 0, 0.75);
+    damageHostile(target, 32 * (1 + state.runGrowth.damage), memory.id, { bossTrace: true, controlHit: true, brandHit: true });
+    if (target.id === "boss") state.metrics[memory.id].bossControls += 1;
+    state.metrics[memory.id].status += 38;
+    addFloater(memory.name, target.x, target.y - 28, "#ff7c90");
+    addBurst(target.x, target.y, "#ff7c90", 13, 3.0);
+  }
 }
 
 function damageHostile(target, amount, source, options = {}) {
+  if (target.marked > 0 || target.vulnerable > 0) amount *= 1.14;
   amount = applySynergyDamage(source, target, amount, options);
   const before = target.hp;
   target.hp -= amount;
   const actual = Math.max(0, before - Math.max(0, target.hp));
   if (actual > 0) {
-    const color = source === "weapon" ? "#f0f3f8" : source === "execution_flash" ? "#eef8ff" : source === "stalker_oath" ? "#a98cff" : source === "shatter_ripple" ? "#6ddfd2" : source === "blood_reflection" ? "#ff5d6c" : "#e8c15d";
+    const color = source === "weapon" ? "#f0f3f8" : source === "execution_flash" ? "#eef8ff" : source === "stalker_oath" ? "#a98cff" : source === "shatter_ripple" ? "#6ddfd2" : source === "blood_reflection" ? "#ff5d6c" : source === "oblivion_brand" ? "#ff7c90" : source === "ashen_guard" ? "#c8c8c8" : "#e8c15d";
     if (actual >= 12 || Math.random() < 0.12) addFloater(String(Math.round(actual)), target.x, target.y - target.r - 6, color);
     if (actual >= 20) addBurst(target.x, target.y, color, source === "weapon" ? 5 : 8, source === "weapon" ? 1.4 : 2.1);
   }
@@ -1503,6 +1612,12 @@ function applySynergyDamage(source, target, amount, options = {}) {
   }
   if (hasSynergy("dot_control") && tags.includes("dot") && target.slow > 0) {
     nextAmount *= 1.28;
+  }
+  if (hasSynergy("brand_chain") && tags.includes("burst") && (target.marked > 0 || target.vulnerable > 0 || options.brandHit)) {
+    nextAmount *= 1.26;
+  }
+  if (activeTacticalFocus(source) && activeSynergiesFor(activeMemoryIds()).some((rule) => rule.tags.some((tag) => tags.includes(tag)))) {
+    nextAmount *= 1.12;
   }
   return nextAmount;
 }
@@ -1625,37 +1740,34 @@ function defeatBoss() {
 
 function calculateDependency() {
   const ids = state.memories.filter((m) => !m.forgotten).map((m) => m.id);
-  const combatValues = ids.map((id) => {
+  const relianceValues = ids.map((id) => {
     const m = state.metrics[id];
-    return m.damage + m.kills * 34 + m.assists * 10 + m.status * 0.28;
+    return m.damage + m.kills * 30 + m.assists * 8 + m.focusDependency * 12;
   });
   const bossValues = ids.map((id) => {
     const m = state.metrics[id];
-    return m.bossDamage + m.groggyDamage * 0.75 + m.bossControls * 34;
+    return m.bossDamage + m.groggyDamage * 0.5 + m.bossControls * 18;
   });
   const presenceValues = ids.map((id) => {
     const m = state.metrics[id];
-    return m.activeCount * 18 + m.presenceTime * 10;
+    return m.activeCount * 10 + m.presenceTime * 6;
   });
-  const totalDamage = sum(ids.map((id) => state.metrics[id].damage)) || 1;
-  const totalKills = sum(ids.map((id) => state.metrics[id].kills)) || 1;
 
   ids.forEach((id, index) => {
     const metric = state.metrics[id];
-    const combat = normalize(combatValues[index], combatValues);
+    const reliance = normalize(relianceValues[index], relianceValues);
     const boss = normalize(bossValues[index], bossValues);
-    const irreplace = clamp(((metric.damage / totalDamage) * 0.72 + (metric.kills / totalKills) * 0.28) * 100, 0, 100);
     const presence = normalize(presenceValues[index], presenceValues);
-    const score = combat * 0.4 + boss * 0.25 + irreplace * 0.2 + presence * 0.15;
-    const deletionScore = score * (forgetBias[id] ?? 1);
+    const score = reliance * 0.72 + boss * 0.16 + presence * 0.12;
     metric.components = {
-      combat: Math.round(combat),
+      combat: Math.round(reliance),
       boss: Math.round(boss),
-      irreplaceability: Math.round(irreplace),
+      irreplaceability: Math.round(reliance),
       presence: Math.round(presence),
+      focus: Math.round(metric.focusDependency || 0),
     };
     metric.score = Math.round(score);
-    metric.deletionScore = Math.round(deletionScore);
+    metric.deletionScore = Math.round(score);
   });
 
   const deletionTotal = sum(ids.map((id) => state.metrics[id].deletionScore)) || 1;
@@ -1664,12 +1776,18 @@ function calculateDependency() {
   });
 }
 
-function forgetMostDependent() {
+function topDependencyCandidates(limit = 2) {
   calculateDependency();
-  const ranked = state.memories
+  return state.memories
     .filter((memory) => !memory.forgotten)
-    .sort((a, b) => state.metrics[b.id].deletionScore - state.metrics[a.id].deletionScore);
-  const forgotten = ranked[0];
+    .sort((a, b) => state.metrics[b.id].deletionScore - state.metrics[a.id].deletionScore)
+    .slice(0, limit);
+}
+
+function forgetMemory(memoryId, forkMeta = null) {
+  calculateDependency();
+  const ranked = topDependencyCandidates(activeMemoryCount());
+  const forgotten = state.memories.find((memory) => memory.id === memoryId && !memory.forgotten) || ranked[0];
   forgotten.forgotten = true;
   state.forgotten = forgotten.id;
   state.forgottenHistory.push({
@@ -1679,7 +1797,8 @@ function forgetMostDependent() {
     cycleIndex: state.runTimeline.currentBossIndex,
     activeBefore: ranked.map((memory) => memory.id),
   });
-  applyEcho(forgotten.id);
+  const echoPowerTier = forkMeta?.rank === 1 ? "strong" : "safe";
+  applyEcho(forgotten.id, echoPowerTier);
   refreshActiveSynergies();
   const buildIdentity = buildIdentityFor(activeMemoryIds(), state);
   state.logs.buildIdentity = buildIdentity;
@@ -1691,6 +1810,8 @@ function forgetMostDependent() {
     forgottenName: forgotten.name,
     activeBefore: ranked.map((memory) => memory.id),
     activeAfterForget: activeMemoryIds(),
+    forkChoice: forkMeta,
+    echoUnlock: latestEchoUnlock(),
     refillAvailableAt: null,
     refillChoice: null,
     final: state.runTimeline.currentBossIndex >= state.runTimeline.bossScheduleSec.length,
@@ -1706,6 +1827,9 @@ function forgetMostDependent() {
     deletionWeights: dependencyWeights(),
     questions: state.questions,
     questionNames: questionNames(),
+    forkChoice: forkMeta,
+    echoUnlock: latestEchoUnlock(),
+    predictionAccuracy: predictionAccuracyLog(),
     echo: state.echo,
     echoTransformation: echoTransformationLog(forgotten.id),
     activeMemoryCount: activeMemoryCount(),
@@ -1714,77 +1838,179 @@ function forgetMostDependent() {
   return forgotten;
 }
 
-function applyEcho(memoryId) {
+function forgetMostDependent() {
+  const chosen = topDependencyCandidates(1)[0];
+  const forkChoice = {
+    cycleIndex: state.runTimeline.currentBossIndex,
+    t: Number(state.elapsed.toFixed(2)),
+    chosenMemoryId: chosen?.id || null,
+    chosenMemoryName: chosen?.name || null,
+    rank: 1,
+    candidateIds: chosen ? [chosen.id] : [],
+    candidateNames: chosen ? [chosen.name] : [],
+    predictedMemoryId: state.questions.predict,
+    predictedMemoryName: state.questions.predict === "unknown" ? "모르겠다" : memories[state.questions.predict]?.name || null,
+    strongPivot: true,
+    automated: true,
+  };
+  state.questions.release = chosen?.id || null;
+  state.forkChoice = forkChoice;
+  return forgetMemory(chosen?.id, forkChoice);
+}
+
+function applyEcho(memoryId, tier = "safe") {
   const tags = memories[memoryId]?.tags || [];
+  const powerMul = tier === "strong" ? 1.55 : 0.82;
   state.tagEchoes.push({
     memoryId,
     memoryName: memories[memoryId]?.name || memoryId,
     tags: tags.slice(0, 1),
-    power: 0.35,
+    power: tier === "strong" ? 0.55 : 0.28,
+    tier,
   });
   if (memoryId === "execution_flash") {
-    state.echo.critChance += 0.05 * experiment.echoPower;
-    state.echo.critDamage += 0.12 * experiment.echoPower;
-    state.echo.weaponFlashChance += 0.09 * experiment.echoPower;
+    state.echo.critChance += 0.05 * experiment.echoPower * powerMul;
+    state.echo.critDamage += 0.12 * experiment.echoPower * powerMul;
+    state.echo.weaponFlashChance += 0.09 * experiment.echoPower * powerMul;
   }
   if (memoryId === "hungry_blades") {
-    state.echo.attackSpeed += 0.07 * experiment.echoPower;
-    state.echo.dotDamage += 0.13 * experiment.echoPower;
-    state.echo.weaponBleedDamage += 0.36 * experiment.echoPower;
+    state.echo.attackSpeed += 0.07 * experiment.echoPower * powerMul;
+    state.echo.dotDamage += 0.13 * experiment.echoPower * powerMul;
+    state.echo.weaponBleedDamage += 0.36 * experiment.echoPower * powerMul;
   }
   if (memoryId === "stalker_oath") {
-    state.echo.projectileCount += 0.42 * experiment.echoPower;
-    state.echo.projectileSpeed += 0.11 * experiment.echoPower;
-    state.echo.weaponHomingChance += 0.10 * experiment.echoPower;
+    state.echo.projectileCount += 0.42 * experiment.echoPower * powerMul;
+    state.echo.projectileSpeed += 0.11 * experiment.echoPower * powerMul;
+    state.echo.weaponHomingChance += 0.10 * experiment.echoPower * powerMul;
   }
   if (memoryId === "shatter_ripple") {
-    state.echo.range += 0.07 * experiment.echoPower;
-    state.echo.knockback += 0.11 * experiment.echoPower;
-    state.echo.damageReduction += 0.025 * experiment.echoPower;
-    state.echo.weaponShockwaveChance += 0.09 * experiment.echoPower;
+    state.echo.range += 0.07 * experiment.echoPower * powerMul;
+    state.echo.knockback += 0.11 * experiment.echoPower * powerMul;
+    state.echo.damageReduction += 0.025 * experiment.echoPower * powerMul;
+    state.echo.weaponShockwaveChance += 0.09 * experiment.echoPower * powerMul;
   }
   if (memoryId === "blood_reflection") {
-    state.echo.extraHitChance += 0.05 * experiment.echoPower;
-    state.echo.onHitDamage += 0.10 * experiment.echoPower;
-    state.echo.weaponBleedDamage += 0.14 * experiment.echoPower;
+    state.echo.extraHitChance += 0.05 * experiment.echoPower * powerMul;
+    state.echo.onHitDamage += 0.10 * experiment.echoPower * powerMul;
+    state.echo.weaponBleedDamage += 0.14 * experiment.echoPower * powerMul;
   }
   if (memoryId === "stopped_second") {
-    state.echo.cooldownReduction += 0.05 * experiment.echoPower;
-    state.echo.slowDuration += 0.14 * experiment.echoPower;
-    state.echo.weaponSlowChance += 0.10 * experiment.echoPower;
+    state.echo.cooldownReduction += 0.05 * experiment.echoPower * powerMul;
+    state.echo.slowDuration += 0.14 * experiment.echoPower * powerMul;
+    state.echo.weaponSlowChance += 0.10 * experiment.echoPower * powerMul;
   }
+  if (memoryId === "ashen_guard") {
+    state.echo.shieldDuration += 0.12 * experiment.echoPower * powerMul;
+    state.echo.range += 0.035 * experiment.echoPower * powerMul;
+    state.echo.weaponCounterChance += 0.10 * experiment.echoPower * powerMul;
+  }
+  if (memoryId === "oblivion_brand") {
+    state.echo.markDuration += 0.12 * experiment.echoPower * powerMul;
+    state.echo.critDamage += 0.08 * experiment.echoPower * powerMul;
+    state.echo.weaponMarkChance += 0.10 * experiment.echoPower * powerMul;
+  }
+  state.echoUnlocks.push(echoUnlockFor(memoryId, tier));
+}
+
+function echoUnlockFor(memoryId, tier = "safe") {
+  const strong = tier === "strong";
+  const names = {
+    execution_flash: ["섬광 처형 경로", "무기 치명/섬광이 새 폭딜 축을 엽니다."],
+    hungry_blades: ["출혈 난무 경로", "빠른 타격과 무기 출혈로 지속 절삭 축을 엽니다."],
+    stalker_oath: ["잔탄 추적 경로", "무기 유도탄과 투사체 수로 카이팅 축을 엽니다."],
+    shatter_ripple: ["반향 파문 경로", "충격파와 넉백으로 광역 제어 축을 엽니다."],
+    blood_reflection: ["피의 온힛 경로", "추가타와 무기 출혈로 평타 피벗을 엽니다."],
+    stopped_second: ["정지 둔화 경로", "무기 둔화와 쿨다운으로 제어 피벗을 엽니다."],
+    ashen_guard: ["잿빛 반격 경로", "보호막과 무기 반격으로 결손 생존 피벗을 엽니다."],
+    oblivion_brand: ["각인 처형 경로", "낙인과 단발 증폭으로 보스 딜타임 피벗을 엽니다."],
+  };
+  const [name, desc] = names[memoryId] || ["잔향 경로", "사라진 기억의 전투 성향이 새 길을 엽니다."];
+  return {
+    memoryId,
+    memoryName: memories[memoryId]?.name || memoryId,
+    tier,
+    name,
+    desc: strong ? `${desc} 강한 잔향으로 열린 경로입니다.` : `${desc} 안전한 잔향이라 경로는 좁게 열립니다.`,
+    power: strong ? "strong" : "safe",
+  };
+}
+
+function latestEchoUnlock() {
+  return state.echoUnlocks[state.echoUnlocks.length - 1] || null;
 }
 
 function showQuestionOverlay(finalCycle = false) {
-  state.questions = { protect: null, predict: null };
-  const template = document.getElementById("questionTemplate");
-  overlay.innerHTML = "";
-  overlay.appendChild(template.content.cloneNode(true));
+  state.questions = { protect: null, predict: null, release: null };
+  const candidates = topDependencyCandidates(2);
+  overlay.innerHTML = `
+    <div class="panel question-panel fork-panel">
+      <p class="eyebrow">망각 갈림길</p>
+      <h2>레테가 가장 선명한 두 기억을 내밀었다.</h2>
+      <p class="panel-copy">먼저 무엇이 떠날지 예측한 뒤, 둘 중 하나를 직접 떠나보내세요. 가장 의존한 기억을 놓아주면 강한 잔향 경로가 열리고, 2순위를 놓아주면 익숙함은 남지만 새 길은 좁게 열립니다.</p>
+      <div class="question-block">
+        <h3>레테가 가져갈 것 같았던 기억은?</h3>
+        <div id="predictChoices" class="pill-row"></div>
+      </div>
+      <div class="fork-choice-grid" id="forkChoices"></div>
+      <button id="submitQuestionsButton" class="primary-btn" type="button" disabled>이 기억을 떠나보내기</button>
+    </div>
+  `;
   overlay.classList.add("show");
-  const protect = overlay.querySelector("#protectChoices");
   const predict = overlay.querySelector("#predictChoices");
+  const forkChoices = overlay.querySelector("#forkChoices");
   const submit = overlay.querySelector("#submitQuestionsButton");
 
   activeMemories().forEach((memory) => {
-    protect.appendChild(questionButton(memory.name, () => {
-      state.questions.protect = memory.id;
-      selectPill(protect, memory.name);
-      submit.disabled = !state.questions.protect || !state.questions.predict;
-    }));
     predict.appendChild(questionButton(memory.name, () => {
       state.questions.predict = memory.id;
       selectPill(predict, memory.name);
-      submit.disabled = !state.questions.protect || !state.questions.predict;
+      submit.disabled = !state.questions.predict || !state.questions.release;
     }));
   });
   predict.appendChild(questionButton("모르겠다", () => {
     state.questions.predict = "unknown";
     selectPill(predict, "모르겠다");
-    submit.disabled = !state.questions.protect || !state.questions.predict;
+    submit.disabled = !state.questions.predict || !state.questions.release;
   }));
 
+  candidates.forEach((memory, index) => {
+    const rank = index + 1;
+    const metric = state.metrics[memory.id];
+    const unlock = echoUnlockFor(memory.id, rank === 1 ? "strong" : "safe");
+    const button = document.createElement("button");
+    button.className = `choice fork-choice ${rank === 1 ? "strong-fork" : "safe-fork"}`;
+    button.type = "button";
+    button.innerHTML = `
+      <strong>${rank}위: ${memory.name}</strong>
+      <span>의존도 ${metric.deletionScore} · ${rank === 1 ? "강한 잔향 / 새 경로 크게 열림" : "약한 잔향 / 익숙함 유지"}</span>
+      <div class="fork-preview">${unlock.name}<br>${unlock.desc}</div>
+    `;
+    button.addEventListener("click", () => {
+      state.questions.release = memory.id;
+      [...forkChoices.children].forEach((child) => child.classList.toggle("selected", child === button));
+      submit.disabled = !state.questions.predict || !state.questions.release;
+    });
+    forkChoices.appendChild(button);
+  });
+
   submit.addEventListener("click", () => {
-    const forgotten = forgetMostDependent();
+    const ranked = topDependencyCandidates(activeMemoryCount());
+    const release = state.questions.release || ranked[0].id;
+    const rank = ranked.findIndex((memory) => memory.id === release) + 1 || 1;
+    const forkChoice = {
+      cycleIndex: state.runTimeline.currentBossIndex,
+      t: Number(state.elapsed.toFixed(2)),
+      chosenMemoryId: release,
+      chosenMemoryName: memories[release].name,
+      rank,
+      candidateIds: candidates.map((memory) => memory.id),
+      candidateNames: candidates.map((memory) => memory.name),
+      predictedMemoryId: state.questions.predict,
+      predictedMemoryName: state.questions.predict === "unknown" ? "모르겠다" : memories[state.questions.predict]?.name || null,
+      strongPivot: rank === 1,
+    };
+    state.forkChoice = forkChoice;
+    const forgotten = forgetMemory(release, forkChoice);
     if (finalCycle) {
       showResultOverlay();
     } else {
@@ -1807,6 +2033,7 @@ function showCycleResultOverlay(forgotten) {
       <div class="result-summary">
         <div class="result-card loss-card"><strong>사라진 행동</strong><br>${forgotten.name} 자동 발동이 멈춥니다.</div>
         ${echoTransformationHtml(forgotten)}
+        ${echoUnlockHtml(latestEchoUnlock())}
         <div class="result-card"><strong>결손 생존</strong><br>${Math.round(experiment.deficitDurationSec)}초 동안 기억 ${activeMemoryCount()}개로 버틴 뒤 새 기억을 고릅니다.</div>
       </div>
       <button id="continueCycleButton" class="primary-btn" type="button">결손 구간 시작</button>
@@ -1940,7 +2167,19 @@ function refillCandidates() {
   const used = new Set(state.memories.map((memory) => memory.id));
   const fresh = Object.keys(memories).filter((id) => !active.has(id) && !used.has(id));
   const recycled = Object.keys(memories).filter((id) => !active.has(id) && used.has(id));
-  return fresh.concat(recycled).slice(0, 3);
+  const latestUnlock = latestEchoUnlock();
+  const desiredTags = latestUnlock ? memories[latestUnlock.memoryId]?.tags || [] : [];
+  return fresh
+    .concat(recycled)
+    .sort((a, b) => synergyFitScore(b, desiredTags) - synergyFitScore(a, desiredTags))
+    .slice(0, 3);
+}
+
+function synergyFitScore(memoryId, desiredTags = []) {
+  const ids = activeMemoryIds().concat(memoryId);
+  const synergies = activeSynergiesFor(ids).length * 20;
+  const tagFit = (memories[memoryId]?.tags || []).filter((tag) => desiredTags.includes(tag)).length * 6;
+  return synergies + tagFit;
 }
 
 function showResultOverlay() {
@@ -1960,8 +2199,10 @@ function showResultOverlay() {
   overlay.querySelector("#resultSummary").innerHTML = `
     <div class="result-card loss-card"><strong>사라진 행동</strong><br>${forgotten.name} 자동 발동이 멈춥니다.<br><small>${forgotten.desc}</small></div>
     <div class="result-card"><strong>예측 결과</strong><br>${predictionText}</div>
+    <div class="result-card"><strong>갈림길 선택</strong><br>${forkChoiceText()}</div>
     <div class="result-card"><strong>삭제 weight</strong><br>${deletionWeightText()}</div>
     ${echoTransformationHtml(forgotten)}
+    ${echoUnlockHtml(latestEchoUnlock())}
     <div class="result-card"><strong>이어지는 방향</strong><br>${forgotten.direction}</div>
     ${runConclusionHtml()}
   `;
@@ -1985,12 +2226,12 @@ function showResultOverlay() {
 }
 
 function dependencyTableHtml() {
-  const header = `<div class="detail-row"><span>기억</span><span>전투</span><span>보스</span><span>대체</span><span>존재</span><span>삭제</span></div>`;
+  const header = `<div class="detail-row"><span>기억</span><span>의존</span><span>보스</span><span>집중</span><span>존재</span><span>점수</span></div>`;
   const rows = state.memories
     .map((memory) => {
       const metric = state.metrics[memory.id];
       const c = metric.components;
-      return `<div class="detail-row"><span>${memory.name}</span><span>${c.combat}</span><span>${c.boss}</span><span>${c.irreplaceability}</span><span>${c.presence}</span><span>${metric.deletionScore}</span></div>`;
+      return `<div class="detail-row"><span>${memory.name}</span><span>${c.combat}</span><span>${c.boss}</span><span>${c.focus || 0}</span><span>${c.presence}</span><span>${metric.deletionScore}</span></div>`;
     })
     .join("");
   return header + rows;
@@ -2020,6 +2261,17 @@ function echoTransformationHtml(memory) {
       <p>${transform.summary}</p>
       <div class="echo-badges">${badges}</div>
       <small>이번 실험 echo 배율: ${Math.round(experiment.echoPower * 100)}%</small>
+    </div>
+  `;
+}
+
+function echoUnlockHtml(unlock) {
+  if (!unlock) return "";
+  return `
+    <div class="result-card echo-unlock-card">
+      <strong>열린 새 경로</strong>
+      <p>${unlock.name}: ${unlock.desc}</p>
+      <small>${unlock.power === "strong" ? "가장 의존한 기억을 놓아준 강한 피벗입니다." : "익숙함을 남긴 안전한 피벗입니다."}</small>
     </div>
   `;
 }
@@ -2056,11 +2308,41 @@ function echoTransformationLog(memoryId) {
       summary: "즉시 둔화 장은 사라지고, 무기 타격에 짧은 정지감이 남아 추격을 늦춥니다.",
       stats: ["쿨다운", "무기 둔화", "제어 운용"],
     },
+    ashen_guard: {
+      lost: "공격을 받아내던 잿빛 보호막",
+      summary: "보호막 발동은 사라지고, 무기 타격과 결손 생존에 반격 잔향이 남습니다.",
+      stats: ["보호막", "무기 반격", "광역 생존"],
+    },
+    oblivion_brand: {
+      lost: "위협 적을 약화하던 망각의 낙인",
+      summary: "능동 낙인은 사라지고, 무기 타격에 짧은 표식과 폭딜 증폭의 길이 남습니다.",
+      stats: ["낙인", "무기 표식", "폭딜 제어"],
+    },
   };
   return map[memoryId] || {
     lost: "사라진 기억",
     summary: memories[memoryId]?.echo || "잔향이 남았습니다.",
     stats: [memories[memoryId]?.role || "잔향"],
+  };
+}
+
+function forkChoiceText() {
+  const choice = state.forkChoice;
+  if (!choice) return "갈림길 기록 없음";
+  const rankText = choice.rank === 1 ? "1순위 기억을 놓아 강한 경로를 열었습니다." : "2순위 기억을 놓아 익숙함을 남겼습니다.";
+  return `${choice.chosenMemoryName} 선택. ${rankText}`;
+}
+
+function predictionAccuracyLog() {
+  const predicted = state.questions.predict;
+  const released = state.questions.release || state.forgotten;
+  return {
+    predictedMemoryId: predicted,
+    predictedMemoryName: predicted === "unknown" ? "모르겠다" : memories[predicted]?.name || null,
+    releasedMemoryId: released,
+    releasedMemoryName: memories[released]?.name || null,
+    matched: predicted !== "unknown" && predicted === released,
+    unknown: predicted === "unknown",
   };
 }
 
@@ -2109,6 +2391,8 @@ function collectLogPayload() {
   state.logs.elapsed = Number(state.elapsed.toFixed(2));
   state.logs.questions = state.questions;
   state.logs.questionNames = questionNames();
+  state.logs.forkChoice = state.forkChoice;
+  state.logs.predictionAccuracy = predictionAccuracyLog();
   state.logs.forgotten = state.forgotten;
   state.logs.forgottenName = memories[state.forgotten]?.name || state.forgotten;
   state.logs.survey = state.survey;
@@ -2116,6 +2400,7 @@ function collectLogPayload() {
   state.logs.deletionWeights = dependencyWeights();
   state.logs.echo = state.echo;
   state.logs.tagEchoes = state.tagEchoes;
+  state.logs.echoUnlocks = state.echoUnlocks;
   state.logs.activeSynergies = state.activeSynergies;
   state.logs.echoPower = experiment.echoPower;
   state.logs.runGrowth = runGrowthLog();
@@ -2198,6 +2483,7 @@ function tacticalFocusLog() {
     durationLeft: Number(focus.durationLeft.toFixed(2)),
     memoryId: focus.memoryId,
     memoryName: memories[focus.memoryId]?.name || null,
+    dependencyBonus: focus.dependencyBonus,
     useCount: focus.useCount,
     successfulCount: focus.successfulCount,
     lastUsedAt: focus.lastUsedAt,
@@ -2309,7 +2595,7 @@ function updateEffects(dt) {
       effect.r = lerp(effect.r, effect.maxR, 0.08);
       if (!effect.hit && effect.life < 0.28 && distance(effect, state.player) < effect.r + state.player.r) {
         effect.hit = true;
-        state.player.hp -= effect.damage * (1 - state.echo.damageReduction);
+        damagePlayer(effect.damage * (1 - state.echo.damageReduction), effect);
       }
     }
   }
@@ -2330,7 +2616,7 @@ function updateClarity() {
     memory.clarity = clamp(state.metrics[memory.id].score / maxScore, 0, 1);
   });
   state.logs.buildIdentity = buildIdentityFor(activeMemoryIds(), state);
-  if (state.elapsed <= 90) state.logs.buildIdentitySeenBy90Sec = true;
+  if (state.elapsed <= 180) state.logs.buildIdentitySeenBy90Sec = true;
 }
 
 function updateUi() {
@@ -2338,7 +2624,8 @@ function updateUi() {
   const xpText = `Lv.${growth.level} ${growth.xp}/${growth.nextXp}`;
   ui.phaseLabel.textContent = state.boss ? `보스 ${state.boss.phase}페이즈 · ${xpText}` : `${state.phase} · ${xpText}`;
   ui.timerLabel.textContent = formatTime(state.elapsed);
-  ui.hpLabel.textContent = `HP ${Math.ceil(state.player.hp)} / ${state.player.maxHp}`;
+  const shieldText = state.player.shield > 0 ? ` + 보호 ${Math.ceil(state.player.shield)}` : "";
+  ui.hpLabel.textContent = `HP ${Math.ceil(state.player.hp)} / ${state.player.maxHp}${shieldText}`;
   ui.weaponCard.innerHTML = weaponCardHtml(state.weapon);
   renderMemorySlots();
   renderEchoes();
@@ -2352,6 +2639,7 @@ function renderMemorySlots() {
     return;
   }
   const maxClarity = Math.max(0, ...source.map((memory) => memory.clarity || 0));
+  const omenActive = state?.runTimeline?.pressurePhaseId === "climax" || state?.mode === "questions";
   source.forEach((memory, index) => {
     const maxCd = memory.cooldown || 1;
     const cdPercent = memory.id === "blood_reflection" ? 100 : (1 - (memory.cooldownLeft || 0) / maxCd) * 100;
@@ -2372,8 +2660,8 @@ function renderMemorySlots() {
       <div class="cooldown-track"><div class="cooldown-fill" style="width:${clamp(cdPercent, 0, 100)}%"></div></div>
       <small>${memory.forgotten ? "망각됨" : memory.desc}</small>
       ${state ? `<div class="tactical-row"><span>전술 집중</span><span>${tacticalStatus}</span></div>` : ""}
-      <div class="clarity-row"><span>의존도</span><span>${Math.round(clarityPercent)}%</span></div>
-      <div class="clarity-track"><div class="clarity-fill" style="width:${clarityPercent}%"></div></div>
+      <div class="clarity-row"><span>${omenActive ? "망각 전조" : "의존도"}</span><span>${Math.round(clarityPercent)}%</span></div>
+      <div class="clarity-track ${omenActive ? "omen-track" : ""}"><div class="clarity-fill" style="width:${clarityPercent}%"></div></div>
     `;
     if (state) {
       slot.addEventListener("click", () => requestTacticalFocus(memory.id));
@@ -2392,7 +2680,7 @@ function renderMemorySlots() {
 function tacticalFocusStatus(memory) {
   const focus = state.tacticalFocus;
   if (activeTacticalFocus(memory.id)) return `${focus.durationLeft.toFixed(1)}초`;
-  if (focus.cooldownLeft > 0) return `${focus.cooldownLeft.toFixed(1)}초`;
+  if (focus.cooldownLeft > 0) return `과열 ${focus.cooldownLeft.toFixed(1)}초`;
   if (memory.cooldown > 0 && (memory.cooldownLeft || 0) <= 0.15) return "즉시";
   return "준비";
 }
@@ -2410,6 +2698,10 @@ function renderEchoes() {
   if (state.tagEchoes?.length) {
     state.tagEchoes.forEach((echo) => lines.push(`태그 잔향: ${echo.memoryName} -> ${echo.tags.map(tagLabel).join("/")}`));
   }
+  if (state.echoUnlocks?.length) {
+    const unlock = latestEchoUnlock();
+    lines.push(`열린 경로: ${unlock.name}`);
+  }
   if (state.echo.critChance > baseEcho.critChance) lines.push(`치명 +${percent(state.echo.critChance - baseEcho.critChance)}`);
   if (state.echo.attackSpeed) lines.push(`공격속도 +${percent(state.echo.attackSpeed)}`);
   if (state.echo.projectileCount) lines.push(`투사체 +${state.echo.projectileCount}`);
@@ -2421,6 +2713,8 @@ function renderEchoes() {
   if (state.echo.weaponHomingChance) lines.push(`무기 유도탄 +${percent(state.echo.weaponHomingChance)}`);
   if (state.echo.weaponShockwaveChance) lines.push(`무기 파문 +${percent(state.echo.weaponShockwaveChance)}`);
   if (state.echo.weaponSlowChance) lines.push(`무기 둔화 +${percent(state.echo.weaponSlowChance)}`);
+  if (state.echo.weaponCounterChance) lines.push(`무기 반격 +${percent(state.echo.weaponCounterChance)}`);
+  if (state.echo.weaponMarkChance) lines.push(`무기 표식 +${percent(state.echo.weaponMarkChance)}`);
   const growth = state.runGrowth;
   const growthLines = [];
   if (growth.damage) growthLines.push(`런 피해 +${percent(growth.damage)}`);

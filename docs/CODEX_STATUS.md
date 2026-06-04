@@ -4,17 +4,28 @@ Last updated: 2026-06-04
 
 ## Current Build
 
-- Project: LETHE HTML Alpha v0.9 WP3 Slice A minimal tactical agency is implemented and browser-proven; the current loop is now gated by the upgraded release-feel quality criteria rather than Chrome transport.
+- Project: LETHE HTML Alpha v0.10 target slice is implemented from `docs/LETHE_망각의_군주_프로토타입_기획서_v0_10.md`.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
-- Current scope: HTML prototype validation. Broad human testing is paused. v0.8 AI gates passed, but the user judged that the prototype still needs a stronger release-like roguelike fun loop before people testing. v0.9 now prioritizes reference-driven build identity, pressure, post-loss challenge, and overnight automation.
-- Latest task-update status: the tactical QA terminal-state overwrite was fixed, and `npm run qa:tactical:trusted` now passes with `status: complete`, `transportFailure: false`, one successful `전술 집중` use, visible tactical-focus text, and zero failures. The AI simulator now models the implemented tactical-focus choice as an existing-memory agency moment, records `tacticalFocusAgency` and `tacticalFocusUseRate`, and keeps it within current scope: no new memory, slot, shop, meta progression, region, weapon, enemy, or boss. `npm run ai:test:quick` is `GO_CANDIDATE` with Alpha Fun Score `0.8904`, early choice interest `0.7684`, tactical focus agency `0.7309`, post-loss challenge contrast `0.3134`, and irritation `0.0104`. `npm run ai:test` is `GO_CANDIDATE` with Alpha Fun Score `0.8937` and irritation `0.006`. `npm run qa:postloss:trusted` remains passed with `status: complete`. The autonomous loop completion check now also requires the tactical browser gate to pass, so the current release-feel loop has AI quick criteria plus WP2/WP3 trusted browser gates satisfied. Next scope should be a final preflight/report/Discord pass and then a controlled 1-person browser playtest prompt, not more blocker paperwork.
-- Planning document status: the old v6 Word 기획서 was not aligned with the current game. `docs/LETHE_망각의_군주_프로토타입_기획서_v0.9.md` is now the Markdown source of truth, and `docs/LETHE_망각의_군주_완성형_기획서_v6.docx` has been updated from that source to describe the current v0.9 HTML prototype rather than the older v0.2/v6 complete-game scope.
+- Current scope: HTML prototype validation. v0.10 changes the core loss beat from automatic deletion to a player-facing `망각 갈림길`: dependency top-2 memories are shown, the player chooses which one to release, and the choice controls echo strength and the newly opened pivot route.
+- Latest task-update status: v0.10 now includes 8 memories, 4 synergies, first boss at 180 seconds, 600-second run schedule, simplified dependency scoring without deletion bias, real-time dependency/omen meter, fork choice payloads, prediction accuracy logs, echo unlock routes, and tactical focus overheat/dependency tradeoff. This keeps the expanded scope inside the v0.10 document limits: no shop, meta progression, region, weapon, enemy, final boss completion, multi-region structure, or active slot expansion.
+- Latest verification status: syntax checks and local doctor pass. Browser QA could not start in this environment because Chrome/Chromium was not found and `CHROME_PATH` is not set, so v0.10 still needs trusted-local browser proof for fork choice, post-loss/refill, and tactical focus before people testing.
+- Planning document status: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_10.md` is now the Markdown source of truth, and `docs/LETHE_망각의_군주_완성형_기획서_v6.docx` has been regenerated from it.
 
 ## Implemented
 
 - Static browser prototype: `index.html`, `style.css`, `src/game.js`.
-- Current planning source: `docs/LETHE_망각의_군주_프로토타입_기획서_v0.9.md`, mirrored into the existing Word 기획서 DOCX.
+- Current planning source: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_10.md`, mirrored into the existing Word 기획서 DOCX.
+- v0.10 target slice:
+  - browser label and experiment version moved to `v0.10`,
+  - default run schedule moved to 600 seconds with bosses at 180 / 340 / 490 / 600 seconds,
+  - memory pool expanded from 6 to 8 with `잿빛 보호막` and `망각의 낙인`,
+  - synergy pool expanded with `각인 연쇄`,
+  - dependency scoring now uses reliance/focus as the dominant signal and removes memory-specific deletion bias,
+  - boss defeat opens a top-2 `망각 갈림길` where the player chooses the released memory,
+  - releasing the rank-1 memory creates a stronger echo unlock route; releasing rank-2 preserves more familiarity with a weaker route,
+  - logs include `forkChoice`, `predictionAccuracy`, and `echoUnlocks`,
+  - tactical focus now adds overheat wording, dependency pressure, and synergy boost context.
 - Weapons: twin blades, greatsword.
 - Memories: 6 total, 3 active slots.
 - Auto basic attack and auto memory activation.
