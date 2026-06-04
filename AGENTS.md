@@ -12,7 +12,9 @@
 4. 결과를 `docs/CODEX_STATUS.md`에 반영한다.
 5. 의미 있는 작업 단위가 끝나면 `docs/devlog/YYYY-MM-DD.md`와 `docs/reports/YYYY-MM-DD.md`를 갱신한다.
 6. 보고서 HTML은 Markdown 원본을 기준으로 생성한다.
-7. 테스트 결과를 바탕으로 기획 수정 또는 방향 결정이 필요하면 `docs/review_prompts/`에 Claude/GPT 전달 프롬프트를 남긴다.
+7. 의미 있는 구현/밸런스/문서화 단위가 끝나면 `npm run report`, `npm run report:check`, `npm run report:discord:unit`까지 실행해 Discord 작업 단위 보고를 실제 전송한다. `dry-run`은 본문/첨부 확인용이지 완료 상태가 아니다.
+8. Discord 실제 전송 예외는 사용자가 명시적으로 전송하지 말라고 했거나 webhook/네트워크/권한 문제로 실패한 경우뿐이다. 실패하면 실패 원인과 다음 실행 명령을 devlog/report에 남긴다.
+9. 테스트 결과를 바탕으로 기획 수정 또는 방향 결정이 필요하면 `docs/review_prompts/`에 Claude/GPT 전달 프롬프트를 남긴다.
 
 ## Role Split
 
