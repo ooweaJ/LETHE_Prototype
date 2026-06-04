@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-04-03 - v0.11 기억 획득과 무기 진화 구현</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-04-03 - v0.11 기억 획득과 무기 진화 구현</h1>
+      <p class="meta">Generated from 2026-06-04-03-v0-11-기억-획득과-무기-진화-구현.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-04-03 - v0.11 기억 획득과 무기 진화 구현</h1>
+<h2>1. Current build status</h2>
+<ul>
+<li>LETHE HTML Alpha is now <code>v0.11</code>.</li>
+<li>The current planning source is <code>docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md</code>.</li>
+<li>The prototype now implements the v0.11 growth loop: starting memory 1, hunting/level-up acquisition, active memory upgrades, weighted-random forgetting, weapon echoes, and two weapon evolutions.</li>
+</ul>
+<h2>2. What changed today</h2>
+<ul>
+<li>Changed setup from 3 starting memories to 1 starting memory.</li>
+<li>Reworked level-up choices into new memory acquisition, owned memory upgrade, run stat, and <code>잔향 증폭</code>.</li>
+<li>Added active memory levels and scaling.</li>
+<li>Replaced the v0.10 <code>망각 갈림길</code> with weighted-random forgetting and prediction-only input.</li>
+<li>Added forget-probability UI during omen/question phases.</li>
+<li>Added leveled <code>echoState</code> and weapon evolutions:</li>
+<li><code>피의 늪</code>,</li>
+<li><code>파쇄 각인</code>.</li>
+<li>Added result-survey Q5 for growth feel.</li>
+<li>Updated README/status/tasks/Discord reporting docs and the v0.11 planning document.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li><code>node --check src/game.js</code>: passed.</li>
+<li><code>node --check scripts/run_browser_identity_qa.js</code>: passed.</li>
+<li><code>node --check scripts/run_browser_pressure_qa.js</code>: passed.</li>
+<li><code>powershell -ExecutionPolicy Bypass -File scripts/update_design_doc_from_markdown.ps1</code>: regenerated the Word planning document from v0.11 Markdown.</li>
+<li><code>npm run report</code>: generated daily HTML and 4 unit files.</li>
+<li><code>npm run report:check</code>: passed.</li>
+<li><code>npm run doctor</code>: passed, 46 pass / 0 warn / 0 fail.</li>
+<li><code>npm run report:discord:unit:dry</code>: passed and summarized the latest reporting unit.</li>
+<li><code>node scripts/send_discord_report.js docs/reports/2026-06-04.md --dry-run --section &quot;2026-06-04-03 - v0.11 기억 획득과 무기 진화 구현&quot;</code>: passed and summarized the v0.11 implementation unit.</li>
+<li><code>npm run qa:identity</code>: blocked before browser assertion because Chrome/Chromium executable was not found and <code>CHROME_PATH</code> is not set.</li>
+<li><code>npm run qa:pressure</code>: blocked for the same Chrome/<code>CHROME_PATH</code> reason.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>Follow v0.11 over v0.10: remove player-chosen release fork and use weighted-random forgetting.</li>
+<li>Keep 8 memories, 2 weapons, 3 active slots, 600-second run, and bosses at 180 / 340 / 490 / 600.</li>
+<li>Implement only two weapon evolutions for the prototype.</li>
+<li>Keep AI metrics as planning evidence only until the simulator models the v0.11 loop.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>Balance is provisional because active memory acquisition and weapon evolution are new.</li>
+<li>Existing browser QA scripts are version-updated but do not yet deeply assert all v0.11 mechanics.</li>
+<li>The managed environment currently blocks browser QA because Chrome/Chromium is unavailable.</li>
+<li>The alpha simulator still needs recalibration for memory acquisition, weighted forgetting, and weapon evolution.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>v0.11 reframes forgetting as weapon growth, not a fork choice.</li>
+<li>The key test question is whether players feel &quot;I grew my build, lost a relied-on active memory, but my weapon became a new body&quot; rather than &quot;the game deleted my best thing.&quot;</li>
+<li>GPT/Claude should review browser/playtest logs for growth feel, probability comprehension, echo/evolution comprehension, and post-loss irritation.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>Regenerate the Word 기획서 from v0.11 Markdown.</li>
+<li>Run <code>npm run report</code>, <code>npm run report:check</code>, <code>npm run doctor</code>, and <code>npm run report:discord:unit:dry</code>.</li>
+<li>Run trusted-local browser QA once Chrome/Chromium is available.</li>
+<li>Add v0.11-specific browser assertions for acquisition/upgrade, weighted forgetting, echo state, and weapon evolution.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: v0.10 improved agency but still did not fully solve the growth fantasy before loss.</li>
+<li>Direction: make memories a hunted/leveled build and make loss become weapon evolution.</li>
+<li>Action: implemented hunting acquisition, active levels, weighted forgetting, leveled echoes, and two weapon evolutions.</li>
+<li>Result: the prototype now tests whether forgetting can feel like transformation and build pivot rather than punishment.</li>
+</ul>
+  </main>
+</body>
+</html>

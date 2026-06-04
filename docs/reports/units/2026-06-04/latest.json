@@ -1,11 +1,11 @@
 {
   "source": "docs\\reports\\2026-06-04.md",
-  "generatedAt": "2026-06-04T01:49:18.704Z",
-  "unitCount": 2,
+  "generatedAt": "2026-06-04T05:20:55.901Z",
+  "unitCount": 4,
   "latest": {
-    "title": "2026-06-04-02 - v0.10 망각 갈림길 구현",
-    "number": "02",
-    "markdownPath": "docs\\reports\\units\\2026-06-04\\2026-06-04-02-v0-10-망각-갈림길-구현.md",
-    "htmlPath": "docs\\reports\\units\\2026-06-04\\2026-06-04-02-v0-10-망각-갈림길-구현.html"
+    "title": "2026-06-04-04 - 수동 보고와 Discord 기록 경로 정리",
+    "number": "04",
+    "markdownPath": "docs\\reports\\units\\2026-06-04\\2026-06-04-04-수동-보고와-discord-기록-경로-정리.md",
+    "htmlPath": "docs\\reports\\units\\2026-06-04\\2026-06-04-04-수동-보고와-discord-기록-경로-정리.html"
   }
 }

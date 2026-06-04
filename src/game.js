@@ -70,6 +70,15 @@ const levelUpChoices = {
     },
     log: "경험치 획득 +16%",
   },
+  echo_amp: {
+    id: "echo_amp",
+    name: "잔향 증폭",
+    desc: "무기에 새겨진 잔향 효과가 더 진하게 남습니다.",
+    apply() {
+      state.runGrowth.echoAmp += 0.2;
+    },
+    log: "잔향 효과 +20%",
+  },
 };
 
 const weapons = {
@@ -205,6 +214,21 @@ const synergyRules = [
   },
 ];
 
+const weaponEvolutionRules = [
+  {
+    id: "blood_marsh",
+    name: "피의 늪",
+    tags: ["dot", "control"],
+    desc: "기본 공격이 핏빛 웅덩이를 남겨 적을 늦추고 갉아먹습니다.",
+  },
+  {
+    id: "shatter_brand",
+    name: "파쇄 각인",
+    tags: ["burst", "control"],
+    desc: "약화, 둔화, 낙인 상태의 적을 처치하면 폭발하며 약화를 퍼뜨립니다.",
+  },
+];
+
 const enemyTypes = {
   eroder: {
     id: "eroder",
@@ -252,9 +276,11 @@ const enemyTypes = {
 };
 
 const qaMode = new URLSearchParams(window.location.search).get("qa") || "";
+const startingMemorySlots = 1;
+const maxActiveMemorySlots = 3;
 
 const experiment = {
-  version: "v0.10",
+  version: "v0.11",
   echoPower: 0.5,
   uiClarity: 0.78,
   runDurationSec: 600,
@@ -313,6 +339,7 @@ const baseEcho = {
 function createMemoryInstance(id) {
   return {
     ...memories[id],
+    level: 1,
     cooldownLeft: id === "blood_reflection" ? 0 : 0.8 + Math.random() * 1.3,
     clarity: 0,
     forgotten: false,
@@ -367,6 +394,7 @@ function createRunState() {
       knockback: 0,
       damageReduction: 0,
       xpGain: 0,
+      echoAmp: 0,
       choicesTaken: [],
       pendingChoices: [],
       earlyKills: 0,
@@ -450,12 +478,28 @@ function createRunState() {
     },
     forkChoice: null,
     echoUnlocks: [],
+    echoState: {
+      memories: {},
+      evolutions: [],
+    },
+    weaponEvolution: [],
+    memoryAcquisition: activeMemories.map((memory) => ({
+      action: "start",
+      memoryId: memory.id,
+      memoryName: memory.name,
+      level: memory.level,
+      t: 0,
+      source: "setup",
+    })),
+    forgetProbability: [],
+    forgetResults: [],
     forgotten: null,
     forgottenHistory: [],
     death: null,
     survey: {
       sadness: null,
       fairness: null,
+      growthFeel: null,
       memoryRecall: "",
     },
     logs: {
@@ -533,7 +577,7 @@ function bindPlaytestMetaInputs() {
 function toggleMemory(id) {
   if (selectedMemories.includes(id)) {
     selectedMemories = selectedMemories.filter((memoryId) => memoryId !== id);
-  } else if (selectedMemories.length < 3) {
+  } else if (selectedMemories.length < startingMemorySlots) {
     selectedMemories.push(id);
   }
   renderSetup();
@@ -542,8 +586,8 @@ function toggleMemory(id) {
 function renderSetup() {
   initChoiceSelection(ui.weaponChoices, selectedWeapon);
   initChoiceSelection(ui.memoryChoices, selectedMemories);
-  ui.slotCount.textContent = `${selectedMemories.length} / 3`;
-  ui.startRunButton.disabled = selectedMemories.length !== 3;
+  ui.slotCount.textContent = `${selectedMemories.length} / ${startingMemorySlots}`;
+  ui.startRunButton.disabled = selectedMemories.length !== startingMemorySlots;
   ui.weaponCard.innerHTML = weaponCardHtml(weapons[selectedWeapon]);
   renderMemorySlots();
   renderSetupSynergies();
@@ -1191,6 +1235,7 @@ function updateEnemies(dt) {
 
   state.enemies = state.enemies.filter((enemy) => {
     if (enemy.hp > 0) return true;
+    triggerShatterBrand(enemy);
     for (const memoryId of enemy.hitBy) {
       if (state.metrics[memoryId]) {
         state.metrics[memoryId].assists += 1;
@@ -1205,6 +1250,27 @@ function updateEnemies(dt) {
       spawnEnemy("eroder", enemy.x + 12, enemy.y - 4, true);
     }
     return false;
+  });
+}
+
+function triggerShatterBrand(enemy) {
+  if (!hasWeaponEvolution("shatter_brand")) return;
+  if (!(enemy.slow > 0 || enemy.marked > 0 || enemy.vulnerable > 0)) return;
+  const radius = 92 * (1 + state.echo.range + state.runGrowth.range);
+  for (const target of state.enemies) {
+    if (target === enemy || target.hp <= 0) continue;
+    if (distance(enemy, target) > radius + target.r) continue;
+    damageHostile(target, 18 + state.weapon.damage * 0.32, "weapon_evolution", { controlHit: true, brandHit: true });
+    target.vulnerable = Math.max(target.vulnerable || 0, 1.6 + state.echo.markDuration);
+    target.marked = Math.max(target.marked || 0, 1.2 + state.echo.markDuration);
+  }
+  addBurst(enemy.x, enemy.y, "#ff7c90", 20, 3.8);
+  addFloater("파쇄 각인", enemy.x, enemy.y - 28, "#ff7c90");
+  logEvent("weapon_evolution_trigger", {
+    evolution: "shatter_brand",
+    enemy: enemy.id,
+    x: Number(enemy.x.toFixed(1)),
+    y: Number(enemy.y.toFixed(1)),
   });
 }
 
@@ -1270,17 +1336,18 @@ function updateMemories(dt) {
 
   for (const memory of state.memories) {
     if (memory.forgotten) continue;
-    const cdMul = 1 - state.echo.cooldownReduction - state.runGrowth.cooldownReduction;
+    const cdMul = (1 - state.echo.cooldownReduction - state.runGrowth.cooldownReduction) * memoryCooldownMultiplier(memory);
     memory.cooldownLeft = Math.max(0, memory.cooldownLeft - dt);
     if (memory.id === "hungry_blades") {
       memory.metricsTime = (memory.metricsTime || 0) + dt;
       memory.visualCd = Math.max(0, (memory.visualCd || 0) - dt);
       const focusMul = activeTacticalFocus(memory.id) ? 1.16 : 1;
-      const radius = 74 * focusMul * (1 + state.echo.range + state.runGrowth.range);
+      const power = memoryPower(memory);
+      const radius = 74 * focusMul * power * (1 + state.echo.range + state.runGrowth.range);
       let hit = false;
       for (const target of hostiles()) {
         if (distance(p, target) < radius + target.r) {
-          damageHostile(target, 7.4 * focusMul * (1 + state.echo.dotDamage + state.runGrowth.damage), memory.id);
+          damageHostile(target, 7.4 * focusMul * power * (1 + state.echo.dotDamage + state.runGrowth.damage), memory.id);
           hit = true;
         }
       }
@@ -1329,9 +1396,10 @@ function basicAttack() {
   const blood = state.memories.find((memory) => memory.id === "blood_reflection" && !memory.forgotten);
   if (blood) {
     const focusMul = activeTacticalFocus(blood.id) ? 1.2 : 1;
-    const chance = (weapon.id === "twin_blades" ? 0.4 : 0.28) + state.echo.extraHitChance + (activeTacticalFocus(blood.id) ? 0.18 : 0);
+    const power = memoryPower(blood);
+    const chance = (weapon.id === "twin_blades" ? 0.4 : 0.28) + state.echo.extraHitChance + (activeTacticalFocus(blood.id) ? 0.18 : 0) + (power - 1) * 0.14;
     if (Math.random() < chance) {
-      const extra = 19 * focusMul * (1 + state.echo.onHitDamage + state.runGrowth.damage);
+      const extra = 19 * focusMul * power * (1 + state.echo.onHitDamage + state.runGrowth.damage);
       damageHostile(target, extra, blood.id, { bossTrace: true });
       state.player.hp = Math.min(state.player.maxHp, state.player.hp + 1.8);
       recordPresence(blood.id, 0.8);
@@ -1472,18 +1540,37 @@ function applyWeaponEchoEffects(target, baseDamage) {
     target.vulnerable = Math.max(target.vulnerable || 0, 1.9 + state.echo.markDuration);
     addFloater("낙인 잔향", target.x, target.y - 20, "#ff7c90");
   }
+
+  if (hasWeaponEvolution("blood_marsh")) {
+    const pulse = state.weapon.id === "twin_blades" ? 0.42 : 0.28;
+    if (Math.random() < pulse) {
+      state.effects.push({
+        type: "blood_pool",
+        x: target.x,
+        y: target.y,
+        r: 18,
+        maxR: 66 * (1 + state.echo.range + state.runGrowth.range),
+        life: 2.6,
+        maxLife: 2.6,
+        tick: 0,
+        damage: 8 + baseDamage * 0.12,
+      });
+      addFloater("피의 늪", target.x, target.y - 24, "#ff5d6c");
+    }
+  }
 }
 
 function activateMemory(memory) {
   const p = state.player;
+  const power = memoryPower(memory);
   state.metrics[memory.id].activeCount += 1;
   recordPresence(memory.id, 1);
-  logEvent("memory_trigger", { memory: memory.id });
+  logEvent("memory_trigger", { memory: memory.id, level: memoryLevel(memory) });
 
   if (memory.id === "execution_flash") {
     const target = highestThreat();
     if (!target) return;
-    const damage = 76 * (state.weapon.id === "greatsword" ? 1.12 : 1) * (1 + state.runGrowth.damage);
+    const damage = 76 * power * (state.weapon.id === "greatsword" ? 1.12 : 1) * (1 + state.runGrowth.damage);
     damageHostile(target, damage, memory.id, { bossTrace: true, groggyBonus: true });
     addFloater(memory.name, target.x, target.y - 26, "#eef8ff");
     addBurst(target.x, target.y, "#eef8ff", 18, 4.8);
@@ -1492,19 +1579,19 @@ function activateMemory(memory) {
   }
 
   if (memory.id === "stalker_oath") {
-    const count = 2 + state.echo.projectileCount;
+    const count = 2 + Math.floor((memoryLevel(memory) - 1) / 2) + state.echo.projectileCount;
     addFloater(memory.name, p.x, p.y - 24, "#a98cff");
     for (let i = 0; i < count; i += 1) {
       const target = farHostile() || nearestHostile(p.x, p.y);
       const angle = target ? angleTo(p, target) + rand(-0.28, 0.28) : p.facing + rand(-0.35, 0.35);
-      const speed = 240 * (1 + state.echo.projectileSpeed);
+      const speed = 240 * power * (1 + state.echo.projectileSpeed);
       addProjectile({
         x: p.x,
         y: p.y,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
         r: 6,
-        damage: 36 * (1 + state.runGrowth.damage),
+        damage: 36 * power * (1 + state.runGrowth.damage),
         hostile: false,
         source: memory.id,
         target,
@@ -1516,7 +1603,7 @@ function activateMemory(memory) {
   }
 
   if (memory.id === "shatter_ripple") {
-    const radius = 132 * (1 + state.echo.range + state.runGrowth.range);
+    const radius = 132 * power * (1 + state.echo.range + state.runGrowth.range);
     addFloater(memory.name, p.x, p.y - 28, "#6ddfd2");
     state.shake = Math.max(state.shake, 4);
     for (const target of hostiles()) {
@@ -1526,7 +1613,7 @@ function activateMemory(memory) {
         const angle = angleTo(p, target);
         target.x += Math.cos(angle) * push;
         target.y += Math.sin(angle) * push;
-        damageHostile(target, 49 * (1 + state.runGrowth.damage), memory.id, { bossTrace: true, pushed: true });
+        damageHostile(target, 49 * power * (1 + state.runGrowth.damage), memory.id, { bossTrace: true, pushed: true });
         state.metrics[memory.id].status += push;
       }
     }
@@ -1535,13 +1622,13 @@ function activateMemory(memory) {
   }
 
   if (memory.id === "stopped_second") {
-    const radius = 150 * (1 + state.echo.range + state.runGrowth.range);
-    const duration = 2.4 * (1 + state.echo.slowDuration);
+    const radius = 150 * power * (1 + state.echo.range + state.runGrowth.range);
+    const duration = 2.4 * power * (1 + state.echo.slowDuration);
     addFloater(memory.name, p.x, p.y - 28, "#a98cff");
     for (const target of hostiles()) {
       if (distance(p, target) < radius + target.r) {
         target.slow = Math.max(target.slow || 0, duration);
-        damageHostile(target, 24 * (1 + state.runGrowth.damage), memory.id, { bossTrace: true, controlHit: true });
+        damageHostile(target, 24 * power * (1 + state.runGrowth.damage), memory.id, { bossTrace: true, controlHit: true });
         if (target.id === "boss") state.metrics[memory.id].bossControls += 1;
         state.metrics[memory.id].status += 24;
       }
@@ -1557,7 +1644,7 @@ function activateMemory(memory) {
 
   if (memory.id === "ashen_guard") {
     const focusMul = activeTacticalFocus(memory.id) ? 1.25 : 1;
-    const shield = Math.round(22 * focusMul * (1 + state.echo.shieldDuration));
+    const shield = Math.round(22 * focusMul * power * (1 + state.echo.shieldDuration));
     p.maxShield = Math.max(p.maxShield || 0, shield);
     p.shield = Math.max(p.shield || 0, shield);
     state.metrics[memory.id].status += shield;
@@ -1568,11 +1655,11 @@ function activateMemory(memory) {
   if (memory.id === "oblivion_brand") {
     const target = highestThreat();
     if (!target) return;
-    const duration = 4.2 * (1 + state.echo.markDuration);
+    const duration = 4.2 * power * (1 + state.echo.markDuration);
     target.marked = Math.max(target.marked || 0, duration);
     target.vulnerable = Math.max(target.vulnerable || 0, duration);
     target.slow = Math.max(target.slow || 0, 0.75);
-    damageHostile(target, 32 * (1 + state.runGrowth.damage), memory.id, { bossTrace: true, controlHit: true, brandHit: true });
+    damageHostile(target, 32 * power * (1 + state.runGrowth.damage), memory.id, { bossTrace: true, controlHit: true, brandHit: true });
     if (target.id === "boss") state.metrics[memory.id].bossControls += 1;
     state.metrics[memory.id].status += 38;
     addFloater(memory.name, target.x, target.y - 28, "#ff7c90");
@@ -1668,11 +1755,31 @@ function queueLevelUp() {
 }
 
 function chooseLevelUpChoices() {
-  const taken = new Set(state.runGrowth.choicesTaken.map((choice) => choice.id));
-  const pool = Object.values(levelUpChoices)
+  const choices = [];
+  const active = activeMemories();
+  const activeIds = new Set(active.map((memory) => memory.id));
+  const usedIds = new Set(state.memories.map((memory) => memory.id));
+  const statTaken = new Set(state.runGrowth.choicesTaken.filter((choice) => choice.kind === "stat").map((choice) => choice.id));
+  const statPool = Object.values(levelUpChoices)
     .sort(() => Math.random() - 0.5)
-    .sort((a, b) => Number(taken.has(a.id)) - Number(taken.has(b.id)));
-  return pool.slice(0, 3).map((choice) => choice.id);
+    .sort((a, b) => Number(statTaken.has(a.id)) - Number(statTaken.has(b.id)));
+  const newMemoryPool = Object.keys(memories)
+    .filter((id) => !activeIds.has(id))
+    .sort((a, b) => Number(usedIds.has(a)) - Number(usedIds.has(b)))
+    .sort(() => Math.random() - 0.5);
+  const upgradePool = active
+    .slice()
+    .sort((a, b) => (a.level || 1) - (b.level || 1) || Math.random() - 0.5);
+
+  if (active.length < maxActiveMemorySlots) {
+    newMemoryPool.slice(0, 2).forEach((id) => choices.push({ kind: "memory_new", id }));
+  }
+  upgradePool.slice(0, active.length >= maxActiveMemorySlots ? 2 : 1).forEach((memory) => {
+    choices.push({ kind: "memory_upgrade", id: memory.id });
+  });
+  statPool.slice(0, 3).forEach((choice) => choices.push({ kind: "stat", id: choice.id }));
+
+  return choices.sort(() => Math.random() - 0.5).slice(0, 3);
 }
 
 function showLevelUpOverlay() {
@@ -1680,42 +1787,107 @@ function showLevelUpOverlay() {
     <div class="panel upgrade-panel">
       <p class="eyebrow">런 성장</p>
       <h2>기억이 피를 먹고 선명해졌다.</h2>
-      <p class="panel-copy">이번 런 동안만 유지되는 힘을 하나 고르세요.</p>
+      <p class="panel-copy">빈 슬롯은 새 기억으로 채우고, 이미 가진 기억은 강화하거나 런 성장으로 밀어붙입니다.</p>
       <div id="levelUpChoices" class="choice-list upgrade-list"></div>
     </div>
   `;
   overlay.classList.add("show");
   const container = overlay.querySelector("#levelUpChoices");
-  state.runGrowth.pendingChoices.forEach((id) => {
-    const choice = levelUpChoices[id];
+  state.runGrowth.pendingChoices.forEach((choice) => {
+    const view = levelUpChoiceView(choice);
     const button = document.createElement("button");
     button.className = "choice";
     button.type = "button";
-    button.innerHTML = `<strong>${choice.name}</strong><span>${choice.desc}<br>${choice.log}</span>`;
-    button.addEventListener("click", () => applyLevelUpChoice(id));
+    button.innerHTML = `<strong>${view.name}</strong><span>${view.desc}<br>${view.log}</span>`;
+    button.addEventListener("click", () => applyLevelUpChoice(choice));
     container.appendChild(button);
   });
 }
 
-function applyLevelUpChoice(id) {
-  const choice = levelUpChoices[id];
+function levelUpChoiceView(choice) {
+  if (choice.kind === "memory_new") {
+    const memory = memories[choice.id];
+    return {
+      name: `새 기억: ${memory.name}`,
+      desc: `${memory.role} · ${memory.desc}`,
+      log: "빈 기억 슬롯을 채웁니다.",
+    };
+  }
+  if (choice.kind === "memory_upgrade") {
+    const memory = activeMemories().find((item) => item.id === choice.id) || memories[choice.id];
+    const level = memory.level || 1;
+    return {
+      name: `기억 강화: ${memory.name}`,
+      desc: `${memory.role} · 능동 기억의 피해/범위/쿨다운이 좋아집니다.`,
+      log: `Lv.${level} -> Lv.${level + 1}`,
+    };
+  }
+  const stat = levelUpChoices[choice.id];
+  return {
+    name: stat.name,
+    desc: stat.desc,
+    log: stat.log,
+  };
+}
+
+function applyLevelUpChoice(choice) {
   if (!choice || state.mode !== "upgrade") return;
-  choice.apply();
-  state.runGrowth.choicesTaken.push({ id, name: choice.name, level: state.runGrowth.level });
+  const view = levelUpChoiceView(choice);
+  if (choice.kind === "memory_new") {
+    if (activeMemoryCount() >= maxActiveMemorySlots || activeMemoryIds().includes(choice.id)) return;
+    const memory = createMemoryInstance(choice.id);
+    memory.joinedAt = Number(state.elapsed.toFixed(2));
+    state.memories.push(memory);
+    if (!state.metrics[choice.id]) state.metrics[choice.id] = createMetricSeed([choice.id])[choice.id];
+    recordMemoryAcquisition("acquire", choice.id, "level_up", { level: memory.level });
+  } else if (choice.kind === "memory_upgrade") {
+    const memory = activeMemories().find((item) => item.id === choice.id);
+    if (!memory) return;
+    memory.level = (memory.level || 1) + 1;
+    recordMemoryAcquisition("upgrade", choice.id, "level_up", { level: memory.level });
+  } else {
+    const stat = levelUpChoices[choice.id];
+    if (!stat) return;
+    stat.apply();
+  }
+  refreshActiveSynergies();
+  state.logs.buildIdentity = buildIdentityFor(activeMemoryIds(), state);
+  state.runGrowth.choicesTaken.push({ ...choice, name: view.name, level: state.runGrowth.level });
   state.runGrowth.pendingChoices = [];
   overlay.classList.remove("show");
   overlay.innerHTML = "";
   state.mode = "combat";
   state.running = true;
-  addLog(`${choice.name}: ${choice.log}`);
-  addFloater(choice.name, state.player.x, state.player.y - 36, "#72e49b");
+  addLog(`${view.name}: ${view.log}`);
+  addFloater(view.name, state.player.x, state.player.y - 36, "#72e49b");
   logEvent("level_up_choice", {
     level: state.runGrowth.level,
-    choice: id,
-    choiceName: choice.name,
+    choice,
+    choiceName: view.name,
     runGrowth: runGrowthLog(),
+    memoryAcquisition: state.memoryAcquisition,
+    buildIdentity: state.logs.buildIdentity,
   });
+  logEvent("build_identity_updated", { buildIdentity: state.logs.buildIdentity });
   renderEchoes();
+  renderMemorySlots();
+}
+
+function recordMemoryAcquisition(action, memoryId, source, extra = {}) {
+  const memory = activeMemories().find((item) => item.id === memoryId) || memories[memoryId];
+  const entry = {
+    action,
+    memoryId,
+    memoryName: memory?.name || memoryId,
+    level: memory?.level || extra.level || 1,
+    source,
+    t: Number(state.elapsed.toFixed(2)),
+    activeAfter: activeMemoryIds(),
+    ...extra,
+  };
+  state.memoryAcquisition.push(entry);
+  logEvent("memory_acquisition", entry);
+  return entry;
 }
 
 function recordPresence(memoryId, amount) {
@@ -1735,6 +1907,11 @@ function defeatBoss() {
     cycleIndex: defeated?.cycleIndex || state.runTimeline.currentBossIndex,
     final: Boolean(defeated?.final),
   });
+  if (defeated?.final) {
+    state.mode = "result";
+    showResultOverlay();
+    return;
+  }
   showQuestionOverlay(Boolean(defeated?.final));
 }
 
@@ -1784,21 +1961,79 @@ function topDependencyCandidates(limit = 2) {
     .slice(0, limit);
 }
 
-function forgetMemory(memoryId, forkMeta = null) {
+function forgetProbabilities() {
+  calculateDependency();
+  const active = activeMemories();
+  const rawWeights = active.map((memory) => {
+    const metric = state.metrics[memory.id];
+    return Math.max(8, metric.deletionScore || 0) + 12;
+  });
+  const total = sum(rawWeights) || 1;
+  const probabilities = active
+    .map((memory, index) => {
+      const probability = rawWeights[index] / total;
+      state.metrics[memory.id].forgetProbability = Number(probability.toFixed(4));
+      return {
+        memoryId: memory.id,
+        memoryName: memory.name,
+        probability: Number(probability.toFixed(4)),
+        percent: Math.round(probability * 100),
+        deletionScore: state.metrics[memory.id].deletionScore || 0,
+      };
+    })
+    .sort((a, b) => b.probability - a.probability);
+  state.forgetProbability = probabilities;
+  return probabilities;
+}
+
+function pickWeightedForget(probabilities) {
+  const roll = Math.random();
+  let cursor = 0;
+  for (const item of probabilities) {
+    cursor += item.probability;
+    if (roll <= cursor) return { chosen: item, roll: Number(roll.toFixed(4)) };
+  }
+  return { chosen: probabilities[probabilities.length - 1], roll: Number(roll.toFixed(4)) };
+}
+
+function forgetWeightedMemory(options = {}) {
+  const probabilities = forgetProbabilities();
+  const picked = options.forceTop ? { chosen: probabilities[0], roll: 0 } : pickWeightedForget(probabilities);
+  const result = {
+    cycleIndex: state.runTimeline.currentBossIndex,
+    t: Number(state.elapsed.toFixed(2)),
+    chosenMemoryId: picked.chosen?.memoryId || null,
+    chosenMemoryName: picked.chosen?.memoryName || null,
+    predictedMemoryId: state.questions.predict,
+    predictedMemoryName: state.questions.predict === "unknown" ? "모르겠다" : memories[state.questions.predict]?.name || null,
+    matched: state.questions.predict !== "unknown" && state.questions.predict === picked.chosen?.memoryId,
+    unknown: state.questions.predict === "unknown",
+    roll: picked.roll,
+    probabilities,
+    automated: Boolean(options.automated),
+  };
+  state.questions.release = picked.chosen?.memoryId || null;
+  state.forgetResults.push(result);
+  logEvent("forget_probability", { cycleIndex: result.cycleIndex, probabilities });
+  return forgetMemory(picked.chosen?.memoryId, result);
+}
+
+function forgetMemory(memoryId, forgetResult = null) {
   calculateDependency();
   const ranked = topDependencyCandidates(activeMemoryCount());
   const forgotten = state.memories.find((memory) => memory.id === memoryId && !memory.forgotten) || ranked[0];
+  const activeBefore = activeMemoryIds();
   forgotten.forgotten = true;
   state.forgotten = forgotten.id;
   state.forgottenHistory.push({
     id: forgotten.id,
     name: forgotten.name,
+    level: memoryLevel(forgotten),
     t: Number(state.elapsed.toFixed(2)),
     cycleIndex: state.runTimeline.currentBossIndex,
-    activeBefore: ranked.map((memory) => memory.id),
+    activeBefore,
   });
-  const echoPowerTier = forkMeta?.rank === 1 ? "strong" : "safe";
-  applyEcho(forgotten.id, echoPowerTier);
+  applyEcho(forgotten.id, memoryLevel(forgotten));
   refreshActiveSynergies();
   const buildIdentity = buildIdentityFor(activeMemoryIds(), state);
   state.logs.buildIdentity = buildIdentity;
@@ -1808,10 +2043,12 @@ function forgetMemory(memoryId, forkMeta = null) {
     bossDefeatedAt: Number(state.elapsed.toFixed(2)),
     forgotten: forgotten.id,
     forgottenName: forgotten.name,
-    activeBefore: ranked.map((memory) => memory.id),
+    forgottenLevel: memoryLevel(forgotten),
+    activeBefore,
     activeAfterForget: activeMemoryIds(),
-    forkChoice: forkMeta,
-    echoUnlock: latestEchoUnlock(),
+    forgetResult,
+    echoState: structuredCloneSafe(state.echoState),
+    weaponEvolution: state.weaponEvolution,
     refillAvailableAt: null,
     refillChoice: null,
     final: state.runTimeline.currentBossIndex >= state.runTimeline.bossScheduleSec.length,
@@ -1827,10 +2064,12 @@ function forgetMemory(memoryId, forkMeta = null) {
     deletionWeights: dependencyWeights(),
     questions: state.questions,
     questionNames: questionNames(),
-    forkChoice: forkMeta,
-    echoUnlock: latestEchoUnlock(),
+    forgetResult,
+    forgetProbability: state.forgetProbability,
     predictionAccuracy: predictionAccuracyLog(),
     echo: state.echo,
+    echoState: structuredCloneSafe(state.echoState),
+    weaponEvolution: state.weaponEvolution,
     echoTransformation: echoTransformationLog(forgotten.id),
     activeMemoryCount: activeMemoryCount(),
     buildIdentity,
@@ -1839,35 +2078,35 @@ function forgetMemory(memoryId, forkMeta = null) {
 }
 
 function forgetMostDependent() {
-  const chosen = topDependencyCandidates(1)[0];
-  const forkChoice = {
-    cycleIndex: state.runTimeline.currentBossIndex,
-    t: Number(state.elapsed.toFixed(2)),
-    chosenMemoryId: chosen?.id || null,
-    chosenMemoryName: chosen?.name || null,
-    rank: 1,
-    candidateIds: chosen ? [chosen.id] : [],
-    candidateNames: chosen ? [chosen.name] : [],
-    predictedMemoryId: state.questions.predict,
-    predictedMemoryName: state.questions.predict === "unknown" ? "모르겠다" : memories[state.questions.predict]?.name || null,
-    strongPivot: true,
-    automated: true,
-  };
-  state.questions.release = chosen?.id || null;
-  state.forkChoice = forkChoice;
-  return forgetMemory(chosen?.id, forkChoice);
+  return forgetWeightedMemory({ automated: true, forceTop: true });
 }
 
-function applyEcho(memoryId, tier = "safe") {
+function applyEcho(memoryId, activeLevel = 1) {
   const tags = memories[memoryId]?.tags || [];
-  const powerMul = tier === "strong" ? 1.55 : 0.82;
-  state.tagEchoes.push({
+  const echoEntry = state.echoState.memories[memoryId] || {
     memoryId,
     memoryName: memories[memoryId]?.name || memoryId,
-    tags: tags.slice(0, 1),
-    power: tier === "strong" ? 0.55 : 0.28,
-    tier,
+    tags: tags.slice(),
+    level: 0,
+    engravedAt: [],
+  };
+  echoEntry.level += Math.max(1, activeLevel);
+  echoEntry.engravedAt.push({
+    cycleIndex: state.runTimeline.currentBossIndex,
+    t: Number(state.elapsed.toFixed(2)),
+    activeLevel,
   });
+  state.echoState.memories[memoryId] = echoEntry;
+  const powerMul = (0.88 + echoEntry.level * 0.18) * (1 + state.runGrowth.echoAmp);
+  echoEntry.power = Number(powerMul.toFixed(2));
+  state.tagEchoes = Object.values(state.echoState.memories).map((echo) => ({
+    memoryId: echo.memoryId,
+    memoryName: echo.memoryName,
+    tags: echo.tags,
+    level: echo.level,
+    power: echo.power || 1,
+    tier: "engraved",
+  }));
   if (memoryId === "execution_flash") {
     state.echo.critChance += 0.05 * experiment.echoPower * powerMul;
     state.echo.critDamage += 0.12 * experiment.echoPower * powerMul;
@@ -1909,7 +2148,8 @@ function applyEcho(memoryId, tier = "safe") {
     state.echo.critDamage += 0.08 * experiment.echoPower * powerMul;
     state.echo.weaponMarkChance += 0.10 * experiment.echoPower * powerMul;
   }
-  state.echoUnlocks.push(echoUnlockFor(memoryId, tier));
+  updateWeaponEvolutions();
+  logEvent("echo_state", { echoState: structuredCloneSafe(state.echoState), weaponEvolution: state.weaponEvolution });
 }
 
 function echoUnlockFor(memoryId, tier = "safe") {
@@ -1939,83 +2179,104 @@ function latestEchoUnlock() {
   return state.echoUnlocks[state.echoUnlocks.length - 1] || null;
 }
 
-function showQuestionOverlay(finalCycle = false) {
+function structuredCloneSafe(value) {
+  if (typeof structuredClone === "function") return structuredClone(value);
+  return JSON.parse(JSON.stringify(value));
+}
+
+function hasWeaponEvolution(id) {
+  return Boolean(state?.weaponEvolution?.some((evolution) => evolution.id === id));
+}
+
+function latestWeaponEvolution() {
+  return state?.weaponEvolution?.[state.weaponEvolution.length - 1] || null;
+}
+
+function updateWeaponEvolutions() {
+  for (const rule of weaponEvolutionRules) {
+    if (hasWeaponEvolution(rule.id)) continue;
+    const pair = echoPairForTags(rule.tags);
+    if (!pair) continue;
+    const evolution = {
+      id: rule.id,
+      name: rule.name,
+      desc: rule.desc,
+      tags: rule.tags,
+      relatedEchoes: pair.map((echo) => echo.memoryId),
+      relatedEchoNames: pair.map((echo) => echo.memoryName),
+      t: Number(state.elapsed.toFixed(2)),
+      cycleIndex: state.runTimeline.currentBossIndex,
+    };
+    state.weaponEvolution.push(evolution);
+    state.echoState.evolutions.push(evolution);
+    addFloater(rule.name, state.player.x, state.player.y - 54, "#e8c15d");
+    addLog(`${state.weapon.name}이 ${rule.name}으로 진화했다.`);
+    logEvent("weapon_evolution", evolution);
+  }
+}
+
+function echoPairForTags(tags) {
+  const entries = Object.values(state.echoState.memories).filter((echo) => echo.level > 0);
+  for (const first of entries) {
+    for (const second of entries) {
+      if (first.memoryId === second.memoryId) continue;
+      if (first.tags.includes(tags[0]) && second.tags.includes(tags[1])) return [first, second];
+    }
+  }
+  return null;
+}
+
+function showQuestionOverlay() {
   state.questions = { protect: null, predict: null, release: null };
-  const candidates = topDependencyCandidates(2);
+  const probabilities = forgetProbabilities();
   overlay.innerHTML = `
     <div class="panel question-panel fork-panel">
-      <p class="eyebrow">망각 갈림길</p>
-      <h2>레테가 가장 선명한 두 기억을 내밀었다.</h2>
-      <p class="panel-copy">먼저 무엇이 떠날지 예측한 뒤, 둘 중 하나를 직접 떠나보내세요. 가장 의존한 기억을 놓아주면 강한 잔향 경로가 열리고, 2순위를 놓아주면 익숙함은 남지만 새 길은 좁게 열립니다.</p>
+      <p class="eyebrow">망각 판정</p>
+      <h2>레테가 선명한 기억을 저울질한다.</h2>
+      <p class="panel-copy">가장 의존한 기억일수록 가져갈 확률이 높지만, 결과는 확률로 정해집니다. 무엇이 무기에 새겨질지 예측하세요.</p>
       <div class="question-block">
-        <h3>레테가 가져갈 것 같았던 기억은?</h3>
+        <h3>레테가 가져갈 것 같은 기억은?</h3>
         <div id="predictChoices" class="pill-row"></div>
       </div>
-      <div class="fork-choice-grid" id="forkChoices"></div>
-      <button id="submitQuestionsButton" class="primary-btn" type="button" disabled>이 기억을 떠나보내기</button>
+      <div class="fork-choice-grid" id="forgetProbabilityCards"></div>
+      <button id="submitQuestionsButton" class="primary-btn" type="button" disabled>망각 판정</button>
     </div>
   `;
   overlay.classList.add("show");
   const predict = overlay.querySelector("#predictChoices");
-  const forkChoices = overlay.querySelector("#forkChoices");
+  const probabilityCards = overlay.querySelector("#forgetProbabilityCards");
   const submit = overlay.querySelector("#submitQuestionsButton");
 
   activeMemories().forEach((memory) => {
     predict.appendChild(questionButton(memory.name, () => {
       state.questions.predict = memory.id;
       selectPill(predict, memory.name);
-      submit.disabled = !state.questions.predict || !state.questions.release;
+      submit.disabled = !state.questions.predict;
     }));
   });
   predict.appendChild(questionButton("모르겠다", () => {
     state.questions.predict = "unknown";
     selectPill(predict, "모르겠다");
-    submit.disabled = !state.questions.predict || !state.questions.release;
+    submit.disabled = !state.questions.predict;
   }));
 
-  candidates.forEach((memory, index) => {
-    const rank = index + 1;
-    const metric = state.metrics[memory.id];
-    const unlock = echoUnlockFor(memory.id, rank === 1 ? "strong" : "safe");
+  probabilities.forEach((entry, index) => {
+    const memory = memories[entry.memoryId];
     const button = document.createElement("button");
-    button.className = `choice fork-choice ${rank === 1 ? "strong-fork" : "safe-fork"}`;
+    button.className = `choice fork-choice ${index === 0 ? "strong-fork" : "safe-fork"}`;
     button.type = "button";
+    button.disabled = true;
     button.innerHTML = `
-      <strong>${rank}위: ${memory.name}</strong>
-      <span>의존도 ${metric.deletionScore} · ${rank === 1 ? "강한 잔향 / 새 경로 크게 열림" : "약한 잔향 / 익숙함 유지"}</span>
-      <div class="fork-preview">${unlock.name}<br>${unlock.desc}</div>
+      <strong>${memory.name}</strong>
+      <span>망각 확률 ${entry.percent}% · 의존도 ${entry.deletionScore}</span>
+      <div class="fork-preview">${memory.echo}<br>망각되면 Lv. 잔향으로 무기에 새겨집니다.</div>
     `;
-    button.addEventListener("click", () => {
-      state.questions.release = memory.id;
-      [...forkChoices.children].forEach((child) => child.classList.toggle("selected", child === button));
-      submit.disabled = !state.questions.predict || !state.questions.release;
-    });
-    forkChoices.appendChild(button);
+    probabilityCards.appendChild(button);
   });
 
   submit.addEventListener("click", () => {
-    const ranked = topDependencyCandidates(activeMemoryCount());
-    const release = state.questions.release || ranked[0].id;
-    const rank = ranked.findIndex((memory) => memory.id === release) + 1 || 1;
-    const forkChoice = {
-      cycleIndex: state.runTimeline.currentBossIndex,
-      t: Number(state.elapsed.toFixed(2)),
-      chosenMemoryId: release,
-      chosenMemoryName: memories[release].name,
-      rank,
-      candidateIds: candidates.map((memory) => memory.id),
-      candidateNames: candidates.map((memory) => memory.name),
-      predictedMemoryId: state.questions.predict,
-      predictedMemoryName: state.questions.predict === "unknown" ? "모르겠다" : memories[state.questions.predict]?.name || null,
-      strongPivot: rank === 1,
-    };
-    state.forkChoice = forkChoice;
-    const forgotten = forgetMemory(release, forkChoice);
-    if (finalCycle) {
-      showResultOverlay();
-    } else {
-      showCycleResultOverlay(forgotten);
-    }
+    const forgotten = forgetWeightedMemory();
+    showCycleResultOverlay(forgotten);
   });
 }
 
@@ -2033,8 +2294,9 @@ function showCycleResultOverlay(forgotten) {
       <div class="result-summary">
         <div class="result-card loss-card"><strong>사라진 행동</strong><br>${forgotten.name} 자동 발동이 멈춥니다.</div>
         ${echoTransformationHtml(forgotten)}
-        ${echoUnlockHtml(latestEchoUnlock())}
-        <div class="result-card"><strong>결손 생존</strong><br>${Math.round(experiment.deficitDurationSec)}초 동안 기억 ${activeMemoryCount()}개로 버틴 뒤 새 기억을 고릅니다.</div>
+        ${echoStateHtml(forgotten.id)}
+        ${weaponEvolutionHtml(latestWeaponEvolution())}
+        <div class="result-card"><strong>결손 생존</strong><br>${Math.round(experiment.deficitDurationSec)}초 동안 기억 ${activeMemoryCount()}개로 버틴 뒤 사냥 보상으로 빈 슬롯을 채웁니다.</div>
       </div>
       <button id="continueCycleButton" class="primary-btn" type="button">결손 구간 시작</button>
     </div>
@@ -2061,7 +2323,7 @@ function showCycleResultOverlay(forgotten) {
     };
     state.runTimeline.postLossChallenges.push(challenge);
     if (cycle) cycle.postLossChallenge = challenge;
-    addLog(`${forgotten.name}의 잔향만 남았다. 기억 ${activeMemoryCount()}개로 버텨라.`);
+    addLog(`${forgotten.name}의 잔향이 무기에 새겨졌다. 기억 ${activeMemoryCount()}개로 버텨라.`);
     logEvent("deficit_started", {
       cycleIndex: state.runTimeline.currentBossIndex,
       refillAvailableAt: Number(refillAt.toFixed(2)),
@@ -2077,9 +2339,9 @@ function showRefillOverlay() {
   state.running = false;
   overlay.innerHTML = `
     <div class="panel question-panel">
-      <p class="eyebrow">기억 보충</p>
-      <h2>망가진 빌드가 새 기억을 붙잡았다.</h2>
-      <p class="panel-copy">새 기억 하나를 골라 다시 3개 슬롯으로 돌아갑니다. 이전 빌드는 복구되지 않고, 잔향 위에 새 방향이 붙습니다.</p>
+      <p class="eyebrow">사냥 보상</p>
+      <h2>빈 슬롯에 새 기억이 떠올랐다.</h2>
+      <p class="panel-copy">새 기억 하나를 골라 다시 3개 슬롯으로 돌아갑니다. 잃은 기억은 복구되지 않고, 무기 잔향 위에 새 방향이 붙습니다.</p>
       <div id="refillChoices" class="choice-list memory-list"></div>
     </div>
   `;
@@ -2107,6 +2369,7 @@ function applyMemoryRefill(id) {
   memory.joinedAt = Number(state.elapsed.toFixed(2));
   state.memories.push(memory);
   if (!state.metrics[id]) state.metrics[id] = createMetricSeed([id])[id];
+  recordMemoryAcquisition("acquire", id, "refill", { cycleIndex: state.runTimeline.currentBossIndex, level: memory.level });
   refreshActiveSynergies();
   const buildIdentity = buildIdentityFor(activeMemoryIds(), state);
   state.logs.buildIdentity = buildIdentity;
@@ -2162,13 +2425,25 @@ function activeMemoryCount() {
   return activeMemoryIds().length;
 }
 
+function memoryLevel(memory) {
+  return Math.max(1, Number(memory?.level || 1));
+}
+
+function memoryPower(memory) {
+  return 1 + (memoryLevel(memory) - 1) * 0.16;
+}
+
+function memoryCooldownMultiplier(memory) {
+  return Math.max(0.72, 1 - (memoryLevel(memory) - 1) * 0.06);
+}
+
 function refillCandidates() {
   const active = new Set(activeMemoryIds());
   const used = new Set(state.memories.map((memory) => memory.id));
   const fresh = Object.keys(memories).filter((id) => !active.has(id) && !used.has(id));
   const recycled = Object.keys(memories).filter((id) => !active.has(id) && used.has(id));
-  const latestUnlock = latestEchoUnlock();
-  const desiredTags = latestUnlock ? memories[latestUnlock.memoryId]?.tags || [] : [];
+  const latestForgotten = state.forgottenHistory[state.forgottenHistory.length - 1];
+  const desiredTags = latestForgotten ? memories[latestForgotten.id]?.tags || [] : [];
   return fresh
     .concat(recycled)
     .sort((a, b) => synergyFitScore(b, desiredTags) - synergyFitScore(a, desiredTags))
@@ -2199,16 +2474,18 @@ function showResultOverlay() {
   overlay.querySelector("#resultSummary").innerHTML = `
     <div class="result-card loss-card"><strong>사라진 행동</strong><br>${forgotten.name} 자동 발동이 멈춥니다.<br><small>${forgotten.desc}</small></div>
     <div class="result-card"><strong>예측 결과</strong><br>${predictionText}</div>
-    <div class="result-card"><strong>갈림길 선택</strong><br>${forkChoiceText()}</div>
-    <div class="result-card"><strong>삭제 weight</strong><br>${deletionWeightText()}</div>
+    <div class="result-card"><strong>망각 판정</strong><br>${forgetResultText()}</div>
+    <div class="result-card"><strong>망각 확률</strong><br>${deletionWeightText()}</div>
     ${echoTransformationHtml(forgotten)}
-    ${echoUnlockHtml(latestEchoUnlock())}
+    ${echoStateHtml(forgotten.id)}
+    ${weaponEvolutionHtml(latestWeaponEvolution())}
     <div class="result-card"><strong>이어지는 방향</strong><br>${forgotten.direction}</div>
     ${runConclusionHtml()}
   `;
   overlay.querySelector("#detailTable").innerHTML = dependencyTableHtml();
   renderScale("sadnessScale", "sadness");
   renderScale("fairnessScale", "fairness");
+  renderScale("growthFeelScale", "growthFeel");
   const recallInput = overlay.querySelector("#memoryRecallInput");
   if (recallInput) {
     recallInput.addEventListener("input", () => {
@@ -2276,6 +2553,39 @@ function echoUnlockHtml(unlock) {
   `;
 }
 
+function echoStateHtml(memoryId) {
+  const echo = state.echoState.memories[memoryId];
+  if (!echo) return "";
+  return `
+    <div class="result-card echo-unlock-card">
+      <strong>무기 잔향</strong>
+      <p>${echo.memoryName} Lv.${echo.level} · ${echo.tags.map(tagLabel).join("/")}</p>
+      <small>같은 기억이 다시 망각되면 잔향 레벨이 누적됩니다.</small>
+    </div>
+  `;
+}
+
+function weaponEvolutionHtml(evolution) {
+  if (!evolution) {
+    const entries = Object.values(state.echoState.memories || {});
+    if (!entries.length) return "";
+    return `
+      <div class="result-card echo-unlock-card">
+        <strong>무기 진화</strong>
+        <p>잔향 태그가 조합되면 피의 늪 또는 파쇄 각인이 열립니다.</p>
+        <small>현재 잔향: ${entries.map((echo) => `${echo.memoryName} Lv.${echo.level}`).join(" / ")}</small>
+      </div>
+    `;
+  }
+  return `
+    <div class="result-card echo-unlock-card">
+      <strong>무기 진화: ${evolution.name}</strong>
+      <p>${evolution.desc}</p>
+      <small>${evolution.relatedEchoNames.join(" + ")} 잔향 조합</small>
+    </div>
+  `;
+}
+
 function echoTransformationLog(memoryId) {
   const map = {
     execution_flash: {
@@ -2333,6 +2643,17 @@ function forkChoiceText() {
   return `${choice.chosenMemoryName} 선택. ${rankText}`;
 }
 
+function forgetResultText() {
+  const result = state.forgetResults[state.forgetResults.length - 1];
+  if (!result) return "망각 판정 기록 없음";
+  const prediction = result.unknown
+    ? "예측 보류"
+    : result.matched
+      ? "예측 성공"
+      : `예측 실패(${result.predictedMemoryName})`;
+  return `${result.chosenMemoryName} 망각 · ${prediction} · roll ${result.roll}`;
+}
+
 function predictionAccuracyLog() {
   const predicted = state.questions.predict;
   const released = state.questions.release || state.forgotten;
@@ -2381,7 +2702,7 @@ function renderScale(containerId, key) {
 function updateDownloadEnabled() {
   const button = overlay.querySelector("#downloadLogButton");
   if (!button) return;
-  button.disabled = state.survey.sadness === null || state.survey.fairness === null;
+  button.disabled = state.survey.sadness === null || state.survey.fairness === null || state.survey.growthFeel === null;
 }
 
 function collectLogPayload() {
@@ -2392,6 +2713,9 @@ function collectLogPayload() {
   state.logs.questions = state.questions;
   state.logs.questionNames = questionNames();
   state.logs.forkChoice = state.forkChoice;
+  state.logs.forgetProbability = state.forgetProbability;
+  state.logs.forgetResult = state.forgetResults[state.forgetResults.length - 1] || null;
+  state.logs.forgetResults = state.forgetResults;
   state.logs.predictionAccuracy = predictionAccuracyLog();
   state.logs.forgotten = state.forgotten;
   state.logs.forgottenName = memories[state.forgotten]?.name || state.forgotten;
@@ -2399,9 +2723,12 @@ function collectLogPayload() {
   state.logs.metrics = state.metrics;
   state.logs.deletionWeights = dependencyWeights();
   state.logs.echo = state.echo;
+  state.logs.echoState = structuredCloneSafe(state.echoState);
   state.logs.tagEchoes = state.tagEchoes;
   state.logs.echoUnlocks = state.echoUnlocks;
+  state.logs.weaponEvolution = state.weaponEvolution;
   state.logs.activeSynergies = state.activeSynergies;
+  state.logs.memoryAcquisition = state.memoryAcquisition;
   state.logs.echoPower = experiment.echoPower;
   state.logs.runGrowth = runGrowthLog();
   state.logs.runTimeline = runTimelineLog();
@@ -2598,6 +2925,19 @@ function updateEffects(dt) {
         damagePlayer(effect.damage * (1 - state.echo.damageReduction), effect);
       }
     }
+    if (effect.type === "blood_pool") {
+      effect.r = lerp(effect.r, effect.maxR, 0.12);
+      effect.tick -= dt;
+      if (effect.tick <= 0) {
+        effect.tick = 0.34;
+        for (const target of hostiles()) {
+          if (distance(effect, target) < effect.r + target.r) {
+            target.slow = Math.max(target.slow || 0, 0.7 + state.echo.slowDuration);
+            damageHostile(target, effect.damage * (1 + state.echo.dotDamage + state.runGrowth.damage), "weapon_evolution", { controlHit: true });
+          }
+        }
+      }
+    }
   }
   state.effects = state.effects.filter((effect) => effect.life > 0);
   for (const floater of state.floaters) {
@@ -2635,15 +2975,18 @@ function renderMemorySlots() {
   const source = state ? activeMemories() : selectedMemories.map((id) => ({ ...memories[id], cooldownLeft: 0, clarity: 0 }));
   ui.memorySlots.innerHTML = "";
   if (!source.length) {
-    ui.memorySlots.innerHTML = `<div class="info-card empty">기억 3개를 선택하세요.</div>`;
+    ui.memorySlots.innerHTML = `<div class="info-card empty">시작 기억 1개를 선택하세요.</div>`;
     return;
   }
   const maxClarity = Math.max(0, ...source.map((memory) => memory.clarity || 0));
   const omenActive = state?.runTimeline?.pressurePhaseId === "climax" || state?.mode === "questions";
+  const probabilityById = state && omenActive
+    ? Object.fromEntries(forgetProbabilities().map((entry) => [entry.memoryId, entry.percent]))
+    : {};
   source.forEach((memory, index) => {
     const maxCd = memory.cooldown || 1;
     const cdPercent = memory.id === "blood_reflection" ? 100 : (1 - (memory.cooldownLeft || 0) / maxCd) * 100;
-    const clarityPercent = (memory.clarity || 0) * 100;
+    const clarityPercent = omenActive && state ? probabilityById[memory.id] || 0 : (memory.clarity || 0) * 100;
     const watched = state && clarityPercent > 35 && (memory.clarity || 0) >= maxClarity - 0.01;
     const focused = state && activeTacticalFocus(memory.id);
     const tacticalStatus = state ? tacticalFocusStatus(memory) : "";
@@ -2654,13 +2997,13 @@ function renderMemorySlots() {
       slot.tabIndex = 0;
     }
     slot.innerHTML = `
-      <div class="slot-header"><strong>${memory.name}</strong><small>${memory.role}</small></div>
+      <div class="slot-header"><strong>${memory.name}</strong><small>Lv.${memoryLevel(memory)} · ${memory.role}</small></div>
       <div class="tag-row">${tagBadges(memory.tags)}</div>
       ${watched ? `<div class="risk-tag">레테의 시선</div>` : ""}
       <div class="cooldown-track"><div class="cooldown-fill" style="width:${clamp(cdPercent, 0, 100)}%"></div></div>
       <small>${memory.forgotten ? "망각됨" : memory.desc}</small>
       ${state ? `<div class="tactical-row"><span>전술 집중</span><span>${tacticalStatus}</span></div>` : ""}
-      <div class="clarity-row"><span>${omenActive ? "망각 전조" : "의존도"}</span><span>${Math.round(clarityPercent)}%</span></div>
+      <div class="clarity-row"><span>${omenActive ? "망각 확률" : "의존도"}</span><span>${Math.round(clarityPercent)}%</span></div>
       <div class="clarity-track ${omenActive ? "omen-track" : ""}"><div class="clarity-fill" style="width:${clarityPercent}%"></div></div>
     `;
     if (state) {
@@ -2696,11 +3039,10 @@ function renderEchoes() {
     state.activeSynergies.forEach((rule) => lines.push(`<strong>시너지: ${rule.name}</strong><br>${rule.desc}`));
   }
   if (state.tagEchoes?.length) {
-    state.tagEchoes.forEach((echo) => lines.push(`태그 잔향: ${echo.memoryName} -> ${echo.tags.map(tagLabel).join("/")}`));
+    state.tagEchoes.forEach((echo) => lines.push(`무기 잔향: ${echo.memoryName} Lv.${echo.level} -> ${echo.tags.map(tagLabel).join("/")}`));
   }
-  if (state.echoUnlocks?.length) {
-    const unlock = latestEchoUnlock();
-    lines.push(`열린 경로: ${unlock.name}`);
+  if (state.weaponEvolution?.length) {
+    state.weaponEvolution.forEach((evolution) => lines.push(`무기 진화: ${evolution.name}`));
   }
   if (state.echo.critChance > baseEcho.critChance) lines.push(`치명 +${percent(state.echo.critChance - baseEcho.critChance)}`);
   if (state.echo.attackSpeed) lines.push(`공격속도 +${percent(state.echo.attackSpeed)}`);
@@ -2723,6 +3065,7 @@ function renderEchoes() {
   if (growth.range) growthLines.push(`런 범위 +${percent(growth.range)}`);
   if (growth.damageReduction) growthLines.push(`런 피해감소 +${percent(growth.damageReduction)}`);
   if (growth.xpGain) growthLines.push(`런 경험치 +${percent(growth.xpGain)}`);
+  if (growth.echoAmp) growthLines.push(`잔향 증폭 +${percent(growth.echoAmp)}`);
   const allLines = [...growthLines, ...lines];
   if (state.tacticalFocus.useCount > 0) {
     const focus = state.tacticalFocus;

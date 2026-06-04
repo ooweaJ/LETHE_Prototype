@@ -4,18 +4,28 @@ Last updated: 2026-06-04
 
 ## Current Build
 
-- Project: LETHE HTML Alpha v0.10 target slice is implemented from `docs/LETHE_망각의_군주_프로토타입_기획서_v0_10.md`.
+- Project: LETHE HTML Alpha v0.11 target slice is implemented from `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md`.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
-- Current scope: HTML prototype validation. v0.10 changes the core loss beat from automatic deletion to a player-facing `망각 갈림길`: dependency top-2 memories are shown, the player chooses which one to release, and the choice controls echo strength and the newly opened pivot route.
-- Latest task-update status: v0.10 now includes 8 memories, 4 synergies, first boss at 180 seconds, 600-second run schedule, simplified dependency scoring without deletion bias, real-time dependency/omen meter, fork choice payloads, prediction accuracy logs, echo unlock routes, and tactical focus overheat/dependency tradeoff. This keeps the expanded scope inside the v0.10 document limits: no shop, meta progression, region, weapon, enemy, final boss completion, multi-region structure, or active slot expansion.
-- Latest verification status: syntax checks and local doctor pass. Browser QA could not start in this environment because Chrome/Chromium was not found and `CHROME_PATH` is not set, so v0.10 still needs trusted-local browser proof for fork choice, post-loss/refill, and tactical focus before people testing.
-- Planning document status: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_10.md` is now the Markdown source of truth, and `docs/LETHE_망각의_군주_완성형_기획서_v6.docx` has been regenerated from it.
+- Current scope: HTML prototype validation. v0.11 changes the core loop to start with 1 memory, gain/upgrade memories through hunting, lose a weighted-random memory after bosses 1-3, engrave the lost memory as weapon echo, and unlock weapon evolutions from echo tag combinations.
+- Latest task-update status: v0.11 now includes 8 memories, 4 active synergies, 2 weapons, 2 weapon evolutions (`피의 늪`, `파쇄 각인`), active memory levels, `잔향 증폭`, forget-probability meter/logs, echo-state logs, weapon-evolution logs, and Q5 growth-feel survey. Scope remains inside the v0.11 document limits: no shop, meta progression, new region, extra weapon count, enemy expansion, final boss content expansion, multi-region structure, or active slot expansion above 3.
+- Latest verification status: syntax checks, DOCX regeneration, report generation/check, doctor, and Discord dry-runs pass. Browser QA is blocked in this environment because Chrome/Chromium executable was not found and `CHROME_PATH` is not set.
+- Planning document status: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md` is now the Markdown source of truth, and `docs/LETHE_망각의_군주_완성형_기획서_v6.docx` should be regenerated from it after this unit.
 
 ## Implemented
 
 - Static browser prototype: `index.html`, `style.css`, `src/game.js`.
-- Current planning source: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_10.md`, mirrored into the existing Word 기획서 DOCX.
+- Current planning source: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md`, mirrored into the existing Word 기획서 DOCX.
+- v0.11 target slice:
+  - browser label and experiment version moved to `v0.11`,
+  - setup starts with weapon 1 and starting memory 1,
+  - level-up choices mix new memory acquisition, active memory upgrade, run stat, and `잔향 증폭`,
+  - active memory slots remain capped at 3,
+  - boss forgetting is weighted-random after bosses 1-3 and final boss ends the run without a new forgetting,
+  - UI shows forget probability during omen/question phases,
+  - forgotten memories engrave as leveled weapon echoes,
+  - echo tag pairs unlock `피의 늪` and `파쇄 각인`,
+  - logs include `memoryAcquisition`, `forgetProbability`, `forgetResult`, `echoState`, `weaponEvolution`, and `predictionAccuracy`.
 - v0.10 target slice:
   - browser label and experiment version moved to `v0.10`,
   - default run schedule moved to 600 seconds with bosses at 180 / 340 / 490 / 600 seconds,
@@ -27,7 +37,7 @@ Last updated: 2026-06-04
   - logs include `forkChoice`, `predictionAccuracy`, and `echoUnlocks`,
   - tactical focus now adds overheat wording, dependency pressure, and synergy boost context.
 - Weapons: twin blades, greatsword.
-- Memories: 6 total, 3 active slots.
+- Memories: 8 total, 3 active slots.
 - Auto basic attack and auto memory activation.
 - Enemy waves and boss encounter.
 - Dependency-based forgetting with per-memory deletion bias.

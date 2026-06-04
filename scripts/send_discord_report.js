@@ -277,11 +277,11 @@ function bulletsFromSections(markdown, headingNames, limit) {
 function findSections(markdown, headingName) {
   const lines = markdown.split(/\r?\n/);
   const sections = [];
-  const target = normalize(headingName);
+  const target = normalizeSectionHeading(headingName);
 
   for (let index = 0; index < lines.length; index += 1) {
     const heading = lines[index].match(/^(#{1,6})\s+(.+)$/);
-    if (!heading || normalize(heading[2]) !== target) continue;
+    if (!heading || normalizeSectionHeading(heading[2]) !== target) continue;
 
     const level = heading[1].length;
     const content = [];
@@ -310,6 +310,10 @@ function fit(text, maxLength) {
 
 function normalize(text) {
   return stripMarkdown(text).trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+function normalizeSectionHeading(text) {
+  return normalize(text).replace(/^\d+\.\s+/, '');
 }
 
 function escapeRegExp(text) {

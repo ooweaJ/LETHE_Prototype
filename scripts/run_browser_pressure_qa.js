@@ -222,7 +222,7 @@ function qaFailures(qa, value) {
 function pressureChecks(qa) {
   return [
     ['status complete', qa.status === 'complete'],
-    ['version v0.10', qa.version === 'v0.10'],
+    ['version v0.11', qa.version === 'v0.11'],
     ['browser state exists', qa.hasState],
     ['lull segment exists', qa.hasLull],
     ['rising segment exists', qa.hasRising],
@@ -234,7 +234,7 @@ function pressureChecks(qa) {
 function postLossChecks(qa) {
   return [
     ['status complete', qa.status === 'complete'],
-    ['version v0.10', qa.version === 'v0.10'],
+    ['version v0.11', qa.version === 'v0.11'],
     ['browser state exists', qa.hasState],
     ['post-loss challenge payload exists', qa.postLossChallengeCount >= 1],
     ['deficit breath segment exists', qa.hasDeficitBreath],
@@ -249,7 +249,7 @@ function postLossChecks(qa) {
 function tacticalChecks(qa) {
   return [
     ['status complete', qa.status === 'complete'],
-    ['version v0.10', qa.version === 'v0.10'],
+    ['version v0.11', qa.version === 'v0.11'],
     ['browser state exists', qa.hasState],
     ['3 active memories remain', qa.activeMemoryCount === 3],
     ['tactical focus payload exists', Boolean(qa.tacticalFocus)],

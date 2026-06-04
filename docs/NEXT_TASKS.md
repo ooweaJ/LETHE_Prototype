@@ -1,14 +1,14 @@
 # Next Tasks
 
-현재 단계는 v0.10 target slice 구현/검증이다. v0.9 release-feel loop는 AI/browser gate를 통과했지만, v0.10 기획서는 망각을 자동 처벌이 아니라 플레이어가 선택하는 `망각 갈림길`과 강한 잔향 피벗으로 바꾸라고 지시한다. 다음 목표는 v0.10 구현을 브라우저 QA와 controlled 1-person browser playtest로 검증하는 것이다.
+현재 단계는 v0.11 target slice 구현/검증이다. v0.11 기획서는 시작 기억 1개, 사냥 기반 기억 획득/강화, 가중 랜덤 망각, 무기 잔향, 잔향 조합 무기 진화를 검증하라고 지시한다. 다음 목표는 v0.11 구현을 trusted-local browser QA와 controlled 1-person browser playtest로 검증하는 것이다.
 
 이 프로젝트의 현재 목표는 HTML 프로토타입으로 LETHE의 핵심 재미와 가능성을 검증하는 것이다. 충분히 재미가 확인되면 그 결과를 근거로 Unity 구현 단계로 넘어간다.
 
 ## Current Verdict
 
-- v0.10 target document: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_10.md`.
-- v0.10 implementation status: target slice implemented in HTML prototype with 8 memories, 4 synergies, 600-second schedule, top-2 forgetting fork, echo unlock routes, simplified dependency scoring, real-time dependency meter, prediction accuracy payload, and tactical-focus dependency tradeoff.
-- Current selected next scope: run v0.10 trusted-local browser QA focused on fork choice, post-loss/refill, and tactical focus. This environment currently cannot start browser QA because Chrome/Chromium is not found and `CHROME_PATH` is not set. After browser evidence, prepare controlled 1-person browser playtest. Do not add more memories, slots, shops, meta progression, regions, weapons, enemies, final boss completion, or multi-region structure.
+- v0.11 target document: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md`.
+- v0.11 implementation status: target slice implemented in HTML prototype with 8 memories, active memory levels, 4 synergies, 600-second schedule, weighted-random forgetting, forget-probability meter, leveled weapon echoes, `피의 늪`/`파쇄 각인` weapon evolutions, Q5 growth survey, and v0.11 log fields.
+- Current selected next scope: run trusted-local browser QA focused on memory acquisition/upgrade, weighted forgetting, post-loss refill, echo state, and weapon evolution. This environment may still fail browser QA if Chrome/Chromium is not found and `CHROME_PATH` is not set. After browser evidence, prepare controlled 1-person browser playtest. Do not add more memories, slots, shops, meta progression, regions, weapons, enemies, final boss completion, or multi-region structure.
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the level-up flow and `runGrowth` payload.
 - Codex implementation result: `GO_CANDIDATE` from `npm run ai:test` and `npm run ai:test:heavy`.

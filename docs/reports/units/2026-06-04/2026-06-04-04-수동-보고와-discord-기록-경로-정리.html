@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-04-04 - 수동 보고와 Discord 기록 경로 정리</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-04-04 - 수동 보고와 Discord 기록 경로 정리</h1>
+      <p class="meta">Generated from 2026-06-04-04-수동-보고와-discord-기록-경로-정리.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-04-04 - 수동 보고와 Discord 기록 경로 정리</h1>
+<h2>1. Current build status</h2>
+<ul>
+<li>Reporting scripts already support daily reports, work-unit reports, latest-section attachments, and Discord dry-run.</li>
+<li>Autonomous loops call Discord work-unit reporting, but manual Codex implementation turns require an explicit report/Discord command at the end.</li>
+</ul>
+<h2>2. What changed today</h2>
+<ul>
+<li>Documented the manual reporting path in <code>docs/DISCORD_REPORTING.md</code>.</li>
+<li>Recorded that <code>docs/ai/</code> is static collaboration/failure-case documentation, not an automatic per-work append log.</li>
+<li>Clarified that per-work AI 활용 records should be written to devlog, daily report, review prompts, and review responses.</li>
+<li>Fixed Discord report summary extraction for numbered section headings such as <code>## 2. What changed today</code>.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li>Script search confirmed <code>run_autonomous_dev_loop.js</code> calls <code>sendWorkUnitReport()</code>.</li>
+<li>Script search confirmed <code>report:discord:unit:dry</code> and <code>report:discord:unit</code> already exist.</li>
+<li><code>node scripts/send_discord_report.js docs/reports/2026-06-04.md --dry-run --section &quot;2026-06-04-03 - v0.11 기억 획득과 무기 진화 구현&quot;</code> now extracts real work/status/problem/handoff summary text and attaches the v0.11 unit HTML.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>Do not treat missing Discord upload after manual implementation as automatic failure of the script.</li>
+<li>Use <code>npm run report:discord:unit:dry</code> as the default proof in Codex-managed sessions.</li>
+<li>Use <code>npm run report:discord:unit</code> only in trusted local environments where real webhook sending is intended.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>Real Discord upload needs <code>.env</code> with <code>DISCORD_WEBHOOK_URL</code> and network access.</li>
+<li>If Codex forgets to run the dry-run after manual work, Discord/latest-section evidence will lag behind the actual implementation.</li>
+<li>AI collaboration docs can look stale if readers expect them to be per-work logs.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<ul>
+<li>The reporting system exists, but its automatic path belongs to autonomous loops.</li>
+<li>Manual implementation should close with report generation, report check, and Discord latest-section dry-run.</li>
+<li>AI utilization evidence for each work unit belongs in reports/devlogs and review prompt/response files.</li>
+</ul>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>After every manual implementation unit, run the report/check/dry-run trio.</li>
+<li>Consider adding a single wrapper command later if manual closure keeps being missed.</li>
+<li>Keep Discord real-send as an explicit trusted-local action.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: work completion and AI usage records were expected to move automatically after manual Codex work.</li>
+<li>Direction: distinguish autonomous-loop automation from manual-turn closure.</li>
+<li>Action: documented the actual command path and source-of-truth locations.</li>
+<li>Result: future work can show a clear paper trail without assuming Discord upload happens implicitly.</li>
+</ul>
+  </main>
+</body>
+</html>

@@ -46,6 +46,26 @@ npm run report:discord:unit
 
 작업 단위 보고는 최신 날짜 보고서의 마지막 `# 제목` 섹션만 요약한다. 예를 들어 `# v0.5 초반 재미 보완 보고` 같은 큰 버전업 섹션을 별도로 보낼 때 쓴다.
 
+## 수동 Codex 작업에서 자동 전송이 안 되는 이유
+
+자동 개발 루프(`npm run dev:loop`, `npm run overnight:loop`)는 구현/검증/보고 단위가 끝날 때 `node scripts/send_discord_report.js --latest-section`를 호출한다. 하지만 일반 Codex 대화에서 수동으로 파일을 고치고 검증하는 경우에는 Discord 전송이 자동으로 실행되지 않는다. 이때 Codex가 해야 하는 종료 절차는 별도다.
+
+수동 작업 종료 절차:
+
+```powershell
+npm run report
+npm run report:check
+npm run report:discord:unit:dry
+```
+
+실제 전송은 `.env`의 `DISCORD_WEBHOOK_URL`이 설정된 trusted local 환경에서만 아래 명령으로 수행한다.
+
+```powershell
+npm run report:discord:unit
+```
+
+`docs/ai/` 문서는 AI 협업 규약과 실패 사례를 보존하는 정적 운영 문서다. 매 작업마다 자동으로 append되지 않는다. 작업별 AI 활용 내역은 `docs/devlog/YYYY-MM-DD.md`, `docs/reports/YYYY-MM-DD.md`, `docs/review_prompts/`, `docs/review_responses/`에 남긴다.
+
 특정 보고서를 보내고 싶을 때:
 
 ```powershell
