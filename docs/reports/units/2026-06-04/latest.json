@@ -1,11 +1,11 @@
 {
   "source": "docs\\reports\\2026-06-04.md",
-  "generatedAt": "2026-06-04T08:53:12.812Z",
-  "unitCount": 7,
+  "generatedAt": "2026-06-04T09:00:52.122Z",
+  "unitCount": 8,
   "latest": {
-    "title": "2026-06-04-07 - v012 밸런스 자동 측정 루프",
-    "number": "07",
-    "markdownPath": "docs\\reports\\units\\2026-06-04\\2026-06-04-07-v012-밸런스-자동-측정-루프.md",
-    "htmlPath": "docs\\reports\\units\\2026-06-04\\2026-06-04-07-v012-밸런스-자동-측정-루프.html"
+    "title": "2026-06-04-08 - Discord 보고 JSON 형식 전환",
+    "number": "08",
+    "markdownPath": "docs\\reports\\units\\2026-06-04\\2026-06-04-08-discord-보고-json-형식-전환.md",
+    "htmlPath": "docs\\reports\\units\\2026-06-04\\2026-06-04-08-discord-보고-json-형식-전환.html"
   }
 }

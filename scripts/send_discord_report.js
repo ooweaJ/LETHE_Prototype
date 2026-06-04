@@ -33,10 +33,15 @@ async function main() {
   const markdown = reportScope.markdown;
   const html = fs.readFileSync(attachmentHtmlPath);
   const prompt = promptPath ? fs.readFileSync(promptPath) : null;
-  const message = buildMessage(markdown, markdownPath, attachmentHtmlPath, promptPath, reportScope.title);
+  const jsonAttachmentName = jsonSummaryFileName(markdownPath, reportScope.title);
+  const messagePayload = buildMessagePayload(markdown, markdownPath, attachmentHtmlPath, promptPath, reportScope.title);
+  messagePayload.attachments.unshift(jsonAttachmentName);
+  const message = formatMessagePayload(messagePayload);
+  const jsonAttachment = Buffer.from(JSON.stringify(messagePayload, null, 2), 'utf8');
 
   if (dryRun) {
     console.log(message);
+    console.log(`Attachment: ${jsonAttachmentName} (${jsonAttachment.length} bytes)`);
     console.log(`Attachment: ${path.relative(process.cwd(), attachmentHtmlPath)} (${html.length} bytes)`);
     if (promptPath) {
       console.log(`Attachment: ${path.relative(process.cwd(), promptPath)} (${prompt.length} bytes)`);
@@ -56,9 +61,10 @@ async function main() {
     content: message,
     allowed_mentions: { parse: [] },
   }));
-  form.append('files[0]', new Blob([html], { type: 'text/html' }), path.basename(attachmentHtmlPath));
+  form.append('files[0]', new Blob([jsonAttachment], { type: 'application/json' }), jsonAttachmentName);
+  form.append('files[1]', new Blob([html], { type: 'text/html' }), path.basename(attachmentHtmlPath));
   if (promptPath) {
-    form.append('files[1]', new Blob([prompt], { type: 'text/markdown' }), path.basename(promptPath));
+    form.append('files[2]', new Blob([prompt], { type: 'text/markdown' }), path.basename(promptPath));
   }
 
   const response = await fetch(webhookUrl, {
@@ -74,7 +80,7 @@ async function main() {
   console.log(`Uploaded ${path.relative(process.cwd(), attachmentHtmlPath)} to Discord.`);
 }
 
-function buildMessage(markdown, markdownFile, htmlFile, reviewPromptPath, sectionTitle = '') {
+function buildMessagePayload(markdown, markdownFile, htmlFile, reviewPromptPath, sectionTitle = '') {
   const reportDate = path.basename(markdownFile, '.md');
   const work = bulletsFromSections(markdown, [
     '2. 오늘 바뀐 것',
@@ -116,16 +122,38 @@ function buildMessage(markdown, markdownFile, htmlFile, reviewPromptPath, sectio
     : handoff.length > 0
       ? fit(joinBullets(handoff), 220)
       : '없음';
-  const lines = [
-    sectionTitle ? `LETHE 작업 보고 - ${sectionTitle}` : `LETHE 일일 보고서 - ${reportDate}`,
-    `작업: ${fit(joinBullets(work) || '보고서가 갱신되었습니다.', 260)}`,
-    `완료: ${fit(joinBullets(status) || 'HTML 보고서 생성 완료', 220)}`,
-    `문제: ${fit(joinBullets(problems) || '새로 기록된 문제 없음', 220)}`,
-    `기획질문: ${planningLine}`,
-    `첨부: ${path.basename(htmlFile)}${reviewPromptPath ? `, ${path.basename(reviewPromptPath)}` : ''}`,
-  ];
+  return {
+    title: sectionTitle ? 'LETHE 작업 보고' : 'LETHE 일일 보고서',
+    date: reportDate,
+    section: sectionTitle || null,
+    status: fit(joinBullets(status) || 'HTML 보고서 생성 완료', 180),
+    work: fit(joinBullets(work) || '보고서가 갱신되었습니다.', 240),
+    risks: fit(joinBullets(problems) || '새로 기록된 문제 없음', 180),
+    planning: planningLine,
+    attachments: [
+      path.basename(htmlFile),
+      ...(reviewPromptPath ? [path.basename(reviewPromptPath)] : []),
+    ],
+  };
+}
 
-  return lines.join('\n').slice(0, 1800);
+function formatMessagePayload(payload) {
+  const json = JSON.stringify(payload, null, 2);
+  if (json.length <= 1800) return `\`\`\`json\n${json}\n\`\`\``;
+
+  payload.status = fit(payload.status, 120);
+  payload.work = fit(payload.work, 160);
+  payload.risks = fit(payload.risks, 120);
+  payload.planning = fit(payload.planning, 140);
+  return `\`\`\`json\n${JSON.stringify(payload, null, 2)}\n\`\`\``.slice(0, 1900);
+}
+
+function jsonSummaryFileName(markdownFile, sectionTitle = '') {
+  const reportDate = path.basename(markdownFile, '.md');
+  if (!sectionTitle) return `${reportDate}-discord-summary.json`;
+  const unit = unitReportForTitle(markdownFile, sectionTitle);
+  if (unit) return path.basename(unit.htmlPath).replace(/\.html$/i, '.json');
+  return `${reportDate}-discord-summary.json`;
 }
 
 function parseArgs(args) {
