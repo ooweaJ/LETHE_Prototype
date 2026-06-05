@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-05-05 - 스폰 수정 후 밸런스 5개 표면 재측정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-05-05 - 스폰 수정 후 밸런스 5개 표면 재측정</h1>
+      <p class="meta">Generated from 2026-06-05-05-스폰-수정-후-밸런스-5개-표면-재측정.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-05-05 - 스폰 수정 후 밸런스 5개 표면 재측정</h1>
+<h2>1. Current build status</h2>
+<p>v0.12는 계속 <code>ITERATE_BALANCE</code>다. 첫 보스 스폰 버그 수정 후 1~5번 표면을 다시 훑은 결과, 다음 병목은 첫 사이클 <code>망각 전조</code> 생존으로 좁혀졌다.</p>
+<h2>2. What changed today</h2>
+<ul>
+<li>첫 보스 스폰 수정 이후 5개 밸런스 표면을 순서대로 다시 실행했다.</li>
+<li>결과를 <code>docs/balance/2026-06-05-v012-spawnfix-balance-pass-1to5.md</code>에 정리했다.</li>
+<li><code>docs/balance/2026-06-05-v012-balance-loop-matrix.md</code>, <code>docs/CODEX_STATUS.md</code>, <code>docs/NEXT_TASKS.md</code>에 최신 우선순위를 반영했다.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li>1번 prelude: <code>docs/balance/2026-06-05-loop-01-preboss-spawnfix.md</code>, 5 runs / 4 gameplay, death 50%, death-at median 159.8s, HP &lt;= 20% median 137.76s.</li>
+<li>2번 TTK: slow-step smoke and partial samples died at 163-179s before boss damage, so TTK remains blocked.</li>
+<li>3A twin+hungry: <code>docs/balance/2026-06-05-loop-03a-twin-hungry-spawnfix.md</code>, 3/3 gameplay, death 33.3%.</li>
+<li>3B greatsword+execution: partial sample reached 190s; first boss spawned at 180.02s and took 647.87 / 780 damage in 10s.</li>
+<li>4번 post-loss fast gate: <code>qa:postloss</code> passed with <code>CHROME_PATH</code>, challenge survived and refill completed.</li>
+<li>5번 full clear: partial sample died at 178.35s in <code>망각 전조</code>; full clear is not measurable yet.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>첫 보스 HP/TTK 튜닝은 아직 보류한다.</li>
+<li>full-run clear rate도 아직 튜닝하지 않는다.</li>
+<li>다음 수치 튜닝은 first-cycle <code>망각 전조</code> 생존에 집중한다.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>긴 230s/608s balance QA는 여전히 타임아웃과 Chrome WebSocket 오류가 섞인다.</li>
+<li>일부 표면은 5런 완주가 아니라 partial signal로만 남았다.</li>
+<li>그래도 모든 gameplay partial이 같은 병목, 즉 160-180초 <code>망각 전조</code> 사망을 가리킨다.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<p>감정선은 제외한다. 다음 검토/구현자는 first-cycle <code>망각 전조</code> 생존을 우선 조정해야 한다. 목표는 HP &lt;= 40% median 140s+, HP &lt;= 20% median 170s+, first-boss reach rate 70%+다.</p>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li><code>망각 전조</code> 구간의 spawn cap, pack size, enemy pool, incoming damage ramp 중 하나를 좁게 조정한다.</li>
+<li>조정 후 1번 prelude와 2번 TTK를 다시 실행한다.</li>
+<li>first boss damage sample이 안정되면 그때 first boss HP를 15-30초 TTK 기준으로 재조정한다.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: 전체 클리어율을 보기 전에 첫 보스 직전에서 런이 무너진다.</li>
+<li>Direction: 밸런스 표면을 순서대로 분리해 가장 앞단의 병목을 찾는다.</li>
+<li>Action: 스폰 수정 후 1~5번 표면을 다시 실행하고 partial 결과까지 비교했다.</li>
+<li>Result: 다음 목표가 <code>망각 전조</code> 생존으로 좁혀졌다.</li>
+</ul>
+  </main>
+</body>
+</html>

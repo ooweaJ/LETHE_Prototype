@@ -10,7 +10,7 @@
 - v0.12 balance sources: `docs/BALANCE_TABLE_v0_12.md`, `docs/LETHE_v0.12_밸런스_개선_제안서.md`, Gemini balance review notes.
 - v0.12 implementation status: first balance pass implemented in HTML prototype with `굶주린 칼무리` DPS/dt fix, hybrid enemy scaling, JSON telemetry/boss TTK logs, tactical-focus forgetting weight reduction, and `피의 늪` proc/tick/cap nerf.
 - Current balance source: `docs/BALANCE_TABLE_v0_12.md`.
-- Current selected next scope: balance automation iteration. Latest split-surface loops remain `ITERATE_BALANCE`; growth pace and top-DPS share can pass, but first-boss prelude survival and long-run browser QA stability block later surfaces. Per-run death phase/enemy-count/HP-sample/boss-post-cycle fields are now in the balance output, HP threshold summaries are in the report, and a first-boss spawn-order bug was fixed. Next implementation should stabilize the long 180-230s balance runner enough to get at least 4/5 gameplay samples, then rerun first-boss clear/TTK. Do not add more memories, slots, shops, meta progression, regions, weapons, enemies, final boss completion, or multi-region structure.
+- Current selected next scope: balance automation iteration. Latest post-spawn-fix 1-5 surface pass remains `ITERATE_BALANCE`. Growth pace and top-DPS share can pass, post-loss fast gate passes, and greatsword+execution has enough boss damage if it reaches first boss. The blocking surface is first-cycle `망각 전조` survival before the 180s boss gate. Next implementation should tune first-cycle `망각 전조` survival to move HP <= 20% median toward 170s+ and first-boss reach rate toward 70%+, then rerun first-boss TTK. Do not add more memories, slots, shops, meta progression, regions, weapons, enemies, final boss completion, or multi-region structure.
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the level-up flow and `runGrowth` payload.
 - Codex implementation result: `GO_CANDIDATE` from `npm run ai:test` and `npm run ai:test:heavy`.
@@ -118,6 +118,17 @@
 - [x] Balance QA Chrome WebSocket 오류를 줄이는 per-run retry/cleanup을 보강한다.
 - [x] 첫 보스가 spawn cap return에 막혀 스폰되지 않는 로직 버그를 수정한다.
 - [ ] 보스 스폰 수정 후 장거리 5런을 다시 통과시켜 first boss damage/TTK 표본을 확보한다.
+- [x] 보스 스폰 수정 후 1~5번 밸런스 표면을 다시 순서대로 실행한다.
+  - 1번 prelude: 5 runs / 4 gameplay, death 50%, death-at median 159.8s.
+  - 2번 TTK: partial samples died at 163-179s before boss damage, TTK blocked.
+  - 3A twin+hungry: 3/3 gameplay, death 33.3%.
+  - 3B greatsword+execution: partial sample reached first boss and dealt 647.87 / 780 damage in 10s.
+  - 4번 post-loss fast gate: complete.
+  - 5번 full clear: partial sample died 178.35s in `망각 전조`.
+- [ ] 첫 사이클 `망각 전조` 생존을 보정한다.
+  - 목표: HP <= 40% median 140s+.
+  - 목표: HP <= 20% median 170s+.
+  - 목표: first-boss reach rate 70%+.
 
 ## v0.2 Done
 

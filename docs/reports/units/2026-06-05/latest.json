@@ -1,11 +1,11 @@
 {
   "source": "docs\\reports\\2026-06-05.md",
-  "generatedAt": "2026-06-05T04:35:12.231Z",
-  "unitCount": 4,
+  "generatedAt": "2026-06-05T06:27:04.760Z",
+  "unitCount": 5,
   "latest": {
-    "title": "2026-06-05-04 - HP 붕괴 지표와 첫 보스 스폰 버그 수정",
-    "number": "04",
-    "markdownPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-04-hp-붕괴-지표와-첫-보스-스폰-버그-수정.md",
-    "htmlPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-04-hp-붕괴-지표와-첫-보스-스폰-버그-수정.html"
+    "title": "2026-06-05-05 - 스폰 수정 후 밸런스 5개 표면 재측정",
+    "number": "05",
+    "markdownPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-05-스폰-수정-후-밸런스-5개-표면-재측정.md",
+    "htmlPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-05-스폰-수정-후-밸런스-5개-표면-재측정.html"
   }
 }

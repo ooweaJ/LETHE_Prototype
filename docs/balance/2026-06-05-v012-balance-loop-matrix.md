@@ -157,3 +157,22 @@ Interpretation:
 - HP threshold telemetry helped identify that HP usually collapses before the 180s boss gate, mostly during `망각 전조`.
 - The first boss was also structurally blocked when enemy count stayed above cap; that bug is fixed and should be treated as the main result of this pass.
 - Long 180-230s browser/CDP balance runs are now the tooling bottleneck. More balance tuning should wait until the runner is stable enough to provide at least 4/5 successful gameplay samples.
+
+## Spawn-Fix Rerun: 1-5 Surface Pass
+
+Evidence summary: `docs/balance/2026-06-05-v012-spawnfix-balance-pass-1to5.md`
+
+| # | Surface | Result |
+| ---: | --- | --- |
+| 1 | First-boss prelude | 5 runs / 4 gameplay, death 50%, death-at median 159.8s |
+| 2 | First boss TTK | blocked; partial samples died at 163-179s before boss damage |
+| 3A | Twin blades + hungry blades | 3/3 gameplay, death 33.3%, first boss clear 0% |
+| 3B | Greatsword + execution flash | partial signal: reached 190s, first boss took 647.87 / 780 damage in 10s |
+| 4 | Post-loss fast gate | complete, challenge survived, refill completed |
+| 5 | Full-run clear | blocked by prelude; partial sample died at 178.35s in `망각 전조` |
+
+Interpretation:
+
+- The next balance target is not full-run clear rate.
+- The next numeric target is first-cycle `망각 전조` survival: move HP <= 20% median closer to 170s+ and raise first-boss reach rate to 70%+.
+- Greatsword + execution has enough boss damage if it reaches the boss. The bottleneck is still reaching the gate consistently.
