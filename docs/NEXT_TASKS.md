@@ -109,6 +109,12 @@
   - 5번 full clear: 5런, full clear 0%, death 80%.
 - [ ] Greatsword + execution start 안정성 보정안을 먼저 구현한다.
 - [ ] Post-loss real-duration QA 루프를 만든다.
+- [x] Greatsword + execution start 1차 안정성 보정안을 구현한다.
+  - 대검 기본 공격에 전방 cleave를 추가했다.
+  - 첫 사이클 spawn cap을 추가했다.
+  - best follow-up sample 기준 death 100% -> 40%.
+- [ ] `hpSamples`에서 HP 60%/40%/20% 이하 첫 진입 시점을 요약한다.
+- [ ] Balance QA Chrome WebSocket 오류를 줄이는 per-run retry/cleanup을 보강한다.
 
 ## v0.2 Done
 

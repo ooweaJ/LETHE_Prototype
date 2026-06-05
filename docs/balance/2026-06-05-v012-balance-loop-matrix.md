@@ -104,3 +104,29 @@ Conclusion: full-run clear rate cannot be tuned until first-boss prelude surviva
 4. Post-loss real-duration balance still needs a non-fast loop.
 5. Full-run clear-rate tuning is blocked by first-boss prelude failure.
 
+## Follow-Up: Diagnostics + Greatsword Stabilization
+
+Implemented after the split-surface matrix:
+
+- Balance QA now preserves `deathPhase`, `deathEnemyCount`, `maxEnemies`, `pressureSegments`, `hpSamples`, `lowHpSamples`, and `bossPostCycleState`.
+- Telemetry samples now include `hpRate`, `pressurePhase`, and `bossActive`.
+- Greatsword basic attacks now cleave up to 3 additional enemies in the weapon arc with reduced damage and a small push.
+- First-cycle spawn caps were added, then tightened:
+  - initial cap pass: lull 34 / rising 44 / climax 52
+  - tightened cap pass: lull 34 / rising 36 / climax 42
+
+Follow-up evidence:
+
+| Surface | Evidence | Result |
+| --- | --- | --- |
+| Greatsword + execution after cleave | `docs/balance/2026-06-05-loop-03b-great-execution-cleave.md` | death 60%, max enemies median 72 |
+| Greatsword + execution after cleave + spawn cap | `docs/balance/2026-06-05-loop-03b-great-execution-cleave-cap.md` | death 40%, max enemies median 48, one browser error |
+| Basic prelude after spawn cap | `docs/balance/2026-06-05-loop-01-preboss-diagnostics-cap.md` | death 40%, max enemies median 53 |
+| First boss 230s after spawn cap | `docs/balance/2026-06-05-loop-02-first-boss-diagnostics-cap.md` | death 80%, max enemies median 47 |
+| First boss 230s after tightened cap | `docs/balance/2026-06-05-loop-02-first-boss-diagnostics-cap2.md` | death 60%, max enemies median 42, browser success 60% |
+
+Interpretation:
+
+- Greatsword start stability improved materially: death rate moved from 100% to 40% in the best follow-up sample.
+- First-boss clear rate is still 0% in the latest samples, so TTK is still blocked by pre-boss/boss-entry reliability.
+- Tightening spawn caps too far risks lowering growth and increasing browser instability. The next pass should use the new `hpSamples` and `pressureSegments` rather than blindly lowering density again.

@@ -216,6 +216,52 @@
 <li>Action: 5개 표면을 별도 루프로 실행하고 결과를 비교했다.</li>
 <li>Result: 첫 보스 전 생존과 대검 시작 안정성이 최우선 병목으로 확인됐다.</li>
 </ul>
+<h1>2026-06-05-03 - 대검 시작 안정화와 밸런스 진단 로그 보강</h1>
+<h2>1. Current build status</h2>
+<p>v0.12는 계속 <code>ITERATE_BALANCE</code>다. 대검 시작 안정성은 개선됐지만, first boss clear rate는 아직 목표에 도달하지 못했다.</p>
+<h2>2. What changed today</h2>
+<ul>
+<li>Balance QA 결과 JSON에 <code>deathPhase</code>, <code>deathEnemyCount</code>, <code>maxEnemies</code>, <code>pressureSegments</code>, <code>hpSamples</code>, <code>lowHpSamples</code>, <code>bossPostCycleState</code>를 보존하게 했다.</li>
+<li>Telemetry sample에 <code>hpRate</code>, <code>pressurePhase</code>, <code>bossActive</code>를 추가했다.</li>
+<li>대검 기본 공격에 전방 cleave를 추가했다.</li>
+<li>첫 사이클 스폰 상한을 추가하고 두 단계로 조정했다.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li><code>node --check src/game.js</code>: pass.</li>
+<li><code>node --check scripts/run_browser_balance_qa.js</code>: pass.</li>
+<li>대검+처형자 cleave 재측정: death 60%, max enemies median 72.</li>
+<li>대검+처형자 cleave+spawn cap 재측정: death 40%, max enemies median 48, browser success 80%.</li>
+<li>기본 prelude spawn cap 재측정: death 40%, max enemies median 53.</li>
+<li>first boss 230s tightened cap 재측정: death 60%, first boss clear 0%, max enemies median 42, browser success 60%.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>대검은 단일 타깃 무기처럼 동작하면 시작 안정성이 너무 낮으므로 전방 cleave를 유지한다.</li>
+<li>첫 사이클 적 수 상한은 유효하지만, 더 낮추는 방식만으로 first boss clear를 만들지는 않는다.</li>
+<li>다음 조정은 <code>hpSamples</code>와 <code>pressureSegments</code>를 보고 어느 시점에 HP가 무너지는지 확인한 뒤 결정한다.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>Chrome DevTools WebSocket 오류가 follow-up QA에서 다시 발생했다.</li>
+<li>tightened spawn cap은 level-up median을 8까지 낮췄다. 더 낮추면 성장 페이스가 무너질 수 있다.</li>
+<li>first boss clear는 여전히 0%라 TTK 측정은 계속 막혀 있다.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<p>감정선은 제외한다. 현재 수치상 대검 시작은 개선됐지만, first boss clear 0%가 남아 있다. 다음 검토자는 density를 더 낮추기보다 <code>hpSamples</code>, <code>deathPhase</code>, <code>pressureSegments</code>를 보고 HP 붕괴 시점을 판단해야 한다.</p>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li><code>hpSamples</code>에서 HP가 60%, 40%, 20% 이하로 떨어지는 첫 시점을 요약하는 runner 지표를 추가한다.</li>
+<li>first boss 전 <code>압박 상승</code>과 <code>망각 전조</code>의 전환 시점/적 수를 따로 비교한다.</li>
+<li>Chrome WebSocket 오류를 줄이기 위해 balance QA의 per-run Chrome cleanup/retry를 보강한다.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: 대검 시작이 쌍검보다 훨씬 불안정했고, 사망 원인 로그가 부족했다.</li>
+<li>Direction: 무기 역할에 맞는 기본 공격 성격을 부여하고, 사망 원인을 데이터로 남긴다.</li>
+<li>Action: 대검 cleave, spawn cap, balance diagnostics를 구현하고 재측정했다.</li>
+<li>Result: 대검 death rate가 100%에서 40%까지 개선된 표본을 얻었지만, first boss clear는 아직 열리지 않았다.</li>
+</ul>
   </main>
 </body>
 </html>

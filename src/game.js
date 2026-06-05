@@ -373,6 +373,12 @@ const balance = {
     fullGraceSec: 12,
     rampEndSec: 220,
   },
+  spawnCaps: {
+    firstCycleLull: 34,
+    firstCycleRising: 36,
+    firstCycleClimax: 42,
+    default: 82,
+  },
   bloodMarsh: {
     twinBladesProc: 0.3,
     greatswordProc: 0.2,
@@ -938,6 +944,11 @@ function updateSpawning(dt) {
   const profile = pressureProfile();
   updatePressurePhase(profile);
   const spawnRate = Math.max(0.34, profile.spawnRate);
+  const maxEnemies = pressureMaxEnemies(profile);
+  if (state.enemies.length >= maxEnemies) {
+    state.spawnCd = Math.max(state.spawnCd, spawnRate * 0.75);
+    return;
+  }
   if (state.spawnCd <= 0) {
     state.spawnCd = spawnRate;
     const packSize = profile.packSize;
@@ -951,6 +962,15 @@ function updateSpawning(dt) {
   if (nextBossAt && state.elapsed >= nextBossAt) {
     spawnBoss();
   }
+}
+
+function pressureMaxEnemies(profile) {
+  const firstCycle = state.runTimeline.nextBossIndex === 0;
+  if (!firstCycle) return balance.spawnCaps.default;
+  if (profile.id === "lull") return balance.spawnCaps.firstCycleLull;
+  if (profile.id === "rising") return balance.spawnCaps.firstCycleRising;
+  if (profile.id === "climax") return balance.spawnCaps.firstCycleClimax;
+  return balance.spawnCaps.default;
 }
 
 function pressureProfile() {
@@ -1512,18 +1532,28 @@ function updateMemories(dt) {
 function basicAttack() {
   const p = state.player;
   const weapon = state.weapon;
+  const range = weapon.range * (1 + state.echo.range + state.runGrowth.range);
   const interval = Math.max(0.16, weapon.interval / (1 + state.echo.attackSpeed + state.runGrowth.attackSpeed));
   if (p.attackCd > 0) return;
 
-  const target = nearestHostile(p.x, p.y, weapon.range * (1 + state.echo.range + state.runGrowth.range));
+  const target = nearestHostile(p.x, p.y, range);
   if (!target) return;
   p.attackCd = interval;
   p.facing = angleTo(p, target);
 
   let damage = weapon.damage * (1 + state.runGrowth.damage);
   if (Math.random() < state.echo.critChance) damage *= 1 + state.echo.critDamage;
-  damageHostile(target, damage, "weapon");
-  applyWeaponEchoEffects(target, damage);
+  const targets = weaponAttackTargets(target, range);
+  for (const entry of targets) {
+    const dealt = damage * entry.damageMul;
+    damageHostile(entry.target, dealt, "weapon");
+    applyWeaponEchoEffects(entry.target, dealt);
+    if (weapon.id === "greatsword" && entry.target !== target) {
+      const pushAngle = angleTo(p, entry.target);
+      entry.target.x += Math.cos(pushAngle) * 10;
+      entry.target.y += Math.sin(pushAngle) * 10;
+    }
+  }
   state.effects.push({
     type: weapon.id === "greatsword" ? "slash_heavy" : "slash_fast",
     x: p.x,
@@ -1548,6 +1578,19 @@ function basicAttack() {
       state.effects.push({ type: "blood", x: target.x, y: target.y, r: 10, maxR: 34, life: 0.28, maxLife: 0.28 });
     }
   }
+}
+
+function weaponAttackTargets(primary, range) {
+  if (state.weapon.id !== "greatsword") return [{ target: primary, damageMul: 1 }];
+  const p = state.player;
+  const cleave = hostiles()
+    .filter((target) => target !== primary && target.hp > 0)
+    .filter((target) => distance(p, target) <= range + target.r)
+    .filter((target) => Math.abs(angleDelta(p.facing, angleTo(p, target))) <= state.weapon.arc / 2)
+    .sort((a, b) => distance(p, a) - distance(p, b))
+    .slice(0, 3)
+    .map((target, index) => ({ target, damageMul: index === 0 ? 0.72 : 0.58 }));
+  return [{ target: primary, damageMul: 1 }, ...cleave];
 }
 
 function updateDangerMetrics(dt) {
@@ -1871,9 +1914,12 @@ function updateTelemetry(force = false) {
     level: state.runGrowth.level,
     activeMemoryCount: activeMemoryCount(),
     hp: Number(state.player.hp.toFixed(1)),
+    hpRate: Number((state.player.hp / state.player.maxHp).toFixed(3)),
     enemiesAlive: state.enemies.length,
     projectilesAlive: state.projectiles.length,
     effectsAlive: state.effects.length,
+    pressurePhase: state.runTimeline.pressurePhaseId,
+    bossActive: Boolean(state.boss),
     totalDps: Number((damageDelta / Math.max(0.01, delta)).toFixed(2)),
     killsPerSecond: Number((killDelta / Math.max(0.01, delta)).toFixed(2)),
     damageBySource: roundNumberMap(telemetry.damageBySource),
@@ -3638,6 +3684,12 @@ function angleTo(a, b) {
   return Math.atan2(b.y - a.y, b.x - a.x);
 }
 
+function angleDelta(a, b) {
+  let diff = (b - a + Math.PI) % (Math.PI * 2) - Math.PI;
+  if (diff < -Math.PI) diff += Math.PI * 2;
+  return diff;
+}
+
 function lerp(a, b, t) {
   return a + (b - a) * t;
 }
@@ -4235,12 +4287,59 @@ function writeBalanceQaResult(extra = {}) {
     dpsBySource: telemetry?.dpsBySource || {},
     damageBySource: telemetry?.damageBySource || {},
     bossFights: telemetry?.bossFights || [],
+    balanceDiagnostics: balanceDiagnostics(payload),
     telemetry,
     balance: payload?.balance || balance,
     danger: payload?.danger || null,
     runGrowth: payload?.runGrowth || null,
     ...extra,
   });
+}
+
+function balanceDiagnostics(payload) {
+  const danger = payload?.danger || null;
+  const runTimeline = payload?.runTimeline || null;
+  const telemetry = payload?.telemetry || null;
+  const samples = telemetry?.samples || [];
+  const latestCycle = runTimeline?.cycles?.[runTimeline.cycles.length - 1] || null;
+  const latestChallenge = runTimeline?.postLossChallenges?.[runTimeline.postLossChallenges.length - 1] || null;
+  return {
+    deathPhase: danger?.deathPhase || state?.death?.phase || null,
+    deathEnemyCount: state?.death?.enemyCount ?? null,
+    deathActiveMemoryCount: danger?.deathActiveMemoryCount ?? state?.death?.activeMemoryCount ?? null,
+    maxEnemies: danger?.maxEnemies ?? null,
+    maxKillGap: danger?.maxKillGap ?? null,
+    pressureSegments: runTimeline?.pressureSegments || [],
+    hpSamples: samples.map((sample) => ({
+      t: sample.t,
+      hp: sample.hp,
+      hpRate: sample.hpRate,
+      enemiesAlive: sample.enemiesAlive,
+      projectilesAlive: sample.projectilesAlive,
+      pressurePhase: sample.pressurePhase,
+      bossActive: sample.bossActive,
+    })),
+    lowHpSamples: samples
+      .filter((sample) => sample.hpRate <= 0.4)
+      .map((sample) => ({
+        t: sample.t,
+        hp: sample.hp,
+        hpRate: sample.hpRate,
+        enemiesAlive: sample.enemiesAlive,
+        pressurePhase: sample.pressurePhase,
+      })),
+    bossPostCycleState: {
+      mode: state?.mode || null,
+      activeMemoryCount: state ? activeMemoryCount() : null,
+      nextBossIndex: runTimeline?.nextBossIndex ?? null,
+      currentBossIndex: runTimeline?.currentBossIndex ?? null,
+      deficitStartedAt: runTimeline?.deficitStartedAt ?? null,
+      refillAvailableAt: runTimeline?.refillAvailableAt ?? null,
+      latestCycle,
+      latestPostLossChallenge: latestChallenge,
+      bossFights: telemetry?.bossFights || [],
+    },
+  };
 }
 
 function chooseBalanceLevelUpChoice() {

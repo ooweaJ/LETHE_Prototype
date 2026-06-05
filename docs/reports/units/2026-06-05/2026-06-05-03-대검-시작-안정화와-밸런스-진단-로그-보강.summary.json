@@ -1,0 +1,32 @@
+{
+  "project": "LETHE Prototype",
+  "type": "work_unit_report",
+  "title": "2026-06-05-03 - 대검 시작 안정화와 밸런스 진단 로그 보강",
+  "기준": "2026-06-05 기준",
+  "어떤_작업": [
+    "Balance QA 결과 JSON에 deathPhase, deathEnemyCount, maxEnemies, pressureSegments, hpSamples, lowHpSamples, bossPostCycleState를 보존하게 했다.",
+    "Telemetry sample에 hpRate, pressurePhase, bossActive를 추가했다."
+  ],
+  "진행_내용": [
+    "node --check src/game.js: pass.",
+    "node --check scripts/run_browser_balance_qa.js: pass.",
+    "대검+처형자 cleave 재측정: death 60%, max enemies median 72.",
+    "대검은 단일 타깃 무기처럼 동작하면 시작 안정성이 너무 낮으므로 전방 cleave를 유지한다."
+  ],
+  "결과": [
+    "HTML 보고서 생성 완료"
+  ],
+  "문제": [
+    "Chrome DevTools WebSocket 오류가 follow-up QA에서 다시 발생했다.",
+    "tightened spawn cap은 level-up median을 8까지 낮췄다. 더 낮추면 성장 페이스가 무너질 수 있다."
+  ],
+  "기획질문": [
+    "없음"
+  ],
+  "attachments": [
+    "2026-06-05-03-대검-시작-안정화와-밸런스-진단-로그-보강.summary.json",
+    "2026-06-05-03-대검-시작-안정화와-밸런스-진단-로그-보강.html"
+  ],
+  "source": "docs\\reports\\units\\2026-06-05\\2026-06-05-03-대검-시작-안정화와-밸런스-진단-로그-보강.html",
+  "generatedAt": "2026-06-05T02:57:53.086Z"
+}

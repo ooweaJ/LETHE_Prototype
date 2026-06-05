@@ -1,11 +1,11 @@
 {
   "source": "docs\\reports\\2026-06-05.md",
-  "generatedAt": "2026-06-05T01:03:51.320Z",
-  "unitCount": 2,
+  "generatedAt": "2026-06-05T02:57:52.997Z",
+  "unitCount": 3,
   "latest": {
-    "title": "2026-06-05-02 - v0.12 밸런스 5개 표면 분리 루프",
-    "number": "02",
-    "markdownPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-02-v0-12-밸런스-5개-표면-분리-루프.md",
-    "htmlPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-02-v0-12-밸런스-5개-표면-분리-루프.html"
+    "title": "2026-06-05-03 - 대검 시작 안정화와 밸런스 진단 로그 보강",
+    "number": "03",
+    "markdownPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-03-대검-시작-안정화와-밸런스-진단-로그-보강.md",
+    "htmlPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-03-대검-시작-안정화와-밸런스-진단-로그-보강.html"
   }
 }

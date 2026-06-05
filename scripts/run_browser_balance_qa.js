@@ -161,6 +161,7 @@ function qaUrl(runNumber) {
 
 function normalizeRun(qa, runNumber) {
   const runResult = qa.runResult || (qa.finalClear ? 'clear' : qa.death ? 'death' : 'incomplete');
+  const diagnostics = qa.balanceDiagnostics || {};
   return {
     runNumber,
     status: qa.status || 'unknown',
@@ -169,6 +170,9 @@ function normalizeRun(qa, runNumber) {
     finalClear: Boolean(qa.finalClear),
     death: Boolean(qa.death),
     deathAt: numberOrNull(qa.deathAt || qa.death?.at),
+    deathPhase: diagnostics.deathPhase || qa.death?.phase || null,
+    deathEnemyCount: numberOrNull(diagnostics.deathEnemyCount ?? qa.death?.enemyCount),
+    maxEnemies: numberOrNull(diagnostics.maxEnemies ?? qa.danger?.maxEnemies),
     firstBossCleared: Boolean(qa.firstBossCleared),
     firstBossTtk: numberOrNull(qa.firstBossTtk),
     firstBossFocusedDps: numberOrNull(qa.firstBossFocusedDps),
@@ -181,6 +185,11 @@ function normalizeRun(qa, runNumber) {
     topDpsShare: Number(qa.topDpsShare || 0),
     dpsBySource: qa.dpsBySource || {},
     bossFights: qa.bossFights || [],
+    pressureSegments: diagnostics.pressureSegments || [],
+    hpSamples: diagnostics.hpSamples || [],
+    lowHpSamples: diagnostics.lowHpSamples || [],
+    bossPostCycleState: diagnostics.bossPostCycleState || null,
+    balanceDiagnostics: diagnostics,
     error: qa.error || null,
   };
 }
@@ -191,6 +200,7 @@ function summarizeRuns(runs) {
   const deathTimes = runs.map((run) => run.deathAt).filter(Number.isFinite);
   const levelUps = runs.map((run) => run.levelUpsBeforeFirstBoss).filter(Number.isFinite);
   const topShares = runs.map((run) => run.topDpsShare).filter(Number.isFinite);
+  const maxEnemies = runs.map((run) => run.maxEnemies).filter(Number.isFinite);
   const metrics = {
     runs: runs.length,
     clearRate: rate(runs, (run) => run.finalClear),
@@ -206,6 +216,9 @@ function summarizeRuns(runs) {
     slotsFilledAtMedian: median(slotsFilled),
     topDpsShareMean: mean(topShares),
     topDpsShareMedian: median(topShares),
+    maxEnemiesMean: mean(maxEnemies),
+    maxEnemiesMedian: median(maxEnemies),
+    deathPhaseCounts: countBy(runs.filter((run) => run.death), (run) => run.deathPhase || 'unknown'),
   };
   const checks = [
     check('browser run success rate', rate(runs, (run) => !run.error) >= options.browserSuccessRateMin, rate(runs, (run) => !run.error), `>= ${options.browserSuccessRateMin}`),
@@ -249,6 +262,8 @@ function markdownReport(summary) {
     `- Level-ups before first boss median: \`${fmt(summary.metrics.levelUpsBeforeFirstBossMedian)}\``,
     `- Slots filled at median: \`${fmt(summary.metrics.slotsFilledAtMedian)}s\``,
     `- Top DPS share median: \`${pct(summary.metrics.topDpsShareMedian)}\``,
+    `- Max enemies median: \`${fmt(summary.metrics.maxEnemiesMedian)}\``,
+    `- Death phase counts: \`${JSON.stringify(summary.metrics.deathPhaseCounts)}\``,
     '',
     '## Checks',
     '',
@@ -256,9 +271,9 @@ function markdownReport(summary) {
     '',
     '## Runs',
     '',
-    '| run | result | death at | first boss | ttk | level-ups | slots filled | top DPS | share |',
-    '| --- | --- | ---: | --- | ---: | ---: | ---: | --- | ---: |',
-    ...summary.runs.map((run) => `| ${run.runNumber} | ${run.runResult} | ${fmt(run.deathAt)} | ${run.firstBossCleared ? 'yes' : 'no'} | ${fmt(run.firstBossTtk)} | ${run.levelUpsBeforeFirstBoss} | ${fmt(run.slotsFilledAt)} | ${run.topDpsSource || '-'} | ${pct(run.topDpsShare)} |`),
+    '| run | result | death at | phase | max enemies | first boss | ttk | level-ups | slots filled | top DPS | share |',
+    '| --- | --- | ---: | --- | ---: | --- | ---: | ---: | ---: | --- | ---: |',
+    ...summary.runs.map((run) => `| ${run.runNumber} | ${run.runResult} | ${fmt(run.deathAt)} | ${run.deathPhase || '-'} | ${fmt(run.maxEnemies)} | ${run.firstBossCleared ? 'yes' : 'no'} | ${fmt(run.firstBossTtk)} | ${run.levelUpsBeforeFirstBoss} | ${fmt(run.slotsFilledAt)} | ${run.topDpsSource || '-'} | ${pct(run.topDpsShare)} |`),
     '',
   ];
   return `${lines.join('\n')}\n`;
@@ -499,6 +514,14 @@ function check(name, pass, value, target) {
 
 function rate(items, predicate) {
   return items.length ? items.filter(predicate).length / items.length : 0;
+}
+
+function countBy(items, keyFn) {
+  return items.reduce((acc, item) => {
+    const key = keyFn(item);
+    acc[key] = (acc[key] || 0) + 1;
+    return acc;
+  }, {});
 }
 
 function mean(values) {
