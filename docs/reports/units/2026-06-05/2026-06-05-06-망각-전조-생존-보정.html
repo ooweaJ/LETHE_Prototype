@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-05-06 - 망각 전조 생존 보정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-05-06 - 망각 전조 생존 보정</h1>
+      <p class="meta">Generated from 2026-06-05-06-망각-전조-생존-보정.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-05-06 - 망각 전조 생존 보정</h1>
+<h2>1. Current build status</h2>
+<p>v0.12는 아직 <code>ITERATE_BALANCE</code>지만, 이번 단위에서 첫 사이클 <code>망각 전조</code> 생존은 목표권에 들어왔다. 다음 병목은 첫 보스 TTK 측정이다.</p>
+<h2>2. What changed today</h2>
+<ul>
+<li>첫 보스 직전 약 169초부터 <code>문지기 호흡</code> 압박 구간을 추가했다.</li>
+<li>첫 사이클 <code>망각 전조</code> cap을 38에서 32로 낮췄다.</li>
+<li>첫 사이클 <code>망각 전조</code> spawn rate를 0.90초에서 1.08초로 늦췄다.</li>
+<li>첫 사이클 <code>망각 전조</code> enemy pool에서 추가 <code>drifting_eye</code>, <code>split_one</code> 가중을 제거했다.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li><code>node --check src/game.js</code>: pass.</li>
+<li><code>node --check scripts/run_browser_balance_qa.js</code>: pass.</li>
+<li>Gate breath only: <code>docs/balance/2026-06-05-loop-01-preboss-gate-breath.md</code>, death 75%, HP &lt;= 40% median 127s, HP &lt;= 20% median 147.32s.</li>
+<li>Climax soften + gate breath: <code>docs/balance/2026-06-05-loop-01-preboss-climax-soften.md</code>, 5/5 gameplay, death 20%, HP &lt;= 40% median 160.58s, HP &lt;= 20% median 169.73s.</li>
+<li>TTK follow-up attempts timed out before accepted gameplay samples.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li><code>망각 전조</code> 생존 보정은 유지한다.</li>
+<li>첫 보스 HP는 아직 조정하지 않는다.</li>
+<li>다음에는 230초 TTK QA를 안정화하거나 더 작은 TTK 전용 측정 경로로 나눈다.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>긴 230초 브라우저/CDP 루프가 여전히 타임아웃된다.</li>
+<li>first boss TTK는 아직 측정되지 않았다.</li>
+<li>일부 런에서 top DPS share가 높게 튈 수 있으므로 TTK 측정 때 같이 확인해야 한다.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<p>감정선은 제외한다. 이번 변화로 HP &lt;= 20% median이 169.73초까지 밀려 목표에 거의 도달했다. 다음 검토자는 boss HP를 추측하지 말고 먼저 <code>bossFights[0].damage</code>, <code>firstBossTtk</code>, focused DPS 표본을 확보해야 한다.</p>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>첫 보스 TTK 측정 루프를 안정화한다.</li>
+<li>accepted gameplay sample 3개 이상을 230초 루프에서 확보한다.</li>
+<li>그 뒤 첫 보스 HP를 15~30초 TTK 기준으로 조정한다.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: 첫 보스 직전 <code>망각 전조</code>에서 HP가 너무 빨리 무너졌다.</li>
+<li>Direction: 126~170초 압박은 유지하되, 보스 진입 직전 완충과 climax 상한을 조정한다.</li>
+<li>Action: <code>문지기 호흡</code> phase와 first-cycle climax 완화를 적용했다.</li>
+<li>Result: death rate가 20%로 내려가고 HP 20% median이 169.73초까지 늦춰졌다.</li>
+</ul>
+  </main>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{
+  "project": "LETHE Prototype",
+  "type": "work_unit_report",
+  "title": "2026-06-05-06 - 망각 전조 생존 보정",
+  "기준": "2026-06-05 기준",
+  "어떤_작업": [
+    "첫 보스 직전 약 169초부터 문지기 호흡 압박 구간을 추가했다.",
+    "첫 사이클 망각 전조 cap을 38에서 32로 낮췄다."
+  ],
+  "진행_내용": [
+    "node --check src/game.js: pass.",
+    "node --check scripts/run_browser_balance_qa.js: pass.",
+    "Gate breath only: docs/balance/2026-06-05-loop-01-preboss-gate-breath.md, death 75%, HP <= 40% median 127s, HP <= 20% median 147.32s.",
+    "망각 전조 생존 보정은 유지한다."
+  ],
+  "결과": [
+    "HTML 보고서 생성 완료"
+  ],
+  "문제": [
+    "긴 230초 브라우저/CDP 루프가 여전히 타임아웃된다.",
+    "first boss TTK는 아직 측정되지 않았다."
+  ],
+  "기획질문": [
+    "없음"
+  ],
+  "attachments": [
+    "2026-06-05-06-망각-전조-생존-보정.summary.json",
+    "2026-06-05-06-망각-전조-생존-보정.html"
+  ],
+  "source": "docs\\reports\\units\\2026-06-05\\2026-06-05-06-망각-전조-생존-보정.html",
+  "generatedAt": "2026-06-05T08:41:14.417Z"
+}

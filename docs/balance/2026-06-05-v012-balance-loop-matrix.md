@@ -176,3 +176,26 @@ Interpretation:
 - The next balance target is not full-run clear rate.
 - The next numeric target is first-cycle `망각 전조` survival: move HP <= 20% median closer to 170s+ and raise first-boss reach rate to 70%+.
 - Greatsword + execution has enough boss damage if it reaches the boss. The bottleneck is still reaching the gate consistently.
+
+## Follow-Up: Omen Survival Tuning
+
+Evidence summary: `docs/balance/2026-06-05-v012-omen-survival-tuning.md`
+
+Implemented:
+
+- Added first-cycle `문지기 호흡` at about 169.2s before the first boss.
+- Reduced first-cycle `망각 전조` cap from 38 to 32.
+- Slowed first-cycle `망각 전조` spawn rate from 0.90s to 1.08s.
+- Removed extra first-cycle climax `drifting_eye` and `split_one` pool weighting.
+
+Result:
+
+| Loop | Gameplay | Death | HP <= 40% median | HP <= 20% median | Notes |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Gate breath only | 4/5 | 75% | 127s | 147.32s | thresholds improved, death still high |
+| Climax soften + gate breath | 5/5 | 20% | 160.58s | 169.73s | target band reached |
+
+Interpretation:
+
+- First-cycle `망각 전조` survival is no longer the immediate numeric blocker in the latest prelude sample.
+- The next blocker is first-boss TTK measurement. Long 230s browser/CDP runs timed out before accepted gameplay samples after this tuning.

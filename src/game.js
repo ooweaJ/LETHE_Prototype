@@ -376,7 +376,8 @@ const balance = {
   spawnCaps: {
     firstCycleLull: 34,
     firstCycleRising: 36,
-    firstCycleClimax: 38,
+    firstCycleClimax: 32,
+    firstCycleGateBreath: 22,
     default: 82,
   },
   bloodMarsh: {
@@ -971,6 +972,7 @@ function pressureMaxEnemies(profile) {
   if (profile.id === "lull") return balance.spawnCaps.firstCycleLull;
   if (profile.id === "rising") return balance.spawnCaps.firstCycleRising;
   if (profile.id === "climax") return balance.spawnCaps.firstCycleClimax;
+  if (profile.id === "gate_breath") return balance.spawnCaps.firstCycleGateBreath;
   return balance.spawnCaps.default;
 }
 
@@ -1030,12 +1032,23 @@ function pressureProfile() {
   }
 
   const firstCycle = timeline.nextBossIndex === 0;
+  if (firstCycle && progress >= 0.94) {
+    return {
+      id: "gate_breath",
+      label: "문지기 호흡",
+      note: "첫 문지기 직전 전열을 정리하는 짧은 완충",
+      intensity: 0.56,
+      spawnRate: 1.30,
+      packSize: 1,
+    };
+  }
+
   return {
     id: "climax",
     label: "망각 전조",
     note: "문지기 직전 최고 압박",
     intensity: firstCycle ? 0.78 : 0.92,
-    spawnRate: firstCycle ? 0.90 : 0.43,
+    spawnRate: firstCycle ? 1.08 : 0.43,
     packSize: firstCycle ? 2 : 4,
   };
 }
@@ -1044,7 +1057,8 @@ function pressureEnemyPool(profile) {
   const base = ["eroder", "eroder", "eroder", "drifting_eye", "split_one"];
   if (profile.id === "lull") return state.elapsed < 70 ? ["eroder", "eroder", "drifting_eye"] : ["eroder", "eroder", "drifting_eye", "split_one"];
   if (profile.id === "rising") return base.concat(state.elapsed > 95 ? ["void_priest"] : []);
-  if (profile.id === "climax" && state.runTimeline.nextBossIndex === 0) return base.concat(["drifting_eye", "split_one"]);
+  if (profile.id === "gate_breath") return ["eroder", "eroder", "drifting_eye"];
+  if (profile.id === "climax" && state.runTimeline.nextBossIndex === 0) return base;
   if (profile.id === "climax") return base.concat(["drifting_eye", "split_one", "void_priest"]);
   if (profile.id === "deficit_breath") return ["eroder", "eroder", "drifting_eye", "split_one"];
   if (profile.id === "deficit_trial") return base.concat(["drifting_eye", "void_priest"]);

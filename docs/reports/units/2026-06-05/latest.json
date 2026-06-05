@@ -1,11 +1,11 @@
 {
   "source": "docs\\reports\\2026-06-05.md",
-  "generatedAt": "2026-06-05T06:27:04.760Z",
-  "unitCount": 5,
+  "generatedAt": "2026-06-05T08:41:14.315Z",
+  "unitCount": 6,
   "latest": {
-    "title": "2026-06-05-05 - 스폰 수정 후 밸런스 5개 표면 재측정",
-    "number": "05",
-    "markdownPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-05-스폰-수정-후-밸런스-5개-표면-재측정.md",
-    "htmlPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-05-스폰-수정-후-밸런스-5개-표면-재측정.html"
+    "title": "2026-06-05-06 - 망각 전조 생존 보정",
+    "number": "06",
+    "markdownPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-06-망각-전조-생존-보정.md",
+    "htmlPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-06-망각-전조-생존-보정.html"
   }
 }
