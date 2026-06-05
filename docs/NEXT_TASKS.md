@@ -557,3 +557,26 @@
 - Difficulty selection.
 - Character selection.
 - Unlock systems.
+
+## Latest Override - 2026-06-05 Boss TTK
+
+- [x] Add `npm run qa:boss-ttk` as an in-process deterministic first-boss TTK harness for cases where Chrome/CDP cannot produce accepted samples.
+- [x] Secure 5/5 boss-only accepted TTK samples.
+  - First boss HP `3500`.
+  - TTK median `21.92s`.
+  - Focused DPS median `159.7`.
+  - Evidence: `docs/balance/2026-06-05-v012-boss-ttk-harness-final.md`.
+- [x] Apply first boss HP `3500` in `src/game.js`.
+- [ ] Run browser `npm run qa:balance` after this HP change and judge first-boss reach/clear/death separately from boss-only TTK.
+
+## Latest Override - 2026-06-05 HP 2800 Follow-Up
+
+- [x] Run boss-only TTK at HP `2800`.
+  - Result: 5/5 accepted samples, TTK median `17.8s`, focused DPS median `157.3`.
+- [x] Run browser balance QA at HP `3500`.
+  - Result: first boss clear `100%`, death `0%`, TTK median `35.65s`; too slow.
+- [x] Apply first boss HP `2800`.
+- [x] Run browser checks at HP `2800`.
+  - Full `qa:balance`: first boss clear `60%`, death `0%`, TTK median `53.21s`, 2/5 incomplete.
+  - `first_boss_ttk` scenario: 1/3 accepted, accepted TTK `22.59s`, 2/3 incomplete.
+- [ ] Stabilize browser `first_boss_ttk` accepted sample rate before another first boss HP change.

@@ -344,7 +344,7 @@ const balance = {
     speed: 184,
   },
   boss: {
-    firstBossHp: 780,
+    firstBossHp: 2800,
   },
   hungryBlades: {
     dps: 28,

@@ -394,3 +394,25 @@ TTK 산정법 (눈대중 금지):
 7. **피의 반사·피의 늪 무기 패리티** 조정 후 재계측 (3·16절).
 8. **결손 75초** 실플레이로 45/60/75 확정 (12절).
 9. 안정되면 각 표 목표값을 측정 기반으로 갱신해 v0.13 수치표 작성.
+
+## 2026-06-05 Boss-Only TTK Override
+
+- Chrome/CDP first-boss TTK route still could not reliably produce accepted gameplay samples, so an in-process deterministic first-boss TTK harness was added: `npm run qa:boss-ttk`.
+- The harness mirrors the intended `balanceScenario=first_boss_ttk` setup as a boss-only calculation input: level 10, 3 active memories, full HP, first boss only.
+- Current first boss HP is now `3500`.
+- Latest default `npm run qa:boss-ttk` result:
+  - accepted samples: `5/5`,
+  - TTK median: `21.92s`,
+  - focused DPS median: `159.7`,
+  - verdict: `GO_BOSS_TTK_SAMPLE`.
+- Evidence: `docs/balance/2026-06-05-v012-boss-ttk-harness-final.md`.
+- This is a boss HP tuning input, not a full browser balance pass. Next validation is browser `npm run qa:balance` with HP `3500`.
+
+## 2026-06-05 HP 2800 Follow-Up
+
+- HP `3500` was boss-only valid but browser `qa:balance` was too slow: TTK median `35.65s`.
+- Current first boss HP: `2800`.
+- Boss-only HP `2800`: 5/5 accepted, TTK median `17.8s`, focused DPS median `157.3`.
+- Browser `first_boss_ttk` HP `2800`: 1/3 accepted, accepted TTK `22.59s`, 2/3 incomplete.
+- Browser full `qa:balance` HP `2800`: first boss clear `60%`, death `0%`, TTK median `53.21s`, 2/5 incomplete.
+- Next tuning decision should focus on browser TTK accepted-sample stability before another HP number change.

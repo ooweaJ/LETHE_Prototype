@@ -1,0 +1,32 @@
+{
+  "project": "LETHE Prototype",
+  "type": "work_unit_report",
+  "title": "2026-06-05-08 - First Boss TTK Boss-Only Harness",
+  "기준": "2026-06-05 기준",
+  "어떤_작업": [
+    "Added scripts/run_boss_ttk_harness.js.",
+    "Added npm run qa:boss-ttk and npm run qa:boss-ttk:dry."
+  ],
+  "진행_내용": [
+    "node --check src/game.js: pass.",
+    "node --check scripts/run_boss_ttk_harness.js: pass.",
+    "npm run qa:boss-ttk at HP 3500: GO_BOSS_TTK_SAMPLE, 5/5 accepted samples, TTK median 21.92s, focused DPS median 159.7.",
+    "Use boss-only deterministic TTK as HP tuning input when Chrome/CDP cannot produce accepted TTK samples."
+  ],
+  "결과": [
+    "HTML 보고서 생성 완료"
+  ],
+  "문제": [
+    "The new harness removes browser/CDP instability, but it also removes movement, enemy clutter, boss attacks, and post-boss flow.",
+    "Browser qa:balance still has to prove first-boss reach/clear/death with HP 2800."
+  ],
+  "기획질문": [
+    "없음"
+  ],
+  "attachments": [
+    "2026-06-05-08-first-boss-ttk-boss-only-harness.summary.json",
+    "2026-06-05-08-first-boss-ttk-boss-only-harness.html"
+  ],
+  "source": "docs\\reports\\units\\2026-06-05\\2026-06-05-08-first-boss-ttk-boss-only-harness.html",
+  "generatedAt": "2026-06-05T15:26:11.670Z"
+}

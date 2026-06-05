@@ -70,3 +70,39 @@ npm run balance:loop:dry
 - 새 기억, 새 무기, 상점, 메타 진행, 새 지역, 최종 보스 확장은 하지 않는다.
 - 보스 HP, XP 곡선, 기억 피해, 진화 proc/cap, 적 스케일링만 조정한다.
 - Discord 보고와 Markdown 보고서가 source of truth다.
+
+## Boss-Only TTK Harness
+
+Chrome/CDP가 first boss TTK 샘플을 안정적으로 만들지 못할 때는 별도 in-process 하네스를 먼저 사용한다.
+
+```powershell
+npm run qa:boss-ttk
+```
+
+dry-run:
+
+```powershell
+npm run qa:boss-ttk:dry
+```
+
+- 목적: `balanceScenario=first_boss_ttk`와 같은 의도인 level 10, 3 active memories, full HP, first-boss only 상태에서 TTK와 focused DPS를 확보한다.
+- 출력:
+  - `alpha_test/outputs/boss-ttk/summary.json`
+  - `alpha_test/outputs/boss-ttk/latest.json`
+  - `docs/balance/YYYY-MM-DD-v012-boss-ttk-harness.md`
+- 현재 기본 first boss HP: `3500`.
+- 최신 accepted samples: `5/5`.
+- 최신 boss-only TTK median: `21.92s`.
+- 최신 focused DPS median: `159.7`.
+- 근거 파일: `docs/balance/2026-06-05-v012-boss-ttk-harness-final.md`.
+
+이 값은 보스 HP 조정 입력값이며, 사람 플레이 감정 증거 또는 전체 브라우저 밸런스 통과 증거가 아니다. HP 반영 후에는 다시 `npm run qa:balance`로 first-boss reach/clear/death를 확인한다.
+
+### 2026-06-05 HP 2800 Follow-Up
+
+- HP `3500` boss-only TTK passed, but browser `qa:balance` produced first boss TTK median `35.65s`, above the 15-30s target.
+- Current first boss HP is now `2800`.
+- Boss-only HP `2800`: 5/5 accepted samples, TTK median `17.8s`, focused DPS median `157.3`.
+- Browser `first_boss_ttk` HP `2800`: 1/3 accepted sample, accepted TTK `22.59s`, 2/3 incomplete.
+- Browser full `qa:balance` HP `2800`: first boss clear `60%`, death `0%`, TTK median `53.21s`, but 2/5 incomplete.
+- Next gate: stabilize browser `first_boss_ttk` accepted sample count before another HP change.

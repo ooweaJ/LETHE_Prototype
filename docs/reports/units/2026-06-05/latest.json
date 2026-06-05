@@ -1,11 +1,11 @@
 {
   "source": "docs\\reports\\2026-06-05.md",
-  "generatedAt": "2026-06-05T09:57:12.432Z",
-  "unitCount": 7,
+  "generatedAt": "2026-06-05T15:25:17.896Z",
+  "unitCount": 8,
   "latest": {
-    "title": "2026-06-05-07 - 첫 보스 TTK 측정 하네스 추가",
-    "number": "07",
-    "markdownPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-07-첫-보스-ttk-측정-하네스-추가.md",
-    "htmlPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-07-첫-보스-ttk-측정-하네스-추가.html"
+    "title": "2026-06-05-08 - First Boss TTK Boss-Only Harness",
+    "number": "08",
+    "markdownPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-08-first-boss-ttk-boss-only-harness.md",
+    "htmlPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-08-first-boss-ttk-boss-only-harness.html"
   }
 }

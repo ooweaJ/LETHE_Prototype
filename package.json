@@ -35,6 +35,8 @@
     "qa:postloss": "node scripts/run_browser_pressure_qa.js --mode postloss",
     "qa:balance": "node scripts/run_browser_balance_qa.js",
     "qa:balance:dry": "node scripts/run_browser_balance_qa.js --dry-run",
+    "qa:boss-ttk": "node scripts/run_boss_ttk_harness.js",
+    "qa:boss-ttk:dry": "node scripts/run_boss_ttk_harness.js --dry-run",
     "qa:postloss:trusted": "node scripts/run_trusted_postloss_gate.js",
     "qa:tactical:trusted": "node scripts/run_trusted_tactical_gate.js",
     "balance:loop": "node scripts/run_balance_loop.js",

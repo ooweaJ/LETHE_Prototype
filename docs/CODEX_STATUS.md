@@ -648,3 +648,18 @@ npm run ai:sweep
 - Use Claude + Codex CLI double check for major planning changes.
 - Before reporting balance, separate AI simulator evidence, browser flow QA evidence, and user play evidence.
 - Do not request user 1-person playtest until v0.9 has browser-visible build identity, pressure rhythm, post-loss challenge evidence, and tactical-focus browser proof or a documented environment-blocker decision.
+
+## Latest Override - 2026-06-05 Boss TTK
+
+- `npm run qa:boss-ttk` now runs an in-process boss-only deterministic TTK harness for the first boss.
+- Latest default result: 5/5 accepted samples, first boss HP `3500`, TTK median `21.92s`, focused DPS median `159.7`.
+- Evidence: `docs/balance/2026-06-05-v012-boss-ttk-harness-final.md`.
+- Overall balance is still `ITERATE_BALANCE` until browser `qa:balance` rechecks first-boss reach, clear, death, and post-boss flow with HP `3500`.
+
+## Latest Override - 2026-06-05 HP 2800 Follow-Up
+
+- First boss HP is now `2800`.
+- Boss-only HP `2800` result: 5/5 accepted samples, TTK median `17.8s`, focused DPS median `157.3`, verdict `GO_BOSS_TTK_SAMPLE`.
+- Browser `first_boss_ttk` HP `2800` result: 1/3 accepted sample, accepted TTK `22.59s`, 2/3 incomplete.
+- Browser full `qa:balance` HP `2800` result: first boss clear `60%`, death `0%`, TTK median `53.21s`, but 2/5 incomplete.
+- Current blocker is browser accepted-sample stability, not another immediate boss HP guess.
