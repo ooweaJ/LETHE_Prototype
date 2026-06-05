@@ -1,0 +1,32 @@
+{
+  "project": "LETHE Prototype",
+  "type": "work_unit_report",
+  "title": "2026-06-05-07 - 첫 보스 TTK 측정 하네스 추가",
+  "기준": "2026-06-05 기준",
+  "어떤_작업": [
+    "Balance QA 러너의 CDP 읽기를 긴 Runtime.evaluate Promise에서 500ms 짧은 polling 방식으로 바꿨다.",
+    "--scenario first_boss_ttk 옵션을 추가했다."
+  ],
+  "진행_내용": [
+    "node --check src/game.js: pass.",
+    "node --check scripts/run_browser_balance_qa.js: pass.",
+    "Polling smoke: docs/balance/2026-06-05-loop-02-first-boss-polling-smoke.md, browser success 0%, gameplay 0.",
+    "첫 보스 HP는 아직 조정하지 않는다."
+  ],
+  "결과": [
+    "HTML 보고서 생성 완료"
+  ],
+  "문제": [
+    "CDP WebSocket이 accepted gameplay sample 전 단계에서 끊긴다.",
+    "first_boss_ttk 시나리오는 구현됐지만 아직 실제 TTK 표본을 만들지 못했다."
+  ],
+  "기획질문": [
+    "없음"
+  ],
+  "attachments": [
+    "2026-06-05-07-첫-보스-ttk-측정-하네스-추가.summary.json",
+    "2026-06-05-07-첫-보스-ttk-측정-하네스-추가.html"
+  ],
+  "source": "docs\\reports\\units\\2026-06-05\\2026-06-05-07-첫-보스-ttk-측정-하네스-추가.html",
+  "generatedAt": "2026-06-05T09:57:12.507Z"
+}

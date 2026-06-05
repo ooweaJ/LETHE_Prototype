@@ -124,31 +124,7 @@ async function runSingleBalanceQa(chromePath, runNumber) {
     const cdp = await WebSocketCdpClient.connect(target.webSocketDebuggerUrl, options.timeoutMs);
     try {
       await cdp.send('Runtime.enable');
-      const result = await cdp.send('Runtime.evaluate', {
-        awaitPromise: true,
-        returnByValue: true,
-        expression: `
-          new Promise((resolve) => {
-            const deadline = Date.now() + ${Math.max(500, options.timeoutMs - 1000)};
-            const read = () => {
-              const raw = document.documentElement.dataset.letheBalanceQa || "";
-              let qa = null;
-              try { qa = raw ? JSON.parse(raw) : null; } catch {}
-              if (qa && ["complete", "failed", "timeout"].includes(qa.status)) {
-                resolve({ qa, raw });
-                return;
-              }
-              if (Date.now() >= deadline) {
-                resolve({ qa, raw, timedOut: true });
-                return;
-              }
-              setTimeout(read, 100);
-            };
-            read();
-          })
-        `,
-      });
-      const value = result.result?.value || {};
+      const value = await pollBalanceQaResult(cdp, Date.now() + Math.max(500, options.timeoutMs - 1000));
       if (value.timedOut) {
         return { status: 'timeout', timedOut: true, raw: value.raw || '', qa: value.qa || null };
       }
@@ -165,6 +141,30 @@ async function runSingleBalanceQa(chromePath, runNumber) {
   }
 }
 
+async function pollBalanceQaResult(cdp, deadline) {
+  let last = { qa: null, raw: '' };
+  while (Date.now() < deadline) {
+    const result = await cdp.send('Runtime.evaluate', {
+      awaitPromise: false,
+      returnByValue: true,
+      expression: `
+        (() => {
+          const raw = document.documentElement.dataset.letheBalanceQa || "";
+          let qa = null;
+          try { qa = raw ? JSON.parse(raw) : null; } catch {}
+          return { qa, raw };
+        })()
+      `,
+    });
+    last = result.result?.value || last;
+    if (last.qa && ["complete", "failed", "timeout"].includes(last.qa.status)) {
+      return last;
+    }
+    await sleep(500);
+  }
+  return { ...last, timedOut: true };
+}
+
 function qaUrl(runNumber) {
   const file = pathToFileURL(path.resolve('index.html'));
   const params = new URLSearchParams();
@@ -174,6 +174,7 @@ function qaUrl(runNumber) {
   params.set('balanceRunSec', String(options.runSec));
   params.set('balanceTimeoutMs', String(options.timeoutMs - 1500));
   params.set('balanceStepsPerTick', String(options.stepsPerTick));
+  if (options.scenario) params.set('balanceScenario', options.scenario);
   if (options.weapon) params.set('weapon', options.weapon);
   if (options.memory) params.set('memory', options.memory);
   file.search = `?${params.toString()}`;
@@ -509,6 +510,7 @@ function parseArgs(args) {
     retries: num(valueAfter(args, '--retries'), 2),
     runSec: num(valueAfter(args, '--run-sec'), 608),
     stepsPerTick: num(valueAfter(args, '--steps-per-tick'), 90),
+    scenario: valueAfter(args, '--scenario') || valueAfter(args, '--balance-scenario') || '',
     outDir,
     reportPath: path.resolve(valueAfter(args, '--report') || path.join('docs', 'balance', `${date}-v012-balance-qa.md`)),
     weapon: valueAfter(args, '--weapon') || 'twin_blades',

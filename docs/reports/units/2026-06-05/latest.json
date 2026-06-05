@@ -1,11 +1,11 @@
 {
   "source": "docs\\reports\\2026-06-05.md",
-  "generatedAt": "2026-06-05T08:41:14.315Z",
-  "unitCount": 6,
+  "generatedAt": "2026-06-05T09:57:12.432Z",
+  "unitCount": 7,
   "latest": {
-    "title": "2026-06-05-06 - 망각 전조 생존 보정",
-    "number": "06",
-    "markdownPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-06-망각-전조-생존-보정.md",
-    "htmlPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-06-망각-전조-생존-보정.html"
+    "title": "2026-06-05-07 - 첫 보스 TTK 측정 하네스 추가",
+    "number": "07",
+    "markdownPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-07-첫-보스-ttk-측정-하네스-추가.md",
+    "htmlPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-07-첫-보스-ttk-측정-하네스-추가.html"
   }
 }

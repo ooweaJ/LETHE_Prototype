@@ -199,3 +199,25 @@ Interpretation:
 
 - First-cycle `망각 전조` survival is no longer the immediate numeric blocker in the latest prelude sample.
 - The next blocker is first-boss TTK measurement. Long 230s browser/CDP runs timed out before accepted gameplay samples after this tuning.
+
+## Follow-Up: First Boss TTK Harness
+
+Evidence summary: `docs/balance/2026-06-05-v012-first-boss-ttk-harness.md`
+
+Implemented:
+
+- Balance QA runner now has a short CDP polling path instead of one long `Runtime.evaluate` Promise.
+- Balance QA runner accepts `--scenario first_boss_ttk`.
+- Browser QA prepares a representative 176s first-boss entry state for targeted TTK measurement.
+
+Result:
+
+| Attempt | Result |
+| --- | --- |
+| Polling smoke | browser success 0%, no gameplay sample |
+| TTK scenario smoke | command timed out before accepted gameplay sample |
+
+Interpretation:
+
+- The harness exists, but the current local Chrome/CDP path still blocks accepted TTK samples.
+- First boss HP should not be tuned until `firstBossTtk` and boss damage samples exist.

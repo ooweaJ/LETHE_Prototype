@@ -10,7 +10,7 @@
 - v0.12 balance sources: `docs/BALANCE_TABLE_v0_12.md`, `docs/LETHE_v0.12_밸런스_개선_제안서.md`, Gemini balance review notes.
 - v0.12 implementation status: first balance pass implemented in HTML prototype with `굶주린 칼무리` DPS/dt fix, hybrid enemy scaling, JSON telemetry/boss TTK logs, tactical-focus forgetting weight reduction, and `피의 늪` proc/tick/cap nerf.
 - Current balance source: `docs/BALANCE_TABLE_v0_12.md`.
-- Current selected next scope: balance automation iteration. Latest first-cycle `망각 전조` survival tuning reached the target band: death 20%, HP <= 40% median 160.58s, HP <= 20% median 169.73s. Growth pace and top-DPS share still pass. The next blocking surface is first-boss TTK measurement: the 230s browser/CDP run timed out before accepted gameplay samples. Next implementation should stabilize or split the long first-boss TTK QA path, then tune boss HP only after at least 3 gameplay samples reach/persist past 180s. Do not add more memories, slots, shops, meta progression, regions, weapons, enemies, final boss completion, or multi-region structure.
+- Current selected next scope: balance automation iteration. Latest first-cycle `망각 전조` survival tuning reached the target band: death 20%, HP <= 40% median 160.58s, HP <= 20% median 169.73s. Growth pace and top-DPS share still pass. A first-boss TTK scenario and short CDP polling path now exist, but local Chrome/CDP still produced 0 accepted TTK gameplay samples. Next implementation should either run the TTK scenario in a stable trusted browser environment or replace browser/CDP with an in-process deterministic boss-only harness. Do not add more memories, slots, shops, meta progression, regions, weapons, enemies, final boss completion, or multi-region structure.
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the level-up flow and `runGrowth` payload.
 - Codex implementation result: `GO_CANDIDATE` from `npm run ai:test` and `npm run ai:test:heavy`.
@@ -132,6 +132,11 @@
 - [ ] 첫 보스 TTK 측정 경로를 안정화한다.
   - 목표: 230s 루프에서 accepted gameplay sample 3개 이상.
   - 목표: `bossFights[0].damage`, `firstBossTtk`, focused DPS 확보.
+- [x] 첫 보스 TTK 전용 시나리오를 추가한다.
+  - `--scenario first_boss_ttk`.
+  - 176s 대표 보스 직전 상태에서 시작한다.
+- [x] Balance QA CDP 읽기를 긴 Promise 대기에서 짧은 polling으로 바꾼다.
+- [ ] TTK scenario에서 accepted gameplay sample 3개 이상을 확보한다.
 
 ## v0.2 Done
 

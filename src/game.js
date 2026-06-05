@@ -4456,6 +4456,42 @@ function setBalanceMovementKeys() {
   if (Math.abs(dy) > 0.1) keys.add(dy > 0 ? "KeyS" : "KeyW");
 }
 
+function prepareBalanceFirstBossTtkScenario() {
+  if (!state || state.mode !== "combat") return;
+  const ids = [selectedMemories[0] || "hungry_blades", "execution_flash", "shatter_ripple"];
+  for (const id of ids) {
+    if (activeMemoryIds().includes(id)) continue;
+    const memory = createMemoryInstance(id);
+    memory.joinedAt = Number(state.elapsed.toFixed(2));
+    state.memories.push(memory);
+    if (!state.metrics[id]) state.metrics[id] = createMetricSeed([id])[id];
+    if (activeMemoryCount() >= maxActiveMemorySlots) break;
+  }
+  state.elapsed = 176;
+  state.phase = "문지기 직전";
+  state.enemies = [];
+  state.projectiles = [];
+  state.effects = [];
+  state.spawnCd = 0.8;
+  state.runTimeline.nextBossIndex = 0;
+  state.runTimeline.currentBossIndex = 0;
+  state.runGrowth.level = Math.max(state.runGrowth.level, 10);
+  state.runGrowth.levelUpsBeforeBoss = Math.max(state.runGrowth.levelUpsBeforeBoss, 9);
+  state.runGrowth.damage = Math.max(state.runGrowth.damage, 0.28);
+  state.runGrowth.attackSpeed = Math.max(state.runGrowth.attackSpeed, 0.22);
+  state.runGrowth.cooldownReduction = Math.max(state.runGrowth.cooldownReduction, 0.08);
+  state.runGrowth.range = Math.max(state.runGrowth.range, 0.12);
+  state.runGrowth.knockback = Math.max(state.runGrowth.knockback, 0.08);
+  state.player.hp = state.player.maxHp;
+  refreshActiveSynergies();
+  markSlotsFilled("qa_first_boss_ttk");
+  logEvent("balance_first_boss_ttk_scenario", {
+    elapsed: state.elapsed,
+    memoryIds: activeMemoryIds(),
+    level: state.runGrowth.level,
+  });
+}
+
 function resolveBalanceInterrupts() {
   if (!state) return;
   if (state.mode === "upgrade") {
@@ -4487,6 +4523,7 @@ function startBalanceQa() {
   const params = new URLSearchParams(window.location.search);
   selectedWeapon = weapons[params.get("weapon")]?.id || weapons.twin_blades.id;
   const memoryId = memories[params.get("memory")] ? params.get("memory") : "hungry_blades";
+  const balanceScenario = params.get("balanceScenario") || "";
   selectedMemories = [memoryId];
   renderSetup();
   writeBalanceQaResult({ status: "setup_visible" });
@@ -4499,10 +4536,15 @@ function startBalanceQa() {
   const maxElapsed = Number(params.get("balanceRunSec") || experiment.runDurationSec + 8);
   const stepDt = 1 / 30;
   const stepsPerTick = Number(params.get("balanceStepsPerTick") || 90);
+  let scenarioPrepared = false;
   const timer = setInterval(() => {
     if (!state) {
       writeBalanceQaResult({ status: "waiting_for_run" });
       return;
+    }
+    if (!scenarioPrepared && balanceScenario === "first_boss_ttk" && state.mode === "combat") {
+      prepareBalanceFirstBossTtkScenario();
+      scenarioPrepared = true;
     }
 
     for (let i = 0; i < stepsPerTick; i += 1) {
