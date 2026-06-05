@@ -182,6 +182,13 @@ function qaUrl(runNumber) {
 }
 
 function normalizeRun(qa, runNumber) {
+  if (qa?.qa && (qa.timedOut || qa.status === 'timeout')) {
+    qa = {
+      ...qa.qa,
+      pollTimedOut: Boolean(qa.timedOut),
+      wrapperStatus: qa.status,
+    };
+  }
   const runResult = qa.runResult || (qa.finalClear ? 'clear' : qa.death ? 'death' : 'incomplete');
   const diagnostics = qa.balanceDiagnostics || {};
   const hp60At = firstHpThresholdAt(diagnostics.hpSamples, 0.6);
@@ -257,17 +264,7 @@ function summarizeRuns(runs) {
     hp20AtMedian: median(hp20Times),
     deathPhaseCounts: countBy(gameplayRuns.filter((run) => run.death), (run) => run.deathPhase || 'unknown'),
   };
-  const checks = [
-    check('browser run success rate', rate(runs, (run) => !run.error) >= options.browserSuccessRateMin, rate(runs, (run) => !run.error), `>= ${options.browserSuccessRateMin}`),
-    check('first boss clear rate', metrics.firstBossClearRate >= options.firstBossClearRateMin, metrics.firstBossClearRate, `>= ${options.firstBossClearRateMin}`),
-    check('clear rate minimum', metrics.clearRate >= options.clearRateMin, metrics.clearRate, `>= ${options.clearRateMin}`),
-    check('clear rate maximum', metrics.clearRate <= options.clearRateMax, metrics.clearRate, `<= ${options.clearRateMax}`),
-    check('first boss TTK lower bound', metrics.firstBossTtkMedian >= options.firstBossTtkMin, metrics.firstBossTtkMedian, `>= ${options.firstBossTtkMin}s`),
-    check('first boss TTK upper bound', metrics.firstBossTtkMedian <= options.firstBossTtkMax, metrics.firstBossTtkMedian, `<= ${options.firstBossTtkMax}s`),
-    check('level-ups before first boss', metrics.levelUpsBeforeFirstBossMedian >= options.levelUpsBeforeFirstBossMin, metrics.levelUpsBeforeFirstBossMedian, `>= ${options.levelUpsBeforeFirstBossMin}`),
-    check('slot fill timing', metrics.slotsFilledAtMedian <= options.slotsFilledAtMax, metrics.slotsFilledAtMedian, `<= ${options.slotsFilledAtMax}s`),
-    check('top DPS share', metrics.topDpsShareMedian <= options.topDpsShareMax, metrics.topDpsShareMedian, `<= ${options.topDpsShareMax}`),
-  ];
+  const checks = balanceChecks(runs, gameplayRuns, metrics);
   const failed = checks.filter((item) => !item.pass);
   return {
     generatedAt: new Date().toISOString(),
@@ -279,6 +276,26 @@ function summarizeRuns(runs) {
     failed,
     runs,
   };
+}
+
+function balanceChecks(runs, gameplayRuns, metrics) {
+  const common = [
+    check('browser run success rate', rate(runs, (run) => !run.error) >= options.browserSuccessRateMin, rate(runs, (run) => !run.error), `>= ${options.browserSuccessRateMin}`),
+    check('first boss clear rate', metrics.firstBossClearRate >= options.firstBossClearRateMin, metrics.firstBossClearRate, `>= ${options.firstBossClearRateMin}`),
+    check('first boss TTK lower bound', metrics.firstBossTtkMedian >= options.firstBossTtkMin, metrics.firstBossTtkMedian, `>= ${options.firstBossTtkMin}s`),
+    check('first boss TTK upper bound', metrics.firstBossTtkMedian <= options.firstBossTtkMax, metrics.firstBossTtkMedian, `<= ${options.firstBossTtkMax}s`),
+  ];
+  if (options.scenario === 'first_boss_ttk') {
+    return common;
+  }
+  return [
+    ...common,
+    check('clear rate minimum', metrics.clearRate >= options.clearRateMin, metrics.clearRate, `>= ${options.clearRateMin}`),
+    check('clear rate maximum', metrics.clearRate <= options.clearRateMax, metrics.clearRate, `<= ${options.clearRateMax}`),
+    check('level-ups before first boss', metrics.levelUpsBeforeFirstBossMedian >= options.levelUpsBeforeFirstBossMin, metrics.levelUpsBeforeFirstBossMedian, `>= ${options.levelUpsBeforeFirstBossMin}`),
+    check('slot fill timing', metrics.slotsFilledAtMedian <= options.slotsFilledAtMax, metrics.slotsFilledAtMedian, `<= ${options.slotsFilledAtMax}`),
+    check('top DPS share', metrics.topDpsShareMedian <= options.topDpsShareMax, metrics.topDpsShareMedian, `<= ${options.topDpsShareMax}`),
+  ];
 }
 
 function markdownReport(summary) {

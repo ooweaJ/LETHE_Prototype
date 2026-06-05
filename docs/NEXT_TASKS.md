@@ -579,4 +579,17 @@
 - [x] Run browser checks at HP `2800`.
   - Full `qa:balance`: first boss clear `60%`, death `0%`, TTK median `53.21s`, 2/5 incomplete.
   - `first_boss_ttk` scenario: 1/3 accepted, accepted TTK `22.59s`, 2/3 incomplete.
-- [ ] Stabilize browser `first_boss_ttk` accepted sample rate before another first boss HP change.
+- [x] Stabilize browser `first_boss_ttk` accepted sample rate before another first boss HP change.
+
+## Latest Override - 2026-06-06 Browser First Boss TTK Terminal
+
+- [x] Make `first_boss_ttk` browser QA finish when the first boss TTK sample is collected.
+  - Result: 3/3 accepted samples, first boss clear `100%`, TTK median `25.76s`.
+  - Evidence: `docs/balance/2026-06-06-v012-browser-first-boss-ttk-terminal.md`.
+- [x] Rerun full browser `qa:balance` at HP `2800`.
+  - Result: first boss clear `80%`, death `20%`, first boss TTK median `27.79s`, level-ups before first boss median `11`, full clear `0%`.
+  - Evidence: `docs/balance/2026-06-06-v012-balance-qa.md`.
+- [ ] Treat the next balance task as post-boss/full-run flow, not another immediate first boss HP change.
+  - Inspect the death at `156.09s` during the forget-warning phase.
+  - Inspect why 4/5 full runs remain incomplete after first boss clear.
+  - Adjust post-boss pressure, forget-warning survival, or later-cycle pacing separately from first boss TTK.

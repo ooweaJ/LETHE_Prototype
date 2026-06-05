@@ -4564,16 +4564,28 @@ function startBalanceQa() {
     }
     keys.clear();
 
-    const terminal = state.mode === "dead" || state.mode === "result" || state.elapsed >= maxElapsed;
+    const firstBossTtkComplete = balanceScenario === "first_boss_ttk" && hasFirstBossTtkSample();
+    const terminal = firstBossTtkComplete || state.mode === "dead" || state.mode === "result" || state.elapsed >= maxElapsed;
     const timedOut = performance.now() - startedAt > maxRuntimeMs;
     if (terminal || timedOut) {
-      const status = state.mode === "result" || state.mode === "dead" ? "complete" : timedOut ? "timeout" : "failed";
-      writeBalanceQaResult({ status, timedOut, maxElapsedReached: state.elapsed >= maxElapsed });
+      const status = firstBossTtkComplete || state.mode === "result" || state.mode === "dead" ? "complete" : timedOut ? "timeout" : "failed";
+      writeBalanceQaResult({
+        status,
+        timedOut,
+        maxElapsedReached: state.elapsed >= maxElapsed,
+        scenarioComplete: firstBossTtkComplete,
+        runResult: firstBossTtkComplete ? "first_boss_ttk" : undefined,
+      });
       clearInterval(timer);
       return;
     }
     writeBalanceQaResult({ status: "running" });
   }, 16);
+}
+
+function hasFirstBossTtkSample() {
+  const firstBoss = state?.telemetry?.bossFights?.[0] || null;
+  return Boolean(firstBoss?.defeatedAt && Number.isFinite(firstBoss.ttk));
 }
 
 if (experiment.qaFastMode || experiment.qaLevelupMode || experiment.qaV06Mode || experiment.qaDeathMode || experiment.qaIdentityMode || experiment.qaPressureMode || experiment.qaPostLossMode || experiment.qaTacticalMode || experiment.qaBalanceMode) {

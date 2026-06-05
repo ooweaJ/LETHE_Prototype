@@ -106,3 +106,11 @@ npm run qa:boss-ttk:dry
 - Browser `first_boss_ttk` HP `2800`: 1/3 accepted sample, accepted TTK `22.59s`, 2/3 incomplete.
 - Browser full `qa:balance` HP `2800`: first boss clear `60%`, death `0%`, TTK median `53.21s`, but 2/5 incomplete.
 - Next gate: stabilize browser `first_boss_ttk` accepted sample count before another HP change.
+
+### 2026-06-06 Browser First Boss TTK Terminal
+
+- `first_boss_ttk` browser QA now exits as `complete` when the first boss TTK sample is recorded.
+- Scenario-specific summary checks now exclude full-run clear, level-up, and slot-fill gates.
+- Browser `first_boss_ttk`: 3/3 accepted samples, first boss clear `100%`, TTK median `25.76s`, verdict `GO_BALANCE_BASELINE`.
+- Full `qa:balance`: first boss clear `80%`, death `20%`, first boss TTK median `27.79s`, full clear `0%`, verdict `ITERATE_BALANCE`.
+- Keep first boss HP at `2800`; the next automation target is post-boss/full-run flow.

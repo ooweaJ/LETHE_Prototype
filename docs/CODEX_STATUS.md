@@ -663,3 +663,12 @@ npm run ai:sweep
 - Browser `first_boss_ttk` HP `2800` result: 1/3 accepted sample, accepted TTK `22.59s`, 2/3 incomplete.
 - Browser full `qa:balance` HP `2800` result: first boss clear `60%`, death `0%`, TTK median `53.21s`, but 2/5 incomplete.
 - Current blocker is browser accepted-sample stability, not another immediate boss HP guess.
+
+## Latest Override - 2026-06-06 Browser First Boss TTK Terminal
+
+- Browser `first_boss_ttk` now terminates as `complete` when the first boss TTK sample is recorded.
+- The browser QA summarizer now uses first-boss-only checks for `--scenario first_boss_ttk` instead of full-run clear, level-up, and slot-fill checks.
+- HP remains `2800`.
+- Browser `first_boss_ttk` result: 3/3 accepted samples, TTK median `25.76s`, first boss clear `100%`, verdict `GO_BALANCE_BASELINE`.
+- Full browser `qa:balance` after the fix: first boss clear `80%`, death `20%`, first boss TTK median `27.79s`, level-ups before first boss median `11`, verdict `ITERATE_BALANCE`.
+- Current blocker moved from first-boss TTK sample stability to post-boss/full-run flow: full clear is still `0%`, and one run died during the forget-warning phase.

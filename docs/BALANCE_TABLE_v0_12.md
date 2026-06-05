@@ -416,3 +416,10 @@ TTK 산정법 (눈대중 금지):
 - Browser `first_boss_ttk` HP `2800`: 1/3 accepted, accepted TTK `22.59s`, 2/3 incomplete.
 - Browser full `qa:balance` HP `2800`: first boss clear `60%`, death `0%`, TTK median `53.21s`, 2/5 incomplete.
 - Next tuning decision should focus on browser TTK accepted-sample stability before another HP number change.
+
+## 2026-06-06 Browser First Boss TTK Terminal
+
+- Current first boss HP: `2800`.
+- Browser `first_boss_ttk`: 3/3 accepted, first boss clear `100%`, TTK median `25.76s`.
+- Full browser `qa:balance`: first boss clear `80%`, death `20%`, TTK median `27.79s`, level-ups before first boss median `11`, full clear `0%`.
+- Next tuning decision should focus on post-boss/full-run flow, not another immediate first boss HP change.
