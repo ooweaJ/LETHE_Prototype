@@ -10,7 +10,7 @@
 - v0.12 balance sources: `docs/BALANCE_TABLE_v0_12.md`, `docs/LETHE_v0.12_밸런스_개선_제안서.md`, Gemini balance review notes.
 - v0.12 implementation status: first balance pass implemented in HTML prototype with `굶주린 칼무리` DPS/dt fix, hybrid enemy scaling, JSON telemetry/boss TTK logs, tactical-focus forgetting weight reduction, and `피의 늪` proc/tick/cap nerf.
 - Current balance source: `docs/BALANCE_TABLE_v0_12.md`.
-- Current selected next scope: balance automation iteration. Latest repeated `npm run qa:balance` runs remain `ITERATE_BALANCE`; growth pace and top-DPS share can pass, but first-boss prelude survival is unstable. Next implementation should add per-run death phase/enemy-count/HP-sample/boss-post-cycle fields to balance run JSON, then run 10-20 balance runs before another numeric pass. Do not add more memories, slots, shops, meta progression, regions, weapons, enemies, final boss completion, or multi-region structure.
+- Current selected next scope: balance automation iteration. Latest split-surface loops remain `ITERATE_BALANCE`; growth pace and top-DPS share can pass, but first-boss prelude survival and greatsword/execution start stability block later surfaces. Next implementation should add per-run death phase/enemy-count/HP-sample/boss-post-cycle fields to balance run JSON, then tune first-boss prelude and greatsword start before rerunning TTK, post-loss, and full-clear loops. Do not add more memories, slots, shops, meta progression, regions, weapons, enemies, final boss completion, or multi-region structure.
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the level-up flow and `runGrowth` payload.
 - Codex implementation result: `GO_CANDIDATE` from `npm run ai:test` and `npm run ai:test:heavy`.
@@ -100,6 +100,15 @@
 - [ ] Balance run JSON에 `deathPhase`, `maxEnemies`, `hpSamples`, `pressureSegments`, `bossPostCycleState`를 포함한다.
 - [ ] 10-20런 기준으로 first-boss clear rate와 death-at median을 다시 판단한다.
 - [ ] 첫 보스 전 사망이 70% 이상 줄어든 뒤 첫 보스 TTK를 15-30초 범위로 재조정한다.
+- [x] 1~5번 밸런스 표면을 별도 루프로 분리 실행한다.
+  - 1번 prelude: 10런, death 60%, first boss clear 0%.
+  - 2번 TTK: 5런, first boss clear 0%라 TTK 미측정.
+  - 3A twin+hungry: 5런, first boss clear 20%, TTK 6.4초.
+  - 3B greatsword+execution: 5런, death 100%.
+  - 4번 post-loss fast QA: complete.
+  - 5번 full clear: 5런, full clear 0%, death 80%.
+- [ ] Greatsword + execution start 안정성 보정안을 먼저 구현한다.
+- [ ] Post-loss real-duration QA 루프를 만든다.
 
 ## v0.2 Done
 
