@@ -42,7 +42,17 @@ async function main() {
 
   const runs = [];
   for (let index = 0; index < options.runs; index += 1) {
-    const qa = await runSingleBalanceQa(chromePath, index + 1);
+    let qa = null;
+    try {
+      qa = await runSingleBalanceQa(chromePath, index + 1);
+    } catch (error) {
+      qa = {
+        status: 'browser_error',
+        runResult: 'browser_error',
+        error: error.message,
+      };
+      console.error(`[balance ${index + 1}/${options.runs}] browser_error: ${firstLine(error.message)}`);
+    }
     const normalized = normalizeRun(qa, index + 1);
     runs.push(normalized);
     writeJson(path.join(options.outDir, `run-${String(index + 1).padStart(2, '0')}.json`), normalized);
@@ -154,9 +164,11 @@ function normalizeRun(qa, runNumber) {
   return {
     runNumber,
     status: qa.status || 'unknown',
+    elapsed: numberOrNull(qa.elapsed),
     runResult,
     finalClear: Boolean(qa.finalClear),
     death: Boolean(qa.death),
+    deathAt: numberOrNull(qa.deathAt || qa.death?.at),
     firstBossCleared: Boolean(qa.firstBossCleared),
     firstBossTtk: numberOrNull(qa.firstBossTtk),
     firstBossFocusedDps: numberOrNull(qa.firstBossFocusedDps),
@@ -169,18 +181,22 @@ function normalizeRun(qa, runNumber) {
     topDpsShare: Number(qa.topDpsShare || 0),
     dpsBySource: qa.dpsBySource || {},
     bossFights: qa.bossFights || [],
+    error: qa.error || null,
   };
 }
 
 function summarizeRuns(runs) {
   const firstBossTtks = runs.map((run) => run.firstBossTtk).filter(Number.isFinite);
   const slotsFilled = runs.map((run) => run.slotsFilledAt).filter(Number.isFinite);
+  const deathTimes = runs.map((run) => run.deathAt).filter(Number.isFinite);
   const levelUps = runs.map((run) => run.levelUpsBeforeFirstBoss).filter(Number.isFinite);
   const topShares = runs.map((run) => run.topDpsShare).filter(Number.isFinite);
   const metrics = {
     runs: runs.length,
     clearRate: rate(runs, (run) => run.finalClear),
     deathRate: rate(runs, (run) => run.death),
+    deathAtMean: mean(deathTimes),
+    deathAtMedian: median(deathTimes),
     firstBossClearRate: rate(runs, (run) => run.firstBossCleared),
     firstBossTtkMean: mean(firstBossTtks),
     firstBossTtkMedian: median(firstBossTtks),
@@ -192,6 +208,7 @@ function summarizeRuns(runs) {
     topDpsShareMedian: median(topShares),
   };
   const checks = [
+    check('browser run success rate', rate(runs, (run) => !run.error) >= options.browserSuccessRateMin, rate(runs, (run) => !run.error), `>= ${options.browserSuccessRateMin}`),
     check('first boss clear rate', metrics.firstBossClearRate >= options.firstBossClearRateMin, metrics.firstBossClearRate, `>= ${options.firstBossClearRateMin}`),
     check('clear rate minimum', metrics.clearRate >= options.clearRateMin, metrics.clearRate, `>= ${options.clearRateMin}`),
     check('clear rate maximum', metrics.clearRate <= options.clearRateMax, metrics.clearRate, `<= ${options.clearRateMax}`),
@@ -226,6 +243,7 @@ function markdownReport(summary) {
     '',
     `- Full clear rate: \`${pct(summary.metrics.clearRate)}\``,
     `- Death rate: \`${pct(summary.metrics.deathRate)}\``,
+    `- Death at median: \`${fmt(summary.metrics.deathAtMedian)}s\``,
     `- First boss clear rate: \`${pct(summary.metrics.firstBossClearRate)}\``,
     `- First boss TTK median: \`${fmt(summary.metrics.firstBossTtkMedian)}s\``,
     `- Level-ups before first boss median: \`${fmt(summary.metrics.levelUpsBeforeFirstBossMedian)}\``,
@@ -238,9 +256,9 @@ function markdownReport(summary) {
     '',
     '## Runs',
     '',
-    '| run | result | first boss | ttk | level-ups | slots filled | top DPS | share |',
-    '| --- | --- | --- | ---: | ---: | ---: | --- | ---: |',
-    ...summary.runs.map((run) => `| ${run.runNumber} | ${run.runResult} | ${run.firstBossCleared ? 'yes' : 'no'} | ${fmt(run.firstBossTtk)} | ${run.levelUpsBeforeFirstBoss} | ${fmt(run.slotsFilledAt)} | ${run.topDpsSource || '-'} | ${pct(run.topDpsShare)} |`),
+    '| run | result | death at | first boss | ttk | level-ups | slots filled | top DPS | share |',
+    '| --- | --- | ---: | --- | ---: | ---: | ---: | --- | ---: |',
+    ...summary.runs.map((run) => `| ${run.runNumber} | ${run.runResult} | ${fmt(run.deathAt)} | ${run.firstBossCleared ? 'yes' : 'no'} | ${fmt(run.firstBossTtk)} | ${run.levelUpsBeforeFirstBoss} | ${fmt(run.slotsFilledAt)} | ${run.topDpsSource || '-'} | ${pct(run.topDpsShare)} |`),
     '',
   ];
   return `${lines.join('\n')}\n`;
@@ -249,6 +267,7 @@ function markdownReport(summary) {
 function targetSnapshot() {
   return {
     firstBossClearRateMin: options.firstBossClearRateMin,
+    browserSuccessRateMin: options.browserSuccessRateMin,
     clearRateMin: options.clearRateMin,
     clearRateMax: options.clearRateMax,
     firstBossTtkMin: options.firstBossTtkMin,
@@ -439,6 +458,7 @@ function parseArgs(args) {
     weapon: valueAfter(args, '--weapon') || 'twin_blades',
     memory: valueAfter(args, '--memory') || 'hungry_blades',
     firstBossClearRateMin: num(valueAfter(args, '--target-first-boss-clear-rate'), 0.7),
+    browserSuccessRateMin: num(valueAfter(args, '--target-browser-success-rate'), 0.8),
     clearRateMin: num(valueAfter(args, '--target-clear-rate-min'), 0.35),
     clearRateMax: num(valueAfter(args, '--target-clear-rate-max'), 0.8),
     firstBossTtkMin: num(valueAfter(args, '--target-first-boss-ttk-min'), 15),
@@ -507,6 +527,10 @@ function pct(value) {
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function firstLine(text) {
+  return String(text || '').split(/\r?\n/).find(Boolean) || '';
 }
 
 function todayString() {

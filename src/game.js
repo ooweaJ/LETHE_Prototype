@@ -235,7 +235,7 @@ const enemyTypes = {
     name: "침식자",
     hp: 48,
     speed: 48,
-    damage: 9,
+    damage: 6,
     radius: 13,
     color: "#61d5b8",
     score: 1,
@@ -245,7 +245,7 @@ const enemyTypes = {
     name: "떠도는 눈",
     hp: 36,
     speed: 33,
-    damage: 7,
+    damage: 5,
     radius: 12,
     color: "#a98cff",
     score: 2,
@@ -256,7 +256,7 @@ const enemyTypes = {
     name: "쪼개진 자",
     hp: 58,
     speed: 42,
-    damage: 8,
+    damage: 6,
     radius: 15,
     color: "#e8c15d",
     score: 2,
@@ -267,7 +267,7 @@ const enemyTypes = {
     name: "공허 사제",
     hp: 74,
     speed: 28,
-    damage: 5,
+    damage: 4,
     radius: 14,
     color: "#ff7c90",
     score: 3,
@@ -339,6 +339,13 @@ const baseEcho = {
 
 const balance = {
   version: "v0.12-balance-1",
+  player: {
+    maxHp: 150,
+    speed: 184,
+  },
+  boss: {
+    firstBossHp: 780,
+  },
   hungryBlades: {
     dps: 28,
     radius: 72,
@@ -347,10 +354,24 @@ const balance = {
   },
   enemyScaling: {
     hpTimePerMinute: 0.12,
-    hpLevelPerLevel: 0.05,
-    damageTimePerMinute: 0.04,
-    damageLevelPerLevel: 0.02,
+    hpLevelPerLevel: 0.03,
+    damageTimePerMinute: 0.03,
+    damageLevelPerLevel: 0.01,
     damageCap: 2.2,
+  },
+  runGrowth: {
+    initialNextXp: 5,
+    preBossXpMul: 1.75,
+    earlyCurveUntilLevel: 10,
+    earlyNextXpMul: 1.24,
+    earlyNextXpAdd: 3,
+    lateNextXpMul: 1.42,
+    lateNextXpAdd: 4,
+  },
+  earlySurvival: {
+    initialDamageMul: 0.30,
+    fullGraceSec: 12,
+    rampEndSec: 220,
   },
   bloodMarsh: {
     twinBladesProc: 0.3,
@@ -416,7 +437,7 @@ function createRunState() {
     runGrowth: {
       level: 1,
       xp: 0,
-      nextXp: 8,
+      nextXp: balance.runGrowth.initialNextXp,
       damage: 0,
       attackSpeed: 0,
       cooldownReduction: 0,
@@ -457,9 +478,9 @@ function createRunState() {
       x: canvas.width / 2,
       y: canvas.height / 2,
       r: 14,
-      hp: 100,
-      maxHp: 100,
-      speed: 176,
+      hp: balance.player.maxHp,
+      maxHp: balance.player.maxHp,
+      speed: balance.player.speed,
       attackCd: 0,
       invuln: 0,
       facing: 0,
@@ -972,7 +993,7 @@ function pressureProfile() {
       note: "레벨업과 빌드 확인을 위한 낮은 압박",
       intensity: 0.42,
       spawnRate: 0.72,
-      packSize: state.elapsed < 24 ? 2 : 3,
+      packSize: state.elapsed < 70 ? 2 : 3,
     };
   }
 
@@ -982,25 +1003,27 @@ function pressureProfile() {
       label: "압박 상승",
       note: "적 밀도가 올라가며 선택한 빌드를 시험",
       intensity: 0.70,
-      spawnRate: 0.54,
-      packSize: 3,
+      spawnRate: state.elapsed < 126 ? 1.05 : 0.54,
+      packSize: state.elapsed < 126 ? 2 : 3,
     };
   }
 
+  const firstCycle = timeline.nextBossIndex === 0;
   return {
     id: "climax",
     label: "망각 전조",
     note: "문지기 직전 최고 압박",
-    intensity: 0.92,
-    spawnRate: 0.43,
-    packSize: 4,
+    intensity: firstCycle ? 0.78 : 0.92,
+    spawnRate: firstCycle ? 0.90 : 0.43,
+    packSize: firstCycle ? 2 : 4,
   };
 }
 
 function pressureEnemyPool(profile) {
   const base = ["eroder", "eroder", "eroder", "drifting_eye", "split_one"];
-  if (profile.id === "lull") return ["eroder", "eroder", "drifting_eye", "split_one"];
-  if (profile.id === "rising") return base.concat(state.elapsed > 28 ? ["void_priest"] : []);
+  if (profile.id === "lull") return state.elapsed < 70 ? ["eroder", "eroder", "drifting_eye"] : ["eroder", "eroder", "drifting_eye", "split_one"];
+  if (profile.id === "rising") return base.concat(state.elapsed > 95 ? ["void_priest"] : []);
+  if (profile.id === "climax" && state.runTimeline.nextBossIndex === 0) return base.concat(["drifting_eye", "split_one"]);
   if (profile.id === "climax") return base.concat(["drifting_eye", "split_one", "void_priest"]);
   if (profile.id === "deficit_breath") return ["eroder", "eroder", "drifting_eye", "split_one"];
   if (profile.id === "deficit_trial") return base.concat(["drifting_eye", "void_priest"]);
@@ -1156,13 +1179,16 @@ function spawnBoss() {
   state.phase = miniBoss ? "첫 망각 문지기" : isFinal ? "최종 문지기" : `${bossIndex}차 문지기`;
   state.enemies.length = Math.min(state.enemies.length, 8);
   state.shake = Math.max(state.shake, 12);
+  const bossHp = miniBoss
+    ? balance.boss.firstBossHp
+    : Math.round(experiment.bossHp * (1 + Math.max(0, bossIndex - 2) * 0.18));
   state.boss = {
     id: "boss",
     name: miniBoss ? "작은 문지기" : isFinal ? "끝의 문지기" : `기억을 씹는 자 ${bossIndex}`,
     x: canvas.width / 2,
     y: 96,
-    hp: Math.round((miniBoss ? experiment.bossHp * 0.68 : experiment.bossHp) * (1 + Math.max(0, bossIndex - 2) * 0.18)),
-    maxHp: Math.round((miniBoss ? experiment.bossHp * 0.68 : experiment.bossHp) * (1 + Math.max(0, bossIndex - 2) * 0.18)),
+    hp: bossHp,
+    maxHp: bossHp,
     r: 32,
     phase: 1,
     phaseTimer: 0,
@@ -1400,8 +1426,18 @@ function updateProjectiles(dt) {
   state.projectiles = state.projectiles.filter((projectile) => projectile.life > 0 && insideBounds(projectile, 80));
 }
 
+function incomingDamageMultiplier() {
+  const early = balance.earlySurvival;
+  if (!early || !state) return 1;
+  if (state.elapsed <= early.fullGraceSec) return early.initialDamageMul;
+  if (state.elapsed >= early.rampEndSec) return 1;
+  const progress = clamp((state.elapsed - early.fullGraceSec) / Math.max(1, early.rampEndSec - early.fullGraceSec), 0, 1);
+  return lerp(early.initialDamageMul, 1, progress);
+}
+
 function damagePlayer(amount, source = null) {
   const p = state.player;
+  amount *= incomingDamageMultiplier();
   const shieldAbsorb = Math.min(p.shield || 0, amount);
   if (shieldAbsorb > 0) {
     p.shield -= shieldAbsorb;
@@ -1914,7 +1950,9 @@ function applySynergyAfterDamage(source, target, actual) {
 function grantXp(enemy) {
   if (!state || state.mode !== "combat") return;
   const growth = state.runGrowth;
-  const gained = Math.max(1, Math.round(enemy.score * (enemy.child ? 0.55 : 1) * (1 + growth.xpGain)));
+  const beforeFirstBoss = state.elapsed < (state.runTimeline.bossScheduleSec[0] || experiment.bossScheduleSec[0]);
+  const earlyMul = beforeFirstBoss ? balance.runGrowth.preBossXpMul : 1;
+  const gained = Math.max(1, Math.round(enemy.score * (enemy.child ? 0.55 : 1) * (1 + growth.xpGain) * earlyMul));
   growth.xp += gained;
   if (state.telemetry) state.telemetry.killCount += 1;
   if (state.elapsed <= 180) growth.earlyKills += 1;
@@ -1933,7 +1971,10 @@ function queueLevelUp() {
   const growth = state.runGrowth;
   growth.xp -= growth.nextXp;
   growth.level += 1;
-  growth.nextXp = Math.round(growth.nextXp * 1.42 + 4);
+  const earlyCurve = growth.level < balance.runGrowth.earlyCurveUntilLevel;
+  const nextMul = earlyCurve ? balance.runGrowth.earlyNextXpMul : balance.runGrowth.lateNextXpMul;
+  const nextAdd = earlyCurve ? balance.runGrowth.earlyNextXpAdd : balance.runGrowth.lateNextXpAdd;
+  growth.nextXp = Math.round(growth.nextXp * nextMul + nextAdd);
   if (!state.bossSpawned) growth.levelUpsBeforeBoss += 1;
   if (state.telemetry) state.telemetry.levelUpTimestamps.push(Number(state.elapsed.toFixed(2)));
   growth.pendingChoices = chooseLevelUpChoices();
@@ -4183,6 +4224,7 @@ function writeBalanceQaResult(extra = {}) {
     firstBossFocusedDps: firstBoss?.focusedDps || null,
     finalClear: state?.mode === "result" && !state?.death,
     death: state?.death || null,
+    deathAt: state?.death?.at ?? null,
     level: state?.runGrowth?.level || 0,
     levelUpsBeforeFirstBoss,
     slotsFilledAt: telemetry?.slotsFilledAt ?? null,
@@ -4207,27 +4249,90 @@ function chooseBalanceLevelUpChoice() {
   if (activeMemoryCount() < maxActiveMemorySlots) {
     return choices.find((choice) => choice.kind === "memory_new") || choices[0];
   }
+  const hpRate = state.player.hp / state.player.maxHp;
+  if (hpRate < 0.62) {
+    const survivalChoice = choices.find((choice) => choice.kind === "stat" && choice.id === "survival");
+    if (survivalChoice) return survivalChoice;
+  }
   return choices.find((choice) => choice.kind === "memory_upgrade")
     || choices.find((choice) => choice.kind === "stat")
     || choices[0];
+}
+
+function chooseBalanceFocusMemory() {
+  const priority = [
+    "execution_flash",
+    "stalker_oath",
+    "oblivion_brand",
+    "hungry_blades",
+    "shatter_ripple",
+    "stopped_second",
+    "blood_reflection",
+    "ashen_guard",
+  ];
+  const active = activeMemories();
+  return priority.map((id) => active.find((memory) => memory.id === id)).find(Boolean) || active[0] || null;
 }
 
 function setBalanceMovementKeys() {
   keys.clear();
   if (!state || state.mode !== "combat") return;
   const p = state.player;
-  const threats = hostiles().filter((target) => distance(target, p) < 180);
-  const nearest = threats.sort((a, b) => distance(a, p) - distance(b, p))[0];
-  const centerBiasX = p.x < canvas.width * 0.32 ? 1 : p.x > canvas.width * 0.68 ? -1 : 0;
-  const centerBiasY = p.y < canvas.height * 0.32 ? 1 : p.y > canvas.height * 0.68 ? -1 : 0;
-  let dx = centerBiasX;
-  let dy = centerBiasY;
-  if (nearest) {
-    dx += p.x - nearest.x;
-    dy += p.y - nearest.y;
+  const threats = hostiles().map((target) => ({ target, dist: distance(target, p) }))
+    .filter((entry) => entry.dist < 270)
+    .sort((a, b) => a.dist - b.dist);
+  const nearest = threats[0];
+  let dx = 0;
+  let dy = 0;
+
+  const edgePadX = canvas.width * 0.24;
+  const edgePadY = canvas.height * 0.24;
+  if (p.x < edgePadX) dx += (edgePadX - p.x) / edgePadX * 2.2;
+  if (p.x > canvas.width - edgePadX) dx -= (p.x - (canvas.width - edgePadX)) / edgePadX * 2.2;
+  if (p.y < edgePadY) dy += (edgePadY - p.y) / edgePadY * 2.2;
+  if (p.y > canvas.height - edgePadY) dy -= (p.y - (canvas.height - edgePadY)) / edgePadY * 2.2;
+
+  for (const { target, dist } of threats) {
+    const safeDist = Math.max(1, dist);
+    const pressure = Math.pow((270 - safeDist) / 270, 2) * (target.damage || 1);
+    dx += ((p.x - target.x) / safeDist) * pressure;
+    dy += ((p.y - target.y) / safeDist) * pressure;
+  }
+
+  for (const projectile of state.projectiles.filter((item) => item.hostile && distance(item, p) < 220)) {
+    const dist = Math.max(1, distance(projectile, p));
+    const pressure = Math.pow((220 - dist) / 220, 2) * 4;
+    dx += ((p.x - projectile.x) / dist) * pressure;
+    dy += ((p.y - projectile.y) / dist) * pressure;
+  }
+
+  if (state.boss) {
+    const bossDist = Math.max(1, distance(state.boss, p));
+    const desired = state.weapon.id === "greatsword" ? 120 : 96;
+    if (bossDist > desired + 18) {
+      dx += ((state.boss.x - p.x) / bossDist) * 1.35;
+      dy += ((state.boss.y - p.y) / bossDist) * 1.35;
+    } else if (bossDist < desired - 22) {
+      dx += ((p.x - state.boss.x) / bossDist) * 1.1;
+      dy += ((p.y - state.boss.y) / bossDist) * 1.1;
+    }
+  }
+
+  if (nearest && nearest.dist < 150) {
+    const awayX = p.x - nearest.target.x;
+    const awayY = p.y - nearest.target.y;
+    const len = Math.hypot(awayX, awayY) || 1;
+    const orbitSign = Math.sin(state.elapsed * 0.8) >= 0 ? 1 : -1;
+    dx += (-awayY / len) * orbitSign * 0.65;
+    dy += (awayX / len) * orbitSign * 0.65;
   } else if (state.boss) {
-    dx += Math.sin(state.elapsed * 1.7);
-    dy += Math.cos(state.elapsed * 1.3) * 0.5;
+    dx += Math.sin(state.elapsed * 1.7) * 0.8;
+    dy += Math.cos(state.elapsed * 1.3) * 0.55;
+  }
+
+  if (Math.hypot(dx, dy) < 0.12) {
+    dx += Math.sin(state.elapsed * 1.1);
+    dy += Math.cos(state.elapsed * 0.9);
   }
   if (Math.abs(dx) > 0.1) keys.add(dx > 0 ? "KeyD" : "KeyA");
   if (Math.abs(dy) > 0.1) keys.add(dy > 0 ? "KeyS" : "KeyW");
@@ -4287,6 +4392,10 @@ function startBalanceQa() {
       if (!state || ["dead", "result"].includes(state.mode)) break;
       if (state.mode === "combat") {
         setBalanceMovementKeys();
+        if (state.boss && state.tacticalFocus.cooldownLeft <= 0) {
+          const focusMemory = chooseBalanceFocusMemory();
+          if (focusMemory) requestTacticalFocus(focusMemory.id);
+        }
         update(stepDt);
       } else {
         resolveBalanceInterrupts();

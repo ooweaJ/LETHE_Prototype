@@ -1,6 +1,6 @@
 # Codex Status
 
-Last updated: 2026-06-04
+Last updated: 2026-06-05
 
 ## Current Build
 
@@ -8,11 +8,11 @@ Last updated: 2026-06-04
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. v0.12 keeps the v0.11 loop, but moves the build into a measurable balance baseline before broader playtesting.
-- Latest task-update status: v0.12 first pass fixes `굶주린 칼무리` from frame damage to `28 DPS * dt`, adds time+level enemy scaling, records telemetry/boss TTK in JSON logs, reduces tactical-focus forgetting weight from 12x to 3x, caps/nerfs `피의 늪`, and adds a telemetry-only balance automation loop.
-- Latest verification status: `node --check src/game.js`, `node --check` for balance scripts, `npm run doctor`, `npm run qa:balance:dry`, `npm run balance:loop:dry`, `npm run qa:balance`, and `npm run balance:loop` pass as executable commands. The current balance verdict is `ITERATE_BALANCE`: first boss clear `0%`, full clear `0%`, death `100%`, pre-boss level-up median `3`, top DPS share median `51.2%`.
+- Latest task-update status: v0.12 balance loop iteration tuned early survival, pre-boss XP, first-cycle spawn pressure, enemy level scaling, first-boss HP, and `qa=balance` movement/focus behavior. The loop is still an iteration baseline, not a balanced release candidate.
+- Latest verification status: `node --check src/game.js` passes and repeated `npm run qa:balance` browser runs execute. Latest 5-run verdict remains `ITERATE_BALANCE`: first boss clear `0%`, full clear `0%`, death `100%`, death-at median `133.97s`, pre-boss level-up median `11`, slot-fill median `16.63s`, top DPS share median `47.05%`. A previous same-turn 5-run reached first boss clear `60%` with TTK median `115.92s`, showing the current 5-run sample is too volatile for GO judgment.
 - Latest reporting format: Discord work-unit reports now send an AI Project Orchestrator style status message, attach a generated `.summary.json` file, then send a second message with the generated HTML report.
 - Planning document status: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md` remains the loop source, while v0.12 balance sources are `docs/BALANCE_TABLE_v0_12.md` and `docs/LETHE_v0.12_밸런스_개선_제안서.md`.
-- Balance status: v0.12 first-pass baseline is in code. Boss HP is intentionally not raised yet; next step is reading `telemetry.bossFights[].ttk` and `focusedDps` from real browser logs before setting first-boss target HP.
+- Balance status: v0.12 second-pass tuning is in code but not accepted. Growth pace and DPS concentration are near target; first-boss prelude survival remains unstable and needs richer per-run telemetry before another broad numeric pass.
 
 ## Implemented
 

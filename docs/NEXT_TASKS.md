@@ -1,6 +1,6 @@
 # Next Tasks
 
-현재 단계는 v0.12 telemetry 기반 밸런스 자동 측정 루프 검증이다. 감정 proxy와 Alpha Fun Score는 이 단계의 판단 기준에서 제외한다. 다음 목표는 `npm run qa:balance` / `npm run balance:loop` 결과의 `ITERATE_BALANCE` 항목을 보고 가장 작은 밸런스 조정 1개씩 반복하는 것이다.
+현재 단계는 v0.12 telemetry 기반 밸런스 자동 측정 루프 검증이다. 감정 proxy와 Alpha Fun Score는 이 단계의 판단 기준에서 제외한다. 다음 목표는 5런 표본을 바로 신뢰하지 말고, first boss 전 사망 원인을 더 잘 남기는 run-level telemetry를 보강한 뒤 10-20런 기준으로 `ITERATE_BALANCE` 항목을 좁히는 것이다.
 
 이 프로젝트의 현재 목표는 HTML 프로토타입으로 LETHE의 핵심 재미와 가능성을 검증하는 것이다. 충분히 재미가 확인되면 그 결과를 근거로 Unity 구현 단계로 넘어간다.
 
@@ -10,7 +10,7 @@
 - v0.12 balance sources: `docs/BALANCE_TABLE_v0_12.md`, `docs/LETHE_v0.12_밸런스_개선_제안서.md`, Gemini balance review notes.
 - v0.12 implementation status: first balance pass implemented in HTML prototype with `굶주린 칼무리` DPS/dt fix, hybrid enemy scaling, JSON telemetry/boss TTK logs, tactical-focus forgetting weight reduction, and `피의 늪` proc/tick/cap nerf.
 - Current balance source: `docs/BALANCE_TABLE_v0_12.md`.
-- Current selected next scope: balance automation iteration. Run `npm run qa:balance` or `npm run balance:loop`, then tune only one small balance axis from the failed checks: first-boss TTK, pre-boss level-ups, slot-fill timing, top DPS share, clear/death rate. Do not add more memories, slots, shops, meta progression, regions, weapons, enemies, final boss completion, or multi-region structure.
+- Current selected next scope: balance automation iteration. Latest repeated `npm run qa:balance` runs remain `ITERATE_BALANCE`; growth pace and top-DPS share can pass, but first-boss prelude survival is unstable. Next implementation should add per-run death phase/enemy-count/HP-sample/boss-post-cycle fields to balance run JSON, then run 10-20 balance runs before another numeric pass. Do not add more memories, slots, shops, meta progression, regions, weapons, enemies, final boss completion, or multi-region structure.
 - GPT verdict: `ITERATE_BEFORE_TEST`.
 - Claude v0.5 evaluation: `GO_TO_HUMAN_TEST` after Chrome headless QA confirmed the level-up flow and `runGrowth` payload.
 - Codex implementation result: `GO_CANDIDATE` from `npm run ai:test` and `npm run ai:test:heavy`.
@@ -92,8 +92,14 @@
 - [x] 기본 5런 `npm run qa:balance`와 `npm run balance:loop`를 실행했다.
   - 결과: `ITERATE_BALANCE`.
   - 최신 loop 관찰: first boss clear `0%`, full clear `0%`, death `100%`, first-boss 전 level-up 중앙값 `3`, top DPS share 중앙값 `51.2%`.
-- [ ] `ITERATE_BALANCE` 실패 항목 중 하나만 골라 v0.12 2차 밸런스 조정을 구현한다.
-- [ ] 조정 후 `npm run qa:balance`를 다시 실행해 `GO_BALANCE_BASELINE` 또는 남은 실패 항목을 기록한다.
+- [x] `ITERATE_BALANCE` 실패 항목 중 하나만 골라 v0.12 2차 밸런스 조정을 구현한다.
+  - 조정 항목: 초반 피해 완충, 첫 사이클 스폰 압력, 적 기본 피해, 레벨 스케일링, 첫 보스 HP, QA 이동/보스 접근/전술 집중.
+- [x] 조정 후 `npm run qa:balance`를 반복 실행해 남은 실패 항목을 기록한다.
+  - 최신 결과: `ITERATE_BALANCE`, first boss clear `0%`, full clear `0%`, death `100%`, death-at median `133.97s`, level-ups median `11`, slots median `16.63s`, top DPS share median `47.05%`.
+  - 중간 최고 결과: first boss clear `60%`, TTK median `115.92s`, death `40%`.
+- [ ] Balance run JSON에 `deathPhase`, `maxEnemies`, `hpSamples`, `pressureSegments`, `bossPostCycleState`를 포함한다.
+- [ ] 10-20런 기준으로 first-boss clear rate와 death-at median을 다시 판단한다.
+- [ ] 첫 보스 전 사망이 70% 이상 줄어든 뒤 첫 보스 TTK를 15-30초 범위로 재조정한다.
 
 ## v0.2 Done
 
