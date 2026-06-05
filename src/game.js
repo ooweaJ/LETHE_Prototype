@@ -340,7 +340,7 @@ const baseEcho = {
 const balance = {
   version: "v0.12-balance-1",
   player: {
-    maxHp: 150,
+    maxHp: 180,
     speed: 184,
   },
   boss: {
@@ -369,14 +369,14 @@ const balance = {
     lateNextXpAdd: 4,
   },
   earlySurvival: {
-    initialDamageMul: 0.30,
+    initialDamageMul: 0.24,
     fullGraceSec: 12,
-    rampEndSec: 220,
+    rampEndSec: 320,
   },
   spawnCaps: {
     firstCycleLull: 34,
     firstCycleRising: 36,
-    firstCycleClimax: 42,
+    firstCycleClimax: 38,
     default: 82,
   },
   bloodMarsh: {
@@ -945,6 +945,11 @@ function updateSpawning(dt) {
   updatePressurePhase(profile);
   const spawnRate = Math.max(0.34, profile.spawnRate);
   const maxEnemies = pressureMaxEnemies(profile);
+  const nextBossAt = state.runTimeline.bossScheduleSec[state.runTimeline.nextBossIndex];
+  if (nextBossAt && state.elapsed >= nextBossAt) {
+    spawnBoss();
+    return;
+  }
   if (state.enemies.length >= maxEnemies) {
     state.spawnCd = Math.max(state.spawnCd, spawnRate * 0.75);
     return;
@@ -958,10 +963,6 @@ function updateSpawning(dt) {
     }
   }
 
-  const nextBossAt = state.runTimeline.bossScheduleSec[state.runTimeline.nextBossIndex];
-  if (nextBossAt && state.elapsed >= nextBossAt) {
-    spawnBoss();
-  }
 }
 
 function pressureMaxEnemies(profile) {
@@ -1536,7 +1537,8 @@ function basicAttack() {
   const interval = Math.max(0.16, weapon.interval / (1 + state.echo.attackSpeed + state.runGrowth.attackSpeed));
   if (p.attackCd > 0) return;
 
-  const target = nearestHostile(p.x, p.y, range);
+  const bossInRange = state.boss && distance(p, state.boss) <= range + state.boss.r;
+  const target = bossInRange ? state.boss : nearestHostile(p.x, p.y, range);
   if (!target) return;
   p.attackCd = interval;
   p.facing = angleTo(p, target);
@@ -4377,8 +4379,9 @@ function setBalanceMovementKeys() {
   keys.clear();
   if (!state || state.mode !== "combat") return;
   const p = state.player;
+  const bossActive = Boolean(state.boss);
   const threats = hostiles().map((target) => ({ target, dist: distance(target, p) }))
-    .filter((entry) => entry.dist < 270)
+    .filter((entry) => entry.dist < (bossActive ? 230 : 270))
     .sort((a, b) => a.dist - b.dist);
   const nearest = threats[0];
   let dx = 0;
@@ -4393,7 +4396,9 @@ function setBalanceMovementKeys() {
 
   for (const { target, dist } of threats) {
     const safeDist = Math.max(1, dist);
-    const pressure = Math.pow((270 - safeDist) / 270, 2) * (target.damage || 1);
+    const radius = bossActive ? 230 : 270;
+    const bossPressureMul = bossActive && target.id !== "boss" ? 0.55 : 1;
+    const pressure = Math.pow((radius - safeDist) / radius, 2) * (target.damage || 1) * bossPressureMul;
     dx += ((p.x - target.x) / safeDist) * pressure;
     dy += ((p.y - target.y) / safeDist) * pressure;
   }
@@ -4407,10 +4412,10 @@ function setBalanceMovementKeys() {
 
   if (state.boss) {
     const bossDist = Math.max(1, distance(state.boss, p));
-    const desired = state.weapon.id === "greatsword" ? 120 : 96;
-    if (bossDist > desired + 18) {
-      dx += ((state.boss.x - p.x) / bossDist) * 1.35;
-      dy += ((state.boss.y - p.y) / bossDist) * 1.35;
+    const desired = state.weapon.id === "greatsword" ? 112 : 82;
+    if (bossDist > desired + 12) {
+      dx += ((state.boss.x - p.x) / bossDist) * 2.4;
+      dy += ((state.boss.y - p.y) / bossDist) * 2.4;
     } else if (bossDist < desired - 22) {
       dx += ((p.x - state.boss.x) / bossDist) * 1.1;
       dy += ((p.y - state.boss.y) / bossDist) * 1.1;

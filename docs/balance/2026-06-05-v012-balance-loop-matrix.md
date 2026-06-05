@@ -130,3 +130,30 @@ Interpretation:
 - Greatsword start stability improved materially: death rate moved from 100% to 40% in the best follow-up sample.
 - First-boss clear rate is still 0% in the latest samples, so TTK is still blocked by pre-boss/boss-entry reliability.
 - Tightening spawn caps too far risks lowering growth and increasing browser instability. The next pass should use the new `hpSamples` and `pressureSegments` rather than blindly lowering density again.
+
+## Follow-Up: HP Thresholds, Boss Spawn Gate, and Runner Stability
+
+Implemented after the diagnostics pass:
+
+- Balance QA report now summarizes first HP drops below 60% / 40% / 20%.
+- Browser balance QA now retries failed per-run Chrome/CDP attempts and excludes `browser_error` rows from gameplay medians.
+- Early survival was softened again: player HP 180, early damage ramp 0.24 -> 1.0 over 320s, first-cycle climax cap 38.
+- Basic attacks now prioritize the boss when the boss is inside weapon range.
+- Balance QA movement now approaches the boss more assertively during boss phase.
+- Fixed a real spawn-order bug: if enemy count was already above the spawn cap, `updateSpawning()` returned before the boss schedule check, so the first boss could be delayed indefinitely.
+
+Follow-up evidence:
+
+| Surface | Evidence | Result |
+| --- | --- | --- |
+| First boss HP-threshold baseline | `docs/balance/2026-06-05-loop-02-first-boss-hp-thresholds.md` | death 60%, HP <= 40% median 90.83s, browser success 80% |
+| Survival buffer | `docs/balance/2026-06-05-loop-02-first-boss-survival-buffer-retry2.md` | death 80%, HP <= 40% median 108.97s, browser success 100% |
+| Prelude soften | `docs/balance/2026-06-05-loop-02-first-boss-prelude-soften.md` | death 60%, HP <= 40% median 102.96s, browser success 80% |
+| Boss targeting probe | `docs/balance/2026-06-05-loop-02-first-boss-targeting.md` | death 40%, but browser success 60%; not accepted as balance proof |
+| Boss spawn fix probe | `docs/balance/2026-06-05-loop-02-first-boss-spawn-fix.md` | browser success 40%; not accepted as balance proof |
+
+Interpretation:
+
+- HP threshold telemetry helped identify that HP usually collapses before the 180s boss gate, mostly during `망각 전조`.
+- The first boss was also structurally blocked when enemy count stayed above cap; that bug is fixed and should be treated as the main result of this pass.
+- Long 180-230s browser/CDP balance runs are now the tooling bottleneck. More balance tuning should wait until the runner is stable enough to provide at least 4/5 successful gameplay samples.

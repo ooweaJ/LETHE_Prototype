@@ -9,10 +9,10 @@ Last updated: 2026-06-05
 - Branch: `main`
 - Current scope: HTML prototype validation. v0.12 keeps the v0.11 loop, but moves the build into a measurable balance baseline before broader playtesting.
 - Latest task-update status: v0.12 balance loop iteration tuned early survival, pre-boss XP, first-cycle spawn pressure, enemy level scaling, first-boss HP, and `qa=balance` movement/focus behavior. The loop is still an iteration baseline, not a balanced release candidate.
-- Latest verification status: `node --check src/game.js` and `node --check scripts/run_browser_balance_qa.js` pass. Five balance surfaces were split and tested, then follow-up diagnostics/greatsword stabilization ran. Greatsword+execution improved from death `100%` to a best follow-up sample of death `40%`, but first boss clear remains `0%` in the latest runs. The overall verdict remains `ITERATE_BALANCE`.
+- Latest verification status: `node --check src/game.js` and `node --check scripts/run_browser_balance_qa.js` pass. Five balance surfaces were split and tested, then follow-up diagnostics/greatsword stabilization and HP-threshold loops ran. A real first-boss spawn-order bug was found and fixed: enemy cap return could block the scheduled boss spawn. Latest long balance probes are not accepted as final balance proof because Chrome/CDP success dropped below the 4/5 target. The overall verdict remains `ITERATE_BALANCE`.
 - Latest reporting format: Discord work-unit reports now send an AI Project Orchestrator style status message, attach a generated `.summary.json` file, then send a second message with the generated HTML report.
 - Planning document status: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md` remains the loop source, while v0.12 balance sources are `docs/BALANCE_TABLE_v0_12.md` and `docs/LETHE_v0.12_밸런스_개선_제안서.md`.
-- Balance status: v0.12 second-pass tuning is in code but not accepted. Growth pace and DPS concentration are near target; first-boss prelude survival remains unstable and needs richer per-run telemetry before another broad numeric pass.
+- Balance status: v0.12 second-pass tuning is in code but not accepted. Growth pace and DPS concentration are near target; HP-threshold telemetry shows HP collapse before the 180s boss gate, and first-boss testing is now blocked more by long-run browser QA stability than by missing metrics.
 
 ## Implemented
 

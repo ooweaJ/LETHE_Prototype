@@ -1,11 +1,11 @@
 {
   "source": "docs\\reports\\2026-06-05.md",
-  "generatedAt": "2026-06-05T02:57:52.997Z",
-  "unitCount": 3,
+  "generatedAt": "2026-06-05T04:35:12.231Z",
+  "unitCount": 4,
   "latest": {
-    "title": "2026-06-05-03 - 대검 시작 안정화와 밸런스 진단 로그 보강",
-    "number": "03",
-    "markdownPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-03-대검-시작-안정화와-밸런스-진단-로그-보강.md",
-    "htmlPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-03-대검-시작-안정화와-밸런스-진단-로그-보강.html"
+    "title": "2026-06-05-04 - HP 붕괴 지표와 첫 보스 스폰 버그 수정",
+    "number": "04",
+    "markdownPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-04-hp-붕괴-지표와-첫-보스-스폰-버그-수정.md",
+    "htmlPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-04-hp-붕괴-지표와-첫-보스-스폰-버그-수정.html"
   }
 }

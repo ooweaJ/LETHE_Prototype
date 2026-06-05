@@ -44,7 +44,7 @@ async function main() {
   for (let index = 0; index < options.runs; index += 1) {
     let qa = null;
     try {
-      qa = await runSingleBalanceQa(chromePath, index + 1);
+      qa = await runSingleBalanceQaWithRetries(chromePath, index + 1);
     } catch (error) {
       qa = {
         status: 'browser_error',
@@ -74,6 +74,23 @@ async function main() {
   console.log(`Report: ${path.relative(process.cwd(), options.reportPath)}`);
 }
 
+async function runSingleBalanceQaWithRetries(chromePath, runNumber) {
+  let lastError = null;
+  for (let attempt = 0; attempt <= options.retries; attempt += 1) {
+    try {
+      const qa = await runSingleBalanceQa(chromePath, runNumber);
+      if (attempt > 0) qa.retryAttempt = attempt;
+      return qa;
+    } catch (error) {
+      lastError = error;
+      if (attempt >= options.retries) break;
+      console.error(`[balance ${runNumber}/${options.runs}] retry ${attempt + 1}/${options.retries}: ${firstLine(error.message)}`);
+      await sleep(750);
+    }
+  }
+  throw lastError;
+}
+
 async function runSingleBalanceQa(chromePath, runNumber) {
   const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), `lethe-balance-qa-${runNumber}-`));
   const port = await findOpenPort();
@@ -83,6 +100,10 @@ async function runSingleBalanceQa(chromePath, runNumber) {
     '--disable-gpu',
     '--disable-extensions',
     '--disable-dev-shm-usage',
+    '--disable-background-timer-throttling',
+    '--disable-backgrounding-occluded-windows',
+    '--disable-renderer-backgrounding',
+    '--disable-features=CalculateNativeWinOcclusion',
     '--no-sandbox',
     '--no-first-run',
     '--no-default-browser-check',
@@ -162,6 +183,9 @@ function qaUrl(runNumber) {
 function normalizeRun(qa, runNumber) {
   const runResult = qa.runResult || (qa.finalClear ? 'clear' : qa.death ? 'death' : 'incomplete');
   const diagnostics = qa.balanceDiagnostics || {};
+  const hp60At = firstHpThresholdAt(diagnostics.hpSamples, 0.6);
+  const hp40At = firstHpThresholdAt(diagnostics.hpSamples, 0.4);
+  const hp20At = firstHpThresholdAt(diagnostics.hpSamples, 0.2);
   return {
     runNumber,
     status: qa.status || 'unknown',
@@ -173,6 +197,9 @@ function normalizeRun(qa, runNumber) {
     deathPhase: diagnostics.deathPhase || qa.death?.phase || null,
     deathEnemyCount: numberOrNull(diagnostics.deathEnemyCount ?? qa.death?.enemyCount),
     maxEnemies: numberOrNull(diagnostics.maxEnemies ?? qa.danger?.maxEnemies),
+    hp60At,
+    hp40At,
+    hp20At,
     firstBossCleared: Boolean(qa.firstBossCleared),
     firstBossTtk: numberOrNull(qa.firstBossTtk),
     firstBossFocusedDps: numberOrNull(qa.firstBossFocusedDps),
@@ -190,24 +217,30 @@ function normalizeRun(qa, runNumber) {
     lowHpSamples: diagnostics.lowHpSamples || [],
     bossPostCycleState: diagnostics.bossPostCycleState || null,
     balanceDiagnostics: diagnostics,
+    retryAttempt: Number(qa.retryAttempt || 0),
     error: qa.error || null,
   };
 }
 
 function summarizeRuns(runs) {
-  const firstBossTtks = runs.map((run) => run.firstBossTtk).filter(Number.isFinite);
-  const slotsFilled = runs.map((run) => run.slotsFilledAt).filter(Number.isFinite);
-  const deathTimes = runs.map((run) => run.deathAt).filter(Number.isFinite);
-  const levelUps = runs.map((run) => run.levelUpsBeforeFirstBoss).filter(Number.isFinite);
-  const topShares = runs.map((run) => run.topDpsShare).filter(Number.isFinite);
-  const maxEnemies = runs.map((run) => run.maxEnemies).filter(Number.isFinite);
+  const gameplayRuns = runs.filter((run) => run.runResult !== 'browser_error' && run.status !== 'browser_error');
+  const firstBossTtks = gameplayRuns.map((run) => run.firstBossTtk).filter(Number.isFinite);
+  const slotsFilled = gameplayRuns.map((run) => run.slotsFilledAt).filter(Number.isFinite);
+  const deathTimes = gameplayRuns.map((run) => run.deathAt).filter(Number.isFinite);
+  const levelUps = gameplayRuns.map((run) => run.levelUpsBeforeFirstBoss).filter(Number.isFinite);
+  const topShares = gameplayRuns.map((run) => run.topDpsShare).filter(Number.isFinite);
+  const maxEnemies = gameplayRuns.map((run) => run.maxEnemies).filter(Number.isFinite);
+  const hp60Times = gameplayRuns.map((run) => run.hp60At).filter(Number.isFinite);
+  const hp40Times = gameplayRuns.map((run) => run.hp40At).filter(Number.isFinite);
+  const hp20Times = gameplayRuns.map((run) => run.hp20At).filter(Number.isFinite);
   const metrics = {
     runs: runs.length,
-    clearRate: rate(runs, (run) => run.finalClear),
-    deathRate: rate(runs, (run) => run.death),
+    gameplayRuns: gameplayRuns.length,
+    clearRate: rate(gameplayRuns, (run) => run.finalClear),
+    deathRate: rate(gameplayRuns, (run) => run.death),
     deathAtMean: mean(deathTimes),
     deathAtMedian: median(deathTimes),
-    firstBossClearRate: rate(runs, (run) => run.firstBossCleared),
+    firstBossClearRate: rate(gameplayRuns, (run) => run.firstBossCleared),
     firstBossTtkMean: mean(firstBossTtks),
     firstBossTtkMedian: median(firstBossTtks),
     levelUpsBeforeFirstBossMean: mean(levelUps),
@@ -218,7 +251,10 @@ function summarizeRuns(runs) {
     topDpsShareMedian: median(topShares),
     maxEnemiesMean: mean(maxEnemies),
     maxEnemiesMedian: median(maxEnemies),
-    deathPhaseCounts: countBy(runs.filter((run) => run.death), (run) => run.deathPhase || 'unknown'),
+    hp60AtMedian: median(hp60Times),
+    hp40AtMedian: median(hp40Times),
+    hp20AtMedian: median(hp20Times),
+    deathPhaseCounts: countBy(gameplayRuns.filter((run) => run.death), (run) => run.deathPhase || 'unknown'),
   };
   const checks = [
     check('browser run success rate', rate(runs, (run) => !run.error) >= options.browserSuccessRateMin, rate(runs, (run) => !run.error), `>= ${options.browserSuccessRateMin}`),
@@ -251,6 +287,7 @@ function markdownReport(summary) {
     `- Generated: ${summary.generatedAt}`,
     `- Verdict: \`${summary.verdict}\``,
     `- Runs: \`${summary.metrics.runs}\``,
+    `- Gameplay runs: \`${summary.metrics.gameplayRuns}\``,
     '',
     '## Metrics',
     '',
@@ -263,6 +300,9 @@ function markdownReport(summary) {
     `- Slots filled at median: \`${fmt(summary.metrics.slotsFilledAtMedian)}s\``,
     `- Top DPS share median: \`${pct(summary.metrics.topDpsShareMedian)}\``,
     `- Max enemies median: \`${fmt(summary.metrics.maxEnemiesMedian)}\``,
+    `- HP <= 60% median: \`${fmt(summary.metrics.hp60AtMedian)}s\``,
+    `- HP <= 40% median: \`${fmt(summary.metrics.hp40AtMedian)}s\``,
+    `- HP <= 20% median: \`${fmt(summary.metrics.hp20AtMedian)}s\``,
     `- Death phase counts: \`${JSON.stringify(summary.metrics.deathPhaseCounts)}\``,
     '',
     '## Checks',
@@ -271,9 +311,9 @@ function markdownReport(summary) {
     '',
     '## Runs',
     '',
-    '| run | result | death at | phase | max enemies | first boss | ttk | level-ups | slots filled | top DPS | share |',
-    '| --- | --- | ---: | --- | ---: | --- | ---: | ---: | ---: | --- | ---: |',
-    ...summary.runs.map((run) => `| ${run.runNumber} | ${run.runResult} | ${fmt(run.deathAt)} | ${run.deathPhase || '-'} | ${fmt(run.maxEnemies)} | ${run.firstBossCleared ? 'yes' : 'no'} | ${fmt(run.firstBossTtk)} | ${run.levelUpsBeforeFirstBoss} | ${fmt(run.slotsFilledAt)} | ${run.topDpsSource || '-'} | ${pct(run.topDpsShare)} |`),
+    '| run | result | death at | phase | max enemies | hp40 | first boss | ttk | level-ups | slots filled | top DPS | share |',
+    '| --- | --- | ---: | --- | ---: | ---: | --- | ---: | ---: | ---: | --- | ---: |',
+    ...summary.runs.map((run) => `| ${run.runNumber} | ${run.runResult} | ${fmt(run.deathAt)} | ${run.deathPhase || '-'} | ${fmt(run.maxEnemies)} | ${fmt(run.hp40At)} | ${run.firstBossCleared ? 'yes' : 'no'} | ${fmt(run.firstBossTtk)} | ${run.levelUpsBeforeFirstBoss} | ${fmt(run.slotsFilledAt)} | ${run.topDpsSource || '-'} | ${pct(run.topDpsShare)} |`),
     '',
   ];
   return `${lines.join('\n')}\n`;
@@ -466,6 +506,7 @@ function parseArgs(args) {
     dryRun: args.includes('--dry-run'),
     runs: num(valueAfter(args, '--runs'), 5),
     timeoutMs: num(valueAfter(args, '--timeout-ms'), 45000),
+    retries: num(valueAfter(args, '--retries'), 2),
     runSec: num(valueAfter(args, '--run-sec'), 608),
     stepsPerTick: num(valueAfter(args, '--steps-per-tick'), 90),
     outDir,
@@ -522,6 +563,11 @@ function countBy(items, keyFn) {
     acc[key] = (acc[key] || 0) + 1;
     return acc;
   }, {});
+}
+
+function firstHpThresholdAt(samples, threshold) {
+  const sample = (samples || []).find((item) => Number.isFinite(item.hpRate) && item.hpRate <= threshold);
+  return numberOrNull(sample?.t);
 }
 
 function mean(values) {
