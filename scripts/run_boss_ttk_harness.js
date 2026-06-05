@@ -19,7 +19,7 @@ const memories = {
 
 const balance = {
   version: 'v0.12-balance-1',
-  boss: { firstBossHp: 2800 },
+  boss: { firstBossHp: 2500 },
   hungryBlades: {
     dps: 28,
     targetSoftCap: 4,

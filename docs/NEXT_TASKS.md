@@ -593,3 +593,22 @@
   - Inspect the death at `156.09s` during the forget-warning phase.
   - Inspect why 4/5 full runs remain incomplete after first boss clear.
   - Adjust post-boss pressure, forget-warning survival, or later-cycle pacing separately from first boss TTK.
+
+## Latest Override - 2026-06-06 Balance Baseline
+
+- [x] Fix full-run QA post-boss automation so the cycle result continue button is clicked before the zero-active-memory guard can stop the loop.
+- [x] Add post-boss spawn caps.
+  - `deficitBreath`: `16`.
+  - `deficitTrial`: `22`.
+  - later-cycle `default`: `58`.
+- [x] Extend default browser balance QA run window from `608s` to `690s`.
+- [x] Apply first boss HP `2500`.
+  - Boss-only TTK: 5/5 accepted, median `15.62s`.
+  - Browser `first_boss_ttk`: 3/3 accepted, median `21.05s`.
+- [x] Rerun full browser `qa:balance`.
+  - Verdict: `GO_BALANCE_BASELINE`.
+  - First boss clear `100%`.
+  - Full clear `40%`.
+  - Death `60%`.
+  - First boss TTK median `22.24s`.
+- [ ] Ask reviewer/GPT to interpret whether deficit-trial death `60%` is acceptable tension for the current prototype gate or needs another design pass before human playtest.

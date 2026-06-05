@@ -525,7 +525,7 @@ function parseArgs(args) {
     runs: num(valueAfter(args, '--runs'), 5),
     timeoutMs: num(valueAfter(args, '--timeout-ms'), 45000),
     retries: num(valueAfter(args, '--retries'), 2),
-    runSec: num(valueAfter(args, '--run-sec'), 608),
+    runSec: num(valueAfter(args, '--run-sec'), 690),
     stepsPerTick: num(valueAfter(args, '--steps-per-tick'), 90),
     scenario: valueAfter(args, '--scenario') || valueAfter(args, '--balance-scenario') || '',
     outDir,

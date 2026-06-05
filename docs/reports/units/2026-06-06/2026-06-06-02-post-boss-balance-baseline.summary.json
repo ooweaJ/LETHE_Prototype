@@ -1,0 +1,33 @@
+{
+  "project": "LETHE Prototype",
+  "type": "work_unit_report",
+  "title": "2026-06-06-02 - Post-Boss Balance Baseline",
+  "기준": "2026-06-06 기준",
+  "어떤_작업": [
+    "Fixed balance QA post-boss automation so the cycle result continue button is clicked before a zero-active-memory guard can stop the loop.",
+    "Added post-boss spawn caps for deficit breath, deficit trial, and later-cycle default pressure."
+  ],
+  "진행_내용": [
+    "node --check src/game.js: pass.",
+    "node --check scripts/run_boss_ttk_harness.js: pass.",
+    "node --check scripts/run_browser_balance_qa.js: pass.",
+    "Treat HP 2500 as the current first boss value."
+  ],
+  "결과": [
+    "HTML 보고서 생성 완료"
+  ],
+  "문제": [
+    "Death remains 60%, concentrated in deficit trial.",
+    "One full clear sample had a first boss TTK outlier, so the median passes but variance remains visible."
+  ],
+  "기획질문": [
+    "있음 - docs\\review_prompts\\2026-06-06-balance-baseline-deficit-trial.md"
+  ],
+  "attachments": [
+    "2026-06-06-02-post-boss-balance-baseline.summary.json",
+    "2026-06-06-02-post-boss-balance-baseline.html",
+    "2026-06-06-balance-baseline-deficit-trial.md"
+  ],
+  "source": "docs\\reports\\units\\2026-06-06\\2026-06-06-02-post-boss-balance-baseline.html",
+  "generatedAt": "2026-06-05T17:59:32.805Z"
+}

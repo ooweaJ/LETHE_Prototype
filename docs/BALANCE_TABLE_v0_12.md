@@ -423,3 +423,13 @@ TTK 산정법 (눈대중 금지):
 - Browser `first_boss_ttk`: 3/3 accepted, first boss clear `100%`, TTK median `25.76s`.
 - Full browser `qa:balance`: first boss clear `80%`, death `20%`, TTK median `27.79s`, level-ups before first boss median `11`, full clear `0%`.
 - Next tuning decision should focus on post-boss/full-run flow, not another immediate first boss HP change.
+
+## 2026-06-06 Balance Baseline
+
+- Current first boss HP: `2500`.
+- Post-boss spawn caps: deficit breath `16`, deficit trial `22`, later-cycle default `58`.
+- Browser balance QA run window: `690s`.
+- Boss-only HP `2500`: 5/5 accepted, TTK median `15.62s`.
+- Browser `first_boss_ttk` HP `2500`: 3/3 accepted, TTK median `21.05s`.
+- Full browser `qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `40%`, death `60%`, first boss TTK median `22.24s`.
+- Next tuning decision should be review-driven: decide whether deficit-trial death concentration is acceptable or should be softened.

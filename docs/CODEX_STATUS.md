@@ -672,3 +672,12 @@ npm run ai:sweep
 - Browser `first_boss_ttk` result: 3/3 accepted samples, TTK median `25.76s`, first boss clear `100%`, verdict `GO_BALANCE_BASELINE`.
 - Full browser `qa:balance` after the fix: first boss clear `80%`, death `20%`, first boss TTK median `27.79s`, level-ups before first boss median `11`, verdict `ITERATE_BALANCE`.
 - Current blocker moved from first-boss TTK sample stability to post-boss/full-run flow: full clear is still `0%`, and one run died during the forget-warning phase.
+
+## Latest Override - 2026-06-06 Balance Baseline
+
+- First boss HP is now `2500`.
+- Browser `first_boss_ttk` HP `2500`: 3/3 accepted samples, TTK median `21.05s`, first boss clear `100%`, verdict `GO_BALANCE_BASELINE`.
+- Full browser `qa:balance`: verdict `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `40%`, death `60%`, first boss TTK median `22.24s`, level-ups before first boss median `10`.
+- Full-run QA window is now `690s` so the final scheduled boss has time to resolve after spawning at `600s`.
+- Post-boss spawn caps are now lower: deficit breath `16`, deficit trial `22`, later-cycle default `58`.
+- Current next task is interpretation/design direction: death remains concentrated in deficit trial, but the automated baseline gates pass.

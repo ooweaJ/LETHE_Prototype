@@ -344,7 +344,7 @@ const balance = {
     speed: 184,
   },
   boss: {
-    firstBossHp: 2800,
+    firstBossHp: 2500,
   },
   hungryBlades: {
     dps: 28,
@@ -378,7 +378,9 @@ const balance = {
     firstCycleRising: 36,
     firstCycleClimax: 32,
     firstCycleGateBreath: 22,
-    default: 82,
+    deficitBreath: 16,
+    deficitTrial: 22,
+    default: 58,
   },
   bloodMarsh: {
     twinBladesProc: 0.3,
@@ -967,6 +969,8 @@ function updateSpawning(dt) {
 }
 
 function pressureMaxEnemies(profile) {
+  if (profile.id === "deficit_breath") return balance.spawnCaps.deficitBreath;
+  if (profile.id === "deficit_trial") return balance.spawnCaps.deficitTrial;
   const firstCycle = state.runTimeline.nextBossIndex === 0;
   if (!firstCycle) return balance.spawnCaps.default;
   if (profile.id === "lull") return balance.spawnCaps.firstCycleLull;
@@ -4499,6 +4503,11 @@ function resolveBalanceInterrupts() {
     if (choice) applyLevelUpChoice(choice);
     return;
   }
+  const continueButton = document.querySelector("#continueCycleButton");
+  if (continueButton) {
+    continueButton.click();
+    return;
+  }
   if (state.mode === "questions") {
     const active = activeMemories();
     if (!active.length) return;
@@ -4506,11 +4515,6 @@ function resolveBalanceInterrupts() {
     state.questions.predict = active[0].id;
     const forgotten = forgetWeightedMemory();
     showCycleResultOverlay(forgotten);
-    return;
-  }
-  const continueButton = document.querySelector("#continueCycleButton");
-  if (continueButton) {
-    continueButton.click();
     return;
   }
   if (state.mode === "refill") {

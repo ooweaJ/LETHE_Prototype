@@ -114,3 +114,13 @@ npm run qa:boss-ttk:dry
 - Browser `first_boss_ttk`: 3/3 accepted samples, first boss clear `100%`, TTK median `25.76s`, verdict `GO_BALANCE_BASELINE`.
 - Full `qa:balance`: first boss clear `80%`, death `20%`, first boss TTK median `27.79s`, full clear `0%`, verdict `ITERATE_BALANCE`.
 - Keep first boss HP at `2800`; the next automation target is post-boss/full-run flow.
+
+### 2026-06-06 Balance Baseline
+
+- Full-run QA now uses a `690s` default run window so the `600s` scheduled boss has time to resolve.
+- Post-boss pressure caps were added: deficit breath `16`, deficit trial `22`, later-cycle default `58`.
+- First boss HP is now `2500`.
+- Boss-only HP `2500`: 5/5 accepted, TTK median `15.62s`.
+- Browser `first_boss_ttk` HP `2500`: 3/3 accepted, TTK median `21.05s`.
+- Full browser `qa:balance`: verdict `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `40%`, death `60%`, first boss TTK median `22.24s`.
+- Next gate: reviewer/GPT interpretation of deficit-trial death rate before human playtest.
