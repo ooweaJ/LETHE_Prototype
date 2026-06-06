@@ -647,4 +647,16 @@
   - Boss-only TTK: 5/5 accepted, median `15.62s`.
   - Browser `first_boss_ttk`: 3/3 accepted, median `19.82s`.
   - Full `qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `80%`, full clear `60%`, death `40%`, first boss TTK median `25.79s`.
-- [ ] Next decision: if this is accepted as pre-human-test automated baseline, move to human-test packaging/reporting rather than another blind tuning pass.
+- [x] Next decision: accept this as the current pre-human-test automated baseline and move to human-test packaging/reporting rather than another blind tuning pass.
+
+## Latest Override - 2026-06-07 v0.12 Human Playtest Package
+
+- [x] Update human playtest guide for the v0.12 balance baseline.
+- [x] Update playtest notes template for v0.12 observation fields.
+- [x] Add `docs/playtest/2026-06-07-v012-human.md`.
+- [x] Update `npm run playtest:package` so the package includes `V012_HUMAN_PLAYTEST_SHEET.md`.
+- [x] Verify packaging.
+  - `node --check scripts/prepare_playtest_build.js`: pass.
+  - `npm run playtest:package:dry`: pass.
+  - `npm run playtest:package`: pass, generated `dist\lethe-v0.12-playtest`.
+- [ ] Next task: run controlled human sessions, place downloaded JSON logs in `playtest_logs/`, then run `npm run playtest:summary`.

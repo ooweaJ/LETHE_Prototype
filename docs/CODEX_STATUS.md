@@ -703,3 +703,15 @@ npm run ai:sweep
 - Final browser `qa:balance`: verdict `GO_BALANCE_BASELINE`, first boss clear `80%`, full clear `60%`, death `40%`, first boss TTK median `25.79s`, level-ups before first boss median `11`.
 - Final boss-only HP `2500`: 5/5 accepted, TTK median `15.62s`.
 - Final browser `first_boss_ttk`: 3/3 accepted, TTK median `19.82s`.
+
+## Latest Override - 2026-06-07 v0.12 Human Playtest Package
+
+- Accepted the latest automated balance baseline as the current pre-human-test candidate instead of continuing blind numeric tuning.
+- Human playtest guide is now v0.12-specific: `docs/HUMAN_PLAYTEST_GUIDE.md`.
+- Playtest notes template is now v0.12-specific: `docs/PLAYTEST_NOTES.md`.
+- New session sheet: `docs/playtest/2026-06-07-v012-human.md`.
+- `npm run playtest:package` now includes `V012_HUMAN_PLAYTEST_SHEET.md` instead of the old v0.7 solo sheet.
+- Verification:
+  - `node --check scripts/prepare_playtest_build.js`: pass.
+  - `npm run playtest:package:dry`: pass, output target `dist\lethe-v0.12-playtest`.
+  - `npm run playtest:package`: pass, generated `dist\lethe-v0.12-playtest`.

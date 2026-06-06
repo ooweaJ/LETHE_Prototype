@@ -1,10 +1,8 @@
 # Playtest Notes
 
-사람 플레이테스트와 관찰 내용을 기록한다. AI 알파테스트 결과와 섞지 않는다.
+Use this file for human observation notes only. Keep AI balance QA, browser automation, and human reactions separate.
 
-테스트 진행 기준은 `docs/HUMAN_PLAYTEST_GUIDE.md`를 따른다.
-
-Current gate: v0.7 is not a broad 5-8 player test yet. Claude v0.7 feedback says to run a user solo feel test first with `docs/playtest/2026-06-02-solo.md`.
+Current gate: LETHE HTML alpha v0.12 is a controlled 5-8 player human-test candidate after the automated balance baseline. Use `docs/HUMAN_PLAYTEST_GUIDE.md` and `docs/playtest/2026-06-07-v012-human.md`.
 
 ## Session Template
 
@@ -12,39 +10,57 @@ Current gate: v0.7 is not a broad 5-8 player test yet. Claude v0.7 feedback says
 Date:
 Tester ID:
 Session ID:
-Build: LETHE HTML alpha v0.7
-Weapon:
-Memories:
+Build: LETHE HTML alpha v0.12
 JSON log file:
 
+Setup:
+- Weapon:
+- Starting memory:
+- Notable level-up choices:
+- Active memories before first boss:
+
 Early loop:
-- 첫 2-3분 재미: fun / neutral / boring / unclear
-- 적 몰림 체감:
-- 레벨업 선택 횟수 체감:
-- 3택 선택 태도: 고민함 / 아무거나 누름 / 이해 못함
-- 선택한 성장과 이유:
+- First 2-3 minute feel: fun / neutral / boring / unclear
+- Enemy pressure: low / good / too high / unclear
+- Level-up choice feel: build-shaping / random / confusing / missed
+- Did the tester mention a preferred memory before the first boss? yes / maybe / no
+- Notes:
 
-Before forgetting:
-- 가장 의존한다고 느낀 기억:
-- 가장 잃고 싶지 않은 기억:
-- 레테가 가져갈 것 같은 기억:
-- 예측 이유:
+First boss:
+- Reached first boss: yes / no
+- Defeated first boss: yes / no
+- Boss TTK feel: fast / good / slow / unclear
+- Did the tester feel stronger by the boss? yes / maybe / no
+- Notes:
 
-After forgetting:
-- 실제로 잃은 기억:
-- Q1 아쉬움 0~4:
-- Q2 납득 0~4:
-- Q3 기억 이름 회상:
-- 즉시 반응:
-- 잔향 이해 여부:
-- 28% 전투력 딥 체감: 약함 / 적당함 / 과함 / 못 느낌
-- 계속 플레이 의향:
-- Unity 가능성 발화:
+Prediction and forgetting:
+- Least wanted memory loss:
+- Predicted memory loss:
+- Actual forgotten memory:
+- Prediction felt: fair / too obvious / confusing / random
+- First spoken reaction:
+- Reaction label: regret / irritation / neutral / unclear
+- Notes:
 
-Observations:
-- reaction label: regret / irritation / neutral / unclear
-- restart intent: yes / maybe / no
-- 좋았던 점:
-- 짜증/혼란:
-- 다음 수정 후보:
+Deficit and refill:
+- 2-memory survival feel: tense-good / too hard / too easy / confusing
+- Refill reached: yes / no
+- Chosen refill memory:
+- Refill felt like: adaptation / full reset / random recovery / unclear
+- After refill, did the tester want to continue? yes / maybe / no
+- Notes:
+
+Required follow-up answers:
+- Was the first 2-3 minutes fun, boring, or unclear?
+- Did the level-up choices feel meaningful?
+- What did the tester feel when the memory disappeared?
+- Did the 2-memory deficit segment feel fair?
+- Did refill make them want to keep playing?
+- Would they restart to try another build?
+- Does this feel promising enough for a future Unity version?
+
+Decision:
+- Session verdict: promising / mixed / revise-before-more-tests
+- Main reason:
+- Next change candidate:
 ```

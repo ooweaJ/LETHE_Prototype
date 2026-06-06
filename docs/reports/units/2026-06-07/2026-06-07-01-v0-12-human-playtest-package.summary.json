@@ -1,0 +1,32 @@
+{
+  "project": "LETHE Prototype",
+  "type": "work_unit_report",
+  "title": "2026-06-07-01 - v0.12 Human Playtest Package",
+  "기준": "2026-06-07 기준",
+  "어떤_작업": [
+    "Updated docs/HUMAN_PLAYTEST_GUIDE.md for v0.12 controlled 5-8 player sessions.",
+    "Updated docs/PLAYTEST_NOTES.md with v0.12 observation fields."
+  ],
+  "진행_내용": [
+    "node --check scripts/prepare_playtest_build.js: pass.",
+    "npm run playtest:package:dry: pass, output target dist\\lethe-v0.12-playtest.",
+    "npm run playtest:package: pass, generated dist\\lethe-v0.12-playtest.",
+    "Accept the latest automated balance baseline as the current pre-human-test candidate."
+  ],
+  "결과": [
+    "HTML 보고서 생성 완료"
+  ],
+  "문제": [
+    "Human players may still find the 40% death / post-loss pressure too sharp.",
+    "AI balance QA is not human emotion evidence."
+  ],
+  "기획질문": [
+    "없음"
+  ],
+  "attachments": [
+    "2026-06-07-01-v0-12-human-playtest-package.summary.json",
+    "2026-06-07-01-v0-12-human-playtest-package.html"
+  ],
+  "source": "docs\\reports\\units\\2026-06-07\\2026-06-07-01-v0-12-human-playtest-package.html",
+  "generatedAt": "2026-06-06T17:57:44.758Z"
+}

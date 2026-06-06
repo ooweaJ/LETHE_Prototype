@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-07-01 - v0.12 Human Playtest Package</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-07-01 - v0.12 Human Playtest Package</h1>
+      <p class="meta">Generated from 2026-06-07.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-07-01 - v0.12 Human Playtest Package</h1>
+<h2>1. Current build status</h2>
+<p>v0.12 is the current controlled human-test candidate. The latest automated balance baseline remains <code>GO_BALANCE_BASELINE</code>: first boss clear <code>80%</code>, full clear <code>60%</code>, death <code>40%</code>, first boss TTK median <code>25.79s</code>.</p>
+<h2>2. What changed today</h2>
+<ul>
+<li>Updated <code>docs/HUMAN_PLAYTEST_GUIDE.md</code> for v0.12 controlled 5-8 player sessions.</li>
+<li>Updated <code>docs/PLAYTEST_NOTES.md</code> with v0.12 observation fields.</li>
+<li>Added <code>docs/playtest/2026-06-07-v012-human.md</code>.</li>
+<li>Updated <code>scripts/prepare_playtest_build.js</code> so the package includes <code>V012_HUMAN_PLAYTEST_SHEET.md</code>.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li><code>node --check scripts/prepare_playtest_build.js</code>: pass.</li>
+<li><code>npm run playtest:package:dry</code>: pass, output target <code>dist\lethe-v0.12-playtest</code>.</li>
+<li><code>npm run playtest:package</code>: pass, generated <code>dist\lethe-v0.12-playtest</code>.</li>
+<li>Package file check confirmed <code>HUMAN_PLAYTEST_GUIDE.md</code>, <code>PLAYTEST_NOTES_TEMPLATE.md</code>, <code>V012_HUMAN_PLAYTEST_SHEET.md</code>, <code>PLAYTEST_SUMMARY_README.md</code>, <code>README.md</code>, <code>index.html</code>, <code>style.css</code>, and <code>src/</code>.</li>
+<li><code>npm run report</code>: pass.</li>
+<li><code>npm run report:check</code>: pass.</li>
+<li><code>npm run doctor</code>: pass, 50 pass / 0 warn / 0 fail.</li>
+<li><code>npm run report:discord:unit:dry</code>: pass.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>Accept the latest automated balance baseline as the current pre-human-test candidate.</li>
+<li>Stop blind numeric tuning until human evidence exists.</li>
+<li>Move the next work toward controlled human sessions and log summarization.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>Human players may still find the <code>40%</code> death / post-loss pressure too sharp.</li>
+<li>AI balance QA is not human emotion evidence.</li>
+<li>The generated <code>dist/</code> package is ignored by git, so it must be regenerated with <code>npm run playtest:package</code> when needed.</li>
+<li><code>npm run report:discord:unit</code> was blocked by the approval reviewer because sending workspace reports/attachments to an external Discord webhook is treated as potential private data exfiltration in this Codex session.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<p>Emotion proxy is excluded. v0.12 has an automated balance baseline and a packaged human-test candidate. Next judgment should come from 5-8 controlled human sessions focused on early fun, meaningful level-up choices, first forgetting reaction, deficit survival feel, refill motivation, and restart intent.</p>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>After sessions, place downloaded JSON logs in <code>playtest_logs/</code>.</li>
+<li>Run <code>npm run playtest:summary</code>.</li>
+<li>Send the generated human-test prompt through the planning pipeline before major tuning or Unity-transition decisions.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: v0.12 passed automated balance, but human-test materials still referenced the old v0.7 solo gate.</li>
+<li>Direction: Convert the automated baseline into a practical controlled playtest package.</li>
+<li>Action: Updated guide, notes, session sheet, and package generation.</li>
+<li>Result: <code>dist\lethe-v0.12-playtest</code> is generated and ready to open for controlled sessions.</li>
+</ul>
+  </main>
+</body>
+</html>
