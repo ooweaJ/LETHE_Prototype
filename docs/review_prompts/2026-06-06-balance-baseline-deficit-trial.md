@@ -1,8 +1,32 @@
 # 2026-06-06 v0.12 Balance Baseline Review Prompt
 
-## Context
+## Update
 
-LETHE HTML prototype v0.12 now passes the automated browser balance baseline.
+Codex ran one more balance pass after this prompt was created. The original deficit-trial death concern is now softened, but a new review question remains.
+
+Latest changes:
+
+- Deficit duration: `75s -> 60s`.
+- Deficit trial cap: `22 -> 16`.
+- Pre-boss XP multiplier: `1.75 -> 1.95`.
+- Refill recovery: HP floor `85%`, shield `18`.
+- Survival stat: max HP `+16`, heal `+28`, damage reduction `+5%`.
+- Low-HP level-ups force-offer survival once; balance QA chooses survival below `78%` HP.
+
+Latest evidence:
+
+- Boss-only HP `2500`: 5/5 accepted, TTK median `15.62s`.
+- Browser `first_boss_ttk`: 3/3 accepted, TTK median `21.04s`.
+- Full browser `qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `80%`, death `20%`, first boss TTK median `27.84s`.
+
+Updated review question:
+
+1. Is full clear `80%` acceptable as an upper-bound automated baseline before human testing, or did the refill/survival tuning become too forgiving?
+2. If too forgiving, should Codex reintroduce a small amount of late pressure without changing first boss HP?
+
+## Previous Context
+
+LETHE HTML prototype v0.12 passed the automated browser balance baseline.
 
 Codex changes in the latest unit:
 

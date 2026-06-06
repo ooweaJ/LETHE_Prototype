@@ -681,3 +681,14 @@ npm run ai:sweep
 - Full-run QA window is now `690s` so the final scheduled boss has time to resolve after spawning at `600s`.
 - Post-boss spawn caps are now lower: deficit breath `16`, deficit trial `22`, later-cycle default `58`.
 - Current next task is interpretation/design direction: death remains concentrated in deficit trial, but the automated baseline gates pass.
+
+## Latest Override - 2026-06-06 Deficit Trial Survival Tuning
+
+- Balance goal: reduce death from `60%` to `<= 40%` while keeping first boss TTK in `15-30s` and full clear within the automated `35-80%` band.
+- Deficit duration is now `60s`.
+- Pre-boss XP multiplier is now `1.95`.
+- Deficit trial cap is now `16`.
+- Refill now restores the player to at least `85%` HP and grants shield `18`.
+- Low-HP level-up rolls now force-offer survival once, and QA chooses survival below `78%` HP.
+- Full browser `qa:balance`: verdict `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `80%`, death `20%`, first boss TTK median `27.84s`.
+- Risk: full clear is exactly at the automated upper bound, so the next reviewer should judge whether the prototype became too forgiving after refill.

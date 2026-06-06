@@ -1,0 +1,33 @@
+{
+  "project": "LETHE Prototype",
+  "type": "work_unit_report",
+  "title": "2026-06-06-03 - Deficit Trial Survival Tuning",
+  "기준": "2026-06-06 기준",
+  "어떤_작업": [
+    "Set the next balance target: death <= 40%, full clear 35-80%, first boss TTK 15-30s.",
+    "Changed deficit duration from 75s to 60s."
+  ],
+  "진행_내용": [
+    "node --check src/game.js: pass.",
+    "node --check scripts/run_boss_ttk_harness.js: pass.",
+    "node --check scripts/run_browser_balance_qa.js: pass.",
+    "Keep first boss HP at 2500."
+  ],
+  "결과": [
+    "HTML 보고서 생성 완료"
+  ],
+  "문제": [
+    "Full clear is exactly at the automated upper bound 80%.",
+    "One run still had a slow first boss outlier, though the median is in target."
+  ],
+  "기획질문": [
+    "있음 - docs\\review_prompts\\2026-06-06-balance-baseline-deficit-trial.md"
+  ],
+  "attachments": [
+    "2026-06-06-03-deficit-trial-survival-tuning.summary.json",
+    "2026-06-06-03-deficit-trial-survival-tuning.html",
+    "2026-06-06-balance-baseline-deficit-trial.md"
+  ],
+  "source": "docs\\reports\\units\\2026-06-06\\2026-06-06-03-deficit-trial-survival-tuning.html",
+  "generatedAt": "2026-06-06T08:22:18.849Z"
+}

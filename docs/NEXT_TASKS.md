@@ -612,3 +612,24 @@
   - Death `60%`.
   - First boss TTK median `22.24s`.
 - [ ] Ask reviewer/GPT to interpret whether deficit-trial death `60%` is acceptable tension for the current prototype gate or needs another design pass before human playtest.
+
+## Latest Override - 2026-06-06 Deficit Trial Survival Tuning
+
+- [x] Set next balance target.
+  - Death `<= 40%`.
+  - Full clear within automated target band `35-80%`.
+  - First boss TTK `15-30s`.
+- [x] Tune deficit survival.
+  - Deficit duration `75s -> 60s`.
+  - Deficit trial cap `22 -> 16`.
+  - Refill HP floor `85%`.
+  - Refill shield `18`.
+- [x] Stabilize low-HP growth choices.
+  - Survival stat now gives max HP `+16`, heal `+28`, damage reduction `+5%`.
+  - Low-HP level-ups force-offer survival when it has not already been taken.
+  - Balance QA chooses survival below `78%` HP.
+- [x] Verify latest balance.
+  - Boss-only TTK: 5/5 accepted, median `15.62s`.
+  - Browser `first_boss_ttk`: 3/3 accepted, median `21.04s`.
+  - Full `qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `80%`, death `20%`, first boss TTK median `27.84s`.
+- [ ] Ask reviewer/GPT whether full clear at the upper bound `80%` is acceptable, or whether the next pass should reintroduce a small amount of late pressure.

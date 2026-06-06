@@ -433,3 +433,16 @@ TTK 산정법 (눈대중 금지):
 - Browser `first_boss_ttk` HP `2500`: 3/3 accepted, TTK median `21.05s`.
 - Full browser `qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `40%`, death `60%`, first boss TTK median `22.24s`.
 - Next tuning decision should be review-driven: decide whether deficit-trial death concentration is acceptable or should be softened.
+
+## 2026-06-06 Deficit Trial Survival Tuning
+
+- Current first boss HP: `2500`.
+- Deficit duration: `60s`.
+- Pre-boss XP multiplier: `1.95`.
+- Post-boss spawn caps: deficit breath `16`, deficit trial `16`, later-cycle default `58`.
+- Refill recovery: HP floor `85%`, shield `18`.
+- Survival stat: max HP `+16`, heal `+28`, damage reduction `+5%`.
+- Boss-only TTK: 5/5 accepted, median `15.62s`.
+- Browser `first_boss_ttk`: 3/3 accepted, median `21.04s`.
+- Full browser `qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `80%`, death `20%`, first boss TTK median `27.84s`.
+- Next tuning decision: review whether full clear at `80%` is too forgiving.

@@ -55,11 +55,11 @@ const levelUpChoices = {
     name: "가라앉지 않는 숨",
     desc: "최대 체력과 회복력이 올라갑니다.",
     apply() {
-      state.player.maxHp += 12;
-      state.player.hp = Math.min(state.player.maxHp, state.player.hp + 18);
-      state.runGrowth.damageReduction += 0.04;
+      state.player.maxHp += 16;
+      state.player.hp = Math.min(state.player.maxHp, state.player.hp + 28);
+      state.runGrowth.damageReduction += 0.05;
     },
-    log: "최대 HP +12, 즉시 회복, 피해 감소 +4%",
+    log: "최대 HP +16, 즉시 회복, 피해 감소 +5%",
   },
   magnet: {
     id: "magnet",
@@ -286,7 +286,7 @@ const experiment = {
   runDurationSec: 600,
   bossScheduleSec: [180, 340, 490, 600],
   bossHp: 560,
-  deficitDurationSec: 75,
+  deficitDurationSec: 60,
   qaFastMode: qaMode.includes("fast"),
   qaLevelupMode: qaMode.includes("levelup"),
   qaV06Mode: qaMode.includes("v06"),
@@ -361,7 +361,7 @@ const balance = {
   },
   runGrowth: {
     initialNextXp: 5,
-    preBossXpMul: 1.75,
+    preBossXpMul: 1.95,
     earlyCurveUntilLevel: 10,
     earlyNextXpMul: 1.24,
     earlyNextXpAdd: 3,
@@ -379,7 +379,8 @@ const balance = {
     firstCycleClimax: 32,
     firstCycleGateBreath: 22,
     deficitBreath: 16,
-    deficitTrial: 22,
+    deficitTrial: 16,
+    laterCycleClimax: 58,
     default: 58,
   },
   bloodMarsh: {
@@ -972,6 +973,7 @@ function pressureMaxEnemies(profile) {
   if (profile.id === "deficit_breath") return balance.spawnCaps.deficitBreath;
   if (profile.id === "deficit_trial") return balance.spawnCaps.deficitTrial;
   const firstCycle = state.runTimeline.nextBossIndex === 0;
+  if (!firstCycle && profile.id === "climax") return balance.spawnCaps.laterCycleClimax;
   if (!firstCycle) return balance.spawnCaps.default;
   if (profile.id === "lull") return balance.spawnCaps.firstCycleLull;
   if (profile.id === "rising") return balance.spawnCaps.firstCycleRising;
@@ -2080,7 +2082,14 @@ function chooseLevelUpChoices() {
   });
   statPool.slice(0, 3).forEach((choice) => choices.push({ kind: "stat", id: choice.id }));
 
-  return choices.sort(() => Math.random() - 0.5).slice(0, 3);
+  const result = choices.sort(() => Math.random() - 0.5).slice(0, 3);
+  const hpRate = state?.player ? state.player.hp / state.player.maxHp : 1;
+  const shouldOfferSurvival = hpRate < 0.72 && !statTaken.has("survival");
+  if (shouldOfferSurvival && !result.some((choice) => choice.kind === "stat" && choice.id === "survival")) {
+    const replaceIndex = result.findIndex((choice) => choice.kind === "stat");
+    result[replaceIndex >= 0 ? replaceIndex : result.length - 1] = { kind: "stat", id: "survival" };
+  }
+  return result;
 }
 
 function showLevelUpOverlay() {
@@ -2717,6 +2726,8 @@ function applyMemoryRefill(id) {
   overlay.innerHTML = "";
   state.mode = "combat";
   state.running = true;
+  state.player.hp = Math.max(state.player.hp, state.player.maxHp * 0.85);
+  state.player.shield = Math.max(state.player.shield || 0, 18);
   state.phase = "전투";
   addLog(`${memories[id].name} 기억이 빈 슬롯을 채웠다.`);
   addFloater("기억 보충", state.player.x, state.player.y - 34, "#6ddfd2");
@@ -4369,7 +4380,7 @@ function chooseBalanceLevelUpChoice() {
     return choices.find((choice) => choice.kind === "memory_new") || choices[0];
   }
   const hpRate = state.player.hp / state.player.maxHp;
-  if (hpRate < 0.62) {
+  if (hpRate < 0.78) {
     const survivalChoice = choices.find((choice) => choice.kind === "stat" && choice.id === "survival");
     if (survivalChoice) return survivalChoice;
   }

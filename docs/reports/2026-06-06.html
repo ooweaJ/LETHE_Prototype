@@ -218,6 +218,57 @@
 <li>Action: Reordered QA interrupt handling, added post-boss caps, extended the QA run window, then set first boss HP to <code>2500</code>.</li>
 <li>Result: Automated browser balance baseline now passes with clear evidence and a narrowed remaining design question.</li>
 </ul>
+<h1>2026-06-06-03 - Deficit Trial Survival Tuning</h1>
+<h2>1. Current build status</h2>
+<p>v0.12 remains <code>GO_BALANCE_BASELINE</code>. Death is now below the target, but full clear is exactly at the automated upper bound.</p>
+<h2>2. What changed today</h2>
+<ul>
+<li>Set the next balance target: death <code>&lt;= 40%</code>, full clear <code>35-80%</code>, first boss TTK <code>15-30s</code>.</li>
+<li>Changed deficit duration from <code>75s</code> to <code>60s</code>.</li>
+<li>Changed deficit trial cap from <code>22</code> to <code>16</code>.</li>
+<li>Changed pre-boss XP multiplier from <code>1.75</code> to <code>1.95</code>.</li>
+<li>Added refill recovery: HP floor <code>85%</code>, shield <code>18</code>.</li>
+<li>Strengthened survival stat and made low-HP survival choices more reliable.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li><code>node --check src/game.js</code>: pass.</li>
+<li><code>node --check scripts/run_boss_ttk_harness.js</code>: pass.</li>
+<li><code>node --check scripts/run_browser_balance_qa.js</code>: pass.</li>
+<li>Boss-only TTK: 5/5 accepted, TTK median <code>15.62s</code>, verdict <code>GO_BOSS_TTK_SAMPLE</code>.</li>
+<li>Browser <code>first_boss_ttk</code>: 3/3 accepted, TTK median <code>21.04s</code>, verdict <code>GO_BALANCE_BASELINE</code>.</li>
+<li>Full browser <code>qa:balance</code>: <code>GO_BALANCE_BASELINE</code>, first boss clear <code>100%</code>, full clear <code>80%</code>, death <code>20%</code>, first boss TTK median <code>27.84s</code>.</li>
+<li>Evidence: <code>docs/balance/2026-06-06-v012-boss-ttk-survival-choice.md</code>, <code>docs/balance/2026-06-06-v012-browser-first-boss-ttk-survival-choice.md</code>, <code>docs/balance/2026-06-06-v012-balance-qa.md</code>.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>Keep first boss HP at <code>2500</code>.</li>
+<li>Treat death <code>20%</code> as meeting the survival target.</li>
+<li>Do not do another blind balance pass until reviewer/GPT judges whether full clear <code>80%</code> is too forgiving.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>Full clear is exactly at the automated upper bound <code>80%</code>.</li>
+<li>One run still had a slow first boss outlier, though the median is in target.</li>
+<li>AI proxy metrics still are not human emotion feedback.</li>
+<li><code>npm run report:discord:unit</code> was blocked by the approval reviewer because sending workspace reports/attachments to an external Discord webhook is treated as potential private data exfiltration in this Codex session.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<p>Emotion proxy is excluded. The new target was death <code>&lt;= 40%</code> while preserving full clear <code>35-80%</code> and first boss TTK <code>15-30s</code>. Latest full <code>qa:balance</code> passes with death <code>20%</code>, full clear <code>80%</code>, first boss TTK median <code>27.84s</code>. Reviewer should decide whether to accept this as pre-human-test baseline or reintroduce slight late pressure.</p>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>If reviewer accepts, proceed to the next pre-human-test/reporting gate.</li>
+<li>If reviewer says too forgiving, reintroduce a small amount of late pressure without changing first boss HP.</li>
+<li>Do not add new systems or expand scope.</li>
+<li>From a trusted local terminal, run <code>npm run report:discord:unit</code> if Discord delivery is still required.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: The previous automated baseline passed but killed <code>60%</code> of AI runs, mostly around post-boss pressure.</li>
+<li>Direction: Improve survival recovery and low-HP choice reliability instead of weakening the first boss.</li>
+<li>Action: Tuned deficit duration/cap, refill recovery, survival stat, and low-HP survival choices.</li>
+<li>Result: Death dropped to <code>20%</code> and full browser balance still passes, leaving a clear design judgment about difficulty ceiling.</li>
+</ul>
   </main>
 </body>
 </html>

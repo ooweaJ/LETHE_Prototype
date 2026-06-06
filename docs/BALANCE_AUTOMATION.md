@@ -124,3 +124,16 @@ npm run qa:boss-ttk:dry
 - Browser `first_boss_ttk` HP `2500`: 3/3 accepted, TTK median `21.05s`.
 - Full browser `qa:balance`: verdict `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `40%`, death `60%`, first boss TTK median `22.24s`.
 - Next gate: reviewer/GPT interpretation of deficit-trial death rate before human playtest.
+
+### 2026-06-06 Deficit Trial Survival Tuning
+
+- Goal: death `<= 40%`, full clear `35-80%`, first boss TTK `15-30s`.
+- Deficit duration changed from `75s` to `60s`.
+- Deficit trial cap changed from `22` to `16`.
+- Pre-boss XP multiplier changed from `1.75` to `1.95`.
+- Refill now restores HP to at least `85%` and grants shield `18`.
+- Low-HP level-ups now force-offer survival once; balance QA chooses survival below `78%` HP.
+- Latest boss-only HP `2500`: 5/5 accepted, TTK median `15.62s`.
+- Latest browser `first_boss_ttk`: 3/3 accepted, TTK median `21.04s`.
+- Latest full browser `qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `80%`, death `20%`, first boss TTK median `27.84s`.
+- Risk: full clear is exactly at the automated upper bound, so the next review should check whether the run became too forgiving.

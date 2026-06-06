@@ -1,11 +1,11 @@
 {
   "source": "docs\\reports\\2026-06-06.md",
-  "generatedAt": "2026-06-05T17:59:09.245Z",
-  "unitCount": 2,
+  "generatedAt": "2026-06-06T08:21:38.027Z",
+  "unitCount": 3,
   "latest": {
-    "title": "2026-06-06-02 - Post-Boss Balance Baseline",
-    "number": "02",
-    "markdownPath": "docs\\reports\\units\\2026-06-06\\2026-06-06-02-post-boss-balance-baseline.md",
-    "htmlPath": "docs\\reports\\units\\2026-06-06\\2026-06-06-02-post-boss-balance-baseline.html"
+    "title": "2026-06-06-03 - Deficit Trial Survival Tuning",
+    "number": "03",
+    "markdownPath": "docs\\reports\\units\\2026-06-06\\2026-06-06-03-deficit-trial-survival-tuning.md",
+    "htmlPath": "docs\\reports\\units\\2026-06-06\\2026-06-06-03-deficit-trial-survival-tuning.html"
   }
 }
