@@ -692,3 +692,14 @@ npm run ai:sweep
 - Low-HP level-up rolls now force-offer survival once, and QA chooses survival below `78%` HP.
 - Full browser `qa:balance`: verdict `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `80%`, death `20%`, first boss TTK median `27.84s`.
 - Risk: full clear is exactly at the automated upper bound, so the next reviewer should judge whether the prototype became too forgiving after refill.
+
+## Latest Override - 2026-06-06 Deficit Trial Review Follow-Up
+
+- External Claude review was attempted but blocked by the approval reviewer because sending workspace-derived prompt content to an external Claude service is treated as potential private data exfiltration in this Codex session.
+- Local fallback review saved: `docs/review_responses/2026-06-06-balance-baseline-deficit-trial-codex.md`.
+- Review decision: `ITERATE_DEFICIT_TRIAL`; full clear `80%` was treated as too close to the automated upper bound.
+- First boss HP remains `2500`.
+- Balance QA selection now avoids over-prioritizing survival before the first boss, but still uses the stronger survival threshold after the first boss.
+- Final browser `qa:balance`: verdict `GO_BALANCE_BASELINE`, first boss clear `80%`, full clear `60%`, death `40%`, first boss TTK median `25.79s`, level-ups before first boss median `11`.
+- Final boss-only HP `2500`: 5/5 accepted, TTK median `15.62s`.
+- Final browser `first_boss_ttk`: 3/3 accepted, TTK median `19.82s`.

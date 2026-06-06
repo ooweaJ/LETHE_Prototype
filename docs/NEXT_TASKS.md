@@ -632,4 +632,19 @@
   - Boss-only TTK: 5/5 accepted, median `15.62s`.
   - Browser `first_boss_ttk`: 3/3 accepted, median `21.04s`.
   - Full `qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `80%`, death `20%`, first boss TTK median `27.84s`.
-- [ ] Ask reviewer/GPT whether full clear at the upper bound `80%` is acceptable, or whether the next pass should reintroduce a small amount of late pressure.
+- [x] Ask reviewer/GPT whether full clear at the upper bound `80%` is acceptable, or whether the next pass should reintroduce a small amount of late pressure.
+  - External Claude review was blocked by the approval reviewer as potential private data exfiltration.
+  - Local Codex fallback review saved: `docs/review_responses/2026-06-06-balance-baseline-deficit-trial-codex.md`.
+
+## Latest Override - 2026-06-06 Deficit Trial Review Follow-Up
+
+- [x] Apply reviewer decision: `ITERATE_DEFICIT_TRIAL`.
+- [x] Keep first boss HP at `2500`.
+- [x] Separate first-boss QA choice behavior from post-boss survival behavior.
+  - Before first boss, QA only picks survival at very low HP.
+  - After first boss, QA still picks survival below `78%` HP.
+- [x] Verify final balance.
+  - Boss-only TTK: 5/5 accepted, median `15.62s`.
+  - Browser `first_boss_ttk`: 3/3 accepted, median `19.82s`.
+  - Full `qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `80%`, full clear `60%`, death `40%`, first boss TTK median `25.79s`.
+- [ ] Next decision: if this is accepted as pre-human-test automated baseline, move to human-test packaging/reporting rather than another blind tuning pass.

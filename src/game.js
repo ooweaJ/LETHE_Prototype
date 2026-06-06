@@ -4380,7 +4380,9 @@ function chooseBalanceLevelUpChoice() {
     return choices.find((choice) => choice.kind === "memory_new") || choices[0];
   }
   const hpRate = state.player.hp / state.player.maxHp;
-  if (hpRate < 0.78) {
+  const firstBossPassed = (state.runTimeline?.nextBossIndex || 0) > 0;
+  const survivalThreshold = firstBossPassed ? 0.78 : 0.55;
+  if (hpRate < survivalThreshold) {
     const survivalChoice = choices.find((choice) => choice.kind === "stat" && choice.id === "survival");
     if (survivalChoice) return survivalChoice;
   }

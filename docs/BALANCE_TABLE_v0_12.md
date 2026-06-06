@@ -446,3 +446,17 @@ TTK 산정법 (눈대중 금지):
 - Browser `first_boss_ttk`: 3/3 accepted, median `21.04s`.
 - Full browser `qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `80%`, death `20%`, first boss TTK median `27.84s`.
 - Next tuning decision: review whether full clear at `80%` is too forgiving.
+
+## 2026-06-06 Deficit Trial Review Follow-Up
+
+- Review decision: `ITERATE_DEFICIT_TRIAL`.
+- External Claude review was blocked by approval review; local Codex fallback review saved under `docs/review_responses/`.
+- Current first boss HP: `2500`.
+- Deficit duration: `60s`.
+- Post-boss spawn caps: deficit breath `16`, deficit trial `16`, later-cycle default `58`.
+- Refill recovery: HP floor `85%`, shield `18`.
+- QA survival choice: lower pre-first-boss threshold, `78%` after first boss.
+- Boss-only TTK: 5/5 accepted, median `15.62s`.
+- Browser `first_boss_ttk`: 3/3 accepted, median `19.82s`.
+- Full browser `qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `80%`, full clear `60%`, death `40%`, first boss TTK median `25.79s`.
+- Next tuning decision: stop blind numeric tuning unless human/reviewer feedback says the baseline still feels wrong.

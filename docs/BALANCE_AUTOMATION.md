@@ -137,3 +137,13 @@ npm run qa:boss-ttk:dry
 - Latest browser `first_boss_ttk`: 3/3 accepted, TTK median `21.04s`.
 - Latest full browser `qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `80%`, death `20%`, first boss TTK median `27.84s`.
 - Risk: full clear is exactly at the automated upper bound, so the next review should check whether the run became too forgiving.
+
+### 2026-06-06 Deficit Trial Review Follow-Up
+
+- External Claude review was blocked by approval review as potential private data exfiltration; local Codex fallback review selected `ITERATE_DEFICIT_TRIAL`.
+- First boss HP stayed `2500`.
+- QA survival choice now uses a lower pre-first-boss threshold and the previous `78%` threshold only after the first boss.
+- Final boss-only HP `2500`: 5/5 accepted, TTK median `15.62s`.
+- Final browser `first_boss_ttk`: 3/3 accepted, TTK median `19.82s`.
+- Final full browser `qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `80%`, full clear `60%`, death `40%`, first boss TTK median `25.79s`.
+- Interpretation: this is a better automated pre-human-test baseline than the previous `80%` full clear / `20%` death result because it sits inside the target band instead of on the easy edge.

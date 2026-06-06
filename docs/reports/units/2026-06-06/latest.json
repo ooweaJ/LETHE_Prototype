@@ -1,11 +1,11 @@
 {
   "source": "docs\\reports\\2026-06-06.md",
-  "generatedAt": "2026-06-06T08:21:38.027Z",
-  "unitCount": 3,
+  "generatedAt": "2026-06-06T08:37:25.852Z",
+  "unitCount": 4,
   "latest": {
-    "title": "2026-06-06-03 - Deficit Trial Survival Tuning",
-    "number": "03",
-    "markdownPath": "docs\\reports\\units\\2026-06-06\\2026-06-06-03-deficit-trial-survival-tuning.md",
-    "htmlPath": "docs\\reports\\units\\2026-06-06\\2026-06-06-03-deficit-trial-survival-tuning.html"
+    "title": "2026-06-06-04 - Deficit Trial Review Follow-Up",
+    "number": "04",
+    "markdownPath": "docs\\reports\\units\\2026-06-06\\2026-06-06-04-deficit-trial-review-follow-up.md",
+    "htmlPath": "docs\\reports\\units\\2026-06-06\\2026-06-06-04-deficit-trial-review-follow-up.html"
   }
 }
