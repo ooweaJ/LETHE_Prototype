@@ -1,0 +1,33 @@
+{
+  "project": "LETHE Prototype",
+  "type": "work_unit_report",
+  "title": "2026-06-07-02 - Balance Loop Gate Fix",
+  "기준": "2026-06-07 기준",
+  "어떤_작업": [
+    "Ran local preflight before the loop.",
+    "Fixed scripts/run_balance_loop.js so the default run window is 690s, positional npm/PowerShell args work, and dry-run prints the real loop configuration."
+  ],
+  "진행_내용": [
+    "npm run autopilot:preflight:local: 20 pass / 1 warn / 0 fail.",
+    "node --check src/game.js: pass.",
+    "node --check scripts/run_browser_balance_qa.js: pass.",
+    "Treat balance:loop as the required source for balance QA."
+  ],
+  "결과": [
+    "HTML 보고서 생성 완료"
+  ],
+  "문제": [
+    "Five-run browser loops are still noisy; use loop evidence first, and consider 10-run confirmation before major claims.",
+    "Death is exactly at the upper bound 40%."
+  ],
+  "기획질문": [
+    "있음 - docs\\review_prompts\\2026-06-07-balance-loop.md"
+  ],
+  "attachments": [
+    "2026-06-07-02-balance-loop-gate-fix.summary.json",
+    "2026-06-07-02-balance-loop-gate-fix.html",
+    "2026-06-07-balance-loop.md"
+  ],
+  "source": "docs\\reports\\units\\2026-06-07\\2026-06-07-02-balance-loop-gate-fix.html",
+  "generatedAt": "2026-06-07T11:04:05.215Z"
+}

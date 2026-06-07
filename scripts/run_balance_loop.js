@@ -14,6 +14,9 @@ function main() {
   if (options.dryRun) {
     console.log('LETHE balance loop dry-run');
     console.log(`- node scripts/run_browser_balance_qa.js --runs ${options.runs}`);
+    console.log(`- run-sec ${options.runSec}, timeout-ms ${options.timeoutMs}`);
+    console.log(`- out ${options.outDir}`);
+    console.log(`- report ${options.reportPath}`);
     console.log('- write docs/review_prompts/YYYY-MM-DD-balance-loop.md');
     console.log('- no emotion proxy, no Alpha Fun Score gate');
     return;
@@ -104,14 +107,20 @@ function readJsonIfExists(file) {
 }
 
 function parseArgs(args) {
+  const positional = args.filter((arg) => !String(arg).startsWith('--'));
   return {
     dryRun: args.includes('--dry-run'),
-    runs: numberArg(args, '--runs', 5),
-    timeoutMs: numberArg(args, '--timeout-ms', 45000),
-    runSec: numberArg(args, '--run-sec', 608),
-    outDir: valueAfter(args, '--out') || path.join('alpha_test', 'outputs', 'balance'),
-    reportPath: valueAfter(args, '--report') || path.join('docs', 'balance', `${todayString()}-v012-balance-qa.md`),
+    runs: numberArg(args, '--runs', numberAt(positional, 0, 5)),
+    runSec: numberArg(args, '--run-sec', numberAt(positional, 1, 690)),
+    timeoutMs: numberArg(args, '--timeout-ms', numberAt(positional, 2, 60000)),
+    outDir: valueAfter(args, '--out') || positional[3] || path.join('alpha_test', 'outputs', 'balance'),
+    reportPath: valueAfter(args, '--report') || positional[4] || path.join('docs', 'balance', `${todayString()}-v012-balance-qa.md`),
   };
+}
+
+function numberAt(values, index, fallback) {
+  const parsed = Number(values[index]);
+  return Number.isFinite(parsed) ? parsed : fallback;
 }
 
 function valueAfter(args, name) {

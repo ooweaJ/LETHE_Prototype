@@ -286,7 +286,7 @@ const experiment = {
   runDurationSec: 600,
   bossScheduleSec: [180, 340, 490, 600],
   bossHp: 560,
-  deficitDurationSec: 60,
+  deficitDurationSec: 54,
   qaFastMode: qaMode.includes("fast"),
   qaLevelupMode: qaMode.includes("levelup"),
   qaV06Mode: qaMode.includes("v06"),
@@ -344,7 +344,7 @@ const balance = {
     speed: 184,
   },
   boss: {
-    firstBossHp: 2500,
+    firstBossHp: 2050,
   },
   hungryBlades: {
     dps: 28,
@@ -355,8 +355,8 @@ const balance = {
   enemyScaling: {
     hpTimePerMinute: 0.12,
     hpLevelPerLevel: 0.03,
-    damageTimePerMinute: 0.03,
-    damageLevelPerLevel: 0.01,
+    damageTimePerMinute: 0.025,
+    damageLevelPerLevel: 0.008,
     damageCap: 2.2,
   },
   runGrowth: {
@@ -375,13 +375,13 @@ const balance = {
   },
   spawnCaps: {
     firstCycleLull: 34,
-    firstCycleRising: 36,
+    firstCycleRising: 34,
     firstCycleClimax: 32,
     firstCycleGateBreath: 22,
     deficitBreath: 16,
-    deficitTrial: 16,
-    laterCycleClimax: 58,
-    default: 58,
+    deficitTrial: 14,
+    laterCycleClimax: 46,
+    default: 46,
   },
   bloodMarsh: {
     twinBladesProc: 0.3,
@@ -2726,8 +2726,8 @@ function applyMemoryRefill(id) {
   overlay.innerHTML = "";
   state.mode = "combat";
   state.running = true;
-  state.player.hp = Math.max(state.player.hp, state.player.maxHp * 0.85);
-  state.player.shield = Math.max(state.player.shield || 0, 18);
+  state.player.hp = Math.max(state.player.hp, state.player.maxHp * 0.95);
+  state.player.shield = Math.max(state.player.shield || 0, 24);
   state.phase = "전투";
   addLog(`${memories[id].name} 기억이 빈 슬롯을 채웠다.`);
   addFloater("기억 보충", state.player.x, state.player.y - 34, "#6ddfd2");

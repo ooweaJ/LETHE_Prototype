@@ -660,3 +660,19 @@
   - `npm run playtest:package:dry`: pass.
   - `npm run playtest:package`: pass, generated `dist\lethe-v0.12-playtest`.
 - [ ] Next task: run controlled human sessions, place downloaded JSON logs in `playtest_logs/`, then run `npm run playtest:summary`.
+
+## Latest Override - 2026-06-07 Balance Loop Gate Fix
+
+- [x] Run balance QA through `npm run balance:loop`, not only one-off `qa:balance`.
+- [x] Run local preflight before loop.
+  - `npm run autopilot:preflight:local`: 20 pass / 1 warn / 0 fail.
+- [x] Fix `balance:loop` argument/default mismatch.
+  - Default run window is now `690s`.
+  - PowerShell/npm positional args are accepted.
+  - Dry-run prints run-sec, timeout, out, and report path.
+- [x] Add death-rate gate to browser balance QA.
+  - Target death rate max: `<= 0.4`.
+- [x] Tune loop-based balance.
+  - Final browser `first_boss_ttk`: `GO_BALANCE_BASELINE`, TTK median `18.61s`.
+  - Final `balance:loop`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.73s`.
+- [ ] Next task: rerun playtest package after this balance change before human sessions.

@@ -460,3 +460,16 @@ TTK 산정법 (눈대중 금지):
 - Browser `first_boss_ttk`: 3/3 accepted, median `19.82s`.
 - Full browser `qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `80%`, full clear `60%`, death `40%`, first boss TTK median `25.79s`.
 - Next tuning decision: stop blind numeric tuning unless human/reviewer feedback says the baseline still feels wrong.
+
+## 2026-06-07 Balance Loop Gate Fix
+
+- QA source: `npm run balance:loop -- 5 690 60000 ...`.
+- Current first boss HP: `2050`.
+- Deficit duration: `54s`.
+- Enemy damage scaling: `damageTimePerMinute 0.025`, `damageLevelPerLevel 0.008`.
+- Post-boss spawn caps: deficit breath `16`, deficit trial `14`, later-cycle/default `46`.
+- Refill recovery: HP floor `95%`, shield `24`.
+- QA gate update: death rate max `<= 40%` is now enforced.
+- Browser `first_boss_ttk`: 3/3 accepted, median `18.61s`.
+- Final balance loop: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.73s`.
+- Next tuning decision: use loop evidence first; do not accept one-off `qa:balance` if it conflicts with loop output.

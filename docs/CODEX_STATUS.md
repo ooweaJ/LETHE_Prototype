@@ -715,3 +715,20 @@ npm run ai:sweep
   - `node --check scripts/prepare_playtest_build.js`: pass.
   - `npm run playtest:package:dry`: pass, output target `dist\lethe-v0.12-playtest`.
   - `npm run playtest:package`: pass, generated `dist\lethe-v0.12-playtest`.
+
+## Latest Override - 2026-06-07 Balance Loop Gate Fix
+
+- User flagged that balance QA should run through the loop, not only one-off `qa:balance`.
+- `npm run autopilot:preflight:local`: 20 pass / 1 warn / 0 fail; warning is the expected skipped live Claude auth check in local mode.
+- `scripts/run_balance_loop.js` now defaults to `690s`, shows run-sec/timeout/out/report in dry-run, and accepts PowerShell/npm positional arguments.
+- `scripts/run_browser_balance_qa.js` now enforces death rate max `<= 0.4`; death `60%` no longer passes as `GO_BALANCE_BASELINE`.
+- Balance changes:
+  - first boss HP `2500 -> 2050`,
+  - deficit duration `60s -> 54s`,
+  - enemy damage scaling `0.03/0.01 -> 0.025/0.008`,
+  - first-cycle rising cap `36 -> 34`,
+  - deficit trial cap `16 -> 14`,
+  - later-cycle/default caps `58 -> 46`,
+  - refill HP floor `85% -> 95%`, shield `18 -> 24`.
+- Final browser `first_boss_ttk`: `GO_BALANCE_BASELINE`, 3/3 accepted, first boss TTK median `18.61s`.
+- Final `npm run balance:loop -- 5 690 60000 ...`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.73s`.

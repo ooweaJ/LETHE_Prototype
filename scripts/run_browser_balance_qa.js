@@ -22,6 +22,7 @@ async function main() {
     console.log(`- out: ${options.outDir}`);
     console.log(`- target first boss TTK: ${options.firstBossTtkMin}-${options.firstBossTtkMax}s`);
     console.log(`- target clear rate: ${options.clearRateMin}-${options.clearRateMax}`);
+    console.log(`- target death rate: <= ${options.deathRateMax}`);
     console.log(`- target level-ups before first boss: >= ${options.levelUpsBeforeFirstBossMin}`);
     return;
   }
@@ -292,6 +293,7 @@ function balanceChecks(runs, gameplayRuns, metrics) {
     ...common,
     check('clear rate minimum', metrics.clearRate >= options.clearRateMin, metrics.clearRate, `>= ${options.clearRateMin}`),
     check('clear rate maximum', metrics.clearRate <= options.clearRateMax, metrics.clearRate, `<= ${options.clearRateMax}`),
+    check('death rate maximum', metrics.deathRate <= options.deathRateMax, metrics.deathRate, `<= ${options.deathRateMax}`),
     check('level-ups before first boss', metrics.levelUpsBeforeFirstBossMedian >= options.levelUpsBeforeFirstBossMin, metrics.levelUpsBeforeFirstBossMedian, `>= ${options.levelUpsBeforeFirstBossMin}`),
     check('slot fill timing', metrics.slotsFilledAtMedian <= options.slotsFilledAtMax, metrics.slotsFilledAtMedian, `<= ${options.slotsFilledAtMax}`),
     check('top DPS share', metrics.topDpsShareMedian <= options.topDpsShareMax, metrics.topDpsShareMedian, `<= ${options.topDpsShareMax}`),
@@ -343,6 +345,7 @@ function targetSnapshot() {
     browserSuccessRateMin: options.browserSuccessRateMin,
     clearRateMin: options.clearRateMin,
     clearRateMax: options.clearRateMax,
+    deathRateMax: options.deathRateMax,
     firstBossTtkMin: options.firstBossTtkMin,
     firstBossTtkMax: options.firstBossTtkMax,
     levelUpsBeforeFirstBossMin: options.levelUpsBeforeFirstBossMin,
@@ -536,6 +539,7 @@ function parseArgs(args) {
     browserSuccessRateMin: num(valueAfter(args, '--target-browser-success-rate'), 0.8),
     clearRateMin: num(valueAfter(args, '--target-clear-rate-min'), 0.35),
     clearRateMax: num(valueAfter(args, '--target-clear-rate-max'), 0.8),
+    deathRateMax: num(valueAfter(args, '--target-death-rate-max'), 0.4),
     firstBossTtkMin: num(valueAfter(args, '--target-first-boss-ttk-min'), 15),
     firstBossTtkMax: num(valueAfter(args, '--target-first-boss-ttk-max'), 30),
     levelUpsBeforeFirstBossMin: num(valueAfter(args, '--target-level-ups-before-first-boss'), 8),

@@ -1,11 +1,11 @@
 {
   "source": "docs\\reports\\2026-06-07.md",
-  "generatedAt": "2026-06-06T17:57:04.944Z",
-  "unitCount": 1,
+  "generatedAt": "2026-06-07T11:03:29.116Z",
+  "unitCount": 2,
   "latest": {
-    "title": "2026-06-07-01 - v0.12 Human Playtest Package",
-    "number": "01",
-    "markdownPath": "docs\\reports\\units\\2026-06-07\\2026-06-07-01-v0-12-human-playtest-package.md",
-    "htmlPath": "docs\\reports\\units\\2026-06-07\\2026-06-07-01-v0-12-human-playtest-package.html"
+    "title": "2026-06-07-02 - Balance Loop Gate Fix",
+    "number": "02",
+    "markdownPath": "docs\\reports\\units\\2026-06-07\\2026-06-07-02-balance-loop-gate-fix.md",
+    "htmlPath": "docs\\reports\\units\\2026-06-07\\2026-06-07-02-balance-loop-gate-fix.html"
   }
 }

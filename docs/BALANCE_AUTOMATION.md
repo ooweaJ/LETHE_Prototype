@@ -147,3 +147,16 @@ npm run qa:boss-ttk:dry
 - Final browser `first_boss_ttk`: 3/3 accepted, TTK median `19.82s`.
 - Final full browser `qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `80%`, full clear `60%`, death `40%`, first boss TTK median `25.79s`.
 - Interpretation: this is a better automated pre-human-test baseline than the previous `80%` full clear / `20%` death result because it sits inside the target band instead of on the easy edge.
+
+### 2026-06-07 Balance Loop Gate Fix
+
+- Use `npm run balance:loop` for balance QA work units.
+- Loop default run window is now `690s`, matching the full-run final boss schedule.
+- Browser balance QA now includes death rate max `<= 40%`.
+- Current first boss HP: `2050`.
+- Deficit duration: `54s`.
+- Post-boss spawn caps: deficit breath `16`, deficit trial `14`, later-cycle/default `46`.
+- Refill recovery: HP floor `95%`, shield `24`.
+- Enemy damage scaling: time `0.025` per minute, level `0.008` per level.
+- Browser `first_boss_ttk`: 3/3 accepted, TTK median `18.61s`.
+- Final 690s `balance:loop`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.73s`.
