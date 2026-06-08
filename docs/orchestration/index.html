@@ -26,15 +26,12 @@
       * { box-sizing: border-box; }
       body { margin: 0; }
       main { width: min(1120px, 100%); margin: 0 auto; padding: 30px 22px 38px; }
-      a { color: var(--green); font-weight: 900; text-decoration: none; }
-      a:hover { text-decoration: underline; }
       header { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: end; margin-bottom: 16px; }
       .eyebrow { margin: 0 0 8px; color: var(--green); font-size: 13px; font-weight: 900; }
       h1 { margin: 0; font-size: clamp(30px, 5vw, 46px); line-height: 1.05; }
-      .subtitle { max-width: 760px; margin: 10px 0 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
       .badge { display: inline-flex; align-items: center; min-height: 34px; padding: 7px 11px; border: 1px solid var(--line); border-radius: 999px; background: var(--soft-amber); color: var(--amber); font-size: 13px; font-weight: 900; white-space: nowrap; }
       .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }
-      .metric, .panel, .linkCard { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+      .metric, .panel { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
       .metric { min-height: 106px; padding: 15px; }
       .metric span { display: block; margin-bottom: 8px; color: var(--muted); font-size: 13px; font-weight: 900; }
       .metric strong { display: block; font-size: 18px; line-height: 1.32; }
@@ -55,14 +52,10 @@
       .decision { display: grid; gap: 10px; }
       .decision div { padding-bottom: 9px; border-bottom: 1px solid #edf0eb; }
       .decision div:last-child { padding-bottom: 0; border-bottom: 0; }
-      .links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
-      .linkCard { display: block; min-height: 94px; padding: 14px; }
-      .linkCard b { display: block; margin-bottom: 6px; color: var(--green); }
-      .linkCard small { display: block; color: var(--muted); line-height: 1.45; }
       code { font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace; }
       footer { margin-top: 18px; color: var(--muted); font-size: 13px; line-height: 1.6; }
       @media (max-width: 900px) {
-        header, .metrics, .grid, .links { grid-template-columns: 1fr; }
+        header, .metrics, .grid { grid-template-columns: 1fr; }
       }
     </style>
   </head>
@@ -71,11 +64,7 @@
       <header>
         <div>
           <p class="eyebrow">LETHE 프로젝트 대시보드</p>
-          <h1>30초 상태 요약</h1>
-          <p class="subtitle">
-            이 화면은 프로젝트 전체 상태만 짧게 보여줍니다. 다음 프롬프트는 `command.html`,
-            자세한 작업 내역은 `reports/`에서 봅니다.
-          </p>
+          <h1>상태 요약</h1>
         </div>
         <span class="badge">사람 테스트 대기</span>
       </header>
@@ -145,7 +134,7 @@
           <div class="decision">
             <div>
               <span class="label">완료 작업</span>
-              <span class="value">오케스트레이션 HTML 인터페이스 규약 정렬</span>
+              <span class="value">프로젝트 대시보드 요약화</span>
             </div>
             <div>
               <span class="label">검증</span>
@@ -159,25 +148,7 @@
         </article>
       </section>
 
-      <nav class="links" aria-label="주요 인터페이스">
-        <a class="linkCard" href="./command.html">
-          <b>다음 지시</b>
-          <small>Codex에게 바로 줄 프롬프트와 완료 기준</small>
-        </a>
-        <a class="linkCard" href="./runbook.html">
-          <b>운영 절차</b>
-          <small>검증, 보고, 패키징, 커밋 명령</small>
-        </a>
-        <a class="linkCard" href="./reports/index.html">
-          <b>상세 리포트</b>
-          <small>작업 단위 보고서와 포트폴리오용 기록</small>
-        </a>
-      </nav>
-
-      <footer>
-        Markdown 원본: `STATUS.md`, `CURRENT_TASK.md`, `NEXT_TASKS.md`, `RUNBOOK.md`.
-        이 대시보드는 핵심 상태만 보여주고, 세부 내용은 연결된 화면에서 확인합니다.
-      </footer>
+      <footer>기준: 2026-06-08</footer>
     </main>
   </body>
 </html>

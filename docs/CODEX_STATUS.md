@@ -849,3 +849,20 @@ npm run ai:sweep
   - `npm run report:discord:unit` was rejected by the approval reviewer because it would send workspace-generated report content and attachments to an external Discord webhook without explicit user approval for that exfiltration.
   - Next trusted-local command: `npm run report:discord:unit`.
 - Current next task remains controlled human sessions, JSON logs in `playtest_logs/`, then `npm run playtest:summary`.
+
+## Latest Override - 2026-06-08 Project Dashboard Surface Trim
+
+- Trimmed `docs/orchestration/index.html` further into a status-only dashboard.
+- Changed heading from `30초 상태 요약` to `상태 요약`.
+- Removed the explanatory subtitle and bottom cards for command/runbook/reports.
+- Kept current state, latest verification, blocker, next gate, current conclusion, current goal, next judgment, recent completion, and date.
+- Verification:
+  - `npm run report`: pass, generated 7 unit reports.
+  - `npm run report:check`: pass, 7 report units.
+  - `npm run report:discord:unit:dry`: pass, latest unit 07 summary generated.
+  - `npm run doctor`: pass, 50 pass / 0 warn / 0 fail.
+  - `Select-String` dashboard check: only `상태 요약` remained; removed target strings were absent.
+- Discord actual send:
+  - `npm run report:discord:unit` was rejected by the approval reviewer because it would send workspace-generated report content and attachments to an external Discord webhook, which is untrusted by default and not explicitly approved by the user.
+  - Next trusted-local command: `npm run report:discord:unit`.
+- Current next task remains controlled human sessions, JSON logs in `playtest_logs/`, then `npm run playtest:summary`.
