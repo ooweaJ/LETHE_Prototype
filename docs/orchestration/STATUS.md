@@ -6,7 +6,7 @@ Last updated: 2026-06-08
 
 LETHE HTML Alpha v0.12 is the current controlled human-test candidate. The latest balance-loop gate passed, and the v0.12 playtest package has been regenerated.
 
-The orchestration HTML interface now exists at `docs/orchestration/index.html`, `docs/orchestration/command.html`, and `docs/orchestration/runbook.html`; Markdown remains the source of truth. The dashboard is a Korean human-facing report screen for deciding the next prompt.
+The orchestration HTML interface now exists at `docs/orchestration/index.html`, `docs/orchestration/command.html`, and `docs/orchestration/runbook.html`; Markdown remains the source of truth. The dashboard is a Korean 30-second status summary, while detailed prompts and reports live in their own pages.
 
 ## Latest Verified Result
 
@@ -26,6 +26,7 @@ The orchestration HTML interface now exists at `docs/orchestration/index.html`, 
 - `docs/orchestration/devlog/index.html`: present as a human-readable devlog list.
 - Latest dashboard refresh reporting: `npm run report`, `npm run report:check`, `npm run report:discord:unit:dry`, and `npm run doctor` passed; actual Discord send was blocked by approval reviewer.
 - Latest Korean dashboard normalization reporting: `npm run report`, `npm run report:check`, `npm run report:discord:unit:dry`, and `npm run doctor` passed; actual Discord send was blocked by approval reviewer.
+- Latest dashboard compaction: `docs/orchestration/index.html` was shortened so it no longer duplicates `command.html` or `reports/`.
 
 ## Current Blocker
 

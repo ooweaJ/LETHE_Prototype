@@ -832,3 +832,20 @@ npm run ai:sweep
   - `npm run report:discord:unit` was rejected by the approval reviewer because it would send workspace-generated report content and attachments to an external Discord webhook without explicit user approval for that exfiltration.
   - Next trusted-local command: `npm run report:discord:unit`.
 - Current next task remains controlled human sessions, JSON logs in `playtest_logs/`, then `npm run playtest:summary`.
+
+## Latest Override - 2026-06-08 Project Dashboard Compaction
+
+- Rebuilt `docs/orchestration/index.html` as a shorter 30-second project dashboard.
+- Removed next-instruction duplication from the dashboard; `command.html` remains the compact prompt/done-criteria surface.
+- Removed broad document browsing and Codex-comparison copy from the main dashboard.
+- Dashboard now focuses on current stage, latest verification, blocker, next gate, current conclusion, recent completion, and primary links.
+- Updated orchestration README/RUNBOOK/STATUS/NEXT_TASKS and decision log to preserve the role split.
+- Verification:
+  - `npm run report`: pass, generated 6 unit reports.
+  - `npm run report:check`: pass, 6 report units.
+  - `npm run report:discord:unit:dry`: pass, latest unit 06 summary generated.
+  - `npm run doctor`: pass, 50 pass / 0 warn / 0 fail.
+- Discord actual send:
+  - `npm run report:discord:unit` was rejected by the approval reviewer because it would send workspace-generated report content and attachments to an external Discord webhook without explicit user approval for that exfiltration.
+  - Next trusted-local command: `npm run report:discord:unit`.
+- Current next task remains controlled human sessions, JSON logs in `playtest_logs/`, then `npm run playtest:summary`.

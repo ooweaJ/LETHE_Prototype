@@ -69,7 +69,7 @@ Rules:
 
 - Markdown is the source of truth.
 - HTML is the Korean human-facing project interface for the user.
-- `index.html` shows the last completed state, recommended next prompt, blockers, evidence, and document links.
+- `index.html` shows the 30-second project state: current stage, verification, blocker, next gate, recent completion, and key links.
 - `command.html` shows the compact next instruction.
 - `runbook.html` shows repeated commands and operating procedures.
 - Until a generator exists, update the HTML manually when orchestration status changes.

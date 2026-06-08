@@ -6,11 +6,11 @@ Markdown files are the source of truth. Generated HTML files are the human-facin
 
 ## Human Dashboard
 
-- `index.html` is the Korean human-facing command dashboard.
+- `index.html` is the Korean 30-second project dashboard.
 - `command.html` is the compact next-instruction block for the command area.
 - `runbook.html` is the operating-procedure block for repeated commands.
-- It reports the last completed state, not live in-progress Codex thoughts.
-- Its job is to help the user decide the next prompt.
+- The dashboard reports only the current state, blocker, latest completed work, and the main links.
+- The dashboard should stay short; detailed explanation belongs in `reports/`.
 - `reports/index.html` lists user-facing and portfolio-ready development reports.
 - `devlog/index.html` lists internal work logs.
 - Markdown remains the source of truth; these HTML pages should eventually be generated from Markdown.
@@ -40,7 +40,7 @@ Before meaningful work, read these files in order:
 - `devlog/`: internal daily work logs.
 - `reports/`: user-facing and portfolio-facing work-unit summaries.
 - `reports/index.html`: human-readable report list.
-- `index.html`: generated project dashboard for people.
+- `index.html`: generated 30-second project dashboard for people.
 - `command.html`: generated next-instruction block.
 - `runbook.html`: generated operating-procedure block.
 - `review_prompts/`: prompts prepared for AI review.
