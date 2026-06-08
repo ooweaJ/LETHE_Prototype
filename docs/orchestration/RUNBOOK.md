@@ -1,0 +1,83 @@
+# Runbook
+
+## Health Checks
+
+```bash
+npm run doctor
+npm run doctor:deep
+```
+
+## Playtest Package
+
+```bash
+npm run playtest:package:dry
+npm run playtest:package
+```
+
+Generated package:
+
+```text
+dist\lethe-v0.12-playtest
+```
+
+## Human Test Summary
+
+```bash
+npm run playtest:summary
+```
+
+Expected input:
+
+```text
+playtest_logs/
+```
+
+## Balance QA
+
+```bash
+npm run qa:balance
+npm run balance:loop
+npm run qa:boss-ttk
+```
+
+Current balance source of truth is the loop result, not a one-off run.
+
+## Reports
+
+```bash
+npm run report
+npm run report:check
+npm run report:discord:unit:dry
+npm run report:discord:unit
+```
+
+If actual Discord send is blocked by policy, webhook, network, or permissions, record the exact reason and next trusted-local command in devlog/report.
+
+## Autopilot
+
+Before unattended implement -> test -> review -> implement loops:
+
+```bash
+npm run autopilot:preflight
+```
+
+If external Claude transmission is not allowed:
+
+```bash
+npm run autopilot:preflight:local
+```
+
+Preflight failures are blockers.
+
+## Git
+
+Use Conventional Commits. After a coherent verified unit:
+
+```bash
+git status --short
+git add <files>
+git commit -m "docs: ..."
+git push
+```
+
+Do not push if the tree is dirty with unrelated or unsafe changes.

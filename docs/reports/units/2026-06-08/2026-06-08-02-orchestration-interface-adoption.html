@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>2026-06-08-01 - v0.12 Playtest Package Rerun</title>
+  <title>2026-06-08-02 - Orchestration Interface Adoption</title>
   <style>
     :root {
       color-scheme: light;
@@ -116,55 +116,12 @@
 <body>
   <header>
     <div class="header-inner">
-      <h1>2026-06-08-01 - v0.12 Playtest Package Rerun</h1>
-      <p class="meta">Generated from 2026-06-08.md</p>
+      <h1>2026-06-08-02 - Orchestration Interface Adoption</h1>
+      <p class="meta">Generated from 2026-06-08-02-orchestration-interface-adoption.md</p>
     </div>
   </header>
   <main>
-    <h1>2026-06-08-01 - v0.12 Playtest Package Rerun</h1>
-<h2>1. Current build status</h2>
-<p>v0.12 is the current controlled human-test candidate. The latest balance loop baseline is <code>GO_BALANCE_BASELINE</code>: first boss clear <code>100%</code>, full clear <code>60%</code>, death <code>40%</code>, first boss TTK median <code>20.73s</code>.</p>
-<h2>2. What changed today</h2>
-<ul>
-<li>Reran the v0.12 playtest package step after the latest balance loop gate fix.</li>
-<li>Updated status/task docs so the package rerun is no longer the next unfinished task.</li>
-</ul>
-<h2>3. Test results and evidence</h2>
-<ul>
-<li><code>npm run playtest:package:dry</code>: pass, output target <code>dist\lethe-v0.12-playtest</code>.</li>
-<li><code>npm run playtest:package</code>: pass, regenerated <code>dist\lethe-v0.12-playtest</code>.</li>
-<li><code>npm run report</code>: pass, generated <code>docs\reports\2026-06-08.html</code> and one unit report under <code>docs\reports\units\2026-06-08</code>.</li>
-<li><code>npm run report:check</code>: pass.</li>
-<li><code>npm run doctor</code>: pass, 50 pass / 0 warn / 0 fail.</li>
-<li><code>npm run report:discord:unit:dry</code>: pass.</li>
-</ul>
-<h2>4. Decisions made</h2>
-<ul>
-<li>Treat the package as current for controlled human sessions.</li>
-<li>Do not add new gameplay, memories, slots, shop, meta progression, region, weapon, or balance changes before human evidence unless the user explicitly changes scope.</li>
-</ul>
-<h2>5. Problems or risks</h2>
-<ul>
-<li>The generated <code>dist/</code> package is ignored by git and must be regenerated when needed.</li>
-<li>Human reaction evidence is still missing; automated balance is not Unity-transition proof.</li>
-<li><code>npm run report:discord:unit</code> was blocked by the approval reviewer because sending workspace-generated reports/attachments to an external Discord webhook is treated as potential private data exfiltration in this Codex session. Next trusted-local command: <code>npm run report:discord:unit</code>.</li>
-</ul>
-<h2>6. GPT handoff summary</h2>
-<p>Emotion proxy remains excluded. v0.12 has a passing balance loop baseline and a freshly regenerated human-test package. Next judgment should come from controlled human sessions and JSON log summaries.</p>
-<h2>7. Next Codex tasks</h2>
-<ul>
-<li>Place downloaded JSON logs in <code>playtest_logs/</code> after sessions.</li>
-<li>Run <code>npm run playtest:summary</code>.</li>
-<li>Use the generated summary for the next planning/review handoff before major tuning or Unity-transition decisions.</li>
-</ul>
-<h2>8. Portfolio notes</h2>
-<ul>
-<li>Problem: the latest balance loop pass needed a fresh shareable playtest package.</li>
-<li>Direction: close packaging before asking for human evidence.</li>
-<li>Action: ran dry-run and actual package generation.</li>
-<li>Result: <code>dist\lethe-v0.12-playtest</code> is regenerated for controlled sessions.</li>
-</ul>
-<h1>2026-06-08-02 - Orchestration Interface Adoption</h1>
+    <h1>2026-06-08-02 - Orchestration Interface Adoption</h1>
 <h2>1. Current build status</h2>
 <p>LETHE v0.12 remains the current controlled human-test candidate. This work did not change gameplay.</p>
 <h2>2. What changed today</h2>

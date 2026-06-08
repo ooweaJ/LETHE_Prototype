@@ -17,6 +17,47 @@
 9. 검증과 보고까지 끝난 의미 있는 작업 단위는 Conventional Commit으로 커밋하고, 작업 트리가 clean이며 공유해도 안전하면 `git push`까지 완료한다. push 실패 시 원인과 다음 명령을 사용자에게 보고한다.
 10. 테스트 결과를 바탕으로 기획 수정 또는 방향 결정이 필요하면 `docs/review_prompts/`에 Claude/GPT 전달 프롬프트를 남긴다.
 
+## Orchestration Interface
+
+This project uses `docs/orchestration/` as the shared Codex project-management interface. Existing project-specific rules in this `AGENTS.md` remain the top-level rules; orchestration files organize state, tasks, decisions, devlogs, reports, and evidence so Codex and the user can resume work quickly.
+
+Before meaningful work, read:
+
+1. `docs/orchestration/README.md`
+2. `docs/orchestration/STATUS.md`
+3. `docs/orchestration/CURRENT_TASK.md`
+4. `docs/orchestration/NEXT_TASKS.md`
+5. `docs/orchestration/PROMPT_CONTEXT.md`
+6. `docs/orchestration/RUNBOOK.md`
+7. `docs/orchestration/SCOPE_GUARD.md`
+
+Use orchestration files as follows:
+
+- `PROJECT_BRIEF.md`: project identity, goals, tech stack, and portfolio framing.
+- `STATUS.md`: whole-project current state, latest verification, blockers, and next major step.
+- `CURRENT_TASK.md`: one active work unit, done criteria, related files, open questions, and verification commands.
+- `NEXT_TASKS.md`: top five next work candidates only.
+- `PROMPT_CONTEXT.md`: stable context Codex should keep in mind each session.
+- `RUNBOOK.md`: commands and procedures for test, build, report, package, recovery, and external handoff.
+- `SCOPE_GUARD.md`: explicit non-goals and things not to build yet.
+- `DECISION_LOG.md`: index of important technical, product, and AI-direction decisions.
+- `devlog/`: internal daily work log.
+- `reports/`: user-facing and portfolio-facing work-unit reports.
+- `review_prompts/`: prompts prepared for Claude/GPT/Codex review.
+- `review_responses/`: saved AI review responses.
+- `evidence/`: useful test outputs, screenshots, logs, benchmark summaries, or links.
+- `templates/`: reusable document, report, review, and task templates.
+
+After meaningful work:
+
+- Update `STATUS.md`, `CURRENT_TASK.md`, or `NEXT_TASKS.md` as needed.
+- Record internal process details in `devlog/YYYY-MM-DD.md`.
+- Record user-facing summaries in `reports/YYYY-MM-DD.md`.
+- Record durable decisions in `DECISION_LOG.md`.
+- Keep `NEXT_TASKS.md` short, usually no more than five active candidates.
+- Keep Markdown as the source of truth; generated HTML is only a readable view.
+- Do not delete legacy docs during adoption; summarize or link them from orchestration files.
+
 ## Role Split
 
 - Codex: HTML prototype code, tests, git, report generation, status updates.

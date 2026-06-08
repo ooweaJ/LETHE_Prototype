@@ -747,3 +747,29 @@ npm run ai:sweep
   - `npm run report:discord:unit` was blocked by the approval reviewer because sending workspace-generated reports/attachments to an external Discord webhook is treated as potential private data exfiltration in this Codex session.
   - Next trusted-local command: `npm run report:discord:unit`.
 - Current next task: run controlled human sessions, place downloaded JSON logs in `playtest_logs/`, then run `npm run playtest:summary`.
+
+## Latest Override - 2026-06-08 Orchestration Adoption
+
+- Added `docs/orchestration/` as the shared Codex project-management interface for LETHE.
+- Added a root `AGENTS.md` Orchestration Interface section without replacing existing project-specific rules.
+- Created orchestration core files:
+  - `README.md`,
+  - `PROJECT_BRIEF.md`,
+  - `STATUS.md`,
+  - `CURRENT_TASK.md`,
+  - `NEXT_TASKS.md`,
+  - `PROMPT_CONTEXT.md`,
+  - `RUNBOOK.md`,
+  - `SCOPE_GUARD.md`,
+  - `DECISION_LOG.md`.
+- Created extension folders and seed files for `devlog/`, `reports/`, `review_prompts/`, `review_responses/`, `evidence/`, and `templates/`.
+- Verified by reading `docs/orchestration/README.md`, `STATUS.md`, `CURRENT_TASK.md`, and `NEXT_TASKS.md`.
+- Verification:
+  - `npm run report`: pass.
+  - `npm run report:check`: pass after rerun; the first parallel check raced report generation.
+  - `npm run report:discord:unit:dry`: pass.
+  - `npm run doctor`: pass, 50 pass / 0 warn / 0 fail.
+- Discord actual send:
+  - `npm run report:discord:unit` was blocked by the approval reviewer because sending workspace-generated reports/attachments to an external Discord webhook is treated as potential private data exfiltration in this Codex session.
+  - Next trusted-local command: `npm run report:discord:unit`.
+- Legacy docs remain in place and are treated as detailed archives; orchestration files are the quick resume interface.

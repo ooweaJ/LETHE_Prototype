@@ -1,11 +1,11 @@
 {
   "source": "docs\\reports\\2026-06-08.md",
-  "generatedAt": "2026-06-08T00:23:17.432Z",
-  "unitCount": 1,
+  "generatedAt": "2026-06-08T06:00:44.943Z",
+  "unitCount": 2,
   "latest": {
-    "title": "2026-06-08-01 - v0.12 Playtest Package Rerun",
-    "number": "01",
-    "markdownPath": "docs\\reports\\units\\2026-06-08\\2026-06-08-01-v0-12-playtest-package-rerun.md",
-    "htmlPath": "docs\\reports\\units\\2026-06-08\\2026-06-08-01-v0-12-playtest-package-rerun.html"
+    "title": "2026-06-08-02 - Orchestration Interface Adoption",
+    "number": "02",
+    "markdownPath": "docs\\reports\\units\\2026-06-08\\2026-06-08-02-orchestration-interface-adoption.md",
+    "htmlPath": "docs\\reports\\units\\2026-06-08\\2026-06-08-02-orchestration-interface-adoption.html"
   }
 }
