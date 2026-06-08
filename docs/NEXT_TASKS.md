@@ -675,4 +675,7 @@
 - [x] Tune loop-based balance.
   - Final browser `first_boss_ttk`: `GO_BALANCE_BASELINE`, TTK median `18.61s`.
   - Final `balance:loop`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.73s`.
-- [ ] Next task: rerun playtest package after this balance change before human sessions.
+- [x] Rerun playtest package after this balance change before human sessions.
+  - `npm run playtest:package:dry`: pass, output target `dist\lethe-v0.12-playtest`.
+  - `npm run playtest:package`: pass, regenerated `dist\lethe-v0.12-playtest`.
+- [ ] Next task: run controlled human sessions, place downloaded JSON logs in `playtest_logs/`, then run `npm run playtest:summary`.

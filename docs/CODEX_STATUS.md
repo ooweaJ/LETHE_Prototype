@@ -1,6 +1,6 @@
 # Codex Status
 
-Last updated: 2026-06-05
+Last updated: 2026-06-08
 
 ## Current Build
 
@@ -8,11 +8,11 @@ Last updated: 2026-06-05
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
 - Current scope: HTML prototype validation. v0.12 keeps the v0.11 loop, but moves the build into a measurable balance baseline before broader playtesting.
-- Latest task-update status: v0.12 balance loop iteration tuned early survival, pre-boss XP, first-cycle spawn pressure, enemy level scaling, first-boss HP, and `qa=balance` movement/focus behavior. The loop is still an iteration baseline, not a balanced release candidate.
-- Latest verification status: `node --check src/game.js` and `node --check scripts/run_browser_balance_qa.js` pass. First-cycle `망각 전조` survival was tuned with a new `문지기 호흡` entry phase and softened first-cycle climax pressure. The latest prelude rerun reached 5/5 gameplay samples, death 20%, HP <= 40% median 160.58s, and HP <= 20% median 169.73s. A first-boss TTK harness and short CDP polling runner path now exist, but local Chrome/CDP still produced 0 accepted TTK gameplay samples. The overall verdict remains `ITERATE_BALANCE`.
+- Latest task-update status: v0.12 balance loop gate fix is accepted as the current controlled human-test baseline. The latest executable step was rerunning the v0.12 playtest package after that balance change.
+- Latest verification status: final browser `first_boss_ttk` is `GO_BALANCE_BASELINE` with 3/3 accepted samples and TTK median `18.61s`. Final `npm run balance:loop` is `GO_BALANCE_BASELINE` with first boss clear `100%`, full clear `60%`, death `40%`, and first boss TTK median `20.73s`. `npm run playtest:package:dry` and `npm run playtest:package` pass, regenerating `dist\lethe-v0.12-playtest`.
 - Latest reporting format: Discord work-unit reports now send an AI Project Orchestrator style status message, attach a generated `.summary.json` file, then send a second message with the generated HTML report.
 - Planning document status: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md` remains the loop source, while v0.12 balance sources are `docs/BALANCE_TABLE_v0_12.md` and `docs/LETHE_v0.12_밸런스_개선_제안서.md`.
-- Balance status: v0.12 second-pass tuning is in code but not accepted. Growth pace and DPS concentration are near target; first-cycle `망각 전조` survival now reaches the target band in the latest 5-run prelude sample. First boss HP must not be tuned until the TTK harness gets at least 3 accepted gameplay samples.
+- Balance status: v0.12 is the current controlled human-test candidate. Do not continue blind numeric tuning before human session evidence unless the user explicitly changes scope.
 
 ## Implemented
 
@@ -732,3 +732,18 @@ npm run ai:sweep
   - refill HP floor `85% -> 95%`, shield `18 -> 24`.
 - Final browser `first_boss_ttk`: `GO_BALANCE_BASELINE`, 3/3 accepted, first boss TTK median `18.61s`.
 - Final `npm run balance:loop -- 5 690 60000 ...`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.73s`.
+
+## Latest Override - 2026-06-08 Playtest Package Rerun
+
+- Reran the v0.12 playtest package after the latest balance loop gate fix.
+- Verification:
+  - `npm run playtest:package:dry`: pass, output target `dist\lethe-v0.12-playtest`.
+  - `npm run playtest:package`: pass, regenerated `dist\lethe-v0.12-playtest`.
+  - `npm run report`: pass.
+  - `npm run report:check`: pass.
+  - `npm run doctor`: pass, 50 pass / 0 warn / 0 fail.
+  - `npm run report:discord:unit:dry`: pass.
+- Discord actual send:
+  - `npm run report:discord:unit` was blocked by the approval reviewer because sending workspace-generated reports/attachments to an external Discord webhook is treated as potential private data exfiltration in this Codex session.
+  - Next trusted-local command: `npm run report:discord:unit`.
+- Current next task: run controlled human sessions, place downloaded JSON logs in `playtest_logs/`, then run `npm run playtest:summary`.
