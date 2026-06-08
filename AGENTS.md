@@ -10,16 +10,16 @@
 2. 구현 전 현재 파일과 문서를 확인한다.
 3. 코드 변경 후 가능한 검증을 실행한다.
 4. 결과를 `docs/orchestration/state/STATUS.md`에 반영하고, 필요한 경우 `docs/CODEX_STATUS.md`는 상세 레거시 아카이브로만 갱신한다.
-5. 의미 있는 작업 단위가 끝나면 AI용 기록은 `docs/orchestration/devlog/YYYYMMDD.md`, 사람용 보고는 `docs/orchestration/reports/YYYYMMDD/index.md`에 갱신한다.
+5. 의미 있는 작업 단위가 끝나면 AI용 기록은 `docs/orchestration/devlog/YYYY-MM-DD.md`, 사람용 보고는 `docs/orchestration/reports/YYYYMMDD/index.md`에 갱신한다. 기존 `YYYYMMDD.md` devlog는 레거시 연속성 기록으로 유지한다.
 6. 보고서 HTML은 Markdown 원본을 기준으로 생성한다.
-7. 의미 있는 구현/밸런스/문서화 단위가 끝나면 `npm run report`, `npm run report:check`, `npm run report:discord:unit`까지 실행해 Discord 작업 단위 보고를 실제 전송한다. `dry-run`은 본문/첨부 확인용이지 완료 상태가 아니다.
-8. Discord 실제 전송 예외는 사용자가 명시적으로 전송하지 말라고 했거나 webhook/네트워크/권한 문제로 실패한 경우뿐이다. 실패하면 실패 원인과 다음 실행 명령을 devlog/report에 남긴다.
-9. 검증과 보고까지 끝난 의미 있는 작업 단위는 Conventional Commit으로 커밋하고, 작업 트리가 clean이며 공유해도 안전하면 `git push`까지 완료한다. push 실패 시 원인과 다음 명령을 사용자에게 보고한다.
+7. 의미 있는 구현/밸런스/문서화 단위가 끝나면 `npm run report`와 `npm run report:check`로 Markdown 원본과 HTML 보고서를 갱신/검증한다.
+8. Discord 알림이 필요하면 Project Orchestrator의 중앙 Discord intake를 우선 사용한다. 중앙 intake가 아직 연결되지 않은 경우에만 이 저장소의 `npm run report:discord:unit:dry`로 본문/첨부를 확인하고, 사용자가 명시적으로 요청했거나 로컬 신뢰 환경일 때 `npm run report:discord:unit`을 fallback으로 실행한다. 실패하면 원인과 다음 실행 명령을 devlog/report에 남긴다.
+9. 검증과 보고까지 끝난 의미 있는 작업 단위는 사용자가 금지하지 않은 경우 Conventional Commit으로 커밋하고, 작업 트리가 clean이며 공유해도 안전하면 `git push`까지 완료한다. push 실패 시 원인과 다음 명령을 사용자에게 보고한다.
 10. 테스트 결과를 바탕으로 기획 수정 또는 방향 결정이 필요하면 `docs/orchestration/review_prompts/`에 Claude/GPT 전달 프롬프트를 남긴다. 기존 `docs/review_prompts/`는 마이그레이션 전 레거시 기록으로만 본다.
 
-## Orchestration Interface
+## Development Docs Plugin
 
-This project uses `docs/orchestration/` as the shared Codex project-management interface. Existing project-specific rules in this `AGENTS.md` remain the top-level rules; orchestration files organize state, tasks, decisions, devlogs, reports, and evidence so Codex and the user can resume work quickly.
+This project uses `docs/orchestration/` as the shared personal development-docs plugin. Existing LETHE-specific rules in this `AGENTS.md` remain the top-level rules; orchestration files organize state, tasks, decisions, devlogs, reports, and evidence so Codex and the user can resume work quickly.
 
 Before meaningful work, read:
 
@@ -33,6 +33,9 @@ Before meaningful work, read:
 
 Use orchestration files as follows:
 
+- `interface/index.html`: human-facing status dashboard.
+- `interface/command.html`: human-facing next-instruction block.
+- `interface/runbook.html`: human-facing operating-procedure block.
 - `state/PROJECT_BRIEF.md`: project identity, goals, tech stack, and portfolio framing.
 - `state/STATUS.md`: whole-project current state, latest verification, blockers, and next major step.
 - `state/CURRENT_TASK.md`: one active work unit, done criteria, related files, open questions, and verification commands.
@@ -41,26 +44,29 @@ Use orchestration files as follows:
 - `state/RUNBOOK.md`: commands and procedures for test, build, report, package, recovery, and external handoff.
 - `state/SCOPE_GUARD.md`: explicit non-goals and things not to build yet.
 - `state/DECISION_LOG.md`: index of important technical, product, and AI-direction decisions.
-- `devlog/YYYYMMDD.md`: AI/internal daily work log.
-- `reports/YYYYMMDD/index.md`: Korean user-facing daily report source.
-- `reports/YYYYMMDD/index.html`: Korean user-facing daily report page.
-- `reports/YYYYMMDD/units/`: generated work-unit Markdown/HTML/summary files.
+- `devlog/`: AI/internal daily work logs.
+- `reports/`: user-facing HTML progress reports. Keep `reports/index.html` as a blog-like newest-first date archive. Keep each `reports/YYYYMMDD/index.html` as that day's unit-card page, and place detailed unit reports under that date's `units/` folder.
+- `reports/YYYYMMDD/index.md`: Markdown source used by the current local report generator.
+- `reports/YYYYMMDD/index.html`: human-facing daily report page.
+- `reports/YYYYMMDD/units/`: detailed work-unit Markdown/HTML/summary files.
 - `review_prompts/`: current prompts prepared for Claude/GPT/Codex review.
 - `review_responses/`: current saved AI review responses.
 - `evidence/`: useful test outputs, screenshots, logs, benchmark summaries, or links.
 - `templates/`: reusable document, report, review, and task templates.
-- `interface/index.html`: generated project dashboard for people.
-- `interface/command.html`: generated next-instruction block for the command area.
-- `interface/runbook.html`: generated operating-procedure block.
+- `legacy/`: archived or pointer-only legacy docs after migration.
 
 After meaningful work:
 
 - Update `state/STATUS.md`, `state/CURRENT_TASK.md`, or `state/NEXT_TASKS.md` as needed.
-- Record internal process details in `devlog/YYYYMMDD.md`.
+- Record internal process details in `devlog/YYYY-MM-DD.md`.
 - Record Korean user-facing daily summaries in `reports/YYYYMMDD/index.md`.
+- Regenerate `reports/index.html` so it lists date journal pages newest-first with title, date, and short summary.
+- Regenerate `reports/YYYYMMDD/index.html` so it shows title blocks/cards for that day's units and links to individual unit pages.
 - Record durable decisions in `state/DECISION_LOG.md`.
 - Keep `state/NEXT_TASKS.md` short, usually no more than five active candidates.
-- Keep Markdown as the source of truth; generated HTML is the human-facing project interface generated from Markdown.
+- Regenerate or update `interface/` HTML when state changes.
+- Keep Markdown as the AI source of truth; generated HTML is the human-facing project interface generated from Markdown.
+- If Discord notification is needed, submit the short Korean summary, report path, optional attachment path, and source file list to Project Orchestrator's central Discord intake instead of sending directly from this project. Use this project's direct Discord script only as an explicit trusted-local fallback.
 - Do not create new source-of-truth files under legacy `docs/reports/`, `docs/devlog/`, `docs/review_prompts/`, or `docs/review_responses/`.
 - Do not delete legacy docs during adoption unless the user explicitly asked for migration; summarize, move, or link them from orchestration files.
 
@@ -114,7 +120,7 @@ The current prototype goal is to verify whether the core loop is fun enough to j
 - Claude answers should be saved under `docs/orchestration/review_responses/YYYY-MM-DD-claude.md`.
 - Claude should not edit project files during automated planning; it is called with tools disabled.
 - Codex reads the saved Claude response, updates `docs/orchestration/state/NEXT_TASKS.md`, then implements the selected work.
-- Discord is only a status/attention channel. Markdown files are the source of truth.
+- Discord is only a status/attention channel. Markdown files are the source of truth. Prefer Project Orchestrator for Discord delivery.
 
 ## Autopilot Preflight
 

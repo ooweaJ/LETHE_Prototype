@@ -13,9 +13,6 @@
       --muted: #667085;
       --line: #d8dee9;
       --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
       --code: #111827;
     }
     * { box-sizing: border-box; }
@@ -100,13 +97,16 @@
       color: #cbd5e1;
       margin: 8px 0 0;
     }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
     }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
     @media (max-width: 720px) {
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
@@ -121,14 +121,15 @@
     </div>
   </header>
   <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260604/index.html">날짜 리포트로 돌아가기</a></p>
     <h1>2026-06-04-02 - v0.10 망각 갈림길 구현</h1>
-<h2>1. Current build status</h2>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>LETHE HTML Alpha is now <code>v0.10</code>.</li>
 <li>The v0.10 target document is <code>docs/LETHE_망각의_군주_프로토타입_기획서_v0_10.md</code>.</li>
 <li>The prototype now implements the first v0.10 target slice: top-2 forgetting fork, echo unlock routes, 8 memories, 4 synergies, 180-second first boss, and simplified dependency scoring.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Changed the default run schedule to 600 seconds with bosses at 180 / 340 / 490 / 600 seconds.</li>
 <li>Added <code>잿빛 보호막</code> and <code>망각의 낙인</code>.</li>
@@ -139,7 +140,7 @@
 <li>Added <code>forkChoice</code>, <code>predictionAccuracy</code>, and <code>echoUnlocks</code> logs.</li>
 <li>Regenerated the Word planning document from the v0.10 Markdown source.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>node --check src/game.js</code>: passed.</li>
 <li><code>node --check scripts/run_browser_identity_qa.js</code>: passed.</li>
@@ -152,34 +153,34 @@
 <li><code>npm run qa:tactical:trusted</code>: blocked before tactical gameplay assertion for the same <code>CHROME_PATH</code> reason.</li>
 <li>AI simulator recalibration is still pending for v0.10; old AI scores should not be used as fork-choice evidence.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>Implement only the v0.10 target slice, not broader content expansion.</li>
 <li>Keep active memory slots at 3.</li>
 <li>Do not add shop, meta progression, new region, new weapon, new enemy, final boss completion, or multi-region structure.</li>
 <li>Treat AI fun metrics as weak planning evidence for this change; browser QA and 1-person playtest are the next meaningful gates.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>Existing browser QA scripts were version-updated, but v0.10-specific fork-choice browser assertions still need to be added or run manually.</li>
 <li>Browser QA cannot run in the current environment until Chrome is installed or <code>CHROME_PATH</code> points to Chrome/Chromium.</li>
 <li>The alpha simulator does not yet model fork choice and echo unlock routes, so old AI scores should not be used as v0.10 proof.</li>
 <li>Balance of the new memories and strong/safe echo paths is provisional until browser/playtest evidence.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>v0.10 changes the emotional core from &quot;the game takes your best memory&quot; to &quot;you choose what to release at a top-2 fork.&quot;</li>
 <li>The player-facing bet is now prediction, agency, and stronger pivot reward for releasing the rank-1 dependency.</li>
 <li>GPT/Claude should review whether the fork and echo unlock framing solves the &quot;optimal play punishment&quot; risk before broader testing.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Add or run v0.10 browser QA for the fork-choice path.</li>
 <li>Set <code>CHROME_PATH</code> or run the browser QA on a trusted local environment with Chrome/Chromium available.</li>
 <li>Recalibrate AI simulator only as planning evidence, not emotion proof.</li>
 <li>Prepare controlled 1-person browser playtest focused on first-forgetting agency, prediction accuracy, and whether rank-1 release feels like a stronger pivot.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: v0.9 risked reading as punishment for optimal play.</li>
 <li>Direction: convert loss into an authored fork with meaningful pivot rewards.</li>

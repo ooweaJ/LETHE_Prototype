@@ -11,8 +11,9 @@ The requested `npm run balance:loop` rerun returned `ITERATE_BALANCE`: full clea
 The report/devlog migration is complete, so new work should now use:
 
 - AI state: `docs/orchestration/state/`
-- AI devlog: `docs/orchestration/devlog/YYYYMMDD.md`
+- AI devlog: `docs/orchestration/devlog/YYYY-MM-DD.md`
 - Human report: `docs/orchestration/reports/YYYYMMDD/index.md|html`
+- Human report archive: `docs/orchestration/reports/index.html`
 - Work-unit details: `docs/orchestration/reports/YYYYMMDD/units/`
 
 ## Done Criteria

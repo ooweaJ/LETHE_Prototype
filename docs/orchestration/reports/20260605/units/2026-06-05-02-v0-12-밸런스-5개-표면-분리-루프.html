@@ -13,9 +13,6 @@
       --muted: #667085;
       --line: #d8dee9;
       --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
       --code: #111827;
     }
     * { box-sizing: border-box; }
@@ -100,13 +97,16 @@
       color: #cbd5e1;
       margin: 8px 0 0;
     }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
     }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
     @media (max-width: 720px) {
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
@@ -121,49 +121,50 @@
     </div>
   </header>
   <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260605/index.html">날짜 리포트로 돌아가기</a></p>
     <h1>2026-06-05-02 - v0.12 밸런스 5개 표면 분리 루프</h1>
-<h2>1. Current build status</h2>
-<p>v0.12 밸런스는 아직 <code>ITERATE_BALANCE</code>다. 다섯 표면을 분리해 돌린 결과, 첫 보스 전 생존과 무기/시작 기억 편차가 뒤쪽 밸런스 측정을 막고 있다.</p>
-<h2>2. What changed today</h2>
+<h2>1. 현재 빌드 상태</h2>
+<p>v0.12는 계속 <code>ITERATE_BALANCE</code>였다. 다섯 개 표면으로 나눠 측정한 결과, 첫 보스 전 생존과 무기/시작 기억 편차가 밸런스 측정을 막는 병목으로 좁혀졌다.</p>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
-<li>1번 첫 보스 전 생존/성장, 2번 첫 보스 TTK, 3번 무기/기억 편차, 4번 결손 구간, 5번 전체 클리어율을 별도 루프로 실행했다.</li>
+<li>첫 보스 전 생존/성장, 첫 보스 TTK, 무기/기억 편차, 결손 구간, 전체 클리어율을 별도 루프로 실행했다.</li>
 <li>종합표를 <code>docs/balance/2026-06-05-v012-balance-loop-matrix.md</code>에 기록했다.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
-<li>1번 prelude 10런: death 60%, first boss clear 0%, level-ups median 10.</li>
-<li>2번 TTK 5런: first boss clear 0%, TTK 미측정.</li>
-<li>3A 쌍검+칼무리 5런: first boss clear 20%, TTK 6.4초, death 60%.</li>
-<li>3B 대검+처형자 5런: first boss clear 0%, death 100%.</li>
+<li>1번 prelude 10회: 사망 <code>60%</code>, 첫 보스 클리어 <code>0%</code>, level-up 중앙값 <code>10</code>.</li>
+<li>2번 TTK 5회: 첫 보스 클리어 <code>0%</code>, TTK 미측정.</li>
+<li>3A 쌍검+허기 5회: 첫 보스 클리어 <code>20%</code>, TTK <code>6.4s</code>, 사망 <code>60%</code>.</li>
+<li>3B 대검+처형 5회: 첫 보스 클리어 <code>0%</code>, 사망 <code>100%</code>.</li>
 <li>4번 post-loss fast QA: complete, survived true, refill complete.</li>
-<li>5번 full-run 5런: full clear 0%, death 80%, first boss clear 0%, browser success 80%.</li>
+<li>5번 full-run 5회: 전체 클리어 <code>0%</code>, 사망 <code>80%</code>, 첫 보스 클리어 <code>0%</code>, browser success <code>80%</code>.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
-<li>후반 클리어율과 결손 실전 밸런스는 아직 본격 튜닝 단계가 아니다.</li>
-<li>먼저 첫 보스 전 생존과 대검 시작 안정성을 잡아야 한다.</li>
-<li>첫 보스 TTK는 보스 처치 표본이 충분히 생긴 뒤 다시 맞춘다.</li>
+<li>전반 클리어율과 결손 시험 밸런스는 아직 본격 판단 단계가 아니다.</li>
+<li>먼저 첫 보스 전 생존과 대검 시작 안정성을 잡는다.</li>
+<li>첫 보스 TTK는 보스 처치 표본이 충분해진 뒤 다시 맞춘다.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
-<li><code>run-sec 260</code>과 일부 무기 비교 루프는 긴 생존/긴 보스전 때문에 명령 타임아웃이 발생했다.</li>
+<li><code>run-sec 260</code>과 일부 무기 비교 루프에서 긴 생존/긴 보스전 때문에 명령 timeout이 발생했다.</li>
 <li>full-run 루프 1회에서 Chrome DevTools WebSocket 오류가 발생했다.</li>
-<li>post-loss QA는 fast mode라 실제 45/60/75초 결손 구간을 대표하지 않는다.</li>
+<li>post-loss QA fast mode는 실제 45/60/75초 결손 구간을 대표하지 않는다.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
-<p>감정선 대신 표면별 수치만 본다. 현재 가장 큰 병목은 first boss prelude survival과 weapon/start-memory parity다. Greatsword + execution start가 Twin blades + hungry start보다 훨씬 불안정하다.</p>
-<h2>7. Next Codex tasks</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>감정 평가는 제외하고 표면별 수치만 본다. 가장 큰 병목은 first boss prelude survival과 weapon/start-memory parity다. Greatsword + execution start가 Twin blades + hungry start보다 훨씬 불안정하다.</p>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
-<li>Greatsword 시작 안정성 보정안을 만든다.</li>
-<li>첫 보스 전 90-160초 사망 원인을 <code>deathPhase</code>, <code>maxEnemies</code>, <code>hpSamples</code>로 계측한다.</li>
+<li>Greatsword 시작 안정성 보정을 만든다.</li>
+<li>첫 보스 전 <code>90-160s</code> 사망 원인을 <code>deathPhase</code>, <code>maxEnemies</code>, <code>hpSamples</code>로 계측한다.</li>
 <li>post-loss real-duration QA 루프를 별도로 만든다.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
-<li>Problem: 단일 평균값만 보면 어느 밸런스 표면이 막는지 알 수 없다.</li>
-<li>Direction: 생존, TTK, 무기 편차, 결손, 클리어율을 분리 측정한다.</li>
-<li>Action: 5개 표면을 별도 루프로 실행하고 결과를 비교했다.</li>
-<li>Result: 첫 보스 전 생존과 대검 시작 안정성이 최우선 병목으로 확인됐다.</li>
+<li>문제: 단일 평균값만 보면 어느 표면이 막히는지 알 수 없었다.</li>
+<li>방향: 생존, TTK, 무기 편차, 결손, 클리어율을 분리 측정한다.</li>
+<li>행동: 5개 표면을 별도 루프로 실행하고 결과를 비교했다.</li>
+<li>결과: 첫 보스 전 생존과 대검 시작 안정성이 최우선 병목으로 확인됐다.</li>
 </ul>
   </main>
 </body>

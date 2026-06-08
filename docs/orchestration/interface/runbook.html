@@ -38,7 +38,7 @@
     <main>
       <header>
         <h1>운영 절차</h1>
-        <a href="./RUNBOOK.md">RUNBOOK.md</a>
+        <a href="../state/RUNBOOK.md">RUNBOOK.md</a>
       </header>
       <p>반복 명령은 Markdown 원본에서 관리하고, 이 화면은 사람이 빠르게 보고 실행 순서를 고르기 위한 요약입니다.</p>
 
@@ -80,21 +80,23 @@ npm run report:discord:unit:dry</code></pre>
 
         <article>
           <h2>실제 보고 전송</h2>
-          <p>정책, webhook, 네트워크, 권한 문제로 실패하면 이유와 다음 명령을 devlog/report에 남깁니다.</p>
-          <pre><code>npm run report:discord:unit</code></pre>
+          <p>기본은 Project Orchestrator 중앙 intake로 보내고, Discord webhook 직접 전송은 fallback으로만 둡니다.</p>
+          <pre><code>npm run report:orchestrator:dry
+npm run report:orchestrator:unit
+npm run report:discord:unit</code></pre>
         </article>
 
         <article>
           <h2>오케스트레이션 HTML</h2>
           <p>원본 Markdown 갱신 후 사람이 보는 HTML 3종도 같이 갱신합니다.</p>
-          <pre><code>docs\orchestration\index.html
-docs\orchestration\command.html
-docs\orchestration\runbook.html</code></pre>
+          <pre><code>docs\orchestration\interface\index.html
+docs\orchestration\interface\command.html
+docs\orchestration\interface\runbook.html</code></pre>
         </article>
 
         <article>
           <h2>커밋 기준</h2>
-          <p>검증과 보고가 끝난 coherent unit만 커밋/푸시합니다.</p>
+          <p>검증과 보고가 끝난 coherent unit만 커밋/푸시합니다. 사용자가 커밋하지 말라고 하면 유지합니다.</p>
           <pre><code>git status --short
 git add &lt;files&gt;
 git commit -m "docs: ..."

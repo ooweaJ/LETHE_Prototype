@@ -13,9 +13,6 @@
       --muted: #667085;
       --line: #d8dee9;
       --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
       --code: #111827;
     }
     * { box-sizing: border-box; }
@@ -100,13 +97,16 @@
       color: #cbd5e1;
       margin: 8px 0 0;
     }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
     }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
     @media (max-width: 720px) {
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
@@ -121,15 +121,16 @@
     </div>
   </header>
   <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260602/index.html">날짜 리포트로 돌아가기</a></p>
     <h1>2026-06-02-12 - Post-loss 브라우저 게이트와 환경 blocker 정리</h1>
-<h2>1. Current build status</h2>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>WP2 Slice B remains implementation-complete and scope-valid.</li>
 <li>Latest status is <code>ITERATE_BEFORE_TEST</code>.</li>
 <li>Browser proof is still missing because the managed sandbox cannot complete Chrome/CDP post-loss QA.</li>
 <li>WP3 Slice A, people testing, balance changes, and UI/gameplay expansion remain blocked.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Hardened <code>scripts/run_browser_pressure_qa.js</code>:</li>
 <li>CDP pipe remains the first path,</li>
@@ -142,7 +143,7 @@
 <li>The trusted gate runs standard post-loss QA, retries once with 30000 ms only for transport failures, then points to the blocker prompt.</li>
 <li>Added <code>alpha_test/outputs/postloss-trusted-gate/latest.json</code> result logging with <code>status</code>, <code>transportFailure</code>, run summaries, <code>nextCommand</code>, and <code>blockerPrompt</code>.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>node --check scripts/run_browser_pressure_qa.js</code>: passed.</li>
 <li><code>node --check scripts/run_trusted_postloss_gate.js</code>: passed.</li>
@@ -157,21 +158,21 @@
 <li>pipe: <code>Timed out waiting for CDP response to Target.getTargets</code>,</li>
 <li>port fallback: <code>listen EPERM: operation not permitted 127.0.0.1</code>.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>Treat this as a browser automation transport blocker in the managed sandbox, not proof that post-loss gameplay failed.</li>
 <li>Keep WP3 blocked until trusted-local browser proof passes or an explicit environment-blocker decision exists.</li>
 <li>Use <code>npm run qa:postloss:trusted</code> as the next single gate command.</li>
 <li>Keep AI proxy metrics as planning evidence only.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>Trusted-local behavior outside this sandbox is still unknown.</li>
 <li>Repeated QA tooling fixes can consume loop time without advancing gameplay.</li>
 <li>AI metrics remain positive but cannot replace browser/user proof.</li>
 <li>If the same transport failure repeats outside this sandbox, the project needs a decision rather than more blind QA retries.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>WP2 Slice B is code-complete and scope-valid.</li>
 <li>The next executable unit is sandbox-outside trusted-local <code>npm run qa:postloss:trusted</code>.</li>
@@ -179,14 +180,14 @@
 <li>If it fails on gameplay assertions, fix only the post-loss flow.</li>
 <li>If it fails on the same transport path, use <code>docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md</code>.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Run <code>npm run qa:postloss:trusted</code> on a trusted local machine outside this managed sandbox.</li>
 <li>Inspect <code>alpha_test/outputs/postloss-trusted-gate/latest.json</code>.</li>
 <li>Update <code>docs/CODEX_STATUS.md</code>, <code>docs/NEXT_TASKS.md</code>, devlog, and report based on that result.</li>
 <li>Keep WP3, people testing, balance, and UI/gameplay expansion closed until the gate is resolved.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: WP2 had promising AI proxy metrics but lacked browser proof because automation failed before gameplay evaluation.</li>
 <li>Direction: distinguish gameplay failure from environment transport failure.</li>

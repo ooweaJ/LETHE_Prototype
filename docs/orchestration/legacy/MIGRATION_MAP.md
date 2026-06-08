@@ -16,5 +16,11 @@ This file records where project-management documents moved after adopting `docs/
 | `docs/review_responses/README.md` | `docs/review_responses/README.md` | replaced with legacy pointer | no |
 | `docs/NEXT_TASKS.md` | `docs/orchestration/state/NEXT_TASKS.md` | summarized; original remains detailed legacy archive | orchestration state for current work |
 | `docs/CODEX_STATUS.md` | `docs/orchestration/state/STATUS.md` | summarized; original remains detailed legacy archive | orchestration state for current work |
+| `EXISTING_PROJECT_MIGRATION_PROMPT.md` | `docs/orchestration/MIGRATION_PROMPT.md` | superseded by current plugin adoption prompt | new prompt path |
+| local Discord webhook flow | Project Orchestrator central intake | delegated when available; local script remains trusted fallback | Project Orchestrator intake |
+| missing HTML interface contract | `docs/orchestration/templates/HTML_INTERFACE_TEMPLATE.md` | added shared template | new path |
+| flat or unit-heavy report navigation | `docs/orchestration/reports/index.html` | generated as newest-first date archive with summaries | generated new path |
+| long daily report HTML body | `docs/orchestration/reports/YYYYMMDD/index.html` plus `units/*.html` | generated as day-level unit cards linking to focused unit pages | generated new path |
+| `docs/orchestration/devlog/YYYYMMDD.md` | `docs/orchestration/devlog/YYYY-MM-DD.md` | new entries use dashed date; compact-date files remain legacy continuity | dashed-date path for new entries |
 
 Legacy folders may remain if external tooling or historical links reference them. New project-management work should not create source-of-truth files under legacy paths.

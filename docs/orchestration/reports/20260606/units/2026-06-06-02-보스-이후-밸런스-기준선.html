@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-06-02 - 보스 이후 밸런스 기준선</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-06-02 - 보스 이후 밸런스 기준선</h1>
+      <p class="meta">Generated from 2026-06-06-02-보스-이후-밸런스-기준선.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260606/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-06-02 - 보스 이후 밸런스 기준선</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>v0.12는 자동 브라우저 밸런스 기준선을 갖췄다. 전체 <code>qa:balance</code>가 <code>GO_BALANCE_BASELINE</code>을 반환했다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>보스 이후 자동 진행에서 cycle result continue 버튼을 먼저 누르게 해, 활성 기억 0개 guard가 루프를 멈추지 않도록 했다.</li>
+<li>결손 숨고르기, 결손 시험, 이후 사이클 기본 압박에 spawn cap을 추가했다.</li>
+<li>브라우저 밸런스 QA 기본 실행 창을 <code>608s</code>에서 <code>690s</code>로 늘렸다.</li>
+<li>첫 보스 HP를 <code>2800</code>에서 <code>2500</code>으로 바꿨다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>node --check src/game.js</code>: 통과.</li>
+<li><code>node --check scripts/run_boss_ttk_harness.js</code>: 통과.</li>
+<li><code>node --check scripts/run_browser_balance_qa.js</code>: 통과.</li>
+<li>boss-only HP <code>2500</code>: 5/5 accepted, TTK 중앙값 <code>15.62s</code>, verdict <code>GO_BOSS_TTK_SAMPLE</code>.</li>
+<li>브라우저 <code>first_boss_ttk</code> HP <code>2500</code>: 3/3 accepted, TTK 중앙값 <code>21.05s</code>, verdict <code>GO_BALANCE_BASELINE</code>.</li>
+<li>전체 브라우저 <code>qa:balance</code>: <code>GO_BALANCE_BASELINE</code>, 첫 보스 클리어 <code>100%</code>, 전체 클리어 <code>40%</code>, 사망 <code>60%</code>, 첫 보스 TTK 중앙값 <code>22.24s</code>.</li>
+<li>근거: <code>docs/balance/2026-06-06-v012-boss-ttk-hp2500.md</code>, <code>docs/balance/2026-06-06-v012-browser-first-boss-ttk-hp2500.md</code>, <code>docs/balance/2026-06-06-v012-balance-qa.md</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>HP <code>2500</code>을 현재 첫 보스 값으로 본다.</li>
+<li>보스 이후와 전체 런 자동화는 현재 기준선 gate에 충분히 고쳐졌다고 본다.</li>
+<li>사망 패턴 해석 없이 바로 인간 준비 완료로 부르지는 않는다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>사망 <code>60%</code>가 결손 시험에 집중됐다.</li>
+<li>자동 기준선은 인간 플레이테스트 감정 증거를 대체하지 못한다.</li>
+<li>실제 Discord 전송은 이 Codex 세션에서 승인 검토에 막힐 수 있다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>감정 proxy는 제외한다. v0.12는 첫 보스 클리어 <code>100%</code>, 전체 클리어 <code>40%</code>, 첫 보스 TTK 중앙값 <code>22.24s</code>로 자동 기준선을 통과했다. 남은 질문은 결손 시험의 높은 사망률이 의도된 긴장인지 과한 처벌인지이다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>결손 시험 사망 <code>60%</code>가 현재 prototype gate에 허용 가능한지 reviewer/GPT 프롬프트를 준비한다.</li>
+<li>필요하면 첫 보스 HP를 건드리지 말고 결손 시험 압박이나 지속시간만 조정한다.</li>
+<li>accepted되면 다음 인간 테스트 전 gate와 보고 루프로 넘어간다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 첫 보스 TTK는 안정됐지만 전체 런은 보스 이후 흐름과 최종 보스 시간 창에서 실패했다.</li>
+<li>방향: QA 진행과 보스 이후 압박을 첫 보스 HP와 분리해 고친다.</li>
+<li>행동: QA interrupt 처리 순서, post-boss cap, QA 실행 창, 첫 보스 HP를 조정했다.</li>
+<li>결과: 자동 브라우저 밸런스 기준선을 통과했고 남은 질문이 결손 시험 해석으로 좁혀졌다.</li>
+</ul>
+  </main>
+</body>
+</html>

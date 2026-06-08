@@ -6,8 +6,8 @@ Codex works in this repository as the implementation, verification, git, reporti
 
 - The project goal is to validate LETHE's core fun and possibility in HTML before deciding whether Unity implementation is justified.
 - AI proxy metrics are planning evidence only. They are not human emotion, balance, or Unity-transition proof.
-- Current state: v0.12 is a controlled human-test candidate after balance-loop validation.
-- Human sessions are the next evidence gate.
+- Current state: v0.12 is paused after the latest balance-loop rerun returned `ITERATE_BALANCE`.
+- The next evidence gate is a small balance adjustment and rerun before controlled human sessions, unless the user explicitly accepts the test risk.
 
 ## Operating Rules
 
@@ -16,13 +16,15 @@ Codex works in this repository as the implementation, verification, git, reporti
 - Keep existing legacy docs; do not delete them during orchestration adoption.
 - Keep Markdown as the source of truth. HTML is a generated/readable view for the user.
 - The orchestration dashboard should be Korean-first and help the user decide the next prompt from the last completed state.
+- Use `docs/orchestration/templates/HTML_INTERFACE_TEMPLATE.md` before creating or revising human-facing HTML surfaces.
+- Prefer Project Orchestrator for Discord delivery. Treat project-local Discord scripts as trusted-local fallback only.
 - After meaningful work, update status/task docs, devlog, reports, and decision logs as appropriate.
 
 ## Evidence Discipline
 
 - Separate AI simulator evidence, browser flow QA evidence, balance-loop evidence, and human play evidence.
 - Do not call automated balance or AI proxy results "human feedback."
-- Do not continue blind numeric tuning before human evidence unless the user explicitly changes scope.
+- Do not continue blind numeric tuning. If a balance gate fails, choose exactly one small lever, document why, and rerun the relevant gate.
 
 ## Reporting Tone
 

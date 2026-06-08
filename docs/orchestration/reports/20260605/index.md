@@ -1,419 +1,414 @@
+# LETHE 개발 보고서 - 2026-06-05
+
+이 날짜의 핵심은 v0.12 밸런스를 실제 브라우저 QA 수치로 쪼개서 추적하고, 첫 보스 전 생존과 TTK 측정 경로를 분리한 것이다.
+
 # 2026-06-05-01 - v0.12 밸런스 루프 테스트
 
-## 1. Current build status
+## 1. 현재 빌드 상태
 
-v0.12 밸런스 자동 측정 루프는 실행 가능하지만 아직 기준선 통과 상태가 아니다. 최신 판정은 `ITERATE_BALANCE`다.
+v0.12 밸런스는 자동 측정 루프를 실행할 수 있지만 아직 기준선 통과 상태가 아니었다. 최신 verdict는 `ITERATE_BALANCE`였다.
 
-## 2. What changed today
+## 2. 오늘 바뀐 것
 
-- 초반 생존 완충, 플레이어 기본 HP/속도, 일반 적 피해량, 적 레벨 스케일링, 첫 사이클 스폰 압력, 첫 보스 HP를 조정했다.
-- `qa=balance` 자동 조작을 주변 적/투사체 압력 기반 이동, 보스 접근, 보스전 전술 집중 사용 방식으로 보강했다.
+- 초반 생존 압력, 플레이어 기본 HP/속도, 일반 적 피해, 무기 로직, 첫 사이클 spawn 압력, 첫 보스 HP를 조정했다.
+- `qa=balance` 자동 조작을 주 무기 투사체 정렬, 보스 접근, 보스 집중 공격 중심으로 보강했다.
 - `docs/BALANCE_TABLE_v0_12.md`, `docs/CODEX_STATUS.md`, `docs/NEXT_TASKS.md`에 최신 루프 결과를 반영했다.
 
-## 3. Test results and evidence
+## 3. 테스트 결과와 근거
 
-- Command: `npm run qa:balance`
-- Latest 5-run verdict: `ITERATE_BALANCE`
-- First boss clear rate: 0%
-- Full clear rate: 0%
-- Death rate: 100%
-- Death-at median: 133.97s
-- Pre-boss level-ups median: 11
-- Slots filled median: 16.63s
-- Top DPS share median: 47.05%
-- Evidence files:
-  - `alpha_test/outputs/balance/summary.json`
-  - `docs/balance/2026-06-05-v012-balance-qa.md`
+- 명령: `npm run qa:balance`.
+- 최신 5-run verdict: `ITERATE_BALANCE`.
+- 첫 보스 클리어율 `0%`, 전체 클리어율 `0%`, 사망률 `100%`.
+- 사망 시점 중앙값 `133.97s`.
+- 첫 보스 전 레벨업 중앙값 `11`.
+- slot fill 중앙값 `16.63s`.
+- top DPS share 중앙값 `47.05%`.
+- 근거: `alpha_test/outputs/balance/summary.json`, `docs/balance/2026-06-05-v012-balance-qa.md`.
 
-## 4. Decisions made
+## 4. 결정한 것
 
 - v0.12는 아직 밸런스 완료가 아니다.
-- 성장 페이스와 DPS 편중은 목표에 가까워졌으므로, 다음 루프는 수치 추가 하향보다 사망 원인 계측 보강을 먼저 한다.
-- 5런 표본 변동이 크므로 다음 판단은 10-20런 기준으로 한다.
+- 성장 편향과 DPS 집중은 목표에 가까워졌으므로 다음 루프는 추가 수치 상향보다 사망 원인 계측 보강을 먼저 한다.
+- 5회 표본 변동이 커서 다음 판단은 10-20회 기준도 고려한다.
 
-## 5. Problems or risks
+## 5. 문제 또는 리스크
 
-- 첫 보스 전 90-160초 구간에서 사망이 계속 발생한다.
-- 같은 턴 중간 측정은 first boss clear 60%까지 갔지만 최신 측정은 0%로 돌아왔다. 표본 변동이 크다.
-- 보스 처치 후 자동 루프 상태에서 `activeMemoryCount`가 0으로 기록되는 사례가 있어, boss post-cycle state 계측이 필요하다.
+- 첫 보스 전 `90-160s` 구간에서 사망이 반복됐다.
+- 중간 측정에서는 첫 보스 클리어가 `60%`까지 올라갔지만 최신 측정은 다시 `0%`로 떨어졌다.
+- 보스 처치 후 자동 루프 상태에서 `activeMemoryCount`가 0으로 기록되는지 추가 계측이 필요하다.
 
-## 6. GPT handoff summary
+## 6. GPT/Claude 인계 요약
 
-감정선 평가는 제외한다. 다음 검토자는 first boss prelude survival, death phase, enemy count, HP samples, boss post-cycle state를 중심으로 `ITERATE_BALANCE` 원인을 판단하면 된다.
+감정 평가는 제외한다. 다음 검토자는 first boss prelude survival, death phase, enemy count, HP samples, boss post-cycle state를 중심으로 `ITERATE_BALANCE` 원인을 판단해야 한다.
 
-## 7. Next Codex tasks
+## 7. 다음 Codex 작업
 
-- Balance run JSON에 `deathPhase`, `maxEnemies`, `hpSamples`, `pressureSegments`, `bossPostCycleState`를 추가한다.
-- 10-20런 balance QA를 실행한다.
-- first boss clear rate가 70% 이상 안정된 뒤 first boss TTK를 15-30초로 재조정한다.
+- balance run JSON에 `deathPhase`, `maxEnemies`, `hpSamples`, `pressureSegments`, `bossPostCycleState`를 추가한다.
+- 10-20회 balance QA를 실행한다.
+- first boss clear rate가 안정적으로 `70%+`가 된 뒤 first boss TTK를 `15-30s`로 재조정한다.
 
-## 8. Portfolio notes
+## 8. 포트폴리오 메모
 
-- Problem: 감정 proxy가 아니라 실제 브라우저 수치 기준으로 밸런스를 잡아야 한다.
-- Direction: first boss 전 성장/생존/TTK를 독립 지표로 분리한다.
-- Action: 반복 5런 QA와 수치 조정을 수행하고 문서화했다.
-- Result: 성장과 DPS 편중은 개선됐지만 first boss 전 생존 안정성은 미달이라 다음 계측 보강이 필요하다.
+- 문제: 감정 proxy가 아니라 실제 브라우저 수치 기준으로 밸런스를 잡아야 했다.
+- 방향: first boss 전 성장, 생존, TTK를 별도 지표로 분리한다.
+- 행동: 반복 QA와 수치 조정을 수행하고 문서화했다.
+- 결과: 성장과 DPS 집중은 개선됐지만 first boss 전 생존 안정성은 아직 미달이었다.
 
 # 2026-06-05-02 - v0.12 밸런스 5개 표면 분리 루프
 
-## 1. Current build status
+## 1. 현재 빌드 상태
 
-v0.12 밸런스는 아직 `ITERATE_BALANCE`다. 다섯 표면을 분리해 돌린 결과, 첫 보스 전 생존과 무기/시작 기억 편차가 뒤쪽 밸런스 측정을 막고 있다.
+v0.12는 계속 `ITERATE_BALANCE`였다. 다섯 개 표면으로 나눠 측정한 결과, 첫 보스 전 생존과 무기/시작 기억 편차가 밸런스 측정을 막는 병목으로 좁혀졌다.
 
-## 2. What changed today
+## 2. 오늘 바뀐 것
 
-- 1번 첫 보스 전 생존/성장, 2번 첫 보스 TTK, 3번 무기/기억 편차, 4번 결손 구간, 5번 전체 클리어율을 별도 루프로 실행했다.
+- 첫 보스 전 생존/성장, 첫 보스 TTK, 무기/기억 편차, 결손 구간, 전체 클리어율을 별도 루프로 실행했다.
 - 종합표를 `docs/balance/2026-06-05-v012-balance-loop-matrix.md`에 기록했다.
 
-## 3. Test results and evidence
+## 3. 테스트 결과와 근거
 
-- 1번 prelude 10런: death 60%, first boss clear 0%, level-ups median 10.
-- 2번 TTK 5런: first boss clear 0%, TTK 미측정.
-- 3A 쌍검+칼무리 5런: first boss clear 20%, TTK 6.4초, death 60%.
-- 3B 대검+처형자 5런: first boss clear 0%, death 100%.
+- 1번 prelude 10회: 사망 `60%`, 첫 보스 클리어 `0%`, level-up 중앙값 `10`.
+- 2번 TTK 5회: 첫 보스 클리어 `0%`, TTK 미측정.
+- 3A 쌍검+허기 5회: 첫 보스 클리어 `20%`, TTK `6.4s`, 사망 `60%`.
+- 3B 대검+처형 5회: 첫 보스 클리어 `0%`, 사망 `100%`.
 - 4번 post-loss fast QA: complete, survived true, refill complete.
-- 5번 full-run 5런: full clear 0%, death 80%, first boss clear 0%, browser success 80%.
+- 5번 full-run 5회: 전체 클리어 `0%`, 사망 `80%`, 첫 보스 클리어 `0%`, browser success `80%`.
 
-## 4. Decisions made
+## 4. 결정한 것
 
-- 후반 클리어율과 결손 실전 밸런스는 아직 본격 튜닝 단계가 아니다.
-- 먼저 첫 보스 전 생존과 대검 시작 안정성을 잡아야 한다.
-- 첫 보스 TTK는 보스 처치 표본이 충분히 생긴 뒤 다시 맞춘다.
+- 전반 클리어율과 결손 시험 밸런스는 아직 본격 판단 단계가 아니다.
+- 먼저 첫 보스 전 생존과 대검 시작 안정성을 잡는다.
+- 첫 보스 TTK는 보스 처치 표본이 충분해진 뒤 다시 맞춘다.
 
-## 5. Problems or risks
+## 5. 문제 또는 리스크
 
-- `run-sec 260`과 일부 무기 비교 루프는 긴 생존/긴 보스전 때문에 명령 타임아웃이 발생했다.
+- `run-sec 260`과 일부 무기 비교 루프에서 긴 생존/긴 보스전 때문에 명령 timeout이 발생했다.
 - full-run 루프 1회에서 Chrome DevTools WebSocket 오류가 발생했다.
-- post-loss QA는 fast mode라 실제 45/60/75초 결손 구간을 대표하지 않는다.
+- post-loss QA fast mode는 실제 45/60/75초 결손 구간을 대표하지 않는다.
 
-## 6. GPT handoff summary
+## 6. GPT/Claude 인계 요약
 
-감정선 대신 표면별 수치만 본다. 현재 가장 큰 병목은 first boss prelude survival과 weapon/start-memory parity다. Greatsword + execution start가 Twin blades + hungry start보다 훨씬 불안정하다.
+감정 평가는 제외하고 표면별 수치만 본다. 가장 큰 병목은 first boss prelude survival과 weapon/start-memory parity다. Greatsword + execution start가 Twin blades + hungry start보다 훨씬 불안정하다.
 
-## 7. Next Codex tasks
+## 7. 다음 Codex 작업
 
-- Greatsword 시작 안정성 보정안을 만든다.
-- 첫 보스 전 90-160초 사망 원인을 `deathPhase`, `maxEnemies`, `hpSamples`로 계측한다.
+- Greatsword 시작 안정성 보정을 만든다.
+- 첫 보스 전 `90-160s` 사망 원인을 `deathPhase`, `maxEnemies`, `hpSamples`로 계측한다.
 - post-loss real-duration QA 루프를 별도로 만든다.
 
-## 8. Portfolio notes
+## 8. 포트폴리오 메모
 
-- Problem: 단일 평균값만 보면 어느 밸런스 표면이 막는지 알 수 없다.
-- Direction: 생존, TTK, 무기 편차, 결손, 클리어율을 분리 측정한다.
-- Action: 5개 표면을 별도 루프로 실행하고 결과를 비교했다.
-- Result: 첫 보스 전 생존과 대검 시작 안정성이 최우선 병목으로 확인됐다.
+- 문제: 단일 평균값만 보면 어느 표면이 막히는지 알 수 없었다.
+- 방향: 생존, TTK, 무기 편차, 결손, 클리어율을 분리 측정한다.
+- 행동: 5개 표면을 별도 루프로 실행하고 결과를 비교했다.
+- 결과: 첫 보스 전 생존과 대검 시작 안정성이 최우선 병목으로 확인됐다.
 
 # 2026-06-05-03 - 대검 시작 안정화와 밸런스 진단 로그 보강
 
-## 1. Current build status
+## 1. 현재 빌드 상태
 
-v0.12는 계속 `ITERATE_BALANCE`다. 대검 시작 안정성은 개선됐지만, first boss clear rate는 아직 목표에 도달하지 못했다.
+v0.12는 계속 `ITERATE_BALANCE`였다. 대검 시작 안정성은 개선됐지만 first boss clear rate는 아직 목표에 도달하지 못했다.
 
-## 2. What changed today
+## 2. 오늘 바뀐 것
 
 - Balance QA 결과 JSON에 `deathPhase`, `deathEnemyCount`, `maxEnemies`, `pressureSegments`, `hpSamples`, `lowHpSamples`, `bossPostCycleState`를 보존하게 했다.
 - Telemetry sample에 `hpRate`, `pressurePhase`, `bossActive`를 추가했다.
 - 대검 기본 공격에 전방 cleave를 추가했다.
-- 첫 사이클 스폰 상한을 추가하고 두 단계로 조정했다.
+- 첫 사이클 spawn 상한을 추가하고 여러 단계로 조정했다.
 
-## 3. Test results and evidence
+## 3. 테스트 결과와 근거
 
-- `node --check src/game.js`: pass.
-- `node --check scripts/run_browser_balance_qa.js`: pass.
-- 대검+처형자 cleave 재측정: death 60%, max enemies median 72.
-- 대검+처형자 cleave+spawn cap 재측정: death 40%, max enemies median 48, browser success 80%.
-- 기본 prelude spawn cap 재측정: death 40%, max enemies median 53.
-- first boss 230s tightened cap 재측정: death 60%, first boss clear 0%, max enemies median 42, browser success 60%.
+- `node --check src/game.js`: 통과.
+- `node --check scripts/run_browser_balance_qa.js`: 통과.
+- 대검+처형 cleave 재측정: 사망 `60%`, max enemies 중앙값 `72`.
+- cleave+spawn cap 재측정: 사망 `40%`, max enemies 중앙값 `48`, browser success `80%`.
+- 기본 prelude spawn cap 재측정: 사망 `40%`, max enemies 중앙값 `53`.
+- first boss 230s tightened cap 재측정: 사망 `60%`, 첫 보스 클리어 `0%`, max enemies 중앙값 `42`, browser success `60%`.
 
-## 4. Decisions made
+## 4. 결정한 것
 
-- 대검은 단일 타깃 무기처럼 동작하면 시작 안정성이 너무 낮으므로 전방 cleave를 유지한다.
-- 첫 사이클 적 수 상한은 유효하지만, 더 낮추는 방식만으로 first boss clear를 만들지는 않는다.
-- 다음 조정은 `hpSamples`와 `pressureSegments`를 보고 어느 시점에 HP가 무너지는지 확인한 뒤 결정한다.
+- 대검은 단일 타겟 무기처럼 동작하면 시작 안정성이 너무 낮으므로 전방 cleave를 유지한다.
+- 첫 사이클 spawn 상한은 유효하지만, 단순히 낮추는 것만으로 first boss clear를 만들 수는 없다.
+- 다음 조정은 `hpSamples`와 `pressureSegments`를 보고 HP가 무너지는 시점을 판단한 뒤 결정한다.
 
-## 5. Problems or risks
+## 5. 문제 또는 리스크
 
-- Chrome DevTools WebSocket 오류가 follow-up QA에서 다시 발생했다.
-- tightened spawn cap은 level-up median을 8까지 낮췄다. 더 낮추면 성장 페이스가 무너질 수 있다.
-- first boss clear는 여전히 0%라 TTK 측정은 계속 막혀 있다.
+- follow-up QA에서 Chrome DevTools WebSocket 오류가 다시 발생했다.
+- tightened spawn cap은 level-up 중앙값을 `8`까지 낮춰 성장 흐름을 무너뜨릴 수 있다.
+- first boss clear가 여전히 `0%`라 TTK 측정이 막혀 있다.
 
-## 6. GPT handoff summary
+## 6. GPT/Claude 인계 요약
 
-감정선은 제외한다. 현재 수치상 대검 시작은 개선됐지만, first boss clear 0%가 남아 있다. 다음 검토자는 density를 더 낮추기보다 `hpSamples`, `deathPhase`, `pressureSegments`를 보고 HP 붕괴 시점을 판단해야 한다.
+감정 평가는 제외한다. 현재 수치는 대검 시작은 개선됐지만 first boss clear `0%`가 남아 있다. 다음 검토자는 density를 더 낮추기보다 `hpSamples`, `deathPhase`, `pressureSegments`로 HP 붕괴 시점을 봐야 한다.
 
-## 7. Next Codex tasks
+## 7. 다음 Codex 작업
 
-- `hpSamples`에서 HP가 60%, 40%, 20% 이하로 떨어지는 첫 시점을 요약하는 runner 지표를 추가한다.
-- first boss 전 `압박 상승`과 `망각 전조`의 전환 시점/적 수를 따로 비교한다.
-- Chrome WebSocket 오류를 줄이기 위해 balance QA의 per-run Chrome cleanup/retry를 보강한다.
+- `hpSamples`에서 HP가 60%, 40%, 20% 이하로 처음 떨어지는 시점을 요약하는 runner 지표를 추가한다.
+- 첫 보스 전 `절박 상승`과 `망각 전조`의 전환 시점/피해를 별도로 비교한다.
+- balance QA의 per-run Chrome cleanup/retry를 보강한다.
 
-## 8. Portfolio notes
+## 8. 포트폴리오 메모
 
-- Problem: 대검 시작이 쌍검보다 훨씬 불안정했고, 사망 원인 로그가 부족했다.
-- Direction: 무기 역할에 맞는 기본 공격 성격을 부여하고, 사망 원인을 데이터로 남긴다.
-- Action: 대검 cleave, spawn cap, balance diagnostics를 구현하고 재측정했다.
-- Result: 대검 death rate가 100%에서 40%까지 개선된 표본을 얻었지만, first boss clear는 아직 열리지 않았다.
+- 문제: 대검 시작이 쌍검보다 불안정했고 사망 원인 로그가 부족했다.
+- 방향: 무기 역할에 맞는 기본 공격 성격을 부여하고 사망 원인을 데이터로 남긴다.
+- 행동: 대검 cleave, spawn cap, balance diagnostics를 구현하고 재측정했다.
+- 결과: 대검 death rate는 100%에서 40%까지 개선됐지만 first boss clear는 아직 열리지 않았다.
 
 # 2026-06-05-04 - HP 붕괴 지표와 첫 보스 스폰 버그 수정
 
-## 1. Current build status
+## 1. 현재 빌드 상태
 
-v0.12는 계속 `ITERATE_BALANCE`다. 다만 이번 단위에서 first boss clear가 낮은 원인 중 하나가 단순 수치 문제가 아니라 보스 스폰 순서 버그였음을 확인했다.
+v0.12는 계속 `ITERATE_BALANCE`였다. 다만 first boss clear가 낮은 이유 중 하나가 단순 수치 문제가 아니라 보스 스폰 순서 버그일 수 있음을 확인했다.
 
-## 2. What changed today
+## 2. 오늘 바뀐 것
 
 - Balance QA 보고서에 HP 60% / 40% / 20% 이하 첫 진입 시점을 추가했다.
-- Balance QA per-run retry, headless Chrome 안정화 플래그, `browser_error` 제외 gameplay metric 집계를 추가했다.
-- 초반 생존/보스 진입을 보정했다: 플레이어 HP 180, 초반 피해 램프 320초, 첫 사이클 climax cap 38.
-- 보스가 기본 공격 사거리 안에 있으면 잡몹보다 우선 공격하게 했다.
-- 첫 보스가 적 수 cap에 막혀 스폰되지 않는 `updateSpawning()` 순서 버그를 수정했다.
+- Balance QA per-run retry, headless Chrome 안정화 flag, `browser_error` 제외 gameplay metric 집계를 추가했다.
+- 초반 생존/보스 진입을 보정했다: 플레이어 HP 180, 초반 피해 완화 320초, 첫 사이클 climax cap 38.
+- 보스가 기본 공격 사거리 안에 있으면 잡몹보다 우선 공격하도록 했다.
+- `updateSpawning()`에서 cap에 막혀 보스가 스폰되지 않던 순서 버그를 수정했다.
 
-## 3. Test results and evidence
+## 3. 테스트 결과와 근거
 
-- `node --check src/game.js`: pass.
-- `node --check scripts/run_browser_balance_qa.js`: pass.
-- HP threshold baseline: `docs/balance/2026-06-05-loop-02-first-boss-hp-thresholds.md`, death 60%, HP <= 40% median 90.83s.
-- Survival buffer retry2: `docs/balance/2026-06-05-loop-02-first-boss-survival-buffer-retry2.md`, browser success 100%, death 80%, HP <= 40% median 108.97s.
-- Prelude soften: `docs/balance/2026-06-05-loop-02-first-boss-prelude-soften.md`, browser success 80%, death 60%.
-- Boss targeting/spawn-fix probes produced low browser success, so they are recorded as diagnostic evidence only, not balance acceptance proof.
+- `node --check src/game.js`: 통과.
+- `node --check scripts/run_browser_balance_qa.js`: 통과.
+- HP threshold baseline: `docs/balance/2026-06-05-loop-02-first-boss-hp-thresholds.md`, 사망 `60%`, HP <= 40% 중앙값 `90.83s`.
+- Survival buffer retry2: `docs/balance/2026-06-05-loop-02-first-boss-survival-buffer-retry2.md`, browser success `100%`, 사망 `80%`, HP <= 40% 중앙값 `108.97s`.
+- Prelude soften: `docs/balance/2026-06-05-loop-02-first-boss-prelude-soften.md`, browser success `80%`, 사망 `60%`.
+- Boss targeting/spawn-fix probe는 browser success가 낮아 진단 근거로만 기록했다.
 
-## 4. Decisions made
+## 4. 결정한 것
 
 - 첫 보스 TTK 조정은 아직 보류한다.
-- spawn cap에 boss schedule이 막히는 버그 수정은 유지한다.
-- 다음 루프는 수치 추가 하향보다 장거리 balance QA 안정화와 first boss damage/TTK 표본 확보를 우선한다.
+- spawn cap과 boss schedule이 충돌하던 버그 수정은 유지한다.
+- 다음 루프는 추가 수치 상향보다 장거리 balance QA 안정화와 first boss damage/TTK 표본 확보를 우선한다.
 
-## 5. Problems or risks
+## 5. 문제 또는 리스크
 
-- 180-230초 장거리 Chrome/CDP balance run에서 WebSocket 오류가 반복된다.
-- 최신 spawn-fix probe는 browser success 40%라 밸런스 판정 근거로 쓰기 어렵다.
+- 180-230초 장거리 Chrome/CDP balance run에서 WebSocket 오류가 반복됐다.
+- 최신 spawn-fix probe는 browser success `40%`라 밸런스 판정 근거로 쓰기 어렵다.
 - HP 붕괴는 여전히 보스 직전 `망각 전조`에 몰려 있다.
 
-## 6. GPT handoff summary
+## 6. GPT/Claude 인계 요약
 
-감정선은 제외한다. 이번 핵심은 `updateSpawning()`의 boss schedule check가 spawn cap return보다 뒤에 있어 보스가 지연될 수 있었다는 점이다. 다음 검토는 runner 안정화 후 first boss damage/TTK를 다시 봐야 한다.
+감정 평가는 제외한다. 이번 핵심은 `updateSpawning()`의 boss schedule check가 spawn cap return 뒤에 있어서 보스가 지연될 수 있었다는 점이다. 다음 검토는 runner 안정화 후 first boss damage/TTK를 다시 봐야 한다.
 
-## 7. Next Codex tasks
+## 7. 다음 Codex 작업
 
 - Long balance QA에서 Chrome/CDP 성공률을 4/5 이상으로 회복한다.
-- 보스 스폰 수정 후 first boss 5런을 다시 실행한다.
-- first boss clear 표본이 생긴 뒤 HP와 TTK를 다시 튜닝한다.
+- 보스 스폰 수정 후 first boss 5-run을 다시 실행한다.
+- first boss clear 표본이 생기면 HP와 TTK를 다시 판단한다.
 
-## 8. Portfolio notes
+## 8. 포트폴리오 메모
 
-- Problem: first boss clear 0%가 단순 HP/피해량 문제가 아닐 수 있었다.
-- Direction: 실패 루프를 HP threshold와 spawn/boss telemetry로 분해한다.
-- Action: HP 붕괴 지표, 브라우저 retry, 보스 우선 타깃팅, 보스 스폰 순서 수정을 적용했다.
-- Result: 실제 보스 스폰 gate bug를 찾아 수정했지만, 장거리 브라우저 QA 안정화가 다음 병목으로 남았다.
+- 문제: first boss clear `0%`가 단순 HP/피해 문제가 아닐 수 있었다.
+- 방향: 실패 루프를 HP threshold와 spawn/boss telemetry로 분해한다.
+- 행동: HP 붕괴 지표, 브라우저 retry, 보스 우선 타겟팅, 보스 스폰 순서 수정을 적용했다.
+- 결과: 실제 보스 스폰 gate bug를 찾았지만 장거리 QA 안정화가 다음 병목으로 남았다.
 
 # 2026-06-05-05 - 스폰 수정 후 밸런스 5개 표면 재측정
 
-## 1. Current build status
+## 1. 현재 빌드 상태
 
-v0.12는 계속 `ITERATE_BALANCE`다. 첫 보스 스폰 버그 수정 후 1~5번 표면을 다시 훑은 결과, 다음 병목은 첫 사이클 `망각 전조` 생존으로 좁혀졌다.
+v0.12는 계속 `ITERATE_BALANCE`였다. 첫 보스 스폰 버그 수정 후 1-5번 표면을 다시 측정한 결과, 다음 병목은 첫 사이클 `망각 전조` 생존으로 좁혀졌다.
 
-## 2. What changed today
+## 2. 오늘 바뀐 것
 
-- 첫 보스 스폰 수정 이후 5개 밸런스 표면을 순서대로 다시 실행했다.
+- 첫 보스 스폰 수정 후 5개 밸런스 표면을 같은 순서로 다시 실행했다.
 - 결과를 `docs/balance/2026-06-05-v012-spawnfix-balance-pass-1to5.md`에 정리했다.
 - `docs/balance/2026-06-05-v012-balance-loop-matrix.md`, `docs/CODEX_STATUS.md`, `docs/NEXT_TASKS.md`에 최신 우선순위를 반영했다.
 
-## 3. Test results and evidence
+## 3. 테스트 결과와 근거
 
-- 1번 prelude: `docs/balance/2026-06-05-loop-01-preboss-spawnfix.md`, 5 runs / 4 gameplay, death 50%, death-at median 159.8s, HP <= 20% median 137.76s.
-- 2번 TTK: slow-step smoke and partial samples died at 163-179s before boss damage, so TTK remains blocked.
-- 3A twin+hungry: `docs/balance/2026-06-05-loop-03a-twin-hungry-spawnfix.md`, 3/3 gameplay, death 33.3%.
-- 3B greatsword+execution: partial sample reached 190s; first boss spawned at 180.02s and took 647.87 / 780 damage in 10s.
-- 4번 post-loss fast gate: `qa:postloss` passed with `CHROME_PATH`, challenge survived and refill completed.
-- 5번 full clear: partial sample died at 178.35s in `망각 전조`; full clear is not measurable yet.
+- 1번 prelude: `docs/balance/2026-06-05-loop-01-preboss-spawnfix.md`, 5 runs / 4 gameplay, 사망 `50%`, 사망 시점 중앙값 `159.8s`, HP <= 20% 중앙값 `137.76s`.
+- 2번 TTK: slow-step smoke와 partial samples가 보스 피해 전 `163-179s`에 사망해 TTK는 계속 blocked.
+- 3A twin+hungry: 3/3 gameplay, 사망 `33.3%`.
+- 3B greatsword+execution: partial sample이 `190s`까지 도달했고, 첫 보스가 `180.02s`에 스폰되어 10초 동안 `647.87 / 780` 피해를 받았다.
+- 4번 post-loss fast gate: `qa:postloss` 통과, challenge survived와 refill complete.
+- 5번 full clear: partial sample이 `178.35s` `망각 전조`에서 사망, full clear는 아직 측정 불가.
 
-## 4. Decisions made
+## 4. 결정한 것
 
-- 첫 보스 HP/TTK 튜닝은 아직 보류한다.
-- full-run clear rate도 아직 튜닝하지 않는다.
-- 다음 수치 튜닝은 first-cycle `망각 전조` 생존에 집중한다.
+- 첫 보스 HP/TTK 판단은 아직 보류한다.
+- full-run clear rate는 아직 판단하지 않는다.
+- 다음 수치 조정은 first-cycle `망각 전조` 생존에 집중한다.
 
-## 5. Problems or risks
+## 5. 문제 또는 리스크
 
-- 긴 230s/608s balance QA는 여전히 타임아웃과 Chrome WebSocket 오류가 섞인다.
-- 일부 표면은 5런 완주가 아니라 partial signal로만 남았다.
-- 그래도 모든 gameplay partial이 같은 병목, 즉 160-180초 `망각 전조` 사망을 가리킨다.
+- 긴 230s/608s balance QA는 여전히 timeout과 Chrome WebSocket 오류가 많다.
+- 일부 표면은 5회 완주가 아니라 partial signal로만 남았다.
+- 그래도 모든 gameplay partial이 같은 병목, 즉 `160-180s` `망각 전조` 사망을 가리켰다.
 
-## 6. GPT handoff summary
+## 6. GPT/Claude 인계 요약
 
-감정선은 제외한다. 다음 검토/구현자는 first-cycle `망각 전조` 생존을 우선 조정해야 한다. 목표는 HP <= 40% median 140s+, HP <= 20% median 170s+, first-boss reach rate 70%+다.
+감정 평가는 제외한다. 다음 구현자는 first-cycle `망각 전조` 생존을 우선 조정해야 한다. 목표는 HP <= 40% 중앙값 140s+, HP <= 20% 중앙값 170s+, first-boss reach rate 70%+이다.
 
-## 7. Next Codex tasks
+## 7. 다음 Codex 작업
 
-- `망각 전조` 구간의 spawn cap, pack size, enemy pool, incoming damage ramp 중 하나를 좁게 조정한다.
+- `망각 전조` 구간의 spawn cap, pack size, enemy pool, incoming damage ramp 중 하나를 작게 조정한다.
 - 조정 후 1번 prelude와 2번 TTK를 다시 실행한다.
-- first boss damage sample이 안정되면 그때 first boss HP를 15-30초 TTK 기준으로 재조정한다.
+- first boss damage sample이 안정되면 first boss HP를 `15-30s` TTK 기준으로 재조정한다.
 
-## 8. Portfolio notes
+## 8. 포트폴리오 메모
 
-- Problem: 전체 클리어율을 보기 전에 첫 보스 직전에서 런이 무너진다.
-- Direction: 밸런스 표면을 순서대로 분리해 가장 앞단의 병목을 찾는다.
-- Action: 스폰 수정 후 1~5번 표면을 다시 실행하고 partial 결과까지 비교했다.
-- Result: 다음 목표가 `망각 전조` 생존으로 좁혀졌다.
+- 문제: 전체 클리어율을 보기 전에 첫 보스 직전에서 런이 무너졌다.
+- 방향: 밸런스 표면을 순서대로 분리해 가장 앞단의 병목을 찾는다.
+- 행동: 스폰 수정 후 1-5번 표면을 다시 실행하고 partial 결과까지 비교했다.
+- 결과: 다음 목표가 `망각 전조` 생존으로 좁혀졌다.
 
 # 2026-06-05-06 - 망각 전조 생존 보정
 
-## 1. Current build status
+## 1. 현재 빌드 상태
 
-v0.12는 아직 `ITERATE_BALANCE`지만, 이번 단위에서 첫 사이클 `망각 전조` 생존은 목표권에 들어왔다. 다음 병목은 첫 보스 TTK 측정이다.
+v0.12는 아직 `ITERATE_BALANCE`였지만, 첫 사이클 `망각 전조` 생존은 목표권에 들어왔다. 다음 병목은 첫 보스 TTK 측정이다.
 
-## 2. What changed today
+## 2. 오늘 바뀐 것
 
-- 첫 보스 직전 약 169초부터 `문지기 호흡` 압박 구간을 추가했다.
-- 첫 사이클 `망각 전조` cap을 38에서 32로 낮췄다.
-- 첫 사이클 `망각 전조` spawn rate를 0.90초에서 1.08초로 늦췄다.
-- 첫 사이클 `망각 전조` enemy pool에서 추가 `drifting_eye`, `split_one` 가중을 제거했다.
+- 첫 보스 직전 약 `169s`부터 `문지기 힌트` 완충 구간을 추가했다.
+- 첫 사이클 `망각 전조` cap을 `38`에서 `32`로 낮췄다.
+- 첫 사이클 `망각 전조` spawn rate를 `0.90s`에서 `1.08s`로 늦췄다.
+- 첫 사이클 `망각 전조` enemy pool에서 추가 `drifting_eye`, `split_one` 가중치를 제거했다.
 
-## 3. Test results and evidence
+## 3. 테스트 결과와 근거
 
-- `node --check src/game.js`: pass.
-- `node --check scripts/run_browser_balance_qa.js`: pass.
-- Gate breath only: `docs/balance/2026-06-05-loop-01-preboss-gate-breath.md`, death 75%, HP <= 40% median 127s, HP <= 20% median 147.32s.
-- Climax soften + gate breath: `docs/balance/2026-06-05-loop-01-preboss-climax-soften.md`, 5/5 gameplay, death 20%, HP <= 40% median 160.58s, HP <= 20% median 169.73s.
-- TTK follow-up attempts timed out before accepted gameplay samples.
+- `node --check src/game.js`: 통과.
+- `node --check scripts/run_browser_balance_qa.js`: 통과.
+- Gate breath only: `docs/balance/2026-06-05-loop-01-preboss-gate-breath.md`, 사망 `75%`, HP <= 40% 중앙값 `127s`, HP <= 20% 중앙값 `147.32s`.
+- Climax soften + gate breath: `docs/balance/2026-06-05-loop-01-preboss-climax-soften.md`, 5/5 gameplay, 사망 `20%`, HP <= 40% 중앙값 `160.58s`, HP <= 20% 중앙값 `169.73s`.
+- TTK follow-up attempt는 accepted gameplay sample 전 timeout됐다.
 
-## 4. Decisions made
+## 4. 결정한 것
 
 - `망각 전조` 생존 보정은 유지한다.
 - 첫 보스 HP는 아직 조정하지 않는다.
-- 다음에는 230초 TTK QA를 안정화하거나 더 작은 TTK 전용 측정 경로로 나눈다.
+- 다음은 230초 TTK QA를 안정화하거나 더 작은 TTK 전용 측정 경로로 나눈다.
 
-## 5. Problems or risks
+## 5. 문제 또는 리스크
 
-- 긴 230초 브라우저/CDP 루프가 여전히 타임아웃된다.
+- 긴 230초 브라우저/CDP 루프가 여전히 timeout된다.
 - first boss TTK는 아직 측정되지 않았다.
-- 일부 런에서 top DPS share가 높게 튈 수 있으므로 TTK 측정 때 같이 확인해야 한다.
+- 일부 run에서 top DPS share가 높게 나올 수 있으므로 TTK 측정 후 같이 확인해야 한다.
 
-## 6. GPT handoff summary
+## 6. GPT/Claude 인계 요약
 
-감정선은 제외한다. 이번 변화로 HP <= 20% median이 169.73초까지 밀려 목표에 거의 도달했다. 다음 검토자는 boss HP를 추측하지 말고 먼저 `bossFights[0].damage`, `firstBossTtk`, focused DPS 표본을 확보해야 한다.
+감정 평가는 제외한다. 이번 변경으로 HP <= 20% 중앙값이 `169.73s`까지 밀려 목표에 거의 도달했다. 다음 검토자는 boss HP를 추측하지 말고 `bossFights[0].damage`, `firstBossTtk`, focused DPS 표본을 확보해야 한다.
 
-## 7. Next Codex tasks
+## 7. 다음 Codex 작업
 
 - 첫 보스 TTK 측정 루프를 안정화한다.
 - accepted gameplay sample 3개 이상을 230초 루프에서 확보한다.
-- 그 뒤 첫 보스 HP를 15~30초 TTK 기준으로 조정한다.
+- 그 뒤 첫 보스 HP를 15-30초 TTK 기준으로 조정한다.
 
-## 8. Portfolio notes
+## 8. 포트폴리오 메모
 
-- Problem: 첫 보스 직전 `망각 전조`에서 HP가 너무 빨리 무너졌다.
-- Direction: 126~170초 압박은 유지하되, 보스 진입 직전 완충과 climax 상한을 조정한다.
-- Action: `문지기 호흡` phase와 first-cycle climax 완화를 적용했다.
-- Result: death rate가 20%로 내려가고 HP 20% median이 169.73초까지 늦춰졌다.
+- 문제: 첫 보스 직전 `망각 전조`에서 HP가 너무 빨리 무너졌다.
+- 방향: 126-170초 압박은 유지하되 보스 진입 직전 위기와 climax 상한을 조정한다.
+- 행동: `문지기 힌트` phase와 first-cycle climax 완화를 적용했다.
+- 결과: death rate가 `20%`로 내려가고 HP 20% 중앙값이 `169.73s`까지 늦춰졌다.
 
 # 2026-06-05-07 - 첫 보스 TTK 측정 하네스 추가
 
-## 1. Current build status
+## 1. 현재 빌드 상태
 
-v0.12는 계속 `ITERATE_BALANCE`다. `망각 전조` 생존은 목표권에 들어왔지만, 첫 보스 TTK는 아직 측정되지 않았다.
+v0.12는 계속 `ITERATE_BALANCE`였다. `망각 전조` 생존은 목표권에 들어왔지만 첫 보스 TTK는 아직 측정되지 않았다.
 
-## 2. What changed today
+## 2. 오늘 바뀐 것
 
-- Balance QA 러너의 CDP 읽기를 긴 `Runtime.evaluate` Promise에서 500ms 짧은 polling 방식으로 바꿨다.
+- Balance QA runner의 CDP 읽기를 긴 `Runtime.evaluate` Promise 대신 500ms 지연 polling 방식으로 바꿨다.
 - `--scenario first_boss_ttk` 옵션을 추가했다.
-- 브라우저 QA에 `balanceScenario=first_boss_ttk` 대표 상태를 추가했다.
-  - elapsed 176s,
-  - level 10,
-  - 3 active memories,
-  - full HP,
-  - no active enemies/projectiles,
-  - first boss scheduled at 180s.
+- 브라우저 QA에 `balanceScenario=first_boss_ttk` 전용 상태를 추가했다.
+- 해당 상태는 elapsed 176s, level 10, active memories 3개, full HP, active enemies/projectiles 없음, first boss scheduled at 180s 조건을 만들었다.
 
-## 3. Test results and evidence
+## 3. 테스트 결과와 근거
 
-- `node --check src/game.js`: pass.
-- `node --check scripts/run_browser_balance_qa.js`: pass.
-- Polling smoke: `docs/balance/2026-06-05-loop-02-first-boss-polling-smoke.md`, browser success 0%, gameplay 0.
-- TTK scenario smoke: `docs/balance/2026-06-05-loop-02-first-boss-ttk-scenario-smoke-clean.md`, command timed out before report/gameplay sample.
-- Summary: `docs/balance/2026-06-05-v012-first-boss-ttk-harness.md`.
+- `node --check src/game.js`: 통과.
+- `node --check scripts/run_browser_balance_qa.js`: 통과.
+- Polling smoke: `docs/balance/2026-06-05-loop-02-first-boss-polling-smoke.md`, browser success `0%`, gameplay `0`.
+- TTK scenario smoke: `docs/balance/2026-06-05-loop-02-first-boss-ttk-scenario-smoke-clean.md`, report/gameplay sample 전 command timeout.
+- 요약: `docs/balance/2026-06-05-v012-first-boss-ttk-harness.md`.
 
-## 4. Decisions made
+## 4. 결정한 것
 
 - 첫 보스 HP는 아직 조정하지 않는다.
-- TTK 측정은 full prelude와 분리한 전용 하네스로 진행한다.
-- 현재 로컬 Chrome/CDP 경로는 여전히 측정 블로커다.
+- TTK 측정은 full prelude와 분리한 전용 시나리오로 진행한다.
+- 현재 로컬 Chrome/CDP 경로는 여전히 측정 blocker다.
 
-## 5. Problems or risks
+## 5. 문제 또는 리스크
 
-- CDP WebSocket이 accepted gameplay sample 전 단계에서 끊긴다.
-- `first_boss_ttk` 시나리오는 구현됐지만 아직 실제 TTK 표본을 만들지 못했다.
+- CDP WebSocket이 accepted gameplay sample 이전 단계에서 끊긴다.
+- `first_boss_ttk` 시나리오는 구현됐지만 실제 TTK 표본은 아직 만들지 못했다.
 - 이 상태에서 boss HP를 조정하면 근거 없는 튜닝이 된다.
 
-## 6. GPT handoff summary
+## 6. GPT/Claude 인계 요약
 
-감정선은 제외한다. 첫 보스 HP를 만지지 말 것. 먼저 `first_boss_ttk` 시나리오를 안정적인 브라우저 환경 또는 in-process deterministic boss-only harness에서 돌려 `bossFights[0].damage`, `firstBossTtk`, focused DPS 표본 3개 이상을 확보해야 한다.
+감정 평가는 제외한다. 첫 보스 HP를 만지지 말고 먼저 `first_boss_ttk` 시나리오를 안정적인 브라우저 환경이나 in-process deterministic boss-only harness에서 돌려 `bossFights[0].damage`, `firstBossTtk`, focused DPS 표본 3개 이상을 확보해야 한다.
 
-## 7. Next Codex tasks
+## 7. 다음 Codex 작업
 
 - `first_boss_ttk` 시나리오에서 accepted gameplay sample 3개 이상을 확보한다.
 - 로컬 CDP가 계속 실패하면 브라우저/CDP가 아닌 in-process boss-only deterministic harness를 만든다.
-- TTK 표본 확보 후 첫 보스 HP를 15~30초 목표로 조정한다.
+- TTK 표본 확보 후 첫 보스 HP를 15-30초 목표로 조정한다.
 
-## 8. Portfolio notes
+## 8. 포트폴리오 메모
 
-- Problem: 생존 보정 후에도 첫 보스 TTK 측정 경로가 불안정하다.
-- Direction: prelude 생존과 boss HP 측정을 분리한다.
-- Action: TTK 전용 시나리오와 짧은 CDP polling을 추가했다.
-- Result: 하네스는 생겼지만 현재 CDP 환경에서는 gameplay sample 0개라 다음은 측정 경로 안정화가 필요하다.
+- 문제: 생존 보정 후 첫 보스 TTK 측정 경로가 불안정했다.
+- 방향: prelude 생존과 boss HP 측정을 분리한다.
+- 행동: TTK 전용 시나리오와 지연 CDP polling을 추가했다.
+- 결과: 시나리오는 생겼지만 현재 CDP 환경에서는 gameplay sample 0개라 측정 경로 안정화가 필요하다.
 
-# 2026-06-05-08 - First Boss TTK Boss-Only Harness
+# 2026-06-05-08 - 첫 보스 TTK 보스 전용 하네스
 
-## 1. Current build status
+## 1. 현재 빌드 상태
 
-v0.12 remains `ITERATE_BALANCE`, but the first-boss TTK measurement blocker now has a non-CDP fallback. First boss HP is now `2800`: boss-only TTK is inside target, and the latest accepted browser first-boss TTK sample is also inside target.
+v0.12는 `ITERATE_BALANCE`를 유지했지만, 첫 보스 TTK 측정 blocker에는 non-CDP fallback이 생겼다. 첫 보스 HP는 `2800`이며, boss-only TTK와 최신 accepted browser first-boss TTK sample 모두 목표 안에 들어왔다.
 
-## 2. What changed today
+## 2. 오늘 바뀐 것
 
-- Added `scripts/run_boss_ttk_harness.js`.
-- Added `npm run qa:boss-ttk` and `npm run qa:boss-ttk:dry`.
-- Fixed the harness `echo.attackSpeed` baseline so weapon attack interval is not `NaN`.
-- Changed first boss HP from `780` to `3500`, then to `2800` after browser QA showed HP `3500` was too slow.
-- Updated balance automation/status/task docs with the new harness and next gate.
+- `scripts/run_boss_ttk_harness.js`를 추가했다.
+- `npm run qa:boss-ttk`, `npm run qa:boss-ttk:dry`를 추가했다.
+- harness의 `echo.attackSpeed` baseline이 `NaN`이 되지 않도록 고쳤다.
+- 브라우저 QA에서 HP `3500`이 느리게 나와 첫 보스 HP를 `780 -> 3500 -> 2800`으로 조정했다.
+- 새 하네스와 다음 gate를 balance automation/status/task 문서에 반영했다.
 
-## 3. Test results and evidence
+## 3. 테스트 결과와 근거
 
-- `node --check src/game.js`: pass.
-- `node --check scripts/run_boss_ttk_harness.js`: pass.
-- `npm run qa:boss-ttk` at HP `3500`: `GO_BOSS_TTK_SAMPLE`, 5/5 accepted samples, TTK median `21.92s`, focused DPS median `159.7`.
-- `node scripts\run_boss_ttk_harness.js --boss-hp 2800`: `GO_BOSS_TTK_SAMPLE`, 5/5 accepted samples, TTK median `17.8s`, focused DPS median `157.3`.
-- `npm run qa:balance` at HP `3500`: first boss clear `100%`, death `0%`, TTK median `35.65s`.
-- `npm run qa:balance` at HP `2800`: first boss clear `60%`, death `0%`, TTK median `53.21s`, but 2/5 runs were incomplete.
-- `node scripts\run_browser_balance_qa.js --scenario first_boss_ttk --runs 3 --run-sec 230 --timeout-ms 60000`: 1/3 accepted TTK sample, TTK `22.59s`; 2/3 runs were incomplete.
-- Evidence: `docs/balance/2026-06-05-v012-boss-ttk-hp2800.md`, `docs/balance/2026-06-05-v012-browser-first-boss-ttk-hp2800.md`.
+- `node --check src/game.js`: 통과.
+- `node --check scripts/run_boss_ttk_harness.js`: 통과.
+- `npm run qa:boss-ttk` HP `3500`: `GO_BOSS_TTK_SAMPLE`, 5/5 accepted, TTK 중앙값 `21.92s`, focused DPS 중앙값 `159.7`.
+- `node scripts\run_boss_ttk_harness.js --boss-hp 2800`: `GO_BOSS_TTK_SAMPLE`, 5/5 accepted, TTK 중앙값 `17.8s`, focused DPS 중앙값 `157.3`.
+- `npm run qa:balance` HP `3500`: 첫 보스 클리어 `100%`, 사망 `0%`, TTK 중앙값 `35.65s`.
+- `npm run qa:balance` HP `2800`: 첫 보스 클리어 `60%`, 사망 `0%`, TTK 중앙값 `53.21s`, 2/5 incomplete.
+- 브라우저 `first_boss_ttk` HP `2800`: 1/3 accepted TTK sample, TTK `22.59s`, 2/3 incomplete.
+- 근거: `docs/balance/2026-06-05-v012-boss-ttk-hp2800.md`, `docs/balance/2026-06-05-v012-browser-first-boss-ttk-hp2800.md`.
 
-## 4. Decisions made
+## 4. 결정한 것
 
-- Use boss-only deterministic TTK as HP tuning input when Chrome/CDP cannot produce accepted TTK samples.
-- Treat HP `2800` as the current first-boss value before the next browser balance QA.
-- Do not treat this as human emotion proof or full browser balance proof.
+- Chrome/CDP가 accepted TTK sample을 만들지 못할 때는 boss-only deterministic TTK를 HP 튜닝 입력으로 사용한다.
+- HP `2800`을 다음 브라우저 밸런스 QA 전 현재 첫 보스 값으로 본다.
+- 이 결과를 인간 감정 증거나 전체 브라우저 밸런스 증거로 보지는 않는다.
 
-## 5. Problems or risks
+## 5. 문제 또는 리스크
 
-- The new harness removes browser/CDP instability, but it also removes movement, enemy clutter, boss attacks, and post-boss flow.
-- Browser `qa:balance` still has to prove first-boss reach/clear/death with HP `2800`.
-- The previous default run generated a host-date `2026-06-06` balance report as well; the canonical work-unit evidence for this report is the explicit `2026-06-05` file.
-- `npm run report:discord:unit` was blocked by the approval reviewer because sending workspace reports/attachments to an external Discord webhook is treated as potential private data exfiltration in this Codex session. Next trusted-local command: `npm run report:discord:unit`.
+- 새 하네스는 브라우저/CDP 불안정을 제거하지만 이동, 적 밀도, 보스 공격, 보스 이후 흐름도 제거한다.
+- HP `2800` 상태에서 브라우저 `qa:balance`가 첫 보스 도달/클리어/사망을 다시 증명해야 한다.
+- 이전 기본 run이 host-date `2026-06-06` balance report도 만들었으므로, 이 작업의 canonical evidence는 명시적 `2026-06-05` 파일이다.
+- 실제 Discord 전송은 이 Codex 세션에서 승인 검토에 막힐 수 있다.
 
-## 6. GPT handoff summary
+## 6. GPT/Claude 인계 요약
 
-Emotion proxy is excluded. First boss HP is now `2800`. Boss-only TTK is `17.8s`; the latest accepted browser first-boss TTK scenario sample is `22.59s`, but browser accepted sample rate is still poor. Next reviewer should judge browser first-boss reach/clear/death separately, because boss-only TTK is not full run balance evidence.
+감정 proxy는 제외한다. 첫 보스 HP는 `2800`이다. boss-only TTK는 `17.8s`, 최신 accepted browser first-boss TTK sample은 `22.59s`지만 browser accepted sample rate는 아직 낮다. 다음 리뷰는 boss-only TTK가 전체 런 밸런스 증거가 아님을 전제로 첫 보스 도달/클리어/사망을 따로 봐야 한다.
 
-## 7. Next Codex tasks
+## 7. 다음 Codex 작업
 
-- Stabilize browser `first_boss_ttk` accepted sample rate with first boss HP `2800`.
-- Then rerun browser `npm run qa:balance` with first boss HP `2800`.
-- Check first-boss reach rate, clear rate, death phase, and whether the post-boss loop still proceeds.
-- If browser flow is too punishing, adjust entry pressure or boss damage separately instead of undoing TTK without evidence.
-- From a trusted local terminal, run `npm run report:discord:unit` if Discord delivery is still required.
+- HP `2800`에서 브라우저 `first_boss_ttk` accepted sample rate를 안정화한다.
+- 그 다음 HP `2800`으로 `npm run qa:balance`를 다시 실행한다.
+- 첫 보스 도달률, 클리어율, 사망 phase, 보스 이후 루프 진행 여부를 확인한다.
+- 브라우저 흐름이 과하면 TTK를 근거 없이 되돌리지 말고 진입 압박이나 보스 피해를 따로 조정한다.
+- Discord 전송이 필요하면 trusted local terminal에서 실행한다.
 
-## 8. Portfolio notes
+## 8. 포트폴리오 메모
 
-- Problem: Chrome/CDP could not reliably collect first-boss TTK samples after survival tuning.
-- Direction: split boss HP tuning from browser transport by creating a deterministic boss-only measurement path.
-- Action: implemented the harness, captured accepted TTK samples, tested HP `3500`, then applied HP `2800`.
-- Result: first-boss HP now has a measured target-band basis, while the next gate remains browser balance validation.
+- 문제: 생존 조정 후 Chrome/CDP가 첫 보스 TTK 표본을 안정적으로 수집하지 못했다.
+- 방향: boss HP 튜닝을 브라우저 transport 문제에서 분리한다.
+- 행동: deterministic boss-only 측정 경로를 만들고 HP `3500`, `2800` 표본을 확보했다.
+- 결과: 첫 보스 HP는 목표 band 근거를 갖췄고, 다음 gate는 브라우저 밸런스 검증으로 남았다.

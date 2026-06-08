@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260608\\index.md",
-  "generatedAt": "2026-06-08T11:34:26.447Z",
-  "unitCount": 11,
+  "generatedAt": "2026-06-08T16:09:17.228Z",
+  "unitCount": 12,
   "latest": {
-    "title": "2026-06-08-11 - 오케스트레이션 구조 규약 정리",
-    "number": "11",
-    "markdownPath": "docs\\orchestration\\reports\\20260608\\units\\2026-06-08-11-오케스트레이션-구조-규약-정리.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260608\\units\\2026-06-08-11-오케스트레이션-구조-규약-정리.html"
+    "title": "2026-06-08-12 - 개발 문서 플러그인 최신 기준 정렬",
+    "number": "12",
+    "markdownPath": "docs\\orchestration\\reports\\20260608\\units\\2026-06-08-12-개발-문서-플러그인-최신-기준-정렬.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260608\\units\\2026-06-08-12-개발-문서-플러그인-최신-기준-정렬.html"
   }
 }

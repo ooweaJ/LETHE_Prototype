@@ -1,0 +1,164 @@
+# LETHE 개발 보고서 - 2026-06-09
+
+오늘은 최신 마이그레이션 템플릿에 맞춰 보고서 인터페이스를 블로그형 구조로 다시 정렬하고, 이전 날짜 보고서와 개발일지의 한글 가독성 문제를 보정했다.
+
+# 2026-06-09-01 - 최신 마이그레이션 템플릿 재정렬
+
+## 1. 현재 빌드 상태
+
+- 게임 빌드나 밸런스 코드는 변경하지 않았다.
+- 이번 작업은 `docs/orchestration/MIGRATION_PROMPT.md`의 최신 development-docs plugin 기준에 실제 문서와 생성기를 다시 맞추는 것이다.
+- 현재 플레이 검증 상태는 별도 밸런스 작업으로 남아 있으며, 이 작업은 문서 인터페이스 정리다.
+
+## 2. 오늘 바뀐 것
+
+- `scripts/build_report.js`를 정상 UTF-8 한국어 문자열로 재작성했다.
+- `docs/orchestration/reports/index.html`은 날짜별 archive가 되도록 했다.
+- `docs/orchestration/reports/YYYYMMDD/index.html`은 그날의 작업 단위를 제목 카드로 보여주도록 했다.
+- 각 `units/*.html`은 해당 작업 단위 본문만 보여주고 날짜 리포트로 돌아가는 링크를 가진다.
+- 생성기가 프로젝트 이름을 하드코딩하지 않고 `state/PROJECT_BRIEF.md`에서 읽도록 바꿨다.
+- 2026-06-05, 2026-06-06, 2026-06-07의 사람용 리포트 원본을 한국어로 재작성했다.
+- 2026-06-05, 2026-06-06, 2026-06-07의 개발일지를 한국어로 정리했다.
+- `docs/DISCORD_REPORTING.md`, `MIGRATION_PROMPT.md`, `HTML_INTERFACE_TEMPLATE.md`에는 Project Orchestrator intake 규약을 반영했다.
+
+## 3. 테스트 결과와 근거
+
+- `node --check scripts/build_report.js`: 통과.
+- `node scripts\build_report.js --all`: 전체 날짜 리포트 재생성 예정.
+- `npm run report:check`: 전체 unit 구조 확인 예정.
+- 커밋은 만들지 않는다.
+
+## 4. 결정한 것
+
+- `reports/index.html`은 unit 목록이 아니라 날짜별 리포트 archive다.
+- `reports/YYYYMMDD/index.html`은 그날의 글 카드 목록이다.
+- `reports/YYYYMMDD/units/*.html`은 개별 글 본문과 Discord 첨부, drill-down 화면으로만 쓴다.
+- Markdown 원본도 사람이 읽을 수 있어야 하며, HTML 생성기가 깨진 한글을 다시 만들면 안 된다.
+- Discord는 레포별 direct send보다 Project Orchestrator intake를 우선하고, local direct send는 trusted-local fallback으로 둔다.
+
+## 5. 문제 또는 리스크
+
+- 2026-06-02부터 2026-06-04까지의 아주 오래된 원본은 양이 많아 추가 정리가 필요할 수 있다.
+- Project Orchestrator intake 명령/API는 아직 이 저장소 안에 실제 구현되어 있지 않다.
+- direct Discord 스크립트가 남아 있으므로 중앙 intake 우선 규약과 trusted-local fallback 구분을 계속 유지해야 한다.
+
+## 6. GPT/Claude 인계 요약
+
+최신 템플릿의 핵심은 2단계 블로그 구조다. `reports/index.html`은 날짜 archive, `reports/YYYYMMDD/index.html`은 그날 작업 카드 목록, `units/*.html`은 개별 글 본문이다. Discord 알림은 `project_id`, `summary_ko`, `report_path`, 선택적 `attachment_path`, `source_files`, `requested_by`를 받는 Project Orchestrator intake 규약을 우선한다.
+
+## 7. 다음 Codex 작업
+
+- 전체 리포트를 재생성한다.
+- `npm run report:check`로 unit 구조를 확인한다.
+- 남은 예전 날짜의 원본 문서까지 같은 수준으로 한글 정리가 필요한지 점검한다.
+- 원래 작업인 v0.12 밸런스 실패 리뷰로 돌아간다.
+
+## 8. 포트폴리오 메모
+
+- 문제: 최신 템플릿은 블로그형 보고서 구조와 공용 Discord intake를 요구하지만, 실제 생성기와 이전 원본은 깨진 한글/영어/LETHE 하드코딩이 섞여 있었다.
+- 방향: 보고서 archive, 날짜별 카드, 개별 본문으로 나누고 Markdown 원본도 한국어로 맞춘다.
+- 행동: 보고서 생성기와 6/5-6/7 원본 리포트/개발일지를 정리했다.
+- 결과: 사용자는 제목 블록을 눌러 해당 작업만 읽고 다시 날짜 페이지로 돌아갈 수 있다.
+
+# 2026-06-09-02 - 보고서 카드 클릭 라우팅 수정
+
+## 1. 현재 빌드 상태
+
+- 게임 빌드나 밸런스 코드는 변경하지 않았다.
+- 문서 보고서 HTML의 카드 클릭 동작만 수정했다.
+- 기존 카드 링크는 서버가 `/api/projects/lethe/` 아래에서 HTML을 보여줄 때 `/api/projects/lethe/units/*.html`로 잘못 해석될 수 있었다.
+
+## 2. 오늘 바뀐 것
+
+- 날짜별 보고서 카드가 더 이상 `units/*.html` 파일로 직접 이동하지 않게 했다.
+- `reports/YYYYMMDD/index.html` 안에 각 unit 본문을 함께 포함했다.
+- 카드 클릭은 `#unit-YYYY-MM-DD-NN` 해시 전환으로 처리한다.
+- 본문 화면에는 `날짜 리포트로 돌아가기` 링크를 넣어 카드 목록으로 복귀하게 했다.
+- unit HTML 파일은 Discord 첨부와 직접 파일 확인용으로 계속 생성한다.
+
+## 3. 테스트 결과와 근거
+
+- `node --check scripts/build_report.js`: 통과.
+- `node scripts\build_report.js --all`: 통과.
+- `npm run report:check`: 통과.
+- `docs/orchestration/reports/20260606/index.html`에서 카드 링크가 `href="#unit-2026-06-06-01"` 형태로 생성되는 것을 확인했다.
+- 같은 파일 안에 `id="unit-2026-06-06-01"` 본문 section이 포함되는 것을 확인했다.
+
+## 4. 결정한 것
+
+- 카드형 일일 보고서의 기본 클릭 UX는 서버 라우트에 의존하지 않는 해시 기반 전환으로 둔다.
+- 개별 unit HTML은 별도 첨부와 직접 접근용 산출물로 유지한다.
+- Project Orchestrator나 별도 서버가 unit 라우트를 지원하지 않아도 사람용 보고서 탐색은 깨지지 않아야 한다.
+
+## 5. 문제 또는 리스크
+
+- 브라우저에서 JavaScript가 꺼져 있으면 해시 전환 UI가 동작하지 않는다.
+- 별도 unit URL 공유가 필요하면 여전히 생성된 unit HTML 경로를 직접 써야 한다.
+
+## 6. GPT/Claude 인계 요약
+
+일일 보고서 카드는 이제 파일 이동이 아니라 같은 HTML 안의 해시 기반 detail view를 연다. 따라서 `/api/projects/lethe/units/*.html` 같은 잘못된 GET 요청이 발생하지 않는다.
+
+## 7. 다음 Codex 작업
+
+- 실제 서버 화면에서 2026-06-06 날짜 카드 클릭을 다시 확인한다.
+- 필요하면 report archive의 날짜 링크도 서버 라우트에 맞춰 같은 방식으로 보강한다.
+
+## 8. 포트폴리오 메모
+
+- 문제: 정적 파일 기준 링크가 API 기반 프로젝트 화면에서는 잘못된 서버 경로로 해석됐다.
+- 방향: 사람용 보고서 탐색은 서버 라우트에 덜 의존하게 만든다.
+- 행동: 날짜 페이지 안에 unit 본문을 포함하고 카드 클릭을 해시 전환으로 바꿨다.
+- 결과: 제목 블록을 눌러 해당 내용만 보고 뒤로 가는 흐름이 한 HTML 안에서 작동한다.
+
+# 2026-06-09-03 - Project Orchestrator Discord 연결
+
+## 1. 현재 빌드 상태
+
+- 게임 빌드나 밸런스 코드는 변경하지 않았다.
+- Discord 보고 경로를 기존 직접 webhook fallback에서 Project Orchestrator 중앙 intake 우선 흐름으로 연결했다.
+- Project Orchestrator endpoint는 `http://127.0.0.1:4317/api/orchestration/discord-report`다.
+
+## 2. 오늘 바뀐 것
+
+- `scripts/send_orchestrator_discord_report.js`를 추가했다.
+- `package.json`에 `report:orchestrator`, `report:orchestrator:dry`, `report:orchestrator:unit`, `report:orchestrator:unit:dry`를 추가했다.
+- `docs/DISCORD_REPORTING.md`에 실제 Orchestrator 명령과 payload 형식을 반영했다.
+- `docs/orchestration/state/RUNBOOK.md`와 `docs/orchestration/interface/runbook.html`에 Orchestrator 전송 명령을 추가했다.
+- `docs/orchestration/MIGRATION_PROMPT.md`와 `HTML_INTERFACE_TEMPLATE.md`에는 다른 프로젝트가 따라야 할 Orchestrator script 명령, `projectId`, `reportPath`, `dryRun`, hash drill-down 규칙을 보강했다.
+
+## 3. 테스트 결과와 근거
+
+- `node --check scripts/send_orchestrator_discord_report.js`: 통과.
+- `node --check scripts/build_report.js`: 통과.
+- `node scripts\send_orchestrator_discord_report.js --latest-section --dry-run --print-payload`: 통과, `projectId: lethe`, `reportPath: 20260609/units/...html` 확인.
+- `npm run report:orchestrator:unit:dry`: 통과, Project Orchestrator가 Discord embed payload와 HTML attachment 경로를 생성했다.
+- `npm run report:orchestrator:unit`: 통과, Orchestrator 응답 `accepted: true`, `sent: true`, attachment `sent: true`.
+
+## 4. 결정한 것
+
+- 정상 Discord 보고는 Project Orchestrator 중앙 intake를 기본 경로로 사용한다.
+- 기존 `npm run report:discord:unit`은 trusted-local fallback으로 유지한다.
+- 다른 프로젝트는 `report:orchestrator:*` 명령을 복사하거나 동등한 script를 만들어야 한다.
+
+## 5. 문제 또는 리스크
+
+- Project Orchestrator가 실행 중이어야 중앙 intake가 동작한다.
+- `projectId`는 Orchestrator의 등록 id와 일치해야 한다.
+- 직접 webhook fallback은 여전히 민감 정보 전송 경로이므로 명시 요청이 있을 때만 사용한다.
+
+## 6. GPT/Claude 인계 요약
+
+LETHE는 이제 Project Orchestrator Discord intake를 실제로 호출한다. dry-run과 실제 전송 모두 통과했고, Discord에는 Orchestrator가 만든 embed와 HTML attachment가 전송됐다.
+
+## 7. 다음 Codex 작업
+
+- 다른 프로젝트에 마이그레이션할 때 `report:orchestrator:*` 명령과 `docs/orchestration/reports/YYYYMMDD/index.html` 구조를 같이 만든다.
+- Project Orchestrator가 꺼져 있으면 먼저 Orchestrator를 실행한 뒤 dry-run을 확인한다.
+
+## 8. 포트폴리오 메모
+
+- 문제: Discord 규약은 있었지만 프로젝트가 실제로 Orchestrator API를 호출하지 않았다.
+- 방향: per-project webhook 전송 대신 중앙 Orchestrator intake를 기본 보고 경로로 만든다.
+- 행동: 전송 스크립트, npm 명령, 문서 규약을 연결하고 dry-run/실제 전송을 검증했다.
+- 결과: LETHE의 작업 단위 보고가 Project Orchestrator를 통해 Discord로 실제 전송됐다.

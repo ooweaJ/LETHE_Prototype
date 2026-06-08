@@ -13,9 +13,6 @@
       --muted: #667085;
       --line: #d8dee9;
       --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
       --code: #111827;
     }
     * { box-sizing: border-box; }
@@ -100,13 +97,16 @@
       color: #cbd5e1;
       margin: 8px 0 0;
     }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
     }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
     @media (max-width: 720px) {
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
@@ -121,14 +121,15 @@
     </div>
   </header>
   <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260603/index.html">날짜 리포트로 돌아가기</a></p>
     <h1>2026-06-03-03 - 2026-06-02 보고서 압축</h1>
-<h2>1. Current build status</h2>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>Reporting policy now expects feature/gate/decision-sized report units.</li>
 <li>The old 2026-06-02 report still had 57 smaller units before this pass.</li>
 <li>Gameplay status is unchanged: v0.9 WP2 Slice B is implemented but not browser-proven.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Rewrote <code>docs/reports/2026-06-02.md</code> from 57 small report units into 13 larger units.</li>
 <li>Grouped the old content into meaningful project phases:</li>
@@ -147,7 +148,7 @@
 <li>report/Discord unit system.</li>
 <li>Regenerated the 2026-06-02 daily HTML and unit files.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>node scripts/build_report.js docs/reports/2026-06-02.md</code>: generated 13 unit reports.</li>
 <li><code>rg &quot;^# 2026-06-02-&quot; docs/reports/2026-06-02.md</code>: confirmed 13 numbered units.</li>
@@ -157,31 +158,31 @@
 <li><code>npm run report:check</code>,</li>
 <li><code>npm run doctor:deep</code>.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>Keep detailed loop artifacts in <code>docs/loop_runs/</code> and git history.</li>
 <li>Keep daily report source files concise enough for a human to scan.</li>
 <li>Historical reports may be rewritten into larger report units when the old unit size is too noisy.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>The rewritten report is a summary, not a line-by-line reproduction of every previous loop step.</li>
 <li>Some exact intermediate wording now lives in git history and loop logs rather than the daily report.</li>
 <li>The report is more readable but less exhaustive.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>2026-06-02 is now compressed to 13 report units.</li>
 <li>The report now matches the new rule: feature/gate/decision units rather than commit/feedback-step units.</li>
 <li>Future loops should not recreate the 57-unit pattern.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Verify both 2026-06-02 and 2026-06-03 report checks.</li>
 <li>Keep future reports around 3-8 units per day unless the day genuinely contains more large decisions.</li>
 <li>Continue gameplay only after the trusted post-loss browser gate is resolved.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: detailed automation logs were leaking into human-facing reports.</li>
 <li>Direction: preserve detail elsewhere while making daily reports readable.</li>

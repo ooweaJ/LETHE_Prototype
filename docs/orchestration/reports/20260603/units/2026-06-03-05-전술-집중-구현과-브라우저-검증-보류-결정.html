@@ -13,9 +13,6 @@
       --muted: #667085;
       --line: #d8dee9;
       --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
       --code: #111827;
     }
     * { box-sizing: border-box; }
@@ -100,13 +97,16 @@
       color: #cbd5e1;
       margin: 8px 0 0;
     }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
     }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
     @media (max-width: 720px) {
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
@@ -121,8 +121,9 @@
     </div>
   </header>
   <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260603/index.html">날짜 리포트로 돌아가기</a></p>
     <h1>2026-06-03-05 - 전술 집중 구현과 브라우저 검증 보류 결정</h1>
-<h2>1. Current build status</h2>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>LETHE HTML Alpha remains v0.9.</li>
 <li>WP3 Slice A <code>전술 집중</code> is code-complete as a minimal tactical agency hook.</li>
@@ -131,7 +132,7 @@
 <li>The latest <code>2026-06-03-devloop-050050-feedback-4</code> Claude/Codex synthesis keeps the verdict at <code>ITERATE_BEFORE_TEST</code>.</li>
 <li>People testing, new gameplay scope, UI expansion, and balance changes remain blocked until trusted-local tactical browser proof passes or an explicit environment-blocker decision exists.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Added <code>전술 집중</code> to the existing active memory slots.</li>
 <li>Players can focus one current active memory during combat by clicking a slot or pressing <code>Digit1</code>-<code>Digit3</code>.</li>
@@ -145,7 +146,7 @@
 <li>Folded feedback-4 into this same feature/decision report unit instead of creating a procedural report unit.</li>
 <li>No new memory, slot, shop, meta progression, region, enemy, weapon, or boss scope was added.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>node --check src/game.js</code>: passed.</li>
 <li><code>node --check scripts/run_browser_pressure_qa.js</code>: passed.</li>
@@ -164,7 +165,7 @@
 <li><code>npm run report:check</code>: passed, 5 units.</li>
 <li><code>node scripts/send_discord_report.js --dry-run --latest-section</code>: latest attachment points to <code>docs/reports/units/2026-06-03/2026-06-03-05-전술-집중-구현과-브라우저-검증-보류-결정.html</code>.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>Treat AI quick evidence as planning evidence only.</li>
 <li>Do not call WP3 Slice A browser-proven until tactical QA passes in a trusted local browser environment.</li>
@@ -176,7 +177,7 @@
 <li>Keep the report unit feature/decision-sized: this unit combines implementation, verification, Claude/Codex feedback, and next-task decision.</li>
 <li>Stop the current automated loop rather than repeatedly rerunning the same blocked tactical browser gate in this managed environment.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>The tactical focus input path has not been proven in browser gameplay yet.</li>
 <li>The managed sandbox still blocks Chrome automation through both CDP pipe and localhost port fallback.</li>
@@ -184,7 +185,7 @@
 <li>Echo-pivot and post-loss challenge scores remain observation targets, not implementation permission.</li>
 <li>AI proxy metrics do not prove human emotion, balance, or Unity-transition readiness.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>Claude and Codex agree that <code>전술 집중</code> is scope-valid but still <code>ITERATE_BEFORE_TEST</code>.</li>
 <li>Claude and Codex agree that the trusted tactical gate logging and WP3-specific blocker prompt are scope-valid and do not prove browser gameplay.</li>
@@ -195,7 +196,7 @@
 <li>Selected next Codex action is only trusted-local <code>npm run qa:tactical:trusted</code>; no new hint text, balance change, UI expansion, or gameplay scope should be added before that result or an environment-blocker decision is recorded.</li>
 <li>The loop should resume only after tactical browser proof or an explicit environment-blocker decision, otherwise it will keep producing gate paperwork rather than gameplay progress.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Run trusted-local <code>npm run qa:tactical:trusted</code>.</li>
 <li>Confirm tactical focus slot click or <code>Digit1</code>-<code>Digit3</code> usage and <code>tacticalFocus</code> payload records.</li>
@@ -204,7 +205,7 @@
 <li>Keep the echo-pivot hint and <code>멈춘 초침</code> tuning deferred until browser proof or a separate explicit scope decision.</li>
 <li>After future report edits, run <code>npm run report</code> and <code>npm run report:check</code> so <code>docs/reports/units/2026-06-03/</code> contains the latest Markdown/HTML unit. Discord latest-section attachments should use that generated unit HTML rather than the full daily cumulative report HTML.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: LETHE needed a small player agency hook without turning the prototype into a larger control-system expansion.</li>
 <li>Direction: add one moment of tactical choice inside the current automatic combat loop.</li>

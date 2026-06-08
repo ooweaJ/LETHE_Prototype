@@ -13,9 +13,6 @@
       --muted: #667085;
       --line: #d8dee9;
       --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
       --code: #111827;
     }
     * { box-sizing: border-box; }
@@ -100,13 +97,16 @@
       color: #cbd5e1;
       margin: 8px 0 0;
     }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
     }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
     @media (max-width: 720px) {
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
@@ -121,14 +121,15 @@
     </div>
   </header>
   <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260602/index.html">날짜 리포트로 돌아가기</a></p>
     <h1>2026-06-02-04 - 테스트 결과 기반 기획 파이프라인과 운영 문서화</h1>
-<h2>1. Current build status</h2>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>The project shifted from ad hoc AI opinions to test-result-driven planning.</li>
 <li>HTML prototype validation remained the current project goal.</li>
 <li>Unity implementation stayed conditional on stronger evidence.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Added planning pipeline scripts and dry-run modes.</li>
 <li>Added Claude/Codex planning handoff docs.</li>
@@ -138,7 +139,7 @@
 <li>Added human playtest package generation.</li>
 <li>Improved Discord status/report delivery and dry-runs.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>npm run planning:pipeline:prompt</code>: generated prompt with quick AI evidence.</li>
 <li><code>npm run doctor</code>: checked runtime, scripts, docs, CLI availability, env, and latest prompt.</li>
@@ -146,32 +147,32 @@
 <li><code>npm run playtest:summary:dry</code>: verified summary automation path.</li>
 <li><code>npm run playtest:package:dry</code>: verified package generation path.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>Markdown files are the source of truth.</li>
 <li>Discord is a status/attention channel only.</li>
 <li>Claude/GPT should interpret results and revise planning, but Codex owns HTML prototype implementation and verification.</li>
 <li>Before unattended loops, run preflight.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>CLI auth and Discord webhook availability vary by environment.</li>
 <li>Automation can create a false sense of progress if it does not preserve test evidence.</li>
 <li>AI planning passes must not be treated as human fun proof.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>Future planning prompts should include concrete test outputs, browser QA evidence, risks, and the current scope guard.</li>
 <li>GPT/Claude should return verdict, next tasks, test criteria, and do-not-build list.</li>
 <li>Codex should then implement only the selected narrow scope.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Keep <code>npm run doctor</code> and <code>npm run doctor:deep</code> green.</li>
 <li>Keep report/Discord dry-runs available.</li>
 <li>Use the planning pipeline after AI or human tests before major design changes.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: AI collaboration can become noisy without a repeatable evidence loop.</li>
 <li>Direction: build a test-result planning pipeline with clear role split.</li>

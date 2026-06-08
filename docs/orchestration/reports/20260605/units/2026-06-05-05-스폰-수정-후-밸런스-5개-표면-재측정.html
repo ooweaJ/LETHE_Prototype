@@ -13,9 +13,6 @@
       --muted: #667085;
       --line: #d8dee9;
       --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
       --code: #111827;
     }
     * { box-sizing: border-box; }
@@ -100,13 +97,16 @@
       color: #cbd5e1;
       margin: 8px 0 0;
     }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
     }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
     @media (max-width: 720px) {
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
@@ -121,50 +121,51 @@
     </div>
   </header>
   <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260605/index.html">날짜 리포트로 돌아가기</a></p>
     <h1>2026-06-05-05 - 스폰 수정 후 밸런스 5개 표면 재측정</h1>
-<h2>1. Current build status</h2>
-<p>v0.12는 계속 <code>ITERATE_BALANCE</code>다. 첫 보스 스폰 버그 수정 후 1~5번 표면을 다시 훑은 결과, 다음 병목은 첫 사이클 <code>망각 전조</code> 생존으로 좁혀졌다.</p>
-<h2>2. What changed today</h2>
+<h2>1. 현재 빌드 상태</h2>
+<p>v0.12는 계속 <code>ITERATE_BALANCE</code>였다. 첫 보스 스폰 버그 수정 후 1-5번 표면을 다시 측정한 결과, 다음 병목은 첫 사이클 <code>망각 전조</code> 생존으로 좁혀졌다.</p>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
-<li>첫 보스 스폰 수정 이후 5개 밸런스 표면을 순서대로 다시 실행했다.</li>
+<li>첫 보스 스폰 수정 후 5개 밸런스 표면을 같은 순서로 다시 실행했다.</li>
 <li>결과를 <code>docs/balance/2026-06-05-v012-spawnfix-balance-pass-1to5.md</code>에 정리했다.</li>
 <li><code>docs/balance/2026-06-05-v012-balance-loop-matrix.md</code>, <code>docs/CODEX_STATUS.md</code>, <code>docs/NEXT_TASKS.md</code>에 최신 우선순위를 반영했다.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
-<li>1번 prelude: <code>docs/balance/2026-06-05-loop-01-preboss-spawnfix.md</code>, 5 runs / 4 gameplay, death 50%, death-at median 159.8s, HP &lt;= 20% median 137.76s.</li>
-<li>2번 TTK: slow-step smoke and partial samples died at 163-179s before boss damage, so TTK remains blocked.</li>
-<li>3A twin+hungry: <code>docs/balance/2026-06-05-loop-03a-twin-hungry-spawnfix.md</code>, 3/3 gameplay, death 33.3%.</li>
-<li>3B greatsword+execution: partial sample reached 190s; first boss spawned at 180.02s and took 647.87 / 780 damage in 10s.</li>
-<li>4번 post-loss fast gate: <code>qa:postloss</code> passed with <code>CHROME_PATH</code>, challenge survived and refill completed.</li>
-<li>5번 full clear: partial sample died at 178.35s in <code>망각 전조</code>; full clear is not measurable yet.</li>
+<li>1번 prelude: <code>docs/balance/2026-06-05-loop-01-preboss-spawnfix.md</code>, 5 runs / 4 gameplay, 사망 <code>50%</code>, 사망 시점 중앙값 <code>159.8s</code>, HP &lt;= 20% 중앙값 <code>137.76s</code>.</li>
+<li>2번 TTK: slow-step smoke와 partial samples가 보스 피해 전 <code>163-179s</code>에 사망해 TTK는 계속 blocked.</li>
+<li>3A twin+hungry: 3/3 gameplay, 사망 <code>33.3%</code>.</li>
+<li>3B greatsword+execution: partial sample이 <code>190s</code>까지 도달했고, 첫 보스가 <code>180.02s</code>에 스폰되어 10초 동안 <code>647.87 / 780</code> 피해를 받았다.</li>
+<li>4번 post-loss fast gate: <code>qa:postloss</code> 통과, challenge survived와 refill complete.</li>
+<li>5번 full clear: partial sample이 <code>178.35s</code> <code>망각 전조</code>에서 사망, full clear는 아직 측정 불가.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
-<li>첫 보스 HP/TTK 튜닝은 아직 보류한다.</li>
-<li>full-run clear rate도 아직 튜닝하지 않는다.</li>
-<li>다음 수치 튜닝은 first-cycle <code>망각 전조</code> 생존에 집중한다.</li>
+<li>첫 보스 HP/TTK 판단은 아직 보류한다.</li>
+<li>full-run clear rate는 아직 판단하지 않는다.</li>
+<li>다음 수치 조정은 first-cycle <code>망각 전조</code> 생존에 집중한다.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
-<li>긴 230s/608s balance QA는 여전히 타임아웃과 Chrome WebSocket 오류가 섞인다.</li>
-<li>일부 표면은 5런 완주가 아니라 partial signal로만 남았다.</li>
-<li>그래도 모든 gameplay partial이 같은 병목, 즉 160-180초 <code>망각 전조</code> 사망을 가리킨다.</li>
+<li>긴 230s/608s balance QA는 여전히 timeout과 Chrome WebSocket 오류가 많다.</li>
+<li>일부 표면은 5회 완주가 아니라 partial signal로만 남았다.</li>
+<li>그래도 모든 gameplay partial이 같은 병목, 즉 <code>160-180s</code> <code>망각 전조</code> 사망을 가리켰다.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
-<p>감정선은 제외한다. 다음 검토/구현자는 first-cycle <code>망각 전조</code> 생존을 우선 조정해야 한다. 목표는 HP &lt;= 40% median 140s+, HP &lt;= 20% median 170s+, first-boss reach rate 70%+다.</p>
-<h2>7. Next Codex tasks</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>감정 평가는 제외한다. 다음 구현자는 first-cycle <code>망각 전조</code> 생존을 우선 조정해야 한다. 목표는 HP &lt;= 40% 중앙값 140s+, HP &lt;= 20% 중앙값 170s+, first-boss reach rate 70%+이다.</p>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
-<li><code>망각 전조</code> 구간의 spawn cap, pack size, enemy pool, incoming damage ramp 중 하나를 좁게 조정한다.</li>
+<li><code>망각 전조</code> 구간의 spawn cap, pack size, enemy pool, incoming damage ramp 중 하나를 작게 조정한다.</li>
 <li>조정 후 1번 prelude와 2번 TTK를 다시 실행한다.</li>
-<li>first boss damage sample이 안정되면 그때 first boss HP를 15-30초 TTK 기준으로 재조정한다.</li>
+<li>first boss damage sample이 안정되면 first boss HP를 <code>15-30s</code> TTK 기준으로 재조정한다.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
-<li>Problem: 전체 클리어율을 보기 전에 첫 보스 직전에서 런이 무너진다.</li>
-<li>Direction: 밸런스 표면을 순서대로 분리해 가장 앞단의 병목을 찾는다.</li>
-<li>Action: 스폰 수정 후 1~5번 표면을 다시 실행하고 partial 결과까지 비교했다.</li>
-<li>Result: 다음 목표가 <code>망각 전조</code> 생존으로 좁혀졌다.</li>
+<li>문제: 전체 클리어율을 보기 전에 첫 보스 직전에서 런이 무너졌다.</li>
+<li>방향: 밸런스 표면을 순서대로 분리해 가장 앞단의 병목을 찾는다.</li>
+<li>행동: 스폰 수정 후 1-5번 표면을 다시 실행하고 partial 결과까지 비교했다.</li>
+<li>결과: 다음 목표가 <code>망각 전조</code> 생존으로 좁혀졌다.</li>
 </ul>
   </main>
 </body>

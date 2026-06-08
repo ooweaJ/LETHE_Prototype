@@ -13,9 +13,6 @@
       --muted: #667085;
       --line: #d8dee9;
       --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
       --code: #111827;
     }
     * { box-sizing: border-box; }
@@ -100,13 +97,16 @@
       color: #cbd5e1;
       margin: 8px 0 0;
     }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
     }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
     @media (max-width: 720px) {
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
@@ -121,52 +121,53 @@
     </div>
   </header>
   <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260605/index.html">날짜 리포트로 돌아가기</a></p>
     <h1>2026-06-05-04 - HP 붕괴 지표와 첫 보스 스폰 버그 수정</h1>
-<h2>1. Current build status</h2>
-<p>v0.12는 계속 <code>ITERATE_BALANCE</code>다. 다만 이번 단위에서 first boss clear가 낮은 원인 중 하나가 단순 수치 문제가 아니라 보스 스폰 순서 버그였음을 확인했다.</p>
-<h2>2. What changed today</h2>
+<h2>1. 현재 빌드 상태</h2>
+<p>v0.12는 계속 <code>ITERATE_BALANCE</code>였다. 다만 first boss clear가 낮은 이유 중 하나가 단순 수치 문제가 아니라 보스 스폰 순서 버그일 수 있음을 확인했다.</p>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Balance QA 보고서에 HP 60% / 40% / 20% 이하 첫 진입 시점을 추가했다.</li>
-<li>Balance QA per-run retry, headless Chrome 안정화 플래그, <code>browser_error</code> 제외 gameplay metric 집계를 추가했다.</li>
-<li>초반 생존/보스 진입을 보정했다: 플레이어 HP 180, 초반 피해 램프 320초, 첫 사이클 climax cap 38.</li>
-<li>보스가 기본 공격 사거리 안에 있으면 잡몹보다 우선 공격하게 했다.</li>
-<li>첫 보스가 적 수 cap에 막혀 스폰되지 않는 <code>updateSpawning()</code> 순서 버그를 수정했다.</li>
+<li>Balance QA per-run retry, headless Chrome 안정화 flag, <code>browser_error</code> 제외 gameplay metric 집계를 추가했다.</li>
+<li>초반 생존/보스 진입을 보정했다: 플레이어 HP 180, 초반 피해 완화 320초, 첫 사이클 climax cap 38.</li>
+<li>보스가 기본 공격 사거리 안에 있으면 잡몹보다 우선 공격하도록 했다.</li>
+<li><code>updateSpawning()</code>에서 cap에 막혀 보스가 스폰되지 않던 순서 버그를 수정했다.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
-<li><code>node --check src/game.js</code>: pass.</li>
-<li><code>node --check scripts/run_browser_balance_qa.js</code>: pass.</li>
-<li>HP threshold baseline: <code>docs/balance/2026-06-05-loop-02-first-boss-hp-thresholds.md</code>, death 60%, HP &lt;= 40% median 90.83s.</li>
-<li>Survival buffer retry2: <code>docs/balance/2026-06-05-loop-02-first-boss-survival-buffer-retry2.md</code>, browser success 100%, death 80%, HP &lt;= 40% median 108.97s.</li>
-<li>Prelude soften: <code>docs/balance/2026-06-05-loop-02-first-boss-prelude-soften.md</code>, browser success 80%, death 60%.</li>
-<li>Boss targeting/spawn-fix probes produced low browser success, so they are recorded as diagnostic evidence only, not balance acceptance proof.</li>
+<li><code>node --check src/game.js</code>: 통과.</li>
+<li><code>node --check scripts/run_browser_balance_qa.js</code>: 통과.</li>
+<li>HP threshold baseline: <code>docs/balance/2026-06-05-loop-02-first-boss-hp-thresholds.md</code>, 사망 <code>60%</code>, HP &lt;= 40% 중앙값 <code>90.83s</code>.</li>
+<li>Survival buffer retry2: <code>docs/balance/2026-06-05-loop-02-first-boss-survival-buffer-retry2.md</code>, browser success <code>100%</code>, 사망 <code>80%</code>, HP &lt;= 40% 중앙값 <code>108.97s</code>.</li>
+<li>Prelude soften: <code>docs/balance/2026-06-05-loop-02-first-boss-prelude-soften.md</code>, browser success <code>80%</code>, 사망 <code>60%</code>.</li>
+<li>Boss targeting/spawn-fix probe는 browser success가 낮아 진단 근거로만 기록했다.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>첫 보스 TTK 조정은 아직 보류한다.</li>
-<li>spawn cap에 boss schedule이 막히는 버그 수정은 유지한다.</li>
-<li>다음 루프는 수치 추가 하향보다 장거리 balance QA 안정화와 first boss damage/TTK 표본 확보를 우선한다.</li>
+<li>spawn cap과 boss schedule이 충돌하던 버그 수정은 유지한다.</li>
+<li>다음 루프는 추가 수치 상향보다 장거리 balance QA 안정화와 first boss damage/TTK 표본 확보를 우선한다.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
-<li>180-230초 장거리 Chrome/CDP balance run에서 WebSocket 오류가 반복된다.</li>
-<li>최신 spawn-fix probe는 browser success 40%라 밸런스 판정 근거로 쓰기 어렵다.</li>
+<li>180-230초 장거리 Chrome/CDP balance run에서 WebSocket 오류가 반복됐다.</li>
+<li>최신 spawn-fix probe는 browser success <code>40%</code>라 밸런스 판정 근거로 쓰기 어렵다.</li>
 <li>HP 붕괴는 여전히 보스 직전 <code>망각 전조</code>에 몰려 있다.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
-<p>감정선은 제외한다. 이번 핵심은 <code>updateSpawning()</code>의 boss schedule check가 spawn cap return보다 뒤에 있어 보스가 지연될 수 있었다는 점이다. 다음 검토는 runner 안정화 후 first boss damage/TTK를 다시 봐야 한다.</p>
-<h2>7. Next Codex tasks</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>감정 평가는 제외한다. 이번 핵심은 <code>updateSpawning()</code>의 boss schedule check가 spawn cap return 뒤에 있어서 보스가 지연될 수 있었다는 점이다. 다음 검토는 runner 안정화 후 first boss damage/TTK를 다시 봐야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Long balance QA에서 Chrome/CDP 성공률을 4/5 이상으로 회복한다.</li>
-<li>보스 스폰 수정 후 first boss 5런을 다시 실행한다.</li>
-<li>first boss clear 표본이 생긴 뒤 HP와 TTK를 다시 튜닝한다.</li>
+<li>보스 스폰 수정 후 first boss 5-run을 다시 실행한다.</li>
+<li>first boss clear 표본이 생기면 HP와 TTK를 다시 판단한다.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
-<li>Problem: first boss clear 0%가 단순 HP/피해량 문제가 아닐 수 있었다.</li>
-<li>Direction: 실패 루프를 HP threshold와 spawn/boss telemetry로 분해한다.</li>
-<li>Action: HP 붕괴 지표, 브라우저 retry, 보스 우선 타깃팅, 보스 스폰 순서 수정을 적용했다.</li>
-<li>Result: 실제 보스 스폰 gate bug를 찾아 수정했지만, 장거리 브라우저 QA 안정화가 다음 병목으로 남았다.</li>
+<li>문제: first boss clear <code>0%</code>가 단순 HP/피해 문제가 아닐 수 있었다.</li>
+<li>방향: 실패 루프를 HP threshold와 spawn/boss telemetry로 분해한다.</li>
+<li>행동: HP 붕괴 지표, 브라우저 retry, 보스 우선 타겟팅, 보스 스폰 순서 수정을 적용했다.</li>
+<li>결과: 실제 보스 스폰 gate bug를 찾았지만 장거리 QA 안정화가 다음 병목으로 남았다.</li>
 </ul>
   </main>
 </body>

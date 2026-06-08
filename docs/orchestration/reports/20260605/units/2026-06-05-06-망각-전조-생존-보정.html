@@ -13,9 +13,6 @@
       --muted: #667085;
       --line: #d8dee9;
       --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
       --code: #111827;
     }
     * { box-sizing: border-box; }
@@ -100,13 +97,16 @@
       color: #cbd5e1;
       margin: 8px 0 0;
     }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
     }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
     @media (max-width: 720px) {
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
@@ -121,50 +121,51 @@
     </div>
   </header>
   <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260605/index.html">날짜 리포트로 돌아가기</a></p>
     <h1>2026-06-05-06 - 망각 전조 생존 보정</h1>
-<h2>1. Current build status</h2>
-<p>v0.12는 아직 <code>ITERATE_BALANCE</code>지만, 이번 단위에서 첫 사이클 <code>망각 전조</code> 생존은 목표권에 들어왔다. 다음 병목은 첫 보스 TTK 측정이다.</p>
-<h2>2. What changed today</h2>
+<h2>1. 현재 빌드 상태</h2>
+<p>v0.12는 아직 <code>ITERATE_BALANCE</code>였지만, 첫 사이클 <code>망각 전조</code> 생존은 목표권에 들어왔다. 다음 병목은 첫 보스 TTK 측정이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
-<li>첫 보스 직전 약 169초부터 <code>문지기 호흡</code> 압박 구간을 추가했다.</li>
-<li>첫 사이클 <code>망각 전조</code> cap을 38에서 32로 낮췄다.</li>
-<li>첫 사이클 <code>망각 전조</code> spawn rate를 0.90초에서 1.08초로 늦췄다.</li>
-<li>첫 사이클 <code>망각 전조</code> enemy pool에서 추가 <code>drifting_eye</code>, <code>split_one</code> 가중을 제거했다.</li>
+<li>첫 보스 직전 약 <code>169s</code>부터 <code>문지기 힌트</code> 완충 구간을 추가했다.</li>
+<li>첫 사이클 <code>망각 전조</code> cap을 <code>38</code>에서 <code>32</code>로 낮췄다.</li>
+<li>첫 사이클 <code>망각 전조</code> spawn rate를 <code>0.90s</code>에서 <code>1.08s</code>로 늦췄다.</li>
+<li>첫 사이클 <code>망각 전조</code> enemy pool에서 추가 <code>drifting_eye</code>, <code>split_one</code> 가중치를 제거했다.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
-<li><code>node --check src/game.js</code>: pass.</li>
-<li><code>node --check scripts/run_browser_balance_qa.js</code>: pass.</li>
-<li>Gate breath only: <code>docs/balance/2026-06-05-loop-01-preboss-gate-breath.md</code>, death 75%, HP &lt;= 40% median 127s, HP &lt;= 20% median 147.32s.</li>
-<li>Climax soften + gate breath: <code>docs/balance/2026-06-05-loop-01-preboss-climax-soften.md</code>, 5/5 gameplay, death 20%, HP &lt;= 40% median 160.58s, HP &lt;= 20% median 169.73s.</li>
-<li>TTK follow-up attempts timed out before accepted gameplay samples.</li>
+<li><code>node --check src/game.js</code>: 통과.</li>
+<li><code>node --check scripts/run_browser_balance_qa.js</code>: 통과.</li>
+<li>Gate breath only: <code>docs/balance/2026-06-05-loop-01-preboss-gate-breath.md</code>, 사망 <code>75%</code>, HP &lt;= 40% 중앙값 <code>127s</code>, HP &lt;= 20% 중앙값 <code>147.32s</code>.</li>
+<li>Climax soften + gate breath: <code>docs/balance/2026-06-05-loop-01-preboss-climax-soften.md</code>, 5/5 gameplay, 사망 <code>20%</code>, HP &lt;= 40% 중앙값 <code>160.58s</code>, HP &lt;= 20% 중앙값 <code>169.73s</code>.</li>
+<li>TTK follow-up attempt는 accepted gameplay sample 전 timeout됐다.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li><code>망각 전조</code> 생존 보정은 유지한다.</li>
 <li>첫 보스 HP는 아직 조정하지 않는다.</li>
-<li>다음에는 230초 TTK QA를 안정화하거나 더 작은 TTK 전용 측정 경로로 나눈다.</li>
+<li>다음은 230초 TTK QA를 안정화하거나 더 작은 TTK 전용 측정 경로로 나눈다.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
-<li>긴 230초 브라우저/CDP 루프가 여전히 타임아웃된다.</li>
+<li>긴 230초 브라우저/CDP 루프가 여전히 timeout된다.</li>
 <li>first boss TTK는 아직 측정되지 않았다.</li>
-<li>일부 런에서 top DPS share가 높게 튈 수 있으므로 TTK 측정 때 같이 확인해야 한다.</li>
+<li>일부 run에서 top DPS share가 높게 나올 수 있으므로 TTK 측정 후 같이 확인해야 한다.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
-<p>감정선은 제외한다. 이번 변화로 HP &lt;= 20% median이 169.73초까지 밀려 목표에 거의 도달했다. 다음 검토자는 boss HP를 추측하지 말고 먼저 <code>bossFights[0].damage</code>, <code>firstBossTtk</code>, focused DPS 표본을 확보해야 한다.</p>
-<h2>7. Next Codex tasks</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>감정 평가는 제외한다. 이번 변경으로 HP &lt;= 20% 중앙값이 <code>169.73s</code>까지 밀려 목표에 거의 도달했다. 다음 검토자는 boss HP를 추측하지 말고 <code>bossFights[0].damage</code>, <code>firstBossTtk</code>, focused DPS 표본을 확보해야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>첫 보스 TTK 측정 루프를 안정화한다.</li>
 <li>accepted gameplay sample 3개 이상을 230초 루프에서 확보한다.</li>
-<li>그 뒤 첫 보스 HP를 15~30초 TTK 기준으로 조정한다.</li>
+<li>그 뒤 첫 보스 HP를 15-30초 TTK 기준으로 조정한다.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
-<li>Problem: 첫 보스 직전 <code>망각 전조</code>에서 HP가 너무 빨리 무너졌다.</li>
-<li>Direction: 126~170초 압박은 유지하되, 보스 진입 직전 완충과 climax 상한을 조정한다.</li>
-<li>Action: <code>문지기 호흡</code> phase와 first-cycle climax 완화를 적용했다.</li>
-<li>Result: death rate가 20%로 내려가고 HP 20% median이 169.73초까지 늦춰졌다.</li>
+<li>문제: 첫 보스 직전 <code>망각 전조</code>에서 HP가 너무 빨리 무너졌다.</li>
+<li>방향: 126-170초 압박은 유지하되 보스 진입 직전 위기와 climax 상한을 조정한다.</li>
+<li>행동: <code>문지기 힌트</code> phase와 first-cycle climax 완화를 적용했다.</li>
+<li>결과: death rate가 <code>20%</code>로 내려가고 HP 20% 중앙값이 <code>169.73s</code>까지 늦춰졌다.</li>
 </ul>
   </main>
 </body>

@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-06-04 - 결손 시험 리뷰 후속 조정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-06-04 - 결손 시험 리뷰 후속 조정</h1>
+      <p class="meta">Generated from 2026-06-06-04-결손-시험-리뷰-후속-조정.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260606/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-06-04 - 결손 시험 리뷰 후속 조정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>v0.12는 <code>GO_BALANCE_BASELINE</code>을 유지한다. 최신 자동 기준선은 전체 클리어 <code>60%</code>, 사망 <code>40%</code>, 첫 보스 TTK 중앙값 <code>25.79s</code>로 목표 구간 중앙에 더 가깝다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>80%</code> 전체 클리어가 너무 쉬운지 외부 Claude review를 시도했지만 승인 검토에서 차단됐다.</li>
+<li>local Codex fallback review를 <code>docs/review_responses/2026-06-06-balance-baseline-deficit-trial-codex.md</code>에 저장했다.</li>
+<li>review 결정 <code>ITERATE_DEFICIT_TRIAL</code>을 적용했다.</li>
+<li>첫 보스 HP <code>2500</code>은 유지했다.</li>
+<li>첫 보스 전에는 survival을 과도하게 우선하지 않고, 보스 이후 survival 우선순위는 유지하도록 QA 선택을 조정했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>node --check src/game.js</code>: 통과.</li>
+<li><code>node --check scripts/run_browser_balance_qa.js</code>: 통과.</li>
+<li>boss-only TTK: 5/5 accepted, TTK 중앙값 <code>15.62s</code>, verdict <code>GO_BOSS_TTK_SAMPLE</code>.</li>
+<li>브라우저 <code>first_boss_ttk</code>: 3/3 accepted, TTK 중앙값 <code>19.82s</code>, verdict <code>GO_BALANCE_BASELINE</code>.</li>
+<li>전체 브라우저 <code>qa:balance</code>: <code>GO_BALANCE_BASELINE</code>, 첫 보스 클리어 <code>80%</code>, 전체 클리어 <code>60%</code>, 사망 <code>40%</code>, 첫 보스 TTK 중앙값 <code>25.79s</code>.</li>
+<li><code>npm run report</code>: 통과.</li>
+<li><code>npm run report:check</code>: 통과.</li>
+<li><code>npm run doctor</code>: 통과, 50 pass / 0 warn / 0 fail.</li>
+<li><code>npm run report:discord:unit:dry</code>: 통과.</li>
+<li>근거: <code>docs/balance/2026-06-06-v012-boss-ttk-deficit-review-final.md</code>, <code>docs/balance/2026-06-06-v012-browser-first-boss-ttk-deficit-review-final.md</code>, <code>docs/balance/2026-06-06-v012-balance-qa.md</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>전체 클리어 <code>80%</code> / 사망 <code>20%</code>는 자동 기준선으로는 쉬운 쪽 끝에 너무 가깝다고 본다.</li>
+<li>기억 교체 루프를 살린 생존/리필 값은 유지한다.</li>
+<li>첫 보스 HP나 새 시스템을 건드리지 않고 QA choice behavior를 조정한다.</li>
+<li>전체 클리어 <code>60%</code> / 사망 <code>40%</code>를 현재 자동 인간 테스트 전 기준선으로 받아들인다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>외부 Claude review는 승인 검토 때문에 이 Codex 세션에서 전송하지 못했다.</li>
+<li>사망이 허용 상한 <code>40%</code>에 정확히 걸려 있다.</li>
+<li>AI proxy metric은 여전히 인간 감정 증거가 아니다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>감정 proxy는 제외한다. local fallback review는 전체 클리어 <code>80%</code>가 쉬운 쪽 끝에 가깝다고 보고 <code>ITERATE_DEFICIT_TRIAL</code>을 선택했다. 최종 자동 기준선은 전체 클리어 <code>60%</code>, 사망 <code>40%</code>, 첫 보스 TTK 중앙값 <code>25.79s</code>로 통과했다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>accepted되면 인간 테스트 패키징/보고로 넘어간다.</li>
+<li>인간 또는 reviewer 피드백에서 post-boss 압박이 강하다고 나오면 그때 부드럽게 조정한다.</li>
+<li>Discord 전송이 필요하면 trusted local terminal에서 실행한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 이전 기준선은 통과했지만 전체 클리어 <code>80%</code>로 쉬운 쪽 끝에 닿았다.</li>
+<li>방향: 첫 보스 튜닝과 기억 교체 생존값은 유지하면서 QA 선택 편향을 조정한다.</li>
+<li>행동: 외부 review가 막힌 뒤 local fallback review를 저장하고, pre-first-boss와 post-first-boss survival 선택 행동을 분리했다.</li>
+<li>결과: 전체 클리어 <code>60%</code>, 사망 <code>40%</code>로 목표 구간 중앙에 더 가까워졌다.</li>
+</ul>
+  </main>
+</body>
+</html>

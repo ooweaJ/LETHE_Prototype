@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260607\\index.md",
-  "generatedAt": "2026-06-08T11:20:12.059Z",
+  "generatedAt": "2026-06-08T16:09:17.206Z",
   "unitCount": 2,
   "latest": {
-    "title": "2026-06-07-02 - Balance Loop Gate Fix",
+    "title": "2026-06-07-02 - 밸런스 루프 게이트 수정",
     "number": "02",
-    "markdownPath": "docs\\orchestration\\reports\\20260607\\units\\2026-06-07-02-balance-loop-gate-fix.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260607\\units\\2026-06-07-02-balance-loop-gate-fix.html"
+    "markdownPath": "docs\\orchestration\\reports\\20260607\\units\\2026-06-07-02-밸런스-루프-게이트-수정.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260607\\units\\2026-06-07-02-밸런스-루프-게이트-수정.html"
   }
 }

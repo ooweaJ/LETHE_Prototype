@@ -13,9 +13,6 @@
       --muted: #667085;
       --line: #d8dee9;
       --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
       --code: #111827;
     }
     * { box-sizing: border-box; }
@@ -100,13 +97,16 @@
       color: #cbd5e1;
       margin: 8px 0 0;
     }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
     }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
     @media (max-width: 720px) {
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
@@ -121,15 +121,16 @@
     </div>
   </header>
   <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260604/index.html">날짜 리포트로 돌아가기</a></p>
     <h1>2026-06-04-01 - 기획서 v0.9 동기화</h1>
-<h2>1. Current build status</h2>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>LETHE HTML Alpha remains v0.9.</li>
 <li>Current game and the old v6 Word 기획서 were not aligned.</li>
 <li>The release-feel prototype currently includes build identity, pressure rhythm, post-loss challenge, memory refill, and tactical focus.</li>
 <li>AI/browser gate evidence remains sufficient for controlled 1-person browser playtest preparation, not Unity transition.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Added <code>docs/LETHE_망각의_군주_프로토타입_기획서_v0.9.md</code> as the current Markdown planning source.</li>
 <li>Updated <code>docs/LETHE_망각의_군주_완성형_기획서_v6.docx</code> from the Markdown source.</li>
@@ -137,7 +138,7 @@
 <li>Updated <code>README.md</code> to reference the v0.9 planning source and current implemented scope.</li>
 <li>Updated <code>docs/CODEX_STATUS.md</code> with the planning-document sync note.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li>DOCX text extraction after regeneration confirmed the v0.9 title, current loop, tactical focus, post-loss challenge, and scope guard sections.</li>
 <li><code>node --check src/game.js</code>: passed.</li>
@@ -145,32 +146,32 @@
 <li><code>npm run report:check</code>: passed.</li>
 <li>DOCX visual render QA was skipped because LibreOffice/<code>soffice</code> is not installed in this environment.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>Treat the Markdown v0.9 planning file as the source of truth.</li>
 <li>Keep the existing Word 기획서 filename for continuity, but update its contents to v0.9.</li>
 <li>Record that the older complete-game/meta-progression sections are not current prototype scope.</li>
 <li>Do not add gameplay while syncing the document.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>The DOCX could not be visually rendered here, so formatting was validated structurally rather than by page PNG inspection.</li>
 <li>The DOCX filename still says <code>v6</code>; its contents now identify the document as the v0.9 prototype planning update.</li>
 <li>Future design changes should update the Markdown source first, then regenerate the DOCX.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>기존 기획서와 현재 게임은 달랐다.</li>
 <li>최신 기준은 v0.9 HTML prototype: 2 weapons, 6 memories, 3 active slots, boss cycles, dependency forgetting, echo, 75-second deficit survival, refill, build identity, and tactical focus.</li>
 <li>Unity 전환은 아직 자동 지표만으로 판단하지 않는다. 다음 근거는 controlled 1-person browser playtest다.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Use <code>docs/LETHE_망각의_군주_프로토타입_기획서_v0.9.md</code> for future planning diffs.</li>
 <li>If planning changes again, run <code>pwsh scripts/update_design_doc_from_markdown.ps1</code>.</li>
 <li>Continue with final preflight/report/Discord and controlled 1-person playtest preparation when the user is ready.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: the project had a working v0.9 prototype but an older planning document, creating ambiguity about what was actually current.</li>
 <li>Direction: make the latest HTML prototype design explicit and diffable.</li>

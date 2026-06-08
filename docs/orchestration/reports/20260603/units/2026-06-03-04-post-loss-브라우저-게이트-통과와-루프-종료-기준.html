@@ -13,9 +13,6 @@
       --muted: #667085;
       --line: #d8dee9;
       --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
       --code: #111827;
     }
     * { box-sizing: border-box; }
@@ -100,13 +97,16 @@
       color: #cbd5e1;
       margin: 8px 0 0;
     }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
     }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
     @media (max-width: 720px) {
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
@@ -121,21 +121,22 @@
     </div>
   </header>
   <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260603/index.html">날짜 리포트로 돌아가기</a></p>
     <h1>2026-06-03-04 - Post-loss 브라우저 게이트 통과와 루프 종료 기준</h1>
-<h2>1. Current build status</h2>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>LETHE HTML Alpha remains v0.9.</li>
 <li>WP2 Slice B is now browser-proven, not only implementation-complete.</li>
 <li>WP3 Slice A is unblocked for one minimal tactical agency hook using only existing memories, existing slots, and the current combat loop.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Fixed a QA cleanup issue in <code>scripts/run_browser_pressure_qa.js</code>.</li>
 <li>Chrome is now stopped before temp-profile cleanup, and temp-profile cleanup is retried.</li>
 <li>Added <code>--stop-when-satisfied</code> support to <code>scripts/run_autonomous_dev_loop.js</code>.</li>
 <li>The autonomous loop can now stop when quality criteria are met instead of only by iteration or duration limits.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li>First <code>npm run qa:postloss:trusted</code> rerun reached browser QA <code>status: complete</code> with failures <code>[]</code>, but exited nonzero because Chrome temp-profile cleanup hit <code>ENOTEMPTY</code>.</li>
 <li><code>node --check scripts/run_browser_pressure_qa.js</code>: passed.</li>
@@ -149,7 +150,7 @@
 <li>refill restored 3 active memories,</li>
 <li>failures <code>[]</code>.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>Treat WP2 Slice B as browser-proven.</li>
 <li>Open WP3 Slice A as the next gameplay loop target.</li>
@@ -162,25 +163,25 @@
 <li>irritation <code>0.03</code> or lower,</li>
 <li>post-loss browser gate passed.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>AI proxy and browser QA still do not prove human emotion.</li>
 <li>WP3 must improve agency without making the automatic combat feel like a new control scheme.</li>
 <li>The current <code>earlyChoiceInterest</code> proxy is below the new target, so the next loop needs a real agency improvement.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>The post-loss blocker is closed.</li>
 <li>The next implementation loop should start WP3 Slice A.</li>
 <li>The loop may run with a high iteration count and stop when target quality criteria are satisfied.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Run the autonomous dev loop with many iterations and <code>--stop-when-satisfied</code>.</li>
 <li>Implement WP3 Slice A as the first gameplay target.</li>
 <li>Verify each loop with doctor, quick AI test, report check, and the relevant browser QA when needed.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: the project had a gameplay gate that looked blocked even though the browser flow could complete.</li>
 <li>Direction: separate QA cleanup failures from gameplay proof and then reopen the smallest next gameplay step.</li>

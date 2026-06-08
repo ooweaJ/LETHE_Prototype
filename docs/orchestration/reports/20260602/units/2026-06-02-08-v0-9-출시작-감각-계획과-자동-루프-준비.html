@@ -13,9 +13,6 @@
       --muted: #667085;
       --line: #d8dee9;
       --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
       --code: #111827;
     }
     * { box-sizing: border-box; }
@@ -100,13 +97,16 @@
       color: #cbd5e1;
       margin: 8px 0 0;
     }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
     }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
     @media (max-width: 720px) {
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
@@ -121,14 +121,15 @@
     </div>
   </header>
   <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260602/index.html">날짜 리포트로 돌아가기</a></p>
     <h1>2026-06-02-08 - v0.9 출시작 감각 계획과 자동 루프 준비</h1>
-<h2>1. Current build status</h2>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>v0.8 Gate C direct progression stopped.</li>
 <li>v0.9 release-feel loop became the new target.</li>
 <li>Human testing stayed paused until the core loop felt stronger.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Added roguelike reference research under <code>docs/research/2026-06-02-roguelike-reference.md</code>.</li>
 <li>Added v0.9 release-feel prompt.</li>
@@ -137,7 +138,7 @@
 <li>Updated doctor/preflight to check new loop commands.</li>
 <li>Clarified that Markdown files are source of truth and Discord is status only.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>npm run doctor</code>: expanded pass set as scripts were added.</li>
 <li><code>npm run doctor:deep</code>: verified dry-run and syntax paths.</li>
@@ -145,32 +146,32 @@
 <li><code>npm run dev:loop:dry</code>: confirmed autonomous loop command shape.</li>
 <li>Actual automation proof included Discord work-unit report and Claude prompt/response paths where available.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>v0.9 should improve build identity, pressure rhythm, post-loss challenge, and visible tactical agency.</li>
 <li>Use existing six memories and three active slots.</li>
 <li>Do not add meta progression, shops, final boss, new region, or more memory content.</li>
 <li>Let the loop continue during sleep, but make preflight failures blockers.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>Automation can keep working but still work on the wrong unit if prompts are too small or stale.</li>
 <li>External Claude/Discord availability depends on trusted local auth/env.</li>
 <li>Reports must stay readable even when the loop creates many logs.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>GPT/Claude should judge v0.9 planning using reference-driven roguelike criteria and the user's direct feedback.</li>
 <li>Selected initial v0.9 order: build identity first, then pressure/post-loss challenge, then minimal tactical agency.</li>
 <li>AI metrics remain planning evidence, not human fun proof.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Implement v0.9 WP1 build identity/readability.</li>
 <li>Verify 90-second identity visibility.</li>
 <li>Keep automation preflight and report delivery clean.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: the prototype was testable but not yet convincing as a release-feel roguelike slice.</li>
 <li>Direction: use references and automation to improve the core loop systematically.</li>

@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-07-02 - 밸런스 루프 게이트 수정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-07-02 - 밸런스 루프 게이트 수정</h1>
+      <p class="meta">Generated from 2026-06-07-02-밸런스-루프-게이트-수정.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260607/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-07-02 - 밸런스 루프 게이트 수정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>v0.12는 단발 QA가 아니라 밸런스 루프에서도 <code>GO_BALANCE_BASELINE</code>으로 돌아왔다. 최종 루프 결과는 첫 보스 클리어 <code>100%</code>, 전체 클리어 <code>60%</code>, 사망 <code>40%</code>, 첫 보스 TTK 중앙값 <code>20.73s</code>이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>루프 실행 전 <code>npm run autopilot:preflight:local</code>을 실행했다.</li>
+<li><code>scripts/run_balance_loop.js</code>의 기본 실행 창을 <code>690s</code>로 바꾸고, PowerShell/npm 경로에서 들어오는 위치 인자를 처리하도록 수정했다.</li>
+<li>dry-run 출력에 실제 루프 설정이 보이도록 했다.</li>
+<li><code>scripts/run_browser_balance_qa.js</code>에 사망률 최대 <code>&lt;= 40%</code> 게이트를 추가했다.</li>
+<li>첫 보스 HP, 결손 지속시간, 적 피해 스케일, 보스 이후 cap, 리필 안전 마진을 조정했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>npm run autopilot:preflight:local</code>: 20 pass / 1 warn / 0 fail.</li>
+<li><code>node --check src/game.js</code>: 통과.</li>
+<li><code>node --check scripts/run_browser_balance_qa.js</code>: 통과.</li>
+<li><code>node --check scripts/run_balance_loop.js</code>: 통과.</li>
+<li><code>npm run balance:loop:dry</code>: 통과, <code>run-sec 690</code> 확인.</li>
+<li>브라우저 <code>first_boss_ttk</code>: <code>GO_BALANCE_BASELINE</code>, 3/3 accepted, TTK 중앙값 <code>18.61s</code>.</li>
+<li>최종 <code>balance:loop</code>: <code>GO_BALANCE_BASELINE</code>, 첫 보스 클리어 <code>100%</code>, 전체 클리어 <code>60%</code>, 사망 <code>40%</code>, 첫 보스 TTK 중앙값 <code>20.73s</code>.</li>
+<li><code>npm run playtest:package</code>: 통과, 밸런스 변경 후 <code>dist\lethe-v0.12-playtest</code> 재생성.</li>
+<li><code>npm run report</code>: 통과.</li>
+<li><code>npm run report:check</code>: 통과.</li>
+<li><code>npm run doctor</code>: 통과, 50 pass / 0 warn / 0 fail.</li>
+<li><code>npm run report:discord:unit:dry</code>: 통과.</li>
+<li>근거: <code>docs/balance/2026-06-07-v012-browser-first-boss-ttk-loop-hp2050.md</code>, <code>docs/balance/2026-06-07-v012-balance-loop.md</code>, <code>docs/review_prompts/2026-06-07-balance-loop.md</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li><code>balance:loop</code>를 밸런스 QA의 기준 소스로 본다.</li>
+<li>사망 <code>60%</code>는 더 이상 GO로 허용하지 않는다.</li>
+<li>Discord 실제 전송은 규칙상 필요하지만, 이 Codex 세션에서 승인 검토에 막히면 원인과 trusted-local 명령을 문서화한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>5회 브라우저 루프는 여전히 표본이 작다. 큰 주장 전에는 10회 확인을 고려한다.</li>
+<li>사망률은 허용 상한인 <code>40%</code>에 정확히 걸려 있다.</li>
+<li>이 Codex 세션에서는 Discord 실제 webhook 전송이 차단될 수 있다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>감정 proxy는 제외한다. 밸런스 루프는 v0.12의 <code>690s</code> 창을 쓰도록 수정되었고, 사망률 <code>&lt;= 40%</code>를 강제한다. 튜닝 후 최종 루프는 전체 클리어 <code>60%</code>, 사망 <code>40%</code>, 첫 보스 TTK 중앙값 <code>20.73s</code>로 통과했다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>Discord 전송이 필요하면 trusted local terminal에서 <code>npm run report:discord:unit</code>를 실행한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 단발 QA와 루프 QA가 서로 다르고, 사망 <code>60%</code>도 자동 게이트를 통과할 수 있었다.</li>
+<li>방향: 루프를 밸런스 기준 소스로 만들고 사망 목표를 코드에 넣는다.</li>
+<li>행동: 루프 인자와 기본값을 고치고, 사망 게이트를 추가하고, 보스 이후 압박을 재조정했다.</li>
+<li>결과: 밸런스 루프가 의도한 기준으로 통과한다.</li>
+</ul>
+  </main>
+</body>
+</html>

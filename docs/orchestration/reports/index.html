@@ -24,9 +24,13 @@
       .eyebrow { margin: 0 0 8px; color: var(--green); font-size: 13px; font-weight: 900; }
       h1 { margin: 0 0 10px; font-size: clamp(30px, 5vw, 46px); line-height: 1.08; }
       p { margin: 0 0 16px; color: var(--muted); line-height: 1.65; }
-      ul { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
-      li { padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
-      small { display: block; margin-top: 6px; color: var(--muted); line-height: 1.45; }
+      ul { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+      li { padding: 0; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+      article { padding: 16px; }
+      time { display: block; margin-bottom: 7px; color: var(--muted); font-size: 13px; font-weight: 900; }
+      h2 { margin: 0 0 8px; font-size: 19px; line-height: 1.3; }
+      small { display: block; margin-top: 8px; color: var(--muted); line-height: 1.45; }
+      .unit a { font-weight: 800; }
       footer { margin-top: 18px; color: var(--muted); font-size: 13px; }
     </style>
   </head>
@@ -34,42 +38,82 @@
     <main>
       <p class="eyebrow">LETHE 개발 문서</p>
       <h1>날짜별 리포트</h1>
-      <p>사람이 읽는 개발 리포트입니다. 날짜별 index가 그날의 작업을 모아 보여주고, 세부 단위는 각 날짜의 units 폴더에 보관됩니다.</p>
+      <p>사람이 읽는 개발 리포트 아카이브입니다. 날짜별 페이지에서 제목 카드로 작업 단위를 고르고, 각 카드에서 해당 내용만 확인합니다.</p>
       <ul>
         <li>
-      <a href="20260608/index.html">2026-06-08 개발 리포트</a>
-      <small>최신 단위: <a href="20260608/units/2026-06-08-11-오케스트레이션-구조-규약-정리.html">2026-06-08-11 - 오케스트레이션 구조 규약 정리</a></small>
+      <article>
+        <time datetime="2026-06-09">2026-06-09</time>
+        <h2><a href="/api/projects/lethe/reports/20260609/index.html">LETHE 개발 보고서 - 2026-06-09</a></h2>
+        <p>오늘은 최신 마이그레이션 템플릿에 맞춰 보고서 인터페이스를 블로그형 구조로 다시 정렬하고, 이전 날짜 보고서와 개발일지의 한글 가독성 문제를 보정했다.</p>
+        <small class="unit">최신 작업 단위: <a href="/api/projects/lethe/reports/20260609/units/2026-06-09-03-project-orchestrator-discord-연결.html">2026-06-09-03 - Project Orchestrator Discord 연결</a></small>
+      </article>
     </li>
 <li>
-      <a href="20260607/index.html">2026-06-07 개발 리포트</a>
-      <small>최신 단위: <a href="20260607/units/2026-06-07-02-balance-loop-gate-fix.html">2026-06-07-02 - Balance Loop Gate Fix</a></small>
+      <article>
+        <time datetime="2026-06-08">2026-06-08</time>
+        <h2><a href="/api/projects/lethe/reports/20260608/index.html">LETHE 개발 보고서 - 2026-06-08</a></h2>
+        <p>이 파일은 2026-06-08 작업을 사람이 읽기 좋게 모은 날짜별 리포트다. 세부 단위 HTML과 JSON 요약은 같은 폴더의 units/에 생성된다.</p>
+        <small class="unit">최신 작업 단위: <a href="/api/projects/lethe/reports/20260608/units/2026-06-08-12-개발-문서-플러그인-최신-기준-정렬.html">2026-06-08-12 - 개발 문서 플러그인 최신 기준 정렬</a></small>
+      </article>
     </li>
 <li>
-      <a href="20260606/index.html">2026-06-06 개발 리포트</a>
-      <small>최신 단위: <a href="20260606/units/2026-06-06-04-deficit-trial-review-follow-up.html">2026-06-06-04 - Deficit Trial Review Follow-Up</a></small>
+      <article>
+        <time datetime="2026-06-07">2026-06-07</time>
+        <h2><a href="/api/projects/lethe/reports/20260607/index.html">LETHE 개발 보고서 - 2026-06-07</a></h2>
+        <p>이 날짜의 핵심은 v0.12를 인간 플레이테스트 후보로 포장하고, 밸런스 루프 기준이 실제 v0.12 목표와 맞지 않던 문제를 수정한 것이다.</p>
+        <small class="unit">최신 작업 단위: <a href="/api/projects/lethe/reports/20260607/units/2026-06-07-02-밸런스-루프-게이트-수정.html">2026-06-07-02 - 밸런스 루프 게이트 수정</a></small>
+      </article>
     </li>
 <li>
-      <a href="20260605/index.html">2026-06-05 개발 리포트</a>
-      <small>최신 단위: <a href="20260605/units/2026-06-05-08-first-boss-ttk-boss-only-harness.html">2026-06-05-08 - First Boss TTK Boss-Only Harness</a></small>
+      <article>
+        <time datetime="2026-06-06">2026-06-06</time>
+        <h2><a href="/api/projects/lethe/reports/20260606/index.html">LETHE 개발 보고서 - 2026-06-06</a></h2>
+        <p>이 날짜의 핵심은 첫 보스 TTK 측정 경로를 안정화하고, 보스 이후 전체 런 밸런스 기준선을 만든 뒤, 결손 시험 생존감을 조정한 것이다.</p>
+        <small class="unit">최신 작업 단위: <a href="/api/projects/lethe/reports/20260606/units/2026-06-06-04-결손-시험-리뷰-후속-조정.html">2026-06-06-04 - 결손 시험 리뷰 후속 조정</a></small>
+      </article>
     </li>
 <li>
-      <a href="20260604/index.html">2026-06-04 개발 리포트</a>
-      <small>최신 단위: <a href="20260604/units/2026-06-04-08-discord-보고-orchestrator-형식-전환.html">2026-06-04-08 - Discord 보고 Orchestrator 형식 전환</a></small>
+      <article>
+        <time datetime="2026-06-05">2026-06-05</time>
+        <h2><a href="/api/projects/lethe/reports/20260605/index.html">LETHE 개발 보고서 - 2026-06-05</a></h2>
+        <p>이 날짜의 핵심은 v0.12 밸런스를 실제 브라우저 QA 수치로 쪼개서 추적하고, 첫 보스 전 생존과 TTK 측정 경로를 분리한 것이다.</p>
+        <small class="unit">최신 작업 단위: <a href="/api/projects/lethe/reports/20260605/units/2026-06-05-08-첫-보스-ttk-보스-전용-하네스.html">2026-06-05-08 - 첫 보스 TTK 보스 전용 하네스</a></small>
+      </article>
     </li>
 <li>
-      <a href="20260603/index.html">2026-06-03 개발 리포트</a>
-      <small>최신 단위: <a href="20260603/units/2026-06-03-06-전술-집중-검증-통과와-루프-기준-회복.html">2026-06-03-06 - 전술 집중 검증 통과와 루프 기준 회복</a></small>
+      <article>
+        <time datetime="2026-06-04">2026-06-04</time>
+        <h2><a href="/api/projects/lethe/reports/20260604/index.html">LETHE 개발 보고서 - 2026-06-04</a></h2>
+        <p>이 날짜의 개발 진행, 검증 결과, 결정, 다음 작업을 모은 리포트입니다.</p>
+        <small class="unit">최신 작업 단위: <a href="/api/projects/lethe/reports/20260604/units/2026-06-04-08-discord-보고-orchestrator-형식-전환.html">2026-06-04-08 - Discord 보고 Orchestrator 형식 전환</a></small>
+      </article>
     </li>
 <li>
-      <a href="20260602/index.html">2026-06-02 개발 리포트</a>
-      <small>최신 단위: <a href="20260602/units/2026-06-02-13-보고서-discord-단위-체계-1차-정리.html">2026-06-02-13 - 보고서/Discord 단위 체계 1차 정리</a></small>
+      <article>
+        <time datetime="2026-06-03">2026-06-03</time>
+        <h2><a href="/api/projects/lethe/reports/20260603/index.html">LETHE 개발 보고서 - 2026-06-03</a></h2>
+        <p>이 날짜의 개발 진행, 검증 결과, 결정, 다음 작업을 모은 리포트입니다.</p>
+        <small class="unit">최신 작업 단위: <a href="/api/projects/lethe/reports/20260603/units/2026-06-03-06-전술-집중-검증-통과와-루프-기준-회복.html">2026-06-03-06 - 전술 집중 검증 통과와 루프 기준 회복</a></small>
+      </article>
     </li>
 <li>
-      <a href="20260601/index.html">2026-06-01 개발 리포트</a>
-      <small>단위 리포트 없음</small>
+      <article>
+        <time datetime="2026-06-02">2026-06-02</time>
+        <h2><a href="/api/projects/lethe/reports/20260602/index.html">LETHE 개발 보고서 - 2026-06-02</a></h2>
+        <p>이 날짜의 개발 진행, 검증 결과, 결정, 다음 작업을 모은 리포트입니다.</p>
+        <small class="unit">최신 작업 단위: <a href="/api/projects/lethe/reports/20260602/units/2026-06-02-13-보고서-discord-단위-체계-1차-정리.html">2026-06-02-13 - 보고서/Discord 단위 체계 1차 정리</a></small>
+      </article>
+    </li>
+<li>
+      <article>
+        <time datetime="2026-06-01">2026-06-01</time>
+        <h2><a href="/api/projects/lethe/reports/20260601/index.html">LETHE 개발 보고서 - 2026-06-01</a></h2>
+        <p>LETHE_alpha_ai_test_system_v01.zip을 alpha_test/로 통합했다.</p>
+        <small class="unit">작업 단위 리포트 없음</small>
+      </article>
     </li>
       </ul>
-      <footer>기준: 2026-06-08</footer>
+      <footer>기준: 2026-06-09</footer>
     </main>
   </body>
 </html>

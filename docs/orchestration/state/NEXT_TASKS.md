@@ -34,10 +34,10 @@ Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, 
 - Verification: downloaded JSON logs exist in `playtest_logs/`.
 - Blocker: balance loop currently failed.
 
-## 5. Automate Orchestration HTML Interface Refresh
+## 5. Wire Project Orchestrator Discord Intake
 
 - Priority: low
-- Why: `docs/orchestration/interface/index.html`, `interface/command.html`, `interface/runbook.html`, `reports/index.html`, and `devlog/index.html` exist with clearer roles, but they should eventually be regenerated from Markdown instead of hand-maintained.
-- How: add a generator that builds the Korean dashboard, command block, runbook block, and document-list pages from `state/STATUS.md`, `state/CURRENT_TASK.md`, `state/NEXT_TASKS.md`, `state/RUNBOOK.md`, `state/DECISION_LOG.md`, devlog, reports, and generated report units.
-- Verification: running the generator updates the HTML pages and preserves Markdown as the source of truth.
-- Blocker: should be done after the current dashboard shape feels useful.
+- Why: the current shared plugin rule says Discord delivery should go through Project Orchestrator when available, while this repo still has local direct-send scripts as fallback.
+- How: add or document the central intake command/API once Project Orchestrator is available, then keep `npm run report:discord:unit` as trusted-local fallback only.
+- Verification: run `npm run report`, `npm run report:check`, and a central-intake dry run or documented fallback dry run.
+- Blocker: Project Orchestrator intake command/API is not present in this repository yet.

@@ -7,129 +7,171 @@
   <style>
     :root {
       color-scheme: light;
-      --bg: #f5f7fb;
+      --bg: #f6f7f3;
       --paper: #ffffff;
-      --ink: #172033;
-      --muted: #667085;
-      --line: #d8dee9;
-      --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
-      --code: #111827;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
+      --ink: #17201d;
+      --muted: #64706b;
+      --line: #dce2da;
+      --accent: #1f6b4d;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: var(--bg);
       color: var(--ink);
-      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.62;
     }
-    header {
-      background: #101828;
-      color: #fff;
-      padding: 28px 20px;
-      border-bottom: 4px solid var(--accent);
-    }
-    main {
-      width: min(1080px, calc(100% - 32px));
-      margin: 24px auto 48px;
-      background: var(--paper);
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); }
+    main { width: min(980px, 100%); margin: 0 auto; padding: 30px 22px 44px; }
+    nav { margin-bottom: 18px; font-size: 14px; }
+    a { color: var(--accent); font-weight: 900; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .eyebrow { margin: 0 0 8px; color: var(--accent); font-size: 13px; font-weight: 900; }
+    h1 { margin: 0 0 10px; font-size: clamp(30px, 5vw, 46px); line-height: 1.08; }
+    .intro { margin: 0 0 18px; color: var(--muted); line-height: 1.65; }
+    ul { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+    li { margin: 0; }
+    .unit-card {
+      min-height: 136px;
+      padding: 17px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      padding: 28px;
-      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+      background: var(--paper);
     }
-    .header-inner {
-      width: min(1080px, calc(100% - 32px));
-      margin: 0 auto;
+    .unit-detail {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
     }
-    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
-    h1 { margin-top: 0; font-size: 30px; }
-    h2 {
-      padding-top: 18px;
+    .unit-detail h1 { font-size: 28px; }
+    .unit-detail h2 {
+      margin-top: 24px;
+      padding-top: 16px;
       border-top: 1px solid var(--line);
-      font-size: 22px;
+      font-size: 21px;
     }
-    h3 { font-size: 17px; color: #243047; }
-    p, ul, ol, table, pre { margin: 0 0 16px; }
-    a { color: var(--accent); }
-    ul, ol { padding-left: 24px; }
-    code {
-      background: #eef2f7;
-      color: #111827;
+    .unit-detail ul { display: block; padding-left: 22px; list-style: disc; }
+    .unit-detail li { margin-bottom: 6px; }
+    .unit-detail code {
       padding: 2px 5px;
       border-radius: 4px;
-      font-size: 0.92em;
+      background: #eef2f7;
     }
-    pre {
-      background: var(--code);
-      color: #e5e7eb;
-      padding: 16px;
-      border-radius: 8px;
-      overflow: auto;
-    }
-    pre code {
-      background: transparent;
-      color: inherit;
-      padding: 0;
-    }
-    blockquote {
-      margin: 0 0 18px;
-      padding: 12px 16px;
-      border-left: 4px solid var(--accent);
-      background: #eef4ff;
-      color: #243047;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-    th, td {
-      border: 1px solid var(--line);
-      padding: 9px 10px;
-      vertical-align: top;
-    }
-    th {
-      background: #f2f4f7;
-      text-align: left;
-    }
-    .meta {
-      color: #cbd5e1;
-      margin: 8px 0 0;
-    }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
-    }
-    @media (max-width: 720px) {
-      main { padding: 18px; }
-      table { display: block; overflow-x: auto; }
-    }
+    .back-inline { margin-bottom: 16px; }
+    .number { display: block; margin-bottom: 8px; color: var(--muted); font-size: 13px; font-weight: 900; }
+    h2 { margin: 0 0 8px; font-size: 20px; line-height: 1.3; }
+    p { margin: 0; color: var(--muted); line-height: 1.6; }
+    footer { margin-top: 20px; color: var(--muted); font-size: 13px; }
   </style>
 </head>
 <body>
-  <header>
-    <div class="header-inner">
-      <h1>LETHE 개발 보고서 - 2026-06-02</h1>
-      <p class="meta">Generated from index.md</p>
-    </div>
-  </header>
   <main>
+    <nav><a href="/api/projects/lethe/reports/index.html">전체 리포트 목록</a></nav>
+    <p class="eyebrow">20260602 개발 기록</p>
     <h1>LETHE 개발 보고서 - 2026-06-02</h1>
-<h1>2026-06-02-01 - v0.2 망각 이해도 튜닝과 브라우저 QA</h1>
-<h2>1. Current build status</h2>
+    <p class="intro">이 날짜의 개발 진행, 검증 결과, 결정, 다음 작업을 모은 리포트입니다.</p>
+    <ul id="unit-list">
+      <li>
+        <article class="unit-card">
+          <span class="number">2026-06-02-01</span>
+          <h2><a href="#unit-2026-06-02-01" data-unit-link="unit-2026-06-02-01">v0.2 망각 이해도 튜닝과 브라우저 QA</a></h2>
+          <p>작업 내용을 확인합니다.</p>
+        </article>
+      </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-02-02</span>
+          <h2><a href="#unit-2026-06-02-02" data-unit-link="unit-2026-06-02-02">v0.3-v0.4 전투 가시성과 사람 테스트 후보화</a></h2>
+          <p>작업 내용을 확인합니다.</p>
+        </article>
+      </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-02-03</span>
+          <h2><a href="#unit-2026-06-02-03" data-unit-link="unit-2026-06-02-03">v0.5 초반 재미와 런 중 성장 보강</a></h2>
+          <p>작업 내용을 확인합니다.</p>
+        </article>
+      </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-02-04</span>
+          <h2><a href="#unit-2026-06-02-04" data-unit-link="unit-2026-06-02-04">테스트 결과 기반 기획 파이프라인과 운영 문서화</a></h2>
+          <p>작업 내용을 확인합니다.</p>
+        </article>
+      </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-02-05</span>
+          <h2><a href="#unit-2026-06-02-05" data-unit-link="unit-2026-06-02-05">v0.6 코어 런 구조 재설계</a></h2>
+          <p>작업 내용을 확인합니다.</p>
+        </article>
+      </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-02-06</span>
+          <h2><a href="#unit-2026-06-02-06" data-unit-link="unit-2026-06-02-06">v0.7 무기/잔향 밸런스와 판정 정정</a></h2>
+          <p>작업 내용을 확인합니다.</p>
+        </article>
+      </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-02-07</span>
+          <h2><a href="#unit-2026-06-02-07" data-unit-link="unit-2026-06-02-07">v0.8 더블체크와 Gate A/B 자동 밸런스 정비</a></h2>
+          <p>작업 내용을 확인합니다.</p>
+        </article>
+      </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-02-08</span>
+          <h2><a href="#unit-2026-06-02-08" data-unit-link="unit-2026-06-02-08">v0.9 출시작 감각 계획과 자동 루프 준비</a></h2>
+          <p>작업 내용을 확인합니다.</p>
+        </article>
+      </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-02-09</span>
+          <h2><a href="#unit-2026-06-02-09" data-unit-link="unit-2026-06-02-09">v0.9 WP1 빌드 정체성과 Identity QA</a></h2>
+          <p>작업 내용을 확인합니다.</p>
+        </article>
+      </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-02-10</span>
+          <h2><a href="#unit-2026-06-02-10" data-unit-link="unit-2026-06-02-10">자동 개발 루프 preflight와 산출물 정합성 정리</a></h2>
+          <p>작업 내용을 확인합니다.</p>
+        </article>
+      </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-02-11</span>
+          <h2><a href="#unit-2026-06-02-11" data-unit-link="unit-2026-06-02-11">v0.9 WP2 압박 리듬과 결손 압박 구현</a></h2>
+          <p>작업 내용을 확인합니다.</p>
+        </article>
+      </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-02-12</span>
+          <h2><a href="#unit-2026-06-02-12" data-unit-link="unit-2026-06-02-12">Post-loss 브라우저 게이트와 환경 blocker 정리</a></h2>
+          <p>작업 내용을 확인합니다.</p>
+        </article>
+      </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-02-13</span>
+          <h2><a href="#unit-2026-06-02-13" data-unit-link="unit-2026-06-02-13">보고서/Discord 단위 체계 1차 정리</a></h2>
+          <p>작업 내용을 확인합니다.</p>
+        </article>
+      </li>
+    </ul>
+    <section id="unit-detail-root">
+      <article class="unit-detail" id="unit-2026-06-02-01" hidden>
+      <p class="back-inline"><a href="#" data-back-link>날짜 리포트로 돌아가기</a></p>
+      <h1>2026-06-02-01 - v0.2 망각 이해도 튜닝과 브라우저 QA</h1>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>LETHE HTML alpha moved from v0.1 into v0.2 narrow tuning.</li>
 <li>The goal was not more content, but making the first forgetting event understandable and testable.</li>
 <li>v0.2 reached AI <code>GO_CANDIDATE</code> and browser QA candidate status.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Converted GPT/Claude v0.2 planning into Korean task docs.</li>
 <li>Tuned first forgetting timing toward the 8-10 minute target.</li>
@@ -138,52 +180,55 @@
 <li>Added clearer result screen fields: forgotten memory, prediction result, deletion weight, remaining echo, next build direction.</li>
 <li>Added Q3 free-response recall and JSON fields for selected/predicted/deleted memories and deletion weights.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>npm run ai:test:quick</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score around <code>0.7798</code>.</li>
 <li><code>npm run ai:test</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score around <code>0.7737</code>.</li>
 <li>Browser <code>?qa=fast</code> verified result screen and JSON payload.</li>
 <li>Report/Discord dry-runs confirmed Korean summary format.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>v0.2 should validate whether forgetting feels like understandable loss.</li>
 <li>Do not expand content before result-screen and JSON evidence are readable.</li>
 <li>Keep Discord as a concise status channel, not the source of truth.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>v0.2 was still early and not yet a release-feel prototype.</li>
 <li>AI metrics were enough for a candidate signal, not proof of human emotion.</li>
 <li>Browser QA had to remain part of the gate before people testing.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>v0.2 asks whether the first forgetting is predictable, legible, and regrettable rather than irritating.</li>
 <li>Human feedback should focus on regret, irritation, neutral reactions, unclear reactions, and memory-name recall.</li>
 <li>GPT/Claude should use test evidence, not vibes, to choose the next version.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Continue pre-human-test polish only where readability or evidence quality is weak.</li>
 <li>Keep browser QA and JSON payload verification mandatory.</li>
 <li>Prepare v0.3 only if the result-screen/forgetting loop needs more clarity before people testing.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: v0.1 had a promising emotional loop but the first loss could be too early and hard to parse.</li>
 <li>Direction: narrow the prototype around a testable first forgetting moment.</li>
 <li>Action: tuned timing, deletion skew, result UI, survey, JSON logging, and Discord/report flow.</li>
 <li>Result: v0.2 became a better evidence-gathering build rather than a content expansion.</li>
 </ul>
-<h1>2026-06-02-02 - v0.3-v0.4 전투 가시성과 사람 테스트 후보화</h1>
-<h2>1. Current build status</h2>
+    </article>
+<article class="unit-detail" id="unit-2026-06-02-02" hidden>
+      <p class="back-inline"><a href="#" data-back-link>날짜 리포트로 돌아가기</a></p>
+      <h1>2026-06-02-02 - v0.3-v0.4 전투 가시성과 사람 테스트 후보화</h1>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>LETHE moved through v0.3 combat readability and v0.4 human-test candidate polish.</li>
 <li>v0.4 reached stronger AI scores and clearer browser evidence.</li>
 <li>The build was closer to people-test readiness but still below the long-term Alpha Fun Score target.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Added Codex CLI planning fallback so Claude auth issues would not stop planning.</li>
 <li>Added combat readability polish:</li>
@@ -197,7 +242,7 @@
 <li>Added <code>echoTransformation</code> to JSON.</li>
 <li>Raised default UI clarity to <code>0.78</code>.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>npm run review:codex:dry</code>: planning fallback path confirmed.</li>
 <li><code>npm run ai:test:quick</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score around <code>0.8190</code> after v0.4 polish.</li>
@@ -205,45 +250,48 @@
 <li><code>npm run ai:test:heavy</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score around <code>0.8369</code>, regret around <code>87.6%</code>, irritation around <code>0.3%</code>.</li>
 <li>Browser QA confirmed v0.3/v0.4 labels and payload fields.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>v0.3 focused on combat legibility rather than new systems.</li>
 <li>v0.4 focused on making loss and echo readable enough for people to answer test questions.</li>
 <li>External planning fallback is required because Claude auth can be unavailable in some sessions.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>Alpha Fun Score improved but stayed below the aspirational <code>0.89+</code>.</li>
 <li>Combat readability improved, but release-feel fun was still not proven.</li>
 <li>AI <code>GO_CANDIDATE</code> was still not a human-test result.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>v0.3/v0.4 improved how players see memory use, dependency risk, lost action, and echo transformation.</li>
 <li>The next planning question was whether this was enough for people testing or whether early fun needed improvement first.</li>
 <li>GPT/Claude should treat v0.4 as a candidate, not a finished prototype.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Verify level-up/run-fun if human testing is delayed.</li>
 <li>Keep browser QA in the loop for every UI payload change.</li>
 <li>Keep the human playtest guide aligned with the current version.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: the prototype could pass simulation while still feeling visually flat or unclear.</li>
 <li>Direction: make memory activations and forgetting risk visible during play.</li>
 <li>Action: added combat feedback, dependency labels, result-screen separation, and payload fields.</li>
 <li>Result: v0.4 became a stronger human-test candidate, but not yet a release-feel game loop.</li>
 </ul>
-<h1>2026-06-02-03 - v0.5 초반 재미와 런 중 성장 보강</h1>
-<h2>1. Current build status</h2>
+    </article>
+<article class="unit-detail" id="unit-2026-06-02-03" hidden>
+      <p class="back-inline"><a href="#" data-back-link>날짜 리포트로 돌아가기</a></p>
+      <h1>2026-06-02-03 - v0.5 초반 재미와 런 중 성장 보강</h1>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>LETHE moved into v0.5 core-fun candidate status.</li>
 <li>The user feedback was that the game needed to be fun enough for players to reach forgetting.</li>
 <li>v0.5 added early combat pressure and in-run growth without adding meta progression or shop systems.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Increased early enemy density and combat pressure.</li>
 <li>Added kill XP and run-only level-up choices.</li>
@@ -256,52 +304,55 @@
 <li>Added level-up browser QA mode and verified level-up pause/resume flow.</li>
 <li>Updated Claude v0.5 evaluation and human playtest guide.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>npm run ai:test</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score around <code>0.8531</code>, Early Fun around <code>0.8669</code>, kill tempo around <code>0.9620</code>, level-ups around <code>4.08</code>.</li>
 <li><code>npm run ai:test:heavy</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score around <code>0.8509</code>, Early Fun around <code>0.8672</code>.</li>
 <li><code>?qa=fast,levelup</code> Chrome headless QA verified level-up DOM, selection, resume, and <code>runGrowth</code> payload.</li>
 <li>Claude v0.5 evaluation was recorded and interpreted as conditional on browser validation.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>Improve the early combat/growth loop before broad people testing.</li>
 <li>Keep growth run-only; no meta progression, shop, unlocks, or permanent growth.</li>
 <li>Do not add more memories while the current six memories are not fully proven.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>Alpha Fun improved but still did not prove human enjoyment.</li>
 <li>Simulation proxies could miss feel issues in combat rhythm and choice interest.</li>
 <li>Human testing remained useful but should not happen if the prototype still felt too thin.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>v0.5 asks whether players have enough moment-to-moment fun to keep playing until forgetting.</li>
 <li>Evidence says early fun improved, but the user later judged that release-feel depth still needed work.</li>
 <li>GPT/Claude should separate &quot;AI can clear it&quot; from &quot;a human wants to replay it.&quot;</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Use test-result planning pipeline for future design decisions.</li>
 <li>Watch earlyChoiceInterest and echoPivotScore as weak-but-not-yet-actionable signals.</li>
 <li>Keep human-test packaging ready but pause it if the core loop is not yet compelling.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: good forgetting metrics do not matter if players quit before the first meaningful loss.</li>
 <li>Direction: strengthen early combat tempo and in-run choices.</li>
 <li>Action: added denser waves, XP, level-ups, and early-fun metrics.</li>
 <li>Result: v0.5 improved early playability but exposed the need for a deeper run structure.</li>
 </ul>
-<h1>2026-06-02-04 - 테스트 결과 기반 기획 파이프라인과 운영 문서화</h1>
-<h2>1. Current build status</h2>
+    </article>
+<article class="unit-detail" id="unit-2026-06-02-04" hidden>
+      <p class="back-inline"><a href="#" data-back-link>날짜 리포트로 돌아가기</a></p>
+      <h1>2026-06-02-04 - 테스트 결과 기반 기획 파이프라인과 운영 문서화</h1>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>The project shifted from ad hoc AI opinions to test-result-driven planning.</li>
 <li>HTML prototype validation remained the current project goal.</li>
 <li>Unity implementation stayed conditional on stronger evidence.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Added planning pipeline scripts and dry-run modes.</li>
 <li>Added Claude/Codex planning handoff docs.</li>
@@ -311,7 +362,7 @@
 <li>Added human playtest package generation.</li>
 <li>Improved Discord status/report delivery and dry-runs.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>npm run planning:pipeline:prompt</code>: generated prompt with quick AI evidence.</li>
 <li><code>npm run doctor</code>: checked runtime, scripts, docs, CLI availability, env, and latest prompt.</li>
@@ -319,46 +370,49 @@
 <li><code>npm run playtest:summary:dry</code>: verified summary automation path.</li>
 <li><code>npm run playtest:package:dry</code>: verified package generation path.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>Markdown files are the source of truth.</li>
 <li>Discord is a status/attention channel only.</li>
 <li>Claude/GPT should interpret results and revise planning, but Codex owns HTML prototype implementation and verification.</li>
 <li>Before unattended loops, run preflight.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>CLI auth and Discord webhook availability vary by environment.</li>
 <li>Automation can create a false sense of progress if it does not preserve test evidence.</li>
 <li>AI planning passes must not be treated as human fun proof.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>Future planning prompts should include concrete test outputs, browser QA evidence, risks, and the current scope guard.</li>
 <li>GPT/Claude should return verdict, next tasks, test criteria, and do-not-build list.</li>
 <li>Codex should then implement only the selected narrow scope.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Keep <code>npm run doctor</code> and <code>npm run doctor:deep</code> green.</li>
 <li>Keep report/Discord dry-runs available.</li>
 <li>Use the planning pipeline after AI or human tests before major design changes.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: AI collaboration can become noisy without a repeatable evidence loop.</li>
 <li>Direction: build a test-result planning pipeline with clear role split.</li>
 <li>Action: added scripts, docs, doctor checks, playtest summary, and package automation.</li>
 <li>Result: future iteration can run as a loop instead of a one-off prompt exchange.</li>
 </ul>
-<h1>2026-06-02-05 - v0.6 코어 런 구조 재설계</h1>
-<h2>1. Current build status</h2>
+    </article>
+<article class="unit-detail" id="unit-2026-06-02-05" hidden>
+      <p class="back-inline"><a href="#" data-back-link>날짜 리포트로 돌아가기</a></p>
+      <h1>2026-06-02-05 - v0.6 코어 런 구조 재설계</h1>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>LETHE moved from a single first-loss prototype toward a 20-minute run structure.</li>
 <li>The goal was to test whether repeated loss/recovery cycles could sustain a roguelike loop.</li>
 <li>The scope remained HTML prototype validation only.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Added a 20-minute structure with bosses at 4, 8, 12, 16, and 20 minutes.</li>
 <li>Boss defeat now leads to dependency-based memory loss.</li>
@@ -367,51 +421,54 @@
 <li>Added <code>runTimeline</code> JSON payload with cycles and refill choices.</li>
 <li>Added <code>?qa=fast,v06</code> browser QA gate.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li>AI metrics stayed in <code>GO_CANDIDATE</code> range after the run-structure change.</li>
 <li>Browser QA validated the v0.6 flow and payload hooks.</li>
 <li>Timeline payload recorded cycles and refill choices for later interpretation.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>The core loop should be tested as repeated loss, deficit survival, and recovery.</li>
 <li>Keep the current six memories and three active slots.</li>
 <li>Do not add a shop, meta progression, or multi-region structure.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>A longer structure could expose balance issues not visible in short-run metrics.</li>
 <li>Deficit survival needs to feel challenging, not irritating.</li>
 <li>Refill choices must feel like recovery/pivot, not a full undo of loss.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>v0.6 created the first real run-loop scaffold.</li>
 <li>GPT/Claude should evaluate whether loss/recovery cadence supports regret and replay desire.</li>
 <li>If the loop is too flat, the next pass should strengthen build identity, pressure rhythm, and post-loss challenge before adding content.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Run balance/proxy checks on the new structure.</li>
 <li>Inspect whether two-memory survival and refill are understandable.</li>
 <li>Prepare v0.7/v0.8 only if evidence says the loop needs clearer agency or balance.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: one forgetting event was not enough to prove LETHE as a roguelike loop.</li>
 <li>Direction: add a repeatable run cycle without broadening scope.</li>
 <li>Action: implemented boss cycles, deficit survival, refill choices, and run timeline logging.</li>
 <li>Result: LETHE became a run-structure prototype rather than a one-event test.</li>
 </ul>
-<h1>2026-06-02-06 - v0.7 무기/잔향 밸런스와 판정 정정</h1>
-<h2>1. Current build status</h2>
+    </article>
+<article class="unit-detail" id="unit-2026-06-02-06" hidden>
+      <p class="back-inline"><a href="#" data-back-link>날짜 리포트로 돌아가기</a></p>
+      <h1>2026-06-02-06 - v0.7 무기/잔향 밸런스와 판정 정정</h1>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>v0.7 improved weapon baselines and lost-memory echo effects.</li>
 <li>AI and Claude planning signals initially suggested solo/human test candidacy.</li>
 <li>User direct feedback later invalidated the balance confidence.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Buffed the two existing weapon baselines.</li>
 <li>Added weapon-facing echo effects for lost memories.</li>
@@ -419,51 +476,54 @@
 <li>Updated AI simulator weapon base DPS and residue proxy.</li>
 <li>Recorded Claude v0.7 feedback and the later correction that AI balance confidence was too optimistic.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>npm run ai:test</code> and related checks stayed in <code>GO_CANDIDATE</code> range.</li>
 <li>Claude v0.7 balance verdict leaned toward solo/human testing.</li>
 <li>User direct feedback judged the balance verdict unreliable and the game not yet ready.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>User live play feedback outranks AI planning/proxy metrics.</li>
 <li>Do not proceed to people testing just because Claude or AI proxies say <code>GO</code>.</li>
 <li>Fix the automatic balance proxy before trusting it for major decisions.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>AI proxies can miss subjective balance and fun issues.</li>
 <li>Weapon/echo improvements can look good numerically while still feeling off.</li>
 <li>The project needed a stronger release-feel plan before more people testing.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>v0.7 improved the prototype but also exposed that AI verdicts were overconfident.</li>
 <li>GPT/Claude should treat future <code>GO</code> outputs as planning passes until browser/user evidence supports them.</li>
 <li>The next plan should be stricter and more reference-driven.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Start v0.8 double-check planning for major design changes.</li>
 <li>Improve danger/death metrics and balance proxy reliability.</li>
 <li>Keep scope guard active: no new memories, shop, meta progression, final boss, or multi-region run.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: simulated balance confidence diverged from user play feel.</li>
 <li>Direction: make AI planning subordinate to direct play evidence.</li>
 <li>Action: recorded the verdict correction and changed the planning default to double-check.</li>
 <li>Result: future work became more cautious, evidence-based, and user-feedback-led.</li>
 </ul>
-<h1>2026-06-02-07 - v0.8 더블체크와 Gate A/B 자동 밸런스 정비</h1>
-<h2>1. Current build status</h2>
+    </article>
+<article class="unit-detail" id="unit-2026-06-02-07" hidden>
+      <p class="back-inline"><a href="#" data-back-link>날짜 리포트로 돌아가기</a></p>
+      <h1>2026-06-02-07 - v0.8 더블체크와 Gate A/B 자동 밸런스 정비</h1>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>v0.8 became the stricter evidence/planning phase after v0.7 feedback.</li>
 <li>The project started Gate A and Gate B work instead of rushing to people testing.</li>
 <li>Broad human testing was paused.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Added v0.8 double-check planning as the default for major direction changes.</li>
 <li>Started Gate A around death bug and real danger metrics.</li>
@@ -473,51 +533,54 @@
 <li>Added <code>?qa=fast,death</code> death QA mode.</li>
 <li>Continued Gate B automatic balance-loop reporting.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li>Doctor/deep doctor checks expanded as automation scripts grew.</li>
 <li>AI quick/default/heavy checks remained available but were treated as proxy evidence.</li>
 <li>Death QA and danger payloads improved the ability to distinguish real danger from simulated survivability.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>Major design changes require Claude plus Codex CLI double-check.</li>
 <li>Browser combat evidence outranks aggregate AI proxy metrics.</li>
 <li>A <code>GO</code> from either AI is only an AI planning pass until browser/user play validates it.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>Current metrics still did not prove release-feel fun.</li>
 <li>Danger/death evidence can improve reliability but not replace human response.</li>
 <li>Automation can loop on stale tasks if the prompt does not identify the foremost unfinished scope.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>v0.8 was a trust-repair phase for the testing and planning loop.</li>
 <li>GPT/Claude should help decide next implementation slices only after checking conflicts and evidence quality.</li>
 <li>The user had already signaled that the prototype needed a stronger game loop before broad human testing.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Prepare v0.9 release-feel planning.</li>
 <li>Research comparable roguelike loops and adapt only patterns that fit LETHE's current scope.</li>
 <li>Build overnight/autonomous loop infrastructure carefully.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: the previous loop could produce overconfident AI verdicts.</li>
 <li>Direction: add double-check planning and better danger/death gates.</li>
 <li>Action: implemented death/danger payloads, double-check process, and stricter evidence rules.</li>
 <li>Result: the project had a safer basis for v0.9 release-feel work.</li>
 </ul>
-<h1>2026-06-02-08 - v0.9 출시작 감각 계획과 자동 루프 준비</h1>
-<h2>1. Current build status</h2>
+    </article>
+<article class="unit-detail" id="unit-2026-06-02-08" hidden>
+      <p class="back-inline"><a href="#" data-back-link>날짜 리포트로 돌아가기</a></p>
+      <h1>2026-06-02-08 - v0.9 출시작 감각 계획과 자동 루프 준비</h1>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>v0.8 Gate C direct progression stopped.</li>
 <li>v0.9 release-feel loop became the new target.</li>
 <li>Human testing stayed paused until the core loop felt stronger.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Added roguelike reference research under <code>docs/research/2026-06-02-roguelike-reference.md</code>.</li>
 <li>Added v0.9 release-feel prompt.</li>
@@ -526,7 +589,7 @@
 <li>Updated doctor/preflight to check new loop commands.</li>
 <li>Clarified that Markdown files are source of truth and Discord is status only.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>npm run doctor</code>: expanded pass set as scripts were added.</li>
 <li><code>npm run doctor:deep</code>: verified dry-run and syntax paths.</li>
@@ -534,46 +597,49 @@
 <li><code>npm run dev:loop:dry</code>: confirmed autonomous loop command shape.</li>
 <li>Actual automation proof included Discord work-unit report and Claude prompt/response paths where available.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>v0.9 should improve build identity, pressure rhythm, post-loss challenge, and visible tactical agency.</li>
 <li>Use existing six memories and three active slots.</li>
 <li>Do not add meta progression, shops, final boss, new region, or more memory content.</li>
 <li>Let the loop continue during sleep, but make preflight failures blockers.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>Automation can keep working but still work on the wrong unit if prompts are too small or stale.</li>
 <li>External Claude/Discord availability depends on trusted local auth/env.</li>
 <li>Reports must stay readable even when the loop creates many logs.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>GPT/Claude should judge v0.9 planning using reference-driven roguelike criteria and the user's direct feedback.</li>
 <li>Selected initial v0.9 order: build identity first, then pressure/post-loss challenge, then minimal tactical agency.</li>
 <li>AI metrics remain planning evidence, not human fun proof.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Implement v0.9 WP1 build identity/readability.</li>
 <li>Verify 90-second identity visibility.</li>
 <li>Keep automation preflight and report delivery clean.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: the prototype was testable but not yet convincing as a release-feel roguelike slice.</li>
 <li>Direction: use references and automation to improve the core loop systematically.</li>
 <li>Action: added research, v0.9 prompts, loop scripts, Discord notices, and preflight checks.</li>
 <li>Result: the project could run longer implementation/test/feedback cycles without losing source-of-truth records.</li>
 </ul>
-<h1>2026-06-02-09 - v0.9 WP1 빌드 정체성과 Identity QA</h1>
-<h2>1. Current build status</h2>
+    </article>
+<article class="unit-detail" id="unit-2026-06-02-09" hidden>
+      <p class="back-inline"><a href="#" data-back-link>날짜 리포트로 돌아가기</a></p>
+      <h1>2026-06-02-09 - v0.9 WP1 빌드 정체성과 Identity QA</h1>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>v0.9 WP1 implemented build identity readability using existing memories.</li>
 <li>WP1 became automation-complete after cleanup and trusted-local identity QA.</li>
 <li>WP2 could start only after the identity/preflight gate closed.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Browser label and experiment version moved to <code>v0.9</code>.</li>
 <li>Memory selection cards now show role, short combat description, and tag chips.</li>
@@ -586,52 +652,55 @@
 <li>Added <code>?qa=fast,identity</code> and <code>npm run qa:identity</code>.</li>
 <li>Compressed memory descriptions to fit UI cards better.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>npm run qa:identity</code>: later passed with <code>status: complete</code>, failures <code>[]</code>, <code>buildIdentitySeenBy90Sec: true</code>.</li>
 <li><code>npm run autopilot:preflight</code>: later passed with 21 pass / 0 warn / 0 fail.</li>
 <li><code>npm run ai:test:quick</code>: remained <code>GO_CANDIDATE</code> around the v0.9 loop.</li>
 <li>Browser identity QA verified that build identity appeared within the required early window.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>WP1 should not be reopened for more gameplay work after identity QA passes.</li>
 <li>Build identity improvement should stay within existing six memories.</li>
 <li>Do not start WP2 until loop-run artifacts, clean preflight, and identity QA are closed.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>Several early devloop runs selected gate cleanup rather than new gameplay because dirty loop artifacts blocked preflight.</li>
 <li>Identity readability is a necessary condition, not proof of fun.</li>
 <li>Some weak metrics such as earlyChoiceInterest and echoPivotScore remained observation items.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>WP1 gave LETHE a clearer build identity surface without adding content.</li>
 <li>Claude/Codex synthesis repeatedly said the next executable work should stay gate-cleanup-only until preflight and identity QA closed.</li>
 <li>After closure, WP2 Slice A pressure rhythm became the next scope.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Keep WP1 closed unless a regression appears.</li>
 <li>Start WP2 Slice A pressure rhythm only after clean-tree preflight and identity proof.</li>
 <li>Preserve scope guard for existing memories/slots.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: players needed to understand their build identity before loss could feel meaningful.</li>
 <li>Direction: make the existing memory set legible instead of adding content.</li>
 <li>Action: added role/tag/synergy UI, identity payloads, and identity QA.</li>
 <li>Result: WP1 became a proven gate for v0.9 release-feel work.</li>
 </ul>
-<h1>2026-06-02-10 - 자동 개발 루프 preflight와 산출물 정합성 정리</h1>
-<h2>1. Current build status</h2>
+    </article>
+<article class="unit-detail" id="unit-2026-06-02-10" hidden>
+      <p class="back-inline"><a href="#" data-back-link>날짜 리포트로 돌아가기</a></p>
+      <h1>2026-06-02-10 - 자동 개발 루프 preflight와 산출물 정합성 정리</h1>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>Autonomous loop infrastructure was usable but needed cleanup to avoid self-blocking.</li>
 <li>The project was still in v0.9 gate/automation work before WP2.</li>
 <li>Clean-tree preflight became mandatory before unattended loops.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Updated autonomous dev loop prompt selection so it targeted the foremost unfinished v0.9 item rather than hard-coded WP1.</li>
 <li>Changed default dev-loop preflight to run before creating loop logs.</li>
@@ -640,7 +709,7 @@
 <li>Added missing-result diagnosis for wrapper-owned prompt/result pairs.</li>
 <li>Recorded and committed prior loop-run artifacts so preflight could pass.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>npm run autopilot:preflight:local</code>: initially failed on dirty loop-run artifacts, then later passed after cleanup.</li>
 <li>Missing result diagnosis identified expected wrapper-owned result files.</li>
@@ -648,45 +717,48 @@
 <li><code>npm run autopilot:preflight</code>: 21 pass / 0 warn / 0 fail,</li>
 <li><code>npm run qa:identity</code>: <code>status: complete</code>, failures <code>[]</code>.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>Preflight failures are blockers, not footnotes.</li>
 <li>Loop logs and prompt/result files must either be committed as records or removed if abandoned.</li>
 <li>Do not let a loop start new gameplay work while wrapper artifacts make the tree dirty.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>Long unattended loops can create many artifacts.</li>
 <li>If artifact cleanup is unclear, the loop may repeat gate work instead of implementing gameplay.</li>
 <li>Reports can become noisy if each internal feedback step becomes a top-level report.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>The loop infrastructure became safer but exposed reporting-size problems.</li>
 <li>GPT/Claude should distinguish AI planning pass, browser proof, and user evidence.</li>
 <li>After preflight/identity closure, WP2 Slice A was allowed.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Start v0.9 WP2 Slice A pressure rhythm.</li>
 <li>Keep loop artifacts tracked and clean.</li>
 <li>Keep report units at feature/gate size, not internal step size.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: automation can fail because of its own logs and stale wrapper outputs.</li>
 <li>Direction: make preflight and artifact diagnosis explicit.</li>
 <li>Action: changed loop preflight order, prompt targeting, dirty-tree diagnostics, and result-file checks.</li>
 <li>Result: unattended loops became safer to restart and less likely to mask blockers.</li>
 </ul>
-<h1>2026-06-02-11 - v0.9 WP2 압박 리듬과 결손 압박 구현</h1>
-<h2>1. Current build status</h2>
+    </article>
+<article class="unit-detail" id="unit-2026-06-02-11" hidden>
+      <p class="back-inline"><a href="#" data-back-link>날짜 리포트로 돌아가기</a></p>
+      <h1>2026-06-02-11 - v0.9 WP2 압박 리듬과 결손 압박 구현</h1>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>v0.9 WP2 Slice A pressure rhythm is implemented.</li>
 <li>v0.9 WP2 Slice B minimal post-loss challenge is implemented.</li>
 <li>AI proxy metrics stayed positive, but browser proof for post-loss remained missing.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Added pressure rhythm phases:</li>
 <li><code>숨 고르기</code>,</li>
@@ -704,7 +776,7 @@
 <li>Added <code>runTimeline.postLossChallenges</code> and post-loss danger fields.</li>
 <li>Added <code>?qa=fast,postloss</code>, <code>npm run qa:pressure</code>, and <code>npm run qa:postloss</code>.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>npm run qa:pressure</code>: passed earlier with <code>status: complete</code>, failures <code>[]</code>, segments <code>lull/rising/climax</code>.</li>
 <li><code>npm run ai:test:quick</code>: <code>GO_CANDIDATE</code>, Alpha Fun Score around <code>0.8846</code>, pressure contrast around <code>0.4416</code>, post-loss challenge around <code>0.6687</code>, post-loss contrast around <code>0.3134</code>.</li>
@@ -712,47 +784,50 @@
 <li><code>npm run doctor</code>: 43 pass / 0 warn / 0 fail during WP2 Slice B.</li>
 <li><code>npm run qa:postloss</code>: failed before gameplay evaluation at Chrome/CDP transport.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>WP2 Slice A and Slice B are implementation-complete and scope-valid.</li>
 <li>Treat post-loss browser proof as missing until trusted-local <code>qa:postloss</code> or <code>qa:postloss:trusted</code> passes.</li>
 <li>Do not start WP3 tactical agency until the post-loss browser gate is resolved.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>Post-loss browser QA failed at transport rather than gameplay assertions.</li>
 <li>The managed sandbox later blocked both CDP pipe and remote-debugging-port paths.</li>
 <li>PostLossChallengeScore around <code>0.669</code> is a planning signal, not human feel proof.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>WP2 added pressure rhythm before loss and a minimal challenge after loss.</li>
 <li>The implementation uses existing enemies, memories, and combat parameters.</li>
 <li>GPT/Claude should judge whether the missing browser proof blocks WP3 or can be treated as environment-specific only after trusted-local evidence.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Run trusted-local <code>npm run qa:postloss</code> or <code>npm run qa:postloss:trusted</code>.</li>
 <li>If browser proof passes, record WP2 Slice B as browser-proven.</li>
 <li>If gameplay assertion fails, fix only the post-loss QA/flow issue.</li>
 <li>If transport fails again outside the sandbox, use the environment-blocker prompt before WP3.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: LETHE needed pressure highs/lows and a meaningful post-loss challenge before tactical agency.</li>
 <li>Direction: strengthen pacing and loss recovery using existing systems.</li>
 <li>Action: implemented pressure phases, post-loss phases, simulator metrics, and QA hooks.</li>
 <li>Result: WP2 was implemented, but its browser evidence gate remained open.</li>
 </ul>
-<h1>2026-06-02-12 - Post-loss 브라우저 게이트와 환경 blocker 정리</h1>
-<h2>1. Current build status</h2>
+    </article>
+<article class="unit-detail" id="unit-2026-06-02-12" hidden>
+      <p class="back-inline"><a href="#" data-back-link>날짜 리포트로 돌아가기</a></p>
+      <h1>2026-06-02-12 - Post-loss 브라우저 게이트와 환경 blocker 정리</h1>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>WP2 Slice B remains implementation-complete and scope-valid.</li>
 <li>Latest status is <code>ITERATE_BEFORE_TEST</code>.</li>
 <li>Browser proof is still missing because the managed sandbox cannot complete Chrome/CDP post-loss QA.</li>
 <li>WP3 Slice A, people testing, balance changes, and UI/gameplay expansion remain blocked.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Hardened <code>scripts/run_browser_pressure_qa.js</code>:</li>
 <li>CDP pipe remains the first path,</li>
@@ -765,7 +840,7 @@
 <li>The trusted gate runs standard post-loss QA, retries once with 30000 ms only for transport failures, then points to the blocker prompt.</li>
 <li>Added <code>alpha_test/outputs/postloss-trusted-gate/latest.json</code> result logging with <code>status</code>, <code>transportFailure</code>, run summaries, <code>nextCommand</code>, and <code>blockerPrompt</code>.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>node --check scripts/run_browser_pressure_qa.js</code>: passed.</li>
 <li><code>node --check scripts/run_trusted_postloss_gate.js</code>: passed.</li>
@@ -780,21 +855,21 @@
 <li>pipe: <code>Timed out waiting for CDP response to Target.getTargets</code>,</li>
 <li>port fallback: <code>listen EPERM: operation not permitted 127.0.0.1</code>.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>Treat this as a browser automation transport blocker in the managed sandbox, not proof that post-loss gameplay failed.</li>
 <li>Keep WP3 blocked until trusted-local browser proof passes or an explicit environment-blocker decision exists.</li>
 <li>Use <code>npm run qa:postloss:trusted</code> as the next single gate command.</li>
 <li>Keep AI proxy metrics as planning evidence only.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>Trusted-local behavior outside this sandbox is still unknown.</li>
 <li>Repeated QA tooling fixes can consume loop time without advancing gameplay.</li>
 <li>AI metrics remain positive but cannot replace browser/user proof.</li>
 <li>If the same transport failure repeats outside this sandbox, the project needs a decision rather than more blind QA retries.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>WP2 Slice B is code-complete and scope-valid.</li>
 <li>The next executable unit is sandbox-outside trusted-local <code>npm run qa:postloss:trusted</code>.</li>
@@ -802,28 +877,31 @@
 <li>If it fails on gameplay assertions, fix only the post-loss flow.</li>
 <li>If it fails on the same transport path, use <code>docs/review_prompts/2026-06-02-postloss-browser-transport-blocker.md</code>.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Run <code>npm run qa:postloss:trusted</code> on a trusted local machine outside this managed sandbox.</li>
 <li>Inspect <code>alpha_test/outputs/postloss-trusted-gate/latest.json</code>.</li>
 <li>Update <code>docs/CODEX_STATUS.md</code>, <code>docs/NEXT_TASKS.md</code>, devlog, and report based on that result.</li>
 <li>Keep WP3, people testing, balance, and UI/gameplay expansion closed until the gate is resolved.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: WP2 had promising AI proxy metrics but lacked browser proof because automation failed before gameplay evaluation.</li>
 <li>Direction: distinguish gameplay failure from environment transport failure.</li>
 <li>Action: added transport diagnostics, fallback hardening, trusted gate wrapper, blocker prompt, and machine-readable gate result JSON.</li>
 <li>Result: the blocker is now explicit and repeatable; the next decision depends on trusted-local browser evidence.</li>
 </ul>
-<h1>2026-06-02-13 - 보고서/Discord 단위 체계 1차 정리</h1>
-<h2>1. Current build status</h2>
+    </article>
+<article class="unit-detail" id="unit-2026-06-02-13" hidden>
+      <p class="back-inline"><a href="#" data-back-link>날짜 리포트로 돌아가기</a></p>
+      <h1>2026-06-02-13 - 보고서/Discord 단위 체계 1차 정리</h1>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>The project had many loop logs and report sections after v0.9 automation work.</li>
 <li>Daily reports were readable as source records but too noisy for Discord/latest-section consumption.</li>
 <li>A first report-unit rule was added on 2026-06-02, later refined on 2026-06-03.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Converted previous top-level work sections into numbered headings.</li>
 <li>Added <code>scripts/check_report_units.js</code>.</li>
@@ -832,44 +910,86 @@
 <li>Changed Discord <code>--latest-section</code> behavior so it can send a clearly named work-unit section.</li>
 <li>The first rule still allowed too-small loop-step units such as feedback-only task updates.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>npm run report:check</code>: validated numbered headings.</li>
 <li><code>npm run doctor</code>: included report heading validation.</li>
 <li>Discord latest-section delivery used the latest top-level report section.</li>
 <li>Later 2026-06-03 work generated per-unit Markdown/HTML files and tightened unit size.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>Use numbered work-unit titles to make Discord and reports less ambiguous.</li>
 <li>Keep the daily Markdown report as the source document.</li>
 <li>Keep refining report units if they become too small for humans to read.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>The 2026-06-02 first pass still produced 57 units, which was too many.</li>
 <li>Internal loop mechanics were overrepresented in the report.</li>
 <li>The 2026-06-03 rule now treats report units as feature/decision units, not commit/log units.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>The first report-unit system made reports addressable but not yet well-sized.</li>
 <li>Future reports should group implementation, verification, feedback, and next decision together.</li>
 <li>Detailed loop artifacts should stay in <code>docs/loop_runs/</code>, not become separate report units.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Apply the 2026-06-03 larger report-unit rule to future reports.</li>
 <li>Keep generated unit files synced with <code>npm run report</code>.</li>
 <li>Use Discord latest-section for feature/gate/decision units, not internal loop steps.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: automated loops create lots of small records that are bad as human-facing reports.</li>
 <li>Direction: separate detailed logs from decision-readable report units.</li>
 <li>Action: added heading rules, report checks, and Discord latest-section support.</li>
 <li>Result: reporting became addressable, and later work made the unit size more humane.</li>
 </ul>
+    </article>
+    </section>
+    <footer>기준: 2026-06-02</footer>
   </main>
+  <script>
+    (() => {
+      const list = document.getElementById('unit-list');
+      const details = Array.from(document.querySelectorAll('.unit-detail'));
+      const showList = () => {
+        list.hidden = false;
+        details.forEach((detail) => { detail.hidden = true; });
+        if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+      };
+      const showUnit = (id) => {
+        const target = document.getElementById(id);
+        if (!target) return;
+        list.hidden = true;
+        details.forEach((detail) => { detail.hidden = detail !== target; });
+        target.scrollIntoView({ block: 'start' });
+      };
+      document.addEventListener('click', (event) => {
+        const unitLink = event.target.closest('[data-unit-link]');
+        if (unitLink) {
+          event.preventDefault();
+          const id = unitLink.getAttribute('data-unit-link');
+          history.pushState(null, '', '#' + id);
+          showUnit(id);
+          return;
+        }
+        if (event.target.closest('[data-back-link]')) {
+          event.preventDefault();
+          showList();
+        }
+      });
+      window.addEventListener('popstate', () => {
+        const id = location.hash.replace(/^#/, '');
+        if (id) showUnit(id);
+        else showList();
+      });
+      const initial = location.hash.replace(/^#/, '');
+      if (initial) showUnit(initial);
+    })();
+  </script>
 </body>
 </html>

@@ -13,9 +13,6 @@
       --muted: #667085;
       --line: #d8dee9;
       --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
       --code: #111827;
     }
     * { box-sizing: border-box; }
@@ -100,13 +97,16 @@
       color: #cbd5e1;
       margin: 8px 0 0;
     }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
     }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
     @media (max-width: 720px) {
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
@@ -121,14 +121,15 @@
     </div>
   </header>
   <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260602/index.html">날짜 리포트로 돌아가기</a></p>
     <h1>2026-06-02-05 - v0.6 코어 런 구조 재설계</h1>
-<h2>1. Current build status</h2>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>LETHE moved from a single first-loss prototype toward a 20-minute run structure.</li>
 <li>The goal was to test whether repeated loss/recovery cycles could sustain a roguelike loop.</li>
 <li>The scope remained HTML prototype validation only.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Added a 20-minute structure with bosses at 4, 8, 12, 16, and 20 minutes.</li>
 <li>Boss defeat now leads to dependency-based memory loss.</li>
@@ -137,37 +138,37 @@
 <li>Added <code>runTimeline</code> JSON payload with cycles and refill choices.</li>
 <li>Added <code>?qa=fast,v06</code> browser QA gate.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li>AI metrics stayed in <code>GO_CANDIDATE</code> range after the run-structure change.</li>
 <li>Browser QA validated the v0.6 flow and payload hooks.</li>
 <li>Timeline payload recorded cycles and refill choices for later interpretation.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>The core loop should be tested as repeated loss, deficit survival, and recovery.</li>
 <li>Keep the current six memories and three active slots.</li>
 <li>Do not add a shop, meta progression, or multi-region structure.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>A longer structure could expose balance issues not visible in short-run metrics.</li>
 <li>Deficit survival needs to feel challenging, not irritating.</li>
 <li>Refill choices must feel like recovery/pivot, not a full undo of loss.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>v0.6 created the first real run-loop scaffold.</li>
 <li>GPT/Claude should evaluate whether loss/recovery cadence supports regret and replay desire.</li>
 <li>If the loop is too flat, the next pass should strengthen build identity, pressure rhythm, and post-loss challenge before adding content.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Run balance/proxy checks on the new structure.</li>
 <li>Inspect whether two-memory survival and refill are understandable.</li>
 <li>Prepare v0.7/v0.8 only if evidence says the loop needs clearer agency or balance.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: one forgetting event was not enough to prove LETHE as a roguelike loop.</li>
 <li>Direction: add a repeatable run cycle without broadening scope.</li>

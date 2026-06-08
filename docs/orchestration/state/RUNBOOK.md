@@ -47,11 +47,46 @@ Current balance source of truth is the loop result, not a one-off run.
 ```bash
 npm run report
 npm run report:check
+```
+
+`npm run report` regenerates the current date-folder report HTML and unit pages from Markdown.
+
+It also regenerates `docs/orchestration/reports/index.html` as a newest-first date archive. The archive should link primarily to `reports/YYYYMMDD/index.html`, not flatten every unit page.
+
+For generated daily reports, `docs/orchestration/reports/YYYYMMDD/index.html` should show cards for that day's units. Open a card to read one unit, then use the back link to return to the date page.
+
+## External Notification
+
+Preferred rule:
+
+```text
+Submit a short Korean summary, the finished report path, optional attachment path, and source file list to Project Orchestrator's central Discord intake.
+```
+
+Project Orchestrator owns the shared Discord webhook and sends the notification/attachment. This LETHE repository should not store or depend on project-local Discord secrets as the normal path.
+
+Project Orchestrator dry-run:
+
+```bash
+npm run report:orchestrator:dry
+npm run report:orchestrator:unit:dry
+```
+
+Project Orchestrator real submit:
+
+```bash
+npm run report:orchestrator
+npm run report:orchestrator:unit
+```
+
+Trusted-local fallback, only when explicitly requested or when the central intake is unavailable:
+
+```bash
 npm run report:discord:unit:dry
 npm run report:discord:unit
 ```
 
-If actual Discord send is blocked by policy, webhook, network, or permissions, record the exact reason and next trusted-local command in devlog/report.
+If actual Discord send is blocked by policy, webhook, network, permissions, or missing Project Orchestrator intake, record the exact reason and next trusted-local command in devlog/report.
 
 ## Orchestration HTML
 
@@ -94,7 +129,7 @@ Preflight failures are blockers.
 
 ## Git
 
-Use Conventional Commits. After a coherent verified unit:
+Use Conventional Commits unless the user explicitly says not to commit. After a coherent verified unit:
 
 ```bash
 git status --short

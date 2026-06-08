@@ -13,9 +13,6 @@
       --muted: #667085;
       --line: #d8dee9;
       --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
       --code: #111827;
     }
     * { box-sizing: border-box; }
@@ -100,13 +97,16 @@
       color: #cbd5e1;
       margin: 8px 0 0;
     }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
     }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
     @media (max-width: 720px) {
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
@@ -121,14 +121,15 @@
     </div>
   </header>
   <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260602/index.html">날짜 리포트로 돌아가기</a></p>
     <h1>2026-06-02-09 - v0.9 WP1 빌드 정체성과 Identity QA</h1>
-<h2>1. Current build status</h2>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>v0.9 WP1 implemented build identity readability using existing memories.</li>
 <li>WP1 became automation-complete after cleanup and trusted-local identity QA.</li>
 <li>WP2 could start only after the identity/preflight gate closed.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Browser label and experiment version moved to <code>v0.9</code>.</li>
 <li>Memory selection cards now show role, short combat description, and tag chips.</li>
@@ -141,38 +142,38 @@
 <li>Added <code>?qa=fast,identity</code> and <code>npm run qa:identity</code>.</li>
 <li>Compressed memory descriptions to fit UI cards better.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>npm run qa:identity</code>: later passed with <code>status: complete</code>, failures <code>[]</code>, <code>buildIdentitySeenBy90Sec: true</code>.</li>
 <li><code>npm run autopilot:preflight</code>: later passed with 21 pass / 0 warn / 0 fail.</li>
 <li><code>npm run ai:test:quick</code>: remained <code>GO_CANDIDATE</code> around the v0.9 loop.</li>
 <li>Browser identity QA verified that build identity appeared within the required early window.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>WP1 should not be reopened for more gameplay work after identity QA passes.</li>
 <li>Build identity improvement should stay within existing six memories.</li>
 <li>Do not start WP2 until loop-run artifacts, clean preflight, and identity QA are closed.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>Several early devloop runs selected gate cleanup rather than new gameplay because dirty loop artifacts blocked preflight.</li>
 <li>Identity readability is a necessary condition, not proof of fun.</li>
 <li>Some weak metrics such as earlyChoiceInterest and echoPivotScore remained observation items.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>WP1 gave LETHE a clearer build identity surface without adding content.</li>
 <li>Claude/Codex synthesis repeatedly said the next executable work should stay gate-cleanup-only until preflight and identity QA closed.</li>
 <li>After closure, WP2 Slice A pressure rhythm became the next scope.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Keep WP1 closed unless a regression appears.</li>
 <li>Start WP2 Slice A pressure rhythm only after clean-tree preflight and identity proof.</li>
 <li>Preserve scope guard for existing memories/slots.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: players needed to understand their build identity before loss could feel meaningful.</li>
 <li>Direction: make the existing memory set legible instead of adding content.</li>

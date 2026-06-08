@@ -6,8 +6,15 @@ const path = require('path');
 
 const REPORTS_ROOT = path.resolve('docs', 'orchestration', 'reports');
 const LEGACY_REPORTS_ROOT = path.resolve('docs', 'reports');
+const PROJECT_BRIEF_PATH = path.resolve('docs', 'orchestration', 'state', 'PROJECT_BRIEF.md');
+const buildAll = process.argv.includes('--all');
 
-const input = process.argv[2] || latestMarkdownReport();
+if (buildAll) {
+  buildAllReports();
+  process.exit(0);
+}
+
+const input = process.argv.find((arg, index) => index > 1 && !arg.startsWith('--')) || latestMarkdownReport();
 const inputPath = path.resolve(input);
 const outputPath = inputPath.replace(/\.md$/i, '.html');
 
@@ -17,11 +24,42 @@ if (!fs.existsSync(inputPath)) {
 }
 
 const markdown = fs.readFileSync(inputPath, 'utf8');
-const html = renderPage(markdown, path.basename(inputPath));
+const html = isDateReportIndex(inputPath)
+  ? renderDateJournalPage(markdown, inputPath)
+  : renderPage(markdown, path.basename(inputPath));
 fs.writeFileSync(outputPath, html, 'utf8');
 console.log(`Wrote ${path.relative(process.cwd(), outputPath)}`);
 writeUnitReports(markdown, inputPath);
 writeReportsIndex();
+
+function buildAllReports() {
+  if (!fs.existsSync(REPORTS_ROOT)) {
+    console.error(`Reports root not found: ${path.relative(process.cwd(), REPORTS_ROOT)}`);
+    process.exit(1);
+  }
+
+  const reports = fs.readdirSync(REPORTS_ROOT)
+    .filter((entry) => /^\d{8}$/.test(entry))
+    .map((entry) => path.join(REPORTS_ROOT, entry, 'index.md'))
+    .filter((filePath) => fs.existsSync(filePath))
+    .sort();
+
+  if (!reports.length) {
+    console.error('No date report markdown files found.');
+    process.exit(1);
+  }
+
+  reports.forEach((reportPath) => {
+    const md = fs.readFileSync(reportPath, 'utf8');
+    const outPath = reportPath.replace(/\.md$/i, '.html');
+    const page = renderDateJournalPage(md, reportPath);
+    fs.writeFileSync(outPath, page, 'utf8');
+    console.log(`Wrote ${path.relative(process.cwd(), outPath)}`);
+    writeUnitReports(md, reportPath);
+  });
+
+  writeReportsIndex();
+}
 
 function writeUnitReports(md, sourcePath) {
   const date = reportDate(sourcePath);
@@ -31,7 +69,7 @@ function writeUnitReports(md, sourcePath) {
   fs.mkdirSync(unitDir, { recursive: true });
 
   fs.readdirSync(unitDir)
-    .filter((file) => file.startsWith(`${date}-`) || file === 'latest.json')
+    .filter((file) => (file.startsWith(`${date}-`) && (file.endsWith('.md') || file.endsWith('.html'))) || file === 'latest.json')
     .forEach((file) => fs.rmSync(path.join(unitDir, file), { force: true }));
 
   const units = topLevelSections(md)
@@ -49,9 +87,12 @@ function writeUnitReports(md, sourcePath) {
     const htmlPath = path.join(unitDir, `${baseName}.html`);
 
     fs.writeFileSync(markdownPath, `${unit.markdown.trim()}\n`, 'utf8');
-    fs.writeFileSync(htmlPath, renderPage(unit.markdown, path.basename(markdownPath)), 'utf8');
+    fs.writeFileSync(htmlPath, renderPage(unit.markdown, path.basename(markdownPath), {
+      backHref: apiReportHref(date.replace(/-/g, '')),
+      backLabel: '날짜 리포트로 돌아가기',
+    }), 'utf8');
     latest = {
-      title: unit.title,
+      title: localizeFullReportTitle(unit.title),
       number,
       markdownPath: path.relative(process.cwd(), markdownPath),
       htmlPath: path.relative(process.cwd(), htmlPath),
@@ -77,17 +118,24 @@ function writeReportsIndex() {
     .filter((entry) => fs.existsSync(path.join(REPORTS_ROOT, entry, 'index.html')))
     .sort()
     .reverse();
+  const archiveDate = days.length ? compactToDate(days[0]) : new Date().toISOString().slice(0, 10);
+  const name = projectName();
 
   const items = days.map((day) => {
     const date = compactToDate(day);
-    const indexPath = `${day}/index.html`;
+    const indexPath = apiReportHref(day);
+    const dayReport = dailyReportInfo(day, date);
     const latest = latestUnitForDay(day);
     const latestLine = latest
-      ? `<small>최신 단위: <a href="${escapeHtml(path.posix.join(day, 'units', path.basename(latest.htmlPath)))}">${escapeHtml(latest.title)}</a></small>`
-      : '<small>단위 리포트 없음</small>';
+      ? `<small class="unit">최신 작업 단위: <a href="${escapeHtml(apiUnitHref(day, path.basename(latest.htmlPath)))}">${escapeHtml(latest.title)}</a></small>`
+      : '<small class="unit">작업 단위 리포트 없음</small>';
     return `<li>
-      <a href="${indexPath}">${escapeHtml(date)} 개발 리포트</a>
-      ${latestLine}
+      <article>
+        <time datetime="${escapeHtml(date)}">${escapeHtml(date)}</time>
+        <h2><a href="${indexPath}">${escapeHtml(dayReport.title)}</a></h2>
+        <p>${escapeHtml(dayReport.summary)}</p>
+        ${latestLine}
+      </article>
     </li>`;
   }).join('\n');
 
@@ -96,7 +144,7 @@ function writeReportsIndex() {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LETHE 개발 리포트</title>
+    <title>${escapeHtml(name)} 개발 리포트</title>
     <style>
       :root {
         --bg: #f6f7f3;
@@ -117,21 +165,25 @@ function writeReportsIndex() {
       .eyebrow { margin: 0 0 8px; color: var(--green); font-size: 13px; font-weight: 900; }
       h1 { margin: 0 0 10px; font-size: clamp(30px, 5vw, 46px); line-height: 1.08; }
       p { margin: 0 0 16px; color: var(--muted); line-height: 1.65; }
-      ul { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
-      li { padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
-      small { display: block; margin-top: 6px; color: var(--muted); line-height: 1.45; }
+      ul { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+      li { padding: 0; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+      article { padding: 16px; }
+      time { display: block; margin-bottom: 7px; color: var(--muted); font-size: 13px; font-weight: 900; }
+      h2 { margin: 0 0 8px; font-size: 19px; line-height: 1.3; }
+      small { display: block; margin-top: 8px; color: var(--muted); line-height: 1.45; }
+      .unit a { font-weight: 800; }
       footer { margin-top: 18px; color: var(--muted); font-size: 13px; }
     </style>
   </head>
   <body>
     <main>
-      <p class="eyebrow">LETHE 개발 문서</p>
+      <p class="eyebrow">${escapeHtml(name)} 개발 문서</p>
       <h1>날짜별 리포트</h1>
-      <p>사람이 읽는 개발 리포트입니다. 날짜별 index가 그날의 작업을 모아 보여주고, 세부 단위는 각 날짜의 units 폴더에 보관됩니다.</p>
+      <p>사람이 읽는 개발 리포트 아카이브입니다. 날짜별 페이지에서 제목 카드로 작업 단위를 고르고, 각 카드에서 해당 내용만 확인합니다.</p>
       <ul>
-        ${items || '<li>아직 생성된 리포트가 없습니다.</li>'}
+        ${items || '<li><article>아직 생성된 리포트가 없습니다.</article></li>'}
       </ul>
-      <footer>기준: ${escapeHtml(new Date().toISOString().slice(0, 10))}</footer>
+      <footer>기준: ${escapeHtml(archiveDate)}</footer>
     </main>
   </body>
 </html>`;
@@ -151,9 +203,190 @@ function latestUnitForDay(day) {
   }
 }
 
-function renderPage(md, fileName) {
-  const title = firstHeading(md) || fileName;
+function renderDateJournalPage(md, sourcePath) {
+  const date = reportDate(sourcePath);
+  const day = date.replace(/-/g, '');
+  const heading = firstHeading(md);
+  const title = /^\d{4}-\d{2}-\d{2}-\d{2}\s+-\s+/.test(heading)
+    ? `${date} 개발 리포트`
+    : localizeFullReportTitle(heading || `${date} 개발 리포트`);
+  const intro = firstParagraph(md) || '이 날짜의 개발 진행, 검증 결과, 결정, 다음 작업을 모은 리포트입니다.';
+  const units = topLevelSections(md)
+    .filter((section) => new RegExp(`^${escapeRegExp(date)}-(\\d{2})\\s+-\\s+.+$`).test(section.title))
+    .map((section) => {
+      const match = section.title.match(new RegExp(`^${escapeRegExp(date)}-(\\d{2})\\s+-\\s+(.+)$`));
+      const number = match[1];
+      const unitTitle = match[2].trim();
+      return {
+        number,
+        id: `unit-${date}-${number}`,
+        shortTitle: localizeReportTitle(unitTitle),
+        summary: localizeUnitSummary(unitTitle, firstParagraph(section.markdown) || '작업 내용을 확인합니다.'),
+        body: renderMarkdown(section.markdown),
+      };
+    });
+
+  const cards = units.map((unit) => `<li>
+        <article class="unit-card">
+          <span class="number">${escapeHtml(`${date}-${unit.number}`)}</span>
+          <h2><a href="#${escapeHtml(unit.id)}" data-unit-link="${escapeHtml(unit.id)}">${escapeHtml(unit.shortTitle)}</a></h2>
+          <p>${escapeHtml(unit.summary)}</p>
+        </article>
+      </li>`).join('\n');
+  const details = units.map((unit) => `<article class="unit-detail" id="${escapeHtml(unit.id)}" hidden>
+      <p class="back-inline"><a href="#" data-back-link>날짜 리포트로 돌아가기</a></p>
+      ${unit.body}
+    </article>`).join('\n');
+
+  return `<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>${escapeHtml(title)}</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f3;
+      --paper: #ffffff;
+      --ink: #17201d;
+      --muted: #64706b;
+      --line: #dce2da;
+      --accent: #1f6b4d;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); }
+    main { width: min(980px, 100%); margin: 0 auto; padding: 30px 22px 44px; }
+    nav { margin-bottom: 18px; font-size: 14px; }
+    a { color: var(--accent); font-weight: 900; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .eyebrow { margin: 0 0 8px; color: var(--accent); font-size: 13px; font-weight: 900; }
+    h1 { margin: 0 0 10px; font-size: clamp(30px, 5vw, 46px); line-height: 1.08; }
+    .intro { margin: 0 0 18px; color: var(--muted); line-height: 1.65; }
+    ul { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+    li { margin: 0; }
+    .unit-card {
+      min-height: 136px;
+      padding: 17px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+    }
+    .unit-detail {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+    }
+    .unit-detail h1 { font-size: 28px; }
+    .unit-detail h2 {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      font-size: 21px;
+    }
+    .unit-detail ul { display: block; padding-left: 22px; list-style: disc; }
+    .unit-detail li { margin-bottom: 6px; }
+    .unit-detail code {
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: #eef2f7;
+    }
+    .back-inline { margin-bottom: 16px; }
+    .number { display: block; margin-bottom: 8px; color: var(--muted); font-size: 13px; font-weight: 900; }
+    h2 { margin: 0 0 8px; font-size: 20px; line-height: 1.3; }
+    p { margin: 0; color: var(--muted); line-height: 1.6; }
+    footer { margin-top: 20px; color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <main>
+    <nav><a href="${escapeHtml(apiReportsIndexHref())}">전체 리포트 목록</a></nav>
+    <p class="eyebrow">${escapeHtml(day)} 개발 기록</p>
+    <h1>${escapeHtml(title)}</h1>
+    <p class="intro">${escapeHtml(intro)}</p>
+    <ul id="unit-list">
+      ${cards || '<li><article class="unit-card"><p>작업 단위 글이 아직 없습니다.</p></article></li>'}
+    </ul>
+    <section id="unit-detail-root">
+      ${details}
+    </section>
+    <footer>기준: ${escapeHtml(date)}</footer>
+  </main>
+  <script>
+    (() => {
+      const list = document.getElementById('unit-list');
+      const details = Array.from(document.querySelectorAll('.unit-detail'));
+      const showList = () => {
+        list.hidden = false;
+        details.forEach((detail) => { detail.hidden = true; });
+        if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+      };
+      const showUnit = (id) => {
+        const target = document.getElementById(id);
+        if (!target) return;
+        list.hidden = true;
+        details.forEach((detail) => { detail.hidden = detail !== target; });
+        target.scrollIntoView({ block: 'start' });
+      };
+      document.addEventListener('click', (event) => {
+        const unitLink = event.target.closest('[data-unit-link]');
+        if (unitLink) {
+          event.preventDefault();
+          const id = unitLink.getAttribute('data-unit-link');
+          history.pushState(null, '', '#' + id);
+          showUnit(id);
+          return;
+        }
+        if (event.target.closest('[data-back-link]')) {
+          event.preventDefault();
+          showList();
+        }
+      });
+      window.addEventListener('popstate', () => {
+        const id = location.hash.replace(/^#/, '');
+        if (id) showUnit(id);
+        else showList();
+      });
+      const initial = location.hash.replace(/^#/, '');
+      if (initial) showUnit(initial);
+    })();
+  </script>
+</body>
+</html>`;
+}
+
+function dailyReportInfo(day, date) {
+  const markdownPath = path.join(REPORTS_ROOT, day, 'index.md');
+  const fallback = {
+    title: `${date} 개발 리포트`,
+    summary: '이 날짜의 개발 진행, 검증 결과, 결정, 다음 작업을 모은 리포트입니다.',
+  };
+
+  if (!fs.existsSync(markdownPath)) return fallback;
+
+  const md = fs.readFileSync(markdownPath, 'utf8');
+  const heading = firstHeading(md);
+  const title = /^\d{4}-\d{2}-\d{2}-\d{2}\s+-\s+/.test(heading)
+    ? fallback.title
+    : localizeFullReportTitle(heading || fallback.title);
+  const summary = firstParagraph(md) || fallback.summary;
+
+  return {
+    title,
+    summary,
+  };
+}
+
+function renderPage(md, fileName, options = {}) {
+  const title = localizeFullReportTitle(firstHeading(md) || fileName);
   const body = renderMarkdown(md);
+  const backLink = options.backHref
+    ? `<p class="back-link"><a href="${escapeHtml(options.backHref)}">${escapeHtml(options.backLabel || '돌아가기')}</a></p>`
+    : '';
   return `<!doctype html>
 <html lang="ko">
 <head>
@@ -169,9 +402,6 @@ function renderPage(md, fileName) {
       --muted: #667085;
       --line: #d8dee9;
       --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
       --code: #111827;
     }
     * { box-sizing: border-box; }
@@ -256,13 +486,16 @@ function renderPage(md, fileName) {
       color: #cbd5e1;
       margin: 8px 0 0;
     }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
     }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
     @media (max-width: 720px) {
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
@@ -277,6 +510,7 @@ function renderPage(md, fileName) {
     </div>
   </header>
   <main>
+    ${backLink}
     ${body}
   </main>
 </body>
@@ -286,6 +520,59 @@ function renderPage(md, fileName) {
 function firstHeading(md) {
   const match = md.match(/^#\s+(.+)$/m);
   return match ? match[1].trim() : '';
+}
+
+function localizeFullReportTitle(text) {
+  const value = String(text || '').trim();
+  const match = value.match(/^(\d{4}-\d{2}-\d{2}-\d{2})\s+-\s+(.+)$/);
+  if (!match) return localizeReportTitle(value);
+  return `${match[1]} - ${localizeReportTitle(match[2])}`;
+}
+
+function localizeReportTitle(text) {
+  const key = normalize(text);
+  const translations = new Map([
+    ['v0.12 human playtest package', 'v0.12 인간 플레이테스트 패키지'],
+    ['balance loop gate fix', '밸런스 루프 게이트 수정'],
+    ['browser first boss ttk terminal', '브라우저 첫 보스 TTK 종료 조건 수정'],
+    ['post-boss balance baseline', '보스 이후 밸런스 기준선'],
+    ['deficit trial survival tuning', '결손 시험 생존 조정'],
+    ['deficit trial review follow-up', '결손 시험 리뷰 후속 조정'],
+    ['first boss ttk boss-only harness', '첫 보스 TTK 보스 전용 하네스'],
+  ]);
+  return translations.get(key) || text;
+}
+
+function localizeUnitSummary(title, fallback) {
+  const key = normalize(title);
+  const summaries = new Map([
+    ['v0.12 human playtest package', '자동 밸런스 기준선을 사람 테스트용 패키지와 관찰 시트로 연결한 작업입니다.'],
+    ['balance loop gate fix', '밸런스 루프를 실제 v0.12 기준선에 맞추고 death gate와 실행 인자 문제를 정리한 작업입니다.'],
+    ['browser first boss ttk terminal', '첫 보스 TTK 브라우저 측정이 보스 처치 이후에도 끝나지 않던 문제를 종료 조건으로 분리해 해결했습니다.'],
+    ['post-boss balance baseline', '보스 이후 흐름과 전체 런 기준선을 자동 QA로 다시 세운 작업입니다.'],
+    ['deficit trial survival tuning', '결손 시험 구간의 사망률을 낮추고 생존/회복 감각을 조정한 작업입니다.'],
+    ['deficit trial review follow-up', '결손 시험 리뷰 결과를 반영해 과도하게 쉬운 기준선을 다시 중앙으로 맞춘 작업입니다.'],
+    ['first boss ttk boss-only harness', '브라우저/CDP 불안정을 우회하기 위해 첫 보스 TTK를 보스 전용 하네스로 측정한 작업입니다.'],
+  ]);
+  return summaries.get(key) || fallback;
+}
+
+function firstParagraph(md) {
+  const lines = String(md || '').split(/\r?\n/);
+  let seenHeading = false;
+  for (const line of lines) {
+    const value = line.trim();
+    if (!value) continue;
+    if (value.startsWith('# ')) {
+      seenHeading = true;
+      continue;
+    }
+    if (!seenHeading) continue;
+    if (value.startsWith('#') || value.startsWith('- ') || value.startsWith('```')) continue;
+    if (value.endsWith(':')) continue;
+    return stripMarkdown(value).slice(0, 180);
+  }
+  return '';
 }
 
 function topLevelSections(md) {
@@ -358,7 +645,7 @@ function renderMarkdown(md) {
     if (heading) {
       closeList();
       const level = heading[1].length;
-      out.push(`<h${level}>${inline(heading[2])}</h${level}>`);
+      out.push(`<h${level}>${inline(localizeHeading(heading[2]))}</h${level}>`);
       continue;
     }
 
@@ -420,6 +707,10 @@ function stripMarkdown(text) {
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
 }
 
+function normalize(text) {
+  return stripMarkdown(text).trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
 function slug(text) {
   return String(text || '')
     .trim()
@@ -478,6 +769,45 @@ function reportDate(filePath) {
   return '';
 }
 
+function localizeHeading(text) {
+  const value = stripMarkdown(text).trim();
+  if (/^\d{4}-\d{2}-\d{2}-\d{2}\s+-\s+/.test(value)) {
+    return localizeFullReportTitle(value);
+  }
+  const match = value.match(/^(\d+)\.\s+(.+)$/);
+  const prefix = match ? `${match[1]}. ` : '';
+  const key = normalize(match ? match[2] : value);
+  const translations = new Map([
+    ['current build status', '현재 빌드 상태'],
+    ['current build', '현재 빌드 상태'],
+    ['build status', '현재 빌드 상태'],
+    ['what changed today', '오늘 바뀐 것'],
+    ['what changed', '오늘 바뀐 것'],
+    ['today work', '오늘 바뀐 것'],
+    ['test results and evidence', '테스트 결과와 근거'],
+    ['test results', '테스트 결과와 근거'],
+    ['verification', '검증'],
+    ['decisions made', '결정한 것'],
+    ['decisions', '결정한 것'],
+    ['problems or risks', '문제 또는 리스크'],
+    ['problems and risks', '문제 또는 리스크'],
+    ['risks', '문제 또는 리스크'],
+    ['gpt handoff summary', 'GPT/Claude 인계 요약'],
+    ['gpt/claude handoff summary', 'GPT/Claude 인계 요약'],
+    ['planning handoff', 'GPT/Claude 인계 요약'],
+    ['next codex tasks', '다음 Codex 작업'],
+    ['next tasks', '다음 Codex 작업'],
+    ['portfolio notes', '포트폴리오 메모'],
+  ]);
+  const translated = translations.get(key);
+  return translated ? `${prefix}${translated}` : text;
+}
+
+function isDateReportIndex(filePath) {
+  return path.basename(filePath).toLowerCase() === 'index.md'
+    && /^\d{8}$/.test(path.basename(path.dirname(filePath)));
+}
+
 function unitDirectory(sourcePath, date) {
   if (path.basename(sourcePath).toLowerCase() === 'index.md' && /^\d{8}$/.test(path.basename(path.dirname(sourcePath)))) {
     return path.join(path.dirname(sourcePath), 'units');
@@ -488,4 +818,40 @@ function unitDirectory(sourcePath, date) {
 
 function compactToDate(value) {
   return `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`;
+}
+
+function projectName() {
+  if (!fs.existsSync(PROJECT_BRIEF_PATH)) return '프로젝트';
+  const md = fs.readFileSync(PROJECT_BRIEF_PATH, 'utf8');
+  const heading = firstHeading(md);
+  const headingName = stripMarkdown(heading)
+    .replace(/^Project Brief\s*[:|-]?\s*/i, '')
+    .replace(/^프로젝트\s*브리프\s*[:|-]?\s*/i, '')
+    .trim();
+  if (headingName && headingName !== heading) return headingName;
+
+  const summaryMatch = md.match(/##\s+One-Line Summary\s+([\s\S]*?)(?:\n##\s+|$)/i);
+  const summary = stripMarkdown(summaryMatch?.[1] || '').trim();
+  const leadingName = summary.match(/^([A-Z][A-Z0-9_-]{2,})\b/)?.[1];
+  return leadingName || '프로젝트';
+}
+
+function projectId() {
+  return projectName()
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9가-힣_-]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'project';
+}
+
+function apiReportsIndexHref() {
+  return `/api/projects/${projectId()}/reports/index.html`;
+}
+
+function apiReportHref(day) {
+  return `/api/projects/${projectId()}/reports/${day}/index.html`;
+}
+
+function apiUnitHref(day, fileName) {
+  return `/api/projects/${projectId()}/reports/${day}/units/${fileName}`;
 }

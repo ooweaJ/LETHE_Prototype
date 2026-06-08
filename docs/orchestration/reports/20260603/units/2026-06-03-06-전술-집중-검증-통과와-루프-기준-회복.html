@@ -13,9 +13,6 @@
       --muted: #667085;
       --line: #d8dee9;
       --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
       --code: #111827;
     }
     * { box-sizing: border-box; }
@@ -100,13 +97,16 @@
       color: #cbd5e1;
       margin: 8px 0 0;
     }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
     }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
     @media (max-width: 720px) {
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
@@ -121,8 +121,9 @@
     </div>
   </header>
   <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260603/index.html">날짜 리포트로 돌아가기</a></p>
     <h1>2026-06-03-06 - 전술 집중 검증 통과와 루프 기준 회복</h1>
-<h2>1. Current build status</h2>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>LETHE HTML Alpha remains v0.9.</li>
 <li>WP3 Slice A <code>전술 집중</code> is now browser-proven through the trusted tactical gate.</li>
@@ -130,7 +131,7 @@
 <li>AI quick/full proxy criteria now satisfy the current release-feel loop targets.</li>
 <li>The project is no longer blocked on tactical Chrome transport evidence; the next useful gate is final preflight/report/Discord and then a controlled 1-person browser playtest.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Fixed the tactical QA result writer so terminal <code>complete</code> / <code>failed</code> states are not overwritten by later non-terminal render snapshots.</li>
 <li>Added the implemented <code>전술 집중</code> choice to the alpha simulator as an existing-memory agency profile.</li>
@@ -139,7 +140,7 @@
 <li>Updated status, NEXT_TASKS, and devlog so the loop no longer treats WP3 as transport-blocked.</li>
 <li>No new memory, slot, shop, meta progression, region, weapon, enemy, final boss, or multi-region scope was added.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>node --check src/game.js</code>: passed.</li>
 <li><code>node --check alpha_test/src/simulator.js</code>: passed.</li>
@@ -151,7 +152,7 @@
 <li><code>npm run qa:tactical:trusted</code>: passed, gate <code>status: complete</code>, <code>transportFailure: false</code>, <code>useCount: 1</code>, <code>successfulCount: 1</code>, visible tactical-focus text, failures <code>[]</code>.</li>
 <li><code>npm run qa:postloss:trusted</code>: passed, gate <code>status: complete</code>, failures <code>[]</code>.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>Treat WP3 Slice A as browser-proven.</li>
 <li>Treat the earlier tactical blocker as resolved by a QA terminal-state fix plus trusted gate rerun, not as a design blocker.</li>
@@ -159,21 +160,21 @@
 <li>The autonomous loop should stop when AI quick targets and WP2/WP3 trusted browser gates are satisfied instead of continuing arbitrary iterations.</li>
 <li>Next scope is playtest preparation and observation, not new content.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>AI proxy metrics still do not prove human emotion, balance, or Unity-transition readiness.</li>
 <li><code>echoPivotScore</code> remains acceptable but not luxurious, so playtest should ask whether players understand the lost-memory echo pivot.</li>
 <li>The <code>멈춘 초침</code> deletion-frequency outlier remains an observation point rather than an immediate tuning target.</li>
 <li>The prototype is ready for controlled 1-person testing, not broad public testing.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>Codex resolved the tactical QA terminal-state bug and proved the tactical focus path in browser QA.</li>
 <li>The tactical focus choice now contributes to measurable early agency without adding new systems.</li>
 <li>AI quick/full results meet the current loop completion thresholds.</li>
 <li>GPT/Claude should now interpret real browser/playtest feedback around tactical focus feel, post-loss challenge pressure, echo pivot comprehension, and whether the run feels release-like enough to keep investing in the HTML prototype.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Run final <code>npm run autopilot:preflight</code>.</li>
 <li>Regenerate reports and unit HTML.</li>
@@ -181,7 +182,7 @@
 <li>Prepare or run a controlled 1-person browser playtest prompt focused on tactical focus, post-loss challenge, echo pivot comprehension, and release-feel.</li>
 <li>Do not add new gameplay scope before that playtest evidence unless the user explicitly changes scope.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: the loop was stuck between a tactical browser blocker and quality targets that were just below the chosen threshold.</li>
 <li>Direction: prove the existing tactical agency hook, then reflect it honestly in automated fun metrics.</li>

@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-09-02 - 보고서 카드 클릭 라우팅 수정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-09-02 - 보고서 카드 클릭 라우팅 수정</h1>
+      <p class="meta">Generated from 2026-06-09-02-보고서-카드-클릭-라우팅-수정.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260609/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-09-02 - 보고서 카드 클릭 라우팅 수정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>게임 빌드나 밸런스 코드는 변경하지 않았다.</li>
+<li>문서 보고서 HTML의 카드 클릭 동작만 수정했다.</li>
+<li>기존 카드 링크는 서버가 <code>/api/projects/lethe/</code> 아래에서 HTML을 보여줄 때 <code>/api/projects/lethe/units/*.html</code>로 잘못 해석될 수 있었다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>날짜별 보고서 카드가 더 이상 <code>units/*.html</code> 파일로 직접 이동하지 않게 했다.</li>
+<li><code>reports/YYYYMMDD/index.html</code> 안에 각 unit 본문을 함께 포함했다.</li>
+<li>카드 클릭은 <code>#unit-YYYY-MM-DD-NN</code> 해시 전환으로 처리한다.</li>
+<li>본문 화면에는 <code>날짜 리포트로 돌아가기</code> 링크를 넣어 카드 목록으로 복귀하게 했다.</li>
+<li>unit HTML 파일은 Discord 첨부와 직접 파일 확인용으로 계속 생성한다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>node --check scripts/build_report.js</code>: 통과.</li>
+<li><code>node scripts\build_report.js --all</code>: 통과.</li>
+<li><code>npm run report:check</code>: 통과.</li>
+<li><code>docs/orchestration/reports/20260606/index.html</code>에서 카드 링크가 <code>href=&quot;#unit-2026-06-06-01&quot;</code> 형태로 생성되는 것을 확인했다.</li>
+<li>같은 파일 안에 <code>id=&quot;unit-2026-06-06-01&quot;</code> 본문 section이 포함되는 것을 확인했다.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>카드형 일일 보고서의 기본 클릭 UX는 서버 라우트에 의존하지 않는 해시 기반 전환으로 둔다.</li>
+<li>개별 unit HTML은 별도 첨부와 직접 접근용 산출물로 유지한다.</li>
+<li>Project Orchestrator나 별도 서버가 unit 라우트를 지원하지 않아도 사람용 보고서 탐색은 깨지지 않아야 한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>브라우저에서 JavaScript가 꺼져 있으면 해시 전환 UI가 동작하지 않는다.</li>
+<li>별도 unit URL 공유가 필요하면 여전히 생성된 unit HTML 경로를 직접 써야 한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>일일 보고서 카드는 이제 파일 이동이 아니라 같은 HTML 안의 해시 기반 detail view를 연다. 따라서 <code>/api/projects/lethe/units/*.html</code> 같은 잘못된 GET 요청이 발생하지 않는다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>실제 서버 화면에서 2026-06-06 날짜 카드 클릭을 다시 확인한다.</li>
+<li>필요하면 report archive의 날짜 링크도 서버 라우트에 맞춰 같은 방식으로 보강한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 정적 파일 기준 링크가 API 기반 프로젝트 화면에서는 잘못된 서버 경로로 해석됐다.</li>
+<li>방향: 사람용 보고서 탐색은 서버 라우트에 덜 의존하게 만든다.</li>
+<li>행동: 날짜 페이지 안에 unit 본문을 포함하고 카드 클릭을 해시 전환으로 바꿨다.</li>
+<li>결과: 제목 블록을 눌러 해당 내용만 보고 뒤로 가는 흐름이 한 HTML 안에서 작동한다.</li>
+</ul>
+  </main>
+</body>
+</html>

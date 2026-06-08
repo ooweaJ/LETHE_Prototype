@@ -13,9 +13,6 @@
       --muted: #667085;
       --line: #d8dee9;
       --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
       --code: #111827;
     }
     * { box-sizing: border-box; }
@@ -100,13 +97,16 @@
       color: #cbd5e1;
       margin: 8px 0 0;
     }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
     }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
     @media (max-width: 720px) {
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
@@ -121,14 +121,15 @@
     </div>
   </header>
   <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260602/index.html">날짜 리포트로 돌아가기</a></p>
     <h1>2026-06-02-06 - v0.7 무기/잔향 밸런스와 판정 정정</h1>
-<h2>1. Current build status</h2>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>v0.7 improved weapon baselines and lost-memory echo effects.</li>
 <li>AI and Claude planning signals initially suggested solo/human test candidacy.</li>
 <li>User direct feedback later invalidated the balance confidence.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Buffed the two existing weapon baselines.</li>
 <li>Added weapon-facing echo effects for lost memories.</li>
@@ -136,37 +137,37 @@
 <li>Updated AI simulator weapon base DPS and residue proxy.</li>
 <li>Recorded Claude v0.7 feedback and the later correction that AI balance confidence was too optimistic.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>npm run ai:test</code> and related checks stayed in <code>GO_CANDIDATE</code> range.</li>
 <li>Claude v0.7 balance verdict leaned toward solo/human testing.</li>
 <li>User direct feedback judged the balance verdict unreliable and the game not yet ready.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>User live play feedback outranks AI planning/proxy metrics.</li>
 <li>Do not proceed to people testing just because Claude or AI proxies say <code>GO</code>.</li>
 <li>Fix the automatic balance proxy before trusting it for major decisions.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>AI proxies can miss subjective balance and fun issues.</li>
 <li>Weapon/echo improvements can look good numerically while still feeling off.</li>
 <li>The project needed a stronger release-feel plan before more people testing.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>v0.7 improved the prototype but also exposed that AI verdicts were overconfident.</li>
 <li>GPT/Claude should treat future <code>GO</code> outputs as planning passes until browser/user evidence supports them.</li>
 <li>The next plan should be stricter and more reference-driven.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Start v0.8 double-check planning for major design changes.</li>
 <li>Improve danger/death metrics and balance proxy reliability.</li>
 <li>Keep scope guard active: no new memories, shop, meta progression, final boss, or multi-region run.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: simulated balance confidence diverged from user play feel.</li>
 <li>Direction: make AI planning subordinate to direct play evidence.</li>

@@ -13,9 +13,6 @@
       --muted: #667085;
       --line: #d8dee9;
       --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
       --code: #111827;
     }
     * { box-sizing: border-box; }
@@ -100,13 +97,16 @@
       color: #cbd5e1;
       margin: 8px 0 0;
     }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
     }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
     @media (max-width: 720px) {
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
@@ -121,14 +121,15 @@
     </div>
   </header>
   <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260603/index.html">날짜 리포트로 돌아가기</a></p>
     <h1>2026-06-03-02 - 보고 단위 크기 조정</h1>
-<h2>1. Current build status</h2>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>Reporting now generates unit files, but the first correction still allowed units that were too small.</li>
 <li>Project gameplay status is unchanged: v0.9 WP2 Slice B remains implemented but not browser-proven.</li>
 <li>WP3 and people testing remain blocked until trusted-local <code>npm run qa:postloss:trusted</code> passes or an environment-blocker decision exists.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Changed autonomous dev-loop reporting so one iteration does not emit two report/Discord units.</li>
 <li>Removed the implementation-midpoint report/Discord send from <code>scripts/run_autonomous_dev_loop.js</code>.</li>
@@ -136,7 +137,7 @@
 <li>Updated task-update prompts so the report unit includes implementation, verification, feedback, and next-task decision together.</li>
 <li>Updated <code>scripts/check_report_units.js</code> to reject small procedural titles such as <code>Feedback-N 태스크 갱신</code>, <code>자동 개발 루프 N차</code>, <code>구현 결과</code>, and single QA retry titles.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li>Pending final verification after this report update:</li>
 <li><code>node --check scripts/run_autonomous_dev_loop.js</code>,</li>
@@ -146,32 +147,32 @@
 <li><code>node scripts/send_discord_report.js --dry-run --latest-section</code>,</li>
 <li><code>npm run doctor:deep</code>.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>Keep commits/logs small.</li>
 <li>Make report and Discord units feature/decision-sized.</li>
 <li>Fold feedback/task-update into the relevant feature or gate report unit.</li>
 <li>Do not use internal loop-step names as report titles.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>Existing 2026-06-02 generated units still include many small historical units because they preserve the old report content.</li>
 <li>The new rule applies to the latest/future daily report checks.</li>
 <li>If a future loop writes a small procedural title, <code>report:check</code> should fail before the loop can treat the report as clean.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>보고 단위는 이제 커밋 단위가 아니라 기능/결정 단위다.</li>
 <li>자동 루프는 구현 직후 보고하지 않고, 피드백과 다음 결정까지 묶어 한 번 보고한다.</li>
 <li>작은 절차 제목은 <code>report:check</code>에서 막는다.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Keep future report units at roughly feature/gate/decision size.</li>
 <li>Run <code>npm run report:check</code> after each report edit.</li>
 <li>Continue project gameplay only after trusted-local post-loss browser proof or environment-blocker decision.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: report unit files existed, but the units were still too granular for human reading.</li>
 <li>Direction: preserve detailed loop logs while making reports decision-readable.</li>

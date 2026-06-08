@@ -13,9 +13,6 @@
       --muted: #667085;
       --line: #d8dee9;
       --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
       --code: #111827;
     }
     * { box-sizing: border-box; }
@@ -100,13 +97,16 @@
       color: #cbd5e1;
       margin: 8px 0 0;
     }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
     }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
     @media (max-width: 720px) {
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
@@ -121,14 +121,15 @@
     </div>
   </header>
   <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260602/index.html">날짜 리포트로 돌아가기</a></p>
     <h1>2026-06-02-13 - 보고서/Discord 단위 체계 1차 정리</h1>
-<h2>1. Current build status</h2>
+<h2>1. 현재 빌드 상태</h2>
 <ul>
 <li>The project had many loop logs and report sections after v0.9 automation work.</li>
 <li>Daily reports were readable as source records but too noisy for Discord/latest-section consumption.</li>
 <li>A first report-unit rule was added on 2026-06-02, later refined on 2026-06-03.</li>
 </ul>
-<h2>2. What changed today</h2>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>Converted previous top-level work sections into numbered headings.</li>
 <li>Added <code>scripts/check_report_units.js</code>.</li>
@@ -137,38 +138,38 @@
 <li>Changed Discord <code>--latest-section</code> behavior so it can send a clearly named work-unit section.</li>
 <li>The first rule still allowed too-small loop-step units such as feedback-only task updates.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
 <li><code>npm run report:check</code>: validated numbered headings.</li>
 <li><code>npm run doctor</code>: included report heading validation.</li>
 <li>Discord latest-section delivery used the latest top-level report section.</li>
 <li>Later 2026-06-03 work generated per-unit Markdown/HTML files and tightened unit size.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>Use numbered work-unit titles to make Discord and reports less ambiguous.</li>
 <li>Keep the daily Markdown report as the source document.</li>
 <li>Keep refining report units if they become too small for humans to read.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>The 2026-06-02 first pass still produced 57 units, which was too many.</li>
 <li>Internal loop mechanics were overrepresented in the report.</li>
 <li>The 2026-06-03 rule now treats report units as feature/decision units, not commit/log units.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
 <ul>
 <li>The first report-unit system made reports addressable but not yet well-sized.</li>
 <li>Future reports should group implementation, verification, feedback, and next decision together.</li>
 <li>Detailed loop artifacts should stay in <code>docs/loop_runs/</code>, not become separate report units.</li>
 </ul>
-<h2>7. Next Codex tasks</h2>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li>Apply the 2026-06-03 larger report-unit rule to future reports.</li>
 <li>Keep generated unit files synced with <code>npm run report</code>.</li>
 <li>Use Discord latest-section for feature/gate/decision units, not internal loop steps.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
 <li>Problem: automated loops create lots of small records that are bad as human-facing reports.</li>
 <li>Direction: separate detailed logs from decision-readable report units.</li>

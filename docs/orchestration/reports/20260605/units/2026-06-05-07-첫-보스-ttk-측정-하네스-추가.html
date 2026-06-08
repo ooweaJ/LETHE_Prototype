@@ -13,9 +13,6 @@
       --muted: #667085;
       --line: #d8dee9;
       --accent: #2563eb;
-      --good: #087443;
-      --warn: #a15c00;
-      --bad: #b42318;
       --code: #111827;
     }
     * { box-sizing: border-box; }
@@ -100,13 +97,16 @@
       color: #cbd5e1;
       margin: 8px 0 0;
     }
-    .callout {
-      border: 1px solid #bfd7ff;
-      background: #eef4ff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
     }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
     @media (max-width: 720px) {
       main { padding: 18px; }
       table { display: block; overflow-x: auto; }
@@ -121,55 +121,51 @@
     </div>
   </header>
   <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260605/index.html">날짜 리포트로 돌아가기</a></p>
     <h1>2026-06-05-07 - 첫 보스 TTK 측정 하네스 추가</h1>
-<h2>1. Current build status</h2>
-<p>v0.12는 계속 <code>ITERATE_BALANCE</code>다. <code>망각 전조</code> 생존은 목표권에 들어왔지만, 첫 보스 TTK는 아직 측정되지 않았다.</p>
-<h2>2. What changed today</h2>
+<h2>1. 현재 빌드 상태</h2>
+<p>v0.12는 계속 <code>ITERATE_BALANCE</code>였다. <code>망각 전조</code> 생존은 목표권에 들어왔지만 첫 보스 TTK는 아직 측정되지 않았다.</p>
+<h2>2. 오늘 바뀐 것</h2>
 <ul>
-<li>Balance QA 러너의 CDP 읽기를 긴 <code>Runtime.evaluate</code> Promise에서 500ms 짧은 polling 방식으로 바꿨다.</li>
+<li>Balance QA runner의 CDP 읽기를 긴 <code>Runtime.evaluate</code> Promise 대신 500ms 지연 polling 방식으로 바꿨다.</li>
 <li><code>--scenario first_boss_ttk</code> 옵션을 추가했다.</li>
-<li>브라우저 QA에 <code>balanceScenario=first_boss_ttk</code> 대표 상태를 추가했다.</li>
-<li>elapsed 176s,</li>
-<li>level 10,</li>
-<li>3 active memories,</li>
-<li>full HP,</li>
-<li>no active enemies/projectiles,</li>
-<li>first boss scheduled at 180s.</li>
+<li>브라우저 QA에 <code>balanceScenario=first_boss_ttk</code> 전용 상태를 추가했다.</li>
+<li>해당 상태는 elapsed 176s, level 10, active memories 3개, full HP, active enemies/projectiles 없음, first boss scheduled at 180s 조건을 만들었다.</li>
 </ul>
-<h2>3. Test results and evidence</h2>
+<h2>3. 테스트 결과와 근거</h2>
 <ul>
-<li><code>node --check src/game.js</code>: pass.</li>
-<li><code>node --check scripts/run_browser_balance_qa.js</code>: pass.</li>
-<li>Polling smoke: <code>docs/balance/2026-06-05-loop-02-first-boss-polling-smoke.md</code>, browser success 0%, gameplay 0.</li>
-<li>TTK scenario smoke: <code>docs/balance/2026-06-05-loop-02-first-boss-ttk-scenario-smoke-clean.md</code>, command timed out before report/gameplay sample.</li>
-<li>Summary: <code>docs/balance/2026-06-05-v012-first-boss-ttk-harness.md</code>.</li>
+<li><code>node --check src/game.js</code>: 통과.</li>
+<li><code>node --check scripts/run_browser_balance_qa.js</code>: 통과.</li>
+<li>Polling smoke: <code>docs/balance/2026-06-05-loop-02-first-boss-polling-smoke.md</code>, browser success <code>0%</code>, gameplay <code>0</code>.</li>
+<li>TTK scenario smoke: <code>docs/balance/2026-06-05-loop-02-first-boss-ttk-scenario-smoke-clean.md</code>, report/gameplay sample 전 command timeout.</li>
+<li>요약: <code>docs/balance/2026-06-05-v012-first-boss-ttk-harness.md</code>.</li>
 </ul>
-<h2>4. Decisions made</h2>
+<h2>4. 결정한 것</h2>
 <ul>
 <li>첫 보스 HP는 아직 조정하지 않는다.</li>
-<li>TTK 측정은 full prelude와 분리한 전용 하네스로 진행한다.</li>
-<li>현재 로컬 Chrome/CDP 경로는 여전히 측정 블로커다.</li>
+<li>TTK 측정은 full prelude와 분리한 전용 시나리오로 진행한다.</li>
+<li>현재 로컬 Chrome/CDP 경로는 여전히 측정 blocker다.</li>
 </ul>
-<h2>5. Problems or risks</h2>
+<h2>5. 문제 또는 리스크</h2>
 <ul>
-<li>CDP WebSocket이 accepted gameplay sample 전 단계에서 끊긴다.</li>
-<li><code>first_boss_ttk</code> 시나리오는 구현됐지만 아직 실제 TTK 표본을 만들지 못했다.</li>
+<li>CDP WebSocket이 accepted gameplay sample 이전 단계에서 끊긴다.</li>
+<li><code>first_boss_ttk</code> 시나리오는 구현됐지만 실제 TTK 표본은 아직 만들지 못했다.</li>
 <li>이 상태에서 boss HP를 조정하면 근거 없는 튜닝이 된다.</li>
 </ul>
-<h2>6. GPT handoff summary</h2>
-<p>감정선은 제외한다. 첫 보스 HP를 만지지 말 것. 먼저 <code>first_boss_ttk</code> 시나리오를 안정적인 브라우저 환경 또는 in-process deterministic boss-only harness에서 돌려 <code>bossFights[0].damage</code>, <code>firstBossTtk</code>, focused DPS 표본 3개 이상을 확보해야 한다.</p>
-<h2>7. Next Codex tasks</h2>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>감정 평가는 제외한다. 첫 보스 HP를 만지지 말고 먼저 <code>first_boss_ttk</code> 시나리오를 안정적인 브라우저 환경이나 in-process deterministic boss-only harness에서 돌려 <code>bossFights[0].damage</code>, <code>firstBossTtk</code>, focused DPS 표본 3개 이상을 확보해야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
 <ul>
 <li><code>first_boss_ttk</code> 시나리오에서 accepted gameplay sample 3개 이상을 확보한다.</li>
 <li>로컬 CDP가 계속 실패하면 브라우저/CDP가 아닌 in-process boss-only deterministic harness를 만든다.</li>
-<li>TTK 표본 확보 후 첫 보스 HP를 15~30초 목표로 조정한다.</li>
+<li>TTK 표본 확보 후 첫 보스 HP를 15-30초 목표로 조정한다.</li>
 </ul>
-<h2>8. Portfolio notes</h2>
+<h2>8. 포트폴리오 메모</h2>
 <ul>
-<li>Problem: 생존 보정 후에도 첫 보스 TTK 측정 경로가 불안정하다.</li>
-<li>Direction: prelude 생존과 boss HP 측정을 분리한다.</li>
-<li>Action: TTK 전용 시나리오와 짧은 CDP polling을 추가했다.</li>
-<li>Result: 하네스는 생겼지만 현재 CDP 환경에서는 gameplay sample 0개라 다음은 측정 경로 안정화가 필요하다.</li>
+<li>문제: 생존 보정 후 첫 보스 TTK 측정 경로가 불안정했다.</li>
+<li>방향: prelude 생존과 boss HP 측정을 분리한다.</li>
+<li>행동: TTK 전용 시나리오와 지연 CDP polling을 추가했다.</li>
+<li>결과: 시나리오는 생겼지만 현재 CDP 환경에서는 gameplay sample 0개라 측정 경로 안정화가 필요하다.</li>
 </ul>
   </main>
 </body>
