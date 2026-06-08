@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LETHE 운영 절차</title>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --panel: #f8faf7;
+        --text: #17211c;
+        --muted: #60706a;
+        --line: #d9e1d7;
+        --green: #1f6b4d;
+        --blue: #285f8f;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--text);
+        background: var(--bg);
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; }
+      main { width: min(1040px, 100%); margin: 0 auto; padding: 18px 16px 24px; }
+      header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+      h1 { margin: 0; font-size: 20px; }
+      a { color: var(--green); font-weight: 900; text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      p { margin: 0 0 12px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+      .commandManual { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      article { min-width: 0; padding: 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+      h2 { margin: 0 0 6px; color: var(--green); font-size: 15px; }
+      .critical h2 { color: var(--blue); }
+      pre { overflow: auto; margin: 0; padding: 12px; border-radius: 8px; background: #eef3eb; font-size: 13px; line-height: 1.55; }
+      code { font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace; }
+      @media (max-width: 760px) { .commandManual { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>운영 절차</h1>
+        <a href="./RUNBOOK.md">RUNBOOK.md</a>
+      </header>
+      <p>반복 명령은 Markdown 원본에서 관리하고, 이 화면은 사람이 빠르게 보고 실행 순서를 고르기 위한 요약입니다.</p>
+
+      <div class="commandManual">
+        <article class="critical">
+          <h2>상태 점검</h2>
+          <p>문서나 자동화가 깨졌는지 넓게 확인합니다.</p>
+          <pre><code>npm run doctor
+npm run report:check</code></pre>
+        </article>
+
+        <article>
+          <h2>플레이테스트 패키지</h2>
+          <p>사람 테스트 전 패키지를 다시 만들거나 확인합니다.</p>
+          <pre><code>npm run playtest:package:dry
+npm run playtest:package</code></pre>
+        </article>
+
+        <article>
+          <h2>사람 테스트 요약</h2>
+          <p>다운로드된 JSON 로그를 <code>playtest_logs/</code>에 둔 뒤 실행합니다.</p>
+          <pre><code>npm run playtest:summary</code></pre>
+        </article>
+
+        <article>
+          <h2>밸런스 기준</h2>
+          <p>현재 기준은 one-off가 아니라 loop 결과입니다.</p>
+          <pre><code>npm run balance:loop
+npm run qa:balance</code></pre>
+        </article>
+
+        <article>
+          <h2>보고서 생성</h2>
+          <p>의미 있는 작업 단위가 끝났을 때 Markdown 원본에서 HTML을 재생성합니다.</p>
+          <pre><code>npm run report
+npm run report:check
+npm run report:discord:unit:dry</code></pre>
+        </article>
+
+        <article>
+          <h2>실제 보고 전송</h2>
+          <p>정책, webhook, 네트워크, 권한 문제로 실패하면 이유와 다음 명령을 devlog/report에 남깁니다.</p>
+          <pre><code>npm run report:discord:unit</code></pre>
+        </article>
+
+        <article>
+          <h2>오케스트레이션 HTML</h2>
+          <p>원본 Markdown 갱신 후 사람이 보는 HTML 3종도 같이 갱신합니다.</p>
+          <pre><code>docs\orchestration\index.html
+docs\orchestration\command.html
+docs\orchestration\runbook.html</code></pre>
+        </article>
+
+        <article>
+          <h2>커밋 기준</h2>
+          <p>검증과 보고가 끝난 coherent unit만 커밋/푸시합니다.</p>
+          <pre><code>git status --short
+git add &lt;files&gt;
+git commit -m "docs: ..."
+git push</code></pre>
+        </article>
+      </div>
+    </main>
+  </body>
+</html>

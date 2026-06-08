@@ -47,6 +47,9 @@ Use orchestration files as follows:
 - `review_responses/`: saved AI review responses.
 - `evidence/`: useful test outputs, screenshots, logs, benchmark summaries, or links.
 - `templates/`: reusable document, report, review, and task templates.
+- `index.html`: generated project dashboard for people.
+- `command.html`: generated next-instruction block for the command area.
+- `runbook.html`: generated operating-procedure block.
 
 After meaningful work:
 
@@ -55,7 +58,7 @@ After meaningful work:
 - Record user-facing summaries in `reports/YYYY-MM-DD.md`.
 - Record durable decisions in `DECISION_LOG.md`.
 - Keep `NEXT_TASKS.md` short, usually no more than five active candidates.
-- Keep Markdown as the source of truth; generated HTML is only a readable view.
+- Keep Markdown as the source of truth; generated HTML is the human-facing project interface generated from Markdown.
 - Do not delete legacy docs during adoption; summarize or link them from orchestration files.
 
 ## Role Split

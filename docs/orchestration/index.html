@@ -23,300 +23,58 @@
         color: var(--text);
         background: var(--bg);
       }
-
       * { box-sizing: border-box; }
       body { margin: 0; }
-      a { color: var(--green); font-weight: 800; text-decoration: none; }
+      a { color: var(--green); font-weight: 900; text-decoration: none; }
       a:hover { text-decoration: underline; }
       code, pre, textarea { font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace; }
-
-      main {
-        width: min(1220px, 100%);
-        margin: 0 auto;
-        padding: 30px 22px 42px;
-      }
-
-      header {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 18px;
-        align-items: end;
-        margin-bottom: 16px;
-      }
-
-      .eyebrow {
-        margin: 0 0 8px;
-        color: var(--green);
-        font-size: 13px;
-        font-weight: 900;
-      }
-
-      h1 {
-        margin: 0;
-        font-size: clamp(30px, 5vw, 48px);
-        line-height: 1.05;
-      }
-
-      .subtitle {
-        margin: 10px 0 0;
-        color: var(--muted);
-        font-size: 15px;
-        line-height: 1.6;
-      }
-
-      .badge {
-        display: inline-flex;
-        align-items: center;
-        min-height: 34px;
-        padding: 7px 11px;
-        border: 1px solid var(--line);
-        border-radius: 999px;
-        background: var(--soft-amber);
-        color: var(--amber);
-        font-size: 13px;
-        font-weight: 900;
-        white-space: nowrap;
-      }
-
-      .topGrid {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 12px;
-        margin-bottom: 14px;
-      }
-
-      .metric,
-      .panel,
-      .promptBox,
-      .step {
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: var(--panel);
-      }
-
-      .metric {
-        min-height: 116px;
-        padding: 15px;
-      }
-
-      .metric span {
-        display: block;
-        margin-bottom: 9px;
-        color: var(--muted);
-        font-size: 13px;
-        font-weight: 900;
-      }
-
-      .metric strong {
-        display: block;
-        font-size: 19px;
-        line-height: 1.35;
-      }
-
-      .metric small {
-        display: block;
-        margin-top: 8px;
-        color: var(--muted);
-        font-size: 12px;
-        line-height: 1.45;
-      }
-
+      main { width: min(1220px, 100%); margin: 0 auto; padding: 30px 22px 42px; }
+      header { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: end; margin-bottom: 16px; }
+      .eyebrow { margin: 0 0 8px; color: var(--green); font-size: 13px; font-weight: 900; }
+      h1 { margin: 0; font-size: clamp(30px, 5vw, 48px); line-height: 1.05; }
+      .subtitle { margin: 10px 0 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
+      .badge { display: inline-flex; align-items: center; min-height: 34px; padding: 7px 11px; border: 1px solid var(--line); border-radius: 999px; background: var(--soft-amber); color: var(--amber); font-size: 13px; font-weight: 900; white-space: nowrap; }
+      .topGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }
+      .metric, .panel, .promptBox, .step { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+      .metric { min-height: 116px; padding: 15px; }
+      .metric span { display: block; margin-bottom: 9px; color: var(--muted); font-size: 13px; font-weight: 900; }
+      .metric strong { display: block; font-size: 19px; line-height: 1.35; }
+      .metric small { display: block; margin-top: 8px; color: var(--muted); font-size: 12px; line-height: 1.45; }
       .metric.green { background: var(--soft-green); }
       .metric.blue { background: var(--soft-blue); }
       .metric.amber { background: var(--soft-amber); }
       .metric.red { background: var(--soft-red); }
-
-      .layout {
-        display: grid;
-        grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
-        gap: 14px;
-        align-items: start;
-      }
-
-      .panel {
-        padding: 18px;
-        margin-bottom: 14px;
-      }
-
-      .panelHeader {
-        display: flex;
-        justify-content: space-between;
-        gap: 14px;
-        align-items: baseline;
-        margin-bottom: 13px;
-      }
-
-      h2 {
-        margin: 0;
-        font-size: 19px;
-        line-height: 1.3;
-      }
-
-      h3 {
-        margin: 18px 0 8px;
-        color: var(--green);
-        font-size: 15px;
-      }
-
-      p {
-        margin: 0 0 10px;
-        line-height: 1.65;
-      }
-
-      ul, ol {
-        margin: 0 0 10px;
-        padding-left: 21px;
-        line-height: 1.65;
-      }
-
+      .layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr); gap: 14px; align-items: start; }
+      .panel { padding: 18px; margin-bottom: 14px; }
+      .panelHeader { display: flex; justify-content: space-between; gap: 14px; align-items: baseline; margin-bottom: 13px; }
+      h2 { margin: 0; font-size: 19px; line-height: 1.3; }
+      h3 { margin: 18px 0 8px; color: var(--green); font-size: 15px; }
+      p { margin: 0 0 10px; line-height: 1.65; }
+      ul, ol { margin: 0 0 10px; padding-left: 21px; line-height: 1.65; }
       li { margin-bottom: 5px; }
-
-      .muted {
-        color: var(--muted);
-        font-size: 13px;
-      }
-
-      .actionPanel {
-        border-color: #cbdcce;
-        background: linear-gradient(180deg, #ffffff 0%, #f0f7f2 100%);
-      }
-
-      .actionLead {
-        max-width: 760px;
-        font-size: 17px;
-        font-weight: 800;
-        line-height: 1.65;
-      }
-
-      .steps {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 10px;
-        margin-top: 14px;
-      }
-
-      .step {
-        padding: 13px;
-        min-height: 122px;
-      }
-
-      .step b {
-        display: block;
-        margin-bottom: 7px;
-        color: var(--green);
-      }
-
-      .promptBox {
-        padding: 14px;
-        background: #fbfcf9;
-        margin-top: 10px;
-      }
-
-      .promptTools {
-        display: flex;
-        justify-content: space-between;
-        gap: 12px;
-        align-items: center;
-        margin-bottom: 8px;
-      }
-
-      button {
-        min-height: 34px;
-        border: 1px solid #b9d2c3;
-        border-radius: 8px;
-        background: var(--green);
-        color: #fff;
-        font-weight: 900;
-        cursor: pointer;
-      }
-
+      .muted { color: var(--muted); font-size: 13px; }
+      .actionPanel { border-color: #cbdcce; background: linear-gradient(180deg, #ffffff 0%, #f0f7f2 100%); }
+      .actionLead { max-width: 780px; font-size: 17px; font-weight: 800; line-height: 1.65; }
+      .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+      .step { padding: 13px; min-height: 122px; }
+      .step b { display: block; margin-bottom: 7px; color: var(--green); }
+      .promptBox { padding: 14px; background: #fbfcf9; margin-top: 10px; }
+      .promptTools { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 8px; }
+      button { min-height: 34px; border: 1px solid #b9d2c3; border-radius: 8px; background: var(--green); color: #fff; font-weight: 900; cursor: pointer; }
       button:hover { filter: brightness(0.96); }
-
-      textarea {
-        width: 100%;
-        min-height: 116px;
-        resize: vertical;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        padding: 12px;
-        background: #ffffff;
-        color: var(--text);
-        font-size: 13px;
-        line-height: 1.55;
-      }
-
-      .twoCol {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px;
-      }
-
-      .statusList {
-        display: grid;
-        gap: 9px;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
-
-      .statusList li {
-        display: grid;
-        grid-template-columns: 120px 1fr;
-        gap: 10px;
-        margin: 0;
-        padding: 9px 0;
-        border-bottom: 1px solid #edf0eb;
-      }
-
-      .statusList li:last-child { border-bottom: 0; }
+      textarea { width: 100%; min-height: 116px; resize: vertical; border: 1px solid var(--line); border-radius: 8px; padding: 12px; background: #ffffff; color: var(--text); font-size: 13px; line-height: 1.55; }
+      .statusList, .docList { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
+      .statusList li { display: grid; grid-template-columns: 122px 1fr; gap: 10px; margin: 0; padding: 9px 0; border-bottom: 1px solid #edf0eb; }
+      .statusList li:last-child, .docList li:last-child { border-bottom: 0; }
       .label { color: var(--muted); font-weight: 900; }
-
-      .docList {
-        display: grid;
-        gap: 9px;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
-
-      .docList li {
-        margin: 0;
-        padding: 10px 0;
-        border-bottom: 1px solid #edf0eb;
-      }
-
-      .docList li:last-child { border-bottom: 0; }
+      .docList li { margin: 0; padding: 10px 0; border-bottom: 1px solid #edf0eb; }
       .docList small { display: block; margin-top: 4px; color: var(--muted); }
-
-      .evidence {
-        display: grid;
-        gap: 10px;
-      }
-
-      .evidenceItem {
-        padding: 11px;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: #fbfcf9;
-      }
-
+      .evidence { display: grid; gap: 10px; }
+      .evidenceItem { padding: 11px; border: 1px solid var(--line); border-radius: 8px; background: #fbfcf9; }
       .evidenceItem b { display: block; margin-bottom: 4px; }
-
-      footer {
-        margin-top: 18px;
-        color: var(--muted);
-        font-size: 13px;
-        line-height: 1.6;
-      }
-
+      footer { margin-top: 18px; color: var(--muted); font-size: 13px; line-height: 1.6; }
       @media (max-width: 940px) {
-        header,
-        .layout,
-        .topGrid,
-        .steps,
-        .twoCol {
-          grid-template-columns: 1fr;
-        }
+        header, .layout, .topGrid, .steps { grid-template-columns: 1fr; }
       }
     </style>
   </head>
@@ -327,8 +85,8 @@
           <p class="eyebrow">LETHE 오케스트레이션 대시보드</p>
           <h1>다음 프롬프트를 정하기 위한 현재 보고서</h1>
           <p class="subtitle">
-            기준: 2026-06-08 · Markdown 원본을 사람이 읽기 쉬운 HTML로 정리한 화면입니다.
-            이 화면은 실시간 작업 추적기가 아니라 마지막 완료 상태 기준의 지휘판입니다.
+            기준: 2026-06-08 · Markdown 원본을 사람이 읽기 쉬운 HTML 인터페이스로 정리한 화면입니다.
+            실시간 작업 추적기가 아니라 마지막 완료 상태 기준의 지휘판입니다.
           </p>
         </div>
         <span class="badge">사람 입력 필요</span>
@@ -360,7 +118,7 @@
       <section class="panel actionPanel">
         <div class="panelHeader">
           <h2>지금 사용자에게 필요한 다음 지시</h2>
-          <a href="./CURRENT_TASK.md">CURRENT_TASK.md</a>
+          <a href="./command.html">command.html</a>
         </div>
         <p class="actionLead">
           지금은 새 기억, 상점, 메타 성장, 추가 밸런스 튜닝을 시킬 단계가 아닙니다.
@@ -393,22 +151,36 @@
         <div>
           <section class="panel">
             <div class="panelHeader">
-              <h2>마지막 완료 작업 보고</h2>
-              <a href="./reports/2026-06-08.md">orchestration report</a>
+              <h2>현재 상태</h2>
+              <a href="./STATUS.md">STATUS.md</a>
             </div>
             <ul class="statusList">
-              <li><span class="label">완료 작업</span><span>오케스트레이션 대시보드 현재 상태 갱신</span></li>
-              <li><span class="label">변경 내용</span><span>상단 요약, 다음 행동, 복사용 프롬프트, 개발문서 목록 화면 정규화</span></li>
+              <li><span class="label">빌드</span><span>LETHE HTML Alpha v0.12 controlled human-test candidate</span></li>
+              <li><span class="label">검증</span><span>`GO_BALANCE_BASELINE` · first boss clear 100% · full clear 60% · death 40%</span></li>
+              <li><span class="label">패키지</span><span>`dist\lethe-v0.12-playtest` 재생성 완료</span></li>
+              <li><span class="label">차단</span><span>사람 반응 증거와 다운로드된 플레이테스트 JSON 로그가 아직 없음</span></li>
+              <li><span class="label">다음 기준</span><span>사람 테스트 후 `npm run playtest:summary` 결과를 보고 HTML 튜닝/Unity 방향 판단</span></li>
+            </ul>
+          </section>
+
+          <section class="panel">
+            <div class="panelHeader">
+              <h2>마지막 완료 작업 보고</h2>
+              <a href="./reports/2026-06-08-04-korean-human-facing-dashboard-normalization.html">오케스트레이션 보고서</a>
+            </div>
+            <ul class="statusList">
+              <li><span class="label">완료 작업</span><span>한글 사람 보고용 오케스트레이션 대시보드 정규화</span></li>
+              <li><span class="label">변경 내용</span><span>`index.html`, 보고서 목록, 개발로그 목록을 사람이 다음 프롬프트를 정할 수 있는 구조로 정리</span></li>
               <li><span class="label">검증</span><span>`npm run report`, `report:check`, `report:discord:unit:dry`, `doctor` 통과</span></li>
               <li><span class="label">차단</span><span>실제 Discord 전송은 외부 webhook 정책으로 차단됨</span></li>
-              <li><span class="label">커밋 기준</span><span>작업 완료 후 문서/보고서/HTML을 함께 커밋하는 흐름</span></li>
+              <li><span class="label">의미</span><span>Codex 앱 대화 기록과 달리 개발 문서를 프로젝트 폴더에서 직접 열람 가능</span></li>
             </ul>
           </section>
 
           <section class="panel">
             <div class="panelHeader">
               <h2>현재 작업과 완료 기준</h2>
-              <a href="./CURRENT_TASK.md">원본 보기</a>
+              <a href="./CURRENT_TASK.md">CURRENT_TASK.md</a>
             </div>
             <p>
               현재 작업은 v0.12 HTML 프로토타입의 controlled human session을 진행하고,
@@ -426,22 +198,8 @@
 
           <section class="panel">
             <div class="panelHeader">
-              <h2>다음 작업 후보 5개</h2>
-              <a href="./NEXT_TASKS.md">원본 보기</a>
-            </div>
-            <ol>
-              <li><b>사람 테스트 진행</b>: v0.12 패키지로 controlled session을 실행합니다.</li>
-              <li><b>테스트 로그 요약</b>: `playtest_logs/`의 JSON 로그로 `npm run playtest:summary`를 실행합니다.</li>
-              <li><b>사람 증거 기반 리뷰 프롬프트 생성</b>: Claude/GPT/Codex 판단용 프롬프트를 작성합니다.</li>
-              <li><b>HTML 튜닝 또는 Unity 방향 결정</b>: 사람 반응을 기준으로 다음 방향을 정합니다.</li>
-              <li><b>대시보드 자동 갱신</b>: Markdown에서 `index.html`을 생성하는 스크립트를 추가합니다.</li>
-            </ol>
-          </section>
-
-          <section class="panel">
-            <div class="panelHeader">
               <h2>검증 결과와 증거</h2>
-              <a href="./STATUS.md">STATUS.md</a>
+              <a href="./evidence/">evidence/</a>
             </div>
             <div class="evidence">
               <div class="evidenceItem">
@@ -465,6 +223,49 @@
         </div>
 
         <aside>
+          <section class="panel">
+            <div class="panelHeader">
+              <h2>개발 문서 보기</h2>
+              <span class="muted">HTML 인터페이스</span>
+            </div>
+            <ul class="docList">
+              <li>
+                <a href="./command.html">다음 지시 블록</a>
+                <small>프롬프트 입력창 위에 두기 좋은 짧은 지시 화면</small>
+              </li>
+              <li>
+                <a href="./runbook.html">운영 절차 블록</a>
+                <small>프롬프트 입력창 아래에 두기 좋은 반복 명령 화면</small>
+              </li>
+              <li>
+                <a href="./reports/index.html">보고서 목록</a>
+                <small>작업 단위 보고서와 포트폴리오용 요약</small>
+              </li>
+              <li>
+                <a href="./devlog/index.html">개발로그 목록</a>
+                <small>내부 작업 과정과 검증/차단 기록</small>
+              </li>
+              <li>
+                <a href="../reports/2026-06-08.html">기존 일일 HTML 보고서</a>
+                <small>기존 report 파이프라인에서 생성된 사람용 문서</small>
+              </li>
+            </ul>
+          </section>
+
+          <section class="panel">
+            <div class="panelHeader">
+              <h2>다음 작업 후보 5개</h2>
+              <a href="./NEXT_TASKS.md">NEXT_TASKS.md</a>
+            </div>
+            <ol>
+              <li><b>사람 테스트 진행</b>: v0.12 패키지로 controlled session을 실행합니다.</li>
+              <li><b>테스트 로그 요약</b>: `playtest_logs/`의 JSON 로그로 `npm run playtest:summary`를 실행합니다.</li>
+              <li><b>사람 증거 기반 리뷰 프롬프트 생성</b>: Claude/GPT/Codex 판단용 프롬프트를 작성합니다.</li>
+              <li><b>HTML 튜닝 또는 Unity 방향 결정</b>: 사람 반응을 기준으로 다음 방향을 정합니다.</li>
+              <li><b>HTML 자동 갱신</b>: Markdown에서 HTML 인터페이스 3개를 생성하는 스크립트를 추가합니다.</li>
+            </ol>
+          </section>
+
           <section class="panel">
             <div class="panelHeader">
               <h2>사용자 판단 포인트</h2>
@@ -495,27 +296,6 @@
 
           <section class="panel">
             <div class="panelHeader">
-              <h2>개발 문서 보기</h2>
-              <span class="muted">HTML 목록</span>
-            </div>
-            <ul class="docList">
-              <li>
-                <a href="./reports/index.html">보고서 목록</a>
-                <small>작업 단위 보고서와 포트폴리오용 요약</small>
-              </li>
-              <li>
-                <a href="./devlog/index.html">개발로그 목록</a>
-                <small>내부 작업 과정과 검증/차단 기록</small>
-              </li>
-              <li>
-                <a href="../reports/2026-06-08.html">기존 일일 HTML 보고서</a>
-                <small>기존 report 파이프라인에서 생성된 사람용 문서</small>
-              </li>
-            </ul>
-          </section>
-
-          <section class="panel">
-            <div class="panelHeader">
               <h2>Codex 앱과의 차별점</h2>
             </div>
             <p>
@@ -526,24 +306,12 @@
               사용자는 HTML 대시보드와 보고서 목록을 보고 다음 프롬프트를 직접 결정할 수 있습니다.
             </p>
           </section>
-
-          <section class="panel">
-            <div class="panelHeader">
-              <h2>자주 쓰는 명령</h2>
-              <a href="./RUNBOOK.md">RUNBOOK.md</a>
-            </div>
-            <pre><code>npm run playtest:package
-npm run playtest:summary
-npm run report
-npm run report:check
-npm run doctor</code></pre>
-          </section>
         </aside>
       </div>
 
       <footer>
-        이 HTML은 사람이 읽는 보고 화면입니다. 원본은 `docs/orchestration/*.md`이며,
-        다음 개선은 Markdown에서 이 대시보드를 자동 생성하는 파이프라인입니다.
+        Markdown이 원본입니다. 이 HTML 3종(`index.html`, `command.html`, `runbook.html`)은 사람이 보는 오케스트레이션 인터페이스이며,
+        `reports/`와 `devlog/` 목록은 개발 문서를 직접 훑기 위한 보조 화면입니다.
       </footer>
     </main>
 

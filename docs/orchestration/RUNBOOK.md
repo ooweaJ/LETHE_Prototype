@@ -59,6 +59,8 @@ Current human-facing pages:
 
 ```text
 docs\orchestration\index.html
+docs\orchestration\command.html
+docs\orchestration\runbook.html
 docs\orchestration\reports\index.html
 docs\orchestration\devlog\index.html
 ```
@@ -66,8 +68,10 @@ docs\orchestration\devlog\index.html
 Rules:
 
 - Markdown is the source of truth.
-- HTML is a Korean readable dashboard/list view for the user.
-- The dashboard shows the last completed state, recommended next prompt, blockers, evidence, and document links.
+- HTML is the Korean human-facing project interface for the user.
+- `index.html` shows the last completed state, recommended next prompt, blockers, evidence, and document links.
+- `command.html` shows the compact next instruction.
+- `runbook.html` shows repeated commands and operating procedures.
 - Until a generator exists, update the HTML manually when orchestration status changes.
 
 ## Autopilot

@@ -2,11 +2,13 @@
 
 This directory is the project-management interface for Codex and the user. It does not replace the existing LETHE documentation; it summarizes and links the current operating state so the project can be resumed quickly.
 
-Markdown files are the source of truth. HTML files, when generated, are readable views only.
+Markdown files are the source of truth. Generated HTML files are the human-facing project interface.
 
 ## Human Dashboard
 
 - `index.html` is the Korean human-facing command dashboard.
+- `command.html` is the compact next-instruction block for the command area.
+- `runbook.html` is the operating-procedure block for repeated commands.
 - It reports the last completed state, not live in-progress Codex thoughts.
 - Its job is to help the user decide the next prompt.
 - `reports/index.html` lists user-facing and portfolio-ready development reports.
@@ -38,6 +40,9 @@ Before meaningful work, read these files in order:
 - `devlog/`: internal daily work logs.
 - `reports/`: user-facing and portfolio-facing work-unit summaries.
 - `reports/index.html`: human-readable report list.
+- `index.html`: generated project dashboard for people.
+- `command.html`: generated next-instruction block.
+- `runbook.html`: generated operating-procedure block.
 - `review_prompts/`: prompts prepared for AI review.
 - `review_responses/`: saved AI review responses.
 - `evidence/`: test, QA, benchmark, playtest, screenshot, and log evidence or links.

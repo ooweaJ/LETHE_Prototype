@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LETHE 작업 보고서 - 한글 오케스트레이션 대시보드 정규화</title>
+    <style>
+      :root {
+        --bg: #f6f7f3;
+        --panel: #ffffff;
+        --text: #17201d;
+        --muted: #64706b;
+        --line: #dce2da;
+        --green: #1f6b4d;
+        --blue: #285f8f;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; }
+      main { width: min(1040px, 100%); margin: 0 auto; padding: 30px 22px 42px; }
+      a { color: var(--green); font-weight: 900; text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      .eyebrow { margin: 0 0 8px; color: var(--green); font-size: 13px; font-weight: 900; }
+      h1 { margin: 0 0 10px; font-size: clamp(30px, 5vw, 46px); line-height: 1.08; }
+      h2 { margin: 0 0 12px; font-size: 20px; }
+      p, li { line-height: 1.65; }
+      p { margin: 0 0 12px; color: var(--muted); }
+      ul { margin: 0; padding-left: 20px; }
+      .panel { margin-top: 14px; padding: 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+      .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+      .wide { grid-column: 1 / -1; }
+      .tag { display: inline-flex; padding: 4px 8px; border-radius: 999px; background: #e8f1f8; color: var(--blue); font-size: 12px; font-weight: 900; }
+      code { font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace; }
+      footer { margin-top: 20px; color: var(--muted); font-size: 13px; }
+      @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } .wide { grid-column: auto; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">LETHE 사용자 보고서</p>
+      <h1>한글 사람 보고용 대시보드 정규화</h1>
+      <p>
+        작업 단위: 2026-06-08-04 · 원본 Markdown: <a href="./2026-06-08.md">docs/orchestration/reports/2026-06-08.md</a>
+      </p>
+      <span class="tag">오케스트레이션 로컬 보고서</span>
+
+      <section class="panel wide">
+        <h2>현재 빌드 상태</h2>
+        <p>
+          LETHE v0.12는 controlled human-test candidate입니다. 자동 밸런스 기준은 통과했지만,
+          Unity 전환이나 다음 튜닝 판단에는 아직 사람 반응 증거가 필요합니다.
+        </p>
+      </section>
+
+      <div class="grid">
+        <section class="panel">
+          <h2>오늘 바꾼 것</h2>
+          <ul>
+            <li><code>docs/orchestration/index.html</code>을 한글 보고형 대시보드로 정규화했습니다.</li>
+            <li>보고서 목록과 개발로그 목록을 오케스트레이션에서 직접 열 수 있게 연결했습니다.</li>
+            <li>Codex 앱과의 차별점인 “프로젝트 폴더에서 개발 문서를 직접 보는 구조”를 대시보드에 명시했습니다.</li>
+          </ul>
+        </section>
+
+        <section class="panel">
+          <h2>검증과 증거</h2>
+          <ul>
+            <li><code>npm run report</code>: pass</li>
+            <li><code>npm run report:check</code>: pass</li>
+            <li><code>npm run report:discord:unit:dry</code>: pass</li>
+            <li><code>npm run doctor</code>: 50 pass / 0 warn / 0 fail</li>
+          </ul>
+        </section>
+
+        <section class="panel">
+          <h2>결정</h2>
+          <p>
+            오케스트레이션 HTML은 단순 문서 덤프가 아니라 사람이 다음 프롬프트를 결정하기 위한
+            프로젝트 인터페이스로 다룹니다. Markdown은 계속 source of truth입니다.
+          </p>
+        </section>
+
+        <section class="panel">
+          <h2>문제와 리스크</h2>
+          <ul>
+            <li>실제 Discord 전송은 외부 webhook 정책으로 차단되었습니다.</li>
+            <li>HTML은 아직 수동 유지입니다. 나중에 Markdown 기반 생성기가 필요합니다.</li>
+            <li>사람 플레이테스트 로그가 없어서 다음 제품 방향 판단은 보류입니다.</li>
+          </ul>
+        </section>
+
+        <section class="panel">
+          <h2>다음 Codex 작업</h2>
+          <ul>
+            <li>사람 테스트 JSON 로그를 <code>playtest_logs/</code>에 모읍니다.</li>
+            <li><code>npm run playtest:summary</code>를 실행합니다.</li>
+            <li>요약 결과를 STATUS, CURRENT_TASK, NEXT_TASKS, devlog, reports, DECISION_LOG에 반영합니다.</li>
+          </ul>
+        </section>
+
+        <section class="panel">
+          <h2>포트폴리오 메모</h2>
+          <p>
+            문제: Codex 대화만으로는 프로젝트 상태와 개발 기록을 장기적으로 보기 어렵습니다.
+            방향: 프로젝트 폴더 안의 오케스트레이션 HTML을 사람용 개발 문서 인터페이스로 만듭니다.
+            결과: 사용자가 대시보드와 보고서 목록을 보고 다음 프롬프트를 직접 결정할 수 있습니다.
+          </p>
+        </section>
+      </div>
+
+      <footer>
+        <a href="./index.html">보고서 목록</a> · <a href="../index.html">오케스트레이션 대시보드</a>
+      </footer>
+    </main>
+  </body>
+</html>

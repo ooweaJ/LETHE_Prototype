@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LETHE 다음 지시</title>
+    <style>
+      :root {
+        --bg: #f7fcf8;
+        --panel: #ffffff;
+        --text: #17211c;
+        --muted: #64706b;
+        --line: #d9e1d7;
+        --green: #1f6b4d;
+        --amber: #916019;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--text);
+        background: var(--bg);
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; }
+      main { width: min(980px, 100%); margin: 0 auto; padding: 16px; }
+      header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+      h1 { margin: 0; font-size: 20px; }
+      a { color: var(--green); font-weight: 900; text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      .grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 10px; }
+      article { min-width: 0; padding: 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+      h2 { margin: 0 0 8px; color: var(--green); font-size: 15px; }
+      p, li { color: #26342f; font-size: 14px; line-height: 1.55; }
+      p { margin: 0 0 8px; }
+      ul { margin: 0; padding-left: 18px; }
+      li { margin-bottom: 4px; }
+      .warning { border-color: #e6d1ac; background: #fff8ec; }
+      .warning h2 { color: var(--amber); }
+      textarea {
+        width: 100%;
+        min-height: 118px;
+        resize: vertical;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px;
+        color: var(--text);
+        background: #fff;
+        font: 13px/1.55 "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+      }
+      button { min-height: 34px; margin-top: 8px; border: 1px solid #b9d2c3; border-radius: 8px; background: var(--green); color: #fff; font-weight: 900; cursor: pointer; }
+      code { font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace; }
+      @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>다음 지시</h1>
+        <a href="./index.html">대시보드</a>
+      </header>
+
+      <div class="grid">
+        <article>
+          <h2>Codex에게 지금 시킬 일</h2>
+          <p>v0.12 사람 테스트 로그를 수집한 뒤 요약하고, 결과를 오케스트레이션 문서에 반영합니다.</p>
+          <textarea id="prompt-next" readonly>현재 docs/orchestration 기준으로 LETHE v0.12 사람 테스트 이후 작업을 진행해줘. playtest_logs/에 있는 JSON 로그를 확인하고 npm run playtest:summary를 실행한 다음, 결과를 docs/orchestration/STATUS.md, CURRENT_TASK.md, NEXT_TASKS.md, devlog, reports, DECISION_LOG.md에 반영해줘. 자동화 지표와 사람 반응 증거를 분리해서 정리하고, Unity 전환 판단이 필요한 경우 review prompt도 만들어줘.</textarea>
+          <button type="button" data-copy-target="prompt-next">프롬프트 복사</button>
+        </article>
+
+        <article class="warning">
+          <h2>지금 하지 말 것</h2>
+          <ul>
+            <li>새 기억, 슬롯, 상점, 메타 성장 추가 금지</li>
+            <li>새 지역, 최종 보스, 장기 구조 확장 금지</li>
+            <li>사람 증거 없는 blind balance tuning 금지</li>
+          </ul>
+        </article>
+
+        <article>
+          <h2>완료 기준</h2>
+          <ul>
+            <li>사람 테스트 JSON 로그가 <code>playtest_logs/</code>에 있음</li>
+            <li><code>npm run playtest:summary</code> 실행 완료</li>
+            <li>상태, devlog, reports, 결정 로그 갱신</li>
+            <li>방향 변경이 필요하면 review prompt 작성</li>
+          </ul>
+        </article>
+
+        <article>
+          <h2>원본 문서</h2>
+          <ul>
+            <li><a href="./CURRENT_TASK.md">CURRENT_TASK.md</a></li>
+            <li><a href="./NEXT_TASKS.md">NEXT_TASKS.md</a></li>
+            <li><a href="./SCOPE_GUARD.md">SCOPE_GUARD.md</a></li>
+          </ul>
+        </article>
+      </div>
+    </main>
+
+    <script>
+      document.querySelectorAll("[data-copy-target]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const target = document.getElementById(button.dataset.copyTarget);
+          if (!target) return;
+          target.select();
+          try {
+            await navigator.clipboard.writeText(target.value);
+            button.textContent = "복사됨";
+            setTimeout(() => { button.textContent = "프롬프트 복사"; }, 1200);
+          } catch {
+            document.execCommand("copy");
+            button.textContent = "복사됨";
+            setTimeout(() => { button.textContent = "프롬프트 복사"; }, 1200);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

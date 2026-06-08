@@ -810,3 +810,25 @@ npm run ai:sweep
   - `npm run report:discord:unit` was blocked by the approval reviewer because sending workspace-generated reports/attachments to an external Discord webhook is treated as potential private data exfiltration in this Codex session.
   - Next trusted-local command: `npm run report:discord:unit`.
 - Current next task remains controlled human sessions, JSON logs in `playtest_logs/`, then `npm run playtest:summary`.
+
+## Latest Override - 2026-06-08 HTML Interface Contract Alignment
+
+- Updated the current orchestration HTML changes to match the revised `EXISTING_PROJECT_MIGRATION_PROMPT.md`.
+- Required human-facing HTML interface:
+  - `docs/orchestration/index.html`: Korean project dashboard.
+  - `docs/orchestration/command.html`: compact next-instruction block.
+  - `docs/orchestration/runbook.html`: operating-procedure block.
+- Optional browse pages remain:
+  - `docs/orchestration/reports/index.html`
+  - `docs/orchestration/devlog/index.html`
+- Added orchestration-local report HTML files under `docs/orchestration/reports/` so user-facing reports can be opened from the orchestration folder.
+- Updated `AGENTS.md`, orchestration README/RUNBOOK/STATUS/NEXT_TASKS, and `DECISION_LOG.md` so Markdown remains the source of truth and generated HTML is the human-facing project interface.
+- Verification:
+  - `npm run report`: pass, generated 5 unit reports.
+  - `npm run report:check`: pass, 5 report units.
+  - `npm run report:discord:unit:dry`: pass, latest unit 05 summary generated.
+  - `npm run doctor`: pass, 50 pass / 0 warn / 0 fail.
+- Discord actual send:
+  - `npm run report:discord:unit` was rejected by the approval reviewer because it would send workspace-generated report content and attachments to an external Discord webhook without explicit user approval for that exfiltration.
+  - Next trusted-local command: `npm run report:discord:unit`.
+- Current next task remains controlled human sessions, JSON logs in `playtest_logs/`, then `npm run playtest:summary`.

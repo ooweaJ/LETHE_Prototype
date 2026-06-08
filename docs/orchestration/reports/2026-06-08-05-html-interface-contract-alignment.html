@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LETHE 작업 보고서 - HTML 인터페이스 규약 정렬</title>
+    <style>
+      :root {
+        --bg: #f6f7f3;
+        --panel: #ffffff;
+        --text: #17201d;
+        --muted: #64706b;
+        --line: #dce2da;
+        --green: #1f6b4d;
+        --blue: #285f8f;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; }
+      main { width: min(1040px, 100%); margin: 0 auto; padding: 30px 22px 42px; }
+      a { color: var(--green); font-weight: 900; text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      .eyebrow { margin: 0 0 8px; color: var(--green); font-size: 13px; font-weight: 900; }
+      h1 { margin: 0 0 10px; font-size: clamp(30px, 5vw, 46px); line-height: 1.08; }
+      h2 { margin: 0 0 12px; font-size: 20px; }
+      p, li { line-height: 1.65; }
+      p { margin: 0 0 12px; color: var(--muted); }
+      ul { margin: 0; padding-left: 20px; }
+      .panel { margin-top: 14px; padding: 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+      .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+      .wide { grid-column: 1 / -1; }
+      .tag { display: inline-flex; padding: 4px 8px; border-radius: 999px; background: #e8f1f8; color: var(--blue); font-size: 12px; font-weight: 900; }
+      code { font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace; }
+      footer { margin-top: 20px; color: var(--muted); font-size: 13px; }
+      @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } .wide { grid-column: auto; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">LETHE 사용자 보고서</p>
+      <h1>HTML 인터페이스 규약 정렬</h1>
+      <p>
+        작업 단위: 2026-06-08-05 · 원본 Markdown: <a href="./2026-06-08.md">docs/orchestration/reports/2026-06-08.md</a>
+      </p>
+      <span class="tag">최신 오케스트레이션 보고서</span>
+
+      <section class="panel wide">
+        <h2>현재 빌드 상태</h2>
+        <p>
+          LETHE v0.12는 여전히 controlled human-test candidate입니다.
+          이번 작업은 gameplay 변경 없이 오케스트레이션 HTML 인터페이스와 문서 규약을 맞춘 작업입니다.
+        </p>
+      </section>
+
+      <div class="grid">
+        <section class="panel">
+          <h2>무엇을 바꿨나</h2>
+          <ul>
+            <li><code>index.html</code>을 한국어 사람용 대시보드로 복구했습니다.</li>
+            <li><code>command.html</code>을 다음 지시 블록으로 정리했습니다.</li>
+            <li><code>runbook.html</code>을 반복 운영 절차 블록으로 정리했습니다.</li>
+            <li><code>reports/</code> 안에서 사람용 보고서 HTML을 직접 열 수 있게 했습니다.</li>
+          </ul>
+        </section>
+
+        <section class="panel">
+          <h2>검증</h2>
+          <ul>
+            <li><code>npm run report</code>: pass, 5 unit reports generated</li>
+            <li><code>npm run report:check</code>: pass</li>
+            <li><code>npm run report:discord:unit:dry</code>: pass</li>
+            <li><code>npm run doctor</code>: 50 pass / 0 warn / 0 fail</li>
+          </ul>
+        </section>
+
+        <section class="panel">
+          <h2>결정</h2>
+          <p>
+            필수 HTML 인터페이스는 <code>index.html</code>, <code>command.html</code>, <code>runbook.html</code>입니다.
+            <code>reports/index.html</code>과 <code>devlog/index.html</code>는 문서 탐색을 위한 보조 화면으로 둡니다.
+          </p>
+        </section>
+
+        <section class="panel">
+          <h2>리스크</h2>
+          <ul>
+            <li>HTML은 아직 수동 유지라 Markdown과 어긋날 수 있습니다.</li>
+            <li>여러 프로젝트에 적용하려면 Markdown 기반 생성기가 필요합니다.</li>
+          </ul>
+        </section>
+
+        <section class="panel">
+          <h2>다음 작업</h2>
+          <ul>
+            <li>사람 테스트 세션을 진행합니다.</li>
+            <li>JSON 로그를 <code>playtest_logs/</code>에 저장합니다.</li>
+            <li><code>npm run playtest:summary</code>로 요약합니다.</li>
+          </ul>
+        </section>
+
+        <section class="panel">
+          <h2>포트폴리오 메모</h2>
+          <p>
+            Codex 대화와 별개로 프로젝트 폴더 안에서 현재 상태, 다음 지시, 운영 절차, 보고서를 볼 수 있게 만든 점이 차별점입니다.
+          </p>
+        </section>
+      </div>
+
+      <footer>
+        <a href="./index.html">보고서 목록</a> · <a href="../index.html">오케스트레이션 대시보드</a>
+      </footer>
+    </main>
+  </body>
+</html>
