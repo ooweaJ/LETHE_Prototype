@@ -573,7 +573,7 @@
 <li><code>npm.cmd run report:check</code>: 통과, 11개 단위 확인.</li>
 <li><code>npm.cmd run report:discord:unit:dry</code>: 통과, 최신 첨부가 <code>docs/orchestration/reports/20260608/units/2026-06-08-11-오케스트레이션-구조-규약-정리.html</code>을 가리킴.</li>
 <li><code>npm.cmd run doctor</code>: 통과, 49 pass / 1 warn / 0 fail. Codex CLI 없음은 warning.</li>
-<li><code>npm.cmd run report:discord:unit</code>: 승인 정책에서 차단. 외부 Discord webhook으로 workspace 생성 보고서와 첨부를 보내는 것은 고위험 데이터 전송으로 판단됨.</li>
+<li><code>npm.cmd run report:discord:unit</code>: 사용자 명시 요청 후 통과, 최신 summary JSON과 unit HTML을 Discord에 업로드함.</li>
 </ul>
 <h2>4. 결정한 것</h2>
 <ul>
@@ -585,7 +585,7 @@
 <h2>5. 문제 또는 리스크</h2>
 <ul>
 <li>과거 devlog와 report 본문 안에는 당시 사용한 레거시 경로가 역사 기록으로 남아 있다.</li>
-<li>실제 Discord 전송은 이 Codex 세션의 승인 정책에서 차단됐다. 우회하지 않는다. 다음 trusted-local 명령은 <code>npm run report:discord:unit</code>이다.</li>
+<li>실제 Discord 전송은 초기 승인 정책에서 한 번 차단됐지만, 사용자가 리스크 설명 후 명시적으로 로컬 실행을 요청해 <code>npm.cmd run report:discord:unit</code> 전송이 성공했다.</li>
 </ul>
 <h2>6. GPT/Claude 인계 요약</h2>
 <p>오케스트레이션은 프로젝트별 문서 폴더가 아니라 공통 개인 AI 플러그인 규약으로 확정한다. 사람은 HTML을 보고, AI는 <code>state/</code>, <code>devlog/</code>, <code>review_prompts/</code>, <code>review_responses/</code> Markdown을 읽는다.</p>

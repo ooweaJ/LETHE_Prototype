@@ -26,7 +26,7 @@ The report/devlog/review migration is now applied physically: old `docs/reports/
 - `npm run doctor`: pass, 50 pass / 0 warn / 0 fail.
 - `npm run report:discord:unit`: blocked by approval reviewer; next trusted-local command is `npm run report:discord:unit`.
 - `npm run report:discord:unit`: blocked by approval reviewer; next trusted-local command is `npm run report:discord:unit`.
-- Latest orchestration structure cleanup verification: `npm.cmd run report`, `npm.cmd run report:check`, `npm.cmd run report:discord:unit:dry`, and `npm.cmd run doctor` passed. Actual Discord send was blocked by approval reviewer; next trusted-local command is `npm run report:discord:unit`.
+- Latest orchestration structure cleanup verification: `npm.cmd run report`, `npm.cmd run report:check`, `npm.cmd run report:discord:unit:dry`, and `npm.cmd run doctor` passed. Actual Discord send succeeded after explicit user request. Latest commit `5949452` was pushed to `main`.
 - `docs/orchestration/interface/index.html`: present and updated for the current v0.12 human-test gate.
 - `docs/orchestration/interface/command.html`: present as the compact next-instruction block.
 - `docs/orchestration/interface/runbook.html`: present as the operating-procedure block.
@@ -42,7 +42,7 @@ The report/devlog/review migration is now applied physically: old `docs/reports/
 
 The latest balance loop failed. Human reaction evidence is still missing, but human sessions should wait until the balance gate is restored or the user explicitly accepts the risk.
 
-Discord actual send from this Codex session was blocked by the approval reviewer because sending workspace-generated reports/attachments to an external webhook is treated as potential private data exfiltration. Next trusted-local command remains `npm run report:discord:unit`.
+Discord actual send for the latest orchestration structure cleanup succeeded after explicit user request. Historical approval blocks remain recorded in the relevant devlog/report entries.
 
 ## Current Next Step
 
