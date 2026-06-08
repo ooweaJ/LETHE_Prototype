@@ -4,6 +4,9 @@
 const fs = require('fs');
 const path = require('path');
 
+const REPORTS_ROOT = path.resolve('docs', 'orchestration', 'reports');
+const LEGACY_REPORTS_ROOT = path.resolve('docs', 'reports');
+
 const options = parseArgs(process.argv.slice(2));
 const dryRun = options.dryRun;
 const input = options.input || latestMarkdownReport();
@@ -82,7 +85,7 @@ async function main() {
 }
 
 function buildMessagePayload(markdown, markdownFile, htmlFile, reviewPromptPath, sectionTitle = '') {
-  const reportDate = path.basename(markdownFile, '.md');
+  const reportDate = reportDateFromPath(markdownFile);
   const work = bulletsFromSections(markdown, [
     '2. 오늘 바뀐 것',
     '오늘 바뀐 것',
@@ -172,7 +175,7 @@ function formatMessagePayload(payload) {
 }
 
 function jsonSummaryFileName(markdownFile, sectionTitle = '') {
-  const reportDate = path.basename(markdownFile, '.md');
+  const reportDate = reportDateFromPath(markdownFile);
   if (!sectionTitle) return `${reportDate}-discord-summary.json`;
   const unit = unitReportForTitle(markdownFile, sectionTitle);
   if (unit) return path.basename(unit.htmlPath).replace(/\.html$/i, '.summary.json');
@@ -271,11 +274,11 @@ function resolveAttachmentHtmlPath(reportPath, reportScope, opts) {
 }
 
 function unitReportForTitle(reportPath, title) {
-  const date = path.basename(reportPath, '.md');
+  const date = reportDateFromPath(reportPath);
   const match = String(title || '').match(new RegExp(`^${escapeRegExp(date)}-(\\d{2})\\s+-\\s+(.+)$`));
   if (!match) return null;
 
-  const unitDir = path.join(path.dirname(reportPath), 'units', date);
+  const unitDir = unitDirectory(reportPath, date);
   const prefix = `${date}-${match[1]}-`;
   if (!fs.existsSync(unitDir)) return null;
 
@@ -324,7 +327,7 @@ function resolvePromptPath(explicitPrompt, reportPath) {
     return fs.existsSync(explicitPath) ? explicitPath : '';
   }
 
-  const date = path.basename(reportPath, '.md');
+  const date = reportDateFromPath(reportPath);
   const promptsDir = path.resolve('docs', 'review_prompts');
   if (!fs.existsSync(promptsDir)) return '';
 
@@ -432,13 +435,49 @@ function unquote(value) {
 }
 
 function latestMarkdownReport() {
-  const reportsDir = path.resolve('docs', 'reports');
-  if (!fs.existsSync(reportsDir)) return 'docs/reports/2026-06-01.md';
+  const reportsDir = REPORTS_ROOT;
+  if (fs.existsSync(reportsDir)) {
+    const reports = fs.readdirSync(reportsDir)
+      .filter((entry) => /^\d{8}$/.test(entry))
+      .filter((entry) => fs.existsSync(path.join(reportsDir, entry, 'index.md')))
+      .sort();
 
-  const reports = fs.readdirSync(reportsDir)
+    if (reports.length > 0) {
+      return path.join('docs', 'orchestration', 'reports', reports[reports.length - 1], 'index.md');
+    }
+  }
+
+  if (!fs.existsSync(LEGACY_REPORTS_ROOT)) return 'docs/orchestration/reports/20260601/index.md';
+
+  const reports = fs.readdirSync(LEGACY_REPORTS_ROOT)
     .filter((file) => /^\d{4}-\d{2}-\d{2}\.md$/.test(file))
     .sort();
 
-  if (reports.length === 0) return 'docs/reports/2026-06-01.md';
+  if (reports.length === 0) return 'docs/orchestration/reports/20260601/index.md';
   return path.join('docs', 'reports', reports[reports.length - 1]);
+}
+
+function reportDateFromPath(filePath) {
+  const base = path.basename(filePath);
+  const direct = base.match(/^(\d{4}-\d{2}-\d{2})\.md$/);
+  if (direct) return direct[1];
+
+  if (base.toLowerCase() === 'index.md') {
+    const compact = path.basename(path.dirname(filePath));
+    if (/^\d{8}$/.test(compact)) return compactToDate(compact);
+  }
+
+  return base.replace(/\.md$/i, '');
+}
+
+function unitDirectory(sourcePath, reportDay) {
+  if (path.basename(sourcePath).toLowerCase() === 'index.md' && /^\d{8}$/.test(path.basename(path.dirname(sourcePath)))) {
+    return path.join(path.dirname(sourcePath), 'units');
+  }
+
+  return path.join(path.dirname(sourcePath), 'units', reportDay);
+}
+
+function compactToDate(value) {
+  return `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`;
 }

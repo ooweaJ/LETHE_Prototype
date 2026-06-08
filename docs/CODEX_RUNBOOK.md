@@ -10,7 +10,7 @@ The project goal is to validate LETHE's core fun and player-facing possibility i
 2. Read the current files and project notes before editing.
 3. Implement the smallest coherent unit.
 4. Run the relevant checks.
-5. Update `docs/CODEX_STATUS.md`, `docs/NEXT_TASKS.md`, `docs/devlog/YYYY-MM-DD.md`, and `docs/reports/YYYY-MM-DD.md`.
+5. Update `docs/orchestration/state/STATUS.md`, `docs/orchestration/state/NEXT_TASKS.md`, `docs/orchestration/devlog/YYYYMMDD.md`, and `docs/orchestration/reports/YYYYMMDD/index.md`.
 6. Generate the HTML report from the Markdown report.
 7. Send a Discord handoff when useful.
 8. Commit with a Conventional Commit message.
@@ -175,7 +175,7 @@ npm run report:discord:unit:dry
 npm run report:discord:unit
 ```
 
-Use a work-unit report after a coherent version-up, automation change, AI test milestone, or other user-facing result. The Markdown source still stays in `docs/reports/YYYY-MM-DD.md`; the Discord summary can target only the relevant section.
+Use a work-unit report after a coherent version-up, automation change, AI test milestone, or other user-facing result. The Markdown source stays in `docs/orchestration/reports/YYYYMMDD/index.md`; the Discord summary can target only the relevant section.
 
 Short Codex status notices use:
 

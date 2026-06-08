@@ -19,64 +19,43 @@
       }
       * { box-sizing: border-box; }
       body { margin: 0; }
-      main { width: min(1050px, 100%); margin: 0 auto; padding: 30px 22px 42px; }
+      main { width: min(980px, 100%); margin: 0 auto; padding: 30px 22px 42px; }
       a { color: var(--green); font-weight: 900; text-decoration: none; }
       a:hover { text-decoration: underline; }
       .eyebrow { margin: 0 0 8px; color: var(--green); font-size: 13px; font-weight: 900; }
       h1 { margin: 0 0 10px; font-size: clamp(30px, 5vw, 46px); line-height: 1.08; }
-      p { margin: 0 0 12px; color: var(--muted); line-height: 1.65; }
-      .panel { margin-top: 14px; padding: 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
-      .panelHeader { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; margin-bottom: 12px; }
-      h2 { margin: 0; font-size: 19px; }
+      p { margin: 0 0 16px; color: var(--muted); line-height: 1.65; }
       ul { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
-      li { padding: 12px 0; border-bottom: 1px solid #edf0eb; }
-      li:last-child { border-bottom: 0; }
-      small { display: block; margin-top: 5px; color: var(--muted); line-height: 1.45; }
+      li { padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+      small { display: block; margin-top: 6px; color: var(--muted); line-height: 1.45; }
       .tag { display: inline-flex; margin-left: 8px; padding: 3px 7px; border-radius: 999px; background: #f8efe0; color: var(--amber); font-size: 12px; font-weight: 900; }
-      footer { margin-top: 20px; color: var(--muted); font-size: 13px; }
+      footer { margin-top: 18px; color: var(--muted); font-size: 13px; }
     </style>
   </head>
   <body>
     <main>
       <p class="eyebrow">LETHE 개발 문서</p>
       <h1>개발로그 목록</h1>
-      <p>
-        개발로그는 내부 작업 블랙박스입니다. 보고서보다 더 구체적인 변경 과정, 검증 명령,
-        실패/차단 기록, 다음 작업 메모를 남깁니다.
-      </p>
-
-      <section class="panel">
-        <div class="panelHeader">
-          <h2>오케스트레이션 개발로그</h2>
-          <a href="../index.html">대시보드로 돌아가기</a>
-        </div>
-        <ul>
-          <li>
-            <a href="./2026-06-08.md">2026-06-08 오케스트레이션 devlog</a>
-            <span class="tag">현재</span>
-            <small>오케스트레이션 도입, 대시보드 정규화, 검증/Discord 차단 기록.</small>
-          </li>
-        </ul>
-      </section>
-
-      <section class="panel">
-        <div class="panelHeader">
-          <h2>기존 상세 개발로그</h2>
-          <a href="../../devlog/2026-06-08.md">최신 원본</a>
-        </div>
-        <ul>
-          <li>
-            <a href="../../devlog/2026-06-08.md">2026-06-08 legacy devlog</a>
-            <small>v0.12 패키지 재생성, 오케스트레이션 도입, 대시보드 현재 상태 갱신.</small>
-          </li>
-          <li>
-            <a href="../../devlog/">legacy devlog 폴더</a>
-            <small>이전 날짜별 작업 로그는 기존 폴더에 계속 보관됩니다.</small>
-          </li>
-        </ul>
-      </section>
-
-      <footer>Markdown이 원본이고 HTML은 사람이 읽기 위한 목록입니다.</footer>
+      <p>AI가 이어서 읽는 내부 작업 로그입니다. 사람용 요약은 날짜별 리포트에서 보고, 여기에는 작업 과정과 검증 흔적을 남깁니다.</p>
+      <ul>
+        <li>
+          <a href="./20260608.md">2026-06-08 개발로그</a>
+          <span class="tag">현재</span>
+          <small>v0.12 패키지, 오케스트레이션 도입, 밸런스 루프, report/devlog 마이그레이션 기록.</small>
+        </li>
+        <li>
+          <a href="./20260608-orchestration.md">2026-06-08 오케스트레이션 전용 로그</a>
+          <small>오케스트레이션 HTML/문서 정규화 과정의 별도 보존본.</small>
+        </li>
+        <li><a href="./20260607.md">2026-06-07 개발로그</a><small>v0.12 사람 테스트 패키지와 balance loop gate fix.</small></li>
+        <li><a href="./20260606.md">2026-06-06 개발로그</a><small>첫 보스 TTK와 deficit trial 후속 조정.</small></li>
+        <li><a href="./20260605.md">2026-06-05 개발로그</a><small>v0.12 밸런스 루프 테스트와 보스 측정 하네스.</small></li>
+        <li><a href="./20260604.md">2026-06-04 개발로그</a><small>v0.11/v0.12 구현, 밸런스 표, Discord 보고 체계.</small></li>
+        <li><a href="./20260603.md">2026-06-03 개발로그</a><small>보고서 단위화, 전술 집중, 후속 검증 정리.</small></li>
+        <li><a href="./20260602.md">2026-06-02 개발로그</a><small>초기 자동 개발 루프와 v0.9 계열 작업 기록.</small></li>
+        <li><a href="./20260601.md">2026-06-01 개발로그</a><small>초기 리포트/Discord/포트폴리오 문서화 시작.</small></li>
+      </ul>
+      <footer>기준: 2026-06-08</footer>
     </main>
   </body>
 </html>

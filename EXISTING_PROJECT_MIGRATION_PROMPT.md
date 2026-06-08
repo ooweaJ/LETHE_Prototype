@@ -16,7 +16,9 @@ This should feel like a local personal AI plugin:
 
 - `docs/orchestration/interface/` contains the required human-facing HTML interface.
 - `docs/orchestration/state/` contains the AI-facing Markdown source of truth.
-- `docs/orchestration/reports/` contains user-facing HTML progress reports, usually one file per coherent work unit.
+- `docs/orchestration/reports/` contains user-facing Korean HTML progress reports, grouped by date.
+- `docs/orchestration/reports/YYYYMMDD/index.html` is the daily human-facing report page.
+- `docs/orchestration/reports/YYYYMMDD/units/` contains generated work-unit details for commit-sized or decision-sized entries.
 - `docs/orchestration/devlog/` contains AI/internal Markdown process logs, usually appended by date.
 - Existing docs outside orchestration should be migrated, summarized, or archived so future work can start from `docs/orchestration/`.
 
@@ -51,10 +53,16 @@ docs/orchestration/
     SCOPE_GUARD.md
     DECISION_LOG.md
   devlog/
-    YYYY-MM-DD.md
+    YYYYMMDD.md
   reports/
     index.html
-    YYYY-MM-DD-NN-slug.html
+    YYYYMMDD/
+      index.md
+      index.html
+      units/
+        YYYY-MM-DD-NN-slug.md
+        YYYY-MM-DD-NN-slug.html
+        YYYY-MM-DD-NN-slug.summary.json
 
 Recommended extension folders:
 
@@ -86,11 +94,13 @@ Core concept:
   - scope guard,
   - active task and next task candidates.
 - `reports/` is for people:
-  - detailed user-facing HTML work-unit reports,
+  - Korean date-based HTML reports,
   - portfolio-ready summaries,
-  - an `index.html` report list.
+  - an `index.html` date list,
+  - `YYYYMMDD/index.html` as the page the user normally opens for a day,
+  - `YYYYMMDD/units/` as the detailed work-unit collection.
 - `devlog/` is for AI/internal continuity:
-  - date-based Markdown logs,
+  - date-based Markdown logs using `YYYYMMDD.md`,
   - append new entries in chronological order,
   - keep enough detail for AI to resume without reading every HTML report.
 - Existing docs should be migrated into `state/`, `devlog/`, `reports/`, `evidence/`, or `legacy/`.
@@ -170,8 +180,8 @@ Use orchestration files as follows:
 After meaningful work:
 
 - Update the relevant files under `docs/orchestration/state/`.
-- Append AI/internal process detail to `docs/orchestration/devlog/YYYY-MM-DD.md`.
-- Add or regenerate a user-facing HTML report under `docs/orchestration/reports/`.
+- Append AI/internal process detail to `docs/orchestration/devlog/YYYYMMDD.md`.
+- Add or regenerate a user-facing Korean daily report under `docs/orchestration/reports/YYYYMMDD/index.html`.
 - Record durable decisions in `docs/orchestration/state/DECISION_LOG.md`.
 - Keep `state/NEXT_TASKS.md` short, usually no more than five active candidates.
 - Regenerate or update `interface/` HTML when state changes.
@@ -189,7 +199,7 @@ Migration and adoption rules:
 - `state/SCOPE_GUARD.md` contains explicit non-goals, forbidden expansions, and scope boundaries.
 - `state/DECISION_LOG.md` is an index of durable decisions. Link to reports, reviews, evidence, or legacy archive entries instead of duplicating everything.
 - `devlog/` is AI/internal continuity. Date-based files can be appended in order, but do not let one file become the only source of truth.
-- `reports/` is people-facing. Prefer HTML work-unit reports. If a generator requires Markdown input, keep that input under `reports/source/`, not as the primary human surface.
+- `reports/` is people-facing and Korean-first. Use `reports/YYYYMMDD/index.md` as generator input and `reports/YYYYMMDD/index.html` as the primary human surface. Keep detailed generated work units under `reports/YYYYMMDD/units/`.
 - `evidence/` stores or links useful test outputs, screenshots, logs, benchmark summaries, playtest outputs, generated QA summaries, or other proof.
 - `legacy/` stores migration notes, archived old docs, or pointer files. Legacy docs should not be required for normal resume after migration.
 
@@ -216,8 +226,9 @@ Human-facing HTML rule:
 - It should not show long explanations, report-send controls, scanner warnings, interface checklists, or broad document navigation unless explicitly requested.
 - `interface/command.html` should show the next instruction, copyable prompt if useful, done criteria, and do-not-touch notes.
 - `interface/runbook.html` should show repeated commands and operating procedures.
-- `reports/index.html` lists people-facing reports.
-- `reports/YYYY-MM-DD-NN-slug.html` is the detailed work-unit report.
+- `reports/index.html` lists date-based people-facing reports.
+- `reports/YYYYMMDD/index.html` is the daily report the user normally reads.
+- `reports/YYYYMMDD/units/YYYY-MM-DD-NN-slug.html` is the detailed work-unit report.
 - People should not need to open Markdown for normal review.
 
 AI-facing Markdown rule:
@@ -251,6 +262,6 @@ After editing:
   - `docs/orchestration/state/STATUS.md`
   - `docs/orchestration/state/CURRENT_TASK.md`
   - `docs/orchestration/state/NEXT_TASKS.md`
-- Leave a short devlog entry under `docs/orchestration/devlog/YYYY-MM-DD.md`.
+- Leave a short devlog entry under `docs/orchestration/devlog/YYYYMMDD.md`.
 - If the project has report generation or dashboard scripts, run the relevant check/generation commands. Otherwise, clearly state that no generator exists yet.
 ````

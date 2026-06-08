@@ -17,4 +17,4 @@ Current legacy evidence locations:
 - `docs/balance/`
 - `alpha_test/outputs/`
 - `playtest_logs/`
-- `docs/reports/`
+- `docs/orchestration/reports/YYYYMMDD/`

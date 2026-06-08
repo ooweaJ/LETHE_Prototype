@@ -11,6 +11,7 @@ const DIRTY_PREFLIGHT = 'node scripts/autopilot_preflight.js --allow-dirty';
 const options = parseArgs(process.argv.slice(2));
 const startedAt = new Date();
 const date = options.date || todayString();
+const compactDate = date.replace(/-/g, '');
 const runId = `${date}-devloop-${compactTime(startedAt)}`;
 const logDir = path.resolve(options.logDir || path.join('docs', 'loop_runs'));
 const runLogPath = path.join(logDir, `${runId}.md`);
@@ -217,8 +218,8 @@ function buildImplementationPrompt(context) {
     '1. 현재 코드와 문서를 읽는다.',
     '2. 가장 작은 구현 단위를 선택해 코드 변경을 한다.',
     '3. 가능한 검증을 실행한다.',
-    `4. \`docs/CODEX_STATUS.md\`, \`docs/NEXT_TASKS.md\`, \`docs/devlog/${date}.md\`를 갱신한다.`,
-    `5. 루틴 구현 회차에서는 \`docs/reports/${date}.md\`에 별도 top-level 보고 단위를 만들지 않는다. 보고서는 피드백과 태스크 갱신까지 합친 뒤 task-update 단계에서 한 번만 만든다.`,
+    `4. \`docs/CODEX_STATUS.md\`, \`docs/orchestration/state/NEXT_TASKS.md\`, \`docs/orchestration/devlog/${compactDate}.md\`를 갱신한다.`,
+    `5. 루틴 구현 회차에서는 \`docs/orchestration/reports/${compactDate}/index.md\`에 별도 top-level 보고 단위를 만들지 않는다. 보고서는 피드백과 태스크 갱신까지 합친 뒤 task-update 단계에서 한 번만 만든다.`,
     `6. 예외: 독립 기능/결정 단위가 완결되어 사용자가 바로 읽어야 하는 경우에만 \`# ${date}-NN - 기능/결정 제목\` 보고 단위를 추가한다. \`Feedback-N 태스크 갱신\`, \`자동 개발 루프 N차\`, \`구현 결과\`처럼 작은 절차명은 보고 제목으로 쓰지 않는다.`,
     '',
     '## 현재 상태 발췌',
@@ -317,18 +318,18 @@ function runCodexTaskUpdate(iteration, feedbackPrompt) {
     `- docs/review_responses/${stem}-claude.md`,
     `- docs/review_responses/${stem}-codex.md`,
     `- docs/review_responses/${stem}-double-check.md`,
-    '- docs/NEXT_TASKS.md',
+    '- docs/orchestration/state/NEXT_TASKS.md',
     '- docs/CODEX_STATUS.md',
     '',
     '## 할 일',
     '',
     '- Claude/Codex 피드백의 공통점과 충돌을 요약한다.',
-    '- `docs/NEXT_TASKS.md`의 완료/다음 작업을 갱신한다.',
-    `- \`docs/CODEX_STATUS.md\`, \`docs/devlog/${date}.md\`, \`docs/reports/${date}.md\`에 루프 결과를 기록한다.`,
+    '- `docs/orchestration/state/NEXT_TASKS.md`의 완료/다음 작업을 갱신한다.',
+    `- \`docs/CODEX_STATUS.md\`, \`docs/orchestration/devlog/${compactDate}.md\`, \`docs/orchestration/reports/${compactDate}/index.md\`에 루프 결과를 기록한다.`,
     `- 보고서의 새 top-level heading은 반드시 \`# ${date}-NN - 기능/결정 제목\` 형식으로 추가한다.`,
     '- 보고 단위는 구현 + 검증 + Claude/Codex 피드백 + 다음 태스크 결정을 합친 기능/결정 단위여야 한다.',
     '- `Feedback-N 태스크 갱신`, `자동 개발 루프 N차`, `구현 결과`, `QA 재시도 1회`처럼 작은 절차명은 보고 단위로 만들지 않는다.',
-    `- \`npm run report\`가 최신 단위를 \`docs/reports/units/${date}/\`에 Markdown/HTML로 분리 생성한다는 전제로, 일일 누적 파일만이 아니라 단위 파일이 Discord 첨부 기준임을 기록한다.`,
+    `- \`npm run report\`가 최신 단위를 \`docs/orchestration/reports/${compactDate}/units/\`에 Markdown/HTML로 분리 생성한다는 전제로, 일일 누적 파일만이 아니라 단위 파일이 Discord 첨부 기준임을 기록한다.`,
     '- 새 구현 범위를 늘리지 않는다.',
     '',
   ].join('\n');

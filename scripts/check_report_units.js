@@ -4,6 +4,9 @@
 const fs = require('fs');
 const path = require('path');
 
+const REPORTS_ROOT = path.resolve('docs', 'orchestration', 'reports');
+const LEGACY_REPORTS_ROOT = path.resolve('docs', 'reports');
+
 const input = process.argv[2] || latestMarkdownReport();
 const reportPath = path.resolve(input);
 
@@ -65,7 +68,7 @@ console.log(`Report unit headings ok: ${path.relative(process.cwd(), reportPath)
 function verifyUnitFiles(unitList) {
   if (!unitList.length) return;
 
-  const unitDir = path.join(path.dirname(reportPath), 'units', date);
+  const unitDir = unitDirectory(reportPath, date);
   if (!fs.existsSync(unitDir)) {
     errors.push(`missing unit report directory: ${path.relative(process.cwd(), unitDir)}`);
     return;
@@ -89,12 +92,19 @@ function verifyUnitFiles(unitList) {
 }
 
 function reportDate(filePath) {
-  const match = path.basename(filePath).match(/^(\d{4}-\d{2}-\d{2})\.md$/);
-  if (!match) {
+  const base = path.basename(filePath);
+  const match = base.match(/^(\d{4}-\d{2}-\d{2})\.md$/);
+  if (match) return match[1];
+
+  if (base.toLowerCase() === 'index.md') {
+    const compact = path.basename(path.dirname(filePath));
+    if (/^\d{8}$/.test(compact)) return compactToDate(compact);
+  }
+
+  {
     console.error(`Report file must be named YYYY-MM-DD.md: ${path.relative(process.cwd(), filePath)}`);
     process.exit(1);
   }
-  return match[1];
 }
 
 function reportTitleIssue(title) {
@@ -117,15 +127,38 @@ function enforceTitlePolicy(reportDay) {
 }
 
 function latestMarkdownReport() {
-  const reportsDir = path.resolve('docs', 'reports');
-  if (!fs.existsSync(reportsDir)) return 'docs/reports/2026-06-01.md';
+  const reportsDir = REPORTS_ROOT;
+  if (fs.existsSync(reportsDir)) {
+    const reports = fs.readdirSync(reportsDir)
+      .filter((entry) => /^\d{8}$/.test(entry))
+      .filter((entry) => fs.existsSync(path.join(reportsDir, entry, 'index.md')))
+      .sort();
 
-  const reports = fs.readdirSync(reportsDir)
+    if (reports.length > 0) {
+      return path.join('docs', 'orchestration', 'reports', reports[reports.length - 1], 'index.md');
+    }
+  }
+
+  if (!fs.existsSync(LEGACY_REPORTS_ROOT)) return 'docs/orchestration/reports/20260601/index.md';
+
+  const reports = fs.readdirSync(LEGACY_REPORTS_ROOT)
     .filter((file) => /^\d{4}-\d{2}-\d{2}\.md$/.test(file))
     .sort();
 
-  if (!reports.length) return 'docs/reports/2026-06-01.md';
+  if (!reports.length) return 'docs/orchestration/reports/20260601/index.md';
   return path.join('docs', 'reports', reports[reports.length - 1]);
+}
+
+function unitDirectory(sourcePath, reportDay) {
+  if (path.basename(sourcePath).toLowerCase() === 'index.md' && /^\d{8}$/.test(path.basename(path.dirname(sourcePath)))) {
+    return path.join(path.dirname(sourcePath), 'units');
+  }
+
+  return path.join(path.dirname(sourcePath), 'units', reportDay);
+}
+
+function compactToDate(value) {
+  return `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`;
 }
 
 function escapeRegExp(text) {

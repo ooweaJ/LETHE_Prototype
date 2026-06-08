@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LETHE 개발 보고서 - 2026-06-08</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>LETHE 개발 보고서 - 2026-06-08</h1>
+      <p class="meta">Generated from index.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>LETHE 개발 보고서 - 2026-06-08</h1>
+<p>이 파일은 2026-06-08 작업을 사람이 읽기 좋게 모은 날짜별 리포트다. 세부 단위 HTML과 JSON 요약은 같은 폴더의 <code>units/</code>에 생성된다.</p>
+<h1>2026-06-08-01 - v0.12 플레이테스트 패키지 재생성</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>v0.12 플레이테스트 패키지를 다시 생성했다.</li>
+<li><code>dist\lethe-v0.12-playtest</code>는 Git 추적 대상이 아니므로 필요할 때 재생성한다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>플레이테스트 패키지 dry-run과 실제 생성을 다시 확인했다.</li>
+<li>상태 문서에서 패키지 재생성이 미완료 작업으로 남지 않게 정리했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>npm run playtest:package:dry</code>: 통과.</li>
+<li><code>npm run playtest:package</code>: 통과.</li>
+<li><code>npm run report</code>: 통과.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>패키지는 사람 테스트 후보로 유지하되, 사람 반응 증거는 아직 별도로 수집해야 한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>자동 밸런스 결과는 사람 테스트를 대체하지 못한다.</li>
+<li>생성된 <code>dist/</code> 패키지는 필요 시 다시 만들어야 한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>v0.12 패키지는 생성 가능하지만, Unity 전환 판단에는 사람 테스트 로그가 필요하다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>사람 테스트 로그를 모을 준비를 유지한다.</li>
+<li>밸런스 게이트가 다시 실패하면 사람 테스트보다 밸런스 재검증을 우선한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 배포 가능한 테스트 패키지 상태를 확인해야 했다.</li>
+<li>방향: dry-run과 실제 패키지 생성을 분리해 검증했다.</li>
+<li>행동: v0.12 패키지를 재생성했다.</li>
+<li>결과: 테스트 후보 패키지를 다시 만들 수 있음을 확인했다.</li>
+</ul>
+<h1>2026-06-08-02 - 오케스트레이션 인터페이스 도입</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li><code>docs/orchestration/</code>을 프로젝트 관리 인터페이스로 도입했다.</li>
+<li>기존 <code>AGENTS.md</code> 규칙은 유지했다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>오케스트레이션용 상태, 작업, 실행 절차, 범위 제한, 결정 로그 문서를 만들었다.</li>
+<li>루트 <code>AGENTS.md</code>에 오케스트레이션 사용 규칙을 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>오케스트레이션 핵심 문서를 읽어 구조를 확인했다.</li>
+<li><code>npm run report</code>: 통과.</li>
+<li><code>npm run report:check</code>: 통과.</li>
+<li><code>npm run doctor</code>: 통과.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li><code>AGENTS.md</code>는 프로젝트 최상위 규칙으로 남기고, 오케스트레이션은 관리 인터페이스 역할을 맡긴다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>기존 <code>docs/NEXT_TASKS.md</code>와 새 오케스트레이션 작업 목록이 한동안 중복될 수 있다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>새 세션은 먼저 오케스트레이션 문서를 읽고 현재 상태와 다음 작업을 파악해야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>실제 작업에서 오케스트레이션 문서가 충분한지 검증한다.</li>
+<li>사람이 읽는 HTML 화면을 추가한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 프로젝트 진행 상태가 여러 문서로 흩어져 있었다.</li>
+<li>방향: 반복 가능한 프로젝트 관리 인터페이스를 만든다.</li>
+<li>행동: 오케스트레이션 문서 세트를 도입했다.</li>
+<li>결과: Codex가 이어서 읽을 짧은 진입점이 생겼다.</li>
+</ul>
+<h1>2026-06-08-03 - 오케스트레이션 대시보드 현재 상태 갱신</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>HTML 대시보드가 현재 v0.12 상태를 보여주도록 갱신됐다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>대시보드에 현재 단계, 최신 검증, 막힌 점, 다음 작업을 표시했다.</li>
+<li>상태 문서와 다음 작업 문서를 대시보드 내용에 맞췄다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>npm run report</code>: 통과.</li>
+<li><code>npm run report:check</code>: 통과.</li>
+<li><code>npm run report:discord:unit:dry</code>: 통과.</li>
+<li><code>npm run doctor</code>: 통과.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>Markdown은 계속 원본으로 두고, HTML은 사람이 빠르게 보는 화면으로 유지한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>HTML을 손으로 고치면 Markdown과 어긋날 수 있다.</li>
+<li>실제 Discord 전송은 승인 정책에서 차단될 수 있다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>대시보드는 실시간 작업 중 내용이 아니라 마지막으로 정리된 완료 상태를 보여준다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>대시보드가 실제로 다음 프롬프트 판단에 충분한지 확인한다.</li>
+<li>필요하면 보고서 목록과 연결한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 사용자가 현재 프로젝트 상태를 빠르게 확인하기 어려웠다.</li>
+<li>방향: 30초 안에 읽는 상태판을 만든다.</li>
+<li>행동: 대시보드 요약을 현재 상태 기준으로 갱신했다.</li>
+<li>결과: 현재 단계와 다음 게이트가 한 화면에 보인다.</li>
+</ul>
+<h1>2026-06-08-04 - 한글 사람 보고용 대시보드 정규화</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>사람용 HTML은 한국어 우선으로 정리하기 시작했다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>대시보드를 한국어 보고 화면으로 다시 구성했다.</li>
+<li>보고서 목록과 개발 로그 목록 HTML을 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>HTML 파일을 직접 읽어 구조를 확인했다.</li>
+<li><code>npm run report</code>: 통과.</li>
+<li><code>npm run report:check</code>: 통과.</li>
+<li><code>npm run doctor</code>: 통과.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>오케스트레이션 HTML은 진행 중인 Codex 생각이 아니라 완료된 상태 보고를 보여준다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>보고서 목록과 기존 report 파이프라인이 겹치기 시작했다.</li>
+<li>HTML 자동 생성기가 없으면 수동 갱신 부담이 커진다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>사람이 읽는 화면은 한국어여야 하며, 다음 프롬프트 판단에 바로 도움이 되어야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>사람용 보고서와 AI용 devlog의 독자를 분리한다.</li>
+<li>중복 report 위치를 정리한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 개발 문서가 Codex 내부 기록처럼 보였다.</li>
+<li>방향: 사용자가 직접 읽는 제품형 문서 화면을 만든다.</li>
+<li>행동: 한글 대시보드와 목록 화면을 추가했다.</li>
+<li>결과: 오케스트레이션이 개인 AI 플러그인처럼 보이기 시작했다.</li>
+</ul>
+<h1>2026-06-08-05 - HTML 인터페이스 규약 정렬</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>오케스트레이션 HTML 3종의 역할을 정했다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>index.html</code>, <code>command.html</code>, <code>runbook.html</code>을 필수 사람용 인터페이스로 정의했다.</li>
+<li>마이그레이션 프롬프트와 현재 HTML 구성을 맞췄다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>npm run report</code>: 통과.</li>
+<li><code>npm run report:check</code>: 통과.</li>
+<li><code>npm run report:discord:unit:dry</code>: 통과.</li>
+<li><code>npm run doctor</code>: 통과.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>프로젝트 상태, 다음 지시, 운영 절차를 서로 다른 HTML 화면으로 분리한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>실제 폴더는 아직 <code>interface/</code>와 <code>state/</code>로 완전히 옮겨지지 않았다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>다른 프로젝트에도 같은 구조를 적용하려면 프롬프트 규약과 실제 폴더 구조가 일치해야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>실제 LETHE 폴더도 규약대로 물리 이동한다.</li>
+<li>report/devlog 중복을 제거한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 인터페이스 규약과 실제 파일 배치가 달랐다.</li>
+<li>방향: 사람이 보는 HTML과 AI가 읽는 Markdown을 분리한다.</li>
+<li>행동: HTML 역할을 명시했다.</li>
+<li>결과: 플러그인형 구조의 기준이 잡혔다.</li>
+</ul>
+<h1>2026-06-08-06 - 프로젝트 대시보드 압축</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>메인 대시보드는 짧은 상태 요약판으로 정리됐다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>긴 프롬프트와 상세 설명을 대시보드에서 제거했다.</li>
+<li>다음 지시와 운영 절차는 별도 화면이 맡도록 했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>npm run report</code>: 통과.</li>
+<li><code>npm run report:check</code>: 통과.</li>
+<li><code>npm run report:discord:unit:dry</code>: 통과.</li>
+<li><code>npm run doctor</code>: 통과.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>대시보드는 요약, command 화면은 지시, runbook 화면은 절차, reports는 상세 설명을 맡는다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>보고서 목록 구조가 아직 완전히 정규화되지 않았다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>메인 화면은 길게 설명하지 않고 현재 판단에 필요한 핵심만 보여줘야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>보고서가 너무 많아질 때 날짜별로 볼 수 있게 구조화한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 한 화면에 너무 많은 역할이 섞였다.</li>
+<li>방향: 화면별 책임을 줄인다.</li>
+<li>행동: 대시보드를 요약 중심으로 압축했다.</li>
+<li>결과: 사용자가 현재 판단만 빠르게 볼 수 있다.</li>
+</ul>
+<h1>2026-06-08-07 - 프로젝트 대시보드 표면 정리</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>대시보드에서 설명성 문구와 하단 링크 카드를 제거했다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>제목을 <code>상태 요약</code>으로 단순화했다.</li>
+<li>인터페이스 사용법 설명을 대시보드 밖으로 밀어냈다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>npm run report</code>: 통과.</li>
+<li><code>npm run report:check</code>: 통과.</li>
+<li><code>npm run report:discord:unit:dry</code>: 통과.</li>
+<li><code>npm run doctor</code>: 통과.</li>
+<li>문자열 확인으로 제거 대상 문구가 남지 않았음을 확인했다.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>메인 대시보드는 인터페이스 설명이 아니라 프로젝트 상태만 보여준다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>보고서로 들어가는 경로는 별도 report index에서 해결해야 한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>대시보드의 목적은 현재 상태 판단이고, 자세한 맥락은 날짜별 보고서가 맡는다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>날짜별 보고서 구조를 정리한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 상태 화면에 안내 문구가 많았다.</li>
+<li>방향: 상태판을 더 조용하고 빠르게 읽히게 만든다.</li>
+<li>행동: 설명과 링크 카드를 제거했다.</li>
+<li>결과: 핵심 지표가 더 잘 보인다.</li>
+</ul>
+<h1>2026-06-08-08 - 플러그인형 마이그레이션 프롬프트 갱신</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>다른 프로젝트에 적용할 공통 마이그레이션 프롬프트를 갱신했다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>interface/</code>, <code>state/</code>, <code>reports/</code>, <code>devlog/</code>, <code>legacy/</code> 역할을 정의했다.</li>
+<li>사람은 HTML을 보고, AI는 Markdown을 읽는 방향을 명시했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>npm run report</code>: 통과.</li>
+<li><code>npm run report:check</code>: 통과.</li>
+<li><code>npm run report:discord:unit:dry</code>: 통과.</li>
+<li><code>npm run doctor</code>: 통과.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>오케스트레이션은 단순 문서 묶음이 아니라 재사용 가능한 개인 AI 플러그인 구조로 다룬다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>이 시점에는 프롬프트만 바뀌었고 LETHE 실제 폴더는 아직 완전히 옮겨지지 않았다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>다음 단계는 규약을 문서로만 두지 말고 실제 LETHE 폴더 구조에 적용하는 것이다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>기존 <code>docs/reports/</code>와 <code>docs/devlog/</code>를 오케스트레이션 내부로 옮긴다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 여러 프로젝트에 적용할 구조가 아직 말뿐이었다.</li>
+<li>방향: 공통 규약을 먼저 문서화한다.</li>
+<li>행동: 마이그레이션 프롬프트를 갱신했다.</li>
+<li>결과: 플러그인형 오케스트레이션의 기준이 생겼다.</li>
+</ul>
+<h1>2026-06-08-09 - v0.12 밸런스 루프 재실행</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>최신 밸런스 루프는 <code>ITERATE_BALANCE</code>로 실패했다.</li>
+<li>사람 테스트는 밸런스 게이트 회복 전까지 보류하는 쪽이 안전하다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>npm run balance:loop</code>를 실행했다.</li>
+<li>실패 결과를 상태 문서, 다음 작업, 대시보드, command 화면, devlog, report에 반영했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>첫 보스 클리어: <code>100%</code>.</li>
+<li>전체 클리어: <code>20%</code>.</li>
+<li>사망: <code>60%</code>.</li>
+<li>첫 보스 TTK 중앙값: <code>26.42s</code>.</li>
+<li>실패 체크: clear rate 최소 기준, death rate 최대 기준.</li>
+<li>사망 집중 구간: <code>망각 전조</code> 3회.</li>
+<li><code>npm run report</code>: 통과.</li>
+<li><code>npm run report:check</code>: 통과.</li>
+<li><code>npm run report:discord:unit:dry</code>: 통과.</li>
+<li><code>npm run doctor</code>: 통과.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>사람 테스트를 바로 진행하지 않고, 작은 밸런스 조정 하나를 먼저 고른다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>이전에 통과했던 자동 기준선이 재실행에서 유지되지 않았다.</li>
+<li>실제 Discord 전송은 외부 webhook 전송 리스크로 승인 정책에서 차단됐다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p><code>망각 전조</code> 사망 집중과 전체 클리어 20%가 핵심 문제다. 한 번에 하나의 작은 조정만 고르고 다시 검증해야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li><code>docs/balance/2026-06-08-v012-balance-qa.md</code>를 검토한다.</li>
+<li><code>docs/review_prompts/2026-06-08-balance-loop.md</code>를 검토한다.</li>
+<li>작은 밸런스 조정 하나를 선택한다.</li>
+<li><code>npm run qa:balance</code> 또는 <code>npm run balance:loop</code>를 다시 실행한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 자동 밸런스 통과가 재현되지 않았다.</li>
+<li>방향: 반복 가능성을 게이트에 포함한다.</li>
+<li>행동: 밸런스 루프를 재실행하고 실패 원인을 기록했다.</li>
+<li>결과: 사람 테스트 전 해결해야 할 구체적인 튜닝 목표가 생겼다.</li>
+</ul>
+<h1>2026-06-08-10 - 오케스트레이션 리포트와 개발로그 실제 마이그레이션</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>오케스트레이션 폴더가 실제 플러그인형 구조로 이동했다.</li>
+<li>기존 <code>docs/reports/</code>와 <code>docs/devlog/</code>를 정상 위치로 더 이상 쓰지 않도록 정리했다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>docs/orchestration/interface/</code>에 사람용 HTML 3종을 옮겼다.</li>
+<li><code>docs/orchestration/state/</code>에 AI용 상태 Markdown을 옮겼다.</li>
+<li>기존 <code>docs/devlog/</code> 날짜 파일을 <code>docs/orchestration/devlog/YYYYMMDD.md</code>로 옮겼다.</li>
+<li>기존 <code>docs/reports/</code> 날짜 파일을 <code>docs/orchestration/reports/YYYYMMDD/index.md|html</code>로 옮겼다.</li>
+<li>기존 단위 리포트는 <code>docs/orchestration/reports/YYYYMMDD/units/</code>로 옮겼다.</li>
+<li>2026-06-08 사람용 daily report를 한국어 요약 중심으로 다시 작성했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>node --check scripts/build_report.js</code>: 통과.</li>
+<li><code>node --check scripts/check_report_units.js</code>: 통과.</li>
+<li><code>node --check scripts/send_discord_report.js</code>: 통과.</li>
+<li><code>node --check scripts/run_autonomous_dev_loop.js</code>: 통과.</li>
+<li><code>npm run report</code>: 통과, <code>docs/orchestration/reports/20260608/index.html</code>과 10개 단위 리포트 생성.</li>
+<li><code>npm run report:check</code>: 통과, 새 경로 <code>docs/orchestration/reports/20260608/index.md</code> 기준 10개 단위 확인.</li>
+<li><code>npm run report:discord:unit:dry</code>: 통과, 최신 첨부가 <code>docs/orchestration/reports/20260608/units/2026-06-08-10-오케스트레이션-리포트와-개발로그-실제-마이그레이션.html</code>을 가리킴.</li>
+<li><code>npm run doctor</code>: 통과, 50 pass / 0 warn / 0 fail.</li>
+<li><code>npm run report:discord:unit</code>: 승인 정책에서 차단. 외부 Discord webhook으로 workspace 생성 보고서와 첨부를 보내는 것은 기본적으로 신뢰되지 않는 전송으로 판단됨.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>사람용 report는 한국어를 기본으로 한다.</li>
+<li>날짜별 대표 페이지는 <code>reports/YYYYMMDD/index.html</code>이다.</li>
+<li>세부 작업 단위는 같은 날짜 폴더의 <code>units/</code>에서 확인한다.</li>
+<li>devlog는 AI용 내부 연속성 기록이므로 영어 요약도 허용한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>과거 리포트 안의 문장에는 당시 사용하던 <code>docs/reports/</code> 경로가 역사 기록으로 남아 있다.</li>
+<li>review prompt/response의 물리 이동은 별도 후속 작업으로 남아 있다.</li>
+<li>실제 Discord 전송은 이 Codex 세션의 승인 정책에서 차단됐다. 다음 trusted-local 명령은 <code>npm run report:discord:unit</code>이다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>오케스트레이션을 개인 AI 플러그인처럼 쓰려면 새 작업이 반드시 <code>docs/orchestration/</code> 내부에서 시작하고 끝나야 한다. report는 날짜별 한국어 HTML, devlog는 AI용 Markdown으로 분리한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li><code>npm run report</code>로 새 위치의 HTML과 단위 리포트를 생성한다.</li>
+<li><code>npm run report:check</code>로 새 구조를 검증한다.</li>
+<li><code>npm run report:discord:unit:dry</code>로 최신 단위가 새 경로를 가리키는지 확인한다.</li>
+<li><code>npm run doctor</code>로 로컬 파이프라인을 점검한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 같은 의미의 report 폴더가 두 개라 사람이 읽을 기준이 흐려졌다.</li>
+<li>방향: 오케스트레이션 폴더 하나를 프로젝트 관리 플러그인처럼 만든다.</li>
+<li>행동: report/devlog/state/interface를 실제로 이동하고, report 경로를 날짜별 구조로 바꿨다.</li>
+<li>결과: 사람은 날짜별 HTML 리포트를 보고, AI는 state/devlog Markdown을 읽는 구조로 정리된다.</li>
+</ul>
+  </main>
+</body>
+</html>

@@ -915,3 +915,28 @@ npm run ai:sweep
 - Discord actual send:
   - `npm run report:discord:unit` was rejected by the approval reviewer because it would send workspace-generated report content and attachments to an external Discord webhook, which is untrusted by default and not explicitly approved by the user.
   - Next trusted-local command: `npm run report:discord:unit`.
+
+## Latest Override - 2026-06-08 Orchestration Report/Devlog Migration
+
+- Legacy `docs/reports/` and `docs/devlog/` were physically migrated into `docs/orchestration/`.
+- New report source of truth:
+  - `docs/orchestration/reports/YYYYMMDD/index.md`
+  - `docs/orchestration/reports/YYYYMMDD/index.html`
+  - `docs/orchestration/reports/YYYYMMDD/units/`
+- New devlog source of truth:
+  - `docs/orchestration/devlog/YYYYMMDD.md`
+- Human-facing HTML interface moved to `docs/orchestration/interface/`.
+- AI-facing state Markdown moved to `docs/orchestration/state/`.
+- `docs/orchestration/reports/20260608/index.md` was rewritten as a Korean date-based report with 10 work units.
+- Verification:
+  - `node --check scripts/build_report.js`: pass.
+  - `node --check scripts/check_report_units.js`: pass.
+  - `node --check scripts/send_discord_report.js`: pass.
+  - `node --check scripts/run_autonomous_dev_loop.js`: pass.
+  - `npm run report`: pass, generated `docs/orchestration/reports/20260608/index.html` and 10 unit reports.
+  - `npm run report:check`: pass, 10 report units.
+  - `npm run report:discord:unit:dry`: pass, latest unit 10 points to the new orchestration report path.
+  - `npm run doctor`: pass, 50 pass / 0 warn / 0 fail.
+- Discord actual send:
+  - `npm run report:discord:unit` was rejected by the approval reviewer because it would send workspace-generated report content and attachments to an external Discord webhook, which is untrusted by default and not explicitly approved by the user.
+  - Next trusted-local command: `npm run report:discord:unit`.

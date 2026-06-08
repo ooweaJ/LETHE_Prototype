@@ -4,6 +4,9 @@
 const fs = require('fs');
 const path = require('path');
 
+const REPORTS_ROOT = path.resolve('docs', 'orchestration', 'reports');
+const LEGACY_REPORTS_ROOT = path.resolve('docs', 'reports');
+
 const input = process.argv[2] || latestMarkdownReport();
 const inputPath = path.resolve(input);
 const outputPath = inputPath.replace(/\.md$/i, '.html');
@@ -18,12 +21,13 @@ const html = renderPage(markdown, path.basename(inputPath));
 fs.writeFileSync(outputPath, html, 'utf8');
 console.log(`Wrote ${path.relative(process.cwd(), outputPath)}`);
 writeUnitReports(markdown, inputPath);
+writeReportsIndex();
 
 function writeUnitReports(md, sourcePath) {
-  const date = path.basename(sourcePath, '.md');
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return;
+  const date = reportDate(sourcePath);
+  if (!date) return;
 
-  const unitDir = path.join(path.dirname(sourcePath), 'units', date);
+  const unitDir = unitDirectory(sourcePath, date);
   fs.mkdirSync(unitDir, { recursive: true });
 
   fs.readdirSync(unitDir)
@@ -62,6 +66,88 @@ function writeUnitReports(md, sourcePath) {
       latest,
     }, null, 2)}\n`, 'utf8');
     console.log(`Wrote ${units.length} unit report(s) to ${path.relative(process.cwd(), unitDir)}`);
+  }
+}
+
+function writeReportsIndex() {
+  if (!fs.existsSync(REPORTS_ROOT)) return;
+
+  const days = fs.readdirSync(REPORTS_ROOT)
+    .filter((entry) => /^\d{8}$/.test(entry))
+    .filter((entry) => fs.existsSync(path.join(REPORTS_ROOT, entry, 'index.html')))
+    .sort()
+    .reverse();
+
+  const items = days.map((day) => {
+    const date = compactToDate(day);
+    const indexPath = `${day}/index.html`;
+    const latest = latestUnitForDay(day);
+    const latestLine = latest
+      ? `<small>최신 단위: <a href="${escapeHtml(path.posix.join(day, 'units', path.basename(latest.htmlPath)))}">${escapeHtml(latest.title)}</a></small>`
+      : '<small>단위 리포트 없음</small>';
+    return `<li>
+      <a href="${indexPath}">${escapeHtml(date)} 개발 리포트</a>
+      ${latestLine}
+    </li>`;
+  }).join('\n');
+
+  const html = `<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LETHE 개발 리포트</title>
+    <style>
+      :root {
+        --bg: #f6f7f3;
+        --panel: #ffffff;
+        --text: #17201d;
+        --muted: #64706b;
+        --line: #dce2da;
+        --green: #1f6b4d;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; }
+      main { width: min(980px, 100%); margin: 0 auto; padding: 30px 22px 42px; }
+      a { color: var(--green); font-weight: 900; text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      .eyebrow { margin: 0 0 8px; color: var(--green); font-size: 13px; font-weight: 900; }
+      h1 { margin: 0 0 10px; font-size: clamp(30px, 5vw, 46px); line-height: 1.08; }
+      p { margin: 0 0 16px; color: var(--muted); line-height: 1.65; }
+      ul { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+      li { padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+      small { display: block; margin-top: 6px; color: var(--muted); line-height: 1.45; }
+      footer { margin-top: 18px; color: var(--muted); font-size: 13px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">LETHE 개발 문서</p>
+      <h1>날짜별 리포트</h1>
+      <p>사람이 읽는 개발 리포트입니다. 날짜별 index가 그날의 작업을 모아 보여주고, 세부 단위는 각 날짜의 units 폴더에 보관됩니다.</p>
+      <ul>
+        ${items || '<li>아직 생성된 리포트가 없습니다.</li>'}
+      </ul>
+      <footer>기준: ${escapeHtml(new Date().toISOString().slice(0, 10))}</footer>
+    </main>
+  </body>
+</html>`;
+
+  fs.writeFileSync(path.join(REPORTS_ROOT, 'index.html'), html, 'utf8');
+  console.log(`Wrote ${path.relative(process.cwd(), path.join(REPORTS_ROOT, 'index.html'))}`);
+}
+
+function latestUnitForDay(day) {
+  const latestPath = path.join(REPORTS_ROOT, day, 'units', 'latest.json');
+  if (!fs.existsSync(latestPath)) return null;
+  try {
+    const data = JSON.parse(fs.readFileSync(latestPath, 'utf8'));
+    return data.latest || null;
+  } catch {
+    return null;
   }
 }
 
@@ -357,13 +443,49 @@ function escapeHtml(text) {
 }
 
 function latestMarkdownReport() {
-  const reportsDir = path.resolve('docs', 'reports');
-  if (!fs.existsSync(reportsDir)) return 'docs/reports/2026-06-01.md';
+  const reportsDir = REPORTS_ROOT;
+  if (fs.existsSync(reportsDir)) {
+    const reports = fs.readdirSync(reportsDir)
+      .filter((entry) => /^\d{8}$/.test(entry))
+      .filter((entry) => fs.existsSync(path.join(reportsDir, entry, 'index.md')))
+      .sort();
 
-  const reports = fs.readdirSync(reportsDir)
+    if (reports.length > 0) {
+      return path.join('docs', 'orchestration', 'reports', reports[reports.length - 1], 'index.md');
+    }
+  }
+
+  if (!fs.existsSync(LEGACY_REPORTS_ROOT)) return 'docs/orchestration/reports/20260601/index.md';
+
+  const reports = fs.readdirSync(LEGACY_REPORTS_ROOT)
     .filter((file) => /^\d{4}-\d{2}-\d{2}\.md$/.test(file))
     .sort();
 
-  if (reports.length === 0) return 'docs/reports/2026-06-01.md';
+  if (reports.length === 0) return 'docs/orchestration/reports/20260601/index.md';
   return path.join('docs', 'reports', reports[reports.length - 1]);
+}
+
+function reportDate(filePath) {
+  const base = path.basename(filePath);
+  const direct = base.match(/^(\d{4}-\d{2}-\d{2})\.md$/);
+  if (direct) return direct[1];
+
+  if (base.toLowerCase() === 'index.md') {
+    const compact = path.basename(path.dirname(filePath));
+    if (/^\d{8}$/.test(compact)) return compactToDate(compact);
+  }
+
+  return '';
+}
+
+function unitDirectory(sourcePath, date) {
+  if (path.basename(sourcePath).toLowerCase() === 'index.md' && /^\d{8}$/.test(path.basename(path.dirname(sourcePath)))) {
+    return path.join(path.dirname(sourcePath), 'units');
+  }
+
+  return path.join(path.dirname(sourcePath), 'units', date);
+}
+
+function compactToDate(value) {
+  return `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`;
 }
