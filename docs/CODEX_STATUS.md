@@ -887,3 +887,31 @@ npm run ai:sweep
   - `npm run report:discord:unit` was rejected by the approval reviewer because it would send workspace-generated report content and attachments to an external Discord webhook, which is untrusted by default and not explicitly approved by the user.
   - Next trusted-local command: `npm run report:discord:unit`.
 - Current next product task remains controlled human sessions, JSON logs in `playtest_logs/`, then `npm run playtest:summary`.
+
+## Latest Override - 2026-06-08 v0.12 Balance Loop Rerun
+
+- User requested the next balance test.
+- Command:
+  - `npm run balance:loop`
+- Result:
+  - verdict: `ITERATE_BALANCE`,
+  - first boss clear: `100%`,
+  - full clear: `20%`,
+  - death: `60%`,
+  - first boss TTK median: `26.42s`.
+- Failed checks:
+  - clear rate minimum: `20%`, target `>= 35%`,
+  - death rate maximum: `60%`, target `<= 40%`.
+- Death phase cluster: `망각 전조` in 3 death runs.
+- Generated:
+  - `docs/balance/2026-06-08-v012-balance-qa.md`,
+  - `docs/review_prompts/2026-06-08-balance-loop.md`.
+- Updated orchestration status/current task/next tasks/dashboard/command view to pause human sessions until balance gate is restored or the user explicitly accepts the risk.
+- Verification:
+  - `npm run report`: pass, generated 9 unit reports.
+  - `npm run report:check`: pass, 9 report units.
+  - `npm run report:discord:unit:dry`: pass, latest unit 09 summary generated and attached the balance review prompt.
+  - `npm run doctor`: pass, 50 pass / 0 warn / 0 fail.
+- Discord actual send:
+  - `npm run report:discord:unit` was rejected by the approval reviewer because it would send workspace-generated report content and attachments to an external Discord webhook, which is untrusted by default and not explicitly approved by the user.
+  - Next trusted-local command: `npm run report:discord:unit`.

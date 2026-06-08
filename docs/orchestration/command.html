@@ -59,8 +59,8 @@
       <div class="grid">
         <article>
           <h2>Codex에게 지금 시킬 일</h2>
-          <p>v0.12 사람 테스트 로그를 수집한 뒤 요약하고, 결과를 오케스트레이션 문서에 반영합니다.</p>
-          <textarea id="prompt-next" readonly>현재 docs/orchestration 기준으로 LETHE v0.12 사람 테스트 이후 작업을 진행해줘. playtest_logs/에 있는 JSON 로그를 확인하고 npm run playtest:summary를 실행한 다음, 결과를 docs/orchestration/STATUS.md, CURRENT_TASK.md, NEXT_TASKS.md, devlog, reports, DECISION_LOG.md에 반영해줘. 자동화 지표와 사람 반응 증거를 분리해서 정리하고, Unity 전환 판단이 필요한 경우 review prompt도 만들어줘.</textarea>
+          <p>최신 `balance:loop` 실패를 보고 작은 밸런스 조정 후보 1개를 정한 뒤 재검증합니다.</p>
+          <textarea id="prompt-next" readonly>docs/balance/2026-06-08-v012-balance-qa.md와 docs/review_prompts/2026-06-08-balance-loop.md를 기준으로 LETHE v0.12 밸런스 실패를 분석해줘. 한 번에 하나의 작은 밸런스 조정만 제안하고, 새 기억/상점/메타/지역/최종보스 확장은 하지 마. 조정 후 npm run qa:balance 또는 npm run balance:loop로 검증하고 결과를 docs/orchestration/STATUS.md, CURRENT_TASK.md, NEXT_TASKS.md, devlog, reports, DECISION_LOG.md에 반영해줘.</textarea>
           <button type="button" data-copy-target="prompt-next">프롬프트 복사</button>
         </article>
 
@@ -76,10 +76,10 @@
         <article>
           <h2>완료 기준</h2>
           <ul>
-            <li>사람 테스트 JSON 로그가 <code>playtest_logs/</code>에 있음</li>
-            <li><code>npm run playtest:summary</code> 실행 완료</li>
+            <li>밸런스 실패 원인 요약</li>
+            <li>작은 조정 후보 1개 선택</li>
+            <li><code>npm run qa:balance</code> 또는 <code>npm run balance:loop</code> 재실행</li>
             <li>상태, devlog, reports, 결정 로그 갱신</li>
-            <li>방향 변경이 필요하면 review prompt 작성</li>
           </ul>
         </article>
 

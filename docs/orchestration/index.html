@@ -66,37 +66,37 @@
           <p class="eyebrow">LETHE 프로젝트 대시보드</p>
           <h1>상태 요약</h1>
         </div>
-        <span class="badge">사람 테스트 대기</span>
+        <span class="badge">밸런스 재조정 필요</span>
       </header>
 
       <section class="metrics" aria-label="핵심 상태 요약">
         <div class="metric green">
           <span>현재 단계</span>
-          <strong>v0.12 human-test candidate</strong>
-          <small>패키지 재생성 완료</small>
+          <strong>v0.12 balance review</strong>
+          <small>사람 테스트 전 재검토</small>
         </div>
         <div class="metric blue">
           <span>자동 검증</span>
-          <strong>balance:loop 통과</strong>
-          <small>full clear 60% · death 40%</small>
+          <strong>ITERATE_BALANCE</strong>
+          <small>full clear 20% · death 60%</small>
         </div>
         <div class="metric amber">
           <span>막힌 점</span>
-          <strong>사람 반응 증거 없음</strong>
-          <small>Unity 판단 전 필요</small>
+          <strong>망각 전조 death cluster</strong>
+          <small>death phase 3 runs</small>
         </div>
         <div class="metric red">
           <span>다음 게이트</span>
-          <strong>playtest summary</strong>
-          <small>JSON 로그 수집 후 실행</small>
+          <strong>small balance adjustment</strong>
+          <small>한 번에 1개만 조정</small>
         </div>
       </section>
 
       <section class="heroPanel">
         <h2>현재 결론</h2>
         <p>
-          LETHE v0.12는 자동 밸런스 기준을 통과했고 사람 테스트를 받을 준비가 됐습니다.
-          지금 필요한 것은 새 기능이 아니라 실제 플레이 로그와 관찰 메모입니다.
+          최신 밸런스 루프가 `ITERATE_BALANCE`로 내려갔습니다.
+          사람 테스트 전에 `망각 전조` 구간 death 60%를 줄이는 작은 조정 후보를 먼저 정해야 합니다.
         </p>
       </section>
 
@@ -106,15 +106,15 @@
           <div class="decision">
             <div>
               <span class="label">해야 할 일</span>
-              <span class="value">controlled human session 실행</span>
+              <span class="value">balance loop failure 리뷰</span>
             </div>
             <div>
               <span class="label">필요한 입력</span>
-              <span class="value"><code>playtest_logs/</code>의 JSON 로그</span>
+              <span class="value"><code>docs/balance/2026-06-08-v012-balance-qa.md</code></span>
             </div>
             <div>
               <span class="label">완료 신호</span>
-              <span class="value"><code>npm run playtest:summary</code> 결과 반영</span>
+              <span class="value">작은 조정 1개 선택 후 재검증</span>
             </div>
           </div>
         </article>
@@ -122,10 +122,10 @@
         <article class="panel">
           <h2>다음 판단</h2>
           <ul>
-            <li>초반 2-3분이 재미있는가?</li>
-            <li>레벨업 선택이 빌드처럼 느껴지는가?</li>
-            <li>첫 망각이 짜증보다 아까움에 가까운가?</li>
-            <li>Unity 전환 근거가 보이는가?</li>
+            <li>death 60%를 어떤 한 가지 레버로 낮출까?</li>
+            <li>first boss TTK 26.42s는 유지할까?</li>
+            <li>full clear 20%를 35% 이상으로 회복할까?</li>
+            <li>튜닝 후 바로 loop까지 돌릴까?</li>
           </ul>
         </article>
 
@@ -134,15 +134,15 @@
           <div class="decision">
             <div>
               <span class="label">완료 작업</span>
-              <span class="value">프로젝트 대시보드 요약화</span>
+              <span class="value">v0.12 balance loop 재실행</span>
             </div>
             <div>
               <span class="label">검증</span>
-              <span class="value">report/check/doctor 통과</span>
+              <span class="value">balance:loop = ITERATE_BALANCE</span>
             </div>
             <div>
               <span class="label">주의</span>
-              <span class="value">Discord 실제 전송은 승인 정책으로 차단됨</span>
+              <span class="value">사람 테스트는 balance gate 회복 후 진행</span>
             </div>
           </div>
         </article>

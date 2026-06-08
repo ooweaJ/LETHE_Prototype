@@ -1,11 +1,11 @@
 {
   "source": "docs\\reports\\2026-06-08.md",
-  "generatedAt": "2026-06-08T09:08:20.656Z",
-  "unitCount": 8,
+  "generatedAt": "2026-06-08T09:36:31.241Z",
+  "unitCount": 9,
   "latest": {
-    "title": "2026-06-08-08 - Plugin-Oriented Migration Prompt Update",
-    "number": "08",
-    "markdownPath": "docs\\reports\\units\\2026-06-08\\2026-06-08-08-plugin-oriented-migration-prompt-update.md",
-    "htmlPath": "docs\\reports\\units\\2026-06-08\\2026-06-08-08-plugin-oriented-migration-prompt-update.html"
+    "title": "2026-06-08-09 - v0.12 Balance Loop Rerun",
+    "number": "09",
+    "markdownPath": "docs\\reports\\units\\2026-06-08\\2026-06-08-09-v0-12-balance-loop-rerun.md",
+    "htmlPath": "docs\\reports\\units\\2026-06-08\\2026-06-08-09-v0-12-balance-loop-rerun.html"
   }
 }

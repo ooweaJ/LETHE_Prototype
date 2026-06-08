@@ -518,6 +518,63 @@
 <li>Action: updated the migration prompt.</li>
 <li>Result: future projects can adopt the same AI-plugin-like project dashboard convention.</li>
 </ul>
+<h1>2026-06-08-09 - v0.12 Balance Loop Rerun</h1>
+<h2>1. Current build status</h2>
+<p>LETHE v0.12 is not currently cleared for controlled human testing. The latest balance loop returned <code>ITERATE_BALANCE</code>.</p>
+<h2>2. What changed today</h2>
+<ul>
+<li>Ran the requested balance test:</li>
+<li><code>npm run balance:loop</code></li>
+<li>Generated:</li>
+<li><code>docs/balance/2026-06-08-v012-balance-qa.md</code>,</li>
+<li><code>docs/review_prompts/2026-06-08-balance-loop.md</code>.</li>
+<li>Updated orchestration status, current task, next tasks, dashboard, and command view to reflect the failed balance gate.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li><code>npm run balance:loop</code>: <code>ITERATE_BALANCE</code>.</li>
+<li>First boss clear: <code>100%</code>.</li>
+<li>Full clear: <code>20%</code>.</li>
+<li>Death: <code>60%</code>.</li>
+<li>First boss TTK median: <code>26.42s</code>.</li>
+<li>Failed checks:</li>
+<li>clear rate minimum: <code>20%</code>, target <code>&gt;= 35%</code>,</li>
+<li>death rate maximum: <code>60%</code>, target <code>&lt;= 40%</code>.</li>
+<li>Death phase cluster: <code>망각 전조</code> in 3 death runs.</li>
+<li><code>npm run report</code>: pass, generated 9 unit reports.</li>
+<li><code>npm run report:check</code>: pass, 9 report units.</li>
+<li><code>npm run report:discord:unit:dry</code>: pass, latest unit 09 summary generated and attached the balance review prompt.</li>
+<li><code>npm run doctor</code>: pass, 50 pass / 0 warn / 0 fail.</li>
+<li><code>npm run report:discord:unit</code>: blocked by approval reviewer because it would send workspace-generated report content and attachments to an external Discord webhook, which is untrusted by default and not explicitly approved by the user. Next trusted-local command: <code>npm run report:discord:unit</code>.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>Human sessions should pause until the balance gate is restored or the user explicitly accepts the risk.</li>
+<li>Next implementation should choose one small balance adjustment only.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>The prior accepted baseline did not reproduce on this rerun.</li>
+<li>Automated metrics still cannot replace human evidence, but this gate is currently below target.</li>
+<li>Discord actual send was blocked by approval policy in this Codex session.</li>
+<li>The review prompt was generated in legacy <code>docs/review_prompts/</code> until the physical orchestration migration happens.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<p>The latest balance loop failed: full clear <code>20%</code>, death <code>60%</code>, first boss clear <code>100%</code>, first boss TTK median <code>26.42s</code>. Deaths cluster in <code>망각 전조</code>. Use the generated review prompt to pick one small tuning change, then rerun balance verification.</p>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>Review <code>docs/balance/2026-06-08-v012-balance-qa.md</code>.</li>
+<li>Review <code>docs/review_prompts/2026-06-08-balance-loop.md</code>.</li>
+<li>Pick one small balance adjustment.</li>
+<li>Rerun <code>npm run qa:balance</code> or <code>npm run balance:loop</code>.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: automated balance acceptance needs repeatability, not one lucky pass.</li>
+<li>Direction: rerun the loop and treat failure as a gate.</li>
+<li>Action: ran <code>balance:loop</code>, recorded the failed checks, and generated a review prompt.</li>
+<li>Result: the project now has a concrete next tuning target before human testing.</li>
+</ul>
   </main>
 </body>
 </html>
