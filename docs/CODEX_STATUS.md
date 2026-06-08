@@ -866,3 +866,24 @@ npm run ai:sweep
   - `npm run report:discord:unit` was rejected by the approval reviewer because it would send workspace-generated report content and attachments to an external Discord webhook, which is untrusted by default and not explicitly approved by the user.
   - Next trusted-local command: `npm run report:discord:unit`.
 - Current next task remains controlled human sessions, JSON logs in `playtest_logs/`, then `npm run playtest:summary`.
+
+## Latest Override - 2026-06-08 Plugin-Oriented Migration Prompt Update
+
+- Updated `EXISTING_PROJECT_MIGRATION_PROMPT.md` for a reusable personal AI plugin-style orchestration structure.
+- New target convention:
+  - `docs/orchestration/interface/`: human-facing HTML (`index.html`, `command.html`, `runbook.html`).
+  - `docs/orchestration/state/`: AI-facing Markdown source of truth.
+  - `docs/orchestration/reports/`: people-facing HTML work-unit reports.
+  - `docs/orchestration/devlog/`: AI/internal Markdown continuity.
+  - `docs/orchestration/legacy/`: migration maps, archived docs, and pointers.
+- Added rules for migrating existing docs so old project-management docs outside orchestration stop being required for normal resume.
+- Current repo note: the prompt is updated, but LETHE still needs a follow-up physical migration to the new folder layout.
+- Verification:
+  - `npm run report`: pass, generated 8 unit reports.
+  - `npm run report:check`: pass, 8 report units.
+  - `npm run report:discord:unit:dry`: pass, latest unit 08 summary generated.
+  - `npm run doctor`: pass, 50 pass / 0 warn / 0 fail.
+- Discord actual send:
+  - `npm run report:discord:unit` was rejected by the approval reviewer because it would send workspace-generated report content and attachments to an external Discord webhook, which is untrusted by default and not explicitly approved by the user.
+  - Next trusted-local command: `npm run report:discord:unit`.
+- Current next product task remains controlled human sessions, JSON logs in `playtest_logs/`, then `npm run playtest:summary`.

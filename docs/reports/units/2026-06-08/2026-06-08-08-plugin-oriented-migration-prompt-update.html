@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-08-08 - Plugin-Oriented Migration Prompt Update</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --good: #087443;
+      --warn: #a15c00;
+      --bad: #b42318;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .callout {
+      border: 1px solid #bfd7ff;
+      background: #eef4ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-08-08 - Plugin-Oriented Migration Prompt Update</h1>
+      <p class="meta">Generated from 2026-06-08-08-plugin-oriented-migration-prompt-update.md</p>
+    </div>
+  </header>
+  <main>
+    <h1>2026-06-08-08 - Plugin-Oriented Migration Prompt Update</h1>
+<h2>1. Current build status</h2>
+<p>LETHE v0.12 remains the current controlled human-test candidate. This work changed only orchestration migration guidance.</p>
+<h2>2. What changed today</h2>
+<ul>
+<li>Updated <code>EXISTING_PROJECT_MIGRATION_PROMPT.md</code> for a reusable personal AI plugin-style structure.</li>
+<li>Defined:</li>
+<li><code>docs/orchestration/interface/</code> for human-facing HTML,</li>
+<li><code>docs/orchestration/state/</code> for AI-facing Markdown,</li>
+<li><code>docs/orchestration/reports/</code> for people-facing HTML work-unit reports,</li>
+<li><code>docs/orchestration/devlog/</code> for AI/internal Markdown continuity,</li>
+<li><code>docs/orchestration/legacy/</code> for migration maps, archived docs, and pointers.</li>
+<li>Added rules for migrating existing docs so legacy project-management docs stop being normal source-of-truth files.</li>
+</ul>
+<h2>3. Test results and evidence</h2>
+<ul>
+<li><code>npm run report</code>: pass, generated 8 unit reports.</li>
+<li><code>npm run report:check</code>: pass, 8 report units.</li>
+<li><code>npm run report:discord:unit:dry</code>: pass, latest unit 08 summary generated.</li>
+<li><code>npm run doctor</code>: pass, 50 pass / 0 warn / 0 fail.</li>
+<li><code>npm run report:discord:unit</code>: blocked by approval reviewer because it would send workspace-generated report content and attachments to an external Discord webhook, which is untrusted by default and not explicitly approved by the user. Next trusted-local command: <code>npm run report:discord:unit</code>.</li>
+</ul>
+<h2>4. Decisions made</h2>
+<ul>
+<li>People-facing docs should be HTML-first.</li>
+<li>AI-facing docs should stay concise Markdown.</li>
+<li>Devlogs can be appended by date, but current state should still live in short <code>state/</code> files.</li>
+<li>Existing docs outside orchestration should be migrated, archived, linked, or pointer-only.</li>
+</ul>
+<h2>5. Problems or risks</h2>
+<ul>
+<li>This did not physically move LETHE's current orchestration files yet.</li>
+<li>Destructive cleanup of old docs should wait for explicit approval and a migration map.</li>
+<li>Discord actual send was blocked by approval policy in this Codex session.</li>
+</ul>
+<h2>6. GPT handoff summary</h2>
+<p>The shared migration prompt now defines the orchestration system as a personal AI plugin structure with separate human HTML, AI Markdown, reports, devlog, and legacy migration zones.</p>
+<h2>7. Next Codex tasks</h2>
+<ul>
+<li>Move LETHE's current <code>docs/orchestration/*.html</code> into <code>docs/orchestration/interface/</code>.</li>
+<li>Move current core Markdown into <code>docs/orchestration/state/</code>.</li>
+<li>Add <code>docs/orchestration/legacy/MIGRATION_MAP.md</code>.</li>
+<li>Update AGENTS and internal links.</li>
+</ul>
+<h2>8. Portfolio notes</h2>
+<ul>
+<li>Problem: the orchestration interface needed a reusable cross-project folder contract.</li>
+<li>Direction: split human-facing and AI-facing surfaces.</li>
+<li>Action: updated the migration prompt.</li>
+<li>Result: future projects can adopt the same AI-plugin-like project dashboard convention.</li>
+</ul>
+  </main>
+</body>
+</html>
