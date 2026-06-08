@@ -1,11 +1,11 @@
 {
-  "source": "docs\\reports\\2026-06-06.md",
-  "generatedAt": "2026-06-06T08:37:25.852Z",
+  "source": "docs\\orchestration\\reports\\20260606\\index.md",
+  "generatedAt": "2026-06-08T11:20:11.985Z",
   "unitCount": 4,
   "latest": {
     "title": "2026-06-06-04 - Deficit Trial Review Follow-Up",
     "number": "04",
-    "markdownPath": "docs\\reports\\units\\2026-06-06\\2026-06-06-04-deficit-trial-review-follow-up.md",
-    "htmlPath": "docs\\reports\\units\\2026-06-06\\2026-06-06-04-deficit-trial-review-follow-up.html"
+    "markdownPath": "docs\\orchestration\\reports\\20260606\\units\\2026-06-06-04-deficit-trial-review-follow-up.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260606\\units\\2026-06-06-04-deficit-trial-review-follow-up.html"
   }
 }

@@ -18,7 +18,7 @@ The report/devlog migration is complete, so new work should now use:
 ## Done Criteria
 
 - `docs/balance/2026-06-08-v012-balance-qa.md` has been reviewed.
-- `docs/review_prompts/2026-06-08-balance-loop.md` has been used as the planning handoff or summarized for the user.
+- `docs/orchestration/review_prompts/2026-06-08-balance-loop.md` has been used as the planning handoff or summarized for the user.
 - Exactly one small balance adjustment candidate has been selected before implementation.
 - After any adjustment, `npm run qa:balance` or `npm run balance:loop` has been rerun.
 - Status, devlog, reports, and decision log are updated under `docs/orchestration/`.
@@ -26,7 +26,7 @@ The report/devlog migration is complete, so new work should now use:
 ## Related Files
 
 - `docs/balance/2026-06-08-v012-balance-qa.md`
-- `docs/review_prompts/2026-06-08-balance-loop.md`
+- `docs/orchestration/review_prompts/2026-06-08-balance-loop.md`
 - `docs/BALANCE_TABLE_v0_12.md`
 - `docs/LETHE_v0.12_밸런스_개선_제안서.md`
 - `scripts/run_balance_loop.js`

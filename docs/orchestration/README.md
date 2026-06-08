@@ -61,4 +61,45 @@ Before meaningful work, read these files in order:
 - `docs/NEXT_TASKS.md` remains the detailed legacy task archive.
 - Former `docs/devlog/` files were migrated into `docs/orchestration/devlog/`.
 - Former `docs/reports/` files were migrated into `docs/orchestration/reports/YYYYMMDD/`.
-- New work should not recreate `docs/devlog/` or `docs/reports/` as normal source-of-truth folders.
+- Former `docs/review_prompts/` and `docs/review_responses/` are legacy input locations. New prompts and responses should be written under `docs/orchestration/review_prompts/` and `docs/orchestration/review_responses/`.
+- New work should not recreate `docs/devlog/`, `docs/reports/`, `docs/review_prompts/`, or `docs/review_responses/` as normal source-of-truth folders.
+
+## Standard Structure Rule
+
+Use this structure for this project and for future projects that adopt the same local AI-orchestration interface:
+
+```text
+docs/orchestration/
+  README.md
+  interface/
+    index.html
+    command.html
+    runbook.html
+  state/
+    PROJECT_BRIEF.md
+    STATUS.md
+    CURRENT_TASK.md
+    NEXT_TASKS.md
+    PROMPT_CONTEXT.md
+    RUNBOOK.md
+    SCOPE_GUARD.md
+    DECISION_LOG.md
+  devlog/
+    YYYYMMDD.md
+  reports/
+    index.html
+    YYYYMMDD/
+      index.md
+      index.html
+      units/
+        YYYY-MM-DD-NN-slug.md
+        YYYY-MM-DD-NN-slug.html
+        YYYY-MM-DD-NN-slug.summary.json
+  review_prompts/
+  review_responses/
+  evidence/
+  templates/
+  legacy/
+```
+
+`interface/` and `reports/` are for people. `state/`, `devlog/`, `review_prompts/`, and `review_responses/` are for AI continuity. `legacy/` is only for migration maps, archived notes, or pointer files.

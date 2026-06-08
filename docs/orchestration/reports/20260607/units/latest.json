@@ -1,11 +1,11 @@
 {
-  "source": "docs\\reports\\2026-06-07.md",
-  "generatedAt": "2026-06-07T11:03:29.116Z",
+  "source": "docs\\orchestration\\reports\\20260607\\index.md",
+  "generatedAt": "2026-06-08T11:20:12.059Z",
   "unitCount": 2,
   "latest": {
     "title": "2026-06-07-02 - Balance Loop Gate Fix",
     "number": "02",
-    "markdownPath": "docs\\reports\\units\\2026-06-07\\2026-06-07-02-balance-loop-gate-fix.md",
-    "htmlPath": "docs\\reports\\units\\2026-06-07\\2026-06-07-02-balance-loop-gate-fix.html"
+    "markdownPath": "docs\\orchestration\\reports\\20260607\\units\\2026-06-07-02-balance-loop-gate-fix.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260607\\units\\2026-06-07-02-balance-loop-gate-fix.html"
   }
 }

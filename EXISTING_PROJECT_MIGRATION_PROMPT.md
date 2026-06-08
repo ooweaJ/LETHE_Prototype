@@ -20,6 +20,8 @@ This should feel like a local personal AI plugin:
 - `docs/orchestration/reports/YYYYMMDD/index.html` is the daily human-facing report page.
 - `docs/orchestration/reports/YYYYMMDD/units/` contains generated work-unit details for commit-sized or decision-sized entries.
 - `docs/orchestration/devlog/` contains AI/internal Markdown process logs, usually appended by date.
+- `docs/orchestration/review_prompts/` contains current AI review prompts.
+- `docs/orchestration/review_responses/` contains current saved AI review responses.
 - Existing docs outside orchestration should be migrated, summarized, or archived so future work can start from `docs/orchestration/`.
 
 ````text
@@ -103,6 +105,10 @@ Core concept:
   - date-based Markdown logs using `YYYYMMDD.md`,
   - append new entries in chronological order,
   - keep enough detail for AI to resume without reading every HTML report.
+- `review_prompts/` and `review_responses/` are for AI planning handoff:
+  - new prompts and responses go under orchestration,
+  - old root-level review folders become legacy only,
+  - Discord may attach a prompt, but Discord is not the source of truth.
 - Existing docs should be migrated into `state/`, `devlog/`, `reports/`, `evidence/`, or `legacy/`.
 - After migration, old docs outside orchestration should not be needed for normal Codex resume.
 
@@ -201,6 +207,8 @@ Migration and adoption rules:
 - `devlog/` is AI/internal continuity. Date-based files can be appended in order, but do not let one file become the only source of truth.
 - `reports/` is people-facing and Korean-first. Use `reports/YYYYMMDD/index.md` as generator input and `reports/YYYYMMDD/index.html` as the primary human surface. Keep detailed generated work units under `reports/YYYYMMDD/units/`.
 - `evidence/` stores or links useful test outputs, screenshots, logs, benchmark summaries, playtest outputs, generated QA summaries, or other proof.
+- `review_prompts/` stores active AI/GPT/Claude/Codex review prompts.
+- `review_responses/` stores active AI/GPT/Claude/Codex review responses.
 - `legacy/` stores migration notes, archived old docs, or pointer files. Legacy docs should not be required for normal resume after migration.
 
 Legacy migration rules:
@@ -208,6 +216,7 @@ Legacy migration rules:
 - Move, summarize, or archive project-management docs into `docs/orchestration/`.
 - If old docs are still useful as historical evidence, put them under `docs/orchestration/legacy/` or link them from a legacy index.
 - If old docs must stay in their original path for external tooling, replace their contents only when safe with a short pointer to the orchestration location.
+- After migration, do not create new source-of-truth files under legacy `docs/reports/`, `docs/devlog/`, `docs/review_prompts/`, or `docs/review_responses/`.
 - After migration, write a migration map:
 
 ```text
@@ -230,6 +239,14 @@ Human-facing HTML rule:
 - `reports/YYYYMMDD/index.html` is the daily report the user normally reads.
 - `reports/YYYYMMDD/units/YYYY-MM-DD-NN-slug.html` is the detailed work-unit report.
 - People should not need to open Markdown for normal review.
+
+Discord reporting rule:
+- Discord is a notification and attachment channel, not the source of truth.
+- Generate reports from `docs/orchestration/reports/YYYYMMDD/index.md`.
+- Send work-unit Discord reports from the latest `docs/orchestration/reports/YYYYMMDD/units/*.html`.
+- Attach or generate `.summary.json` beside the unit HTML.
+- Store review prompts under `docs/orchestration/review_prompts/`; Discord may attach them, but should not be the only place they exist.
+- If an external webhook send fails or is blocked, record the failure and the next trusted-local command in `devlog/` and `reports/`.
 
 AI-facing Markdown rule:
 - AI should read `state/` first.

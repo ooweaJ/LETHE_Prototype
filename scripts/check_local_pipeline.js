@@ -99,7 +99,7 @@ function checkRequiredDocs() {
       tokens: ['## Planning Pipeline', '## GPT And Claude Planning', '## Approval Reality'],
     },
     {
-      file: 'docs/review_prompts/README.md',
+      file: 'docs/orchestration/review_prompts/README.md',
       tokens: ['## 테스트 결과 기반 자동 파이프라인', 'planning:pipeline:prompt'],
     },
     {
@@ -149,7 +149,8 @@ function checkEnvironment() {
     add(env.includes('DISCORD_WEBHOOK_URL=') ? 'pass' : 'warn', 'DISCORD_WEBHOOK_URL', env.includes('DISCORD_WEBHOOK_URL=') ? 'configured' : 'missing', 'Set DISCORD_WEBHOOK_URL only on trusted locals that should send Discord notices.');
   }
 
-  const prompt = latestMatchingFile('docs/review_prompts', /^\d{4}-\d{2}-\d{2}(?:-[a-z0-9-]+)?\.md$/i);
+  const prompt = latestMatchingFile('docs/orchestration/review_prompts', /^\d{4}-\d{2}-\d{2}(?:-[a-z0-9-]+)?\.md$/i)
+    || latestMatchingFile('docs/review_prompts', /^\d{4}-\d{2}-\d{2}(?:-[a-z0-9-]+)?\.md$/i);
   add(prompt ? 'pass' : 'fail', 'latest review prompt', prompt || 'missing', 'Run npm run planning:pipeline:prompt to generate one.');
 
   const reportCheck = run('node scripts/check_report_units.js');

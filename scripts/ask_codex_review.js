@@ -5,8 +5,12 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
+const REVIEW_PROMPTS_DIR = path.join('docs', 'orchestration', 'review_prompts');
+const REVIEW_RESPONSES_DIR = path.join('docs', 'orchestration', 'review_responses');
+const LEGACY_REVIEW_PROMPTS_DIR = path.join('docs', 'review_prompts');
+
 const options = parseArgs(process.argv.slice(2));
-const promptPath = path.resolve(options.prompt || latestMarkdown('docs/review_prompts'));
+const promptPath = path.resolve(options.prompt || latestMarkdown([REVIEW_PROMPTS_DIR, LEGACY_REVIEW_PROMPTS_DIR]));
 const outputPath = path.resolve(options.output || defaultOutputPath(promptPath));
 const model = options.model || process.env.CODEX_REVIEW_MODEL || '';
 
@@ -115,25 +119,27 @@ function parseArgs(args) {
   return parsed;
 }
 
-function latestMarkdown(dir) {
-  const fullDir = path.resolve(dir);
-  if (!fs.existsSync(fullDir)) fail(`Directory not found: ${dir}`);
+function latestMarkdown(dirs) {
+  const files = dirs.flatMap((dir) => {
+    const fullDir = path.resolve(dir);
+    if (!fs.existsSync(fullDir)) return [];
+    return fs.readdirSync(fullDir)
+      .filter((file) => /^\d{4}-\d{2}-\d{2}(?:-[a-z0-9-]+)?\.md$/i.test(file))
+      .map((file) => ({
+        dir,
+        file,
+        mtimeMs: fs.statSync(path.join(fullDir, file)).mtimeMs,
+      }));
+  }).sort((a, b) => a.mtimeMs - b.mtimeMs || a.file.localeCompare(b.file));
 
-  const files = fs.readdirSync(fullDir)
-    .filter((file) => /^\d{4}-\d{2}-\d{2}(?:-[a-z0-9-]+)?\.md$/i.test(file))
-    .map((file) => ({
-      file,
-      mtimeMs: fs.statSync(path.join(fullDir, file)).mtimeMs,
-    }))
-    .sort((a, b) => a.mtimeMs - b.mtimeMs || a.file.localeCompare(b.file));
-
-  if (files.length === 0) fail(`No dated Markdown prompts found in ${dir}`);
-  return path.join(dir, files[files.length - 1].file);
+  if (files.length === 0) fail(`No dated Markdown prompts found in ${dirs.join(', ')}`);
+  const latest = files[files.length - 1];
+  return path.join(latest.dir, latest.file);
 }
 
 function defaultOutputPath(inputPath) {
   const date = path.basename(inputPath, '.md');
-  return path.join('docs', 'review_responses', `${date}-codex.md`);
+  return path.join(REVIEW_RESPONSES_DIR, `${date}-codex.md`);
 }
 
 function fail(message) {

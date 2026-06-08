@@ -91,7 +91,7 @@ node scripts/run_overnight_loop.js --no-discord
 The default loop uses:
 
 ```text
-docs/review_prompts/2026-06-02-v09-release-feel-loop.md
+docs/orchestration/review_prompts/2026-06-02-v09-release-feel-loop.md
 ```
 
 and writes logs to:
@@ -106,7 +106,7 @@ Default behavior does not let an external model edit project files. If a trusted
 node scripts/run_overnight_loop.js --implement-cmd "your safe implementation command"
 ```
 
-If any required step fails, the loop sends a blocked notice, writes a blocker prompt under `docs/review_prompts/YYYY-MM-DD-overnight-loop-blocker-N.md`, and stops. The next Codex session should read the loop log, blocker prompt, latest planning response, and `docs/CODEX_STATUS.md`.
+If any required step fails, the loop sends a blocked notice, writes a blocker prompt under `docs/orchestration/review_prompts/YYYY-MM-DD-overnight-loop-blocker-N.md`, and stops. The next Codex session should read the loop log, blocker prompt, latest planning response, and `docs/orchestration/state/STATUS.md`.
 
 ## Autonomous Dev Loop
 
@@ -156,9 +156,9 @@ node scripts/run_autonomous_dev_loop.js --no-commit --discord-dry-run
 node scripts/run_autonomous_dev_loop.js --allow-dirty --no-push
 ```
 
-The loop requires a clean tree by default. Use `--allow-dirty` only when deliberately smoke-testing the loop. If verification fails, the loop sends a blocked notice, writes `docs/review_prompts/YYYY-MM-DD-autodev-blocker-*.md`, and stops instead of committing.
+The loop requires a clean tree by default. Use `--allow-dirty` only when deliberately smoke-testing the loop. If verification fails, the loop sends a blocked notice, writes `docs/orchestration/review_prompts/YYYY-MM-DD-autodev-blocker-*.md`, and stops instead of committing.
 
-This loop is powerful: do not use it for broad scope expansion. It should consume the current `docs/NEXT_TASKS.md` queue and the current scope guards.
+This loop is powerful: do not use it for broad scope expansion. It should consume the current `docs/orchestration/state/NEXT_TASKS.md` queue and the current scope guards.
 
 ## Discord Notices
 
@@ -272,10 +272,10 @@ Actual review:
 npm run review:claude
 ```
 
-The script reads the latest dated file in `docs/review_prompts/` and writes the response to:
+The script reads the latest dated file in `docs/orchestration/review_prompts/` and writes the response to:
 
 ```text
-docs/review_responses/YYYY-MM-DD-claude.md
+docs/orchestration/review_responses/YYYY-MM-DD-claude.md
 ```
 
 Claude is called with tools disabled, so it should only answer the planning prompt. Codex remains responsible for file edits, tests, reports, commits, and pushes.
@@ -329,18 +329,18 @@ npm run planning:pipeline:auto
 The pipeline runs a quick AI test by default, writes a fresh prompt to:
 
 ```text
-docs/review_prompts/YYYY-MM-DD-pipeline.md
+docs/orchestration/review_prompts/YYYY-MM-DD-pipeline.md
 ```
 
 By default, it asks both Claude and Codex CLI. Responses and the double-check handoff are saved to:
 
 ```text
-docs/review_responses/YYYY-MM-DD-pipeline-claude.md
-docs/review_responses/YYYY-MM-DD-pipeline-codex.md
-docs/review_responses/YYYY-MM-DD-pipeline-double-check.md
+docs/orchestration/review_responses/YYYY-MM-DD-pipeline-claude.md
+docs/orchestration/review_responses/YYYY-MM-DD-pipeline-codex.md
+docs/orchestration/review_responses/YYYY-MM-DD-pipeline-double-check.md
 ```
 
-After the responses are saved, Codex should read both, update the double-check summary with common points and conflicts, update `docs/NEXT_TASKS.md`, implement the selected work, verify, report, commit, and push when safe.
+After the responses are saved, Codex should read both, update the double-check summary with common points and conflicts, update `docs/orchestration/state/NEXT_TASKS.md`, implement the selected work, verify, report, commit, and push when safe.
 
 If the current Codex session cannot export repository prompts to external services, use `planning:pipeline:prompt` and run `npm run planning:pipeline` from the user's trusted local terminal.
 
@@ -370,7 +370,7 @@ This writes:
 
 ```text
 docs/playtest_summaries/YYYY-MM-DD.md
-docs/review_prompts/YYYY-MM-DD-human-playtest.md
+docs/orchestration/review_prompts/YYYY-MM-DD-human-playtest.md
 ```
 
 Use the generated human-test prompt as the next Claude/GPT planning input before HTML v0.6 or Unity transition decisions.
@@ -391,10 +391,10 @@ Actual review:
 npm run review:codex
 ```
 
-The script reads the latest dated file in `docs/review_prompts/` and writes the final Codex message to:
+The script reads the latest dated file in `docs/orchestration/review_prompts/` and writes the final Codex message to:
 
 ```text
-docs/review_responses/YYYY-MM-DD-codex.md
+docs/orchestration/review_responses/YYYY-MM-DD-codex.md
 ```
 
 It calls `codex exec` in read-only mode with approvals disabled, so it should not edit files. It uses the local Codex CLI login/session and any applicable ChatGPT/Codex plan limits. Set `CODEX_REVIEW_MODEL` to override the model.

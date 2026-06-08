@@ -8,7 +8,7 @@ LETHE HTML Alpha v0.12 is no longer cleared for controlled human testing after t
 
 The orchestration HTML interface now exists at `docs/orchestration/interface/index.html`, `docs/orchestration/interface/command.html`, and `docs/orchestration/interface/runbook.html`. AI-facing state lives under `docs/orchestration/state/`; human-facing reports live under `docs/orchestration/reports/YYYYMMDD/`.
 
-The report/devlog migration is now applied physically: old `docs/reports/` daily files moved to `docs/orchestration/reports/YYYYMMDD/index.md|html`, old unit reports moved to `docs/orchestration/reports/YYYYMMDD/units/`, and old `docs/devlog/` files moved to `docs/orchestration/devlog/YYYYMMDD.md`. New work should not recreate legacy `docs/reports/` or `docs/devlog/` as normal source-of-truth folders.
+The report/devlog/review migration is now applied physically: old `docs/reports/` daily files moved to `docs/orchestration/reports/YYYYMMDD/index.md|html`, old unit reports moved to `docs/orchestration/reports/YYYYMMDD/units/`, old `docs/devlog/` files moved to `docs/orchestration/devlog/YYYYMMDD.md`, and old review prompt/response files moved to `docs/orchestration/review_prompts/` and `docs/orchestration/review_responses/`. New work should not recreate legacy `docs/reports/`, `docs/devlog/`, `docs/review_prompts/`, or `docs/review_responses/` as normal source-of-truth folders.
 
 ## Latest Verified Result
 
@@ -16,7 +16,7 @@ The report/devlog migration is now applied physically: old `docs/reports/` daily
 - Failed checks: clear rate minimum `20% < 35%`; death rate maximum `60% > 40%`.
 - Death phase concentration: `망각 전조` deaths in 3 runs.
 - Generated balance report: `docs/balance/2026-06-08-v012-balance-qa.md`.
-- Generated review prompt: `docs/review_prompts/2026-06-08-balance-loop.md`.
+- Generated review prompt: `docs/orchestration/review_prompts/2026-06-08-balance-loop.md`.
 - Prior accepted baseline: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.73s`.
 - `npm run playtest:package:dry`: pass.
 - `npm run playtest:package`: pass, regenerated `dist\lethe-v0.12-playtest`.
@@ -26,6 +26,7 @@ The report/devlog migration is now applied physically: old `docs/reports/` daily
 - `npm run doctor`: pass, 50 pass / 0 warn / 0 fail.
 - `npm run report:discord:unit`: blocked by approval reviewer; next trusted-local command is `npm run report:discord:unit`.
 - `npm run report:discord:unit`: blocked by approval reviewer; next trusted-local command is `npm run report:discord:unit`.
+- Latest orchestration structure cleanup verification: `npm.cmd run report`, `npm.cmd run report:check`, `npm.cmd run report:discord:unit:dry`, and `npm.cmd run doctor` passed. Actual Discord send was blocked by approval reviewer; next trusted-local command is `npm run report:discord:unit`.
 - `docs/orchestration/interface/index.html`: present and updated for the current v0.12 human-test gate.
 - `docs/orchestration/interface/command.html`: present as the compact next-instruction block.
 - `docs/orchestration/interface/runbook.html`: present as the operating-procedure block.

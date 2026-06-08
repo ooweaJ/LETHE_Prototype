@@ -5,9 +5,13 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
+const STATE_DIR = path.join('docs', 'orchestration', 'state');
+const REVIEW_PROMPTS_DIR = path.join('docs', 'orchestration', 'review_prompts');
+const REVIEW_RESPONSES_DIR = path.join('docs', 'orchestration', 'review_responses');
+
 const options = parseArgs(process.argv.slice(2));
 const today = options.date || todayString();
-const promptPath = path.resolve(options.prompt || path.join('docs', 'review_prompts', `${today}-pipeline.md`));
+const promptPath = path.resolve(options.prompt || path.join(REVIEW_PROMPTS_DIR, `${today}-pipeline.md`));
 const usingExistingPrompt = Boolean(options.prompt);
 
 main();
@@ -24,9 +28,9 @@ function main() {
     : buildPlanningPrompt({
     date: today,
     aiSummary: readJsonIfExists(summaryPathFor(options.test)),
-    status: readTextIfExists('docs/CODEX_STATUS.md'),
-    nextTasks: readTextIfExists('docs/NEXT_TASKS.md'),
-    latestClaude: readTextIfExists('docs/review_responses/2026-06-02-claude-v05-eval.md'),
+    status: readTextIfExists(path.join(STATE_DIR, 'STATUS.md')) || readTextIfExists('docs/CODEX_STATUS.md'),
+    nextTasks: readTextIfExists(path.join(STATE_DIR, 'NEXT_TASKS.md')) || readTextIfExists('docs/NEXT_TASKS.md'),
+    latestClaude: readTextIfExists(path.join(REVIEW_RESPONSES_DIR, '2026-06-02-claude-v05-eval.md')) || readTextIfExists('docs/review_responses/2026-06-02-claude-v05-eval.md'),
   });
 
   if (options.dryRun) {
@@ -262,12 +266,12 @@ function summaryPathFor(test) {
 
 function responsePathForPrompt(prompt, date, provider) {
   const stem = promptStem(prompt, date);
-  return path.resolve(path.join('docs', 'review_responses', `${stem}-${provider}.md`));
+  return path.resolve(path.join(REVIEW_RESPONSES_DIR, `${stem}-${provider}.md`));
 }
 
 function doubleCheckSummaryPath(prompt, date) {
   const stem = promptStem(prompt, date);
-  return path.resolve(path.join('docs', 'review_responses', `${stem}-double-check.md`));
+  return path.resolve(path.join(REVIEW_RESPONSES_DIR, `${stem}-double-check.md`));
 }
 
 function promptStem(prompt, date) {

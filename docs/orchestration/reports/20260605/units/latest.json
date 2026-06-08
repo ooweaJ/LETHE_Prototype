@@ -1,11 +1,11 @@
 {
-  "source": "docs\\reports\\2026-06-05.md",
-  "generatedAt": "2026-06-05T15:25:17.896Z",
+  "source": "docs\\orchestration\\reports\\20260605\\index.md",
+  "generatedAt": "2026-06-08T11:20:11.901Z",
   "unitCount": 8,
   "latest": {
     "title": "2026-06-05-08 - First Boss TTK Boss-Only Harness",
     "number": "08",
-    "markdownPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-08-first-boss-ttk-boss-only-harness.md",
-    "htmlPath": "docs\\reports\\units\\2026-06-05\\2026-06-05-08-first-boss-ttk-boss-only-harness.html"
+    "markdownPath": "docs\\orchestration\\reports\\20260605\\units\\2026-06-05-08-first-boss-ttk-boss-only-harness.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260605\\units\\2026-06-05-08-first-boss-ttk-boss-only-harness.html"
   }
 }

@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260608\\index.md",
-  "generatedAt": "2026-06-08T10:11:30.276Z",
-  "unitCount": 10,
+  "generatedAt": "2026-06-08T11:22:41.057Z",
+  "unitCount": 11,
   "latest": {
-    "title": "2026-06-08-10 - 오케스트레이션 리포트와 개발로그 실제 마이그레이션",
-    "number": "10",
-    "markdownPath": "docs\\orchestration\\reports\\20260608\\units\\2026-06-08-10-오케스트레이션-리포트와-개발로그-실제-마이그레이션.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260608\\units\\2026-06-08-10-오케스트레이션-리포트와-개발로그-실제-마이그레이션.html"
+    "title": "2026-06-08-11 - 오케스트레이션 구조 규약 정리",
+    "number": "11",
+    "markdownPath": "docs\\orchestration\\reports\\20260608\\units\\2026-06-08-11-오케스트레이션-구조-규약-정리.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260608\\units\\2026-06-08-11-오케스트레이션-구조-규약-정리.html"
   }
 }

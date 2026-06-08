@@ -542,6 +542,68 @@
 <li>행동: report/devlog/state/interface를 실제로 이동하고, report 경로를 날짜별 구조로 바꿨다.</li>
 <li>결과: 사람은 날짜별 HTML 리포트를 보고, AI는 state/devlog Markdown을 읽는 구조로 정리된다.</li>
 </ul>
+<h1>2026-06-08-11 - 오케스트레이션 구조 규약 정리</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>오케스트레이션 구조의 기준 위치를 <code>docs/orchestration/</code>로 고정했다.</li>
+<li>review prompt/response도 실제 파일까지 오케스트레이션 아래로 옮겼다.</li>
+<li>Discord 보고는 최신 날짜의 unit HTML과 summary JSON을 기준으로 보낸다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>AGENTS.md</code>, <code>EXISTING_PROJECT_MIGRATION_PROMPT.md</code>, <code>docs/DISCORD_REPORTING.md</code>, <code>docs/CODEX_RUNBOOK.md</code>의 경로 규약을 새 구조로 정리했다.</li>
+<li><code>docs/review_prompts/*.md</code>를 <code>docs/orchestration/review_prompts/</code>로 옮겼다.</li>
+<li><code>docs/review_responses/*.md</code>를 <code>docs/orchestration/review_responses/</code>로 옮겼다.</li>
+<li>기존 review 폴더에는 legacy pointer README만 남겼다.</li>
+<li><code>scripts/ask_claude_review.js</code>, <code>scripts/ask_codex_review.js</code>, <code>scripts/send_discord_report.js</code>, <code>scripts/run_balance_loop.js</code>, <code>scripts/run_planning_pipeline.js</code>, <code>scripts/check_local_pipeline.js</code>, <code>scripts/run_autonomous_dev_loop.js</code>, trusted QA 스크립트를 새 경로 우선으로 바꿨다.</li>
+<li><code>docs/orchestration/legacy/MIGRATION_MAP.md</code>를 추가했다.</li>
+<li>날짜별 리포트를 전체 재생성해 <code>latest.json</code> 경로가 새 구조를 가리키도록 정리했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>날짜별 전체 리포트 재생성: 통과.</li>
+<li><code>docs/orchestration/reports/index.html</code>가 새 날짜별 구조를 기준으로 다시 생성됐다.</li>
+<li><code>node --check scripts/ask_claude_review.js</code>: 통과.</li>
+<li><code>node --check scripts/ask_codex_review.js</code>: 통과.</li>
+<li><code>node --check scripts/send_discord_report.js</code>: 통과.</li>
+<li><code>node --check scripts/run_balance_loop.js</code>: 통과.</li>
+<li><code>node --check scripts/run_planning_pipeline.js</code>: 통과.</li>
+<li><code>node --check scripts/run_autonomous_dev_loop.js</code>: 통과.</li>
+<li><code>npm.cmd run report</code>: 통과, 11개 단위 리포트 생성.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 11개 단위 확인.</li>
+<li><code>npm.cmd run report:discord:unit:dry</code>: 통과, 최신 첨부가 <code>docs/orchestration/reports/20260608/units/2026-06-08-11-오케스트레이션-구조-규약-정리.html</code>을 가리킴.</li>
+<li><code>npm.cmd run doctor</code>: 통과, 49 pass / 1 warn / 0 fail. Codex CLI 없음은 warning.</li>
+<li><code>npm.cmd run report:discord:unit</code>: 승인 정책에서 차단. 외부 Discord webhook으로 workspace 생성 보고서와 첨부를 보내는 것은 고위험 데이터 전송으로 판단됨.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>새 source of truth는 <code>docs/orchestration/</code> 아래에만 둔다.</li>
+<li><code>docs/reports/</code>, <code>docs/devlog/</code>, <code>docs/review_prompts/</code>, <code>docs/review_responses/</code>는 레거시 포인터 또는 역사 기록으로만 본다.</li>
+<li>review prompt/response는 새 작업부터 반드시 <code>docs/orchestration/review_prompts/</code>, <code>docs/orchestration/review_responses/</code>에 저장한다.</li>
+<li>Discord는 알림과 첨부 채널일 뿐이고, 기록의 기준은 Markdown/HTML 파일이다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>과거 devlog와 report 본문 안에는 당시 사용한 레거시 경로가 역사 기록으로 남아 있다.</li>
+<li>실제 Discord 전송은 이 Codex 세션의 승인 정책에서 차단됐다. 우회하지 않는다. 다음 trusted-local 명령은 <code>npm run report:discord:unit</code>이다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>오케스트레이션은 프로젝트별 문서 폴더가 아니라 공통 개인 AI 플러그인 규약으로 확정한다. 사람은 HTML을 보고, AI는 <code>state/</code>, <code>devlog/</code>, <code>review_prompts/</code>, <code>review_responses/</code> Markdown을 읽는다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li><code>npm run report</code>로 이번 단위 HTML을 생성한다.</li>
+<li><code>npm run report:check</code>로 단위 제목과 생성 파일을 검증한다.</li>
+<li><code>npm run report:discord:unit:dry</code>로 최신 Discord 첨부가 새 경로를 가리키는지 확인한다.</li>
+<li><code>npm run doctor</code>로 로컬 파이프라인을 점검한다.</li>
+<li>이후 원래 작업인 v0.12 밸런스 실패 리뷰로 돌아간다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 여러 프로젝트에 같은 방식으로 적용할 문서/보고/AI 연속성 규약이 필요했다.</li>
+<li>방향: 오케스트레이션 폴더 하나를 플러그인형 프로젝트 관리 인터페이스로 표준화했다.</li>
+<li>행동: 문서 구조, 스크립트 기본 경로, Discord 보고 기준, legacy map을 한 번에 정렬했다.</li>
+<li>결과: 다음 작업부터 상태, 개발로그, 리포트, AI 리뷰, Discord 첨부가 같은 구조로 쌓인다.</li>
+</ul>
   </main>
 </body>
 </html>

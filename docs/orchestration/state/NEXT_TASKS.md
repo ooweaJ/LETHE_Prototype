@@ -6,7 +6,7 @@ Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, 
 
 - Priority: high
 - Why: latest `balance:loop` returned `ITERATE_BALANCE`, full clear `20%`, death `60%`.
-- How: read `docs/balance/2026-06-08-v012-balance-qa.md` and `docs/review_prompts/2026-06-08-balance-loop.md`.
+- How: read `docs/balance/2026-06-08-v012-balance-qa.md` and `docs/orchestration/review_prompts/2026-06-08-balance-loop.md`.
 - Verification: one small adjustment candidate is selected and documented.
 - Blocker: requires direction on whether Codex should tune now or ask for external review first.
 

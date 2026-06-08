@@ -15,7 +15,7 @@
 7. 의미 있는 구현/밸런스/문서화 단위가 끝나면 `npm run report`, `npm run report:check`, `npm run report:discord:unit`까지 실행해 Discord 작업 단위 보고를 실제 전송한다. `dry-run`은 본문/첨부 확인용이지 완료 상태가 아니다.
 8. Discord 실제 전송 예외는 사용자가 명시적으로 전송하지 말라고 했거나 webhook/네트워크/권한 문제로 실패한 경우뿐이다. 실패하면 실패 원인과 다음 실행 명령을 devlog/report에 남긴다.
 9. 검증과 보고까지 끝난 의미 있는 작업 단위는 Conventional Commit으로 커밋하고, 작업 트리가 clean이며 공유해도 안전하면 `git push`까지 완료한다. push 실패 시 원인과 다음 명령을 사용자에게 보고한다.
-10. 테스트 결과를 바탕으로 기획 수정 또는 방향 결정이 필요하면 `docs/review_prompts/` 또는 `docs/orchestration/review_prompts/`에 Claude/GPT 전달 프롬프트를 남긴다.
+10. 테스트 결과를 바탕으로 기획 수정 또는 방향 결정이 필요하면 `docs/orchestration/review_prompts/`에 Claude/GPT 전달 프롬프트를 남긴다. 기존 `docs/review_prompts/`는 마이그레이션 전 레거시 기록으로만 본다.
 
 ## Orchestration Interface
 
@@ -45,8 +45,8 @@ Use orchestration files as follows:
 - `reports/YYYYMMDD/index.md`: Korean user-facing daily report source.
 - `reports/YYYYMMDD/index.html`: Korean user-facing daily report page.
 - `reports/YYYYMMDD/units/`: generated work-unit Markdown/HTML/summary files.
-- `review_prompts/`: prompts prepared for Claude/GPT/Codex review.
-- `review_responses/`: saved AI review responses.
+- `review_prompts/`: current prompts prepared for Claude/GPT/Codex review.
+- `review_responses/`: current saved AI review responses.
 - `evidence/`: useful test outputs, screenshots, logs, benchmark summaries, or links.
 - `templates/`: reusable document, report, review, and task templates.
 - `interface/index.html`: generated project dashboard for people.
@@ -61,7 +61,8 @@ After meaningful work:
 - Record durable decisions in `state/DECISION_LOG.md`.
 - Keep `state/NEXT_TASKS.md` short, usually no more than five active candidates.
 - Keep Markdown as the source of truth; generated HTML is the human-facing project interface generated from Markdown.
-- Do not delete legacy docs during adoption; summarize or link them from orchestration files.
+- Do not create new source-of-truth files under legacy `docs/reports/`, `docs/devlog/`, `docs/review_prompts/`, or `docs/review_responses/`.
+- Do not delete legacy docs during adoption unless the user explicitly asked for migration; summarize, move, or link them from orchestration files.
 
 ## Role Split
 
@@ -110,7 +111,7 @@ The current prototype goal is to verify whether the core loop is fun enough to j
 ## Claude Code Automation
 
 - Claude Code may be used after AI or human tests to interpret results, revise planning, and decide what Codex should implement next.
-- Claude answers should be saved under `docs/review_responses/YYYY-MM-DD-claude.md` or `docs/orchestration/review_responses/YYYY-MM-DD-claude.md`.
+- Claude answers should be saved under `docs/orchestration/review_responses/YYYY-MM-DD-claude.md`.
 - Claude should not edit project files during automated planning; it is called with tools disabled.
 - Codex reads the saved Claude response, updates `docs/orchestration/state/NEXT_TASKS.md`, then implements the selected work.
 - Discord is only a status/attention channel. Markdown files are the source of truth.

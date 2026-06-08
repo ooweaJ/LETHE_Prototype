@@ -1,11 +1,11 @@
 {
-  "source": "docs/reports/2026-06-03.md",
-  "generatedAt": "2026-06-02T20:57:24.207Z",
+  "source": "docs\\orchestration\\reports\\20260603\\index.md",
+  "generatedAt": "2026-06-08T11:20:11.725Z",
   "unitCount": 6,
   "latest": {
     "title": "2026-06-03-06 - 전술 집중 검증 통과와 루프 기준 회복",
     "number": "06",
-    "markdownPath": "docs/reports/units/2026-06-03/2026-06-03-06-전술-집중-검증-통과와-루프-기준-회복.md",
-    "htmlPath": "docs/reports/units/2026-06-03/2026-06-03-06-전술-집중-검증-통과와-루프-기준-회복.html"
+    "markdownPath": "docs\\orchestration\\reports\\20260603\\units\\2026-06-03-06-전술-집중-검증-통과와-루프-기준-회복.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260603\\units\\2026-06-03-06-전술-집중-검증-통과와-루프-기준-회복.html"
   }
 }

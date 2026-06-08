@@ -6,6 +6,8 @@ const path = require('path');
 
 const REPORTS_ROOT = path.resolve('docs', 'orchestration', 'reports');
 const LEGACY_REPORTS_ROOT = path.resolve('docs', 'reports');
+const REVIEW_PROMPTS_ROOT = path.resolve('docs', 'orchestration', 'review_prompts');
+const LEGACY_REVIEW_PROMPTS_ROOT = path.resolve('docs', 'review_prompts');
 
 const options = parseArgs(process.argv.slice(2));
 const dryRun = options.dryRun;
@@ -58,7 +60,7 @@ async function main() {
   const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
   if (!webhookUrl) {
     console.log('DISCORD_WEBHOOK_URL is not set. Skipped Discord upload; the HTML report was still generated.');
-    console.log(`Report: ${path.relative(process.cwd(), htmlPath)}`);
+    console.log(`Report: ${path.relative(process.cwd(), attachmentHtmlPath)}`);
     return;
   }
 
@@ -328,18 +330,22 @@ function resolvePromptPath(explicitPrompt, reportPath) {
   }
 
   const date = reportDateFromPath(reportPath);
-  const promptsDir = path.resolve('docs', 'review_prompts');
-  if (!fs.existsSync(promptsDir)) return '';
-
-  const prompts = fs.readdirSync(promptsDir)
-    .filter((file) => new RegExp(`^${escapeRegExp(date)}(?:-[a-z0-9-]+)?\\.md$`, 'i').test(file))
-    .map((file) => ({
-      file,
-      mtimeMs: fs.statSync(path.join(promptsDir, file)).mtimeMs,
-    }))
+  const promptDirs = [REVIEW_PROMPTS_ROOT, LEGACY_REVIEW_PROMPTS_ROOT];
+  const prompts = promptDirs.flatMap((promptsDir) => {
+    if (!fs.existsSync(promptsDir)) return [];
+    return fs.readdirSync(promptsDir)
+      .filter((file) => new RegExp(`^${escapeRegExp(date)}(?:-[a-z0-9-]+)?\\.md$`, 'i').test(file))
+      .map((file) => ({
+        dir: promptsDir,
+        file,
+        mtimeMs: fs.statSync(path.join(promptsDir, file)).mtimeMs,
+      }));
+  })
     .sort((a, b) => a.mtimeMs - b.mtimeMs || a.file.localeCompare(b.file));
 
-  return prompts.length ? path.join(promptsDir, prompts[prompts.length - 1].file) : '';
+  if (!prompts.length) return '';
+  const latest = prompts[prompts.length - 1];
+  return path.join(latest.dir, latest.file);
 }
 
 function bulletsFromSections(markdown, headingNames, limit) {

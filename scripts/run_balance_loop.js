@@ -7,6 +7,7 @@ const { spawnSync } = require('child_process');
 
 const options = parseArgs(process.argv.slice(2));
 const date = todayString();
+const REVIEW_PROMPTS_DIR = path.join('docs', 'orchestration', 'review_prompts');
 
 main();
 
@@ -17,7 +18,7 @@ function main() {
     console.log(`- run-sec ${options.runSec}, timeout-ms ${options.timeoutMs}`);
     console.log(`- out ${options.outDir}`);
     console.log(`- report ${options.reportPath}`);
-    console.log('- write docs/review_prompts/YYYY-MM-DD-balance-loop.md');
+    console.log('- write docs/orchestration/review_prompts/YYYY-MM-DD-balance-loop.md');
     console.log('- no emotion proxy, no Alpha Fun Score gate');
     return;
   }
@@ -51,8 +52,8 @@ function main() {
 }
 
 function writeBalancePrompt(summary) {
-  fs.mkdirSync(path.join('docs', 'review_prompts'), { recursive: true });
-  const file = path.join('docs', 'review_prompts', `${date}-balance-loop.md`);
+  fs.mkdirSync(REVIEW_PROMPTS_DIR, { recursive: true });
+  const file = path.join(REVIEW_PROMPTS_DIR, `${date}-balance-loop.md`);
   const failed = summary.failed || [];
   const lines = [
     `# LETHE v0.12 Balance Loop - ${date}`,

@@ -7,6 +7,9 @@ const { spawnSync } = require('child_process');
 
 const DEFAULT_PREFLIGHT = 'npm run autopilot:preflight:local';
 const DIRTY_PREFLIGHT = 'node scripts/autopilot_preflight.js --allow-dirty';
+const STATE_DIR = path.join('docs', 'orchestration', 'state');
+const REVIEW_PROMPTS_DIR = path.join('docs', 'orchestration', 'review_prompts');
+const REVIEW_RESPONSES_DIR = path.join('docs', 'orchestration', 'review_responses');
 
 const options = parseArgs(process.argv.slice(2));
 const startedAt = new Date();
@@ -161,9 +164,9 @@ function runPreflightBeforeLog() {
 function readLoopContext(iteration) {
   return {
     iteration,
-    status: readText('docs/CODEX_STATUS.md'),
-    nextTasks: readText('docs/NEXT_TASKS.md'),
-    doubleCheck: readText('docs/review_responses/2026-06-02-v09-release-feel-loop-double-check.md'),
+    status: readText(path.join(STATE_DIR, 'STATUS.md')) || readText('docs/CODEX_STATUS.md'),
+    nextTasks: readText(path.join(STATE_DIR, 'NEXT_TASKS.md')) || readText('docs/NEXT_TASKS.md'),
+    doubleCheck: readText(path.join(REVIEW_RESPONSES_DIR, '2026-06-02-v09-release-feel-loop-double-check.md')) || readText('docs/review_responses/2026-06-02-v09-release-feel-loop-double-check.md'),
     latestSummary: readJsonIfExists('alpha_test/outputs/quick/summary.json'),
   };
 }
@@ -208,8 +211,8 @@ function buildImplementationPrompt(context) {
     '',
     '## 이번 루프 목표',
     '',
-    '- `docs/NEXT_TASKS.md`의 다음 미완료 v0.10 작업 중 가장 앞선 하나만 구현한다.',
-    '- 현재 선택 범위는 아래 `NEXT_TASKS` 발췌에서 가장 앞선 미완료 v0.10 항목이다.',
+    '- `docs/orchestration/state/NEXT_TASKS.md`의 다음 미완료 작업 중 가장 앞선 하나만 구현한다.',
+    '- 현재 선택 범위는 아래 `NEXT_TASKS` 발췌에서 가장 앞선 미완료 항목이다.',
     '- WP1이 완료된 상태라면 새 기능으로 건너뛰기 전에 preflight cleanup과 trusted-local identity QA 재확인을 먼저 처리한다.',
     '- 새 기억, 새 슬롯, 상점, 메타 진행, 새 지역, 대형 무기 확장은 금지한다.',
     '',
@@ -264,7 +267,7 @@ function verificationCommands() {
 }
 
 function writeFeedbackPrompt(iteration, implementation) {
-  const promptPath = path.join('docs', 'review_prompts', `${runId}-feedback-${iteration}.md`);
+  const promptPath = path.join(REVIEW_PROMPTS_DIR, `${runId}-feedback-${iteration}.md`);
   const summary = readText('alpha_test/outputs/quick/summary.json');
   const diffStat = runCapture('git diff --stat');
   const prompt = [
@@ -292,7 +295,7 @@ function writeFeedbackPrompt(iteration, implementation) {
     '',
     '## 답변 요청',
     '',
-    '- 이번 구현이 `docs/NEXT_TASKS.md`의 현재 v0.10 최우선 미완료 항목과 범위 제한에 맞는지 판단한다.',
+    '- 이번 구현이 `docs/orchestration/state/NEXT_TASKS.md`의 현재 최우선 미완료 항목과 범위 제한에 맞는지 판단한다.',
     '- 다음 루프에서 구현할 가장 작은 작업 1개를 제안한다.',
     '- 실패/리스크가 있으면 명확히 적는다.',
     '- 범위 확장은 금지한다.',
@@ -315,9 +318,9 @@ function runCodexTaskUpdate(iteration, feedbackPrompt) {
     '## 읽을 파일',
     '',
     `- ${feedbackPrompt}`,
-    `- docs/review_responses/${stem}-claude.md`,
-    `- docs/review_responses/${stem}-codex.md`,
-    `- docs/review_responses/${stem}-double-check.md`,
+    `- ${path.join(REVIEW_RESPONSES_DIR, `${stem}-claude.md`)}`,
+    `- ${path.join(REVIEW_RESPONSES_DIR, `${stem}-codex.md`)}`,
+    `- ${path.join(REVIEW_RESPONSES_DIR, `${stem}-double-check.md`)}`,
     '- docs/orchestration/state/NEXT_TASKS.md',
     '- docs/CODEX_STATUS.md',
     '',
@@ -493,7 +496,8 @@ function recordResult(name, result) {
 }
 
 function writeBlockerPrompt(iteration, stepName, detail) {
-  const blockerPath = path.join('docs', 'review_prompts', `${date}-autodev-blocker-${iteration || 'preflight'}.md`);
+  const blockerPath = path.join(REVIEW_PROMPTS_DIR, `${date}-autodev-blocker-${iteration || 'preflight'}.md`);
+  fs.mkdirSync(path.dirname(blockerPath), { recursive: true });
   fs.writeFileSync(blockerPath, [
     `# LETHE 자동 개발 루프 Blocker - ${date}`,
     '',
