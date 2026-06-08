@@ -773,3 +773,20 @@ npm run ai:sweep
   - `npm run report:discord:unit` was blocked by the approval reviewer because sending workspace-generated reports/attachments to an external Discord webhook is treated as potential private data exfiltration in this Codex session.
   - Next trusted-local command: `npm run report:discord:unit`.
 - Legacy docs remain in place and are treated as detailed archives; orchestration files are the quick resume interface.
+
+## Latest Override - 2026-06-08 Orchestration Dashboard Refresh
+
+- Updated `docs/orchestration/index.html` so the top summary reflects the current project state.
+- Current stage now reads as v0.12 controlled human-test gate.
+- Latest verification now highlights `balance:loop GO`, full clear `60%`, and death `40%`.
+- Current blocker now highlights missing human reaction evidence.
+- Updated `docs/orchestration/STATUS.md` and `docs/orchestration/NEXT_TASKS.md` to match the dashboard state.
+- Verification:
+  - `npm run report`: pass.
+  - `npm run report:check`: pass.
+  - `npm run report:discord:unit:dry`: pass.
+  - `npm run doctor`: pass, 50 pass / 0 warn / 0 fail.
+- Discord actual send:
+  - `npm run report:discord:unit` was blocked by the approval reviewer because sending workspace-generated reports/attachments to an external Discord webhook is treated as potential private data exfiltration in this Codex session.
+  - Next trusted-local command: `npm run report:discord:unit`.
+- Current next task remains controlled human sessions, JSON logs in `playtest_logs/`, then `npm run playtest:summary`.

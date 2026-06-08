@@ -6,6 +6,8 @@ Last updated: 2026-06-08
 
 LETHE HTML Alpha v0.12 is the current controlled human-test candidate. The latest balance-loop gate passed, and the v0.12 playtest package has been regenerated.
 
+The orchestration HTML dashboard now exists at `docs/orchestration/index.html`; Markdown remains the source of truth.
+
 ## Latest Verified Result
 
 - Final browser `first_boss_ttk`: `GO_BALANCE_BASELINE`, 3/3 accepted samples, first boss TTK median `18.61s`.
@@ -17,6 +19,8 @@ LETHE HTML Alpha v0.12 is the current controlled human-test candidate. The lates
 - `npm run doctor`: pass, 50 pass / 0 warn / 0 fail.
 - `npm run report:discord:unit:dry`: pass.
 - `npm run report:discord:unit`: blocked by approval reviewer; next trusted-local command is `npm run report:discord:unit`.
+- `docs/orchestration/index.html`: present and updated for the current v0.12 human-test gate.
+- Latest dashboard refresh reporting: `npm run report`, `npm run report:check`, `npm run report:discord:unit:dry`, and `npm run doctor` passed; actual Discord send was blocked by approval reviewer.
 
 ## Current Blocker
 

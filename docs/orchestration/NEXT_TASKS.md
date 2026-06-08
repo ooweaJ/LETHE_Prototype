@@ -34,10 +34,10 @@ Keep this file short. Detailed history belongs in `devlog/`, `DECISION_LOG.md`, 
 - Verification: decision has evidence links and next task changes.
 - Blocker: requires human summary and review response.
 
-## 5. Generate Orchestration HTML Dashboard
+## 5. Automate Orchestration HTML Dashboard Refresh
 
 - Priority: low
-- Why: the user wants an easy visual way to monitor orchestration state across projects.
-- How: add a generator that builds `docs/orchestration/index.html` from Markdown.
-- Verification: dashboard is generated from Markdown source, not hand-maintained.
-- Blocker: should be done after the Markdown interface proves useful.
+- Why: `docs/orchestration/index.html` exists, but it should eventually be regenerated from Markdown instead of hand-maintained.
+- How: add a generator that builds `docs/orchestration/index.html` from `STATUS.md`, `CURRENT_TASK.md`, `NEXT_TASKS.md`, `DECISION_LOG.md`, devlog, and reports.
+- Verification: running the generator updates the dashboard and preserves Markdown as the source of truth.
+- Blocker: should be done after the current dashboard shape feels useful.

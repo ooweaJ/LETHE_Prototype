@@ -1,11 +1,11 @@
 {
   "source": "docs\\reports\\2026-06-08.md",
-  "generatedAt": "2026-06-08T06:00:44.943Z",
-  "unitCount": 2,
+  "generatedAt": "2026-06-08T06:56:32.842Z",
+  "unitCount": 3,
   "latest": {
-    "title": "2026-06-08-02 - Orchestration Interface Adoption",
-    "number": "02",
-    "markdownPath": "docs\\reports\\units\\2026-06-08\\2026-06-08-02-orchestration-interface-adoption.md",
-    "htmlPath": "docs\\reports\\units\\2026-06-08\\2026-06-08-02-orchestration-interface-adoption.html"
+    "title": "2026-06-08-03 - Orchestration Dashboard Current-State Refresh",
+    "number": "03",
+    "markdownPath": "docs\\reports\\units\\2026-06-08\\2026-06-08-03-orchestration-dashboard-current-state-refresh.md",
+    "htmlPath": "docs\\reports\\units\\2026-06-08\\2026-06-08-03-orchestration-dashboard-current-state-refresh.html"
   }
 }
