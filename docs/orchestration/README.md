@@ -4,6 +4,15 @@ This directory is the project-management interface for Codex and the user. It do
 
 Markdown files are the source of truth. HTML files, when generated, are readable views only.
 
+## Human Dashboard
+
+- `index.html` is the Korean human-facing command dashboard.
+- It reports the last completed state, not live in-progress Codex thoughts.
+- Its job is to help the user decide the next prompt.
+- `reports/index.html` lists user-facing and portfolio-ready development reports.
+- `devlog/index.html` lists internal work logs.
+- Markdown remains the source of truth; these HTML pages should eventually be generated from Markdown.
+
 ## Read Order
 
 Before meaningful work, read these files in order:
@@ -28,10 +37,12 @@ Before meaningful work, read these files in order:
 - `DECISION_LOG.md`: durable decision index with links to evidence.
 - `devlog/`: internal daily work logs.
 - `reports/`: user-facing and portfolio-facing work-unit summaries.
+- `reports/index.html`: human-readable report list.
 - `review_prompts/`: prompts prepared for AI review.
 - `review_responses/`: saved AI review responses.
 - `evidence/`: test, QA, benchmark, playtest, screenshot, and log evidence or links.
 - `templates/`: reusable document templates.
+- `devlog/index.html`: human-readable devlog list.
 
 ## Legacy Mapping
 

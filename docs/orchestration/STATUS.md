@@ -6,7 +6,7 @@ Last updated: 2026-06-08
 
 LETHE HTML Alpha v0.12 is the current controlled human-test candidate. The latest balance-loop gate passed, and the v0.12 playtest package has been regenerated.
 
-The orchestration HTML dashboard now exists at `docs/orchestration/index.html`; Markdown remains the source of truth.
+The orchestration HTML dashboard now exists at `docs/orchestration/index.html`; Markdown remains the source of truth. The dashboard is a Korean human-facing report screen for deciding the next prompt.
 
 ## Latest Verified Result
 
@@ -20,7 +20,10 @@ The orchestration HTML dashboard now exists at `docs/orchestration/index.html`; 
 - `npm run report:discord:unit:dry`: pass.
 - `npm run report:discord:unit`: blocked by approval reviewer; next trusted-local command is `npm run report:discord:unit`.
 - `docs/orchestration/index.html`: present and updated for the current v0.12 human-test gate.
+- `docs/orchestration/reports/index.html`: present as a human-readable report list.
+- `docs/orchestration/devlog/index.html`: present as a human-readable devlog list.
 - Latest dashboard refresh reporting: `npm run report`, `npm run report:check`, `npm run report:discord:unit:dry`, and `npm run doctor` passed; actual Discord send was blocked by approval reviewer.
+- Latest Korean dashboard normalization reporting: `npm run report`, `npm run report:check`, `npm run report:discord:unit:dry`, and `npm run doctor` passed; actual Discord send was blocked by approval reviewer.
 
 ## Current Blocker
 

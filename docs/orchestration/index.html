@@ -3,237 +3,567 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LETHE_Prototype 오케스트레이션</title>
+    <title>LETHE 오케스트레이션 대시보드</title>
     <style>
       :root {
-        color: #17211c;
-        background: #f5f7f1;
+        --bg: #f6f7f3;
+        --panel: #ffffff;
+        --text: #17201d;
+        --muted: #64706b;
+        --line: #dce2da;
+        --green: #1f6b4d;
+        --blue: #285f8f;
+        --amber: #916019;
+        --red: #9a3d36;
+        --soft-green: #e7f3ec;
+        --soft-blue: #e8f1f8;
+        --soft-amber: #f8efe0;
+        --soft-red: #fae9e7;
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--text);
+        background: var(--bg);
       }
+
       * { box-sizing: border-box; }
       body { margin: 0; }
-      main { width: min(1180px, 100%); margin: 0 auto; padding: 32px 22px; }
-      header { margin-bottom: 18px; }
-      .eyebrow { margin: 0 0 8px; color: #60706a; font-size: 13px; font-weight: 900; }
-      h1 { margin: 0; font-size: clamp(28px, 5vw, 46px); line-height: 1.05; }
-      h2, h3, h4, p { margin-top: 0; }
-      .summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }
-      .metric, .card { border: 1px solid #d9e1d7; border-radius: 8px; background: #fff; }
-      .metric { padding: 16px; }
-      .metric span { display: block; color: #697873; font-size: 13px; font-weight: 900; }
-      .metric strong { display: block; margin-top: 8px; font-size: 20px; line-height: 1.35; }
-      .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-      .wide { grid-column: 1 / -1; }
-      .card { padding: 18px; min-width: 0; }
-      .cardTitle { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
-      .cardTitle h2 { margin: 0; font-size: 18px; }
-      a { color: #1f6b4d; font-weight: 900; text-decoration: none; }
+      a { color: var(--green); font-weight: 800; text-decoration: none; }
       a:hover { text-decoration: underline; }
-      .markdown { color: #26342f; font-size: 14px; line-height: 1.65; }
-      .markdown h3 { margin: 14px 0 8px; color: #1f6b4d; font-size: 15px; }
-      .markdown h4 { margin: 12px 0 6px; font-size: 14px; }
-      .markdown p { margin: 0 0 10px; }
-      .markdown ul { margin: 0 0 10px; padding-left: 20px; }
-      .markdown li { margin-bottom: 4px; }
-      code { font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace; }
-      pre { overflow: auto; margin: 0 0 10px; padding: 12px; border-radius: 8px; background: #f2f5ef; font-size: 13px; line-height: 1.55; }
-      .listCard ul { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
-      .listCard li { display: grid; gap: 3px; }
-      small, .muted { color: #697873; font-size: 13px; }
-      footer { margin-top: 20px; color: #697873; font-size: 13px; }
-      @media (max-width: 760px) {
-        .summary, .grid { grid-template-columns: 1fr; }
+      code, pre, textarea { font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace; }
+
+      main {
+        width: min(1220px, 100%);
+        margin: 0 auto;
+        padding: 30px 22px 42px;
+      }
+
+      header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 18px;
+        align-items: end;
+        margin-bottom: 16px;
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        color: var(--green);
+        font-size: 13px;
+        font-weight: 900;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(30px, 5vw, 48px);
+        line-height: 1.05;
+      }
+
+      .subtitle {
+        margin: 10px 0 0;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        min-height: 34px;
+        padding: 7px 11px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--soft-amber);
+        color: var(--amber);
+        font-size: 13px;
+        font-weight: 900;
+        white-space: nowrap;
+      }
+
+      .topGrid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+
+      .metric,
+      .panel,
+      .promptBox,
+      .step {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+      }
+
+      .metric {
+        min-height: 116px;
+        padding: 15px;
+      }
+
+      .metric span {
+        display: block;
+        margin-bottom: 9px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 900;
+      }
+
+      .metric strong {
+        display: block;
+        font-size: 19px;
+        line-height: 1.35;
+      }
+
+      .metric small {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .metric.green { background: var(--soft-green); }
+      .metric.blue { background: var(--soft-blue); }
+      .metric.amber { background: var(--soft-amber); }
+      .metric.red { background: var(--soft-red); }
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+        gap: 14px;
+        align-items: start;
+      }
+
+      .panel {
+        padding: 18px;
+        margin-bottom: 14px;
+      }
+
+      .panelHeader {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        align-items: baseline;
+        margin-bottom: 13px;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 19px;
+        line-height: 1.3;
+      }
+
+      h3 {
+        margin: 18px 0 8px;
+        color: var(--green);
+        font-size: 15px;
+      }
+
+      p {
+        margin: 0 0 10px;
+        line-height: 1.65;
+      }
+
+      ul, ol {
+        margin: 0 0 10px;
+        padding-left: 21px;
+        line-height: 1.65;
+      }
+
+      li { margin-bottom: 5px; }
+
+      .muted {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .actionPanel {
+        border-color: #cbdcce;
+        background: linear-gradient(180deg, #ffffff 0%, #f0f7f2 100%);
+      }
+
+      .actionLead {
+        max-width: 760px;
+        font-size: 17px;
+        font-weight: 800;
+        line-height: 1.65;
+      }
+
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .step {
+        padding: 13px;
+        min-height: 122px;
+      }
+
+      .step b {
+        display: block;
+        margin-bottom: 7px;
+        color: var(--green);
+      }
+
+      .promptBox {
+        padding: 14px;
+        background: #fbfcf9;
+        margin-top: 10px;
+      }
+
+      .promptTools {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+
+      button {
+        min-height: 34px;
+        border: 1px solid #b9d2c3;
+        border-radius: 8px;
+        background: var(--green);
+        color: #fff;
+        font-weight: 900;
+        cursor: pointer;
+      }
+
+      button:hover { filter: brightness(0.96); }
+
+      textarea {
+        width: 100%;
+        min-height: 116px;
+        resize: vertical;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 12px;
+        background: #ffffff;
+        color: var(--text);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .twoCol {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .statusList {
+        display: grid;
+        gap: 9px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .statusList li {
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: 10px;
+        margin: 0;
+        padding: 9px 0;
+        border-bottom: 1px solid #edf0eb;
+      }
+
+      .statusList li:last-child { border-bottom: 0; }
+      .label { color: var(--muted); font-weight: 900; }
+
+      .docList {
+        display: grid;
+        gap: 9px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .docList li {
+        margin: 0;
+        padding: 10px 0;
+        border-bottom: 1px solid #edf0eb;
+      }
+
+      .docList li:last-child { border-bottom: 0; }
+      .docList small { display: block; margin-top: 4px; color: var(--muted); }
+
+      .evidence {
+        display: grid;
+        gap: 10px;
+      }
+
+      .evidenceItem {
+        padding: 11px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fbfcf9;
+      }
+
+      .evidenceItem b { display: block; margin-bottom: 4px; }
+
+      footer {
+        margin-top: 18px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      @media (max-width: 940px) {
+        header,
+        .layout,
+        .topGrid,
+        .steps,
+        .twoCol {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
   <body>
     <main>
       <header>
-        <p class="eyebrow">오케스트레이션 대시보드</p>
-        <h1>LETHE_Prototype</h1>
+        <div>
+          <p class="eyebrow">LETHE 오케스트레이션 대시보드</p>
+          <h1>다음 프롬프트를 정하기 위한 현재 보고서</h1>
+          <p class="subtitle">
+            기준: 2026-06-08 · Markdown 원본을 사람이 읽기 쉬운 HTML로 정리한 화면입니다.
+            이 화면은 실시간 작업 추적기가 아니라 마지막 완료 상태 기준의 지휘판입니다.
+          </p>
+        </div>
+        <span class="badge">사람 입력 필요</span>
       </header>
 
-      <section class="summary">
-        <div class="metric"><span>현재 단계</span><strong>v0.12 controlled human-test gate</strong></div>
-        <div class="metric"><span>최신 검증</span><strong>balance:loop GO · full clear 60% · death 40%</strong></div>
-        <div class="metric"><span>현재 blocker</span><strong>human reaction evidence missing</strong></div>
+      <section class="topGrid" aria-label="핵심 상태 요약">
+        <div class="metric green">
+          <span>현재 단계</span>
+          <strong>v0.12 사람 테스트 대기</strong>
+          <small>새 기능 개발보다 사람 반응 증거가 먼저입니다.</small>
+        </div>
+        <div class="metric blue">
+          <span>최신 검증</span>
+          <strong>balance:loop 통과</strong>
+          <small>first boss clear 100% · full clear 60% · death 40%</small>
+        </div>
+        <div class="metric amber">
+          <span>현재 문제</span>
+          <strong>사람 반응 증거 없음</strong>
+          <small>자동화 지표는 Unity 전환 근거가 아닙니다.</small>
+        </div>
+        <div class="metric red">
+          <span>다음 행동</span>
+          <strong>controlled human session</strong>
+          <small>로그를 `playtest_logs/`에 넣고 summary 실행.</small>
+        </div>
       </section>
 
-      <div class="grid">
-        <section class="card">
-    <div class="cardTitle">
-      <h2>현재 프로젝트 상태</h2>
-      <a href="./STATUS.md">STATUS.md</a>
-    </div>
-    <div class="markdown"><p>Last updated: 2026-06-08</p>
-<h3>Current Snapshot</h3>
-<p>LETHE HTML Alpha v0.12 is the current controlled human-test candidate. The latest balance-loop gate passed, and the v0.12 playtest package has been regenerated.</p>
-<p>The orchestration HTML dashboard now exists at <code>docs/orchestration/index.html</code>; Markdown remains the source of truth.</p>
-<h3>Latest Verified Result</h3>
-<ul>
-<li>Final browser <code>first_boss_ttk</code>: <code>GO_BALANCE_BASELINE</code>, 3/3 accepted samples, first boss TTK median <code>18.61s</code>.</li>
-<li>Final <code>npm run balance:loop</code>: <code>GO_BALANCE_BASELINE</code>, first boss clear <code>100%</code>, full clear <code>60%</code>, death <code>40%</code>, first boss TTK median <code>20.73s</code>.</li>
-<li><code>npm run playtest:package:dry</code>: pass.</li>
-<li><code>npm run playtest:package</code>: pass, regenerated <code>dist\lethe-v0.12-playtest</code>.</li>
-<li><code>npm run report</code>: pass.</li>
-<li><code>npm run report:check</code>: pass.</li>
-<li><code>npm run doctor</code>: pass, 50 pass / 0 warn / 0 fail.</li>
-<li><code>npm run report:discord:unit:dry</code>: pass.</li>
-<li><code>npm run report:discord:unit</code>: blocked by approval reviewer; next trusted-local command is <code>npm run report:discord:unit</code>.</li>
-<li><code>docs/orchestration/index.html</code>: present and updated for the current v0.12 human-test gate.</li>
-</ul>
-<h3>Current Blocker</h3>
-<p>Human reaction evidence is still missing. Automated balance evidence is not Unity-transition proof.</p>
-<p>Discord actual send from this Codex session was blocked by the approval reviewer because sending workspace-generated reports/attachments to an external webhook is treated as potential private data exfiltration. Next trusted-local command remains <code>npm run report:discord:unit</code>.</p>
-<h3>Current Next Step</h3>
-<p>Run controlled human sessions, place downloaded JSON logs in <code>playtest_logs/</code>, then run <code>npm run playtest:summary</code>.</p>
-<h3>Current Source Of Truth</h3>
-<ul>
-<li>Top-level rules: <code>AGENTS.md</code></li>
-<li>Detailed legacy status: <code>docs/CODEX_STATUS.md</code></li>
-<li>Detailed legacy task archive: <code>docs/NEXT_TASKS.md</code></li>
-<li>Current orchestration task: <code>docs/orchestration/CURRENT_TASK.md</code></li>
-</ul></div>
-  </section>
-        <section class="card">
-    <div class="cardTitle">
-      <h2>이번 작업</h2>
-      <a href="./CURRENT_TASK.md">CURRENT_TASK.md</a>
-    </div>
-    <div class="markdown"><h3>Goal</h3>
-<p>Run controlled human sessions for the current v0.12 HTML prototype candidate and summarize the downloaded JSON logs.</p>
-<h3>Why Now</h3>
-<p>The v0.12 balance-loop baseline is accepted for human testing. More blind numeric tuning should wait until human evidence shows what is actually weak.</p>
-<h3>Done Criteria</h3>
-<ul>
-<li>At least one controlled human session has been run.</li>
-<li>Downloaded JSON logs are placed in <code>playtest_logs/</code>.</li>
-<li>Human observation notes are recorded using <code>docs/PLAYTEST_NOTES.md</code> or a session-specific note.</li>
-<li><code>npm run playtest:summary</code> has been run after logs are available.</li>
-<li>Resulting summary is used to update orchestration status, devlog, reports, and a planning/review prompt if direction changes are needed.</li>
-</ul>
-<h3>Related Files</h3>
-<ul>
-<li><code>dist\lethe-v0.12-playtest</code></li>
-<li><code>docs/HUMAN_PLAYTEST_GUIDE.md</code></li>
-<li><code>docs/PLAYTEST_NOTES.md</code></li>
-<li><code>docs/playtest/2026-06-07-v012-human.md</code></li>
-<li><code>playtest_logs/</code></li>
-<li><code>scripts/summarize_playtests.js</code></li>
-</ul>
-<h3>Verification Commands</h3>
-<p>```bash</p>
-<p>npm run playtest:package</p>
-<p>npm run playtest:summary</p>
-<p>npm run report</p>
-<p>npm run report:check</p>
-<p>npm run doctor</p>
-<p>```</p>
-<h3>Open Questions</h3>
-<ul>
-<li>Do players read the first 2-3 minutes as fun, neutral, boring, or unclear?</li>
-<li>Do level-up choices feel meaningful or random?</li>
-<li>Does first forgetting create regret/acceptance rather than irritation?</li>
-<li>Does the 2-memory deficit segment feel tense but fair?</li>
-<li>Does refill feel like adaptation instead of a full reset?</li>
-<li>Does the prototype feel promising enough for a future Unity version?</li>
-</ul>
-<h3>Do Not Touch</h3>
-<p>Do not add new memories, slots, shop, meta progression, region structure, weapon expansion, final boss expansion, or additional blind balance tuning before human evidence unless the user explicitly changes scope.</p></div>
-  </section>
-        <section class="card">
-    <div class="cardTitle">
-      <h2>다음 작업 5개</h2>
-      <a href="./NEXT_TASKS.md">NEXT_TASKS.md</a>
-    </div>
-    <div class="markdown"><p>Keep this file short. Detailed history belongs in <code>devlog/</code>, <code>DECISION_LOG.md</code>, legacy <code>docs/NEXT_TASKS.md</code>, or evidence files.</p>
-<h3>1. Run Controlled Human Sessions</h3>
-<ul>
-<li>Priority: high</li>
-<li>Why: automated balance passed, but human reaction evidence is missing.</li>
-<li>How: use <code>dist\lethe-v0.12-playtest</code>, <code>docs/HUMAN_PLAYTEST_GUIDE.md</code>, and <code>docs/PLAYTEST_NOTES.md</code>.</li>
-<li>Verification: downloaded JSON logs exist in <code>playtest_logs/</code>.</li>
-<li>Blocker: needs actual human session time.</li>
-</ul>
-<h3>2. Summarize Playtest Logs</h3>
-<ul>
-<li>Priority: high after sessions</li>
-<li>Why: summary is needed before planning or Unity-transition judgment.</li>
-<li>How: place logs in <code>playtest_logs/</code>, then run <code>npm run playtest:summary</code>.</li>
-<li>Verification: summary output exists and is referenced from status/report.</li>
-<li>Blocker: requires playtest logs.</li>
-</ul>
-<h3>3. Create Planning Review Prompt From Human Evidence</h3>
-<ul>
-<li>Priority: medium</li>
-<li>Why: Claude/GPT/Codex review should interpret human evidence before major scope changes.</li>
-<li>How: create a prompt under <code>docs/orchestration/review_prompts/</code> or legacy <code>docs/review_prompts/</code>.</li>
-<li>Verification: prompt references human logs, notes, and summary.</li>
-<li>Blocker: requires summarized human evidence.</li>
-</ul>
-<h3>4. Decide Whether To Tune HTML Or Prepare Unity Direction</h3>
-<ul>
-<li>Priority: medium</li>
-<li>Why: the next implementation direction should follow human evidence.</li>
-<li>How: update <code>DECISION_LOG.md</code>, <code>STATUS.md</code>, and <code>NEXT_TASKS.md</code> after review.</li>
-<li>Verification: decision has evidence links and next task changes.</li>
-<li>Blocker: requires human summary and review response.</li>
-</ul>
-<h3>5. Automate Orchestration HTML Dashboard Refresh</h3>
-<ul>
-<li>Priority: low</li>
-<li>Why: <code>docs/orchestration/index.html</code> exists, but it should eventually be regenerated from Markdown instead of hand-maintained.</li>
-<li>How: add a generator that builds <code>docs/orchestration/index.html</code> from <code>STATUS.md</code>, <code>CURRENT_TASK.md</code>, <code>NEXT_TASKS.md</code>, <code>DECISION_LOG.md</code>, devlog, and reports.</li>
-<li>Verification: running the generator updates the dashboard and preserves Markdown as the source of truth.</li>
-<li>Blocker: should be done after the current dashboard shape feels useful.</li>
-</ul></div>
-  </section>
-        <section class="card">
-    <div class="cardTitle">
-      <h2>최근 결정</h2>
-      <a href="./DECISION_LOG.md">DECISION_LOG.md</a>
-    </div>
-    <div class="markdown"><p>This file is an index of durable decisions. Link to detailed reports, legacy docs, review prompts, review responses, or evidence instead of duplicating full history.</p>
-<p>| ID | Date | Decision | Reason | Evidence / Links |</p>
-<p>| --- | --- | --- | --- | --- |</p>
-<p>| DEC-2026-06-08-01 | 2026-06-08 | Adopt <code>docs/orchestration/</code> as the project-management interface. | The user wants a reusable cross-project Codex orchestration layer for status, tasks, logs, reports, evidence, and portfolio material. | <code>EXISTING_PROJECT_MIGRATION_PROMPT.md</code>, <code>AGENTS.md</code>, <code>docs/orchestration/README.md</code> |</p>
-<p>| DEC-2026-06-08-02 | 2026-06-08 | Keep root <code>AGENTS.md</code> as top-level rules and add only an Orchestration Interface section. | Existing agent rules are project-specific and should not be replaced by orchestration docs. | <code>AGENTS.md</code>, <code>docs/orchestration/PROMPT_CONTEXT.md</code> |</p>
-<p>| DEC-2026-06-08-03 | 2026-06-08 | Treat v0.12 as the current controlled human-test candidate. | The latest balance loop passed and package regeneration succeeded; further direction needs human evidence. | <code>docs/CODEX_STATUS.md</code>, <code>docs/orchestration/STATUS.md</code>, <code>docs/reports/2026-06-08.md</code> |</p>
-<p>| DEC-2026-06-07-01 | 2026-06-07 | Use <code>balance:loop</code> as the required balance source instead of relying on one-off <code>qa:balance</code>. | The user flagged loop/one-off mismatch; loop defaults and death gate were fixed. | <code>docs/reports/2026-06-07.md</code>, <code>docs/balance/2026-06-07-v012-balance-loop.md</code> |</p></div>
-  </section>
-        <section class="card listCard">
-          <div class="cardTitle"><h2>최근 devlog</h2><a href="./devlog/">devlog/</a></div>
-          <ul><li><a href="./devlog/2026-06-08.md">2026-06-08 Devlog</a><small>2026. 6. 8. PM 3:00:32</small></li></ul>
-        </section>
-        <section class="card listCard">
-          <div class="cardTitle"><h2>최근 report</h2><a href="./reports/">reports/</a></div>
-          <ul><li><a href="./reports/2026-06-08.md">2026-06-08-01 - Orchestration Interface Adoption</a><small>2026. 6. 8. PM 3:00:33</small></li></ul>
-        </section>
-        <section class="card wide">
-          <div class="cardTitle"><h2>자주 쓰는 명령</h2><a href="./RUNBOOK.md">RUNBOOK.md</a></div>
-          <pre><code>npm run doctor
-npm run doctor:deep</code></pre><pre><code>npm run playtest:package:dry
-npm run playtest:package</code></pre><pre><code>dist\lethe-v0.12-playtest</code></pre><pre><code>npm run playtest:summary</code></pre><pre><code>playtest_logs/</code></pre><pre><code>npm run qa:balance
-npm run balance:loop
-npm run qa:boss-ttk</code></pre>
-        </section>
-        <section class="card wide">
-          <div class="cardTitle"><h2>관련 문서 링크</h2><span class="muted">Markdown 원본</span></div>
-          <div class="markdown">
-            <ul>
-              <li><a href="./PROJECT_BRIEF.md">PROJECT_BRIEF.md</a></li>
-              <li><a href="./STATUS.md">STATUS.md</a></li>
-              <li><a href="./CURRENT_TASK.md">CURRENT_TASK.md</a></li>
-              <li><a href="./NEXT_TASKS.md">NEXT_TASKS.md</a></li>
-              <li><a href="./PROMPT_CONTEXT.md">PROMPT_CONTEXT.md</a></li>
-              <li><a href="./RUNBOOK.md">RUNBOOK.md</a></li>
-              <li><a href="./SCOPE_GUARD.md">SCOPE_GUARD.md</a></li>
-              <li><a href="./DECISION_LOG.md">DECISION_LOG.md</a></li>
-            </ul>
+      <section class="panel actionPanel">
+        <div class="panelHeader">
+          <h2>지금 사용자에게 필요한 다음 지시</h2>
+          <a href="./CURRENT_TASK.md">CURRENT_TASK.md</a>
+        </div>
+        <p class="actionLead">
+          지금은 새 기억, 상점, 메타 성장, 추가 밸런스 튜닝을 시킬 단계가 아닙니다.
+          v0.12 패키지로 사람 테스트를 진행하고, 다운로드된 JSON 로그를 모은 뒤 요약을 실행하는 것이 다음 작업입니다.
+        </p>
+        <div class="steps">
+          <div class="step">
+            <b>1. 테스트 진행</b>
+            <p>생성된 `dist\lethe-v0.12-playtest`로 controlled human session을 진행합니다.</p>
           </div>
-        </section>
+          <div class="step">
+            <b>2. 로그 수집</b>
+            <p>다운로드된 JSON 로그를 `playtest_logs/`에 모읍니다.</p>
+          </div>
+          <div class="step">
+            <b>3. 요약 실행</b>
+            <p>`npm run playtest:summary` 실행 후 결과를 오케스트레이션 문서에 반영합니다.</p>
+          </div>
+        </div>
+        <div class="promptBox">
+          <div class="promptTools">
+            <b>복사용 추천 프롬프트</b>
+            <button type="button" data-copy-target="prompt-main">복사</button>
+          </div>
+          <textarea id="prompt-main" readonly>현재 docs/orchestration 기준으로 LETHE v0.12 사람 테스트 이후 작업을 진행해줘. playtest_logs/에 있는 JSON 로그를 확인하고 npm run playtest:summary를 실행한 다음, 결과를 docs/orchestration/STATUS.md, CURRENT_TASK.md, NEXT_TASKS.md, devlog, reports, DECISION_LOG.md에 반영해줘. 자동화 지표와 사람 반응 증거를 분리해서 정리하고, Unity 전환 판단이 필요한 경우 review prompt도 만들어줘.</textarea>
+        </div>
+      </section>
+
+      <div class="layout">
+        <div>
+          <section class="panel">
+            <div class="panelHeader">
+              <h2>마지막 완료 작업 보고</h2>
+              <a href="./reports/2026-06-08.md">orchestration report</a>
+            </div>
+            <ul class="statusList">
+              <li><span class="label">완료 작업</span><span>오케스트레이션 대시보드 현재 상태 갱신</span></li>
+              <li><span class="label">변경 내용</span><span>상단 요약, 다음 행동, 복사용 프롬프트, 개발문서 목록 화면 정규화</span></li>
+              <li><span class="label">검증</span><span>`npm run report`, `report:check`, `report:discord:unit:dry`, `doctor` 통과</span></li>
+              <li><span class="label">차단</span><span>실제 Discord 전송은 외부 webhook 정책으로 차단됨</span></li>
+              <li><span class="label">커밋 기준</span><span>작업 완료 후 문서/보고서/HTML을 함께 커밋하는 흐름</span></li>
+            </ul>
+          </section>
+
+          <section class="panel">
+            <div class="panelHeader">
+              <h2>현재 작업과 완료 기준</h2>
+              <a href="./CURRENT_TASK.md">원본 보기</a>
+            </div>
+            <p>
+              현재 작업은 v0.12 HTML 프로토타입의 controlled human session을 진행하고,
+              다운로드된 JSON 로그를 요약하는 것입니다.
+            </p>
+            <h3>완료 기준</h3>
+            <ul>
+              <li>최소 1회 이상의 사람 테스트 세션 진행</li>
+              <li>다운로드된 JSON 로그를 `playtest_logs/`에 저장</li>
+              <li>관찰 메모를 `docs/PLAYTEST_NOTES.md` 또는 세션 문서에 기록</li>
+              <li>`npm run playtest:summary` 실행</li>
+              <li>요약 결과를 상태, devlog, reports, 결정 로그에 반영</li>
+            </ul>
+          </section>
+
+          <section class="panel">
+            <div class="panelHeader">
+              <h2>다음 작업 후보 5개</h2>
+              <a href="./NEXT_TASKS.md">원본 보기</a>
+            </div>
+            <ol>
+              <li><b>사람 테스트 진행</b>: v0.12 패키지로 controlled session을 실행합니다.</li>
+              <li><b>테스트 로그 요약</b>: `playtest_logs/`의 JSON 로그로 `npm run playtest:summary`를 실행합니다.</li>
+              <li><b>사람 증거 기반 리뷰 프롬프트 생성</b>: Claude/GPT/Codex 판단용 프롬프트를 작성합니다.</li>
+              <li><b>HTML 튜닝 또는 Unity 방향 결정</b>: 사람 반응을 기준으로 다음 방향을 정합니다.</li>
+              <li><b>대시보드 자동 갱신</b>: Markdown에서 `index.html`을 생성하는 스크립트를 추가합니다.</li>
+            </ol>
+          </section>
+
+          <section class="panel">
+            <div class="panelHeader">
+              <h2>검증 결과와 증거</h2>
+              <a href="./STATUS.md">STATUS.md</a>
+            </div>
+            <div class="evidence">
+              <div class="evidenceItem">
+                <b>밸런스 루프</b>
+                <span>`GO_BALANCE_BASELINE` · first boss clear 100% · full clear 60% · death 40% · first boss TTK median 20.73s</span>
+              </div>
+              <div class="evidenceItem">
+                <b>패키지</b>
+                <span>`npm run playtest:package:dry` / `npm run playtest:package` 통과 · `dist\lethe-v0.12-playtest` 재생성</span>
+              </div>
+              <div class="evidenceItem">
+                <b>문서/보고</b>
+                <span>`npm run report`, `npm run report:check`, `npm run report:discord:unit:dry`, `npm run doctor` 통과</span>
+              </div>
+              <div class="evidenceItem">
+                <b>남은 증거</b>
+                <span>사람 반응, 테스트 로그, 요약 리포트, Unity 전환 판단 근거</span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <aside>
+          <section class="panel">
+            <div class="panelHeader">
+              <h2>사용자 판단 포인트</h2>
+            </div>
+            <ul>
+              <li>초반 2-3분이 재미있는가?</li>
+              <li>레벨업 선택이 빌드를 만든다고 느껴지는가?</li>
+              <li>첫 망각이 짜증보다 아까움/후회에 가까운가?</li>
+              <li>2기억 결손 구간이 공정하게 긴장되는가?</li>
+              <li>리필이 리셋이 아니라 적응처럼 느껴지는가?</li>
+              <li>Unity 버전으로 확장할 가능성이 보이는가?</li>
+            </ul>
+          </section>
+
+          <section class="panel">
+            <div class="panelHeader">
+              <h2>금지 범위</h2>
+              <a href="./SCOPE_GUARD.md">SCOPE_GUARD.md</a>
+            </div>
+            <ul>
+              <li>새 기억 / 새 슬롯 추가 금지</li>
+              <li>상점 / 메타 성장 금지</li>
+              <li>새 지역 / 다지역 구조 금지</li>
+              <li>최종 보스 확장 금지</li>
+              <li>사람 증거 전 blind balance tuning 금지</li>
+            </ul>
+          </section>
+
+          <section class="panel">
+            <div class="panelHeader">
+              <h2>개발 문서 보기</h2>
+              <span class="muted">HTML 목록</span>
+            </div>
+            <ul class="docList">
+              <li>
+                <a href="./reports/index.html">보고서 목록</a>
+                <small>작업 단위 보고서와 포트폴리오용 요약</small>
+              </li>
+              <li>
+                <a href="./devlog/index.html">개발로그 목록</a>
+                <small>내부 작업 과정과 검증/차단 기록</small>
+              </li>
+              <li>
+                <a href="../reports/2026-06-08.html">기존 일일 HTML 보고서</a>
+                <small>기존 report 파이프라인에서 생성된 사람용 문서</small>
+              </li>
+            </ul>
+          </section>
+
+          <section class="panel">
+            <div class="panelHeader">
+              <h2>Codex 앱과의 차별점</h2>
+            </div>
+            <p>
+              이 오케스트레이션은 대화창 안에만 남는 상태가 아니라,
+              개발 문서와 보고서를 프로젝트 폴더에서 직접 볼 수 있게 남깁니다.
+            </p>
+            <p>
+              사용자는 HTML 대시보드와 보고서 목록을 보고 다음 프롬프트를 직접 결정할 수 있습니다.
+            </p>
+          </section>
+
+          <section class="panel">
+            <div class="panelHeader">
+              <h2>자주 쓰는 명령</h2>
+              <a href="./RUNBOOK.md">RUNBOOK.md</a>
+            </div>
+            <pre><code>npm run playtest:package
+npm run playtest:summary
+npm run report
+npm run report:check
+npm run doctor</code></pre>
+          </section>
+        </aside>
       </div>
-      <footer>Generated/readable view. Markdown remains the source of truth. 2026-06-08 current state refresh.</footer>
+
+      <footer>
+        이 HTML은 사람이 읽는 보고 화면입니다. 원본은 `docs/orchestration/*.md`이며,
+        다음 개선은 Markdown에서 이 대시보드를 자동 생성하는 파이프라인입니다.
+      </footer>
     </main>
+
+    <script>
+      document.querySelectorAll("[data-copy-target]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const target = document.getElementById(button.dataset.copyTarget);
+          if (!target) return;
+          target.select();
+          try {
+            await navigator.clipboard.writeText(target.value);
+            button.textContent = "복사됨";
+            setTimeout(() => { button.textContent = "복사"; }, 1200);
+          } catch {
+            document.execCommand("copy");
+            button.textContent = "복사됨";
+            setTimeout(() => { button.textContent = "복사"; }, 1200);
+          }
+        });
+      });
+    </script>
   </body>
 </html>

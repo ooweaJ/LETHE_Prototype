@@ -53,6 +53,23 @@ npm run report:discord:unit
 
 If actual Discord send is blocked by policy, webhook, network, or permissions, record the exact reason and next trusted-local command in devlog/report.
 
+## Orchestration HTML
+
+Current human-facing pages:
+
+```text
+docs\orchestration\index.html
+docs\orchestration\reports\index.html
+docs\orchestration\devlog\index.html
+```
+
+Rules:
+
+- Markdown is the source of truth.
+- HTML is a Korean readable dashboard/list view for the user.
+- The dashboard shows the last completed state, recommended next prompt, blockers, evidence, and document links.
+- Until a generator exists, update the HTML manually when orchestration status changes.
+
 ## Autopilot
 
 Before unattended implement -> test -> review -> implement loops:

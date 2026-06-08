@@ -14,7 +14,8 @@ Codex works in this repository as the implementation, verification, git, reporti
 - Root `AGENTS.md` is the top-level project rulebook.
 - Use `docs/orchestration/` as the current operating interface.
 - Keep existing legacy docs; do not delete them during orchestration adoption.
-- Keep Markdown as the source of truth. HTML is a generated/readable view.
+- Keep Markdown as the source of truth. HTML is a generated/readable view for the user.
+- The orchestration dashboard should be Korean-first and help the user decide the next prompt from the last completed state.
 - After meaningful work, update status/task docs, devlog, reports, and decision logs as appropriate.
 
 ## Evidence Discipline

@@ -790,3 +790,23 @@ npm run ai:sweep
   - `npm run report:discord:unit` was blocked by the approval reviewer because sending workspace-generated reports/attachments to an external Discord webhook is treated as potential private data exfiltration in this Codex session.
   - Next trusted-local command: `npm run report:discord:unit`.
 - Current next task remains controlled human sessions, JSON logs in `playtest_logs/`, then `npm run playtest:summary`.
+
+## Latest Override - 2026-06-08 Korean Dashboard Normalization
+
+- Rebuilt `docs/orchestration/index.html` as a Korean human-facing command dashboard.
+- Added a copyable recommended prompt for the next Codex action.
+- Added `docs/orchestration/reports/index.html` and `docs/orchestration/devlog/index.html`.
+- Updated orchestration docs to state:
+  - Markdown is the source of truth,
+  - HTML is a readable user view,
+  - the dashboard shows the last completed state, not live in-progress Codex thoughts,
+  - the dashboard should help the user decide the next prompt.
+- Verification:
+  - `npm run report`: pass.
+  - `npm run report:check`: pass.
+  - `npm run report:discord:unit:dry`: pass.
+  - `npm run doctor`: pass, 50 pass / 0 warn / 0 fail.
+- Discord actual send:
+  - `npm run report:discord:unit` was blocked by the approval reviewer because sending workspace-generated reports/attachments to an external Discord webhook is treated as potential private data exfiltration in this Codex session.
+  - Next trusted-local command: `npm run report:discord:unit`.
+- Current next task remains controlled human sessions, JSON logs in `playtest_logs/`, then `npm run playtest:summary`.

@@ -37,7 +37,7 @@ Keep this file short. Detailed history belongs in `devlog/`, `DECISION_LOG.md`, 
 ## 5. Automate Orchestration HTML Dashboard Refresh
 
 - Priority: low
-- Why: `docs/orchestration/index.html` exists, but it should eventually be regenerated from Markdown instead of hand-maintained.
-- How: add a generator that builds `docs/orchestration/index.html` from `STATUS.md`, `CURRENT_TASK.md`, `NEXT_TASKS.md`, `DECISION_LOG.md`, devlog, and reports.
-- Verification: running the generator updates the dashboard and preserves Markdown as the source of truth.
+- Why: `docs/orchestration/index.html`, `reports/index.html`, and `devlog/index.html` exist, but they should eventually be regenerated from Markdown instead of hand-maintained.
+- How: add a generator that builds the Korean dashboard and document-list pages from `STATUS.md`, `CURRENT_TASK.md`, `NEXT_TASKS.md`, `DECISION_LOG.md`, devlog, reports, and generated report units.
+- Verification: running the generator updates the HTML pages and preserves Markdown as the source of truth.
 - Blocker: should be done after the current dashboard shape feels useful.
