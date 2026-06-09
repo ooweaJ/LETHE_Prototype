@@ -59,8 +59,8 @@
       <div class="grid">
         <article>
           <h2>Codex에게 지금 시킬 일</h2>
-          <p>최신 <code>balance:loop</code> 실패를 보고 작은 밸런스 조정 후보 1개를 정한 뒤 재검증합니다.</p>
-          <textarea id="prompt-next" readonly>docs/balance/2026-06-08-v012-balance-qa.md와 docs/orchestration/review_prompts/2026-06-08-balance-loop.md를 기준으로 LETHE v0.12 밸런스 실패를 분석해줘. 한 번에 하나의 작은 밸런스 조정만 제안하고, 새 기억/상점/메타/지역/최종보스 확장은 하지 마. 조정 후 npm run qa:balance 또는 npm run balance:loop로 검증하고 결과를 docs/orchestration/state/STATUS.md, CURRENT_TASK.md, NEXT_TASKS.md, DECISION_LOG.md와 docs/orchestration/devlog/2026-06-09.md, docs/orchestration/reports/20260609/index.md에 반영해줘.</textarea>
+          <p><code>laterCycleClimax 46 -> 42</code> 후보 실패를 보고, 다른 작은 밸런스 조정 후보 1개를 정한 뒤 재검증합니다.</p>
+          <textarea id="prompt-next" readonly>docs/balance/2026-06-09-v012-balance-qa.md와 docs/orchestration/review_prompts/2026-06-09-balance-loop.md를 기준으로 LETHE v0.12 밸런스 실패를 분석해줘. 단순 laterCycleClimax cap 하향은 이미 실패했으니 반복하지 말고, 한 번에 하나의 작은 밸런스 조정만 제안해줘. 새 기억/상점/메타/지역/최종보스 확장은 하지 마. 조정 후 npm run qa:balance 또는 npm run balance:loop로 검증하고 결과를 docs/orchestration/state/STATUS.md, CURRENT_TASK.md, NEXT_TASKS.md, DECISION_LOG.md와 docs/orchestration/devlog/2026-06-09.md, docs/orchestration/reports/20260609/index.md에 반영해줘.</textarea>
           <button type="button" data-copy-target="prompt-next">프롬프트 복사</button>
         </article>
 

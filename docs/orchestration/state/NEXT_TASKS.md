@@ -2,19 +2,19 @@
 
 Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, legacy `docs/NEXT_TASKS.md`, or evidence files.
 
-## 1. Review Balance Loop Failure
+## 1. Review 2026-06-09 Balance Failure
 
 - Priority: high
-- Why: latest `balance:loop` returned `ITERATE_BALANCE`, full clear `20%`, death `60%`.
-- How: read `docs/balance/2026-06-08-v012-balance-qa.md` and `docs/orchestration/review_prompts/2026-06-08-balance-loop.md`.
-- Verification: one small adjustment candidate is selected and documented.
-- Blocker: requires direction on whether Codex should tune now or ask for external review first.
+- Why: the first one-lever candidate, `laterCycleClimax 46 -> 42`, worsened the loop to full clear `20%`, death `80%`.
+- How: read `docs/balance/2026-06-09-v012-balance-qa.md` and `docs/orchestration/review_prompts/2026-06-09-balance-loop.md`.
+- Verification: one different small adjustment candidate is selected and documented.
+- Blocker: do not repeat a pure post-cycle climax cap cut as the next immediate candidate.
 
-## 2. Apply One Small Balance Adjustment
+## 2. Apply One Different Small Balance Adjustment
 
 - Priority: high after review
 - Why: death rate is above the accepted gate.
-- How: change exactly one balance lever from the v0.12 balance docs.
+- How: change exactly one balance lever from the v0.12 balance docs; prefer a non-density lever such as refill/transition safety or damage timing if the evidence supports it.
 - Verification: changed file is documented and test command is rerun.
 - Blocker: should not stack multiple blind tuning changes.
 

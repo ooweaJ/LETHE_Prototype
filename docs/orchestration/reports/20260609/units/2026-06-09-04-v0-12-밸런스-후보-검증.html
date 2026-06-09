@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-09-04 - v0.12 밸런스 후보 검증</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-09-04 - v0.12 밸런스 후보 검증</h1>
+      <p class="meta">Generated from 2026-06-09-04-v0-12-밸런스-후보-검증.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260609/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-09-04 - v0.12 밸런스 후보 검증</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>v0.12는 아직 사람 테스트 재개 기준을 통과하지 못했다.</li>
+<li>단일 후보로 <code>laterCycleClimax 46 -&gt; 42</code>를 시험했지만, 결과가 악화되어 코드에는 채택하지 않았다.</li>
+<li><code>src/game.js</code>는 기존 <code>laterCycleClimax: 46</code> 기준선으로 되돌렸다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>2026-06-08 실패 리포트와 review prompt를 기준으로 원인을 다시 좁혔다.</li>
+<li>첫 보스 클리어, 첫 보스 TTK, 초반 레벨업, 슬롯 완성, top DPS share는 통과했기 때문에 기억 성능이나 보스 HP는 건드리지 않았다.</li>
+<li>사망이 <code>망각 전조</code>에 몰린 점을 보고 post-first-cycle <code>망각 전조</code> 적 상한만 낮추는 후보를 시험했다.</li>
+<li>검증 후 실패로 판단해 해당 코드 변경은 되돌렸다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>npm run qa:balance</code>: <code>ITERATE_BALANCE</code>.</li>
+<li>QA 결과: first boss clear <code>100%</code>, full clear <code>20%</code>, death <code>80%</code>, first boss TTK median <code>26.17s</code>.</li>
+<li><code>npm run balance:loop</code>: <code>ITERATE_BALANCE</code>.</li>
+<li>Loop 결과: first boss clear <code>100%</code>, full clear <code>20%</code>, death <code>80%</code>, first boss TTK median <code>23.1s</code>.</li>
+<li>생성 리포트: <code>docs/balance/2026-06-09-v012-balance-qa.md</code>.</li>
+<li>생성 review prompt: <code>docs/orchestration/review_prompts/2026-06-09-balance-loop.md</code>.</li>
+<li><code>npm run report</code>: 통과, 2026-06-09 HTML 보고서와 4개 unit report 재생성.</li>
+<li><code>npm run report:check</code>: 통과, 4개 unit heading 확인.</li>
+<li><code>npm run doctor</code>: 통과, 50 pass / 0 warn / 0 fail.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li><code>laterCycleClimax 46 -&gt; 42</code>는 v0.12 accepted tuning으로 채택하지 않는다.</li>
+<li>다음 후보는 단순 후반 <code>망각 전조</code> cap 하향이 아니라, refill 전환 안정성, 결손 압박, 초반 HP erosion, enemy damage timing 중 하나를 증거로 골라야 한다.</li>
+<li>새 기억, 상점, 메타 진행, 새 지역, 최종보스 확장은 계속 금지한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>death rate가 이전 실패 기준 <code>60%</code>에서 후보 검증 후 <code>80%</code>로 악화됐다.</li>
+<li>사망 phase가 <code>망각 전조</code>만이 아니라 <code>결손 압박</code>, <code>압박 상승</code>까지 퍼져, 순수 밀도 cap 문제가 아닐 가능성이 커졌다.</li>
+<li>사람 테스트는 여전히 보류해야 한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p><code>laterCycleClimax 46 -&gt; 42</code> 단일 후보는 실패했다. 첫 보스 관련 지표는 계속 통과하지만 clear <code>20%</code>, death <code>80%</code>라서 사람 테스트 기준은 아니다. 다음 검토는 단순 enemy cap 하향을 반복하지 말고, refill/transition safety 또는 damage timing 쪽의 작은 한 레버를 골라야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li><code>docs/balance/2026-06-09-v012-balance-qa.md</code>와 <code>docs/orchestration/review_prompts/2026-06-09-balance-loop.md</code>를 읽는다.</li>
+<li>단순 <code>laterCycleClimax</code> cap 하향을 반복하지 않는다.</li>
+<li>다음 작은 후보 하나를 고른 뒤 <code>npm run qa:balance</code> 또는 <code>npm run balance:loop</code>로 다시 검증한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: v0.12 자동 밸런스가 사람 테스트 전 기준을 다시 잃었다.</li>
+<li>방향: 한 번에 하나의 작은 레버만 바꾸고, 실패한 후보도 명확히 버린다.</li>
+<li>행동: 후반 <code>망각 전조</code> enemy cap 하향을 시험하고 QA/loop로 검증했다.</li>
+<li>결과: 후보를 미채택하고 다음 분석 방향을 refill/transition/damage timing으로 좁혔다.</li>
+</ul>
+  </main>
+</body>
+</html>
