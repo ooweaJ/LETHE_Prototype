@@ -6,11 +6,11 @@ LETHE is an HTML prototype for testing whether a memory-loss roguelike loop is f
 
 ## Current Goal
 
-Validate the core loop through HTML prototype playtesting before committing to Unity production. The current focus is not content expansion; it is evidence that early combat, run growth, first forgetting, deficit survival, refill, and replay intent work together.
+Use the HTML prototype evidence to define the Unity vertical-slice system contract. The current focus is not content expansion; it is freezing the memory, echo, resonance, awakened echo, and ultimate echo rules that should carry the Unity version.
 
 ## Current Phase
 
-Controlled human-test candidate after v0.12 balance-loop validation.
+Unity-transition planning after v0.12 balance-loop validation.
 
 ## Tech Stack
 

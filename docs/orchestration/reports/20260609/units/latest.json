@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260609\\index.md",
-  "generatedAt": "2026-06-09T07:35:05.308Z",
-  "unitCount": 7,
+  "generatedAt": "2026-06-09T08:13:58.471Z",
+  "unitCount": 8,
   "latest": {
-    "title": "2026-06-09-07 - 잔향 피드백 가시성 보강",
-    "number": "07",
-    "markdownPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-07-잔향-피드백-가시성-보강.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-07-잔향-피드백-가시성-보강.html"
+    "title": "2026-06-09-08 - Unity 전환용 핵심 시스템 기획",
+    "number": "08",
+    "markdownPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-08-unity-전환용-핵심-시스템-기획.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-08-unity-전환용-핵심-시스템-기획.html"
   }
 }

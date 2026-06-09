@@ -4,7 +4,7 @@ Last updated: 2026-06-09
 
 ## Current Snapshot
 
-LETHE HTML Alpha v0.12 is cleared again as a controlled human-test candidate after the latest one-lever balance recovery. The accepted tuning change is player max HP `180 -> 190`; two consecutive `npm run balance:loop` runs returned `GO_BALANCE_BASELINE`. After the user noted that echo effects felt unclear, the build now makes weapon echoes more explicit in the forget result card, combat log, sidebar, and start-of-deficit visual feedback without changing balance numbers. The playtest package was regenerated at `dist\lethe-v0.12-playtest`.
+LETHE HTML Alpha v0.12 is cleared again as a controlled human-test candidate after the latest one-lever balance recovery, but the project direction has now shifted from more HTML tuning toward Unity transition planning. The accepted tuning change remains player max HP `180 -> 190`; two consecutive `npm run balance:loop` runs returned `GO_BALANCE_BASELINE`. After the user clarified the desired echo fantasy, the current core-system direction is documented in `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md`: memory and echo levels both cap at `+5`, forgotten memory levels accumulate into matching echoes, reacquired echoed memories gain resonance, and two `+5` echoes can unlock ultimate echo synergies.
 
 The orchestration HTML interface now exists at `docs/orchestration/interface/index.html`, `docs/orchestration/interface/command.html`, and `docs/orchestration/interface/runbook.html`. AI-facing state lives under `docs/orchestration/state/`; human-facing reports live under `docs/orchestration/reports/YYYYMMDD/`.
 
@@ -24,6 +24,7 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 - `npm run qa:identity` with `CHROME_PATH=C:\Program Files\Google\Chrome\Application\chrome.exe`: pass, failures `[]`.
 - `npm run playtest:package:dry`: pass after echo clarity patch.
 - `npm run playtest:package`: pass after echo clarity patch, regenerated `dist\lethe-v0.12-playtest`.
+- Unity transition system plan: `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md` created.
 - Failed checks: none in the latest loop.
 - Death phases in the latest loop: `압박 상승` 1, `망각 전조` 1.
 - Generated balance report: `docs/balance/2026-06-09-v012-balance-qa.md`.
@@ -56,7 +57,7 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Current Blocker
 
-Human reaction evidence is still missing. The automated balance gate and playtest package are ready, and the first echo readability risk has been patched, so the next blocker is running a controlled human session and saving logs/notes.
+The main blocker is no longer a single HTML balance gate. The next needed work is turning the newly defined memory/echo/resonance rules into a Unity vertical-slice backlog and confirming which first awakened echoes and ultimate echo synergy should be implemented.
 
 Discord actual send for the latest orchestration structure cleanup succeeded after explicit user request. Historical approval blocks remain recorded in the relevant devlog/report entries.
 
@@ -64,7 +65,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Run controlled human sessions with `dist\lethe-v0.12-playtest` and collect logs/notes. Watch specifically whether weapon echoes are now understandable after a memory is forgotten. If human sessions still report weak or invisible echo effects, decide whether the next tiny change should be visual feedback or one small echo-power tuning lever.
+Review `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md`, freeze the first-slice rules, then create the Unity vertical-slice backlog. Human testing of the HTML build remains useful as supporting evidence, but the next project step is system planning for Unity rather than another blind HTML tuning pass.
 
 For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` before real sends, then `npm run report:orchestrator:unit` when the Project Orchestrator is running and the report is ready.
 
