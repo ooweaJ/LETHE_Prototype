@@ -1,3 +1,7 @@
+# Development Docs Plugin Migration Prompt
+
+Use this file when this existing project should adopt the shared personal development-docs plugin.
+
 # Existing Project Development Docs Plugin Adoption Prompt
 
 Use this prompt when an existing project should adopt the shared personal development-docs plugin.
@@ -238,7 +242,7 @@ Migration and adoption rules:
 - `reports/` is people-facing. Prefer a date-folder HTML journal at `reports/YYYYMMDD/index.html`. If a generator requires Markdown input, keep that input under `reports/source/`, not as the primary human surface.
 - `reports/index.html` is the blog-like archive page. It should list date report pages newest-first, show a short title/date/summary for each date, and link to `reports/YYYYMMDD/index.html` rather than flattening every `units/` page into the main list.
 - `reports/YYYYMMDD/index.html` is the date page. It should read like a blog entry for that date and include a clickable list of that date's unit reports under `reports/YYYYMMDD/units/*.html` when unit pages exist.
-- If date report pages are served through a host API such as `/api/projects/<id>/...`, avoid fragile relative links from the date page to `units/*.html`. Prefer same-page hash drill-down (`#unit-YYYY-MM-DD-NN`) or host-aware absolute report paths so clicking a card never becomes `/api/projects/<id>/units/*.html`.
+- Unit clicks on `reports/YYYYMMDD/index.html` should open the unit detail in a dismissible drawer or overlay panel inside the current page. Do not require a new browser window for normal unit reading.
 - `reports/YYYYMMDD/units/` is optional detail storage for separate work-unit pages, Discord attachments, or portfolio drill-down pages.
 - `evidence/` stores or links useful test outputs, screenshots, logs, benchmark summaries, playtest outputs, generated QA summaries, or other proof.
 - `legacy/` stores migration notes, archived old docs, or pointer files. Legacy docs should not be required for normal resume after migration.
@@ -268,11 +272,6 @@ Discord reporting rules:
 - Use `docs/orchestration/reports/YYYYMMDD/units/*.html` only for detailed work-unit pages, Discord attachments, or portfolio drill-down pages.
 - Submit Discord delivery through Project Orchestrator's central intake when available, using the project id, report path, optional attachment flag, and a short Korean summary.
 - Use `POST http://127.0.0.1:4317/api/orchestration/discord-report` as the normal function-style handoff. The minimum body is `projectId`, `reportPath`, and `attachHtml`; use `dryRun: true` before a real send when testing.
-- If the project is Node-based, provide npm scripts equivalent to:
-  - `report:orchestrator:dry`
-  - `report:orchestrator`
-  - `report:orchestrator:unit:dry`
-  - `report:orchestrator:unit`
 - `projectId` must match the id registered in Project Orchestrator's local `data/projects.json`. For LETHE-style projects, use that registered id, for example `lethe` if the Orchestrator project list uses `lethe`.
 - `reportPath` must be relative to `docs/orchestration/reports/`, not an absolute filesystem path.
 - The project may also submit `reportHtml` or a structured `report` object, but the normal path-based flow is preferred because it keeps the HTML report as the local source of truth.
