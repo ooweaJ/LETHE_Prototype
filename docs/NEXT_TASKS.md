@@ -1,10 +1,30 @@
 # Next Tasks
 
-현재 단계는 v0.12 telemetry 기반 밸런스 자동 측정 루프 검증이다. 감정 proxy와 Alpha Fun Score는 이 단계의 판단 기준에서 제외한다. 다음 목표는 5런 표본을 바로 신뢰하지 말고, first boss 전 사망 원인을 더 잘 남기는 run-level telemetry를 보강한 뒤 10-20런 기준으로 `ITERATE_BALANCE` 항목을 좁히는 것이다.
+현재 단계는 HTML v0.12를 더 깎는 것이 아니라, HTML에서 얻은 증거를 바탕으로 Unity vertical slice의 핵심 시스템을 확정하는 것이다.
 
-이 프로젝트의 현재 목표는 HTML 프로토타입으로 LETHE의 핵심 재미와 가능성을 검증하는 것이다. 충분히 재미가 확인되면 그 결과를 근거로 Unity 구현 단계로 넘어간다.
+현재 목표는 `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md`를 기준으로 기억/잔향/공명 시스템을 Unity 구현 단위로 쪼개는 것이다. v0.12 HTML 빌드는 balance evidence build로 유지하고, 다음 실행 범위는 Unity backlog 작성과 첫 잔향 쇼케이스 선택이다.
 
 ## Current Verdict
+
+- Current planning source: `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md`.
+- Current selected next scope: Unity vertical-slice backlog.
+- Core system direction:
+  - 기억과 잔향은 모두 `+5` max.
+  - 기억을 잃으면 해당 기억 레벨만큼 같은 잔향에 누적된다.
+  - 기존 `+3` 잔향이 있고 `+2` 기억을 잃으면 `+5` 만렙 잔향이 된다.
+  - 잔향이 남아 있는 기억을 다시 얻으면 기억이 공명으로 강화된다.
+  - `+5` 잔향은 각성 잔향으로 강하고 눈에 띄는 효과를 가진다.
+  - 두 개의 `+5` 잔향은 궁극 잔향 시너지를 열 수 있다.
+  - 원거리 적은 영구 카이팅이 아니라 짧은 후퇴, 정지 사격, 재합류 압박으로 설계한다.
+- Immediate next work:
+  - Unity data model backlog 작성.
+  - 기억 레벨/잔향 레벨/망각 변환/재획득 공명 작업 단위화.
+  - 각성 잔향 2개와 궁극 잔향 1개 후보 선택.
+  - UI/debug panel, 기본 전투, 원거리 적 AI 기준 정의.
+- HTML v0.12 status: evidence build. Accepted recovery is player max HP `180 -> 190`; two consecutive `npm run balance:loop` runs returned `GO_BALANCE_BASELINE`.
+- Scope guard: do not start shop, meta progression, multi-region structure, final boss, or large memory roster expansion before the Unity first-slice system contract is approved.
+
+## Legacy HTML Prototype Notes
 
 - v0.11 target document: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md`.
 - v0.12 balance sources: `docs/BALANCE_TABLE_v0_12.md`, `docs/LETHE_v0.12_밸런스_개선_제안서.md`, Gemini balance review notes.

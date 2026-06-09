@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-09-09 - docs 현재 상태와 잔향 시스템 동기화</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-09-09 - docs 현재 상태와 잔향 시스템 동기화</h1>
+      <p class="meta">Generated from 2026-06-09-09-docs-현재-상태와-잔향-시스템-동기화.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260609/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-09-09 - docs 현재 상태와 잔향 시스템 동기화</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>HTML v0.12는 자동 밸런스 근거 빌드로 유지한다.</li>
+<li>현재 프로젝트 초점은 Unity 전환용 시스템 기획이다.</li>
+<li>새 기준은 <code>docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md</code>다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>docs/CODEX_STATUS.md</code> 상단을 현재 상태로 갱신했다.</li>
+<li><code>docs/NEXT_TASKS.md</code> 상단을 Unity vertical-slice backlog 중심으로 갱신했다.</li>
+<li>일반 docs에서도 기억/잔향 <code>+5</code> max, 망각 시 잔향 누적, 재획득 공명, 각성 잔향, 궁극 잔향 시너지가 바로 보이게 했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>이번 작업은 문서 동기화다.</li>
+<li>보고서 생성 후 <code>npm run report</code>, <code>npm run report:check</code>, <code>npm run doctor</code>로 문서 파이프라인을 확인한다.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>오케스트레이션 문서가 source of truth지만, 사람이 직접 열어볼 수 있는 legacy docs 상단도 최신 상태를 보여야 한다.</li>
+<li><code>docs/CODEX_STATUS.md</code>와 <code>docs/NEXT_TASKS.md</code>는 상세 archive 성격을 유지하되, 맨 위에는 최신 방향을 둔다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>legacy docs 본문 아래쪽에는 과거 HTML 단계 기록이 길게 남아 있다.</li>
+<li>따라서 최신 판단은 항상 문서 상단과 <code>docs/orchestration/state/</code>를 우선해서 읽어야 한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>일반 docs 문서도 Unity 전환 방향으로 동기화했다. 현재 기준은 HTML 추가 튜닝이 아니라 memory/echo/resonance system을 Unity vertical slice backlog로 쪼개는 것이다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li><code>docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md</code>를 기준으로 Unity vertical-slice backlog를 작성한다.</li>
+<li>첫 각성 잔향 2개와 궁극 잔향 1개를 선택한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 최신 방향은 오케스트레이션에 반영됐지만 일반 docs 상단은 과거 HTML 단계처럼 보일 수 있었다.</li>
+<li>방향: 사용자가 직접 여는 docs에서도 현재 판단을 바로 볼 수 있게 한다.</li>
+<li>행동: 상태 문서와 다음 작업 문서의 상단을 Unity 전환/잔향 시스템 기준으로 갱신했다.</li>
+<li>결과: 문서 진입점들이 같은 방향을 가리키게 됐다.</li>
+</ul>
+  </main>
+</body>
+</html>

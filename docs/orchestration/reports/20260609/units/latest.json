@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260609\\index.md",
-  "generatedAt": "2026-06-09T08:13:58.471Z",
-  "unitCount": 8,
+  "generatedAt": "2026-06-09T08:21:21.094Z",
+  "unitCount": 9,
   "latest": {
-    "title": "2026-06-09-08 - Unity 전환용 핵심 시스템 기획",
-    "number": "08",
-    "markdownPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-08-unity-전환용-핵심-시스템-기획.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-08-unity-전환용-핵심-시스템-기획.html"
+    "title": "2026-06-09-09 - docs 현재 상태와 잔향 시스템 동기화",
+    "number": "09",
+    "markdownPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-09-docs-현재-상태와-잔향-시스템-동기화.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-09-docs-현재-상태와-잔향-시스템-동기화.html"
   }
 }

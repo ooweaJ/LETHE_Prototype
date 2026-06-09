@@ -25,6 +25,7 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 - `npm run playtest:package:dry`: pass after echo clarity patch.
 - `npm run playtest:package`: pass after echo clarity patch, regenerated `dist\lethe-v0.12-playtest`.
 - Unity transition system plan: `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md` created.
+- Legacy docs current-state sync: `docs/CODEX_STATUS.md` and `docs/NEXT_TASKS.md` now summarize the Unity-transition direction and planned echo system at the top.
 - Failed checks: none in the latest loop.
 - Death phases in the latest loop: `압박 상승` 1, `망각 전조` 1.
 - Generated balance report: `docs/balance/2026-06-09-v012-balance-qa.md`.

@@ -1,21 +1,31 @@
 # Codex Status
 
-Last updated: 2026-06-08
+Last updated: 2026-06-09
 
 ## Current Build
 
-- Project: LETHE HTML Alpha v0.12 first balance pass is implemented from `docs/BALANCE_TABLE_v0_12.md`, `docs/LETHE_v0.12_밸런스_개선_제안서.md`, and Gemini balance review notes.
+- Project: LETHE HTML Alpha v0.12 is now treated as an evidence build for Unity transition planning.
 - Repository: `https://github.com/ooweaJ/LETHE_Prototype.git`
 - Branch: `main`
-- Current scope: HTML prototype validation. v0.12 keeps the v0.11 loop, but moves the build into a measurable balance baseline before broader playtesting.
-- Latest task-update status: v0.12 balance loop gate fix is accepted as the current controlled human-test baseline. The latest executable step was rerunning the v0.12 playtest package after that balance change.
-- Latest verification status: final browser `first_boss_ttk` is `GO_BALANCE_BASELINE` with 3/3 accepted samples and TTK median `18.61s`. Final `npm run balance:loop` is `GO_BALANCE_BASELINE` with first boss clear `100%`, full clear `60%`, death `40%`, and first boss TTK median `20.73s`. `npm run playtest:package:dry` and `npm run playtest:package` pass, regenerating `dist\lethe-v0.12-playtest`.
+- Current scope: freeze the Unity vertical-slice system contract before more HTML tuning. The current core is memory -> echo -> resonance -> awakened echo -> ultimate echo synergy.
+- Latest task-update status: `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md` is the current system-planning source. Orchestration state now points to Unity-transition planning and the next task is a Unity vertical-slice backlog.
+- Latest verification status: v0.12 balance evidence remains valid. The accepted recovery is player max HP `180 -> 190`; two consecutive `npm run balance:loop` runs returned `GO_BALANCE_BASELINE` with full clear `60%`, death `40%`, and first boss clear `100%`. After echo readability work, `npm run qa:postloss`, `npm run qa:identity`, `npm run playtest:package:dry`, `npm run playtest:package`, `npm run report`, `npm run report:check`, and `npm run doctor` passed.
 - Latest reporting format: Discord work-unit reports now send an AI Project Orchestrator style status message, attach a generated `.summary.json` file, then send a second message with the generated HTML report.
-- Planning document status: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md` remains the loop source, while v0.12 balance sources are `docs/BALANCE_TABLE_v0_12.md` and `docs/LETHE_v0.12_밸런스_개선_제안서.md`.
-- Balance status: v0.12 is the current controlled human-test candidate. Do not continue blind numeric tuning before human session evidence unless the user explicitly changes scope.
+- Planning document status: `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md` is the current Unity-transition source. `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md`, `docs/BALANCE_TABLE_v0_12.md`, and `docs/LETHE_v0.12_밸런스_개선_제안서.md` remain HTML prototype/balance references.
+- Echo system to add: memory and echo levels both cap at `+5`; forgotten memory levels accumulate into matching echoes; reacquired memories with existing echoes gain resonance; `+5` echoes awaken into strong visible powers; two `+5` echoes can unlock an ultimate echo synergy.
+- Balance status: v0.12 is no longer the main iteration target unless needed as evidence. Do not continue blind numeric HTML tuning before the Unity system backlog is defined.
 
 ## Implemented
 
+- Unity-transition core system plan:
+  - `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md` defines the next system contract.
+  - Memories and echoes both use a visible `+1` to `+5` level scale.
+  - Forgetting converts the active memory level into the matching echo level and clamps at `+5`.
+  - If a matching echo already exists, the forgotten level is added to it, e.g. `+3` echo plus forgotten `+2` memory becomes `+5` echo.
+  - Reacquiring a memory with an existing echo strengthens the memory through resonance instead of consuming the echo.
+  - `+5` echoes become awakened echoes with strong visible combat behavior.
+  - Two `+5` echoes can unlock an ultimate echo synergy.
+  - Unity first-slice scope should implement a small data-driven version: memory levels, echo levels, forgetting, reacquisition resonance, two awakened echoes, one ultimate echo, and ranged enemy pressure rules.
 - Static browser prototype: `index.html`, `style.css`, `src/game.js`.
 - Current planning source: `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md`, mirrored into the existing Word 기획서 DOCX.
 - Current balance source: `docs/BALANCE_TABLE_v0_12.md` plus `docs/LETHE_v0.12_밸런스_개선_제안서.md`.
