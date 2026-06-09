@@ -11,14 +11,21 @@ Last updated: 2026-06-09
 - Latest task-update status: `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md` is the current system-planning source. Orchestration state now points to Unity-transition planning and the next task is a Unity vertical-slice backlog.
 - Latest verification status: v0.12 balance evidence remains valid. The accepted recovery is player max HP `180 -> 190`; two consecutive `npm run balance:loop` runs returned `GO_BALANCE_BASELINE` with full clear `60%`, death `40%`, and first boss clear `100%`. After echo readability work, `npm run qa:postloss`, `npm run qa:identity`, `npm run playtest:package:dry`, `npm run playtest:package`, `npm run report`, `npm run report:check`, and `npm run doctor` passed.
 - Latest reporting format: Discord work-unit reports now send an AI Project Orchestrator style status message, attach a generated `.summary.json` file, then send a second message with the generated HTML report.
-- Planning document status: `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md` is the current Unity-transition source. `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md`, `docs/BALANCE_TABLE_v0_12.md`, and `docs/LETHE_v0.12_밸런스_개선_제안서.md` remain HTML prototype/balance references.
+- Planning document status: `docs/design/` is now a Korean Unity-transition design-doc set. Start with `docs/design/LETHE_GAME_DESIGN_OVERVIEW.md`, then use `LETHE_CORE_SYSTEMS_UNITY_PLAN.md`, `LETHE_RUN_STRUCTURE.md`, `LETHE_COMBAT_DESIGN.md`, `LETHE_CONTENT_TABLES.md`, `LETHE_BALANCE_BASELINE.md`, and `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`. `docs/LETHE_망각의_군주_프로토타입_기획서_v0_11.md`, `docs/BALANCE_TABLE_v0_12.md`, and `docs/LETHE_v0.12_밸런스_개선_제안서.md` remain HTML prototype/balance references.
 - Echo system to add: memory and echo levels both cap at `+5`; forgotten memory levels accumulate into matching echoes; reacquired memories with existing echoes gain resonance; `+5` echoes awaken into strong visible powers; two `+5` echoes can unlock an ultimate echo synergy.
 - Balance status: v0.12 is no longer the main iteration target unless needed as evidence. Do not continue blind numeric HTML tuning before the Unity system backlog is defined.
 
 ## Implemented
 
-- Unity-transition core system plan:
-  - `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md` defines the next system contract.
+- Unity-transition Korean design-doc set:
+  - `docs/design/README.md` defines the reading order.
+  - `docs/design/LETHE_GAME_DESIGN_OVERVIEW.md` is the first human-facing overview.
+  - `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md` defines the memory/echo/resonance system contract.
+  - `docs/design/LETHE_RUN_STRUCTURE.md` defines run flow, growth, forgetting, deficit survival, and refill.
+  - `docs/design/LETHE_COMBAT_DESIGN.md` defines combat feel, weapons, enemy roles, and ranged enemy behavior.
+  - `docs/design/LETHE_CONTENT_TABLES.md` manages memories, echoes, ultimate echo candidates, and enemies.
+  - `docs/design/LETHE_BALANCE_BASELINE.md` summarizes HTML v0.12 evidence and Unity initial targets.
+  - `docs/design/LETHE_UNITY_VERTICAL_SLICE_SPEC.md` defines the first Unity implementation scope.
   - Memories and echoes both use a visible `+1` to `+5` level scale.
   - Forgetting converts the active memory level into the matching echo level and clamps at `+5`.
   - If a matching echo already exists, the forgotten level is added to it, e.g. `+3` echo plus forgotten `+2` memory becomes `+5` echo.

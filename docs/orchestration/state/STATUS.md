@@ -4,7 +4,7 @@ Last updated: 2026-06-09
 
 ## Current Snapshot
 
-LETHE HTML Alpha v0.12 is cleared again as a controlled human-test candidate after the latest one-lever balance recovery, but the project direction has now shifted from more HTML tuning toward Unity transition planning. The accepted tuning change remains player max HP `180 -> 190`; two consecutive `npm run balance:loop` runs returned `GO_BALANCE_BASELINE`. After the user clarified the desired echo fantasy, the current core-system direction is documented in `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md`: memory and echo levels both cap at `+5`, forgotten memory levels accumulate into matching echoes, reacquired echoed memories gain resonance, and two `+5` echoes can unlock ultimate echo synergies.
+LETHE HTML Alpha v0.12 is cleared again as a controlled human-test candidate after the latest one-lever balance recovery, but the project direction has now shifted from more HTML tuning toward Unity transition planning. The accepted tuning change remains player max HP `180 -> 190`; two consecutive `npm run balance:loop` runs returned `GO_BALANCE_BASELINE`. The design docs are now organized as a Korean multi-document set under `docs/design/`: overview, core systems, run structure, combat, content tables, balance baseline, and Unity vertical-slice spec. The current core-system direction is memory and echo levels both cap at `+5`, forgotten memory levels accumulate into matching echoes, reacquired echoed memories gain resonance, and two `+5` echoes can unlock ultimate echo synergies.
 
 The orchestration HTML interface now exists at `docs/orchestration/interface/index.html`, `docs/orchestration/interface/command.html`, and `docs/orchestration/interface/runbook.html`. AI-facing state lives under `docs/orchestration/state/`; human-facing reports live under `docs/orchestration/reports/YYYYMMDD/`.
 
@@ -26,6 +26,7 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 - `npm run playtest:package`: pass after echo clarity patch, regenerated `dist\lethe-v0.12-playtest`.
 - Unity transition system plan: `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md` created.
 - Legacy docs current-state sync: `docs/CODEX_STATUS.md` and `docs/NEXT_TASKS.md` now summarize the Unity-transition direction and planned echo system at the top.
+- Korean design docs split: `docs/design/README.md`, `LETHE_GAME_DESIGN_OVERVIEW.md`, `LETHE_CORE_SYSTEMS_UNITY_PLAN.md`, `LETHE_RUN_STRUCTURE.md`, `LETHE_COMBAT_DESIGN.md`, `LETHE_CONTENT_TABLES.md`, `LETHE_BALANCE_BASELINE.md`, and `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`.
 - Failed checks: none in the latest loop.
 - Death phases in the latest loop: `압박 상승` 1, `망각 전조` 1.
 - Generated balance report: `docs/balance/2026-06-09-v012-balance-qa.md`.
@@ -66,7 +67,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Review `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md`, freeze the first-slice rules, then create the Unity vertical-slice backlog. Human testing of the HTML build remains useful as supporting evidence, but the next project step is system planning for Unity rather than another blind HTML tuning pass.
+Review the Korean design-doc set under `docs/design/`, freeze the first-slice rules, then create the Unity vertical-slice backlog. Human testing of the HTML build remains useful as supporting evidence, but the next project step is system planning for Unity rather than another blind HTML tuning pass.
 
 For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` before real sends, then `npm run report:orchestrator:unit` when the Project Orchestrator is running and the report is ready.
 

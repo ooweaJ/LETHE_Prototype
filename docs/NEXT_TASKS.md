@@ -2,11 +2,13 @@
 
 현재 단계는 HTML v0.12를 더 깎는 것이 아니라, HTML에서 얻은 증거를 바탕으로 Unity vertical slice의 핵심 시스템을 확정하는 것이다.
 
-현재 목표는 `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md`를 기준으로 기억/잔향/공명 시스템을 Unity 구현 단위로 쪼개는 것이다. v0.12 HTML 빌드는 balance evidence build로 유지하고, 다음 실행 범위는 Unity backlog 작성과 첫 잔향 쇼케이스 선택이다.
+현재 목표는 `docs/design/`의 한글 기획서 세트를 기준으로 기억/잔향/공명 시스템을 Unity 구현 단위로 쪼개는 것이다. v0.12 HTML 빌드는 balance evidence build로 유지하고, 다음 실행 범위는 Unity backlog 작성과 첫 잔향 쇼케이스 선택이다.
 
 ## Current Verdict
 
-- Current planning source: `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md`.
+- Current planning source: `docs/design/README.md` and the Korean design-doc set under `docs/design/`.
+- Design entry point: `docs/design/LETHE_GAME_DESIGN_OVERVIEW.md`.
+- First Unity scope source: `docs/design/LETHE_UNITY_VERTICAL_SLICE_SPEC.md`.
 - Current selected next scope: Unity vertical-slice backlog.
 - Core system direction:
   - 기억과 잔향은 모두 `+5` max.

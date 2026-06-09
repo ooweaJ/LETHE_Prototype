@@ -6,7 +6,7 @@ Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, 
 
 - Priority: high
 - Why: memory/echo/resonance rules now define the Unity transition.
-- How: review `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md` and confirm the reacquisition formula, echo `+5` awakening rule, and ultimate echo condition.
+- How: review the Korean docs under `docs/design/`, especially `LETHE_GAME_DESIGN_OVERVIEW.md`, `LETHE_CORE_SYSTEMS_UNITY_PLAN.md`, and `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`. Confirm the reacquisition formula, echo `+5` awakening rule, and ultimate echo condition.
 - Verification: approved rules are reflected in a Unity backlog or implementation prompt.
 - Blocker: needs user direction on first awakened echoes and first ultimate synergy.
 
@@ -14,7 +14,7 @@ Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, 
 
 - Priority: high
 - Why: the next implementation step should be a scoped Unity slice, not more HTML micro-tuning.
-- How: break the system plan into data model, combat prefab, UI/debug panel, memory level, echo level, forgetting, reacquisition, awakened echo, and synergy tasks.
+- How: break `LETHE_UNITY_VERTICAL_SLICE_SPEC.md` into data model, combat prefab, UI/debug panel, memory level, echo level, forgetting, reacquisition, awakened echo, and synergy tasks.
 - Verification: backlog has ordered tasks with done criteria and validation method.
 - Blocker: core rules should be frozen first.
 

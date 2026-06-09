@@ -1,203 +1,140 @@
-# LETHE Core Systems Unity Plan
+# LETHE 핵심 시스템 기획서
 
-Last updated: 2026-06-09
+최종 갱신: 2026-06-09
 
-## Purpose
+## 목적
 
-This document defines the core system direction for moving LETHE from the HTML prototype into a Unity vertical slice.
+이 문서는 LETHE를 Unity vertical slice로 옮길 때 유지해야 할 핵심 시스템 규칙을 정의한다.
 
-The HTML prototype proved the rough shape of the memory-loss loop, but the next version needs a clearer fantasy: losing a memory should not feel like simple deletion. A lost memory should leave an echo that changes the player's build, creates new synergies, and can become a major power spike when it reaches max level.
+핵심은 "기억을 잃으면 끝"이 아니라 "기억을 잃으면 잔향이 남아 다른 빌드가 열린다"는 구조다.
 
-## Core Pillar
+## 핵심 명제
 
-LETHE is about turning loss into a new build.
+LETHE는 상실을 새로운 빌드로 바꾸는 게임이다.
 
-- Active memories are the player's current abilities.
-- Echoes are the remains of lost memories.
-- Forgetting removes a familiar tool, but converts its level into a persistent weapon/body imprint.
-- Reacquiring a memory that already has an echo should feel like resonance, not a reset.
-- The best moments should come from intentionally letting strong memories become strong echoes.
+- 활성 기억은 현재 사용하는 능력이다.
+- 잔향은 잃어버린 기억의 흔적이다.
+- 망각은 익숙한 능력을 제거하지만, 그 레벨을 잔향으로 전환한다.
+- 잔향이 남아 있는 기억을 다시 얻으면 공명이 발생한다.
+- 강한 기억을 잃는 것이 강한 잔향을 만드는 전략이 될 수 있다.
 
-## Level Rules
+## 레벨 규칙
 
-Both memories and echoes use the same visible level scale.
+- 기억 레벨 max: `+5`.
+- 잔향 레벨 max: `+5`.
+- 활성 기억과 같은 종류의 잔향은 동시에 존재할 수 있다.
+- 잔향은 일시 버프가 아니라 런 동안 유지되는 빌드 상태다.
 
-- Memory level max: `+5`.
-- Echo level max: `+5`.
-- A memory can be active while its echo also exists.
-- Echoes are not temporary buffs. They are run-level build state.
+## 기억에서 잔향으로 전환
 
-### Memory To Echo Conversion
+활성 기억이 망각될 때:
 
-When an active memory is forgotten:
+1. 활성 슬롯에서 기억을 제거한다.
+2. 해당 기억의 현재 레벨을 같은 잔향에 더한다.
+3. 잔향 레벨은 `+5`에서 멈춘다.
+4. 잔향이 `+5`에 도달하면 각성 잔향 효과를 연다.
 
-1. Remove the active memory from the active slot.
-2. Add that memory's current level to the matching echo level.
-3. Clamp the echo level at `+5`.
-4. If the echo reaches `+5`, unlock its awakened echo behavior.
+예시:
 
-Examples:
+- `굶주린 칼무리 +3`을 잃고 잔향이 없으면 `칼무리 잔향 +3`.
+- `칼무리 잔향 +3`이 있는 상태에서 `굶주린 칼무리 +2`를 잃으면 `칼무리 잔향 +5`.
+- `칼무리 잔향 +2`가 있는 상태에서 `굶주린 칼무리 +5`를 잃으면 `칼무리 잔향 +5`.
 
-- Forget `Hungry Blades +3` with no existing echo: `Hungry Blades Echo +3`.
-- Forget `Hungry Blades +2` while `Hungry Blades Echo +3` exists: `Hungry Blades Echo +5`.
-- Forget `Hungry Blades +5` while `Hungry Blades Echo +2` exists: `Hungry Blades Echo +5`, with overflow ignored for now.
+첫 slice에서는 초과분을 버린다. 초과분을 임시 폭발이나 궁극 게이지로 바꾸는 규칙은 나중에 검토한다.
 
-### Reacquiring An Echoed Memory
+## 잔향이 남은 기억 재획득
 
-If the player gains a memory whose echo already exists, the memory is strengthened by resonance.
+잔향이 이미 있는 기억을 다시 얻으면, 기억은 공명으로 강화된다.
 
-Recommended first rule:
+1차 추천 공식:
 
-- Reacquired memory starts at `base offered level + floor(echo level / 2)`.
-- Clamp active memory level at `+5`.
-- The echo is not consumed.
-- While the memory and its echo coexist, the memory gains a resonance rider tied to the echo's identity.
+```text
+재획득 기억 시작 레벨 = 기본 제시 레벨 + floor(잔향 레벨 / 2)
+최대 +5
+잔향은 소비하지 않음
+```
 
-Examples:
+예시:
 
-- `Hungry Blades Echo +3` exists, player picks `Hungry Blades +1`: active memory starts at `+2`.
-- `Hungry Blades Echo +5` exists, player picks `Hungry Blades +1`: active memory starts at `+3` and gets its resonance rider.
-- If that `Hungry Blades +3` is forgotten again, the echo remains `+5`.
+- `칼무리 잔향 +3`이 있고 `굶주린 칼무리 +1`을 얻으면 기억은 `+2`로 시작한다.
+- `칼무리 잔향 +5`가 있고 `굶주린 칼무리 +1`을 얻으면 기억은 `+3`으로 시작하고 공명 보너스를 가진다.
+- 이후 그 기억을 다시 잃으면 잔향은 계속 `+5`로 유지된다.
 
-Why not restore the exact lost level immediately:
+이 방식을 추천하는 이유:
 
-- It can make memory loss feel reversible and less meaningful.
-- It makes reacquisition too obviously optimal.
-- Resonance still rewards the player, but keeps build decisions alive.
+- 잃은 기억을 다시 얻는 보상이 있다.
+- 하지만 잃기 전 레벨을 완전히 복구하지 않아 망각의 의미가 남는다.
+- 잔향을 소비하지 않으므로 "상실이 남긴 힘"이라는 판타지가 유지된다.
 
-## Echo Power Bands
+## 잔향 레벨 체감
 
-Echo level should be readable by effect quality, not only numbers.
-
-| Echo Level | Player Meaning | Design Target |
+| 잔향 레벨 | 의미 | 체감 목표 |
 | --- | --- | --- |
-| `+1` | Faint trace | Small stat or low-chance weapon rider |
-| `+2` | Noticeable trace | Reliable minor combat identity |
-| `+3` | Build-relevant echo | Player starts planning around it |
-| `+4` | Strong echo | Clearly changes targeting, AoE, or survival behavior |
-| `+5` | Awakened echo | Major power spike with visible effect and combo potential |
+| `+1` | 희미한 흔적 | 낮은 확률의 무기 보정 또는 작은 수치 |
+| `+2` | 눈에 띄는 흔적 | 전투 중 가끔 보이는 부가 효과 |
+| `+3` | 빌드 재료 | 플레이어가 계획하기 시작하는 수준 |
+| `+4` | 강한 잔향 | 범위, 타겟팅, 생존 방식이 바뀜 |
+| `+5` | 각성 잔향 | 화면에서 확실히 보이는 강한 효과 |
 
-## Awakened Echoes
+## 각성 잔향
 
-At `+5`, every echo should become a named awakened echo. This is where the player gets the "power fantasy" reward for losing something important.
+잔향이 `+5`가 되면 이름과 효과가 바뀐다. 이때부터는 단순 보정이 아니라 빌드 목표가 되어야 한다.
 
-| Memory | Awakened Echo Direction | Combat Fantasy |
+| 원본 기억 | 각성 잔향 방향 | 전투 판타지 |
 | --- | --- | --- |
-| Hungry Blades | Blade Swarm Echo | Blades orbit or sweep around the player and apply on-hit bleed ticks. |
-| Execution Flash | Execution Echo | Critical or low-health hits trigger white flash bursts. |
-| Stalker Oath | Pursuit Echo | Weapon hits spawn seeking afterimages or homing shards. |
-| Shatter Ripple | Ripple Echo | Hits periodically release knockback shockwaves. |
-| Blood Reflection | Blood Return Echo | Fast hits create reflected blood strikes and on-hit sustain pressure. |
-| Stopped Second | Still Second Echo | Hits briefly slow or pin nearby enemies. |
-| Ashen Guard | Ash Guard Echo | Defensive triggers release counter pulses or short guard windows. |
-| Oblivion Brand | Brand Echo | Hits mark enemies and amplify follow-up burst damage. |
+| 굶주린 칼무리 | 칼무리 잔향 | 칼날이 주변을 훑고 온힛/출혈 판정을 만든다. |
+| 처형자의 섬광 | 처형 잔향 | 치명타 또는 처형 조건에서 하얀 폭발이 터진다. |
+| 추적자의 맹세 | 추적 잔향 | 무기 타격이 유도 잔탄이나 그림자 투사체를 만든다. |
+| 파쇄의 파문 | 파문 잔향 | 타격이 주기적으로 충격파와 넉백을 만든다. |
+| 피의 반사 | 혈반 잔향 | 빠른 타격이 피의 추가타와 흡혈 압박을 만든다. |
+| 멈춘 초침 | 정지 잔향 | 타격이 짧은 둔화나 정지감을 남긴다. |
+| 잿빛 보호막 | 잿빛 잔향 | 방어/피격 시 반격 파동이나 짧은 가드가 열린다. |
+| 망각의 낙인 | 낙인 잔향 | 타격이 표식을 남기고 후속 폭딜을 키운다. |
 
-## Resonance Riders
+## 공명 보너스
 
-When a memory and its matching echo coexist, the active memory gets a special rider. This makes "losing and later finding the same memory again" exciting.
+기억과 같은 잔향이 동시에 있을 때 기억은 공명 보너스를 얻는다.
 
-Examples:
+예시:
 
-- Hungry Blades memory + Hungry Blades Echo: active blade hits count as on-hit events for echo blades.
-- Execution Flash memory + Execution Echo: flash strikes prioritize marked or low-health targets.
-- Stalker Oath memory + Pursuit Echo: active projectiles leave shorter-lived echo shards.
-- Shatter Ripple memory + Ripple Echo: active ripples trigger smaller secondary waves.
+- 굶주린 칼무리 + 칼무리 잔향: 칼무리 타격이 잔향 칼날의 온힛 판정으로도 계산된다.
+- 처형자의 섬광 + 처형 잔향: 섬광이 낙인 또는 저체력 적을 우선한다.
+- 추적자의 맹세 + 추적 잔향: 유도 투사체가 짧은 잔탄을 남긴다.
+- 파쇄의 파문 + 파문 잔향: 주 파문 뒤에 작은 2차 파문이 생긴다.
 
-The first Unity slice only needs two or three resonance riders implemented fully. The rest can be data-defined placeholders until the combat feel is proven.
+Unity 첫 slice는 공명 보너스를 전부 만들지 않는다. 먼저 2~3개만 제대로 구현한다.
 
-## Ultimate Echo Synergies
+## 궁극 잔향 시너지
 
-When two awakened echoes reach `+5`, they can unlock an ultimate echo synergy.
+`+5` 각성 잔향 2개가 모이면 궁극 잔향 시너지를 열 수 있다.
 
-Rules:
+규칙:
 
-- Requires two specific echoes at `+5`.
-- The synergy should be visibly stronger than either echo alone.
-- It should not require an active memory slot.
-- It should create a build identity that can carry the rest of the run.
+- 특정 두 잔향이 모두 `+5`여야 한다.
+- 활성 기억 슬롯을 요구하지 않는다.
+- 두 잔향보다 확실히 강하게 보여야 한다.
+- 런 후반 빌드 정체성을 책임질 수 있어야 한다.
 
-Example synergy candidates:
-
-| Required Echoes | Ultimate Echo | Effect Direction |
+| 필요 잔향 | 궁극 잔향 | 효과 방향 |
 | --- | --- | --- |
-| Hungry Blades + Blood Reflection | Blood Blade Storm | Orbiting cuts apply bleed and trigger reflected blood hits. |
-| Execution Flash + Oblivion Brand | Execution Brand | Marked enemies explode in white flash damage when executed. |
-| Stalker Oath + Stopped Second | Frozen Pursuit | Homing shards slow targets and chain toward slowed enemies. |
-| Shatter Ripple + Ashen Guard | Bastion Ripple | Defensive pulses create large knockback shockwaves. |
+| 칼무리 잔향 + 혈반 잔향 | 피의 칼폭풍 | 주변 칼날이 출혈과 피의 추가타를 동시에 만든다. |
+| 처형 잔향 + 낙인 잔향 | 처형 각인 | 낙인 적 처형 시 하얀 폭발이 연쇄된다. |
+| 추적 잔향 + 정지 잔향 | 정지 추적 | 유도 잔탄이 적을 둔화시키고 둔화 적에게 연쇄된다. |
+| 파문 잔향 + 잿빛 잔향 | 성채 파문 | 방어 반응이 큰 넉백 파문을 만든다. |
 
-The Unity vertical slice should implement one ultimate echo fully and keep the rest as design targets.
+첫 Unity slice는 궁극 잔향 1개만 완성한다.
 
-## Build Decision Loop
+## 빌드 판단 루프
 
-The player should repeatedly face these questions:
+플레이어가 반복해서 생각해야 하는 질문:
 
-1. Which memory am I relying on right now?
-2. If I lose it, what echo will it become?
-3. Do I want this memory active, echoed, or both through resonance?
-4. Am I building toward a `+5` awakened echo?
-5. Can I combine two `+5` echoes into a run-defining ultimate?
+1. 지금 어떤 기억에 의존하고 있나?
+2. 이 기억을 잃으면 어떤 잔향이 생기나?
+3. 이 기억을 활성 상태로 유지할까, 잔향으로 키울까?
+4. 이 기억을 다시 얻으면 공명이 얼마나 강해질까?
+5. 어떤 두 잔향을 `+5`로 만들어 궁극 시너지를 열까?
 
-This changes forgetting from a pure penalty into a risky build pivot.
-
-## Enemy Role Direction
-
-Enemy behavior should support the memory/echo fantasy. It should not turn the game into a long chase.
-
-### Melee Enemies
-
-- Primary pressure source.
-- Move toward the player and create density.
-- Let AoE, orbit blades, knockback, and slow effects feel valuable.
-
-### Ranged Enemies
-
-Current HTML behavior lets shooter enemies back away when the player is close. That is acceptable as a prototype signal, but risky for the Unity version.
-
-Unity rule:
-
-- Ranged enemies may short backstep or strafe.
-- They should stop to fire.
-- They should not kite forever.
-- They should not retreat off-screen as the main behavior.
-- Their role is positional pressure, not forcing the player into a chase.
-
-Recommended pattern:
-
-1. Approach until in firing band.
-2. Stop and telegraph shot.
-3. Fire.
-4. Short reposition.
-5. Rejoin pressure if too far from the player or arena center.
-
-## Unity First Slice Scope
-
-The first Unity slice should not try to rebuild the whole HTML prototype at once.
-
-Required:
-
-- Player movement and basic weapon attack.
-- A small enemy set: melee pressure enemy, ranged pressure enemy, one tougher elite or gate enemy.
-- Active memory slots.
-- Memory level `+1` to `+5`.
-- Forgetting event that converts memory level into echo level.
-- Echo level `+1` to `+5`.
-- Reacquisition resonance rule.
-- Two awakened echoes.
-- One ultimate echo synergy.
-- Simple run report/debug panel showing active memories, echo levels, and synergies.
-
-Out of scope for first Unity slice:
-
-- Shop.
-- Meta progression.
-- Multi-region structure.
-- Final boss.
-- Large memory roster expansion.
-- Full narrative content.
-
-## Data Model Direction
-
-Recommended Unity data shape:
+## Unity 데이터 구조 방향
 
 ```text
 MemoryDefinition
@@ -229,17 +166,11 @@ RunBuildState
 - unlockedEchoSynergies
 ```
 
-This should be data-driven from the start so Codex/AI can help generate definitions without rewriting core combat code.
+처음부터 데이터 기반으로 만든다. 그래야 기억/잔향/시너지 추가를 코드 수정이 아니라 데이터 추가로 처리할 수 있다.
 
-## Open Questions
+## 열린 질문
 
-- Should echo overflow above `+5` be ignored, converted into temporary power, or stored as progress toward an ultimate? First recommendation: ignore overflow until the core loop is fun.
-- Should a reacquired memory ever consume its echo? First recommendation: no. Consuming the echo weakens the central fantasy.
-- Should a `+5` echo always awaken immediately, or require a player choice? First recommendation: awaken immediately for the first slice.
-- How many active memory slots should Unity start with? First recommendation: keep the HTML prototype's small-slot pressure before expanding.
-
-## Current Decision
-
-Proceed toward Unity planning with the memory/echo/resonance structure as the core system.
-
-The next step is to turn this document into a Unity vertical-slice backlog: data definitions, combat prefabs, UI/debug panels, first awakened echoes, and one ultimate echo synergy.
+- 초과 잔향 레벨은 버릴지, 임시 폭발로 바꿀지, 궁극 게이지로 쌓을지.
+- 재획득 공식 `base + floor(echo / 2)`가 적절한지.
+- 각성 잔향이 자동으로 열릴지, 선택 보상으로 열릴지.
+- Unity 첫 slice에서 구현할 각성 잔향 2개와 궁극 잔향 1개는 무엇인지.

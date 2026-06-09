@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-09-10 - 한글 기획서 세트 분리</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-09-10 - 한글 기획서 세트 분리</h1>
+      <p class="meta">Generated from 2026-06-09-10-한글-기획서-세트-분리.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260609/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-09-10 - 한글 기획서 세트 분리</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>게임 코드는 변경하지 않았다.</li>
+<li>HTML v0.12는 evidence build로 유지한다.</li>
+<li>Unity 전환 기획을 한글 문서 세트로 분리했다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>docs/design/README.md</code>를 추가해 읽는 순서를 만들었다.</li>
+<li><code>LETHE_GAME_DESIGN_OVERVIEW.md</code>를 메인 기획서 입구로 만들었다.</li>
+<li><code>LETHE_CORE_SYSTEMS_UNITY_PLAN.md</code>를 한글 핵심 시스템 기획서로 바꿨다.</li>
+<li><code>LETHE_RUN_STRUCTURE.md</code>, <code>LETHE_COMBAT_DESIGN.md</code>, <code>LETHE_CONTENT_TABLES.md</code>, <code>LETHE_BALANCE_BASELINE.md</code>, <code>LETHE_UNITY_VERTICAL_SLICE_SPEC.md</code>를 추가했다.</li>
+<li>오케스트레이션 상태, 다음 지시 HTML, 일반 docs 상태 문서가 새 문서 묶음을 가리키게 했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>이번 작업은 문서 구조 정리다.</li>
+<li><code>npm run report</code>: 통과.</li>
+<li><code>npm run report:check</code>: 통과, 10개 unit 확인.</li>
+<li><code>npm run doctor</code>: 통과, 50 pass / 0 warn / 0 fail.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>LETHE 기획은 한 파일로 합치지 않는다.</li>
+<li>처음 읽는 문서는 <code>LETHE_GAME_DESIGN_OVERVIEW.md</code>다.</li>
+<li>수치, 콘텐츠 표, 런 구조, 전투, Unity 구현 범위는 별도 문서에서 관리한다.</li>
+<li>이렇게 해야 수치 변경이 전체 기획서를 망가뜨리지 않는다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>문서가 나뉘었기 때문에 서로 다른 문서가 충돌하지 않도록 overview와 status를 계속 갱신해야 한다.</li>
+<li>다음 작업에서 Unity backlog를 만들 때 각 문서의 범위를 다시 한번 확인해야 한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>LETHE의 Unity 전환 기획은 이제 <code>docs/design/</code>의 한글 문서 세트로 관리한다. 메인 개요, 핵심 시스템, 런 구조, 전투, 콘텐츠 표, 밸런스 기준, Unity vertical slice 명세가 분리되어 있다. 다음 작업은 이 문서 세트를 기준으로 Unity 구현 backlog를 만드는 것이다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li><code>LETHE_UNITY_VERTICAL_SLICE_SPEC.md</code>를 구현 작업 단위로 쪼갠다.</li>
+<li>첫 각성 잔향 2개와 궁극 잔향 1개를 확정한다.</li>
+<li>Unity data model과 debug UI 작업부터 backlog에 넣는다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 기획을 한 파일에 모두 넣으면 수치, 콘텐츠, 구현 범위가 뒤섞여 유지보수가 어려워진다.</li>
+<li>방향: 사람이 읽는 입구와 자주 바뀌는 세부 문서를 분리한다.</li>
+<li>행동: 한글 기획서 세트를 만들고 상태 문서들이 그 구조를 가리키게 했다.</li>
+<li>결과: Unity 전환 전 기획 문서 체계가 정리됐다.</li>
+</ul>
+  </main>
+</body>
+</html>

@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260609\\index.md",
-  "generatedAt": "2026-06-09T08:21:21.094Z",
-  "unitCount": 9,
+  "generatedAt": "2026-06-09T08:33:58.617Z",
+  "unitCount": 10,
   "latest": {
-    "title": "2026-06-09-09 - docs 현재 상태와 잔향 시스템 동기화",
-    "number": "09",
-    "markdownPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-09-docs-현재-상태와-잔향-시스템-동기화.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-09-docs-현재-상태와-잔향-시스템-동기화.html"
+    "title": "2026-06-09-10 - 한글 기획서 세트 분리",
+    "number": "10",
+    "markdownPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-10-한글-기획서-세트-분리.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-10-한글-기획서-세트-분리.html"
   }
 }

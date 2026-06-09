@@ -474,3 +474,55 @@ LETHE는 Unity 전환 전 핵심 시스템을 `기억 -> 잔향 -> 공명 -> 각
 - 방향: 사용자가 직접 여는 docs에서도 현재 판단을 바로 볼 수 있게 한다.
 - 행동: 상태 문서와 다음 작업 문서의 상단을 Unity 전환/잔향 시스템 기준으로 갱신했다.
 - 결과: 문서 진입점들이 같은 방향을 가리키게 됐다.
+
+# 2026-06-09-10 - 한글 기획서 세트 분리
+
+## 1. 현재 빌드 상태
+
+- 게임 코드는 변경하지 않았다.
+- HTML v0.12는 evidence build로 유지한다.
+- Unity 전환 기획을 한글 문서 세트로 분리했다.
+
+## 2. 오늘 바뀐 것
+
+- `docs/design/README.md`를 추가해 읽는 순서를 만들었다.
+- `LETHE_GAME_DESIGN_OVERVIEW.md`를 메인 기획서 입구로 만들었다.
+- `LETHE_CORE_SYSTEMS_UNITY_PLAN.md`를 한글 핵심 시스템 기획서로 바꿨다.
+- `LETHE_RUN_STRUCTURE.md`, `LETHE_COMBAT_DESIGN.md`, `LETHE_CONTENT_TABLES.md`, `LETHE_BALANCE_BASELINE.md`, `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`를 추가했다.
+- 오케스트레이션 상태, 다음 지시 HTML, 일반 docs 상태 문서가 새 문서 묶음을 가리키게 했다.
+
+## 3. 테스트 결과와 근거
+
+- 이번 작업은 문서 구조 정리다.
+- `npm run report`: 통과.
+- `npm run report:check`: 통과, 10개 unit 확인.
+- `npm run doctor`: 통과, 50 pass / 0 warn / 0 fail.
+
+## 4. 결정한 것
+
+- LETHE 기획은 한 파일로 합치지 않는다.
+- 처음 읽는 문서는 `LETHE_GAME_DESIGN_OVERVIEW.md`다.
+- 수치, 콘텐츠 표, 런 구조, 전투, Unity 구현 범위는 별도 문서에서 관리한다.
+- 이렇게 해야 수치 변경이 전체 기획서를 망가뜨리지 않는다.
+
+## 5. 문제 또는 리스크
+
+- 문서가 나뉘었기 때문에 서로 다른 문서가 충돌하지 않도록 overview와 status를 계속 갱신해야 한다.
+- 다음 작업에서 Unity backlog를 만들 때 각 문서의 범위를 다시 한번 확인해야 한다.
+
+## 6. GPT/Claude 인계 요약
+
+LETHE의 Unity 전환 기획은 이제 `docs/design/`의 한글 문서 세트로 관리한다. 메인 개요, 핵심 시스템, 런 구조, 전투, 콘텐츠 표, 밸런스 기준, Unity vertical slice 명세가 분리되어 있다. 다음 작업은 이 문서 세트를 기준으로 Unity 구현 backlog를 만드는 것이다.
+
+## 7. 다음 Codex 작업
+
+- `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`를 구현 작업 단위로 쪼갠다.
+- 첫 각성 잔향 2개와 궁극 잔향 1개를 확정한다.
+- Unity data model과 debug UI 작업부터 backlog에 넣는다.
+
+## 8. 포트폴리오 메모
+
+- 문제: 기획을 한 파일에 모두 넣으면 수치, 콘텐츠, 구현 범위가 뒤섞여 유지보수가 어려워진다.
+- 방향: 사람이 읽는 입구와 자주 바뀌는 세부 문서를 분리한다.
+- 행동: 한글 기획서 세트를 만들고 상태 문서들이 그 구조를 가리키게 했다.
+- 결과: Unity 전환 전 기획 문서 체계가 정리됐다.
