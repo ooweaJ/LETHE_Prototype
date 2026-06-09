@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260609\\index.md",
-  "generatedAt": "2026-06-09T08:33:58.617Z",
-  "unitCount": 10,
+  "generatedAt": "2026-06-09T14:36:45.037Z",
+  "unitCount": 11,
   "latest": {
-    "title": "2026-06-09-10 - 한글 기획서 세트 분리",
-    "number": "10",
-    "markdownPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-10-한글-기획서-세트-분리.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-10-한글-기획서-세트-분리.html"
+    "title": "2026-06-09-11 - 망각 대상과 잔향 초과분 규칙 확정",
+    "number": "11",
+    "markdownPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-11-망각-대상과-잔향-초과분-규칙-확정.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-11-망각-대상과-잔향-초과분-규칙-확정.html"
   }
 }

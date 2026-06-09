@@ -6,15 +6,16 @@ Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, 
 
 - Priority: high
 - Why: memory/echo/resonance rules now define the Unity transition.
-- How: review the Korean docs under `docs/design/`, especially `LETHE_GAME_DESIGN_OVERVIEW.md`, `LETHE_CORE_SYSTEMS_UNITY_PLAN.md`, and `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`. Confirm the reacquisition formula, echo `+5` awakening rule, and ultimate echo condition.
+- How: review the Korean docs under `docs/design/`, especially `LETHE_GAME_DESIGN_OVERVIEW.md`, `LETHE_CORE_SYSTEMS_UNITY_PLAN.md`, and `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`. The current frozen rules are highest-level memory forgetting, echo `+5` cap, overflow-to-overcharge, reacquisition resonance, echo `+5` awakening, and ultimate echo condition.
 - Verification: approved rules are reflected in a Unity backlog or implementation prompt.
-- Blocker: needs user direction on first awakened echoes and first ultimate synergy.
+- Blocker: reacquisition formula and exact overcharge payout still need first-slice tuning.
 
 ## 2. Create Unity Vertical-Slice Backlog
 
 - Priority: high
 - Why: the next implementation step should be a scoped Unity slice, not more HTML micro-tuning.
 - How: break `LETHE_UNITY_VERTICAL_SLICE_SPEC.md` into data model, combat prefab, UI/debug panel, memory level, echo level, forgetting, reacquisition, awakened echo, and synergy tasks.
+- Include: debug controls for immediate forgetting, echo `+5`, and ultimate echo demonstration.
 - Verification: backlog has ordered tasks with done criteria and validation method.
 - Blocker: core rules should be frozen first.
 
@@ -22,7 +23,7 @@ Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, 
 
 - Priority: high
 - Why: Unity needs one memorable echo power spike to prove the fantasy.
-- How: pick two awakened echoes and one ultimate echo synergy from the design doc.
+- How: start from the recommended showcase: 칼무리 잔향 + 혈반 잔향 -> 피의 칼폭풍.
 - Verification: selected showcase has clear visual/combat behavior and can be implemented in a small arena.
 - Blocker: avoid adding a large memory roster before the showcase works.
 

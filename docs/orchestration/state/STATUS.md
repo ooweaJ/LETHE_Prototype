@@ -4,7 +4,7 @@ Last updated: 2026-06-09
 
 ## Current Snapshot
 
-LETHE HTML Alpha v0.12 is cleared again as a controlled human-test candidate after the latest one-lever balance recovery, but the project direction has now shifted from more HTML tuning toward Unity transition planning. The accepted tuning change remains player max HP `180 -> 190`; two consecutive `npm run balance:loop` runs returned `GO_BALANCE_BASELINE`. The design docs are now organized as a Korean multi-document set under `docs/design/`: overview, core systems, run structure, combat, content tables, balance baseline, and Unity vertical-slice spec. The current core-system direction is memory and echo levels both cap at `+5`, forgotten memory levels accumulate into matching echoes, reacquired echoed memories gain resonance, and two `+5` echoes can unlock ultimate echo synergies.
+LETHE HTML Alpha v0.12 is cleared again as a controlled human-test candidate after the latest one-lever balance recovery, but the project direction has now shifted from more HTML tuning toward Unity transition planning. The accepted tuning change remains player max HP `180 -> 190`; two consecutive `npm run balance:loop` runs returned `GO_BALANCE_BASELINE`. The design docs are now organized as a Korean multi-document set under `docs/design/`: overview, core systems, run structure, combat, content tables, balance baseline, and Unity vertical-slice spec. The current core-system direction is memory and echo levels both cap at `+5`, forgotten memory levels accumulate into matching echoes, reacquired echoed memories gain resonance, and two `+5` echoes can unlock ultimate echo synergies. The first-slice forgetting rule is now highest-level active memory, with tied highest memories chosen by the player; echo overflow above `+5` becomes overcharge instead of being discarded.
 
 The orchestration HTML interface now exists at `docs/orchestration/interface/index.html`, `docs/orchestration/interface/command.html`, and `docs/orchestration/interface/runbook.html`. AI-facing state lives under `docs/orchestration/state/`; human-facing reports live under `docs/orchestration/reports/YYYYMMDD/`.
 
@@ -25,6 +25,7 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 - `npm run playtest:package:dry`: pass after echo clarity patch.
 - `npm run playtest:package`: pass after echo clarity patch, regenerated `dist\lethe-v0.12-playtest`.
 - Unity transition system plan: `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md` created.
+- Unity first-slice rule freeze update: highest-level memory forgetting, echo overflow-to-overcharge, and balance target changes were reflected in `docs/design/`.
 - Legacy docs current-state sync: `docs/CODEX_STATUS.md` and `docs/NEXT_TASKS.md` now summarize the Unity-transition direction and planned echo system at the top.
 - Korean design docs split: `docs/design/README.md`, `LETHE_GAME_DESIGN_OVERVIEW.md`, `LETHE_CORE_SYSTEMS_UNITY_PLAN.md`, `LETHE_RUN_STRUCTURE.md`, `LETHE_COMBAT_DESIGN.md`, `LETHE_CONTENT_TABLES.md`, `LETHE_BALANCE_BASELINE.md`, and `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`.
 - Failed checks: none in the latest loop.
@@ -59,7 +60,7 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Current Blocker
 
-The main blocker is no longer a single HTML balance gate. The next needed work is turning the newly defined memory/echo/resonance rules into a Unity vertical-slice backlog and confirming which first awakened echoes and ultimate echo synergy should be implemented.
+The main blocker is no longer a single HTML balance gate. The next needed work is turning the newly defined memory/echo/resonance rules into a Unity vertical-slice backlog. The recommended first showcase remains 칼무리 잔향 + 혈반 잔향 -> 피의 칼폭풍, but the backlog still needs exact overcharge payout and reacquisition tuning criteria.
 
 Discord actual send for the latest orchestration structure cleanup succeeded after explicit user request. Historical approval blocks remain recorded in the relevant devlog/report entries.
 
@@ -67,7 +68,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Review the Korean design-doc set under `docs/design/`, freeze the first-slice rules, then create the Unity vertical-slice backlog. Human testing of the HTML build remains useful as supporting evidence, but the next project step is system planning for Unity rather than another blind HTML tuning pass.
+Create the Unity vertical-slice backlog from the frozen first-slice rules in `docs/design/`: highest-level memory forgetting, echo overflow-to-overcharge, reacquisition resonance, two awakened echoes, one ultimate echo, and debug controls for forcing the loop. Human testing of the HTML build remains useful as supporting evidence, but the next project step is system planning for Unity rather than another blind HTML tuning pass.
 
 For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` before real sends, then `npm run report:orchestrator:unit` when the Project Orchestrator is running and the report is ready.
 
