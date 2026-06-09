@@ -4,7 +4,7 @@ Last updated: 2026-06-09
 
 ## Current Snapshot
 
-LETHE HTML Alpha v0.12 is cleared again as a controlled human-test candidate after the latest one-lever balance recovery. The accepted tuning change is player max HP `180 -> 190`; two consecutive `npm run balance:loop` runs returned `GO_BALANCE_BASELINE`.
+LETHE HTML Alpha v0.12 is cleared again as a controlled human-test candidate after the latest one-lever balance recovery. The accepted tuning change is player max HP `180 -> 190`; two consecutive `npm run balance:loop` runs returned `GO_BALANCE_BASELINE`. The playtest package was regenerated at `dist\lethe-v0.12-playtest`.
 
 The orchestration HTML interface now exists at `docs/orchestration/interface/index.html`, `docs/orchestration/interface/command.html`, and `docs/orchestration/interface/runbook.html`. AI-facing state lives under `docs/orchestration/state/`; human-facing reports live under `docs/orchestration/reports/YYYYMMDD/`.
 
@@ -17,6 +17,8 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 - Accepted recovery change: player max HP `180 -> 190`.
 - Latest `npm run balance:loop` pass 1 after HP `190`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `18.97s`.
 - Latest `npm run balance:loop` pass 2 after HP `190`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.18s`.
+- `npm run playtest:package:dry`: pass.
+- `npm run playtest:package`: pass, wrote `dist\lethe-v0.12-playtest`.
 - Failed checks: none in the latest loop.
 - Death phases in the latest loop: `압박 상승` 1, `망각 전조` 1.
 - Generated balance report: `docs/balance/2026-06-09-v012-balance-qa.md`.
@@ -49,7 +51,7 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Current Blocker
 
-Human reaction evidence is still missing. The automated balance gate is restored, so the next blocker is controlled human-session evidence rather than numeric balance.
+Human reaction evidence is still missing. The automated balance gate and playtest package are ready, so the next blocker is running a controlled human session and saving logs/notes.
 
 Discord actual send for the latest orchestration structure cleanup succeeded after explicit user request. Historical approval blocks remain recorded in the relevant devlog/report entries.
 
@@ -57,7 +59,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Run controlled human sessions with the v0.12 playtest package and collect logs/notes. If human sessions report irritation or early deaths despite the restored gate, use the latest balance report as the next tuning baseline.
+Run controlled human sessions with `dist\lethe-v0.12-playtest` and collect logs/notes. If human sessions report irritation or early deaths despite the restored gate, use the latest balance report as the next tuning baseline.
 
 For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` before real sends, then `npm run report:orchestrator:unit` when the Project Orchestrator is running and the report is ready.
 

@@ -10,7 +10,9 @@ The 2026-06-08 `npm run balance:loop` rerun returned `ITERATE_BALANCE`: full cle
 
 The first one-lever candidate, lowering `laterCycleClimax 46 -> 42`, was tested on 2026-06-09 and rejected. It worsened the loop to full clear `20%`, death `80%`, so the code was reverted.
 
-The accepted one-lever recovery was player max HP `180 -> 190`. Two consecutive `npm run balance:loop` runs returned `GO_BALANCE_BASELINE`: full clear `60%`, death `40%`, first boss clear `100%`, first boss TTK median `18.97s` then `20.18s`. Numeric balance is no longer the current blocker; human evidence is.
+The accepted one-lever recovery was player max HP `180 -> 190`. Two consecutive `npm run balance:loop` runs returned `GO_BALANCE_BASELINE`: full clear `60%`, death `40%`, first boss clear `100%`, first boss TTK median `18.97s` then `20.18s`.
+
+`npm run playtest:package:dry` and `npm run playtest:package` passed, and `dist\lethe-v0.12-playtest` was regenerated. Numeric balance and packaging are no longer the current blockers; human evidence is.
 
 The report/devlog migration is complete, so new work should now use:
 
@@ -22,9 +24,9 @@ The report/devlog migration is complete, so new work should now use:
 
 ## Done Criteria
 
-- The restored v0.12 build is packaged or confirmed packageable.
+- The restored v0.12 build is packaged or confirmed packageable. Done: `npm run playtest:package:dry` and `npm run playtest:package` passed.
 - Human playtest guide and notes are ready for a controlled session.
-- At least one human session log or note set is captured under the expected playtest evidence path.
+- At least one human session log or note set is captured under the expected playtest evidence path. Pending.
 - Status, devlog, reports, and decision log are updated after the session.
 
 ## Related Files

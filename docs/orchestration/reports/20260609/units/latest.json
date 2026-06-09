@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260609\\index.md",
-  "generatedAt": "2026-06-09T01:29:39.539Z",
-  "unitCount": 5,
+  "generatedAt": "2026-06-09T03:16:35.799Z",
+  "unitCount": 6,
   "latest": {
-    "title": "2026-06-09-05 - v0.12 밸런스 기준선 회복",
-    "number": "05",
-    "markdownPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-05-v0-12-밸런스-기준선-회복.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-05-v0-12-밸런스-기준선-회복.html"
+    "title": "2026-06-09-06 - v0.12 사람 테스트 패키지 갱신",
+    "number": "06",
+    "markdownPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-06-v0-12-사람-테스트-패키지-갱신.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-06-v0-12-사람-테스트-패키지-갱신.html"
   }
 }

@@ -28,11 +28,11 @@ Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, 
 
 ## 4. Refresh Playtest Package If Needed
 
-- Priority: medium before session
+- Priority: done unless source changes again
 - Why: the playtest package should include HP `190`.
-- How: run `npm run playtest:package:dry`, then `npm run playtest:package`.
-- Verification: `dist\lethe-v0.12-playtest` exists and opens.
-- Blocker: package generation failure.
+- How: `npm run playtest:package:dry` and `npm run playtest:package` were run.
+- Verification: `dist\lethe-v0.12-playtest` was regenerated.
+- Blocker: rerun only if source changes before the session.
 
 ## 5. Keep Project Orchestrator Discord Intake Ready
 

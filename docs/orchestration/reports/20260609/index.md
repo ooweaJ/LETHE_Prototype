@@ -275,3 +275,49 @@ HP `180 -> 190` 하나만으로 v0.12 balance loop가 두 번 연속 `GO_BALANCE
 - 방향: 새 콘텐츠를 넣지 않고 가장 작은 생존 버퍼만 조정한다.
 - 행동: HP +10 하나를 적용하고 balance loop를 두 번 반복 검증했다.
 - 결과: 자동 기준선이 회복되어 사람 테스트 단계로 돌아갈 근거가 생겼다.
+
+# 2026-06-09-06 - v0.12 사람 테스트 패키지 갱신
+
+## 1. 현재 빌드 상태
+
+- v0.12는 자동 밸런스 기준선을 회복했고, 사람 테스트 패키지도 다시 생성됐다.
+- 현재 테스트 대상은 `dist\lethe-v0.12-playtest`다.
+
+## 2. 오늘 바뀐 것
+
+- HP `190` 기준선이 들어간 현재 소스 기준으로 playtest package를 갱신했다.
+- 패키지에는 `index.html`, `style.css`, `src/game.js`, human playtest guide, notes template, playtest sheet, README가 포함된다.
+
+## 3. 테스트 결과와 근거
+
+- `npm run playtest:package:dry`: 통과.
+- `npm run playtest:package`: 통과, `dist\lethe-v0.12-playtest` 생성.
+- `npm run report`: 통과, 2026-06-09 HTML 보고서와 6개 unit report 재생성.
+- `npm run report:check`: 통과, 6개 unit heading 확인.
+- `npm run doctor`: 49 pass / 1 warn / 0 fail. Warning은 `codex --version` unavailable이며 이번 패키지 준비의 blocker는 아니다.
+
+## 4. 결정한 것
+
+- 추가 숫자 튜닝은 여기서 멈춘다.
+- 다음 단계는 controlled human session evidence 수집이다.
+
+## 5. 문제 또는 리스크
+
+- 자동 기준선은 통과했지만, 사람이 망각을 재미있는 손실로 느끼는지는 아직 검증되지 않았다.
+- 사람 테스트 로그/노트가 없으면 Unity 전환 판단 근거가 부족하다.
+
+## 6. GPT/Claude 인계 요약
+
+v0.12는 HP `190` 기준으로 balance loop를 통과했고, playtest package도 생성됐다. 다음 판단은 숫자 튜닝이 아니라 사람 테스트 로그와 노트가 필요하다.
+
+## 7. 다음 Codex 작업
+
+- 사람 테스트 로그가 생기면 `npm run playtest:summary`를 실행한다.
+- 결과를 orchestration state/devlog/report에 반영한다.
+
+## 8. 포트폴리오 메모
+
+- 문제: 자동 밸런스 통과 후 사람이 테스트할 수 있는 패키지 상태가 필요했다.
+- 방향: 검증된 현재 소스를 그대로 패키징한다.
+- 행동: dry-run과 실제 package 생성을 실행했다.
+- 결과: 사람 테스트 후보 빌드가 `dist\lethe-v0.12-playtest`에 준비됐다.
