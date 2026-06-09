@@ -14,6 +14,8 @@ The accepted one-lever recovery was player max HP `180 -> 190`. Two consecutive 
 
 `npm run playtest:package:dry` and `npm run playtest:package` passed, and `dist\lethe-v0.12-playtest` was regenerated. Numeric balance and packaging are no longer the current blockers; human evidence is.
 
+Before the human session, the user reported that the echo effect felt too weak or unclear. Code review showed the mechanics were present, but the player-facing feedback was too subtle. The current build now clarifies weapon echoes in the forget result card, combat log, sidebar, and start-of-deficit visual cue without changing numeric balance.
+
 The report/devlog migration is complete, so new work should now use:
 
 - AI state: `docs/orchestration/state/`
@@ -25,6 +27,7 @@ The report/devlog migration is complete, so new work should now use:
 ## Done Criteria
 
 - The restored v0.12 build is packaged or confirmed packageable. Done: `npm run playtest:package:dry` and `npm run playtest:package` passed.
+- Echo readability is patched without adding new systems or changing balance values. Done: `npm run qa:postloss` and `npm run qa:identity` passed with local `CHROME_PATH`.
 - Human playtest guide and notes are ready for a controlled session.
 - At least one human session log or note set is captured under the expected playtest evidence path. Pending.
 - Status, devlog, reports, and decision log are updated after the session.
@@ -50,6 +53,8 @@ npm run qa:balance
 npm run balance:loop
 npm run playtest:package:dry
 npm run playtest:package
+npm run qa:postloss
+npm run qa:identity
 npm run report
 npm run report:check
 npm run report:discord:unit:dry
@@ -60,6 +65,7 @@ npm run doctor
 
 - Does the restored numeric baseline feel fair to a human tester?
 - Does the forgetting loop feel regrettable rather than irritating?
+- Does the clearer echo card/log/sidebar make the remaining weapon echo understandable?
 - Does HP `190` make the run too forgiving, or does it only reduce unfair deaths?
 - Should the next validation be one-off `qa:balance` first or the full `balance:loop` directly?
 

@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260609\\index.md",
-  "generatedAt": "2026-06-09T05:48:25.739Z",
-  "unitCount": 6,
+  "generatedAt": "2026-06-09T07:35:05.308Z",
+  "unitCount": 7,
   "latest": {
-    "title": "2026-06-09-06 - v0.12 사람 테스트 패키지 갱신",
-    "number": "06",
-    "markdownPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-06-v0-12-사람-테스트-패키지-갱신.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-06-v0-12-사람-테스트-패키지-갱신.html"
+    "title": "2026-06-09-07 - 잔향 피드백 가시성 보강",
+    "number": "07",
+    "markdownPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-07-잔향-피드백-가시성-보강.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260609\\units\\2026-06-09-07-잔향-피드백-가시성-보강.html"
   }
 }

@@ -94,8 +94,16 @@ async function main() {
     if (stderr.trim()) console.error(stderr.trim().split('\n').slice(-8).join('\n'));
     throw error;
   } finally {
-    chrome.kill('SIGKILL');
-    fs.rmSync(userDataDir, { recursive: true, force: true });
+    if (!chrome.killed) chrome.kill('SIGKILL');
+    await new Promise((resolve) => {
+      if (chrome.exitCode !== null) {
+        resolve();
+        return;
+      }
+      chrome.once('exit', resolve);
+      setTimeout(resolve, 800);
+    });
+    fs.rmSync(userDataDir, { recursive: true, force: true, maxRetries: 8, retryDelay: 150 });
   }
 }
 

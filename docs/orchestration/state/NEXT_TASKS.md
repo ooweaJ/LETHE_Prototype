@@ -6,7 +6,7 @@ Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, 
 
 - Priority: high
 - Why: HP `180 -> 190` restored the automated balance gate in two consecutive loops, so the next missing evidence is human response.
-- How: use `dist\lethe-v0.12-playtest`, `docs/HUMAN_PLAYTEST_GUIDE.md`, and `docs/PLAYTEST_NOTES.md`.
+- How: use `dist\lethe-v0.12-playtest`, `docs/HUMAN_PLAYTEST_GUIDE.md`, and `docs/PLAYTEST_NOTES.md`. Ask whether the forgotten memory's weapon echo is now understandable in the result card, sidebar, and combat feedback.
 - Verification: downloaded JSON logs or written playtest notes exist in `playtest_logs/` or an agreed evidence path.
 - Blocker: needs a human tester/session.
 
@@ -29,8 +29,8 @@ Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, 
 ## 4. Refresh Playtest Package If Needed
 
 - Priority: done unless source changes again
-- Why: the playtest package should include HP `190`.
-- How: `npm run playtest:package:dry` and `npm run playtest:package` were run.
+- Why: the playtest package should include HP `190` and the echo readability patch.
+- How: `npm run playtest:package:dry` and `npm run playtest:package` were rerun after source changes.
 - Verification: `dist\lethe-v0.12-playtest` was regenerated.
 - Blocker: rerun only if source changes before the session.
 

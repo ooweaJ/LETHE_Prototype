@@ -2657,7 +2657,11 @@ function showCycleResultOverlay(forgotten) {
     };
     state.runTimeline.postLossChallenges.push(challenge);
     if (cycle) cycle.postLossChallenge = challenge;
-    addLog(`${forgotten.name}의 잔향이 무기에 새겨졌다. 기억 ${activeMemoryCount()}개로 버텨라.`);
+    addLog(`${forgotten.name}의 잔향이 무기에 새겨졌다: ${echoCombatSummary(forgotten.id)} 기억 ${activeMemoryCount()}개로 버텨라.`);
+    if (state.player) {
+      addFloater("잔향 각인", state.player.x, state.player.y - 54, "#e8c15d");
+      addBurst(state.player.x, state.player.y, "#e8c15d", 24, 3.2);
+    }
     logEvent("deficit_started", {
       cycleIndex: state.runTimeline.currentBossIndex,
       refillAvailableAt: Number(refillAt.toFixed(2)),
@@ -2873,6 +2877,7 @@ function echoTransformationHtml(memory) {
     <div class="result-card echo-transform-card">
       <strong>잔향 변형</strong>
       <p>${transform.summary}</p>
+      <p><strong>전투 변화</strong><br>${echoCombatSummary(memory.id)}</p>
       <div class="echo-badges">${badges}</div>
       <small>이번 실험 echo 배율: ${Math.round(experiment.echoPower * 100)}%</small>
     </div>
@@ -2897,6 +2902,7 @@ function echoStateHtml(memoryId) {
     <div class="result-card echo-unlock-card">
       <strong>무기 잔향</strong>
       <p>${echo.memoryName} Lv.${echo.level} · ${echo.tags.map(tagLabel).join("/")}</p>
+      <p>${echoCombatSummary(memoryId)}</p>
       <small>같은 기억이 다시 망각되면 잔향 레벨이 누적됩니다.</small>
     </div>
   `;
@@ -2971,6 +2977,20 @@ function echoTransformationLog(memoryId) {
     summary: memories[memoryId]?.echo || "잔향이 남았습니다.",
     stats: [memories[memoryId]?.role || "잔향"],
   };
+}
+
+function echoCombatSummary(memoryId) {
+  const map = {
+    execution_flash: "치명 보정과 섬광 추가타가 무기 공격에 붙습니다.",
+    hungry_blades: "공격 속도와 출혈 잔향 피해가 무기 공격에 남습니다.",
+    stalker_oath: "무기 타격 중 일부가 추적 잔탄을 불러냅니다.",
+    shatter_ripple: "무기 타격 중 일부가 작은 파문으로 번져 포위를 밀어냅니다.",
+    blood_reflection: "빠른 평타에 추가타와 출혈 잔향이 얇게 붙습니다.",
+    stopped_second: "무기 타격에 짧은 둔화와 쿨다운 보정이 남습니다.",
+    ashen_guard: "결손 생존 중 보호막 지속과 반격 잔향이 남습니다.",
+    oblivion_brand: "무기 타격에 짧은 표식과 치명 피해 보정이 남습니다.",
+  };
+  return map[memoryId] || "사라진 기억의 전투 성향이 무기 보정으로 남습니다.";
 }
 
 function forkChoiceText() {
@@ -3378,7 +3398,9 @@ function renderEchoes() {
     state.activeSynergies.forEach((rule) => lines.push(`<strong>시너지: ${rule.name}</strong><br>${rule.desc}`));
   }
   if (state.tagEchoes?.length) {
-    state.tagEchoes.forEach((echo) => lines.push(`무기 잔향: ${echo.memoryName} Lv.${echo.level} -> ${echo.tags.map(tagLabel).join("/")}`));
+    state.tagEchoes.forEach((echo) => {
+      lines.push(`<strong>무기 잔향: ${echo.memoryName} Lv.${echo.level}</strong><br>${echoCombatSummary(echo.memoryId)}`);
+    });
   }
   if (state.weaponEvolution?.length) {
     state.weaponEvolution.forEach((evolution) => lines.push(`무기 진화: ${evolution.name}`));

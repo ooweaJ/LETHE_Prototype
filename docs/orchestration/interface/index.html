@@ -75,7 +75,7 @@
         <div class="metric green">
           <span>현재 단계</span>
           <strong>v0.12 human test ready</strong>
-          <small>자동 밸런스 게이트 회복</small>
+          <small>밸런스 회복 + 잔향 피드백 보강</small>
         </div>
         <div class="metric blue">
           <span>자동 검증</span>
@@ -90,7 +90,7 @@
         <div class="metric red">
           <span>다음 게이트</span>
           <strong>controlled session</strong>
-          <small>로그/노트 수집</small>
+          <small>로그/노트 + 잔향 이해도 확인</small>
         </div>
       </section>
 
@@ -98,7 +98,8 @@
         <h2>현재 결론</h2>
         <p>
           플레이어 HP <code>180 -> 190</code> 하나만 조정해 밸런스 루프가 두 번 연속 통과했습니다.
-          다음 판단은 추가 숫자 튜닝이 아니라 사람 테스트에서 망각 루프가 재미있는지 확인하는 것입니다.
+          잔향은 수치 변경 없이 결과 카드, 로그, 사이드바, 전투 시작 피드백을 보강했습니다.
+          다음 판단은 사람 테스트에서 망각 루프와 무기 잔향이 읽히는지 확인하는 것입니다.
         </p>
       </section>
 
@@ -108,7 +109,7 @@
           <div class="decision">
             <div>
               <span class="label">해야 할 일</span>
-              <span class="value">controlled human session 준비</span>
+              <span class="value">controlled human session 진행</span>
             </div>
             <div>
               <span class="label">필요한 입력</span>
@@ -126,6 +127,7 @@
           <ul>
             <li>HP 190이 사람에게 너무 쉽거나 빡세지 않을까?</li>
             <li>망각이 아쉬움으로 느껴질까, 짜증으로 느껴질까?</li>
+            <li>잃은 기억이 무기 잔향으로 남는다는 점이 보일까?</li>
             <li>다시 시작하고 싶은 흐름이 생길까?</li>
             <li>Unity 전환 판단에 충분한 증거가 모일까?</li>
           </ul>
@@ -136,11 +138,11 @@
           <div class="decision">
             <div>
               <span class="label">완료 작업</span>
-              <span class="value">v0.12 HP +10 기준선 회복</span>
+              <span class="value">HP +10 기준선 회복 · 잔향 가시성 보강</span>
             </div>
             <div>
               <span class="label">검증</span>
-              <span class="value">balance:loop 2회 = GO_BALANCE_BASELINE</span>
+              <span class="value">balance:loop 2회 · postloss/identity QA 통과</span>
             </div>
             <div>
               <span class="label">주의</span>
