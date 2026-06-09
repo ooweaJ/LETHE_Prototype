@@ -294,7 +294,7 @@ HP `180 -> 190` 하나만으로 v0.12 balance loop가 두 번 연속 `GO_BALANCE
 - `npm run playtest:package`: 통과, `dist\lethe-v0.12-playtest` 생성.
 - `npm run report`: 통과, 2026-06-09 HTML 보고서와 6개 unit report 재생성.
 - `npm run report:check`: 통과, 6개 unit heading 확인.
-- `npm run doctor`: 49 pass / 1 warn / 0 fail. Warning은 `codex --version` unavailable이며 이번 패키지 준비의 blocker는 아니다.
+- `npm run doctor`: 통과, 50 pass / 0 warn / 0 fail.
 
 ## 4. 결정한 것
 
