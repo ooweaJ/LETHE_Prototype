@@ -340,7 +340,7 @@ const baseEcho = {
 const balance = {
   version: "v0.12-balance-1",
   player: {
-    maxHp: 180,
+    maxHp: 190,
     speed: 184,
   },
   boss: {

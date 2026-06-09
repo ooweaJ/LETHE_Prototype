@@ -2,42 +2,42 @@
 
 Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, legacy `docs/NEXT_TASKS.md`, or evidence files.
 
-## 1. Review 2026-06-09 Balance Failure
+## 1. Run Controlled Human Sessions
 
 - Priority: high
-- Why: the first one-lever candidate, `laterCycleClimax 46 -> 42`, worsened the loop to full clear `20%`, death `80%`.
-- How: read `docs/balance/2026-06-09-v012-balance-qa.md` and `docs/orchestration/review_prompts/2026-06-09-balance-loop.md`.
-- Verification: one different small adjustment candidate is selected and documented.
-- Blocker: do not repeat a pure post-cycle climax cap cut as the next immediate candidate.
-
-## 2. Apply One Different Small Balance Adjustment
-
-- Priority: high after review
-- Why: death rate is above the accepted gate.
-- How: change exactly one balance lever from the v0.12 balance docs; prefer a non-density lever such as refill/transition safety or damage timing if the evidence supports it.
-- Verification: changed file is documented and test command is rerun.
-- Blocker: should not stack multiple blind tuning changes.
-
-## 3. Rerun Balance Verification
-
-- Priority: high after adjustment
-- Why: balance gate must recover before controlled human sessions.
-- How: run `npm run qa:balance`, then `npm run balance:loop` if the one-off result is acceptable.
-- Verification: target death rate `<= 40%`, clear rate `>= 35%`, first boss TTK within `15-30s`.
-- Blocker: local/browser automation environment must pass.
-
-## 4. Run Controlled Human Sessions
-
-- Priority: medium after balance gate recovers
-- Why: automated balance alone is not Unity-transition proof.
+- Why: HP `180 -> 190` restored the automated balance gate in two consecutive loops, so the next missing evidence is human response.
 - How: use `dist\lethe-v0.12-playtest`, `docs/HUMAN_PLAYTEST_GUIDE.md`, and `docs/PLAYTEST_NOTES.md`.
-- Verification: downloaded JSON logs exist in `playtest_logs/`.
-- Blocker: balance loop currently failed.
+- Verification: downloaded JSON logs or written playtest notes exist in `playtest_logs/` or an agreed evidence path.
+- Blocker: needs a human tester/session.
 
-## 5. Wire Project Orchestrator Discord Intake
+## 2. Summarize Human Playtest Evidence
+
+- Priority: high after session
+- Why: Unity-transition judgment needs human evidence, not only automated balance.
+- How: run `npm run playtest:summary` after logs exist.
+- Verification: summary report records clear moments, deaths, confusion, regret/irritation, and restart intent.
+- Blocker: no human logs yet.
+
+## 3. Decide Whether v0.12 Needs Another Tiny Tune
+
+- Priority: medium after human evidence
+- Why: HP `190` passes automated gates, but humans may still find the forgetting loop unfair or too soft.
+- How: choose at most one small balance lever from the evidence.
+- Verification: `npm run balance:loop` remains `GO_BALANCE_BASELINE`.
+- Blocker: do not tune blindly before human evidence unless the user explicitly asks.
+
+## 4. Refresh Playtest Package If Needed
+
+- Priority: medium before session
+- Why: the playtest package should include HP `190`.
+- How: run `npm run playtest:package:dry`, then `npm run playtest:package`.
+- Verification: `dist\lethe-v0.12-playtest` exists and opens.
+- Blocker: package generation failure.
+
+## 5. Keep Project Orchestrator Discord Intake Ready
 
 - Priority: low
-- Why: the current shared plugin rule says Discord delivery should go through Project Orchestrator when available, while this repo still has local direct-send scripts as fallback.
-- How: add or document the central intake command/API once Project Orchestrator is available, then keep `npm run report:discord:unit` as trusted-local fallback only.
-- Verification: run `npm run report`, `npm run report:check`, and a central-intake dry run or documented fallback dry run.
-- Blocker: Project Orchestrator intake command/API is not present in this repository yet.
+- Why: report delivery should use central intake when available.
+- How: use `npm run report:orchestrator:unit:dry` before a real send.
+- Verification: Orchestrator dry-run accepts the latest report path.
+- Blocker: Project Orchestrator must be running.

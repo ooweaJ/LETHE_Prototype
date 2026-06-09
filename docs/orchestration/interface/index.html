@@ -68,37 +68,37 @@
           <p class="eyebrow">LETHE 프로젝트 대시보드</p>
           <h1>상태 요약</h1>
         </div>
-        <span class="badge">밸런스 재조정 필요</span>
+        <span class="badge">사람 테스트 후보</span>
       </header>
 
       <section class="metrics" aria-label="핵심 상태 요약">
         <div class="metric green">
           <span>현재 단계</span>
-          <strong>v0.12 balance review</strong>
-          <small>사람 테스트 전 재검토</small>
+          <strong>v0.12 human test ready</strong>
+          <small>자동 밸런스 게이트 회복</small>
         </div>
         <div class="metric blue">
           <span>자동 검증</span>
-          <strong>ITERATE_BALANCE</strong>
-          <small>full clear 20% · death 80%</small>
+          <strong>GO_BALANCE_BASELINE</strong>
+          <small>full clear 60% · death 40%</small>
         </div>
         <div class="metric amber">
           <span>막힌 점</span>
-          <strong>cap-only 후보 실패</strong>
-          <small>laterCycleClimax 42 미채택</small>
+          <strong>human evidence missing</strong>
+          <small>자동 지표만으로는 부족</small>
         </div>
         <div class="metric red">
           <span>다음 게이트</span>
-          <strong>small balance adjustment</strong>
-          <small>한 번에 1개만 조정</small>
+          <strong>controlled session</strong>
+          <small>패키지 확인 후 테스트</small>
         </div>
       </section>
 
       <section class="heroPanel">
         <h2>현재 결론</h2>
         <p>
-          <code>laterCycleClimax 46 -> 42</code> 단일 후보는 실패했습니다.
-          사람 테스트 전에 단순 적 상한 하향이 아닌 다른 작은 레버를 골라 death 80%를 다시 낮춰야 합니다.
+          플레이어 HP <code>180 -> 190</code> 하나만 조정해 밸런스 루프가 두 번 연속 통과했습니다.
+          다음 판단은 추가 숫자 튜닝이 아니라 사람 테스트에서 망각 루프가 재미있는지 확인하는 것입니다.
         </p>
       </section>
 
@@ -108,15 +108,15 @@
           <div class="decision">
             <div>
               <span class="label">해야 할 일</span>
-              <span class="value">2026-06-09 balance failure 리뷰</span>
+              <span class="value">controlled human session 준비</span>
             </div>
             <div>
               <span class="label">필요한 입력</span>
-              <span class="value"><code>docs/balance/2026-06-09-v012-balance-qa.md</code></span>
+              <span class="value"><code>docs/HUMAN_PLAYTEST_GUIDE.md</code></span>
             </div>
             <div>
               <span class="label">완료 신호</span>
-              <span class="value">작은 조정 1개 선택 후 재검증</span>
+              <span class="value">사람 테스트 로그 또는 노트 확보</span>
             </div>
           </div>
         </article>
@@ -124,10 +124,10 @@
         <article class="panel">
           <h2>다음 판단</h2>
           <ul>
-            <li>death 80%를 어떤 한 가지 레버로 낮출까?</li>
-            <li>first boss TTK 23.1s는 유지할까?</li>
-            <li>full clear 20%를 35% 이상으로 회복할까?</li>
-            <li>단순 climax cap 하향을 반복하지 않을까?</li>
+            <li>HP 190이 사람에게 너무 쉽거나 빡세지 않을까?</li>
+            <li>망각이 아쉬움으로 느껴질까, 짜증으로 느껴질까?</li>
+            <li>다시 시작하고 싶은 흐름이 생길까?</li>
+            <li>Unity 전환 판단에 충분한 증거가 모일까?</li>
           </ul>
         </article>
 
@@ -136,15 +136,15 @@
           <div class="decision">
             <div>
               <span class="label">완료 작업</span>
-              <span class="value">v0.12 cap-only 후보 검증</span>
+              <span class="value">v0.12 HP +10 기준선 회복</span>
             </div>
             <div>
               <span class="label">검증</span>
-              <span class="value">qa:balance / balance:loop = ITERATE_BALANCE</span>
+              <span class="value">balance:loop 2회 = GO_BALANCE_BASELINE</span>
             </div>
             <div>
               <span class="label">주의</span>
-              <span class="value">사람 테스트는 balance gate 회복 후 진행</span>
+              <span class="value">추가 튜닝은 사람 증거 이후 진행</span>
             </div>
           </div>
         </article>

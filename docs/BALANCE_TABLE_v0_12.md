@@ -473,3 +473,11 @@ TTK 산정법 (눈대중 금지):
 - Browser `first_boss_ttk`: 3/3 accepted, median `18.61s`.
 - Final balance loop: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.73s`.
 - Next tuning decision: use loop evidence first; do not accept one-off `qa:balance` if it conflicts with loop output.
+
+## 2026-06-09 HP Buffer Recovery
+
+- Rejected candidate: post-first-cycle climax cap `laterCycleClimax 46 -> 42`. It worsened the loop to full clear `20%`, death `80%`, so it was reverted.
+- Accepted candidate: player max HP `180 -> 190`.
+- First confirmation loop: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `18.97s`.
+- Second confirmation loop: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.18s`.
+- Next tuning decision: stop blind numeric tuning and collect controlled human-session evidence.

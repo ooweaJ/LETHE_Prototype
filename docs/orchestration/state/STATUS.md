@@ -4,7 +4,7 @@ Last updated: 2026-06-09
 
 ## Current Snapshot
 
-LETHE HTML Alpha v0.12 is still not cleared for controlled human testing. The latest one-lever tuning candidate, lowering post-first-cycle `망각 전조` enemy cap through `laterCycleClimax 46 -> 42`, was tested and rejected because the balance loop worsened to death `80%`. The code was reverted to the prior baseline; the next step is a different small adjustment candidate rather than another blind density cut.
+LETHE HTML Alpha v0.12 is cleared again as a controlled human-test candidate after the latest one-lever balance recovery. The accepted tuning change is player max HP `180 -> 190`; two consecutive `npm run balance:loop` runs returned `GO_BALANCE_BASELINE`.
 
 The orchestration HTML interface now exists at `docs/orchestration/interface/index.html`, `docs/orchestration/interface/command.html`, and `docs/orchestration/interface/runbook.html`. AI-facing state lives under `docs/orchestration/state/`; human-facing reports live under `docs/orchestration/reports/YYYYMMDD/`.
 
@@ -14,13 +14,14 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
-- Latest candidate tested: `laterCycleClimax 46 -> 42`; rejected and reverted.
-- Latest `npm run qa:balance` after that candidate: `ITERATE_BALANCE`, first boss clear `100%`, full clear `20%`, death `80%`, first boss TTK median `26.17s`.
-- Latest `npm run balance:loop` after that candidate: `ITERATE_BALANCE`, first boss clear `100%`, full clear `20%`, death `80%`, first boss TTK median `23.1s`.
-- Failed checks: clear rate minimum `20% < 35%`; death rate maximum `80% > 40%`.
-- Death phases after the candidate: `망각 전조` 2, `결손 압박` 1, `압박 상승` 1.
+- Accepted recovery change: player max HP `180 -> 190`.
+- Latest `npm run balance:loop` pass 1 after HP `190`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `18.97s`.
+- Latest `npm run balance:loop` pass 2 after HP `190`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.18s`.
+- Failed checks: none in the latest loop.
+- Death phases in the latest loop: `압박 상승` 1, `망각 전조` 1.
 - Generated balance report: `docs/balance/2026-06-09-v012-balance-qa.md`.
 - Generated review prompt: `docs/orchestration/review_prompts/2026-06-09-balance-loop.md`.
+- Rejected prior candidate: `laterCycleClimax 46 -> 42`; it worsened the loop to full clear `20%`, death `80%`, and was reverted.
 - Previous failed baseline: `ITERATE_BALANCE`, first boss clear `100%`, full clear `20%`, death `60%`, first boss TTK median `26.42s`, death cluster `망각 전조` 3 runs.
 - Previous evidence: `docs/balance/2026-06-08-v012-balance-qa.md`, `docs/orchestration/review_prompts/2026-06-08-balance-loop.md`.
 - Prior accepted baseline: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.73s`.
@@ -48,7 +49,7 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Current Blocker
 
-The latest balance loop failed harder after the single cap-lowering candidate. Human reaction evidence is still missing, but human sessions should wait until the balance gate is restored or the user explicitly accepts the risk.
+Human reaction evidence is still missing. The automated balance gate is restored, so the next blocker is controlled human-session evidence rather than numeric balance.
 
 Discord actual send for the latest orchestration structure cleanup succeeded after explicit user request. Historical approval blocks remain recorded in the relevant devlog/report entries.
 
@@ -56,7 +57,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Review the new 2026-06-09 balance prompt and choose a different one-lever adjustment. Do not repeat a pure post-cycle climax cap cut as the next candidate; it reduced neither clear failure nor death rate in this run. Rerun balance verification before returning to controlled human sessions.
+Run controlled human sessions with the v0.12 playtest package and collect logs/notes. If human sessions report irritation or early deaths despite the restored gate, use the latest balance report as the next tuning baseline.
 
 For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` before real sends, then `npm run report:orchestrator:unit` when the Project Orchestrator is running and the report is ready.
 

@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-09-05 - v0.12 밸런스 기준선 회복</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-09-05 - v0.12 밸런스 기준선 회복</h1>
+      <p class="meta">Generated from 2026-06-09-05-v0-12-밸런스-기준선-회복.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260609/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-09-05 - v0.12 밸런스 기준선 회복</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>v0.12 자동 밸런스 게이트가 다시 통과 상태가 됐다.</li>
+<li>채택한 조정은 플레이어 최대 HP <code>180 -&gt; 190</code> 하나뿐이다.</li>
+<li>새 기억, 상점, 메타 진행, 새 지역, 최종보스 확장은 하지 않았다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>src/game.js</code>에서 player max HP만 <code>190</code>으로 올렸다.</li>
+<li>cap-only 후보 실패 이후 현재 코드 기준선을 다시 측정했다.</li>
+<li>death rate만 실패하고 나머지 지표가 통과하는 것을 확인한 뒤, 전체 생존 버퍼를 아주 작게 올리는 방향을 선택했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>조정 전 현재 기준선 <code>npm run balance:loop</code>: <code>ITERATE_BALANCE</code>.</li>
+<li>조정 전 결과: first boss clear <code>80%</code>, full clear <code>40%</code>, death <code>60%</code>, first boss TTK median <code>21.44s</code>.</li>
+<li>HP <code>190</code> 적용 후 <code>npm run balance:loop</code> 1회차: <code>GO_BALANCE_BASELINE</code>.</li>
+<li>1회차 결과: first boss clear <code>100%</code>, full clear <code>60%</code>, death <code>40%</code>, first boss TTK median <code>18.97s</code>.</li>
+<li>HP <code>190</code> 적용 후 <code>npm run balance:loop</code> 2회차: <code>GO_BALANCE_BASELINE</code>.</li>
+<li>2회차 결과: first boss clear <code>100%</code>, full clear <code>60%</code>, death <code>40%</code>, first boss TTK median <code>20.18s</code>.</li>
+<li>최신 리포트: <code>docs/balance/2026-06-09-v012-balance-qa.md</code>.</li>
+<li>최신 review prompt: <code>docs/orchestration/review_prompts/2026-06-09-balance-loop.md</code>.</li>
+<li><code>npm run report</code>: 통과, 2026-06-09 HTML 보고서와 5개 unit report 재생성.</li>
+<li><code>npm run report:check</code>: 통과, 5개 unit heading 확인.</li>
+<li><code>npm run doctor</code>: 통과, 50 pass / 0 warn / 0 fail.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>player max HP <code>180 -&gt; 190</code>을 v0.12 accepted tuning으로 채택한다.</li>
+<li><code>laterCycleClimax 46 -&gt; 42</code>는 계속 미채택으로 둔다.</li>
+<li>자동 밸런스 게이트가 회복됐으므로 다음 blocker는 숫자 튜닝이 아니라 controlled human session evidence다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>death <code>40%</code>는 허용 상한에 정확히 걸친 값이라 사람 테스트에서 여전히 빡세게 느껴질 수 있다.</li>
+<li>full clear <code>60%</code>는 목표 범위 안이지만, 사람에게 너무 쉽거나 어렵게 느껴지는지는 자동 지표만으로 판단할 수 없다.</li>
+<li>추가 튜닝은 사람 테스트 증거 없이 반복하지 않는 것이 안전하다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>HP <code>180 -&gt; 190</code> 하나만으로 v0.12 balance loop가 두 번 연속 <code>GO_BALANCE_BASELINE</code>을 회복했다. 다음 작업은 더 많은 숫자 튜닝이 아니라 playtest package 확인과 controlled human session evidence 수집이다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li><code>npm run playtest:package:dry</code>로 패키지 생성 가능성을 확인한다.</li>
+<li>필요하면 <code>npm run playtest:package</code>로 <code>dist\lethe-v0.12-playtest</code>를 갱신한다.</li>
+<li>사람 테스트 후 <code>npm run playtest:summary</code>로 로그를 정리한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 자동 밸런스 기준이 사망률 때문에 흔들렸다.</li>
+<li>방향: 새 콘텐츠를 넣지 않고 가장 작은 생존 버퍼만 조정한다.</li>
+<li>행동: HP +10 하나를 적용하고 balance loop를 두 번 반복 검증했다.</li>
+<li>결과: 자동 기준선이 회복되어 사람 테스트 단계로 돌아갈 근거가 생겼다.</li>
+</ul>
+  </main>
+</body>
+</html>

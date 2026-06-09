@@ -2,13 +2,15 @@
 
 ## Goal
 
-Review the latest v0.12 balance-loop failure after the rejected cap-only tuning candidate and choose the next exactly-one small adjustment candidate.
+Run controlled human sessions against the restored v0.12 balance baseline.
 
 ## Why Now
 
 The 2026-06-08 `npm run balance:loop` rerun returned `ITERATE_BALANCE`: full clear `20%`, death `60%`, first boss clear `100%`, first boss TTK median `26.42s`.
 
-The first one-lever candidate, lowering `laterCycleClimax 46 -> 42`, was tested on 2026-06-09 and rejected. `npm run qa:balance` and `npm run balance:loop` both returned full clear `20%`, death `80%`, first boss clear `100%`; the code was reverted to the prior baseline. Human testing should pause until the balance gate is restored or the user explicitly accepts the risk.
+The first one-lever candidate, lowering `laterCycleClimax 46 -> 42`, was tested on 2026-06-09 and rejected. It worsened the loop to full clear `20%`, death `80%`, so the code was reverted.
+
+The accepted one-lever recovery was player max HP `180 -> 190`. Two consecutive `npm run balance:loop` runs returned `GO_BALANCE_BASELINE`: full clear `60%`, death `40%`, first boss clear `100%`, first boss TTK median `18.97s` then `20.18s`. Numeric balance is no longer the current blocker; human evidence is.
 
 The report/devlog migration is complete, so new work should now use:
 
@@ -20,12 +22,10 @@ The report/devlog migration is complete, so new work should now use:
 
 ## Done Criteria
 
-- `docs/balance/2026-06-09-v012-balance-qa.md` has been reviewed.
-- `docs/orchestration/review_prompts/2026-06-09-balance-loop.md` has been used as the planning handoff or summarized for the user.
-- The rejected `laterCycleClimax 46 -> 42` candidate is not repeated as the next immediate adjustment.
-- Exactly one new small balance adjustment candidate is selected before implementation.
-- After any adjustment, `npm run qa:balance` or `npm run balance:loop` is rerun.
-- Status, devlog, reports, and decision log are updated under `docs/orchestration/`.
+- The restored v0.12 build is packaged or confirmed packageable.
+- Human playtest guide and notes are ready for a controlled session.
+- At least one human session log or note set is captured under the expected playtest evidence path.
+- Status, devlog, reports, and decision log are updated after the session.
 
 ## Related Files
 
@@ -33,6 +33,9 @@ The report/devlog migration is complete, so new work should now use:
 - `docs/balance/2026-06-09-v012-balance-qa.md`
 - `docs/orchestration/review_prompts/2026-06-08-balance-loop.md`
 - `docs/orchestration/review_prompts/2026-06-09-balance-loop.md`
+- `dist\lethe-v0.12-playtest`
+- `docs/HUMAN_PLAYTEST_GUIDE.md`
+- `docs/PLAYTEST_NOTES.md`
 - `docs/BALANCE_TABLE_v0_12.md`
 - `docs/LETHE_v0.12_밸런스_개선_제안서.md`
 - `scripts/run_balance_loop.js`
@@ -43,6 +46,8 @@ The report/devlog migration is complete, so new work should now use:
 ```bash
 npm run qa:balance
 npm run balance:loop
+npm run playtest:package:dry
+npm run playtest:package
 npm run report
 npm run report:check
 npm run report:discord:unit:dry
@@ -51,9 +56,9 @@ npm run doctor
 
 ## Open Questions
 
-- Why did lowering post-cycle climax cap fail to reduce death rate?
-- Is the remaining failure driven by refill transition, deficit pressure, early HP erosion before the second cycle, or enemy damage scaling rather than raw climax count?
-- Can one small non-density adjustment restore death rate to `<= 40%` without making full clear exceed `80%`?
+- Does the restored numeric baseline feel fair to a human tester?
+- Does the forgetting loop feel regrettable rather than irritating?
+- Does HP `190` make the run too forgiving, or does it only reduce unfair deaths?
 - Should the next validation be one-off `qa:balance` first or the full `balance:loop` directly?
 
 ## Do Not Touch
