@@ -2,38 +2,37 @@
 
 Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, legacy `docs/NEXT_TASKS.md`, or evidence files.
 
-## 1. Run Jaewoo Solo Feel Test
+## 1. Review Forgetting Feel Spec
 
 - Priority: high
-- Why: the real gate is human feel, not simulator emotion proxy.
-- How: open `dist\lethe-v0.12-playtest\index.html` and play the new highest-level forgetting loop.
-- Observe: highest-level loss regret vs irritation, visible echo change, resonance excitement, and conscious leveling tradeoff.
-- Evidence: save notes under `playtest_logs/` or `docs/orchestration/evidence/`.
+- Why: the latest user feedback is that the new model does not feel like a big change yet.
+- How: read `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`.
+- Decide: are the four moments right: loss, echo combat shift, resonance reacquisition, ultimate echo goal?
+- Blocker: do not start more code before this feel target is accepted or revised.
 
-## 2. Record Human Test Notes
+## 2. Choose Next Surface
 
 - Priority: high
-- Why: Unity transition should depend on concrete feel evidence.
-- How: save jaewoo notes under `playtest_logs/` or `docs/orchestration/evidence/`, then summarize in report/devlog.
-- Include: exact moment of loss, echo visibility, reacquisition reaction, and whether debug buttons were used.
+- Why: the same feel spec can drive either an HTML presentation pass or the Unity first slice.
+- Options: HTML feel-presentation pass, Unity slice backlog, or one more planning review.
+- Recommendation: if the goal is immediate proof, do one HTML presentation pass; if the goal is production direction, convert the feel spec into Unity tasks.
 
-## 3. Interpret Feel Gate
+## 3. Lock First Showcase
 
-- Priority: medium
-- Why: the next decision is either another narrow HTML iteration or Unity backlog.
-- How: compare notes against the four human-test questions in `CURRENT_TASK.md`.
-- Blocker: do not use AI proxy metrics as the GO decision.
+- Priority: high
+- Why: a broad memory/echo matrix will dilute the first proof.
+- Recommended showcase: `굶주린 칼무리 + 피의 반사 -> 피의 칼폭풍`.
+- Done: the first showcase has one loss moment, one visible echo behavior, one resonance choice, and one ultimate goal HUD.
 
-## 4. Tune One Lever Only If Human Test Fails Narrowly
-
-- Priority: medium
-- Why: broad tuning would blur whether the new forgetting model is working.
-- How: choose one small lever, document why, rerun the relevant gate.
-- Blocker: do not tune from AI emotion proxy.
-
-## 5. Resume Unity Backlog Only After Feel Gate
+## 4. Draft Implementation Tasks From Feel Spec
 
 - Priority: medium
-- Why: Unity setup is intentionally excluded from this round.
-- How: if the solo test supports the loop, convert the frozen rules into the Unity vertical-slice backlog.
-- Blocker: do not start Unity before the HTML feel gate is recorded.
+- Why: the next implementation should follow player-facing moments, not raw system rules.
+- Include: result screen redesign, stronger echo effects, resonance candidate card, ultimate goal HUD, one-button debug loop.
+- Blocker: avoid adding new content.
+
+## 5. Record Planning Decision
+
+- Priority: medium
+- Why: portfolio framing is stronger if the project explains why code paused for design.
+- How: update report/devlog/decision log after the feel target is approved.

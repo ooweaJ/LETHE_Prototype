@@ -4,9 +4,9 @@ Last updated: 2026-06-10
 
 ## Current Snapshot
 
-LETHE HTML Alpha v0.12 has returned to an `ITERATE_BEFORE_TEST` HTML gate before Unity setup. The immediate task is not new content or Unity backlog work; it is porting the new forgetting model into the existing HTML prototype and using that build for a jaewoo solo feel test. The new model makes the highest-level active memory the forgetting target, lets the player choose among tied highest memories, caps memory and echo levels at `+5`, converts echo overflow into immediate overcharge, and gives reacquired echoed memories resonance.
+LETHE HTML Alpha v0.12 implemented the new forgetting model and passed automated regression, but the user feedback is that the play experience still does not feel like a big change. The current task has therefore shifted from more implementation to design concretization: define exactly how the loss, echo combat shift, resonance reacquisition, and ultimate echo goal should appear and feel.
 
-Implementation for the new HTML model is now in `src/game.js`: highest-level forgetting, echo `+5` cap, overcharge burst logging, reacquisition resonance, HUD candidate visibility, debug demonstration buttons, and alpha simulator synchronization. Regression verification passed after a single accepted balance lever, player max HP `190 -> 210`. The jaewoo solo test package has been regenerated at `dist\lethe-v0.12-playtest`.
+The new design source is `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`. It reframes the system around four player memories: "I lost it because I raised it," "something remained and changed combat," "reacquiring it creates resonance," and "two awakened echoes lead to a bigger goal." No new gameplay code should be added until this feel target is accepted or revised.
 
 The orchestration HTML interface now exists at `docs/orchestration/interface/index.html`, `docs/orchestration/interface/command.html`, and `docs/orchestration/interface/runbook.html`. AI-facing state lives under `docs/orchestration/state/`; human-facing reports live under `docs/orchestration/reports/YYYYMMDD/`.
 
@@ -23,8 +23,11 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 - `npm run report`: pass, regenerated 2026-06-10 report HTML and report archive.
 - `npm run report:check`: pass, one 2026-06-10 unit report verified.
 - `npm run doctor`: pass, 50 pass / 0 warn / 0 fail.
+- Forgetting feel spec reporting: `npm run report` pass, regenerated 2026-06-10 report with 2 unit reports.
+- Forgetting feel spec reporting: `npm run report:check` pass, 2 unit headings verified.
 - Accepted recovery lever for new model: player max HP `190 -> 210`.
 - New planning response saved: `docs/orchestration/review_responses/2026-06-10-forgetting-model-gate.md`.
+- New feel design spec saved: `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`.
 - Accepted recovery change: player max HP `180 -> 190`.
 - Latest `npm run balance:loop` pass 1 after HP `190`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `18.97s`.
 - Latest `npm run balance:loop` pass 2 after HP `190`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.18s`.
@@ -71,7 +74,7 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Current Blocker
 
-The current blocker is no longer automated regression. The next blocker is human evidence: jaewoo needs to run the regenerated HTML build and record whether the new forgetting loop feels regrettable, visible, and exciting on reacquisition.
+The current blocker is design clarity. The new rules exist, but the project needs an agreed feel target before more implementation. The immediate question is whether `LETHE_FORGETTING_FEEL_SPEC.md` is the right target for the next HTML presentation pass or Unity first-slice contract.
 
 Discord actual send for the latest orchestration structure cleanup succeeded after explicit user request. Historical approval blocks remain recorded in the relevant devlog/report entries.
 
@@ -79,7 +82,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Run the jaewoo solo feel test from `dist\lethe-v0.12-playtest`, record notes, and update report/devlog/evidence. Unity backlog work resumes only after the HTML feel gate is recorded.
+Review `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`, decide whether the first showcase should be `굶주린 칼무리 + 피의 반사 -> 피의 칼폭풍`, then convert the approved feel target into implementation tasks.
 
 For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` before real sends, then `npm run report:orchestrator:unit` when the Project Orchestrator is running and the report is ready.
 

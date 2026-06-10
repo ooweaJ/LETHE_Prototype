@@ -1,8 +1,8 @@
 # LETHE Design Docs
 
-최종 갱신: 2026-06-09
+최종 갱신: 2026-06-10
 
-이 폴더는 LETHE를 HTML 프로토타입에서 Unity vertical slice로 옮기기 위한 한글 기획 문서 묶음이다.
+이 폴더는 LETHE의 기억/망각/잔향/공명 루프를 구체화하기 위한 한글 기획 문서 묶음이다. 현재는 Unity 셋업보다 "망각이 실제로 크게 느껴지는 장면"을 먼저 확정한다.
 
 ## 읽는 순서
 
@@ -10,15 +10,17 @@
    - 프로젝트 전체 비전, 핵심 재미, 현재 단계.
 2. `LETHE_CORE_SYSTEMS_UNITY_PLAN.md`
    - 기억, 잔향, 공명, 각성 잔향, 궁극 잔향.
-3. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
+3. `LETHE_FORGETTING_FEEL_SPEC.md`
+   - 망각, 잔향, 공명, 궁극 목표가 플레이 중 어떻게 보여야 하는지.
+4. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
    - Unity 첫 구현 범위와 완료 기준.
-4. `LETHE_RUN_STRUCTURE.md`
+5. `LETHE_RUN_STRUCTURE.md`
    - 한 판 흐름, 성장, 망각, 보충.
-5. `LETHE_COMBAT_DESIGN.md`
+6. `LETHE_COMBAT_DESIGN.md`
    - 무기, 적 역할, 전투 감각.
-6. `LETHE_CONTENT_TABLES.md`
+7. `LETHE_CONTENT_TABLES.md`
    - 기억, 잔향, 시너지, 적 표.
-7. `LETHE_BALANCE_BASELINE.md`
+8. `LETHE_BALANCE_BASELINE.md`
    - v0.12 기준 수치와 Unity 초기 목표.
 
 ## 문서 운영 원칙

@@ -59,8 +59,8 @@
       <div class="grid">
         <article>
           <h2>Codex에게 지금 시킬 일</h2>
-          <p>새 망각 모델 HTML 빌드가 준비됐으니, 다음은 jaewoo 1인 체감 테스트입니다.</p>
-          <textarea id="prompt-next" readonly>dist\lethe-v0.12-playtest\index.html을 열고 새 망각 모델을 1인 체감 테스트해줘. 확인할 것은 네 가지야: 최고 레벨로 키운 기억을 잃는 순간이 "아깝다"인지 "짜증난다"인지, 잃은 직후 잔향 효과가 전투에서 보이는지, 잃었던 기억을 다시 얻을 때 공명이 설레는지, "이 기억을 키우면 다음에 잃는다"는 트레이드오프를 의식하게 되는지. 테스트 노트를 playtest_logs/ 또는 docs/orchestration/evidence/에 남기고, 결과를 docs/orchestration/state/STATUS.md, CURRENT_TASK.md, NEXT_TASKS.md와 docs/orchestration/devlog/2026-06-10.md, docs/orchestration/reports/20260610/index.md에 반영해줘.</textarea>
+          <p>새 모델이 아직 크게 느껴지지 않았으니, 다음은 망각 체감 설계 검토입니다.</p>
+          <textarea id="prompt-next" readonly>docs/design/LETHE_FORGETTING_FEEL_SPEC.md를 읽고 LETHE의 망각 체감 설계를 검토해줘. 네 장면이 맞는지 봐줘: 1) 내가 키운 기억이라 잃는 손실 순간, 2) 잃었지만 잔향이 남아 전투가 바뀌는 순간, 3) 잃었던 기억을 다시 얻을 때 공명으로 돌아오는 보상 순간, 4) 두 잔향을 끝까지 키우면 궁극 목표가 열린다는 장기 목표. 특히 첫 쇼케이스를 굶주린 칼무리 + 피의 반사 -> 피의 칼폭풍으로 고정해도 되는지, 다음 구현을 HTML presentation pass로 할지 Unity slice backlog로 할지 판단해줘. 결과를 docs/orchestration/state/NEXT_TASKS.md와 docs/orchestration/reports/20260610/index.md에 반영해줘.</textarea>
           <button type="button" data-copy-target="prompt-next">프롬프트 복사</button>
         </article>
 
@@ -69,17 +69,17 @@
           <ul>
             <li>새 기억, 무기, 적, 슬롯 추가 금지</li>
             <li>새 지역, 최종 보스, 장기 구조 확장 금지</li>
-            <li>Unity 셋업은 1인 체감 테스트 후로 보류</li>
+            <li>Unity 셋업은 체감 설계 승인 후로 보류</li>
           </ul>
         </article>
 
         <article>
           <h2>완료 기준</h2>
           <ul>
-            <li>최고 레벨 기억 상실 감정 기록</li>
-            <li>잔향 전투 체감 기록</li>
-            <li>재획득 공명 반응 기록</li>
-            <li>강화-망각 트레이드오프 인지 여부 기록</li>
+            <li>네 체감 장면 검토</li>
+            <li>첫 쇼케이스 확정</li>
+            <li>HTML pass 또는 Unity backlog 방향 결정</li>
+            <li>다음 구현 단위 도출</li>
             <li>상태, devlog, reports 갱신</li>
           </ul>
         </article>

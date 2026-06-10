@@ -6,11 +6,11 @@ LETHE is an HTML prototype for testing whether a memory-loss roguelike loop is f
 
 ## Current Goal
 
-Use the HTML prototype to verify the new forgetting, echo, and reacquisition resonance loop before Unity setup. The current focus is not content expansion; it is a narrow HTML feel gate for the core emotional loop.
+Concretize how the forgetting, echo, and reacquisition resonance loop should feel before doing more implementation. The current focus is not content expansion; it is defining the player-facing loss, echo, resonance, and ultimate-goal moments.
 
 ## Current Phase
 
-HTML `ITERATE_BEFORE_TEST` after v0.12 balance-loop validation and before Unity setup.
+Design concretization after HTML `ITERATE_BEFORE_TEST` revealed that the new rules do not yet feel big enough.
 
 ## Tech Stack
 

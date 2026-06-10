@@ -21,7 +21,7 @@ Until the user or planning review explicitly changes scope, do not add:
 
 ## Current Prototype Gate
 
-The current gate is jaewoo solo human evidence for the v0.12 HTML prototype with the new forgetting model. The forgetting loop should feel regrettable rather than irritating, and the player should understand that the highest-level memory is the next forgetting candidate.
+The current gate is design clarity for the v0.12 forgetting loop. The forgetting loop should feel regrettable rather than irritating, the echo should visibly change combat, reacquisition should feel like resonance, and the player should understand that the highest-level memory is the next forgetting candidate.
 
 ## Current Tuning Rule
 
