@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260611\\index.md",
-  "generatedAt": "2026-06-10T16:05:05.415Z",
-  "unitCount": 2,
+  "generatedAt": "2026-06-10T16:13:21.271Z",
+  "unitCount": 3,
   "latest": {
-    "title": "2026-06-11-02 - Unity 플레이 가능한 잔향 디버그 루프",
-    "number": "02",
-    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-02-unity-플레이-가능한-잔향-디버그-루프.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-02-unity-플레이-가능한-잔향-디버그-루프.html"
+    "title": "2026-06-11-03 - Unity 아침 리뷰 게이트 정리",
+    "number": "03",
+    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-03-unity-아침-리뷰-게이트-정리.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-03-unity-아침-리뷰-게이트-정리.html"
   }
 }

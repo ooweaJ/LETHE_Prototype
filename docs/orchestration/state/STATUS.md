@@ -42,6 +42,11 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 - Final Unity debug loop verification: `unity_get_compilation_errors(port=7890, severity="all")` returned `count: 0`; Play Mode runtime check returned `controller=true`, `stormVisible=true`, `orbitVisible=true`, `healThreadVisible=true`, `enemyHealth=6`; console error log returned `count: 0`; missing reference scan returned `totalFound=0`; editor state after stopping Play Mode returned `sceneDirty=false`.
 - Unity debug loop evidence: `docs/orchestration/evidence/2026-06-11-dev-echo-slice-play.png`.
 - Unity debug loop reporting: `npm.cmd run report` pass, `npm.cmd run report:check` pass, `npm.cmd run report:orchestrator:unit:dry` failed with `fetch failed`.
+- Unity morning review prompt: `docs/orchestration/review_prompts/2026-06-11-unity-echo-slice-jaewoo-review.md`.
+- Unity promotion gate: `docs/design/LETHE_UNITY_ECHO_SLICE_PROMOTION_GATE.md`.
+- Unity morning review docs status: jaewoo can open `Assets/_dev/Scenes/Dev_EchoSlice.unity`, press Play, use `1~5` and `Space`, then return `GO`, `ITERATE`, or `NO-GO` with weakest state and first fix.
+- Unity final morning-readiness verification: `unity_editor_ping(port=7890)` connected to `LETHE`; `unity_editor_state(port=7890)` active scene `Assets/_dev/Scenes/Dev_EchoSlice.unity`, `isCompiling=false`, `sceneDirty=false`; compilation errors `count=0`; scene missing references `totalFound=0`; console errors `count=0`.
+- Unity morning review docs reporting: `npm.cmd run report` pass, `npm.cmd run report:check` pass, `npm.cmd run report:orchestrator:unit:dry` failed with `fetch failed`.
 - New forgetting model `npm run qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.19s`.
 - New forgetting model `npm run balance:loop`: `GO_BALANCE_BASELINE`, first boss clear `80%`, full clear `60%`, death `40%`, first boss TTK median `23.91s`.
 - `npm run playtest:package:dry`: pass.
@@ -110,7 +115,9 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Prepare the morning playtest checklist and promotion gate notes: how to open `Dev_EchoSlice`, what controls to press, what jaewoo should judge, known rough edges, and what qualifies for `_dev -> Assets/Lethe` promotion.
+Wait for jaewoo's morning Unity echo slice review. Open `LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity`, press Play, test `1` base, `2` Kalmuri +1, `3` Kalmuri +5, `4` Blood +5, `5` Blood Blade Storm, and `Space` forced attack. Return `GO`, `ITERATE`, or `NO-GO`, plus weakest state and first fix.
+
+Do not promote `_dev` assets to `Assets/Lethe` until jaewoo explicitly returns `GO`.
 
 For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` before real sends, then `npm run report:orchestrator:unit` when the Project Orchestrator is running and the report is ready.
 

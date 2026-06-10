@@ -1,6 +1,6 @@
 # LETHE Design Docs
 
-최종 갱신: 2026-06-10
+최종 갱신: 2026-06-11
 
 이 폴더는 LETHE의 기억/망각/잔향/공명 루프를 구체화하기 위한 한글 기획 문서 묶음이다. 현재는 Unity 셋업보다 "망각이 실제로 크게 느껴지는 장면"을 먼저 확정한다.
 
@@ -26,15 +26,17 @@
    - 첫 Unity slice를 위해 어떤 이미지를 어떤 순서로 만들고, 어떤 MCP/프리팹/테스트 게이트로 검증할지 정의.
 10. `LETHE_UNITY_ASSET_BINDING_PLAN.md`
    - 캐릭터, 맵, 무기, 잔향 VFX 이미지 파일을 Unity 프리팹, ScriptableObject, Scene에 연결하는 MCP 실행용 지도.
-11. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
+11. `LETHE_UNITY_ECHO_SLICE_PROMOTION_GATE.md`
+   - `_dev` echo slice를 언제 `Assets/Lethe`로 승격할지 정하는 GO/ITERATE/NO-GO 체크리스트.
+12. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
    - Unity 첫 구현 범위와 완료 기준.
-12. `LETHE_RUN_STRUCTURE.md`
+13. `LETHE_RUN_STRUCTURE.md`
    - 한 판 흐름, 성장, 망각, 보충.
-13. `LETHE_COMBAT_DESIGN.md`
+14. `LETHE_COMBAT_DESIGN.md`
    - 무기, 적 역할, 전투 감각.
-14. `LETHE_CONTENT_TABLES.md`
+15. `LETHE_CONTENT_TABLES.md`
    - 기억, 잔향, 시너지, 적 표.
-15. `LETHE_BALANCE_BASELINE.md`
+16. `LETHE_BALANCE_BASELINE.md`
    - v0.12 기준 수치와 Unity 초기 목표.
 
 ## 문서 운영 원칙

@@ -2,32 +2,24 @@
 
 ## Goal
 
-Make the Unity `_dev` echo slice playable enough for jaewoo to open it in the morning and review the core loop visually.
+Await jaewoo's morning review of the Unity `_dev` echo slice.
 
 ## Why Now
 
-The Unity skeleton, basic sprites, runtime foundation, basic combat scene, and core echo VFX prefabs now exist. The remaining useful overnight work is to wire them into a playable debug loop rather than wait for final art or production structure.
+The Unity skeleton, basic sprites, runtime foundation, basic combat scene, core echo VFX prefabs, and playable debug loop now exist. The next decision is not more implementation by default; it is jaewoo review.
 
 This task must answer:
 
-- Can jaewoo press Play in `Dev_EchoSlice` and see the difference between base dual blades, Kalmuri +1, Kalmuri +5, Blood +5, and Blood Blade Storm?
-- Are the generated echo sprites connected to actual scene/prefab behavior?
-- Is the morning review checklist clear enough to decide GO/ITERATE/NO-GO?
+- Does jaewoo choose `GO`, `ITERATE`, or `NO-GO` after playing the scene?
+- Which state is weakest: Base, Kalmuri +1, Kalmuri +5, Blood +5, or Storm?
+- Is `_dev -> Assets/Lethe` promotion allowed or blocked?
 
 ## Done Criteria
 
-- Core echo sprites and placeholder prefabs exist under `LETHE/Assets/_dev`.
-- `Dev_EchoSlice.unity` contains a debug controller or panel with immediate state switching.
-- The scene can show:
-  - base dual blades only,
-  - Kalmuri +1 delayed slash,
-  - Kalmuri +5 orbit/launch state,
-  - Blood +5 mark/bloom/heal thread state,
-  - Blood Blade Storm.
-- Unity compile errors are zero.
-- Missing scene references are zero.
-- Report/devlog/state docs record each completed unit.
-- Discord notification is attempted through Project Orchestrator after report generation; if the intake endpoint is unavailable, record the failed endpoint check and retry command.
+- Morning review prompt exists at `docs/orchestration/review_prompts/2026-06-11-unity-echo-slice-jaewoo-review.md`.
+- Promotion gate exists at `docs/design/LETHE_UNITY_ECHO_SLICE_PROMOTION_GATE.md`.
+- Latest report/devlog/status mention controls, known rough edges, and next decision.
+- No actual `Assets/Lethe` promotion happens before jaewoo GO.
 
 ## Related Files
 
@@ -44,8 +36,10 @@ This task must answer:
 - `LETHE/Assets/_dev/Prefabs/Ultimates/**/*.prefab`
 - `LETHE/Assets/_dev/Scripts/Debug/**/*.cs`
 - `LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity`
+- `docs/design/LETHE_UNITY_ECHO_SLICE_PROMOTION_GATE.md`
+- `docs/orchestration/review_prompts/2026-06-11-unity-echo-slice-jaewoo-review.md`
 - `docs/orchestration/state/NEXT_TASKS.md`
-- `docs/orchestration/reports/20260610/index.md`
+- `docs/orchestration/reports/20260611/index.md`
 
 ## Verification Commands
 
@@ -57,7 +51,7 @@ npm.cmd run report:orchestrator:unit:dry
 
 ## Open Questions
 
-- Whether final debug interaction should be UI buttons or keyboard shortcuts. Overnight default: implement keyboard shortcuts first and add minimal visible labels if feasible.
+- Waiting for jaewoo review result.
 
 ## Do Not Touch
 

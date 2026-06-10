@@ -162,6 +162,13 @@
           <p>Dev_EchoSlice.unity는 이제 Play Mode에서 바로 확인 가능한 상태다. 숫자키 1~5 또는 화면의 작은 debug 버튼으로 기본 쌍검, 칼무리 +1, 칼무리 +5, 혈반 +5, 피의 칼폭풍 상태를 전환할 수 있다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-11-03</span>
+          <h2><a href="#unit-2026-06-11-03" data-unit-link="unit-2026-06-11-03">Unity 아침 리뷰 게이트 정리</a></h2>
+          <p>Unity _dev echo slice는 아침 리뷰 대기 상태다. Dev_EchoSlice.unity를 열고 Play 후 숫자키 1~5와 Space로 기본 쌍검, 칼무리 +1, 칼무리 +5, 혈반 +5, 피의 칼폭풍을 확인할 수 있다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -281,6 +288,62 @@
 <li>방향: 최종 시스템보다 빠른 debug loop를 만들어 감정 루프를 먼저 본다.</li>
 <li>행동: debug controller, scene wiring, runtime play check, screenshot evidence를 추가했다.</li>
 <li>결과: 아침에 Unity에서 바로 플레이하며 잔향 slice를 검토할 수 있는 상태가 됐다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-11-03" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-11-03 - Unity 아침 리뷰 게이트 정리</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>Unity <code>_dev</code> echo slice는 아침 리뷰 대기 상태다. <code>Dev_EchoSlice.unity</code>를 열고 Play 후 숫자키 <code>1~5</code>와 <code>Space</code>로 기본 쌍검, 칼무리 +1, 칼무리 +5, 혈반 +5, 피의 칼폭풍을 확인할 수 있다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>jaewoo 아침 리뷰 프롬프트를 만들었다.</li>
+<li><code>_dev -&gt; Assets/Lethe</code> 승격 게이트 문서를 만들었다.</li>
+<li>디자인 문서 index에 승격 게이트 문서를 추가했다.</li>
+<li>현재 작업 상태를 추가 구현이 아니라 jaewoo 리뷰 대기로 바꿨다.</li>
+<li>다음 작업 목록을 리뷰, 첫 ITERATE 수정, production runtime 분리, data asset binding, 승격 순서로 정리했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>리뷰 대상 scene: <code>LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity</code>.</li>
+<li>리뷰 프롬프트: <code>docs/orchestration/review_prompts/2026-06-11-unity-echo-slice-jaewoo-review.md</code>.</li>
+<li>승격 게이트: <code>docs/design/LETHE_UNITY_ECHO_SLICE_PROMOTION_GATE.md</code>.</li>
+<li>직전 Play Mode 검증 기준: compile error 0, missing reference 0, console error 0, scene dirty false.</li>
+<li>직전 runtime check: <code>controller=true</code>, <code>stormVisible=true</code>, <code>orbitVisible=true</code>, <code>healThreadVisible=true</code>, <code>enemyHealth=6</code>.</li>
+<li>최종 Unity editor state: active scene <code>Assets/_dev/Scenes/Dev_EchoSlice.unity</code>, <code>isCompiling=false</code>, <code>sceneDirty=false</code>.</li>
+<li>최종 Unity 검증: compilation errors <code>count=0</code>, scene missing references <code>totalFound=0</code>, console errors <code>count=0</code>.</li>
+<li><code>npm.cmd run report</code>: 통과, 3개 unit report 생성.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 3개 unit heading 확인.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패. Project Orchestrator intake endpoint가 현재 응답하지 않는 상태로 판단.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>지금은 더 자동 구현하지 않고 jaewoo의 체감 리뷰를 받는다.</li>
+<li>GO 전에는 <code>Assets/Lethe</code>로 승격하지 않는다.</li>
+<li>GO가 나도 debug controller 그대로 승격하지 않고 production runtime split을 먼저 한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>VFX는 placeholder imagegen sprite다.</li>
+<li>sound, hitstop, camera impulse, 2D light는 아직 없다.</li>
+<li>Blood heal thread와 Storm density는 사람 눈으로 보며 조정해야 한다.</li>
+<li>Project Orchestrator API 보고는 이전 Task와 같이 endpoint 미응답 가능성이 남아 있다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>jaewoo가 Unity에서 직접 플레이한 뒤 <code>GO</code>, <code>ITERATE</code>, <code>NO-GO</code>를 정하면 된다. 가장 약한 상태와 첫 수정 항목을 받아 Codex가 다음 구현 단위를 고른다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo 리뷰 결과를 읽는다.</li>
+<li><code>ITERATE</code>면 가장 약한 상태의 VFX scale, sorting, timing, readability를 먼저 고친다.</li>
+<li><code>GO</code>면 promotion gate에 따라 production runtime split과 data asset binding부터 진행한다.</li>
+<li><code>NO-GO</code>면 잔향 기획 문서로 돌아가 형태 변환 규칙을 다시 잡는다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: playable slice가 있어도 판단 기준이 없으면 다음 작업이 흔들린다.</li>
+<li>방향: 구현 완료가 아니라 리뷰 가능한 의사결정 단위로 묶는다.</li>
+<li>행동: 리뷰 프롬프트, 승격 게이트, task 상태, report를 한 번에 정리했다.</li>
+<li>결과: jaewoo가 아침에 Unity를 열고 판단하면 바로 다음 Codex 작업으로 이어질 수 있다.</li>
 </ul>
     </article>
       </div>
