@@ -16,3 +16,38 @@ playtest_logs/*.json
 # Local secrets
 .env
 .env.*
+
+# Unity generated files
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+
+# Unity generated project files
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Unity crash/debug artifacts
+sysinfo.txt
+*.stackdump
+
+# Unity package/cache artifacts
+.vs/
+.vsconfig
+.gradle/
+*.apk
+*.aab
