@@ -469,6 +469,7 @@ GameObject:
   - component: {fileID: 986855090}
   - component: {fileID: 986855093}
   - component: {fileID: 986855092}
+  - component: {fileID: 986855097}
   m_Layer: 0
   m_Name: Services
   m_TagString: Untagged
@@ -569,6 +570,41 @@ Transform:
   m_Children: []
   m_Father: {fileID: 656408473}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &986855097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 986855089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cca02f42d741fe94d88b686e0914d502, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Lethe.Dev.DevEchoSliceDebugController
+  buildState: {fileID: 986855095}
+  hitResolver: {fileID: 986855090}
+  poolService: {fileID: 986855093}
+  dualBlades: {fileID: 1425271943}
+  player: {fileID: 1363654349}
+  targetEnemy: {fileID: 2042222677}
+  echoAnchor: {fileID: 1609971510}
+  autoAttack: 1
+  kalmuriSlashPrefab: {fileID: 7454030236281290444, guid: 3a3231ec61aef2240a73490a6268ecfd, type: 3}
+  kalmuriOrbitBladePrefab: {fileID: 6409886242775930313, guid: d6eb5250e6b4c454aa14425487a26f77, type: 3}
+  kalmuriLaunchBladePrefab: {fileID: 2904308247058333855, guid: 6eb107395c090e140ac4b3f3d9eba574, type: 3}
+  bloodMarkPrefab: {fileID: 6312648043902293064, guid: a6f462e72ab591044838eb445a44b0a7, type: 3}
+  healThreadTipPrefab: {fileID: 7795540018701955280, guid: db59a765cec781245b3735ed9aa83897, type: 3}
+  bloodBloomPrefab: {fileID: 4045738741786051230, guid: fc6241abdc322c543a25b3aed574b2a2, type: 3}
+  bloodBladeStormPrefab: {fileID: 6431451401054681831, guid: ea67fc2c0af094d439d2b2f58a2a3a37, type: 3}
+  currentMode: 0
+  slashLifetime: 0.45
+  launchLifetime: 0.55
+  bloodMarkLifetime: 0.8
+  bloomLifetime: 0.5
+  healThreadLifetime: 0.35
+  persistentOrbitRadius: 0.85
+  orbitSpeed: 140
 --- !u!1 &1007537884
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-11-02 - Unity 플레이 가능한 잔향 디버그 루프</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-11-02 - Unity 플레이 가능한 잔향 디버그 루프</h1>
+      <p class="meta">Generated from 2026-06-11-02-unity-플레이-가능한-잔향-디버그-루프.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260611/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-11-02 - Unity 플레이 가능한 잔향 디버그 루프</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_EchoSlice.unity</code>는 이제 Play Mode에서 바로 확인 가능한 상태다. 숫자키 <code>1~5</code> 또는 화면의 작은 debug 버튼으로 기본 쌍검, 칼무리 +1, 칼무리 +5, 혈반 +5, 피의 칼폭풍 상태를 전환할 수 있다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>DevEchoSliceDebugController.cs</code>를 추가했다.</li>
+<li><code>Services</code> 오브젝트에 debug controller를 붙였다.</li>
+<li>player, enemy, weapon, build state, hit resolver, pool service, echo anchor, VFX prefab references를 연결했다.</li>
+<li>자동 공격과 <code>Space</code> 강제 공격을 지원하게 했다.</li>
+<li>칼무리 +1은 지연 칼선, 칼무리 +5는 고리/발사 칼날, 혈반 +5는 혈반/피꽃/회복 실, 피의 칼폭풍은 고리와 칼날 폭풍을 보여준다.</li>
+<li>Play Mode evidence screenshot을 <code>docs/orchestration/evidence/2026-06-11-dev-echo-slice-play.png</code>에 저장했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>최초 Play Mode 검증에서 Input System-only 프로젝트에서 <code>UnityEngine.Input.GetKeyDown</code> 예외가 발생하는 문제를 발견했다.</li>
+<li>입력 처리를 <code>UnityEngine.InputSystem.Keyboard</code> 기준으로 수정하고 legacy input은 define이 있을 때만 쓰게 바꿨다.</li>
+<li><code>unity_get_compilation_errors(port=7890, severity=&quot;all&quot;)</code>: <code>count: 0</code>, <code>isCompiling: false</code>.</li>
+<li>Play Mode runtime check: <code>controller=true</code>, <code>stormVisible=true</code>, <code>orbitVisible=true</code>, <code>healThreadVisible=true</code>, final forced attack 후 <code>enemyHealth=6</code>.</li>
+<li>최종 Play Mode 후 Unity console error log: <code>count: 0</code>.</li>
+<li>Play Mode 정지 후 editor state: <code>isPlaying=false</code>, <code>sceneDirty=false</code>.</li>
+<li>scene missing reference scan: <code>totalFound=0</code>.</li>
+<li><code>npm.cmd run report</code>: 통과, 2개 unit report 생성.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 2개 unit heading 확인.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패. Project Orchestrator intake endpoint가 현재 응답하지 않는 상태로 판단.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>아침 리뷰용 상호작용은 우선 키보드 <code>1~5</code>와 최소 OnGUI 버튼으로 충분하다.</li>
+<li>production runtime이 아니라 <code>_dev</code> debug controller로 격리한다.</li>
+<li>승격 전에는 이 debug controller를 그대로 <code>Assets/Lethe</code>로 옮기지 않고, 검증된 동작만 production echo runtime으로 정리한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>현재 VFX는 playable placeholder이며 최종 밸런스/타이밍/풀링 구조가 아니다.</li>
+<li>persistent orbit/storm은 debug controller에서 직접 생성한다. production 승격 시 <code>PoolService</code>/runtime class 기반으로 바꿔야 한다.</li>
+<li>소리, 히트스톱, 카메라 impulse는 아직 없다.</li>
+<li>OnGUI debug panel은 리뷰용이며 최종 UI가 아니다.</li>
+<li>Project Orchestrator API 보고는 endpoint 미응답으로 실제 제출되지 않았다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Unity에서 잔향이 텍스트가 아니라 화면 행동으로 보이는 최소 loop가 생겼다. jaewoo는 아침에 <code>Dev_EchoSlice.unity</code>를 열고 Play 후 <code>1~5</code>를 눌러 각 상태가 충분히 구분되는지 보면 된다. 핵심 판단은 “피의 칼폭풍을 다시 보고 싶은가”와 “칼무리/혈반이 서로 다른 효과로 읽히는가”다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>아침 리뷰 체크리스트와 승격 전 gate 문서를 정리한다.</li>
+<li>jaewoo 확인 후 GO면 <code>_dev -&gt; Assets/Lethe</code> 승격 계획을 실행한다.</li>
+<li>ITERATE면 VFX 크기, 패널 위치, hit timing, blood thread readability를 먼저 조정한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 리소스와 전투 기반이 있어도 플레이어가 직접 눌러볼 수 없으면 체감 검증이 안 된다.</li>
+<li>방향: 최종 시스템보다 빠른 debug loop를 만들어 감정 루프를 먼저 본다.</li>
+<li>행동: debug controller, scene wiring, runtime play check, screenshot evidence를 추가했다.</li>
+<li>결과: 아침에 Unity에서 바로 플레이하며 잔향 slice를 검토할 수 있는 상태가 됐다.</li>
+</ul>
+  </main>
+</body>
+</html>

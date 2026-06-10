@@ -505,6 +505,8 @@ Scene 판독 기준은 Phase 5에서 확인한다:
 
 ### Phase 5: MCP 프리팹/씬 조립
 
+상태: 아침 리뷰용 `_dev` debug loop 완료. `Dev_EchoSlice.unity`는 Play Mode에서 숫자키 `1~5`와 화면 debug 버튼으로 기본 쌍검, 칼무리 +1, 칼무리 +5, 혈반 +5, 피의 칼폭풍을 전환할 수 있다.
+
 - `Dev_EchoSlice.unity` 생성.
 - player, enemy, map, weapon, echo, ultimate prefab 연결.
 - debug panel 버튼 연결.

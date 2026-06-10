@@ -37,6 +37,11 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 - Unity VFX verification: `unity_asset_list(folder="Assets/_dev/Art/Sprites/Echoes", type="Texture")` found 6 textures; `unity_asset_list(folder="Assets/_dev/Art/Sprites/Ultimates", type="Texture")` found 2 textures; `unity_asset_list(folder="Assets/_dev/Prefabs/Echoes", type="Prefab")` found 6 prefabs; `unity_asset_list(folder="Assets/_dev/Prefabs/Ultimates", type="Prefab")` found 1 prefab.
 - Unity compile verification after VFX import: `unity_get_compilation_errors(port=7890, severity="all")` returned `count: 0`, `isCompiling: false`.
 - Unity core echo VFX reporting: `npm.cmd run report` pass, `npm.cmd run report:check` pass, `npm.cmd run report:orchestrator:unit:dry` failed with `fetch failed`.
+- Unity playable debug loop: added `DevEchoSliceDebugController` to `Services` in `Dev_EchoSlice.unity`; Play Mode supports `1` base dual blades, `2` Kalmuri +1, `3` Kalmuri +5, `4` Blood +5, `5` Blood Blade Storm, and `Space` forced attack.
+- Unity debug loop runtime verification: first Play Mode run exposed an Input System-only exception from `UnityEngine.Input.GetKeyDown`; fixed with `UnityEngine.InputSystem.Keyboard` under `ENABLE_INPUT_SYSTEM`.
+- Final Unity debug loop verification: `unity_get_compilation_errors(port=7890, severity="all")` returned `count: 0`; Play Mode runtime check returned `controller=true`, `stormVisible=true`, `orbitVisible=true`, `healThreadVisible=true`, `enemyHealth=6`; console error log returned `count: 0`; missing reference scan returned `totalFound=0`; editor state after stopping Play Mode returned `sceneDirty=false`.
+- Unity debug loop evidence: `docs/orchestration/evidence/2026-06-11-dev-echo-slice-play.png`.
+- Unity debug loop reporting: `npm.cmd run report` pass, `npm.cmd run report:check` pass, `npm.cmd run report:orchestrator:unit:dry` failed with `fetch failed`.
 - New forgetting model `npm run qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.19s`.
 - New forgetting model `npm run balance:loop`: `GO_BALANCE_BASELINE`, first boss clear `80%`, full clear `60%`, death `40%`, first boss TTK median `23.91s`.
 - `npm run playtest:package:dry`: pass.
@@ -105,7 +110,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Continue the first Unity `_dev` runtime slice from `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md` and `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`: implement the debug loop that shows base dual blades, Kalmuri +1/+5, Blood +5, and Blood Blade Storm in `Dev_EchoSlice.unity`.
+Prepare the morning playtest checklist and promotion gate notes: how to open `Dev_EchoSlice`, what controls to press, what jaewoo should judge, known rough edges, and what qualifies for `_dev -> Assets/Lethe` promotion.
 
 For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` before real sends, then `npm run report:orchestrator:unit` when the Project Orchestrator is running and the report is ready.
 
