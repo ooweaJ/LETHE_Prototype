@@ -59,8 +59,8 @@
       <div class="grid">
         <article>
           <h2>Codex에게 지금 시킬 일</h2>
-          <p>첫 스프라이트/VFX 콘셉트와 Unity import 계획을 검토합니다.</p>
-          <textarea id="prompt-next" readonly>docs/design/LETHE_VISUAL_ASSET_PLAN.md와 docs/design/assets/lethe-first-echo-showcase-concept.png를 보고 LETHE 첫 Unity slice의 스프라이트/VFX 방향을 검토해줘. 이 콘셉트 시트가 절단쌍검 + 굶주린 칼무리 + 피의 반사 -> 피의 칼폭풍 방향에 맞는지 보고, 다음 작업을 투명 runtime sprite 생성으로 갈지, 추가 콘셉트 변형으로 갈지, Unity 2D 프로젝트 생성으로 갈지 판단해줘.</textarea>
+          <p>Unity MCP가 따라 할 에셋-프리팹 연결 지도를 검토합니다.</p>
+          <textarea id="prompt-next" readonly>docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md를 읽고 Unity MCP가 그대로 따라 할 수 있을 정도로 캐릭터, 맵, 검, 칼무리/혈반/피의 칼폭풍 VFX, UI, ScriptableObject, Scene 연결이 구체적인지 검토해줘. 현재 콘셉트 이미지는 Art/Concept 참조용이고 런타임 sprite는 별도 투명 PNG로 만든다는 전제가 맞는지도 봐줘. 다음 작업을 Unity 2D 프로젝트 생성으로 갈지, 투명 runtime sprite 3~5개 생성으로 갈지 판단해줘.</textarea>
           <button type="button" data-copy-target="prompt-next">프롬프트 복사</button>
         </article>
 
@@ -69,17 +69,17 @@
           <ul>
             <li>새 기억, 무기, 적, 슬롯 추가 금지</li>
             <li>새 지역, 최종 보스, 장기 구조 확장 금지</li>
-            <li>콘셉트 시트를 최종 runtime sprite로 바로 사용하지 않기</li>
+            <li>콘셉트 시트를 최종 runtime sprite atlas로 바로 사용하지 않기</li>
           </ul>
         </article>
 
         <article>
           <h2>완료 기준</h2>
           <ul>
-            <li>콘셉트 시트 방향 검토</li>
-            <li>첫 투명 sprite 후보 결정</li>
+            <li>파일-프리팹 연결 검토</li>
+            <li>placeholder 허용 범위 결정</li>
             <li>Unity setup 여부 결정</li>
-            <li>MCP import 기준 확인</li>
+            <li>투명 sprite 생성 우선순위 확인</li>
             <li>상태, devlog, reports 갱신</li>
           </ul>
         </article>

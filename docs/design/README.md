@@ -22,15 +22,17 @@
    - Unity 첫 slice의 잔향 시스템 PRD, 클래스 역할, ScriptableObject, 프리팹, 에셋 구조.
 8. `LETHE_VISUAL_ASSET_PLAN.md`
    - Unity 첫 slice에 사용할 스프라이트/VFX 콘셉트 이미지, 파츠, import 계획, 프리팹 연결.
-9. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
+9. `LETHE_UNITY_ASSET_BINDING_PLAN.md`
+   - 캐릭터, 맵, 무기, 잔향 VFX 이미지 파일을 Unity 프리팹, ScriptableObject, Scene에 연결하는 MCP 실행용 지도.
+10. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
    - Unity 첫 구현 범위와 완료 기준.
-10. `LETHE_RUN_STRUCTURE.md`
+11. `LETHE_RUN_STRUCTURE.md`
    - 한 판 흐름, 성장, 망각, 보충.
-11. `LETHE_COMBAT_DESIGN.md`
+12. `LETHE_COMBAT_DESIGN.md`
    - 무기, 적 역할, 전투 감각.
-12. `LETHE_CONTENT_TABLES.md`
+13. `LETHE_CONTENT_TABLES.md`
    - 기억, 잔향, 시너지, 적 표.
-13. `LETHE_BALANCE_BASELINE.md`
+14. `LETHE_BALANCE_BASELINE.md`
    - v0.12 기준 수치와 Unity 초기 목표.
 
 ## 문서 운영 원칙

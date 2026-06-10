@@ -6,7 +6,7 @@ Last updated: 2026-06-10
 
 LETHE HTML Alpha v0.12 implemented the new forgetting model and passed automated regression, but the user feedback is that the play experience still does not feel like a big change. The current task has shifted from raw rule implementation to Unity-ready echo architecture: echoes should not feel like `잔향!` labels on basic attacks, but like weapon-specific combat events with clear form transformation, data contracts, prefabs, and event boundaries.
 
-The new design sources are `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`, `docs/design/LETHE_WEAPON_MEMORY_ECHO_SPEC.md`, `docs/design/LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`, `docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md`, `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`, and `docs/design/LETHE_VISUAL_ASSET_PLAN.md`. Together they define the first showcase, active-to-echo form transformation, loop-safe hit event taxonomy, Unity class roles, ScriptableObjects, prefabs, first-slice acceptance criteria, and the first sprite/VFX concept sheet. No gameplay code should be added until this combat fantasy, architecture, and visual direction target is accepted or revised.
+The new design sources are `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`, `docs/design/LETHE_WEAPON_MEMORY_ECHO_SPEC.md`, `docs/design/LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`, `docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md`, `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`, `docs/design/LETHE_VISUAL_ASSET_PLAN.md`, and `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md`. Together they define the first showcase, active-to-echo form transformation, loop-safe hit event taxonomy, Unity class roles, ScriptableObjects, prefabs, first-slice acceptance criteria, the first sprite/VFX concept sheet, and the file-to-prefab-to-scene binding map for Unity MCP. No gameplay code should be added until this combat fantasy, architecture, and visual direction target is accepted or revised.
 
 The orchestration HTML interface now exists at `docs/orchestration/interface/index.html`, `docs/orchestration/interface/command.html`, and `docs/orchestration/interface/runbook.html`. AI-facing state lives under `docs/orchestration/state/`; human-facing reports live under `docs/orchestration/reports/YYYYMMDD/`.
 
@@ -74,7 +74,7 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Current Blocker
 
-The current blocker is implementation-surface and asset-pass choice. The first showcase is now specified as `절단쌍검 + 굶주린 칼무리 + 피의 반사 -> 피의 칼폭풍`, and the first concept image exists, but the project still needs to decide whether to generate transparent runtime sprites next, prototype the showcase in HTML, or create the Unity 2D project and backlog.
+The current blocker is Unity setup versus asset-pass choice. The first showcase is now specified as `절단쌍검 + 굶주린 칼무리 + 피의 반사 -> 피의 칼폭풍`, the first concept image exists, and the asset binding plan says how character, map, weapon, VFX, SOs, prefabs, and scene should connect. The project still needs to decide whether to generate transparent runtime sprites next or create the Unity 2D project with placeholders.
 
 Discord actual send for the latest orchestration structure cleanup succeeded after explicit user request. Historical approval blocks remain recorded in the relevant devlog/report entries.
 
@@ -82,7 +82,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Review `docs/design/LETHE_VISUAL_ASSET_PLAN.md`, then choose the next pass: transparent runtime sprites, HTML showcase pass, or Unity first-slice backlog. If Unity is chosen, the first backlog should start with data SOs, hit event routing, echo runtime, pooling, feedback services, debug panel, and importing the concept sheet as reference art.
+Review `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md`, then choose the next pass: transparent runtime sprites or Unity 2D project setup. If Unity is chosen, import the concept sheet as reference art only, use placeholder character/map/enemy as needed, and start with data SOs, hit event routing, echo runtime, pooling, feedback services, and debug panel.
 
 For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` before real sends, then `npm run report:orchestrator:unit` when the Project Orchestrator is running and the report is ready.
 

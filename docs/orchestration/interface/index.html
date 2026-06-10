@@ -68,14 +68,14 @@
           <p class="eyebrow">LETHE 프로젝트 대시보드</p>
           <h1>상태 요약</h1>
         </div>
-        <span class="badge">비주얼 에셋 계획</span>
+        <span class="badge">Unity 에셋 연결</span>
       </header>
 
       <section class="metrics" aria-label="핵심 상태 요약">
         <div class="metric green">
           <span>현재 단계</span>
-          <strong>Asset Direction</strong>
-          <small>첫 스프라이트/VFX 콘셉트</small>
+          <strong>Asset Binding Map</strong>
+          <small>파일 -> 프리팹 -> Scene 연결</small>
         </div>
         <div class="metric blue">
           <span>자동 검증</span>
@@ -84,23 +84,22 @@
         </div>
         <div class="metric amber">
           <span>막힌 점</span>
-          <strong>asset pass choice</strong>
-          <small>투명 sprite 또는 Unity setup 결정</small>
+          <strong>setup choice</strong>
+          <small>Unity setup 또는 투명 sprite 생성</small>
         </div>
         <div class="metric red">
           <span>다음 게이트</span>
-          <strong>visual review</strong>
-          <small>콘셉트 시트와 import 계획 검토</small>
+          <strong>binding review</strong>
+          <small>MCP 실행 지도 검토</small>
         </div>
       </section>
 
       <section class="heroPanel">
         <h2>현재 결론</h2>
         <p>
-          Unity 첫 slice 전에 스프라이트/VFX 방향을 잡는 콘셉트 시트를 만들었습니다.
-          기준 문서는 <code>docs/design/LETHE_VISUAL_ASSET_PLAN.md</code>이고,
-          이미지는 <code>docs/design/assets/lethe-first-echo-showcase-concept.png</code>입니다.
-          다음 판단은 투명 runtime sprite를 만들지, Unity 2D 프로젝트를 먼저 만들지입니다.
+          Unity MCP가 따라 할 수 있도록 캐릭터, 맵, 검, 잔향 VFX, UI를 파일과 프리팹에 연결하는 지도를 만들었습니다.
+          기준 문서는 <code>docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md</code>입니다.
+          현재 콘셉트 이미지는 <code>Art/Concept/</code> 참조용이고, 런타임 sprite는 별도 투명 PNG로 만듭니다.
         </p>
       </section>
 
@@ -110,15 +109,15 @@
           <div class="decision">
             <div>
               <span class="label">해야 할 일</span>
-              <span class="value">첫 비주얼 에셋 계획 검토</span>
+              <span class="value">Unity 에셋-프리팹 연결 검토</span>
             </div>
             <div>
               <span class="label">필요한 입력</span>
-              <span class="value"><code>LETHE_VISUAL_ASSET_PLAN.md</code></span>
+              <span class="value"><code>LETHE_UNITY_ASSET_BINDING_PLAN.md</code></span>
             </div>
             <div>
               <span class="label">완료 신호</span>
-              <span class="value">투명 sprite 또는 Unity setup 선택</span>
+              <span class="value">Unity setup 또는 투명 sprite 생성 선택</span>
             </div>
           </div>
         </article>
@@ -126,10 +125,10 @@
         <article class="panel">
           <h2>다음 판단</h2>
           <ul>
-            <li>콘셉트 시트가 LETHE 첫 slice 방향으로 맞는가?</li>
-            <li>어떤 파츠를 투명 PNG로 먼저 만들까?</li>
-            <li>Unity MCP import 전에 추가 이미지가 필요한가?</li>
-            <li>Unity 2D 프로젝트를 지금 만들까?</li>
+            <li>캐릭터/맵은 placeholder로 시작해도 되는가?</li>
+            <li>검/잔향 VFX 파일 연결이 충분히 구체적인가?</li>
+            <li>Unity MCP가 문서 순서대로 실행 가능한가?</li>
+            <li>다음은 Unity setup인가, 투명 sprite 생성인가?</li>
           </ul>
         </article>
 
@@ -138,15 +137,15 @@
           <div class="decision">
             <div>
               <span class="label">완료 작업</span>
-              <span class="value">첫 스프라이트/VFX 콘셉트 시트 추가</span>
+              <span class="value">Unity asset binding map 추가</span>
             </div>
             <div>
               <span class="label">검증</span>
-              <span class="value">imagegen 생성 이미지 확인, 보고서 재생성 필요</span>
+              <span class="value">문서 설계 단위, 보고서 재생성 필요</span>
             </div>
             <div>
               <span class="label">주의</span>
-              <span class="value">콘셉트 이미지는 참조용, 런타임 sprite는 별도 생성</span>
+              <span class="value">콘셉트 시트는 참조용, 런타임 sprite는 별도 PNG</span>
             </div>
           </div>
         </article>

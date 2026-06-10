@@ -6,7 +6,7 @@
 
 이 문서는 `LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md`, `LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`, `LETHE_WEAPON_MEMORY_ECHO_SPEC.md`를 Unity vertical slice로 옮기기 위한 제품 요구사항 및 기술 구조 설계서다.
 
-스프라이트/VFX 이미지 방향과 import 계획은 `LETHE_VISUAL_ASSET_PLAN.md`를 따른다.
+스프라이트/VFX 이미지 방향은 `LETHE_VISUAL_ASSET_PLAN.md`를 따른다. 실제 파일 import, 프리팹 연결, ScriptableObject 연결, scene 배치 순서는 `LETHE_UNITY_ASSET_BINDING_PLAN.md`를 따른다.
 
 목표는 바로 모든 기억을 구현하는 것이 아니라, 첫 slice에서 LETHE의 핵심 감정이 실제 전투로 보이는지 검증하는 것이다.
 

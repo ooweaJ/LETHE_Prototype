@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-10-06 - Unity 에셋-프리팹 연결 지도</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-10-06 - Unity 에셋-프리팹 연결 지도</h1>
+      <p class="meta">Generated from 2026-06-10-06-unity-에셋-프리팹-연결-지도.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260610/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-10-06 - Unity 에셋-프리팹 연결 지도</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>코드는 변경하지 않았다. 이번 작업은 기존 콘셉트 이미지가 무기/VFX 중심이라는 점을 반영해, Unity MCP가 실제 프로젝트에서 따라 할 수 있는 파일-프리팹-Scene 연결 지도를 추가한 문서화 작업이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md</code>를 추가했다.</li>
+<li>현재 사용 가능한 이미지 <code>docs/design/assets/lethe-first-echo-showcase-concept.png</code>는 런타임 sprite atlas가 아니라 <code>Art/Concept/</code> 참조용으로 정의했다.</li>
+<li>캐릭터, 맵, 절단쌍검, 칼무리, 혈반, 피의 칼폭풍, 적, UI가 각각 어떤 파일/프리팹/SO에 연결되는지 표로 정리했다.</li>
+<li>아직 없는 캐릭터/맵/적 이미지는 placeholder로 시작할 수 있게 표시했다.</li>
+<li>Unity MCP 실행 순서를 폴더 생성, 이미지 import, material 생성, prefab 생성, SO 생성, scene 배치, debug 검증 순서로 적었다.</li>
+<li>design README, visual asset plan, Unity echo PRD, orchestration state를 새 연결 문서 기준으로 갱신했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<p>이번 작업은 문서 기획이다. 검증은 보고서 생성과 보고서 구조 검증으로 진행한다.</p>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>방금 만든 콘셉트 이미지는 Unity에 넣을 수 있지만 <code>Assets/Lethe/Art/Concept/</code> 참조용으로만 사용한다.</li>
+<li>실제 게임 런타임에는 개별 투명 PNG 스프라이트와 material을 prefab에 연결한다.</li>
+<li>첫 Unity slice에서 캐릭터/맵/적은 placeholder로 시작해도 되고, 이펙트 파츠가 우선이다.</li>
+<li>Unity MCP는 이 문서를 기준으로 import, prefab 연결, SO 연결, scene 배치를 수행한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>아직 투명 runtime sprite가 없기 때문에 실제 VFX prefab은 placeholder 또는 다음 imagegen pass가 필요하다.</li>
+<li>캐릭터/맵을 너무 늦게 만들면 화면 전체 인상이 약할 수 있지만, 첫 검증은 잔향 VFX가 우선이다.</li>
+<li>콘셉트 시트를 잘라 런타임에 바로 쓰면 축소 시 디테일이 뭉칠 수 있다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Unity로 넘어갈 때는 <code>LETHE_UNITY_ASSET_BINDING_PLAN.md</code>를 먼저 읽으면 된다. 이 문서는 캐릭터는 어떤 파일, 맵은 어떤 파일, 검은 어떤 파일, 칼무리/혈반/피의 칼폭풍은 어떤 VFX 파일과 prefab을 쓰는지 연결한다. 현재 이미지는 참조용이고, 런타임 sprite는 별도 생성 대상이다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li><code>LETHE_UNITY_ASSET_BINDING_PLAN.md</code>를 검토한다.</li>
+<li>다음 중 하나를 고른다: Unity 2D 프로젝트 생성, 또는 투명 runtime sprite 3~5개 생성.</li>
+<li>Unity를 선택하면 MCP로 <code>Assets/Lethe/</code> 구조를 만들고 콘셉트 이미지를 <code>Art/Concept/</code>에 import한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 콘셉트 이미지만 있으면 Unity에서 무엇에 연결할지 모호하다.</li>
+<li>방향: 이미지 파일을 캐릭터, 맵, 무기, VFX, UI 프리팹과 직접 연결한다.</li>
+<li>행동: Unity MCP 실행용 asset binding map을 작성했다.</li>
+<li>결과: Unity 프로젝트 생성 시 문서를 보고 폴더/import/prefab/SO/scene 순서로 실행할 수 있게 됐다.</li>
+</ul>
+  </main>
+</body>
+</html>

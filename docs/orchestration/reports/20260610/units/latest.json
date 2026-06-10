@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260610\\index.md",
-  "generatedAt": "2026-06-10T06:25:34.648Z",
-  "unitCount": 5,
+  "generatedAt": "2026-06-10T06:33:09.373Z",
+  "unitCount": 6,
   "latest": {
-    "title": "2026-06-10-05 - 첫 스프라이트/VFX 콘셉트 시트",
-    "number": "05",
-    "markdownPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-05-첫-스프라이트-vfx-콘셉트-시트.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-05-첫-스프라이트-vfx-콘셉트-시트.html"
+    "title": "2026-06-10-06 - Unity 에셋-프리팹 연결 지도",
+    "number": "06",
+    "markdownPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-06-unity-에셋-프리팹-연결-지도.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-06-unity-에셋-프리팹-연결-지도.html"
   }
 }

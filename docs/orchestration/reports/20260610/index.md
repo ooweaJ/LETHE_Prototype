@@ -249,3 +249,52 @@ jaewoo 1인 체감 테스트를 진행하고, 관찰 내용을 `docs/orchestrati
 - 방향: 첫 slice의 핵심 VFX를 한 장의 콘셉트 시트로 고정한다.
 - 행동: Codex imagegen으로 콘셉트 이미지를 만들고, Unity prefab/import 계획으로 연결했다.
 - 결과: Unity 프로젝트 생성 전에 클래스, 프리팹, 이미지 방향이 함께 맞물린 상태가 됐다.
+
+# 2026-06-10-06 - Unity 에셋-프리팹 연결 지도
+
+## 1. 현재 빌드 상태
+
+코드는 변경하지 않았다. 이번 작업은 기존 콘셉트 이미지가 무기/VFX 중심이라는 점을 반영해, Unity MCP가 실제 프로젝트에서 따라 할 수 있는 파일-프리팹-Scene 연결 지도를 추가한 문서화 작업이다.
+
+## 2. 오늘 바뀐 것
+
+- `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md`를 추가했다.
+- 현재 사용 가능한 이미지 `docs/design/assets/lethe-first-echo-showcase-concept.png`는 런타임 sprite atlas가 아니라 `Art/Concept/` 참조용으로 정의했다.
+- 캐릭터, 맵, 절단쌍검, 칼무리, 혈반, 피의 칼폭풍, 적, UI가 각각 어떤 파일/프리팹/SO에 연결되는지 표로 정리했다.
+- 아직 없는 캐릭터/맵/적 이미지는 placeholder로 시작할 수 있게 표시했다.
+- Unity MCP 실행 순서를 폴더 생성, 이미지 import, material 생성, prefab 생성, SO 생성, scene 배치, debug 검증 순서로 적었다.
+- design README, visual asset plan, Unity echo PRD, orchestration state를 새 연결 문서 기준으로 갱신했다.
+
+## 3. 테스트 결과와 근거
+
+이번 작업은 문서 기획이다. 검증은 보고서 생성과 보고서 구조 검증으로 진행한다.
+
+## 4. 결정한 것
+
+- 방금 만든 콘셉트 이미지는 Unity에 넣을 수 있지만 `Assets/Lethe/Art/Concept/` 참조용으로만 사용한다.
+- 실제 게임 런타임에는 개별 투명 PNG 스프라이트와 material을 prefab에 연결한다.
+- 첫 Unity slice에서 캐릭터/맵/적은 placeholder로 시작해도 되고, 이펙트 파츠가 우선이다.
+- Unity MCP는 이 문서를 기준으로 import, prefab 연결, SO 연결, scene 배치를 수행한다.
+
+## 5. 문제 또는 리스크
+
+- 아직 투명 runtime sprite가 없기 때문에 실제 VFX prefab은 placeholder 또는 다음 imagegen pass가 필요하다.
+- 캐릭터/맵을 너무 늦게 만들면 화면 전체 인상이 약할 수 있지만, 첫 검증은 잔향 VFX가 우선이다.
+- 콘셉트 시트를 잘라 런타임에 바로 쓰면 축소 시 디테일이 뭉칠 수 있다.
+
+## 6. GPT/Claude 인계 요약
+
+Unity로 넘어갈 때는 `LETHE_UNITY_ASSET_BINDING_PLAN.md`를 먼저 읽으면 된다. 이 문서는 캐릭터는 어떤 파일, 맵은 어떤 파일, 검은 어떤 파일, 칼무리/혈반/피의 칼폭풍은 어떤 VFX 파일과 prefab을 쓰는지 연결한다. 현재 이미지는 참조용이고, 런타임 sprite는 별도 생성 대상이다.
+
+## 7. 다음 Codex 작업
+
+- `LETHE_UNITY_ASSET_BINDING_PLAN.md`를 검토한다.
+- 다음 중 하나를 고른다: Unity 2D 프로젝트 생성, 또는 투명 runtime sprite 3~5개 생성.
+- Unity를 선택하면 MCP로 `Assets/Lethe/` 구조를 만들고 콘셉트 이미지를 `Art/Concept/`에 import한다.
+
+## 8. 포트폴리오 메모
+
+- 문제: 콘셉트 이미지만 있으면 Unity에서 무엇에 연결할지 모호하다.
+- 방향: 이미지 파일을 캐릭터, 맵, 무기, VFX, UI 프리팹과 직접 연결한다.
+- 행동: Unity MCP 실행용 asset binding map을 작성했다.
+- 결과: Unity 프로젝트 생성 시 문서를 보고 폴더/import/prefab/SO/scene 순서로 실행할 수 있게 됐다.

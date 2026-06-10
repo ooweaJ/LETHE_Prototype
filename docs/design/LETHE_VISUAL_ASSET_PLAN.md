@@ -11,8 +11,11 @@
 - `LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md`: 활성 기억, 잔향, 공명, 궁극의 화면 형태 문법.
 - `LETHE_UNITY_ECHO_SYSTEM_PRD.md`: Unity 클래스, ScriptableObject, 프리팹, 이벤트 구조.
 - `LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`: 기억/잔향 레벨별 동작.
+- `LETHE_UNITY_ASSET_BINDING_PLAN.md`: 캐릭터, 맵, 무기, VFX 파일을 Unity 프리팹/SO/Scene에 연결하는 MCP 실행용 지도.
 
 이 문서는 "아트 최종 납품서"가 아니라, Unity 첫 slice에서 어떤 이미지 파츠를 만들고 어떤 프리팹에 붙일지 정하는 아트-구현 연결 문서다.
+
+파일별 import 대상과 prefab 연결은 `LETHE_UNITY_ASSET_BINDING_PLAN.md`가 더 구체적인 기준이다.
 
 ## 1. 첫 콘셉트 이미지
 

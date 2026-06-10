@@ -2,19 +2,19 @@
 
 Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, legacy `docs/NEXT_TASKS.md`, or evidence files.
 
-## 1. Review Visual Asset Plan
+## 1. Review Unity Asset Binding Plan
 
 - Priority: high
-- Why: Unity setup should know which sprites/VFX concept and import targets to use.
-- How: read `docs/design/LETHE_VISUAL_ASSET_PLAN.md`.
-- Decide: is the first concept sheet good enough as the art direction anchor?
-- Blocker: do not import concept art as final runtime sprite atlas.
+- Why: Unity MCP needs a concrete file-to-prefab-to-scene map before setup.
+- How: read `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md`.
+- Decide: are character, map, weapon, echo VFX, SO, prefab, and scene links specific enough?
+- Blocker: do not use the concept sheet as the final runtime sprite atlas.
 
 ## 2. Choose Next Asset Pass
 
 - Priority: high
 - Options: transparent runtime sprites, more concept variations, or Unity project setup.
-- Recommendation: generate 3~5 transparent runtime VFX sprites only after the concept direction is accepted.
+- Recommendation: create Unity project if placeholder character/map is acceptable; otherwise generate 3~5 transparent runtime VFX sprites first.
 - First candidates: 칼무리 반달 칼선, 혈반 표식, 회복 실 끝점, +5 발사 칼날, 피의 칼폭풍 칼날.
 
 ## 3. Choose Next Implementation Surface
