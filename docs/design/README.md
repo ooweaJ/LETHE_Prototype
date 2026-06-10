@@ -14,15 +14,21 @@
    - 망각, 잔향, 공명, 궁극 목표가 플레이 중 어떻게 보여야 하는지.
 4. `LETHE_WEAPON_MEMORY_ECHO_SPEC.md`
    - 무기, 기억, 잔향, 각성, 공명, 궁극 잔향의 구체 전투 행동.
-5. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
+5. `LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`
+   - 잔향을 레벨 단위, 동작 단위, 무기별 표현까지 내려 쓴 상세 구현 설계.
+6. `LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md`
+   - 활성 기억, 망각, 잔향, 각성, 공명, 궁극의 화면 형태 변환 문법.
+7. `LETHE_UNITY_ECHO_SYSTEM_PRD.md`
+   - Unity 첫 slice의 잔향 시스템 PRD, 클래스 역할, ScriptableObject, 프리팹, 에셋 구조.
+8. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
    - Unity 첫 구현 범위와 완료 기준.
-6. `LETHE_RUN_STRUCTURE.md`
+9. `LETHE_RUN_STRUCTURE.md`
    - 한 판 흐름, 성장, 망각, 보충.
-7. `LETHE_COMBAT_DESIGN.md`
+10. `LETHE_COMBAT_DESIGN.md`
    - 무기, 적 역할, 전투 감각.
-8. `LETHE_CONTENT_TABLES.md`
+11. `LETHE_CONTENT_TABLES.md`
    - 기억, 잔향, 시너지, 적 표.
-9. `LETHE_BALANCE_BASELINE.md`
+12. `LETHE_BALANCE_BASELINE.md`
    - v0.12 기준 수치와 Unity 초기 목표.
 
 ## 문서 운영 원칙

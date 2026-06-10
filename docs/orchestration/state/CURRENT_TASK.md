@@ -2,34 +2,37 @@
 
 ## Goal
 
-Concretize weapon, memory, echo, awakened echo, resonance, and ultimate echo design so echoes feel powerful rather than like small text/proc labels.
+Turn the concrete weapon/memory/echo design into a Unity-ready system PRD: form transformation grammar, class roles, ScriptableObjects, prefabs, event boundaries, and first-slice acceptance criteria.
 
 ## Why Now
 
-The user clarified that the real issue is not only the forgetting loop. The current HTML echo feedback feels like "잔향!" attached to basic attacks, which does not create enough impact. LETHE needs a more concrete design for what each weapon does, what each memory becomes when forgotten, and how echoes change the player's combat fantasy.
+The weapon/memory/echo detail is now concrete enough to expose the next risk: if Unity implementation starts without a class/event/prefab contract, echoes can collapse back into generic proc text or tangled on-hit loops. The current task is to define how Unity should build the first showcase without implementing the project yet.
 
 The design must answer:
 
-- What does each weapon feel like before echoes?
-- What new action does each echo add to weapon attacks?
-- How does the same echo behave differently on dual blades versus greatsword?
-- What changes at echo `+5` awakened state?
-- What does reacquisition resonance add beyond level restoration?
-- What is the first "this build is crazy" ultimate echo moment?
+- How are active memories, echoes, awakened echoes, resonance, and ultimate echoes visually different?
+- Which Unity classes own build state, forgetting, resonance, hit events, echo routing, and feedback?
+- Which ScriptableObjects hold weapon, memory, echo, synergy, and feedback data?
+- Which prefabs are required for the first `절단쌍검 + 칼무리 + 혈반 -> 피의 칼폭풍` slice?
+- How do `WeaponHit`, `EchoHit`, `UltimateHit`, `Kill`, and `ShieldBreak` avoid recursive proc loops?
+- What acceptance criteria prove that echoes became transformed combat events rather than weak copies?
 
 ## Done Criteria
 
-- `docs/design/LETHE_WEAPON_MEMORY_ECHO_SPEC.md` exists.
-- The spec defines dual blades and greatsword identity.
-- The spec defines concrete active memory, normal echo, awakened echo, resonance, and hype moment for the current 8 memories.
-- The spec defines at least `피의 칼폭풍` in enough detail to guide implementation.
-- Design README, combat design, content tables, overview, and feel spec link to the new spec.
-- Report/devlog/state docs record that this planning pass is about replacing abstract echo text with concrete combat events.
+- `docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md` exists.
+- `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md` exists.
+- The form spec defines active memory, forgetting transition, echo, awakened echo, resonance, and ultimate shape differences.
+- The PRD defines Unity data SOs, runtime classes, event boundaries, prefab list, folder layout, and first-slice acceptance criteria.
+- `docs/design/README.md` links the new docs in the reading order.
+- Report/devlog/state docs record that the design is now implementation-architecture ready.
 - No gameplay code is added in this planning unit.
 
 ## Related Files
 
 - `docs/design/LETHE_WEAPON_MEMORY_ECHO_SPEC.md`
+- `docs/design/LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`
+- `docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md`
+- `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`
 - `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`
 - `docs/design/LETHE_COMBAT_DESIGN.md`
 - `docs/design/LETHE_CONTENT_TABLES.md`
@@ -45,9 +48,10 @@ npm run report:check
 
 ## Open Questions
 
-- Is the first implementation target definitely `절단쌍검 + 굶주린 칼무리 + 피의 반사 -> 피의 칼폭풍`?
-- Should `장송대검 + 처형자의 섬광 + 망각의 낙인 -> 처형 각인` be the second showcase?
-- Should HTML prototype implement only the first showcase, leaving the rest as Unity design?
+- Should the next work be HTML showcase implementation or Unity project setup/backlog conversion?
+- Should `피의 칼폭풍` be always-on once unlocked, or triggered by a gauge?
+- Should the first Unity slice use automatic attacks like HTML or manual attack input?
+- What healing cap should `혈반` and `피의 칼폭풍` use?
 
 ## Do Not Touch
 

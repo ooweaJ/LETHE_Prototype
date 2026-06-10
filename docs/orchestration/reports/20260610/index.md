@@ -151,3 +151,53 @@ jaewoo 1인 체감 테스트를 진행하고, 관찰 내용을 `docs/orchestrati
 - 방향: 무기, 기억, 잔향의 결합을 구체적인 전투 사건으로 설계한다.
 - 행동: 8개 기억의 활성/잔향/각성/공명/궁극 방향과 무기별 차이를 문서화했다.
 - 결과: 다음 구현이 "수치가 오른다"가 아니라 "빌드가 화면에서 터진다"를 목표로 삼을 수 있게 됐다.
+
+# 2026-06-10-04 - Unity 잔향 시스템 PRD
+
+## 1. 현재 빌드 상태
+
+코드는 변경하지 않았다. 이번 작업은 `LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`의 상세 기획을 Unity 구현 계약으로 바꾸는 문서화 작업이다. 목표는 Unity를 열기 전에 클래스, ScriptableObject, 프리팹, 이벤트 경계, 수락 기준을 정해 잔향이 다시 일반 proc 코드로 흐르지 않게 하는 것이다.
+
+## 2. 오늘 바뀐 것
+
+- `docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md`를 추가했다.
+- 활성 기억, 망각 변환, 일반 잔향, 각성 잔향, 공명, 궁극 잔향의 화면 형태 차이를 정의했다.
+- `WeaponHit`, `EchoHit`, `UltimateHit`, `Kill`, `DamageTaken`, `ShieldBreak` 이벤트 경계를 정의해 무한 온힛 루프를 막는 기준을 세웠다.
+- `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`를 추가했다.
+- Unity 첫 slice의 데이터 SO, 런타임 클래스, 피드백 서비스, 풀링, UI, 디버그 패널, 프리팹 목록을 정리했다.
+- `LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`와 design README가 새 문서를 참조하도록 갱신했다.
+- orchestration state와 dashboard/command를 Unity echo PRD 리뷰와 구현 표면 결정 중심으로 바꿨다.
+
+## 3. 테스트 결과와 근거
+
+이번 작업은 문서/설계 작업이다. 검증은 보고서 생성과 보고서 구조 검증으로 진행한다.
+
+## 4. 결정한 것
+
+- 잔향은 "약해진 같은 효과"가 아니라 "형태가 바뀐 효과"로 구현한다.
+- `+5` 잔향은 활성 기억 복사본이 아니라 무기에 붙은 반각성 형태여야 한다.
+- Unity 구현은 `WeaponHit`, `EchoHit`, `UltimateHit`를 분리해 재귀 proc 루프를 막는다.
+- 첫 Unity slice는 `절단쌍검 + 굶주린 칼무리 + 피의 반사 -> 피의 칼폭풍`을 기준으로 설계한다.
+
+## 5. 문제 또는 리스크
+
+- 아직 HTML showcase로 한 번 더 볼지, Unity backlog로 바로 넘길지 결정이 필요하다.
+- `피의 칼폭풍`이 상시 궁극인지 게이지 발동인지 열어둔 상태다.
+- 혈반/궁극 회복량 cap을 정하지 않으면 쌍검 타수와 결합해 생존 밸런스가 터질 수 있다.
+
+## 6. GPT/Claude 인계 요약
+
+새 문서의 핵심은 Unity 구현 전에 형태 변환과 이벤트 경계를 고정하는 것이다. 활성 칼무리는 독립 고리, 잔향 칼무리는 무기에서 튀는 칼선, 공명은 둘이 동시에 존재하는 상태, 피의 칼폭풍은 칼날과 혈반이 서로를 먹여 살리는 루프로 정의한다.
+
+## 7. 다음 Codex 작업
+
+- `LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md`와 `LETHE_UNITY_ECHO_SYSTEM_PRD.md`를 검토한다.
+- 다음 표면을 고른다: HTML showcase pass 또는 Unity first-slice backlog.
+- Unity를 선택하면 데이터 SO, hit event router, echo runtime, pooling, feedback service, debug panel 순서로 backlog를 쪼갠다.
+
+## 8. 포트폴리오 메모
+
+- 문제: 좋은 잔향 기획도 구현 구조가 없으면 일반 proc 코드로 흐를 수 있다.
+- 방향: 재미 기획을 Unity 클래스/데이터/프리팹/이벤트 계약으로 변환한다.
+- 행동: 형태 변환 문법과 Unity echo system PRD를 작성했다.
+- 결과: 첫 Unity slice가 "무엇을 어떻게 만들지"까지 내려간 구현 준비 상태가 됐다.

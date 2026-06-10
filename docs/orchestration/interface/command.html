@@ -59,8 +59,8 @@
       <div class="grid">
         <article>
           <h2>Codex에게 지금 시킬 일</h2>
-          <p>잔향이 텍스트/proc처럼 느껴지지 않게, 무기·기억·잔향 설계를 검토합니다.</p>
-          <textarea id="prompt-next" readonly>docs/design/LETHE_WEAPON_MEMORY_ECHO_SPEC.md를 읽고 LETHE의 무기·기억·잔향 설계를 검토해줘. 핵심은 잔향이 기본공격에 "잔향!"이라고 붙는 수준이 아니라, 무기 공격이 새 행동을 하게 만드는 거야. 절단쌍검은 작은 잔향을 자주 연쇄시키고, 장송대검은 조건부 큰 폭발로 잔향을 터뜨리는 방향이 맞는지 봐줘. 첫 쇼케이스를 절단쌍검 + 굶주린 칼무리 + 피의 반사 -> 피의 칼폭풍으로 고정해도 되는지 판단하고, 다음 구현을 HTML showcase pass로 할지 Unity first-slice backlog로 할지 정리해줘.</textarea>
+          <p>Unity 잔향 시스템 PRD를 검토하고, 다음 구현 표면을 결정합니다.</p>
+          <textarea id="prompt-next" readonly>docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md와 docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md를 읽고 LETHE의 Unity 잔향 시스템 구조를 검토해줘. 핵심은 잔향이 "약해진 같은 효과"가 아니라 "잃어버린 기억이 무기에 남긴 버릇"으로 보이는 거야. WeaponHit/EchoHit/UltimateHit 이벤트 경계, ScriptableObject 구조, 프리팹 목록, 피의 칼폭풍 첫 slice 수락 기준이 충분한지 봐줘. 다음 작업을 HTML showcase pass로 할지 Unity first-slice backlog로 바로 넘길지 판단해줘.</textarea>
           <button type="button" data-copy-target="prompt-next">프롬프트 복사</button>
         </article>
 
@@ -69,17 +69,17 @@
           <ul>
             <li>새 기억, 무기, 적, 슬롯 추가 금지</li>
             <li>새 지역, 최종 보스, 장기 구조 확장 금지</li>
-            <li>Unity 셋업은 체감 설계 승인 후로 보류</li>
+            <li>Unity 셋업은 PRD 검토와 표면 결정 후</li>
           </ul>
         </article>
 
         <article>
           <h2>완료 기준</h2>
           <ul>
-            <li>무기별 잔향 행동 검토</li>
-            <li>피의 칼폭풍 쇼케이스 확정</li>
+            <li>형태 변환 문법 검토</li>
+            <li>Unity 클래스·SO·프리팹 구조 검토</li>
             <li>HTML pass 또는 Unity backlog 방향 결정</li>
-            <li>다음 구현 단위 도출</li>
+            <li>피의 칼폭풍 첫 backlog 단위 도출</li>
             <li>상태, devlog, reports 갱신</li>
           </ul>
         </article>

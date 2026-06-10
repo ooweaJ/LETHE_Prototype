@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-10-04 - Unity 잔향 시스템 PRD</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-10-04 - Unity 잔향 시스템 PRD</h1>
+      <p class="meta">Generated from 2026-06-10-04-unity-잔향-시스템-prd.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260610/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-10-04 - Unity 잔향 시스템 PRD</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>코드는 변경하지 않았다. 이번 작업은 <code>LETHE_WEAPON_MEMORY_ECHO_DETAIL.md</code>의 상세 기획을 Unity 구현 계약으로 바꾸는 문서화 작업이다. 목표는 Unity를 열기 전에 클래스, ScriptableObject, 프리팹, 이벤트 경계, 수락 기준을 정해 잔향이 다시 일반 proc 코드로 흐르지 않게 하는 것이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md</code>를 추가했다.</li>
+<li>활성 기억, 망각 변환, 일반 잔향, 각성 잔향, 공명, 궁극 잔향의 화면 형태 차이를 정의했다.</li>
+<li><code>WeaponHit</code>, <code>EchoHit</code>, <code>UltimateHit</code>, <code>Kill</code>, <code>DamageTaken</code>, <code>ShieldBreak</code> 이벤트 경계를 정의해 무한 온힛 루프를 막는 기준을 세웠다.</li>
+<li><code>docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md</code>를 추가했다.</li>
+<li>Unity 첫 slice의 데이터 SO, 런타임 클래스, 피드백 서비스, 풀링, UI, 디버그 패널, 프리팹 목록을 정리했다.</li>
+<li><code>LETHE_WEAPON_MEMORY_ECHO_DETAIL.md</code>와 design README가 새 문서를 참조하도록 갱신했다.</li>
+<li>orchestration state와 dashboard/command를 Unity echo PRD 리뷰와 구현 표면 결정 중심으로 바꿨다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<p>이번 작업은 문서/설계 작업이다. 검증은 보고서 생성과 보고서 구조 검증으로 진행한다.</p>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>잔향은 &quot;약해진 같은 효과&quot;가 아니라 &quot;형태가 바뀐 효과&quot;로 구현한다.</li>
+<li><code>+5</code> 잔향은 활성 기억 복사본이 아니라 무기에 붙은 반각성 형태여야 한다.</li>
+<li>Unity 구현은 <code>WeaponHit</code>, <code>EchoHit</code>, <code>UltimateHit</code>를 분리해 재귀 proc 루프를 막는다.</li>
+<li>첫 Unity slice는 <code>절단쌍검 + 굶주린 칼무리 + 피의 반사 -&gt; 피의 칼폭풍</code>을 기준으로 설계한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>아직 HTML showcase로 한 번 더 볼지, Unity backlog로 바로 넘길지 결정이 필요하다.</li>
+<li><code>피의 칼폭풍</code>이 상시 궁극인지 게이지 발동인지 열어둔 상태다.</li>
+<li>혈반/궁극 회복량 cap을 정하지 않으면 쌍검 타수와 결합해 생존 밸런스가 터질 수 있다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>새 문서의 핵심은 Unity 구현 전에 형태 변환과 이벤트 경계를 고정하는 것이다. 활성 칼무리는 독립 고리, 잔향 칼무리는 무기에서 튀는 칼선, 공명은 둘이 동시에 존재하는 상태, 피의 칼폭풍은 칼날과 혈반이 서로를 먹여 살리는 루프로 정의한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li><code>LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md</code>와 <code>LETHE_UNITY_ECHO_SYSTEM_PRD.md</code>를 검토한다.</li>
+<li>다음 표면을 고른다: HTML showcase pass 또는 Unity first-slice backlog.</li>
+<li>Unity를 선택하면 데이터 SO, hit event router, echo runtime, pooling, feedback service, debug panel 순서로 backlog를 쪼갠다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 좋은 잔향 기획도 구현 구조가 없으면 일반 proc 코드로 흐를 수 있다.</li>
+<li>방향: 재미 기획을 Unity 클래스/데이터/프리팹/이벤트 계약으로 변환한다.</li>
+<li>행동: 형태 변환 문법과 Unity echo system PRD를 작성했다.</li>
+<li>결과: 첫 Unity slice가 &quot;무엇을 어떻게 만들지&quot;까지 내려간 구현 준비 상태가 됐다.</li>
+</ul>
+  </main>
+</body>
+</html>

@@ -2,33 +2,34 @@
 
 Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, legacy `docs/NEXT_TASKS.md`, or evidence files.
 
-## 1. Review Weapon/Memory/Echo Spec
+## 1. Review Unity Echo System PRD
 
 - Priority: high
-- Why: current echoes feel like labels/procs, not combat fantasy.
-- How: read `docs/design/LETHE_WEAPON_MEMORY_ECHO_SPEC.md`.
-- Decide: are dual blades, greatsword, the 8 echoes, and `피의 칼폭풍` concrete enough?
-- Blocker: do not implement more generic `잔향!` feedback.
+- Why: Unity work should start from a class/event/prefab contract, not improvised proc code.
+- How: read `docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md` and `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`.
+- Decide: are the class roles, ScriptableObjects, prefabs, and event boundaries enough for the first slice?
+- Blocker: do not implement Unity echoes without `WeaponHit/EchoHit/UltimateHit` loop rules.
 
-## 2. Lock First Showcase
+## 2. Lock First Showcase And Trigger Rules
 
 - Priority: high
 - Recommendation: `절단쌍검 + 굶주린 칼무리 + 피의 반사 -> 피의 칼폭풍`.
-- Done: one weapon rhythm, two active memories, two awakened echoes, one ultimate echo, one debug loop.
-- Blocker: if this showcase does not sound exciting on paper, revise before code.
+- Include: 망각 변환 연출, 칼무리 +1~+5, 혈반 +1~+5, 공명, 피의 칼폭풍.
+- Decide: 궁극은 unlock 후 상시인지, 게이지 발동인지.
+- Blocker: if +5 looks like active memory copy, revise form language.
 
 ## 3. Choose Next Implementation Surface
 
 - Priority: high
 - Options: HTML showcase pass or Unity first-slice backlog.
-- Recommendation: implement the first showcase in HTML only if it can prove the moment quickly; otherwise use the spec as Unity contract.
-- Include: no new memories, no new weapon roster.
+- Recommendation: use HTML only for cheap rule visualization; use Unity when testing hitstop/sound/VFX/pooling matters.
+- Include: no new memories, no new weapon roster, no meta systems.
 
-## 4. Convert Spec To Tasks
+## 4. Convert PRD To Unity Backlog
 
 - Priority: medium
-- Include: dual-blade hit rhythm, 칼무리 잔칼, 혈반 피 실, 공명 card, 피의 칼폭풍 HUD/trigger, one-button demo.
-- Done: tasks have visible success criteria, not just numeric balance criteria.
+- Include: data SOs, hit event router, echo runtime, pool service, feedback services, debug panel.
+- Done: each task has a prefab/class target and visual acceptance criterion.
 
 ## 5. Keep The Second Showcase As Backup
 

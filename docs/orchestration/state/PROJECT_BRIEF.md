@@ -6,11 +6,11 @@ LETHE is an HTML prototype for testing whether a memory-loss roguelike loop is f
 
 ## Current Goal
 
-Concretize how weapons, memories, echoes, resonance, and ultimate echoes should feel before doing more implementation. The current focus is not content expansion; it is turning abstract echo labels into concrete combat events.
+Convert the concrete weapon, memory, echo, resonance, and ultimate echo design into a Unity-ready first-slice contract. The current focus is not content expansion; it is turning abstract echo labels into concrete combat events with clear classes, data, prefabs, event rules, and feedback services.
 
 ## Current Phase
 
-Design concretization after HTML `ITERATE_BEFORE_TEST` revealed that the new rules do not yet feel big enough.
+Unity echo system PRD after HTML `ITERATE_BEFORE_TEST` revealed that the new rules need stronger form transformation and implementation architecture before more code.
 
 ## Tech Stack
 

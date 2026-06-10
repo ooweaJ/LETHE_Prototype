@@ -6,8 +6,8 @@ Codex works in this repository as the implementation, verification, git, reporti
 
 - The project goal is to validate LETHE's core fun and possibility in HTML before deciding whether Unity implementation is justified.
 - AI proxy metrics are planning evidence only. They are not human emotion, balance, or Unity-transition proof.
-- Current state: the new forgetting model is implemented, but echoes still feel like labels/procs rather than powerful combat fantasy.
-- The next gate is weapon/memory/echo concretization: define exactly how echoes change weapon behavior before more code.
+- Current state: the new forgetting model is implemented, and weapon/memory/echo behavior has been concretized into Unity-ready design docs.
+- The next gate is implementation-surface choice: HTML showcase pass or Unity first-slice backlog based on `LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md` and `LETHE_UNITY_ECHO_SYSTEM_PRD.md`.
 
 ## Operating Rules
 
