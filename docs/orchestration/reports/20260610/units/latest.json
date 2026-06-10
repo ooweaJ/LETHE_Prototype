@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260610\\index.md",
-  "generatedAt": "2026-06-10T07:54:57.744Z",
-  "unitCount": 11,
+  "generatedAt": "2026-06-10T08:34:15.022Z",
+  "unitCount": 12,
   "latest": {
-    "title": "2026-06-10-11 - Unity _dev 폴더 세팅",
-    "number": "11",
-    "markdownPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-11-unity-dev-폴더-세팅.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-11-unity-dev-폴더-세팅.html"
+    "title": "2026-06-10-12 - Unity 기본 slice 리소스 생성/import",
+    "number": "12",
+    "markdownPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-12-unity-기본-slice-리소스-생성-import.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-12-unity-기본-slice-리소스-생성-import.html"
   }
 }

@@ -4,7 +4,7 @@ Last updated: 2026-06-10
 
 ## Current Snapshot
 
-LETHE HTML Alpha v0.12 implemented the new forgetting model and passed automated regression, but the user feedback is that the play experience still does not feel like a big change. The current task has shifted from raw rule implementation to a Unity-ready echo slice: echoes should not feel like `잔향!` labels on basic attacks, but like weapon-specific combat events supported by concrete images, `_dev` prefabs, debug scene states, and one-person feel tests.
+LETHE HTML Alpha v0.12 implemented the new forgetting model and passed automated regression, but the user feedback is that the play experience still does not feel like a big change. The current task has shifted from raw rule implementation to a Unity-ready echo slice: echoes should not feel like `잔향!` labels on basic attacks, but like weapon-specific combat events supported by concrete images, `_dev` prefabs, debug scene states, and one-person feel tests. The first Unity `_dev` readability resource pass is now imported: player silhouette, walker enemy, dark floor tile, and left/right dual blade sprites are in `LETHE/Assets/_dev/Art/Sprites`, with chroma source images preserved in `LETHE/Assets/_dev/Art/Source`.
 
 The new design sources are `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`, `docs/design/LETHE_WEAPON_MEMORY_ECHO_SPEC.md`, `docs/design/LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`, `docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md`, `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`, `docs/design/LETHE_VISUAL_ASSET_PLAN.md`, `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md`, and `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md`. Together they define the first showcase, active-to-echo form transformation, loop-safe hit event taxonomy, Unity class roles, ScriptableObjects, prefabs, first-slice acceptance criteria, the first sprite/VFX concept sheet, the imagegen production plan, and the file-to-prefab-to-scene binding map for Unity MCP. No gameplay code should be added until this combat fantasy, image plan, architecture, and visual direction target is accepted or revised.
 
@@ -16,6 +16,12 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity basic resource pass: Codex imagegen produced 5 first-slice images; chroma-key cleanup produced transparent runtime sprites for player, enemy, and dual blades; the floor tile remains opaque by design.
+- Unity MCP import: `unity_asset_import(port=7890)` imported 5 runtime sprites and 4 chroma source textures under `Assets/_dev/Art`; `unity_texture_set_sprite` configured the 5 runtime sprites as Sprite/Single with 100 pixels per unit.
+- Unity MCP verification: `unity_asset_list(folder="Assets/_dev/Art/Sprites", type="Texture")` sees 5 Texture2D assets; `unity_asset_list(folder="Assets/_dev/Art/Source", type="Texture")` sees 4 Texture2D source assets.
+- Runtime sprite GUIDs: player `a1ef9603867c4f24a84840ac22180c29`, enemy `bafc84ca59893594abe69b91563746bd`, floor `71bbd8c64392bde4a8ea63e92d2c1a2c`, left blade `691d8a000ca16fc41b69e21c808eb5e9`, right blade `33990fa8e271b0e49bddab9da881e4be`.
+- Basic resource reporting: `npm.cmd run report` pass, `npm.cmd run report:check` pass, `node scripts\send_orchestrator_discord_report.js --latest-section --dry-run --print-payload` pass.
+- Project Orchestrator notification: `npm.cmd run report:orchestrator:unit:dry` failed with `fetch failed`; escalated retry also failed; `Test-NetConnection 127.0.0.1 -Port 4317` returned `TcpTestSucceeded: False`.
 - New forgetting model `npm run qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.19s`.
 - New forgetting model `npm run balance:loop`: `GO_BALANCE_BASELINE`, first boss clear `80%`, full clear `60%`, death `40%`, first boss TTK median `23.91s`.
 - `npm run playtest:package:dry`: pass.
@@ -74,7 +80,7 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Current Blocker
 
-The current blocker has moved from setup choice to first-slice Unity development order. The Unity 2D project skeleton now exists under `LETHE/`, AnkleBreaker Unity MCP is registered as `anklebreaker-unity`, and the Unity editor bridge is reachable on port `7890`. `Assets/_dev` and its development subfolders now exist and were confirmed through `unity_asset_list`, so the next work should produce/import the first resources, build runtime foundations, and assemble a debug combat slice.
+The current blocker has moved from resource setup to first runtime assembly. The Unity 2D project skeleton now exists under `LETHE/`, AnkleBreaker Unity MCP is registered as `anklebreaker-unity`, and the Unity editor bridge is reachable on port `7890`. `Assets/_dev` and its development subfolders exist, and the basic player/enemy/map/weapon sprites are imported. The next work should build runtime foundations and assemble a debug combat slice.
 
 Discord actual send for the latest orchestration structure cleanup succeeded after explicit user request. Historical approval blocks remain recorded in the relevant devlog/report entries.
 
@@ -82,7 +88,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Begin the first Unity `_dev` game slice from `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md` and `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`: produce/import the basic resources, add runtime foundations, then assemble `Dev_EchoSlice.unity` with a basic combat/debug loop.
+Begin the first Unity `_dev` runtime slice from `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md` and `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`: add runtime foundations, then assemble `Dev_EchoSlice.unity` with a basic 쌍검 hit/debug loop. Generate core echo VFX sprites before or alongside prefab assembly when the debug states need visible Kalmuri/Blood effects.
 
 For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` before real sends, then `npm run report:orchestrator:unit` when the Project Orchestrator is running and the report is ready.
 

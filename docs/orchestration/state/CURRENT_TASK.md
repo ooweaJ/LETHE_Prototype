@@ -2,27 +2,28 @@
 
 ## Goal
 
-Audit and strengthen the Unity game-development architecture contract before starting implementation.
+Produce and import the first Unity `_dev` readability resources for the echo slice.
 
 ## Why Now
 
-The Unity skeleton and `_dev` folder now exist, AnkleBreaker MCP can see `Assets/_dev`, and the first slice production plan exists. Before creating assets or scripts, the technical docs need to prove that the Unity structure is OOP-friendly and data-driven enough for future weapons, memories, echoes, prefabs, and images to be added without rewriting core services.
+The Unity skeleton and `_dev` folder now exist, AnkleBreaker MCP can see `Assets/_dev`, and the first slice production plan exists. Before runtime C# or prefab assembly, the project needs basic player/enemy/map/weapon sprites so the first combat scene has readable anchors and scale.
 
-The design must answer:
+This task must answer:
 
-- Do `WeaponDefinition`, `MemoryDefinition`, `EchoDefinition`, and `EchoSynergyDefinition` support adding new content as data?
-- Are runtime classes separated from core services enough to avoid `if echoId == ...` growth?
-- Are image, prefab, class, and ScriptableObject paths concrete enough for MCP implementation?
-- Is `_dev` staging clearly separated from `Assets/Lethe` promotion?
-- Is Discord notification part of the document/development workflow?
+- Can Codex generate usable first-pass images for the slice?
+- Are transparent runtime sprites cleaned up enough for Unity use?
+- Does AnkleBreaker MCP see the imported assets in `Assets/_dev/Art/Sprites`?
+- Are source chroma files and Unity `.meta` files preserved cleanly?
+- Is the next implementation step clear after this resource pass?
 
 ## Done Criteria
 
-- `LETHE_UNITY_ECHO_SYSTEM_PRD.md` includes OOP/data extension rules.
-- `LETHE_UNITY_ASSET_BINDING_PLAN.md` clearly separates `_dev` staging from `Assets/Lethe` promotion.
-- `SCOPE_GUARD` and `RUNBOOK` reflect the Unity `_dev` gate and Discord notification rule.
-- Report/devlog/state docs record the architecture audit and next implementation sequence.
-- Discord notification is sent for this document unit.
+- Player silhouette, walker enemy, dark floor tile, and left/right dual blade sprites exist under `LETHE/Assets/_dev/Art/Sprites`.
+- Original chroma source images are preserved under `LETHE/Assets/_dev/Art/Source`.
+- Runtime sprites are imported through AnkleBreaker MCP and configured as Unity Sprite assets.
+- `unity_asset_list` sees the runtime sprites and source textures.
+- Report/devlog/state docs record the resource pass.
+- Discord notification is attempted through Project Orchestrator after report generation; if the intake endpoint is unavailable, record the failed endpoint check and retry command.
 
 ## Related Files
 
@@ -33,26 +34,22 @@ The design must answer:
 - `docs/design/LETHE_VISUAL_ASSET_PLAN.md`
 - `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md`
 - `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md`
-- `docs/design/assets/lethe-first-echo-showcase-concept.png`
-- `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`
-- `docs/design/LETHE_COMBAT_DESIGN.md`
-- `docs/design/LETHE_CONTENT_TABLES.md`
-- `AGENTS.md`
-- `docs/orchestration/state/RUNBOOK.md`
-- `docs/orchestration/state/SCOPE_GUARD.md`
+- `LETHE/Assets/_dev/Art/Source/*.png`
+- `LETHE/Assets/_dev/Art/Sprites/**/*.png`
 - `docs/orchestration/state/NEXT_TASKS.md`
 - `docs/orchestration/reports/20260610/index.md`
 
 ## Verification Commands
 
 ```bash
+npm run report:orchestrator:unit:dry
 npm run report
 npm run report:check
 ```
 
 ## Open Questions
 
-- Should the first Unity implementation use abstract base classes only, or interfaces plus abstract base classes? Current decision: both, with abstract `MonoBehaviour` base classes for Unity serialization.
+- None for this resource pass. The next open question belongs to runtime foundations: exact interface/base-class split in C#.
 
 ## Do Not Touch
 

@@ -62,20 +62,35 @@ Assets/_dev/
 | 구분 | 현재 파일 | Unity 용도 | 바로 런타임 사용 여부 |
 | --- | --- | --- | --- |
 | 첫 잔향 콘셉트 시트 | `docs/design/assets/lethe-first-echo-showcase-concept.png` | 칼날, 혈반, 회복 실, 피의 칼폭풍 시각 기준 | 아니오. `Art/Concept/` 참조용 |
+| 플레이어 실루엣 | `Assets/_dev/Art/Sprites/Characters/spr_player_echo_silhouette_01.png` | `Player_EchoShowcase` sprite renderer 초안 | 예. 첫 slice placeholder |
+| 테스트 워커 적 | `Assets/_dev/Art/Sprites/Enemies/spr_enemy_walker_01.png` | `Enemy_TestWalker` sprite renderer 초안 | 예. 첫 slice placeholder |
+| 어두운 바닥 타일 | `Assets/_dev/Art/Sprites/Map/tile_dev_floor_dark_01.png` | `Dev_EchoSlice` 바닥/Tilemap 초안 | 예. 첫 slice placeholder |
+| 절단쌍검 왼손 | `Assets/_dev/Art/Sprites/Weapons/spr_weapon_dual_blade_left_01.png` | `Weapon_DualBlades_Runtime` left blade sprite | 예. 첫 slice placeholder |
+| 절단쌍검 오른손 | `Assets/_dev/Art/Sprites/Weapons/spr_weapon_dual_blade_right_01.png` | `Weapon_DualBlades_Runtime` right blade sprite | 예. 첫 slice placeholder |
 
 주의:
 
 - 이 이미지는 한 장짜리 콘셉트 시트라서 Unity에 넣을 수는 있지만, 런타임 sprite atlas로 바로 쓰기엔 부적합하다.
 - Unity에는 먼저 `Assets/Lethe/Art/Concept/lethe-first-echo-showcase-concept.png`로 import한다.
 - 실제 프리팹에는 별도의 투명 PNG 파츠를 연결한다.
+- `_dev` 기본 sprite 5개는 Codex imagegen으로 만든 첫 pass이며 최종 아트가 아니다. 프리팹/씬 anchor와 scale 검증을 위한 placeholder로 쓴다.
+
+Source 보존:
+
+```text
+Assets/_dev/Art/Source/spr_player_echo_silhouette_01_chroma.png
+Assets/_dev/Art/Source/spr_enemy_walker_01_chroma.png
+Assets/_dev/Art/Source/spr_weapon_dual_blade_left_01_chroma.png
+Assets/_dev/Art/Source/spr_weapon_dual_blade_right_01_chroma.png
+```
 
 ## 2. 첫 Unity slice 에셋 큰 지도
 
 | 게임 요소 | Unity 프리팹 | 필요한 이미지 파일 | 현재 상태 | 처리 |
 | --- | --- | --- | --- | --- |
-| 플레이어 캐릭터 | `Player_EchoShowcase` | `spr_player_echo_showcase_placeholder.png` | 없음 | 첫 Unity slice는 단색 실루엣 placeholder 또는 다음 imagegen 대상 |
-| 테스트 맵 | `Scene_Slice_EchoShowcase` / `Map_TestArena` | `tile_test_floor_01.png`, `spr_arena_boundary_01.png` | 없음 | 처음은 Unity Tile/Shape placeholder, 이후 imagegen/타일 제작 |
-| 절단쌍검 | `Weapon_DualBlades_Runtime` | `spr_weapon_dual_blade_left.png`, `spr_weapon_dual_blade_right.png` | 콘셉트 시트에 방향 있음 | 별도 투명 PNG 생성 필요 |
+| 플레이어 캐릭터 | `Player_EchoShowcase` | `spr_player_echo_silhouette_01.png` | `_dev` import 완료 | 첫 slice placeholder로 사용 |
+| 테스트 맵 | `Scene_Slice_EchoShowcase` / `Map_TestArena` | `tile_dev_floor_dark_01.png`, 이후 `spr_arena_boundary_01.png` | 바닥 타일 `_dev` import 완료 | 경계는 Unity shape 또는 다음 imagegen |
+| 절단쌍검 | `Weapon_DualBlades_Runtime` | `spr_weapon_dual_blade_left_01.png`, `spr_weapon_dual_blade_right_01.png` | `_dev` import 완료 | 첫 slice placeholder로 사용 |
 | 기본 베기 | `Hitbox_DualBladeArc_L/R` | `spr_dual_blade_swing_arc_01.png`, `spr_dual_blade_swing_arc_02.png` | 콘셉트 시트에 방향 있음 | 별도 투명 PNG 생성 필요 |
 | 활성 칼무리 | `Memory_HungryBlades_Ring` | `spr_kalmuri_orbit_blade_01.png` | 콘셉트 시트에 방향 있음 | 별도 투명 PNG 생성 필요 |
 | 칼무리 잔향 | `Echo_Kalmuri_DelayedSlash`, `Echo_Kalmuri_LingerSlash` | `spr_kalmuri_echo_slash_01.png` | 콘셉트 시트에 방향 있음 | 첫 투명 VFX 생성 우선순위 1 |
@@ -84,7 +99,7 @@ Assets/_dev/
 | 회복 실 | `Echo_Blood_HealThread` | `spr_heal_thread_tip_01.png`, `mat_heal_thread_line.mat` | 콘셉트 시트에 방향 있음 | tip sprite + LineRenderer material |
 | 혈반 피꽃 | `Echo_Blood_Bloom` | `spr_blood_bloom_01.png` 또는 particle texture | 콘셉트 시트에 방향 있음 | particle/sprite burst 제작 |
 | 피의 칼폭풍 | `Ultimate_BloodBladeStorm` | `spr_blood_blade_storm_blade_01.png`, `spr_blood_blade_storm_ring_01.png`, `mat_blood_thread.mat` | 콘셉트 시트에 방향 있음 | 궁극 전용 투명 PNG/Material 제작 |
-| 테스트 적 | `Enemy_TestWalker`, `Enemy_TestShooter` | `spr_enemy_test_walker_placeholder.png`, `spr_enemy_test_shooter_placeholder.png` | 없음 | 첫 slice는 단순 실루엣 placeholder 가능 |
+| 테스트 적 | `Enemy_TestWalker`, `Enemy_TestShooter` | `spr_enemy_walker_01.png`, 이후 shooter sprite | 워커 `_dev` import 완료 | 첫 slice는 walker만 사용 |
 | UI | `UI_EchoHud`, `UI_DebugEchoPanel` | icon sprites optional | 없음 | TextMeshPro + 단색 UI로 시작 |
 
 ## 3. Unity 폴더와 파일 배치
@@ -290,10 +305,8 @@ Unity 프로젝트가 열린 뒤 MCP는 아래 순서로 실행한다. 현재는
 
 현재 없는 이미지:
 
-- 플레이어 캐릭터.
-- 테스트 맵 바닥/경계.
-- 테스트 적.
-- 투명 배경 쌍검.
+- arena boundary.
+- test shooter.
 - 투명 배경 개별 칼선/혈반/피실/폭풍 파츠.
 
 다음 생성 우선순위:
@@ -302,9 +315,9 @@ Unity 프로젝트가 열린 뒤 MCP는 아래 순서로 실행한다. 현재는
 2. `spr_blood_mark_01.png`
 3. `spr_kalmuri_launch_blade_01.png`
 4. `spr_blood_blade_storm_blade_01.png`
-5. `spr_weapon_dual_blade_left/right.png`
-6. `spr_player_echo_showcase_placeholder.png`
-7. `tile_test_floor_01.png`
+5. `spr_heal_thread_tip_01.png`
+6. `spr_kalmuri_orbit_blade_01.png`
+7. `spr_blood_bloom_01.png`
 
 판단:
 
@@ -316,7 +329,8 @@ Unity 프로젝트가 열린 뒤 MCP는 아래 순서로 실행한다. 현재는
 
 이 문서 기준으로 Unity MCP 작업이 성공한 상태:
 
-- 콘셉트 이미지가 `Assets/Lethe/Art/Concept/`에 들어가 있다.
+- 기본 player/enemy/floor/dual blade sprite가 `Assets/_dev/Art/Sprites/`에 들어가고 Unity에서 Sprite로 import되어 있다.
+- 원본 chroma/source 이미지가 `Assets/_dev/Art/Source/`에 보존되어 있다.
 - `Player_EchoShowcase`가 scene에 있고 `WeaponAnchor`, `EchoAnchor`를 가진다.
 - `Weapon_DualBlades_Runtime`가 player에 연결되어 있다.
 - 칼무리/혈반/피의 칼폭풍 prefab이 각각 어떤 sprite/material을 써야 하는지 명확하다.

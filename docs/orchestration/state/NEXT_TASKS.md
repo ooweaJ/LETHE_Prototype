@@ -2,26 +2,25 @@
 
 Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, legacy `docs/NEXT_TASKS.md`, or evidence files.
 
-## 1. Produce Basic Slice Resources
-
-- Priority: high
-- Why: the Unity slice needs player/enemy/map/weapon readability before echo VFX can be judged.
-- Include: player silhouette, walker enemy, dark floor tile, left/right dual blades.
-- Method: Codex imagegen, chroma-key/alpha cleanup, then MCP import.
-- Source: `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md`.
-
-## 2. Build Unity Runtime Foundations
+## 1. Build Unity Runtime Foundations
 
 - Priority: high
 - Include: `RunBuildState`, definition data classes/SOs, `HitEvent`, `HitResolver`, `EchoTriggerRouter`, `PoolService`, feedback service stubs.
 - Constraint: keep the first implementation `_dev` scoped and minimal.
 - Done: scripts compile and Unity console has no errors.
 
-## 3. Assemble Basic Combat Scene
+## 2. Assemble Basic Combat Scene
 
 - Priority: medium
 - Include: `Dev_EchoSlice.unity`, player anchors, test enemy, dark arena, dual blades, basic hitbox, damage/flash feedback.
 - Done: basic 쌍검 타격이 enemy에 맞고 읽힌다.
+
+## 3. Generate Core Echo VFX Sprites
+
+- Priority: medium
+- Include: Kalmuri slash, Kalmuri orbit/launch blade, blood mark, heal thread tip, and one Blood Blade Storm blade.
+- Method: Codex imagegen, alpha cleanup, MCP import, then prefab binding.
+- Done: each sprite has a concrete prefab/runtime target in `LETHE_UNITY_ASSET_BINDING_PLAN.md`.
 
 ## 4. Implement First Echo Debug Loop
 

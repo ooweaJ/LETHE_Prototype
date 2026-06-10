@@ -453,9 +453,9 @@ AnkleBreaker Unity MCP 확인 기준:
 
 - Unity asset list가 `_dev` 하위 폴더를 읽는다.
 
-### Phase 2: 기본 이미지 5개 생성
+### Phase 2: 기본 이미지 5개 생성/import
 
-먼저 만들 이미지:
+상태: 완료. 아래 5개 이미지는 `Assets/_dev/Art/Sprites`에 import됐고 Unity에서 Sprite/Single로 설정됐다.
 
 1. `spr_player_echo_silhouette_01.png`
 2. `spr_enemy_walker_01.png`
@@ -464,6 +464,11 @@ AnkleBreaker Unity MCP 확인 기준:
 5. `spr_weapon_dual_blade_right_01.png`
 
 완료 기준:
+
+- `unity_asset_list(folder="Assets/_dev/Art/Sprites", type="Texture")`에서 5개가 보인다.
+- source/chroma 원본은 `Assets/_dev/Art/Source`에 보존된다.
+
+Scene 판독 기준은 Phase 5에서 확인한다:
 
 - Unity scene에 player/enemy/map/weapon이 보인다.
 - 아직 잔향 없이도 기본 화면 판독이 된다.
