@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260610\\index.md",
-  "generatedAt": "2026-06-10T09:41:15.332Z",
-  "unitCount": 13,
+  "generatedAt": "2026-06-10T14:52:51.352Z",
+  "unitCount": 14,
   "latest": {
-    "title": "2026-06-10-13 - Unity 런타임 기반 스크립트",
-    "number": "13",
-    "markdownPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-13-unity-런타임-기반-스크립트.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-13-unity-런타임-기반-스크립트.html"
+    "title": "2026-06-10-14 - Unity 기본 전투 씬 조립",
+    "number": "14",
+    "markdownPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-14-unity-기본-전투-씬-조립.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-14-unity-기본-전투-씬-조립.html"
   }
 }

@@ -689,3 +689,63 @@ Unity `_dev` 런타임 기반은 컴파일된다. 다음 Codex는 `Dev_EchoSlice
 - 방향: 첫 slice부터 데이터 정의, 이벤트, 라우팅, 풀링, 피드백을 분리한다.
 - 행동: Unity C# 기반 클래스를 `_dev` 범위에 추가하고 컴파일 검증했다.
 - 결과: 다음 작업에서 prefab/scene 조립과 잔향 runtime을 얹을 수 있는 최소 OOP 기반이 생겼다.
+
+# 2026-06-10-14 - Unity 기본 전투 씬 조립
+
+## 1. 현재 빌드 상태
+
+Unity `_dev`에 `Dev_EchoSlice.unity` 기본 전투 씬과 player, enemy, arena, dual blades prefab이 생성됐다. 기본 쌍검 공격은 `HitResolver`를 통해 테스트 적에게 피해를 적용한다. 다만 스케일 보정 후 스크린샷 재시도 중 Unity bridge가 끊겨, 최신 화면 증거는 아직 남기지 못했다.
+
+## 2. 오늘 바뀐 것
+
+- `DualBladesController`를 추가해 자동/수동 쌍검 공격 진입점을 만들었다.
+- `TestEnemyController`를 추가해 테스트 적이 사망 후 짧은 지연 뒤 리셋되도록 했다.
+- `Assets/_dev/Scenes/Dev_EchoSlice.unity`를 만들었다.
+- scene service 오브젝트에 `RunBuildState`, `EchoProcLimiter`, `EchoTriggerRouter`, `HitResolver`, `PoolService`, `FeedbackService`를 배치했다.
+- `Player_EchoShowcase`, `Enemy_TestWalker`, `Dev_TestArena`, `Weapon_DualBlades_Runtime` prefab을 만들었다.
+- player/enemy/weapon/floor sprite를 scene에 배치하고, 최초 스크린샷에서 보인 과대 스케일을 조정했다.
+
+## 3. 테스트 결과와 근거
+
+- AnkleBreaker MCP `unity_execute_menu_item(menuPath="Assets/Refresh")`: 통과.
+- AnkleBreaker MCP `unity_get_compilation_errors(port=7890, severity="all")`: `count: 0`, `isCompiling: false`.
+- AnkleBreaker MCP scene info: active scene `Dev_EchoSlice`, path `Assets/_dev/Scenes/Dev_EchoSlice.unity`, dirty `false`.
+- AnkleBreaker MCP missing reference scan: `totalFound: 0`.
+- Direct hit check: `DualBladesController.Attack(enemy)` 호출 후 enemy health가 `30 -> 22`로 변했다. 적용 피해는 `8`.
+- Screenshot retry: 실패. `unity_editor_ping(port=7890)`이 `connected: false`를 반환했다.
+- `npm.cmd run report`: 통과, 14개 unit report 생성.
+- `npm.cmd run report:check`: 통과, 14개 unit heading 확인.
+- `node scripts\send_orchestrator_discord_report.js --latest-section --dry-run --print-payload`: 통과, 최신 unit payload가 `20260610/units/2026-06-10-14-unity-기본-전투-씬-조립.html`을 가리킴.
+- `npm.cmd run report:orchestrator:unit:dry`: `fetch failed`로 실패. Project Orchestrator intake endpoint가 현재 응답하지 않는 상태로 판단.
+
+## 4. 결정한 것
+
+- Task 2는 compile, scene save, prefab save, missing reference, direct hit 검증으로 통과 처리한다.
+- 스케일 보정 전 스크린샷은 오해를 만들 수 있어 증거로 보관하지 않는다.
+- 다음 MCP 의존 작업은 Unity bridge가 다시 reachable 상태가 된 뒤 진행한다.
+
+## 5. 문제 또는 리스크
+
+- 스케일 보정 후 최신 화면 스크린샷이 없다.
+- Play Mode에서 자동 공격 루프를 장시간 검증하지는 않았다.
+- `Health` damage/flash 연결은 확인됐지만, 잔향 VFX와 debug state는 아직 없다.
+- Unity bridge가 끊겨 Task 3의 VFX import와 prefab binding이 막혀 있다.
+- Project Orchestrator API 보고는 endpoint 미응답으로 실제 제출되지 않았다.
+
+## 6. GPT/Claude 인계 요약
+
+기본 전투 씬은 `_dev`에 저장됐고 쌍검 공격은 enemy health에 실제 피해를 준다. 다음 작업은 Unity bridge를 복구한 뒤 칼무리/혈반/피의 칼폭풍 VFX sprite를 생성/import하고, `Dev_EchoSlice`에서 debug state로 표시되도록 연결하는 것이다.
+
+## 7. 다음 Codex 작업
+
+- Unity MCP bridge `7890` 연결 복구 확인.
+- 칼무리 slash, orbit/launch blade, blood mark, heal thread, storm blade sprite 생성/import.
+- 각 sprite를 VFX prefab/runtime target에 연결한다.
+- `UI_DebugEchoPanel` 또는 임시 debug input으로 기본 공격, 칼무리 +1/+5, 혈반 +5, 피의 칼폭풍 상태를 전환한다.
+
+## 8. 포트폴리오 메모
+
+- 문제: 런타임 골격만으로는 실제 전투 slice인지 확인할 수 없다.
+- 방향: 최소 scene, prefab, hit path를 먼저 만들어 이후 잔향 VFX가 붙을 표면을 확보한다.
+- 행동: player/enemy/arena/weapon prefab과 scene service를 만들고, 직접 공격 호출로 피해 적용을 검증했다.
+- 결과: 잔향 VFX와 debug loop를 붙일 수 있는 첫 Unity 전투 표면이 생겼다.

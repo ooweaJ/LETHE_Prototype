@@ -24,6 +24,12 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 - Project Orchestrator notification: `npm.cmd run report:orchestrator:unit:dry` failed with `fetch failed`; escalated retry also failed; `Test-NetConnection 127.0.0.1 -Port 4317` returned `TcpTestSucceeded: False`.
 - Unity runtime foundation pass: added `_dev` C# definitions/contracts for `WeaponDefinition`, `MemoryDefinition`, `EchoDefinition`, `EchoSynergyDefinition`, `FeedbackProfile`, runtime interfaces/base classes, `RunBuildState`, hit events, `HitResolver`, `EchoTriggerRouter`, `EchoProcLimiter`, `PoolService`, `FeedbackService`, `Health`, and `WeaponHitEmitter`.
 - Unity compile verification: `Assets/Refresh` succeeded and `unity_get_compilation_errors(port=7890, severity="all")` returned `count: 0`, `isCompiling: false`.
+- Unity basic combat scene pass: created `Assets/_dev/Scenes/Dev_EchoSlice.unity`, plus prefabs `Player_EchoShowcase`, `Enemy_TestWalker`, `Dev_TestArena`, and `Weapon_DualBlades_Runtime`.
+- Unity hit verification: MCP `unity_execute_code` invoked `DualBladesController.Attack(enemy)` and enemy health changed `30 -> 22`, applying `8` damage through `HitResolver`.
+- Unity scene verification: `unity_scene_info(port=7890)` returned active scene `Dev_EchoSlice`, path `Assets/_dev/Scenes/Dev_EchoSlice.unity`, dirty `false`, root objects `Dev_EchoSlice_Root` and `Main Camera`; `unity_search_missing_references(scope="scene")` returned `totalFound: 0`.
+- Screenshot evidence attempt: first screenshot was discarded after scale correction; retry failed because Unity bridge became unreachable. `unity_editor_ping(port=7890)` returned `connected: false`.
+- Basic combat scene reporting: `npm.cmd run report` pass, `npm.cmd run report:check` pass, `node scripts\send_orchestrator_discord_report.js --latest-section --dry-run --print-payload` pass for unit 14.
+- Project Orchestrator notification for unit 14: `npm.cmd run report:orchestrator:unit:dry` failed with `fetch failed`.
 - New forgetting model `npm run qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.19s`.
 - New forgetting model `npm run balance:loop`: `GO_BALANCE_BASELINE`, first boss clear `80%`, full clear `60%`, death `40%`, first boss TTK median `23.91s`.
 - `npm run playtest:package:dry`: pass.
@@ -82,7 +88,7 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Current Blocker
 
-The current blocker has moved from resource setup to first runtime assembly. The Unity 2D project skeleton now exists under `LETHE/`, AnkleBreaker Unity MCP is registered as `anklebreaker-unity`, and the Unity editor bridge is reachable on port `7890`. `Assets/_dev` and its development subfolders exist, and the basic player/enemy/map/weapon sprites are imported. The next work should build runtime foundations and assemble a debug combat slice.
+The current blocker has moved from runtime assembly to Unity MCP connectivity. The Unity 2D project skeleton now exists under `LETHE/`, AnkleBreaker Unity MCP is registered as `anklebreaker-unity`, and the basic `_dev` scene/prefabs/scripts are saved. After the screenshot retry, the Unity editor bridge on port `7890` became unreachable, so the next MCP-dependent work should resume after the bridge is reachable again.
 
 Discord actual send for the latest orchestration structure cleanup succeeded after explicit user request. Historical approval blocks remain recorded in the relevant devlog/report entries.
 
@@ -90,7 +96,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Continue the first Unity `_dev` runtime slice from `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md` and `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`: assemble `Dev_EchoSlice.unity` with player/enemy/floor/dual blades and a basic 쌍검 hit loop. Generate core echo VFX sprites before or alongside prefab assembly when the debug states need visible Kalmuri/Blood effects.
+Resume Unity MCP connectivity, then continue the first Unity `_dev` runtime slice from `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md` and `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`: generate/import core echo VFX sprites and bind visible Kalmuri/Blood debug states.
 
 For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` before real sends, then `npm run report:orchestrator:unit` when the Project Orchestrator is running and the report is ready.
 
