@@ -4,9 +4,9 @@ Last updated: 2026-06-10
 
 ## Current Snapshot
 
-LETHE HTML Alpha v0.12 implemented the new forgetting model and passed automated regression, but the user feedback is that the play experience still does not feel like a big change. The current task has therefore shifted from more implementation to design concretization: define exactly how the loss, echo combat shift, resonance reacquisition, and ultimate echo goal should appear and feel.
+LETHE HTML Alpha v0.12 implemented the new forgetting model and passed automated regression, but the user feedback is that the play experience still does not feel like a big change. The current task has shifted to concrete weapon/memory/echo design: echoes should not feel like `잔향!` labels on basic attacks, but like weapon-specific combat events that create build hype.
 
-The new design source is `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`. It reframes the system around four player memories: "I lost it because I raised it," "something remained and changed combat," "reacquiring it creates resonance," and "two awakened echoes lead to a bigger goal." No new gameplay code should be added until this feel target is accepted or revised.
+The new design sources are `docs/design/LETHE_FORGETTING_FEEL_SPEC.md` and `docs/design/LETHE_WEAPON_MEMORY_ECHO_SPEC.md`. The latter defines dual blades, greatsword, the current 8 memories, normal echoes, awakened echoes, resonance riders, and ultimate echo candidates with concrete combat behavior. No new gameplay code should be added until this combat fantasy target is accepted or revised.
 
 The orchestration HTML interface now exists at `docs/orchestration/interface/index.html`, `docs/orchestration/interface/command.html`, and `docs/orchestration/interface/runbook.html`. AI-facing state lives under `docs/orchestration/state/`; human-facing reports live under `docs/orchestration/reports/YYYYMMDD/`.
 
@@ -74,7 +74,7 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Current Blocker
 
-The current blocker is design clarity. The new rules exist, but the project needs an agreed feel target before more implementation. The immediate question is whether `LETHE_FORGETTING_FEEL_SPEC.md` is the right target for the next HTML presentation pass or Unity first-slice contract.
+The current blocker is design clarity. The new rules exist, but the project needs an agreed weapon/memory/echo fantasy before more implementation. The immediate question is whether the first showcase should lock to `절단쌍검 + 굶주린 칼무리 + 피의 반사 -> 피의 칼폭풍`.
 
 Discord actual send for the latest orchestration structure cleanup succeeded after explicit user request. Historical approval blocks remain recorded in the relevant devlog/report entries.
 
@@ -82,7 +82,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Review `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`, decide whether the first showcase should be `굶주린 칼무리 + 피의 반사 -> 피의 칼폭풍`, then convert the approved feel target into implementation tasks.
+Review `docs/design/LETHE_WEAPON_MEMORY_ECHO_SPEC.md`, lock the first showcase, then decide whether to implement it as an HTML showcase pass or convert it into the Unity first-slice backlog.
 
 For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` before real sends, then `npm run report:orchestrator:unit` when the Project Orchestrator is running and the report is ready.
 

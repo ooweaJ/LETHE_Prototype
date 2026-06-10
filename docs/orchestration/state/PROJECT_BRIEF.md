@@ -6,7 +6,7 @@ LETHE is an HTML prototype for testing whether a memory-loss roguelike loop is f
 
 ## Current Goal
 
-Concretize how the forgetting, echo, and reacquisition resonance loop should feel before doing more implementation. The current focus is not content expansion; it is defining the player-facing loss, echo, resonance, and ultimate-goal moments.
+Concretize how weapons, memories, echoes, resonance, and ultimate echoes should feel before doing more implementation. The current focus is not content expansion; it is turning abstract echo labels into concrete combat events.
 
 ## Current Phase
 

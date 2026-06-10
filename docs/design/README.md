@@ -12,15 +12,17 @@
    - 기억, 잔향, 공명, 각성 잔향, 궁극 잔향.
 3. `LETHE_FORGETTING_FEEL_SPEC.md`
    - 망각, 잔향, 공명, 궁극 목표가 플레이 중 어떻게 보여야 하는지.
-4. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
+4. `LETHE_WEAPON_MEMORY_ECHO_SPEC.md`
+   - 무기, 기억, 잔향, 각성, 공명, 궁극 잔향의 구체 전투 행동.
+5. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
    - Unity 첫 구현 범위와 완료 기준.
-5. `LETHE_RUN_STRUCTURE.md`
+6. `LETHE_RUN_STRUCTURE.md`
    - 한 판 흐름, 성장, 망각, 보충.
-6. `LETHE_COMBAT_DESIGN.md`
+7. `LETHE_COMBAT_DESIGN.md`
    - 무기, 적 역할, 전투 감각.
-7. `LETHE_CONTENT_TABLES.md`
+8. `LETHE_CONTENT_TABLES.md`
    - 기억, 잔향, 시너지, 적 표.
-8. `LETHE_BALANCE_BASELINE.md`
+9. `LETHE_BALANCE_BASELINE.md`
    - v0.12 기준 수치와 Unity 초기 목표.
 
 ## 문서 운영 원칙

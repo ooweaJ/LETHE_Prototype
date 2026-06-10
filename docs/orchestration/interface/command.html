@@ -59,8 +59,8 @@
       <div class="grid">
         <article>
           <h2>Codex에게 지금 시킬 일</h2>
-          <p>새 모델이 아직 크게 느껴지지 않았으니, 다음은 망각 체감 설계 검토입니다.</p>
-          <textarea id="prompt-next" readonly>docs/design/LETHE_FORGETTING_FEEL_SPEC.md를 읽고 LETHE의 망각 체감 설계를 검토해줘. 네 장면이 맞는지 봐줘: 1) 내가 키운 기억이라 잃는 손실 순간, 2) 잃었지만 잔향이 남아 전투가 바뀌는 순간, 3) 잃었던 기억을 다시 얻을 때 공명으로 돌아오는 보상 순간, 4) 두 잔향을 끝까지 키우면 궁극 목표가 열린다는 장기 목표. 특히 첫 쇼케이스를 굶주린 칼무리 + 피의 반사 -> 피의 칼폭풍으로 고정해도 되는지, 다음 구현을 HTML presentation pass로 할지 Unity slice backlog로 할지 판단해줘. 결과를 docs/orchestration/state/NEXT_TASKS.md와 docs/orchestration/reports/20260610/index.md에 반영해줘.</textarea>
+          <p>잔향이 텍스트/proc처럼 느껴지지 않게, 무기·기억·잔향 설계를 검토합니다.</p>
+          <textarea id="prompt-next" readonly>docs/design/LETHE_WEAPON_MEMORY_ECHO_SPEC.md를 읽고 LETHE의 무기·기억·잔향 설계를 검토해줘. 핵심은 잔향이 기본공격에 "잔향!"이라고 붙는 수준이 아니라, 무기 공격이 새 행동을 하게 만드는 거야. 절단쌍검은 작은 잔향을 자주 연쇄시키고, 장송대검은 조건부 큰 폭발로 잔향을 터뜨리는 방향이 맞는지 봐줘. 첫 쇼케이스를 절단쌍검 + 굶주린 칼무리 + 피의 반사 -> 피의 칼폭풍으로 고정해도 되는지 판단하고, 다음 구현을 HTML showcase pass로 할지 Unity first-slice backlog로 할지 정리해줘.</textarea>
           <button type="button" data-copy-target="prompt-next">프롬프트 복사</button>
         </article>
 
@@ -76,8 +76,8 @@
         <article>
           <h2>완료 기준</h2>
           <ul>
-            <li>네 체감 장면 검토</li>
-            <li>첫 쇼케이스 확정</li>
+            <li>무기별 잔향 행동 검토</li>
+            <li>피의 칼폭풍 쇼케이스 확정</li>
             <li>HTML pass 또는 Unity backlog 방향 결정</li>
             <li>다음 구현 단위 도출</li>
             <li>상태, devlog, reports 갱신</li>

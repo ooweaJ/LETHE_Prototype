@@ -2,43 +2,37 @@
 
 ## Goal
 
-Concretize the forgetting, echo, and resonance feel design before doing more implementation.
+Concretize weapon, memory, echo, awakened echo, resonance, and ultimate echo design so echoes feel powerful rather than like small text/proc labels.
 
 ## Why Now
 
-The new HTML forgetting model was implemented and regression-checked, but the user felt that the play experience did not change much. That means the next blocker is not another small code patch; it is a design clarity problem.
+The user clarified that the real issue is not only the forgetting loop. The current HTML echo feedback feels like "잔향!" attached to basic attacks, which does not create enough impact. LETHE needs a more concrete design for what each weapon does, what each memory becomes when forgotten, and how echoes change the player's combat fantasy.
 
-The current rules are understandable on paper:
+The design must answer:
 
-- highest-level active memory is forgotten;
-- forgotten level becomes echo level;
-- echo caps at `+5`;
-- overflow becomes overcharge;
-- reacquiring an echoed memory creates resonance.
-
-But the player-facing moments are not concrete enough yet. The project now needs to define exactly what the player should see, feel, and decide during:
-
-- the loss moment;
-- the echo combat shift;
-- the resonance reacquisition;
-- the long-term ultimate echo goal.
+- What does each weapon feel like before echoes?
+- What new action does each echo add to weapon attacks?
+- How does the same echo behave differently on dual blades versus greatsword?
+- What changes at echo `+5` awakened state?
+- What does reacquisition resonance add beyond level restoration?
+- What is the first "this build is crazy" ultimate echo moment?
 
 ## Done Criteria
 
-- `docs/design/LETHE_FORGETTING_FEEL_SPEC.md` exists and defines the desired player-facing moments.
-- Design docs point to the feel spec before Unity or additional implementation work.
-- `STATUS.md` and `NEXT_TASKS.md` describe planning concretization as the next step.
-- Daily devlog/report record that the latest user feedback is "the change does not feel big enough."
-- No new gameplay code is added in this planning unit.
+- `docs/design/LETHE_WEAPON_MEMORY_ECHO_SPEC.md` exists.
+- The spec defines dual blades and greatsword identity.
+- The spec defines concrete active memory, normal echo, awakened echo, resonance, and hype moment for the current 8 memories.
+- The spec defines at least `피의 칼폭풍` in enough detail to guide implementation.
+- Design README, combat design, content tables, overview, and feel spec link to the new spec.
+- Report/devlog/state docs record that this planning pass is about replacing abstract echo text with concrete combat events.
+- No gameplay code is added in this planning unit.
 
 ## Related Files
 
+- `docs/design/LETHE_WEAPON_MEMORY_ECHO_SPEC.md`
 - `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`
-- `docs/design/README.md`
-- `docs/design/LETHE_GAME_DESIGN_OVERVIEW.md`
-- `docs/design/LETHE_CORE_SYSTEMS_UNITY_PLAN.md`
-- `docs/design/LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
-- `docs/orchestration/state/STATUS.md`
+- `docs/design/LETHE_COMBAT_DESIGN.md`
+- `docs/design/LETHE_CONTENT_TABLES.md`
 - `docs/orchestration/state/NEXT_TASKS.md`
 - `docs/orchestration/reports/20260610/index.md`
 
@@ -51,9 +45,9 @@ npm run report:check
 
 ## Open Questions
 
-- Should the next implementation happen in HTML as a feel-presentation pass, or should the feel spec become the Unity first-slice contract?
-- Should `굶주린 칼무리 + 피의 반사 -> 피의 칼폭풍` be the only first showcase?
-- Should the next HTML patch force the resonance candidate to appear, or should that be reserved for a debug demonstration loop?
+- Is the first implementation target definitely `절단쌍검 + 굶주린 칼무리 + 피의 반사 -> 피의 칼폭풍`?
+- Should `장송대검 + 처형자의 섬광 + 망각의 낙인 -> 처형 각인` be the second showcase?
+- Should HTML prototype implement only the first showcase, leaving the rest as Unity design?
 
 ## Do Not Touch
 
