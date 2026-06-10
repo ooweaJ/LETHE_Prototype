@@ -22,6 +22,8 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 - Runtime sprite GUIDs: player `a1ef9603867c4f24a84840ac22180c29`, enemy `bafc84ca59893594abe69b91563746bd`, floor `71bbd8c64392bde4a8ea63e92d2c1a2c`, left blade `691d8a000ca16fc41b69e21c808eb5e9`, right blade `33990fa8e271b0e49bddab9da881e4be`.
 - Basic resource reporting: `npm.cmd run report` pass, `npm.cmd run report:check` pass, `node scripts\send_orchestrator_discord_report.js --latest-section --dry-run --print-payload` pass.
 - Project Orchestrator notification: `npm.cmd run report:orchestrator:unit:dry` failed with `fetch failed`; escalated retry also failed; `Test-NetConnection 127.0.0.1 -Port 4317` returned `TcpTestSucceeded: False`.
+- Unity runtime foundation pass: added `_dev` C# definitions/contracts for `WeaponDefinition`, `MemoryDefinition`, `EchoDefinition`, `EchoSynergyDefinition`, `FeedbackProfile`, runtime interfaces/base classes, `RunBuildState`, hit events, `HitResolver`, `EchoTriggerRouter`, `EchoProcLimiter`, `PoolService`, `FeedbackService`, `Health`, and `WeaponHitEmitter`.
+- Unity compile verification: `Assets/Refresh` succeeded and `unity_get_compilation_errors(port=7890, severity="all")` returned `count: 0`, `isCompiling: false`.
 - New forgetting model `npm run qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.19s`.
 - New forgetting model `npm run balance:loop`: `GO_BALANCE_BASELINE`, first boss clear `80%`, full clear `60%`, death `40%`, first boss TTK median `23.91s`.
 - `npm run playtest:package:dry`: pass.
@@ -88,7 +90,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Begin the first Unity `_dev` runtime slice from `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md` and `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`: add runtime foundations, then assemble `Dev_EchoSlice.unity` with a basic 쌍검 hit/debug loop. Generate core echo VFX sprites before or alongside prefab assembly when the debug states need visible Kalmuri/Blood effects.
+Continue the first Unity `_dev` runtime slice from `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md` and `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`: assemble `Dev_EchoSlice.unity` with player/enemy/floor/dual blades and a basic 쌍검 hit loop. Generate core echo VFX sprites before or alongside prefab assembly when the debug states need visible Kalmuri/Blood effects.
 
 For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` before real sends, then `npm run report:orchestrator:unit` when the Project Orchestrator is running and the report is ready.
 

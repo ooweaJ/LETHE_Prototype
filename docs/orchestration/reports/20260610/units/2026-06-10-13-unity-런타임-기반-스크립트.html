@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-10-13 - Unity 런타임 기반 스크립트</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-10-13 - Unity 런타임 기반 스크립트</h1>
+      <p class="meta">Generated from 2026-06-10-13-unity-런타임-기반-스크립트.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260610/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-10-13 - Unity 런타임 기반 스크립트</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>Unity <code>_dev</code>에는 기본 sprite와 폴더 구조가 있고, 이번 작업으로 첫 slice 런타임 골격이 들어갔다. 아직 scene/prefab 조립은 하지 않았고, 목표는 이후 기본 전투와 잔향 디버그 루프가 붙을 수 있는 컴파일 가능한 C# 기반을 만드는 것이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>WeaponDefinition</code>, <code>MemoryDefinition</code>, <code>EchoDefinition</code>, <code>EchoSynergyDefinition</code>, <code>FeedbackProfile</code> ScriptableObject 정의를 추가했다.</li>
+<li><code>EchoLevelData</code>, <code>TriggerFamily</code>, <code>HitSourceType</code>, <code>EchoBehavior</code>, <code>EchoStyle</code>을 추가했다.</li>
+<li><code>IWeaponRuntime</code>, <code>IActiveMemoryRuntime</code>, <code>IEchoRuntime</code>, <code>IUltimateEchoRuntime</code>, <code>IPooledObject</code> 계약을 추가했다.</li>
+<li>Unity 직렬화/컴포넌트 연결용 abstract base class를 추가했다.</li>
+<li><code>RunBuildState</code>에 active memory level, echo level, synergy unlock, highest memory lookup, echo +5 cap/overflow 처리를 넣었다.</li>
+<li><code>HitEvent</code>, <code>KillEvent</code>, <code>DamageTakenEvent</code>, <code>HitResolver</code>, <code>EchoTriggerRouter</code>, <code>EchoProcLimiter</code>를 추가했다.</li>
+<li><code>Health</code>, <code>WeaponHitEmitter</code>, <code>PoolService</code>, <code>PooledBehaviour</code>, <code>FeedbackService</code>, <code>SpriteFlashReceiver</code>를 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>AnkleBreaker MCP <code>unity_execute_menu_item(menuPath=&quot;Assets/Refresh&quot;)</code>: 통과.</li>
+<li>AnkleBreaker MCP <code>unity_get_compilation_errors(port=7890, severity=&quot;all&quot;)</code>: <code>count: 0</code>, <code>isCompiling: false</code>.</li>
+<li><code>npm.cmd run report</code>: 통과, 13개 unit report 생성.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 13개 unit heading 확인.</li>
+<li><code>node scripts\send_orchestrator_discord_report.js --latest-section --dry-run --print-payload</code>: 통과, 최신 unit payload가 <code>20260610/units/2026-06-10-13-unity-런타임-기반-스크립트.html</code>을 가리킴.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패. Project Orchestrator intake endpoint가 현재 응답하지 않는 상태로 판단.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>core service는 특정 <code>Echo_Kalmuri</code>, <code>Echo_Blood</code> id로 분기하지 않는다.</li>
+<li>첫 구현은 빠르게 가되 <code>Definition -&gt; Runtime Prefab -&gt; Runtime Component</code> 구조를 유지한다.</li>
+<li>scene/prefab 조립은 다음 단위에서 처리한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>아직 ScriptableObject asset 자체와 prefab 연결은 없다.</li>
+<li>Project Orchestrator API 보고는 endpoint 미응답으로 제출되지 않았다.</li>
+<li><code>FeedbackService</code>는 hitstop/flash stub 중심이라 사운드, 라이트, 카메라 impulse는 다음 단계에서 확장해야 한다.</li>
+<li>현재 <code>PoolService</code>는 prefab key 기반 최소 구현이라 전투 밀도 테스트 후 capacity/prewarm 정책을 추가해야 한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Unity <code>_dev</code> 런타임 기반은 컴파일된다. 다음 Codex는 <code>Dev_EchoSlice.unity</code>를 만들고 player, enemy, floor, dual blades, hit resolver/router/pool/feedback 오브젝트를 배치한 뒤 기본 쌍검 hit가 enemy health와 flash에 연결되는지 검증하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li><code>Dev_EchoSlice.unity</code> 생성.</li>
+<li>player/enemy/floor/weapon sprite 배치.</li>
+<li><code>HitResolver</code>, <code>EchoTriggerRouter</code>, <code>PoolService</code>, <code>FeedbackService</code> scene service 오브젝트 생성.</li>
+<li>기본 쌍검 타격이 enemy에 damage/flash를 주는지 확인.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 잔향 기획이 있어도 core code가 id 분기로 시작하면 확장이 막힌다.</li>
+<li>방향: 첫 slice부터 데이터 정의, 이벤트, 라우팅, 풀링, 피드백을 분리한다.</li>
+<li>행동: Unity C# 기반 클래스를 <code>_dev</code> 범위에 추가하고 컴파일 검증했다.</li>
+<li>결과: 다음 작업에서 prefab/scene 조립과 잔향 runtime을 얹을 수 있는 최소 OOP 기반이 생겼다.</li>
+</ul>
+  </main>
+</body>
+</html>

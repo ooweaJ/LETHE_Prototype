@@ -232,6 +232,13 @@
           <p>Unity 2D 프로젝트는 LETHE/ 아래 열려 있고, AnkleBreaker MCP는 LETHE 인스턴스 port 7890에 연결되어 있다. 이번 작업은 gameplay 코드가 아니라 Dev_EchoSlice 조립 전에 필요한 기본 판독 리소스를 만드는 asset pass다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-10-13</span>
+          <h2><a href="#unit-2026-06-10-13" data-unit-link="unit-2026-06-10-13">Unity 런타임 기반 스크립트</a></h2>
+          <p>Unity _dev에는 기본 sprite와 폴더 구조가 있고, 이번 작업으로 첫 slice 런타임 골격이 들어갔다. 아직 scene/prefab 조립은 하지 않았고, 목표는 이후 기본 전투와 잔향 디버그 루프가 붙을 수 있는 컴파일 가능한 C# 기반을 만드는 것이다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -826,6 +833,60 @@
 <li>방향: 최종 아트가 아니라 구현 검증용 placeholder를 먼저 만든다.</li>
 <li>행동: imagegen, alpha cleanup, MCP import, Sprite 설정, asset binding 문서 갱신을 한 단위로 처리했다.</li>
 <li>결과: Unity runtime/prefab 작업이 바로 시작 가능한 최소 시각 리소스가 준비됐다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-10-13" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-10-13 - Unity 런타임 기반 스크립트</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>Unity <code>_dev</code>에는 기본 sprite와 폴더 구조가 있고, 이번 작업으로 첫 slice 런타임 골격이 들어갔다. 아직 scene/prefab 조립은 하지 않았고, 목표는 이후 기본 전투와 잔향 디버그 루프가 붙을 수 있는 컴파일 가능한 C# 기반을 만드는 것이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>WeaponDefinition</code>, <code>MemoryDefinition</code>, <code>EchoDefinition</code>, <code>EchoSynergyDefinition</code>, <code>FeedbackProfile</code> ScriptableObject 정의를 추가했다.</li>
+<li><code>EchoLevelData</code>, <code>TriggerFamily</code>, <code>HitSourceType</code>, <code>EchoBehavior</code>, <code>EchoStyle</code>을 추가했다.</li>
+<li><code>IWeaponRuntime</code>, <code>IActiveMemoryRuntime</code>, <code>IEchoRuntime</code>, <code>IUltimateEchoRuntime</code>, <code>IPooledObject</code> 계약을 추가했다.</li>
+<li>Unity 직렬화/컴포넌트 연결용 abstract base class를 추가했다.</li>
+<li><code>RunBuildState</code>에 active memory level, echo level, synergy unlock, highest memory lookup, echo +5 cap/overflow 처리를 넣었다.</li>
+<li><code>HitEvent</code>, <code>KillEvent</code>, <code>DamageTakenEvent</code>, <code>HitResolver</code>, <code>EchoTriggerRouter</code>, <code>EchoProcLimiter</code>를 추가했다.</li>
+<li><code>Health</code>, <code>WeaponHitEmitter</code>, <code>PoolService</code>, <code>PooledBehaviour</code>, <code>FeedbackService</code>, <code>SpriteFlashReceiver</code>를 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>AnkleBreaker MCP <code>unity_execute_menu_item(menuPath=&quot;Assets/Refresh&quot;)</code>: 통과.</li>
+<li>AnkleBreaker MCP <code>unity_get_compilation_errors(port=7890, severity=&quot;all&quot;)</code>: <code>count: 0</code>, <code>isCompiling: false</code>.</li>
+<li><code>npm.cmd run report</code>: 통과, 13개 unit report 생성.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 13개 unit heading 확인.</li>
+<li><code>node scripts\send_orchestrator_discord_report.js --latest-section --dry-run --print-payload</code>: 통과, 최신 unit payload가 <code>20260610/units/2026-06-10-13-unity-런타임-기반-스크립트.html</code>을 가리킴.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패. Project Orchestrator intake endpoint가 현재 응답하지 않는 상태로 판단.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>core service는 특정 <code>Echo_Kalmuri</code>, <code>Echo_Blood</code> id로 분기하지 않는다.</li>
+<li>첫 구현은 빠르게 가되 <code>Definition -&gt; Runtime Prefab -&gt; Runtime Component</code> 구조를 유지한다.</li>
+<li>scene/prefab 조립은 다음 단위에서 처리한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>아직 ScriptableObject asset 자체와 prefab 연결은 없다.</li>
+<li>Project Orchestrator API 보고는 endpoint 미응답으로 제출되지 않았다.</li>
+<li><code>FeedbackService</code>는 hitstop/flash stub 중심이라 사운드, 라이트, 카메라 impulse는 다음 단계에서 확장해야 한다.</li>
+<li>현재 <code>PoolService</code>는 prefab key 기반 최소 구현이라 전투 밀도 테스트 후 capacity/prewarm 정책을 추가해야 한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Unity <code>_dev</code> 런타임 기반은 컴파일된다. 다음 Codex는 <code>Dev_EchoSlice.unity</code>를 만들고 player, enemy, floor, dual blades, hit resolver/router/pool/feedback 오브젝트를 배치한 뒤 기본 쌍검 hit가 enemy health와 flash에 연결되는지 검증하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li><code>Dev_EchoSlice.unity</code> 생성.</li>
+<li>player/enemy/floor/weapon sprite 배치.</li>
+<li><code>HitResolver</code>, <code>EchoTriggerRouter</code>, <code>PoolService</code>, <code>FeedbackService</code> scene service 오브젝트 생성.</li>
+<li>기본 쌍검 타격이 enemy에 damage/flash를 주는지 확인.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 잔향 기획이 있어도 core code가 id 분기로 시작하면 확장이 막힌다.</li>
+<li>방향: 첫 slice부터 데이터 정의, 이벤트, 라우팅, 풀링, 피드백을 분리한다.</li>
+<li>행동: Unity C# 기반 클래스를 <code>_dev</code> 범위에 추가하고 컴파일 검증했다.</li>
+<li>결과: 다음 작업에서 prefab/scene 조립과 잔향 runtime을 얹을 수 있는 최소 OOP 기반이 생겼다.</li>
 </ul>
     </article>
       </div>
