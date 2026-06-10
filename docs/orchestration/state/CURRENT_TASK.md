@@ -2,27 +2,31 @@
 
 ## Goal
 
-Produce and import the first Unity `_dev` readability resources for the echo slice.
+Make the Unity `_dev` echo slice playable enough for jaewoo to open it in the morning and review the core loop visually.
 
 ## Why Now
 
-The Unity skeleton and `_dev` folder now exist, AnkleBreaker MCP can see `Assets/_dev`, and the first slice production plan exists. Before runtime C# or prefab assembly, the project needs basic player/enemy/map/weapon sprites so the first combat scene has readable anchors and scale.
+The Unity skeleton, basic sprites, runtime foundation, basic combat scene, and core echo VFX prefabs now exist. The remaining useful overnight work is to wire them into a playable debug loop rather than wait for final art or production structure.
 
 This task must answer:
 
-- Can Codex generate usable first-pass images for the slice?
-- Are transparent runtime sprites cleaned up enough for Unity use?
-- Does AnkleBreaker MCP see the imported assets in `Assets/_dev/Art/Sprites`?
-- Are source chroma files and Unity `.meta` files preserved cleanly?
-- Is the next implementation step clear after this resource pass?
+- Can jaewoo press Play in `Dev_EchoSlice` and see the difference between base dual blades, Kalmuri +1, Kalmuri +5, Blood +5, and Blood Blade Storm?
+- Are the generated echo sprites connected to actual scene/prefab behavior?
+- Is the morning review checklist clear enough to decide GO/ITERATE/NO-GO?
 
 ## Done Criteria
 
-- Player silhouette, walker enemy, dark floor tile, and left/right dual blade sprites exist under `LETHE/Assets/_dev/Art/Sprites`.
-- Original chroma source images are preserved under `LETHE/Assets/_dev/Art/Source`.
-- Runtime sprites are imported through AnkleBreaker MCP and configured as Unity Sprite assets.
-- `unity_asset_list` sees the runtime sprites and source textures.
-- Report/devlog/state docs record the resource pass.
+- Core echo sprites and placeholder prefabs exist under `LETHE/Assets/_dev`.
+- `Dev_EchoSlice.unity` contains a debug controller or panel with immediate state switching.
+- The scene can show:
+  - base dual blades only,
+  - Kalmuri +1 delayed slash,
+  - Kalmuri +5 orbit/launch state,
+  - Blood +5 mark/bloom/heal thread state,
+  - Blood Blade Storm.
+- Unity compile errors are zero.
+- Missing scene references are zero.
+- Report/devlog/state docs record each completed unit.
 - Discord notification is attempted through Project Orchestrator after report generation; if the intake endpoint is unavailable, record the failed endpoint check and retry command.
 
 ## Related Files
@@ -36,20 +40,24 @@ This task must answer:
 - `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md`
 - `LETHE/Assets/_dev/Art/Source/*.png`
 - `LETHE/Assets/_dev/Art/Sprites/**/*.png`
+- `LETHE/Assets/_dev/Prefabs/Echoes/**/*.prefab`
+- `LETHE/Assets/_dev/Prefabs/Ultimates/**/*.prefab`
+- `LETHE/Assets/_dev/Scripts/Debug/**/*.cs`
+- `LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity`
 - `docs/orchestration/state/NEXT_TASKS.md`
 - `docs/orchestration/reports/20260610/index.md`
 
 ## Verification Commands
 
 ```bash
-npm run report:orchestrator:unit:dry
-npm run report
-npm run report:check
+npm.cmd run report
+npm.cmd run report:check
+npm.cmd run report:orchestrator:unit:dry
 ```
 
 ## Open Questions
 
-- None for this resource pass. The next open question belongs to runtime foundations: exact interface/base-class split in C#.
+- Whether final debug interaction should be UI buttons or keyboard shortcuts. Overnight default: implement keyboard shortcuts first and add minimal visible labels if feasible.
 
 ## Do Not Touch
 

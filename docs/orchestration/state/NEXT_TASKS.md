@@ -2,19 +2,18 @@
 
 Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, legacy `docs/NEXT_TASKS.md`, or evidence files.
 
-## 1. Generate Core Echo VFX Sprites
-
-- Priority: medium
-- Include: Kalmuri slash, Kalmuri orbit/launch blade, blood mark, heal thread tip, and one Blood Blade Storm blade.
-- Method: Codex imagegen, alpha cleanup, MCP import, then prefab binding.
-- Done: each sprite has a concrete prefab/runtime target in `LETHE_UNITY_ASSET_BINDING_PLAN.md`.
-- Blocker: Unity bridge on port `7890` must be reachable again before MCP import/prefab binding.
-
-## 2. Implement First Echo Debug Loop
+## 1. Implement First Echo Debug Loop
 
 - Priority: medium
 - Include: Kalmuri +1/+5, Blood +5, Blood Blade Storm, and `UI_DebugEchoPanel`.
 - Done: debug state switches can show basic attack, Kalmuri +1/+5, Blood +5, and Blood Blade Storm.
+- Assets ready: core Kalmuri/Blood/Storm sprites and placeholder prefabs now exist under `Assets/_dev`.
+
+## 2. Prepare Morning Playtest Checklist
+
+- Priority: medium
+- Include: how to open `Dev_EchoSlice`, controls, expected visible states, known rough edges, and jaewoo review questions.
+- Done: user can wake up, open Unity, press Play, and know exactly what to check.
 
 ## 3. Prepare Promotion Gate
 

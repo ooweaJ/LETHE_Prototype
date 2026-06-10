@@ -67,6 +67,14 @@ Assets/_dev/
 | 어두운 바닥 타일 | `Assets/_dev/Art/Sprites/Map/tile_dev_floor_dark_01.png` | `Dev_EchoSlice` 바닥/Tilemap 초안 | 예. 첫 slice placeholder |
 | 절단쌍검 왼손 | `Assets/_dev/Art/Sprites/Weapons/spr_weapon_dual_blade_left_01.png` | `Weapon_DualBlades_Runtime` left blade sprite | 예. 첫 slice placeholder |
 | 절단쌍검 오른손 | `Assets/_dev/Art/Sprites/Weapons/spr_weapon_dual_blade_right_01.png` | `Weapon_DualBlades_Runtime` right blade sprite | 예. 첫 slice placeholder |
+| 칼무리 지연 칼선 | `Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_echo_slash_01.png` | `Echo_Kalmuri_DelayedSlash` sprite renderer 초안 | 예. 첫 slice VFX |
+| 칼무리 고리 칼날 | `Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_orbit_blade_01.png` | `Memory_HungryBlades_Ring` sprite renderer 초안 | 예. 첫 slice VFX |
+| 칼무리 발사 칼날 | `Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_launch_blade_01.png` | `Echo_Kalmuri_LaunchBlade` sprite renderer 초안 | 예. 첫 slice VFX |
+| 혈반 표식 | `Assets/_dev/Art/Sprites/Echoes/Blood/spr_blood_mark_01.png` | `Echo_Blood_Mark` sprite renderer 초안 | 예. 첫 slice VFX |
+| 회복 실 끝점 | `Assets/_dev/Art/Sprites/Echoes/Blood/spr_heal_thread_tip_01.png` | `Echo_Blood_HealThread` tip sprite 초안 | 예. 첫 slice VFX |
+| 혈반 피꽃 | `Assets/_dev/Art/Sprites/Echoes/Blood/spr_blood_bloom_01.png` | `Echo_Blood_Bloom` sprite renderer 초안 | 예. 첫 slice VFX |
+| 피의 칼폭풍 고리 | `Assets/_dev/Art/Sprites/Ultimates/spr_blood_blade_storm_ring_01.png` | `Ultimate_BloodBladeStorm/StormRing` sprite renderer 초안 | 예. 첫 slice VFX |
+| 피의 칼폭풍 칼날 | `Assets/_dev/Art/Sprites/Ultimates/spr_blood_blade_storm_blade_01.png` | `Ultimate_BloodBladeStorm/StormBlade_*` sprite renderer 초안 | 예. 첫 slice VFX |
 
 주의:
 
@@ -82,6 +90,14 @@ Assets/_dev/Art/Source/spr_player_echo_silhouette_01_chroma.png
 Assets/_dev/Art/Source/spr_enemy_walker_01_chroma.png
 Assets/_dev/Art/Source/spr_weapon_dual_blade_left_01_chroma.png
 Assets/_dev/Art/Source/spr_weapon_dual_blade_right_01_chroma.png
+Assets/_dev/Art/Source/spr_kalmuri_echo_slash_01_chroma.png
+Assets/_dev/Art/Source/spr_kalmuri_orbit_blade_01_chroma.png
+Assets/_dev/Art/Source/spr_kalmuri_launch_blade_01_chroma.png
+Assets/_dev/Art/Source/spr_blood_mark_01_chroma.png
+Assets/_dev/Art/Source/spr_heal_thread_tip_01_chroma.png
+Assets/_dev/Art/Source/spr_blood_bloom_01_chroma.png
+Assets/_dev/Art/Source/spr_blood_blade_storm_ring_01_chroma.png
+Assets/_dev/Art/Source/spr_blood_blade_storm_blade_01_chroma.png
 ```
 
 ## 2. 첫 Unity slice 에셋 큰 지도
@@ -91,14 +107,14 @@ Assets/_dev/Art/Source/spr_weapon_dual_blade_right_01_chroma.png
 | 플레이어 캐릭터 | `Player_EchoShowcase` | `spr_player_echo_silhouette_01.png` | `_dev` import 완료 | 첫 slice placeholder로 사용 |
 | 테스트 맵 | `Scene_Slice_EchoShowcase` / `Map_TestArena` | `tile_dev_floor_dark_01.png`, 이후 `spr_arena_boundary_01.png` | 바닥 타일 `_dev` import 완료 | 경계는 Unity shape 또는 다음 imagegen |
 | 절단쌍검 | `Weapon_DualBlades_Runtime` | `spr_weapon_dual_blade_left_01.png`, `spr_weapon_dual_blade_right_01.png` | `_dev` import 완료 | 첫 slice placeholder로 사용 |
-| 기본 베기 | `Hitbox_DualBladeArc_L/R` | `spr_dual_blade_swing_arc_01.png`, `spr_dual_blade_swing_arc_02.png` | 콘셉트 시트에 방향 있음 | 별도 투명 PNG 생성 필요 |
-| 활성 칼무리 | `Memory_HungryBlades_Ring` | `spr_kalmuri_orbit_blade_01.png` | 콘셉트 시트에 방향 있음 | 별도 투명 PNG 생성 필요 |
-| 칼무리 잔향 | `Echo_Kalmuri_DelayedSlash`, `Echo_Kalmuri_LingerSlash` | `spr_kalmuri_echo_slash_01.png` | 콘셉트 시트에 방향 있음 | 첫 투명 VFX 생성 우선순위 1 |
-| 칼무리 +5 | `Echo_Kalmuri_WeaponShard`, `Echo_Kalmuri_LaunchBlade` | `spr_kalmuri_echo_shard_01.png`, `spr_kalmuri_launch_blade_01.png` | 콘셉트 시트에 방향 있음 | 별도 투명 PNG 생성 필요 |
-| 혈반 표식 | `Echo_Blood_Mark` | `spr_blood_mark_01.png`, `spr_blood_mark_02.png` | 콘셉트 시트에 방향 있음 | 첫 투명 VFX 생성 우선순위 2 |
-| 회복 실 | `Echo_Blood_HealThread` | `spr_heal_thread_tip_01.png`, `mat_heal_thread_line.mat` | 콘셉트 시트에 방향 있음 | tip sprite + LineRenderer material |
-| 혈반 피꽃 | `Echo_Blood_Bloom` | `spr_blood_bloom_01.png` 또는 particle texture | 콘셉트 시트에 방향 있음 | particle/sprite burst 제작 |
-| 피의 칼폭풍 | `Ultimate_BloodBladeStorm` | `spr_blood_blade_storm_blade_01.png`, `spr_blood_blade_storm_ring_01.png`, `mat_blood_thread.mat` | 콘셉트 시트에 방향 있음 | 궁극 전용 투명 PNG/Material 제작 |
+| 기본 베기 | `Hitbox_DualBladeArc_L/R` | `spr_dual_blade_swing_arc_01.png`, `spr_dual_blade_swing_arc_02.png` | 콘셉트 시트에 방향 있음 | 첫 debug loop는 기존 쌍검 hit로 대체, 추후 별도 생성 |
+| 활성 칼무리 | `Memory_HungryBlades_Ring` | `spr_kalmuri_orbit_blade_01.png` | `_dev` import/prefab 완료 | debug loop에서 orbit state로 사용 |
+| 칼무리 잔향 | `Echo_Kalmuri_DelayedSlash`, `Echo_Kalmuri_LingerSlash` | `spr_kalmuri_echo_slash_01.png` | `_dev` import/prefab 완료 | delayed slash와 linger slash 공용 초안 |
+| 칼무리 +5 | `Echo_Kalmuri_WeaponShard`, `Echo_Kalmuri_LaunchBlade` | `spr_kalmuri_launch_blade_01.png` | `_dev` import/prefab 완료 | launch blade 우선, shard는 추후 |
+| 혈반 표식 | `Echo_Blood_Mark` | `spr_blood_mark_01.png` | `_dev` import/prefab 완료 | enemy attach marker 초안 |
+| 회복 실 | `Echo_Blood_HealThread` | `spr_heal_thread_tip_01.png`, `mat_heal_thread_line.mat` | tip sprite `_dev` import/prefab 완료 | LineRenderer material은 Task 4에서 생성 |
+| 혈반 피꽃 | `Echo_Blood_Bloom` | `spr_blood_bloom_01.png` | `_dev` import/prefab 완료 | +5 bloom burst 초안 |
+| 피의 칼폭풍 | `Ultimate_BloodBladeStorm` | `spr_blood_blade_storm_blade_01.png`, `spr_blood_blade_storm_ring_01.png`, `mat_blood_thread.mat` | `_dev` import/prefab 완료 | material/thread runtime은 Task 4에서 보강 |
 | 테스트 적 | `Enemy_TestWalker`, `Enemy_TestShooter` | `spr_enemy_walker_01.png`, 이후 shooter sprite | 워커 `_dev` import 완료 | 첫 slice는 walker만 사용 |
 | UI | `UI_EchoHud`, `UI_DebugEchoPanel` | icon sprites optional | 없음 | TextMeshPro + 단색 UI로 시작 |
 
@@ -307,9 +323,12 @@ Unity 프로젝트가 열린 뒤 MCP는 아래 순서로 실행한다. 현재는
 
 - arena boundary.
 - test shooter.
-- 투명 배경 개별 칼선/혈반/피실/폭풍 파츠.
+- 기본 베기 arc.
+- 칼무리 shard.
+- 혈반 강화 표식.
+- 피의 칼폭풍 thread/burst 보조 파츠.
 
-다음 생성 우선순위:
+완료된 생성 우선순위:
 
 1. `spr_kalmuri_echo_slash_01.png`
 2. `spr_blood_mark_01.png`
@@ -318,6 +337,14 @@ Unity 프로젝트가 열린 뒤 MCP는 아래 순서로 실행한다. 현재는
 5. `spr_heal_thread_tip_01.png`
 6. `spr_kalmuri_orbit_blade_01.png`
 7. `spr_blood_bloom_01.png`
+8. `spr_blood_blade_storm_ring_01.png`
+
+다음 생성 우선순위:
+
+1. `spr_dual_blade_swing_arc_01.png`
+2. `spr_kalmuri_echo_shard_01.png`
+3. `spr_blood_mark_02.png`
+4. `spr_blood_blade_storm_thread_01.png`
 
 판단:
 

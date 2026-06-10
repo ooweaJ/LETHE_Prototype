@@ -475,6 +475,8 @@ Scene 판독 기준은 Phase 5에서 확인한다:
 
 ### Phase 3: 잔향 핵심 이미지 5개 생성
 
+상태: 완료. 아래 5개 이미지는 `Assets/_dev/Art/Sprites`에 import됐고 Unity에서 Sprite/Single로 설정됐다. 원본 chroma-key 이미지는 `Assets/_dev/Art/Source`에 보존된다.
+
 먼저 만들 이미지:
 
 1. `spr_kalmuri_echo_slash_01.png`
@@ -488,6 +490,8 @@ Scene 판독 기준은 Phase 5에서 확인한다:
 - debug scene에서 칼무리 +1/+5와 혈반 표식/회복 실을 볼 수 있다.
 
 ### Phase 4: 궁극 이미지 3개 생성
+
+상태: 부분 완료. `spr_blood_blade_storm_ring_01.png`, `spr_blood_blade_storm_blade_01.png`, `spr_blood_bloom_01.png`는 생성/import/prefab 연결이 완료됐다. `thread/burst` 보조 파츠는 첫 debug loop 통과 후 필요하면 추가한다.
 
 먼저 만들 이미지:
 

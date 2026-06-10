@@ -1,12 +1,12 @@
 # Status
 
-Last updated: 2026-06-10
+Last updated: 2026-06-11
 
 ## Current Snapshot
 
 LETHE HTML Alpha v0.12 implemented the new forgetting model and passed automated regression, but the user feedback is that the play experience still does not feel like a big change. The current task has shifted from raw rule implementation to a Unity-ready echo slice: echoes should not feel like `잔향!` labels on basic attacks, but like weapon-specific combat events supported by concrete images, `_dev` prefabs, debug scene states, and one-person feel tests. The first Unity `_dev` readability resource pass is now imported: player silhouette, walker enemy, dark floor tile, and left/right dual blade sprites are in `LETHE/Assets/_dev/Art/Sprites`, with chroma source images preserved in `LETHE/Assets/_dev/Art/Source`.
 
-The new design sources are `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`, `docs/design/LETHE_WEAPON_MEMORY_ECHO_SPEC.md`, `docs/design/LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`, `docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md`, `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`, `docs/design/LETHE_VISUAL_ASSET_PLAN.md`, `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md`, and `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md`. Together they define the first showcase, active-to-echo form transformation, loop-safe hit event taxonomy, Unity class roles, ScriptableObjects, prefabs, first-slice acceptance criteria, the first sprite/VFX concept sheet, the imagegen production plan, and the file-to-prefab-to-scene binding map for Unity MCP. No gameplay code should be added until this combat fantasy, image plan, architecture, and visual direction target is accepted or revised.
+The new design sources are `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`, `docs/design/LETHE_WEAPON_MEMORY_ECHO_SPEC.md`, `docs/design/LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`, `docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md`, `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`, `docs/design/LETHE_VISUAL_ASSET_PLAN.md`, `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md`, and `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md`. Together they define the first showcase, active-to-echo form transformation, loop-safe hit event taxonomy, Unity class roles, ScriptableObjects, prefabs, first-slice acceptance criteria, the first sprite/VFX concept sheet, the imagegen production plan, and the file-to-prefab-to-scene binding map for Unity MCP. The current implementation target is now a playable `_dev` debug slice for morning review.
 
 The orchestration HTML interface now exists at `docs/orchestration/interface/index.html`, `docs/orchestration/interface/command.html`, and `docs/orchestration/interface/runbook.html`. AI-facing state lives under `docs/orchestration/state/`; human-facing reports live under `docs/orchestration/reports/YYYYMMDD/`.
 
@@ -30,6 +30,13 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 - Screenshot evidence attempt: first screenshot was discarded after scale correction; retry failed because Unity bridge became unreachable. `unity_editor_ping(port=7890)` returned `connected: false`.
 - Basic combat scene reporting: `npm.cmd run report` pass, `npm.cmd run report:check` pass, `node scripts\send_orchestrator_discord_report.js --latest-section --dry-run --print-payload` pass for unit 14.
 - Project Orchestrator notification for unit 14: `npm.cmd run report:orchestrator:unit:dry` failed with `fetch failed`.
+- Unity MCP recovery: Unity Editor was relaunched directly with Unity `6000.3.10f1` and project path `C:/jaewoo/LETHE_Prototype/LETHE`; AnkleBreaker MCP rediscovered `LETHE` on port `7890`, and `unity_editor_ping(port=7890)` returned `connected: true`.
+- Unity core echo VFX pass: generated 8 VFX images for Kalmuri, Blood, and Blood Blade Storm; source chroma images are preserved under `LETHE/Assets/_dev/Art/Source`; runtime alpha PNGs are under `LETHE/Assets/_dev/Art/Sprites/Echoes` and `LETHE/Assets/_dev/Art/Sprites/Ultimates`.
+- Unity core echo prefab pass: created 6 echo prefabs under `Assets/_dev/Prefabs/Echoes` and 1 ultimate prefab under `Assets/_dev/Prefabs/Ultimates`.
+- VFX evidence: `docs/orchestration/evidence/2026-06-11-echo-vfx-contact-sheet.png`.
+- Unity VFX verification: `unity_asset_list(folder="Assets/_dev/Art/Sprites/Echoes", type="Texture")` found 6 textures; `unity_asset_list(folder="Assets/_dev/Art/Sprites/Ultimates", type="Texture")` found 2 textures; `unity_asset_list(folder="Assets/_dev/Prefabs/Echoes", type="Prefab")` found 6 prefabs; `unity_asset_list(folder="Assets/_dev/Prefabs/Ultimates", type="Prefab")` found 1 prefab.
+- Unity compile verification after VFX import: `unity_get_compilation_errors(port=7890, severity="all")` returned `count: 0`, `isCompiling: false`.
+- Unity core echo VFX reporting: `npm.cmd run report` pass, `npm.cmd run report:check` pass, `npm.cmd run report:orchestrator:unit:dry` failed with `fetch failed`.
 - New forgetting model `npm run qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.19s`.
 - New forgetting model `npm run balance:loop`: `GO_BALANCE_BASELINE`, first boss clear `80%`, full clear `60%`, death `40%`, first boss TTK median `23.91s`.
 - `npm run playtest:package:dry`: pass.
@@ -88,7 +95,9 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Current Blocker
 
-The current blocker has moved from runtime assembly to Unity MCP connectivity. The Unity 2D project skeleton now exists under `LETHE/`, AnkleBreaker Unity MCP is registered as `anklebreaker-unity`, and the basic `_dev` scene/prefabs/scripts are saved. After the screenshot retry, the Unity editor bridge on port `7890` became unreachable, so the next MCP-dependent work should resume after the bridge is reachable again.
+No active Unity blocker. Unity MCP is currently reachable on port `7890`.
+
+Known rough edge: the bundled imagegen chroma-key helper could not run because Pillow is not installed in the active Python environment. The 2026-06-11 VFX alpha cleanup used Windows `System.Drawing` instead.
 
 Discord actual send for the latest orchestration structure cleanup succeeded after explicit user request. Historical approval blocks remain recorded in the relevant devlog/report entries.
 
@@ -96,7 +105,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Resume Unity MCP connectivity, then continue the first Unity `_dev` runtime slice from `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md` and `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`: generate/import core echo VFX sprites and bind visible Kalmuri/Blood debug states.
+Continue the first Unity `_dev` runtime slice from `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md` and `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`: implement the debug loop that shows base dual blades, Kalmuri +1/+5, Blood +5, and Blood Blade Storm in `Dev_EchoSlice.unity`.
 
 For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` before real sends, then `npm run report:orchestrator:unit` when the Project Orchestrator is running and the report is ready.
 
