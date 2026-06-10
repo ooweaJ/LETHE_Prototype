@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-10-01 - 새 망각 모델 HTML 게이트</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-10-01 - 새 망각 모델 HTML 게이트</h1>
+      <p class="meta">Generated from 2026-06-10-01-새-망각-모델-html-게이트.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260610/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-10-01 - 새 망각 모델 HTML 게이트</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>HTML v0.12는 Unity 전환 직전 상태에서 한 번 더 HTML 체감 게이트로 돌아왔다. 이번 라운드는 신규 콘텐츠나 Unity 셋업 없이, 새 망각 모델만 이식한 빌드로 jaewoo 1인 체감 테스트를 하기 위한 준비이며, 패키지는 <code>dist\lethe-v0.12-playtest</code>로 갱신됐다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>망각 대상이 의존도 가중 랜덤에서 최고 레벨 활성 기억으로 바뀌었다.</li>
+<li>최고 레벨 동률은 일반 플레이에서 플레이어가 선택하고, QA/디버그는 최근 강화 기억을 우선 선택한다.</li>
+<li>기억과 잔향 레벨 상한을 <code>+5</code>로 고정했다.</li>
+<li>잔향 초과분은 버리지 않고 즉시 과부하 폭발과 <code>ultimateGauge</code> 로그로 전환한다.</li>
+<li>잔향이 있는 기억을 다시 얻으면 <code>1 + floor(echoLevel / 2)</code>만큼 공명해 높은 레벨로 돌아온다.</li>
+<li>HUD에 다음 망각 후보, 잔향 레벨, <code>+5</code> 각성, 과부하/궁극 게이지를 표시했다.</li>
+<li>즉시 망각, 잔향 <code>+5</code>, 궁극 표식 디버그 버튼을 추가했다.</li>
+<li>새 망각 모델 적용 후 death rate가 올라가 HP 단일 레버를 <code>190 -&gt; 210</code>으로 조정했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>node --check src/game.js</code>: 통과.</li>
+<li><code>node --check alpha_test/src/simulator.js</code>: 통과.</li>
+<li><code>npm run qa:balance</code>: <code>GO_BALANCE_BASELINE</code>, first boss clear <code>100%</code>, full clear <code>60%</code>, death <code>40%</code>, first boss TTK median <code>20.19s</code>.</li>
+<li><code>npm run balance:loop</code>: <code>GO_BALANCE_BASELINE</code>, first boss clear <code>80%</code>, full clear <code>60%</code>, death <code>40%</code>, first boss TTK median <code>23.91s</code>.</li>
+<li><code>npm run playtest:package:dry</code>: 통과.</li>
+<li><code>npm run playtest:package</code>: 통과, <code>dist\lethe-v0.12-playtest</code> 갱신.</li>
+</ul>
+<p>이번 게이트에서 AI 테스트는 회귀 확인용이고, 최종 판단은 jaewoo 1인 체감 테스트다.</p>
+<h2>4. 결정한 것</h2>
+<p><code>ITERATE_BEFORE_TEST</code>: Unity 셋업 전에 HTML에 새 망각 모델만 이식하고 1인 체감 테스트를 진행한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>최고 레벨 망각은 트레이드오프를 선명하게 만들지만, 실제 체감이 &quot;아쉽다&quot;가 아니라 &quot;짜증난다&quot;로 흐를 수 있다.</li>
+<li>HP <code>210</code>은 회귀 밴드를 회복했지만, 사람 체감에서는 결손 손실이 약해졌는지 확인해야 한다.</li>
+<li>공명 재획득이 너무 강하면 망각 손실이 약해질 수 있다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>새 모델의 판단 기준은 자동 지표가 아니라 감정 루프다. 테스트에서 봐야 할 것은 최고 레벨 기억 상실의 아쉬움, 잔향으로 바뀐 전투 체감, 재획득 공명의 설렘, 그리고 플레이어가 강화 선택을 망각 위험과 연결해 생각하는지다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo 1인 체감 테스트를 진행하고, 관찰 내용을 <code>docs/orchestration/evidence/</code> 또는 <code>playtest_logs/</code>에 남긴 뒤 보고서와 다음 작업을 갱신한다.</p>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 기존 망각은 의존도 기반 확률이라 플레이어가 성장과 상실의 관계를 읽기 어려웠다.</li>
+<li>방향: &quot;키운 기억이 다음 망각 후보가 된다&quot;는 규칙으로 감정적 트레이드오프를 전면화했다.</li>
+<li>행동: 기존 8개 기억/2무기 범위 안에서 망각, 잔향, 재획득 규칙만 바꿨다.</li>
+<li>결과: Unity로 넘어가기 전에 핵심 감정 루프를 HTML에서 직접 체감 검증할 수 있는 빌드가 준비됐다.</li>
+</ul>
+  </main>
+</body>
+</html>

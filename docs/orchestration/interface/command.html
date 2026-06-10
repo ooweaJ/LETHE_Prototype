@@ -59,27 +59,27 @@
       <div class="grid">
         <article>
           <h2>Codex에게 지금 시킬 일</h2>
-          <p>망각/잔향 수학이 정리됐으니, 다음은 첫 vertical slice backlog를 만듭니다.</p>
-          <textarea id="prompt-next" readonly>docs/design/의 한글 기획서 세트, 특히 LETHE_GAME_DESIGN_OVERVIEW.md, LETHE_CORE_SYSTEMS_UNITY_PLAN.md, LETHE_CONTENT_TABLES.md, LETHE_UNITY_VERTICAL_SLICE_SPEC.md를 기준으로 LETHE Unity vertical slice backlog를 만들어줘. 기억과 잔향은 모두 +5 max이고, 망각 대상은 최고 레벨 활성 기억이며, 동률이면 플레이어가 선택해. 기억을 잃으면 같은 잔향에 레벨이 누적되고, +5 초과분은 폐기하지 않고 잔향 과부하 또는 궁극 잔향 게이지로 전환해. 잔향이 남은 기억을 다시 얻으면 기억이 공명으로 강화되는 규칙을 기준으로 해줘. 첫 slice는 상점/메타/지역/최종보스 확장 없이, 데이터 모델, 기본 전투, 기억 레벨, 망각, 잔향 레벨, 과부하 처리, 재획득 공명, 각성 잔향 2개, 궁극 잔향 1개, 원거리 적 행동 기준, 루프 강제 시연 debug UI 작업으로 쪼개줘. 결과를 docs/orchestration/state/STATUS.md, CURRENT_TASK.md, NEXT_TASKS.md와 docs/orchestration/devlog/2026-06-09.md, docs/orchestration/reports/20260609/index.md에 반영해줘.</textarea>
+          <p>새 망각 모델 HTML 빌드가 준비됐으니, 다음은 jaewoo 1인 체감 테스트입니다.</p>
+          <textarea id="prompt-next" readonly>dist\lethe-v0.12-playtest\index.html을 열고 새 망각 모델을 1인 체감 테스트해줘. 확인할 것은 네 가지야: 최고 레벨로 키운 기억을 잃는 순간이 "아깝다"인지 "짜증난다"인지, 잃은 직후 잔향 효과가 전투에서 보이는지, 잃었던 기억을 다시 얻을 때 공명이 설레는지, "이 기억을 키우면 다음에 잃는다"는 트레이드오프를 의식하게 되는지. 테스트 노트를 playtest_logs/ 또는 docs/orchestration/evidence/에 남기고, 결과를 docs/orchestration/state/STATUS.md, CURRENT_TASK.md, NEXT_TASKS.md와 docs/orchestration/devlog/2026-06-10.md, docs/orchestration/reports/20260610/index.md에 반영해줘.</textarea>
           <button type="button" data-copy-target="prompt-next">프롬프트 복사</button>
         </article>
 
         <article class="warning">
           <h2>지금 하지 말 것</h2>
           <ul>
-            <li>새 기억, 슬롯, 상점, 메타 성장 추가 금지</li>
+            <li>새 기억, 무기, 적, 슬롯 추가 금지</li>
             <li>새 지역, 최종 보스, 장기 구조 확장 금지</li>
-            <li>Unity 첫 slice 전에 대형 콘텐츠 확장 금지</li>
+            <li>Unity 셋업은 1인 체감 테스트 후로 보류</li>
           </ul>
         </article>
 
         <article>
           <h2>완료 기준</h2>
           <ul>
-            <li>Unity 작업 단위 목록 작성</li>
-            <li>각 작업별 완료 기준 작성</li>
-            <li>칼무리/혈반/피의 칼폭풍 작업 단위화</li>
-            <li>잔향 과부하 보상 기준 작성</li>
+            <li>최고 레벨 기억 상실 감정 기록</li>
+            <li>잔향 전투 체감 기록</li>
+            <li>재획득 공명 반응 기록</li>
+            <li>강화-망각 트레이드오프 인지 여부 기록</li>
             <li>상태, devlog, reports 갱신</li>
           </ul>
         </article>

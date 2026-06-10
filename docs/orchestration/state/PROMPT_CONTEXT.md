@@ -6,8 +6,8 @@ Codex works in this repository as the implementation, verification, git, reporti
 
 - The project goal is to validate LETHE's core fun and possibility in HTML before deciding whether Unity implementation is justified.
 - AI proxy metrics are planning evidence only. They are not human emotion, balance, or Unity-transition proof.
-- Current state: v0.12 is paused after the latest balance-loop rerun returned `ITERATE_BALANCE`.
-- The next evidence gate is a small balance adjustment and rerun before controlled human sessions, unless the user explicitly accepts the test risk.
+- Current state: v0.12 is in an `ITERATE_BEFORE_TEST` HTML gate for the new forgetting model.
+- The next evidence gate is regression verification, then a jaewoo solo feel test of highest-level forgetting, echo overcharge, and reacquisition resonance.
 
 ## Operating Rules
 

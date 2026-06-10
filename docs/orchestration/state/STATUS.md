@@ -1,10 +1,12 @@
 # Status
 
-Last updated: 2026-06-09
+Last updated: 2026-06-10
 
 ## Current Snapshot
 
-LETHE HTML Alpha v0.12 is cleared again as a controlled human-test candidate after the latest one-lever balance recovery, but the project direction has now shifted from more HTML tuning toward Unity transition planning. The accepted tuning change remains player max HP `180 -> 190`; two consecutive `npm run balance:loop` runs returned `GO_BALANCE_BASELINE`. The design docs are now organized as a Korean multi-document set under `docs/design/`: overview, core systems, run structure, combat, content tables, balance baseline, and Unity vertical-slice spec. The current core-system direction is memory and echo levels both cap at `+5`, forgotten memory levels accumulate into matching echoes, reacquired echoed memories gain resonance, and two `+5` echoes can unlock ultimate echo synergies. The first-slice forgetting rule is now highest-level active memory, with tied highest memories chosen by the player; echo overflow above `+5` becomes overcharge instead of being discarded.
+LETHE HTML Alpha v0.12 has returned to an `ITERATE_BEFORE_TEST` HTML gate before Unity setup. The immediate task is not new content or Unity backlog work; it is porting the new forgetting model into the existing HTML prototype and using that build for a jaewoo solo feel test. The new model makes the highest-level active memory the forgetting target, lets the player choose among tied highest memories, caps memory and echo levels at `+5`, converts echo overflow into immediate overcharge, and gives reacquired echoed memories resonance.
+
+Implementation for the new HTML model is now in `src/game.js`: highest-level forgetting, echo `+5` cap, overcharge burst logging, reacquisition resonance, HUD candidate visibility, debug demonstration buttons, and alpha simulator synchronization. Regression verification passed after a single accepted balance lever, player max HP `190 -> 210`. The jaewoo solo test package has been regenerated at `dist\lethe-v0.12-playtest`.
 
 The orchestration HTML interface now exists at `docs/orchestration/interface/index.html`, `docs/orchestration/interface/command.html`, and `docs/orchestration/interface/runbook.html`. AI-facing state lives under `docs/orchestration/state/`; human-facing reports live under `docs/orchestration/reports/YYYYMMDD/`.
 
@@ -14,6 +16,15 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- New forgetting model `npm run qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.19s`.
+- New forgetting model `npm run balance:loop`: `GO_BALANCE_BASELINE`, first boss clear `80%`, full clear `60%`, death `40%`, first boss TTK median `23.91s`.
+- `npm run playtest:package:dry`: pass.
+- `npm run playtest:package`: pass, wrote `dist\lethe-v0.12-playtest`.
+- `npm run report`: pass, regenerated 2026-06-10 report HTML and report archive.
+- `npm run report:check`: pass, one 2026-06-10 unit report verified.
+- `npm run doctor`: pass, 50 pass / 0 warn / 0 fail.
+- Accepted recovery lever for new model: player max HP `190 -> 210`.
+- New planning response saved: `docs/orchestration/review_responses/2026-06-10-forgetting-model-gate.md`.
 - Accepted recovery change: player max HP `180 -> 190`.
 - Latest `npm run balance:loop` pass 1 after HP `190`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `18.97s`.
 - Latest `npm run balance:loop` pass 2 after HP `190`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.18s`.
@@ -60,7 +71,7 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Current Blocker
 
-The main blocker is no longer a single HTML balance gate. The next needed work is turning the newly defined memory/echo/resonance rules into a Unity vertical-slice backlog. The recommended first showcase remains 칼무리 잔향 + 혈반 잔향 -> 피의 칼폭풍, but the backlog still needs exact overcharge payout and reacquisition tuning criteria.
+The current blocker is no longer automated regression. The next blocker is human evidence: jaewoo needs to run the regenerated HTML build and record whether the new forgetting loop feels regrettable, visible, and exciting on reacquisition.
 
 Discord actual send for the latest orchestration structure cleanup succeeded after explicit user request. Historical approval blocks remain recorded in the relevant devlog/report entries.
 
@@ -68,7 +79,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Create the Unity vertical-slice backlog from the frozen first-slice rules in `docs/design/`: highest-level memory forgetting, echo overflow-to-overcharge, reacquisition resonance, two awakened echoes, one ultimate echo, and debug controls for forcing the loop. Human testing of the HTML build remains useful as supporting evidence, but the next project step is system planning for Unity rather than another blind HTML tuning pass.
+Run the jaewoo solo feel test from `dist\lethe-v0.12-playtest`, record notes, and update report/devlog/evidence. Unity backlog work resumes only after the HTML feel gate is recorded.
 
 For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` before real sends, then `npm run report:orchestrator:unit` when the Project Orchestrator is running and the report is ready.
 

@@ -251,10 +251,11 @@ function computeReliance(state, snapshot) {
   };
 }
 
-function chooseDeletion(rng, deletionWeights) {
+function chooseDeletion(state, deletionWeights) {
   const ids = Object.keys(deletionWeights || {});
   if (!ids.length) return null;
-  return ids.sort((a, b) => (deletionWeights[b] || 0) - (deletionWeights[a] || 0))[0];
+  const levels = state.memoryLevels || {};
+  return ids.sort((a, b) => (levels[b] || 1) - (levels[a] || 1) || (deletionWeights[b] || 0) - (deletionWeights[a] || 0))[0];
 }
 
 function classifyBuild(state, snapshot) {
@@ -691,10 +692,15 @@ function echoPivotScore(state, build, powerDrop, recoveryRatio) {
   ), 4);
 }
 
-function applyEcho(state, memoryId) {
+function applyEcho(state, memoryId, lostLevel = 1) {
   const existing = state.echoes.find((e) => e.memoryId === memoryId);
-  if (existing) existing.stacks += 1;
-  else state.echoes.push({ memoryId, stacks: 1 });
+  if (existing) {
+    const raw = existing.stacks + Math.max(1, lostLevel);
+    existing.overflow = (existing.overflow || 0) + Math.max(0, raw - 5);
+    existing.stacks = Math.min(5, raw);
+  } else {
+    state.echoes.push({ memoryId, stacks: Math.min(5, Math.max(1, lostLevel)), overflow: Math.max(0, lostLevel - 5) });
+  }
 }
 
 function memoryNames(ids) {
@@ -708,9 +714,13 @@ function simulateOneRun(rng, bot, options, runIndex = 0) {
     bot,
     weaponId,
     activeMemories: chooseInitialMemories(rng, bot, weaponId),
+    memoryLevels: {},
     echoes: [],
     echoPower: options.echoPower,
   };
+  state.activeMemories.forEach((id) => {
+    state.memoryLevels[id] = 1;
+  });
   const forgottenIds = [];
   const stageLogs = [];
   let totalTimeSec = 0;
@@ -745,7 +755,7 @@ function simulateOneRun(rng, bot, options, runIndex = 0) {
       break;
     }
 
-    const deletedMemoryId = chooseDeletion(rng, reliance.deletionWeights);
+    const deletedMemoryId = chooseDeletion(state, reliance.deletionWeights);
     reliance.deletedMemoryId = deletedMemoryId;
     const predictedMemoryId = predictDeletion(rng, state, reliance, options);
     const leastWantedId = chooseLeastWantedToLose(rng, state, snapshot, reliance);
@@ -756,7 +766,7 @@ function simulateOneRun(rng, bot, options, runIndex = 0) {
 
     // Delete active memory and add echo.
     state.activeMemories = state.activeMemories.filter((id) => id !== deletedMemoryId);
-    applyEcho(state, deletedMemoryId);
+    applyEcho(state, deletedMemoryId, state.memoryLevels[deletedMemoryId] || 1);
     forgottenIds.push(deletedMemoryId);
     const postDeletePower = calculatePower(state);
     const powerDrop = preForgetPower > 0 ? clamp((preForgetPower - postDeletePower) / preForgetPower, -1, 1) : 0;
@@ -766,7 +776,11 @@ function simulateOneRun(rng, bot, options, runIndex = 0) {
     let replacementId = null;
     if (options.replacementOffer && deficit.survived && state.activeMemories.length < 3) {
       replacementId = chooseReplacement(rng, state, forgottenIds);
-      if (replacementId) state.activeMemories.push(replacementId);
+      if (replacementId) {
+        const echo = state.echoes.find((entry) => entry.memoryId === replacementId);
+        state.memoryLevels[replacementId] = Math.min(5, 1 + Math.floor((echo?.stacks || 0) / 2));
+        state.activeMemories.push(replacementId);
+      }
     }
     const postReplacementPower = calculatePower(state);
     const recoveryRatio = preForgetPower > 0 ? postReplacementPower / preForgetPower : 1;

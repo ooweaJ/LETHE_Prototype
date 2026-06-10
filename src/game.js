@@ -17,6 +17,7 @@ const ui = {
   weaponCard: document.getElementById("weaponCard"),
   memorySlots: document.getElementById("memorySlots"),
   echoList: document.getElementById("echoList"),
+  debugControls: document.getElementById("debugControls"),
   combatLog: document.getElementById("combatLog"),
 };
 
@@ -278,6 +279,8 @@ const enemyTypes = {
 const qaMode = new URLSearchParams(window.location.search).get("qa") || "";
 const startingMemorySlots = 1;
 const maxActiveMemorySlots = 3;
+const maxMemoryLevel = 5;
+const maxEchoLevel = 5;
 
 const experiment = {
   version: "v0.12",
@@ -340,7 +343,7 @@ const baseEcho = {
 const balance = {
   version: "v0.12-balance-1",
   player: {
-    maxHp: 190,
+    maxHp: 210,
     speed: 184,
   },
   boss: {
@@ -397,14 +400,15 @@ const balance = {
   tacticalFocusForgetWeight: 3,
 };
 
-function createMemoryInstance(id) {
+function createMemoryInstance(id, options = {}) {
   return {
     ...memories[id],
-    level: 1,
+    level: clampMemoryLevel(options.level || 1),
     cooldownLeft: id === "blood_reflection" ? 0 : 0.8 + Math.random() * 1.3,
     clarity: 0,
     forgotten: false,
     joinedAt: state ? Number(state.elapsed.toFixed(2)) : 0,
+    resonant: Boolean(options.resonant),
   };
 }
 
@@ -461,6 +465,7 @@ function createRunState() {
       earlyKills: 0,
       maxEnemies: 0,
       levelUpsBeforeBoss: 0,
+      lastMemoryUpgrade: null,
     },
     danger: {
       deaths: 0,
@@ -561,6 +566,9 @@ function createRunState() {
     echoState: {
       memories: {},
       evolutions: [],
+      overchargeTotal: 0,
+      ultimateGauge: 0,
+      overchargeBursts: [],
     },
     weaponEvolution: [],
     memoryAcquisition: activeMemories.map((memory) => ({
@@ -632,11 +640,16 @@ function initSetup() {
 
   ui.startRunButton.addEventListener("click", startRun);
   bindPlaytestMetaInputs();
+  bindDebugControls();
   renderSetup();
 }
 
-function memoryChoiceHtml(memory) {
-  return `<strong>${memory.name}</strong><span class="choice-summary">${memory.role} · ${memory.desc}</span><div class="tag-row">${tagBadges(memory.tags)}</div>`;
+function memoryChoiceHtml(memory, options = {}) {
+  const resonance = options.resonance;
+  const resonanceLine = resonance?.bonusLevel
+    ? `<div class="fork-preview">공명: 잔향 Lv.${resonance.echoLevel} -> 시작 Lv.${resonance.startLevel}</div>`
+    : "";
+  return `<strong>${memory.name}</strong><span class="choice-summary">${memory.role} · ${memory.desc}</span><div class="tag-row">${tagBadges(memory.tags)}</div>${resonanceLine}`;
 }
 
 function bindPlaytestMetaInputs() {
@@ -652,6 +665,18 @@ function bindPlaytestMetaInputs() {
       playtestMeta.sessionId = ui.sessionIdInput.value.trim();
     });
   }
+}
+
+function bindDebugControls() {
+  if (!ui.debugControls) return;
+  ui.debugControls.querySelectorAll("[data-debug-action]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const action = button.getAttribute("data-debug-action");
+      if (action === "forget") debugForgetNow();
+      if (action === "echo-cap") debugSetEchoCap();
+      if (action === "ultimate") debugMarkUltimateEcho();
+    });
+  });
 }
 
 function toggleMemory(id) {
@@ -2071,6 +2096,7 @@ function chooseLevelUpChoices() {
     .sort((a, b) => Number(usedIds.has(a)) - Number(usedIds.has(b)))
     .sort(() => Math.random() - 0.5);
   const upgradePool = active
+    .filter((memory) => memoryLevel(memory) < maxMemoryLevel)
     .slice()
     .sort((a, b) => (a.level || 1) - (b.level || 1) || Math.random() - 0.5);
 
@@ -2129,7 +2155,7 @@ function levelUpChoiceView(choice) {
     return {
       name: `기억 강화: ${memory.name}`,
       desc: `${memory.role} · 능동 기억의 피해/범위/쿨다운이 좋아집니다.`,
-      log: `Lv.${level} -> Lv.${level + 1}`,
+      log: `Lv.${level} -> Lv.${Math.min(maxMemoryLevel, level + 1)}`,
     };
   }
   const stat = levelUpChoices[choice.id];
@@ -2152,8 +2178,15 @@ function applyLevelUpChoice(choice) {
     recordMemoryAcquisition("acquire", choice.id, "level_up", { level: memory.level });
   } else if (choice.kind === "memory_upgrade") {
     const memory = activeMemories().find((item) => item.id === choice.id);
-    if (!memory) return;
-    memory.level = (memory.level || 1) + 1;
+    if (!memory || memoryLevel(memory) >= maxMemoryLevel) return;
+    memory.level = clampMemoryLevel(memoryLevel(memory) + 1);
+    memory.lastUpgradedAt = Number(state.elapsed.toFixed(2));
+    state.runGrowth.lastMemoryUpgrade = {
+      memoryId: memory.id,
+      memoryName: memory.name,
+      level: memory.level,
+      t: memory.lastUpgradedAt,
+    };
     recordMemoryAcquisition("upgrade", choice.id, "level_up", { level: memory.level });
   } else {
     const stat = levelUpChoices[choice.id];
@@ -2298,14 +2331,13 @@ function topDependencyCandidates(limit = 2) {
 function forgetProbabilities() {
   calculateDependency();
   const active = activeMemories();
-  const rawWeights = active.map((memory) => {
-    const metric = state.metrics[memory.id];
-    return Math.max(8, metric.deletionScore || 0) + 12;
-  });
-  const total = sum(rawWeights) || 1;
+  const maxLevel = Math.max(1, ...active.map(memoryLevel));
+  const highest = active.filter((memory) => memoryLevel(memory) === maxLevel);
+  const tiedShare = highest.length ? 1 / highest.length : 0;
   const probabilities = active
-    .map((memory, index) => {
-      const probability = rawWeights[index] / total;
+    .map((memory) => {
+      const isHighestLevel = memoryLevel(memory) === maxLevel;
+      const probability = isHighestLevel ? tiedShare : 0;
       state.metrics[memory.id].forgetProbability = Number(probability.toFixed(4));
       return {
         memoryId: memory.id,
@@ -2313,9 +2345,11 @@ function forgetProbabilities() {
         probability: Number(probability.toFixed(4)),
         percent: Math.round(probability * 100),
         deletionScore: state.metrics[memory.id].deletionScore || 0,
+        memoryLevel: memoryLevel(memory),
+        isHighestLevel,
       };
     })
-    .sort((a, b) => b.probability - a.probability);
+    .sort((a, b) => b.memoryLevel - a.memoryLevel || b.deletionScore - a.deletionScore);
   state.forgetProbability = probabilities;
   return probabilities;
 }
@@ -2330,9 +2364,38 @@ function pickWeightedForget(probabilities) {
   return { chosen: probabilities[probabilities.length - 1], roll: Number(roll.toFixed(4)) };
 }
 
+function highestLevelForgetEntries(probabilities = forgetProbabilities()) {
+  const maxLevel = Math.max(1, ...probabilities.map((entry) => entry.memoryLevel || 1));
+  return probabilities.filter((entry) => (entry.memoryLevel || 1) === maxLevel);
+}
+
+function pickHighestLevelForget(probabilities, options = {}) {
+  if (options.memoryId) {
+    const chosen = probabilities.find((entry) => entry.memoryId === options.memoryId);
+    if (chosen) return { chosen, roll: 0 };
+  }
+  const candidates = highestLevelForgetEntries(probabilities);
+  if (candidates.length <= 1) return { chosen: candidates[0] || probabilities[0], roll: 0 };
+
+  if (options.preferRecentUpgrade || options.automated) {
+    const recentId = state.runGrowth.lastMemoryUpgrade?.memoryId;
+    const recent = candidates.find((entry) => entry.memoryId === recentId);
+    if (recent) return { chosen: recent, roll: 0 };
+    const byUpgrade = candidates
+      .map((entry) => ({
+        entry,
+        upgradedAt: activeMemories().find((memory) => memory.id === entry.memoryId)?.lastUpgradedAt || -1,
+      }))
+      .sort((a, b) => b.upgradedAt - a.upgradedAt);
+    if (byUpgrade[0]?.upgradedAt >= 0) return { chosen: byUpgrade[0].entry, roll: 0 };
+  }
+
+  return { chosen: candidates[0], roll: 0 };
+}
+
 function forgetWeightedMemory(options = {}) {
   const probabilities = forgetProbabilities();
-  const picked = options.forceTop ? { chosen: probabilities[0], roll: 0 } : pickWeightedForget(probabilities);
+  const picked = pickHighestLevelForget(probabilities, options);
   const result = {
     cycleIndex: state.runTimeline.currentBossIndex,
     t: Number(state.elapsed.toFixed(2)),
@@ -2343,6 +2406,7 @@ function forgetWeightedMemory(options = {}) {
     matched: state.questions.predict !== "unknown" && state.questions.predict === picked.chosen?.memoryId,
     unknown: state.questions.predict === "unknown",
     roll: picked.roll,
+    rule: "highest_memory_level",
     probabilities,
     automated: Boolean(options.automated),
   };
@@ -2412,7 +2476,7 @@ function forgetMemory(memoryId, forgetResult = null) {
 }
 
 function forgetMostDependent() {
-  return forgetWeightedMemory({ automated: true, forceTop: true });
+  return forgetWeightedMemory({ automated: true, preferRecentUpgrade: true });
 }
 
 function applyEcho(memoryId, activeLevel = 1) {
@@ -2424,13 +2488,22 @@ function applyEcho(memoryId, activeLevel = 1) {
     level: 0,
     engravedAt: [],
   };
-  echoEntry.level += Math.max(1, activeLevel);
+  const beforeLevel = echoEntry.level || 0;
+  const lostLevel = clampMemoryLevel(activeLevel);
+  const rawLevel = beforeLevel + lostLevel;
+  const overflow = Math.max(0, rawLevel - maxEchoLevel);
+  echoEntry.level = Math.min(maxEchoLevel, rawLevel);
+  echoEntry.overcharge = (echoEntry.overcharge || 0) + overflow;
   echoEntry.engravedAt.push({
     cycleIndex: state.runTimeline.currentBossIndex,
     t: Number(state.elapsed.toFixed(2)),
-    activeLevel,
+    activeLevel: lostLevel,
+    beforeLevel,
+    afterLevel: echoEntry.level,
+    overflow,
   });
   state.echoState.memories[memoryId] = echoEntry;
+  if (overflow > 0) triggerEchoOvercharge(memoryId, overflow, echoEntry);
   const powerMul = (0.88 + echoEntry.level * 0.18) * (1 + state.runGrowth.echoAmp);
   echoEntry.power = Number(powerMul.toFixed(2));
   state.tagEchoes = Object.values(state.echoState.memories).map((echo) => ({
@@ -2440,6 +2513,7 @@ function applyEcho(memoryId, activeLevel = 1) {
     level: echo.level,
     power: echo.power || 1,
     tier: "engraved",
+    overcharge: echo.overcharge || 0,
   }));
   if (memoryId === "execution_flash") {
     state.echo.critChance += 0.05 * experiment.echoPower * powerMul;
@@ -2483,7 +2557,40 @@ function applyEcho(memoryId, activeLevel = 1) {
     state.echo.weaponMarkChance += 0.10 * experiment.echoPower * powerMul;
   }
   updateWeaponEvolutions();
-  logEvent("echo_state", { echoState: structuredCloneSafe(state.echoState), weaponEvolution: state.weaponEvolution });
+  logEvent("echo_state", {
+    echoState: structuredCloneSafe(state.echoState),
+    weaponEvolution: state.weaponEvolution,
+    overcharge: overflow,
+    ultimateGauge: state.echoState.ultimateGauge || 0,
+  });
+}
+
+function triggerEchoOvercharge(memoryId, overflow, echoEntry) {
+  state.echoState.overchargeTotal = (state.echoState.overchargeTotal || 0) + overflow;
+  state.echoState.ultimateGauge = (state.echoState.ultimateGauge || 0) + overflow;
+  const p = state.player;
+  const radius = 118 + overflow * 22;
+  const damage = (42 + overflow * 18) * (1 + state.runGrowth.echoAmp);
+  for (const target of hostiles()) {
+    if (distance(p, target) < radius + target.r) {
+      damageHostile(target, damage, "echo_overcharge", { controlHit: true });
+    }
+  }
+  const burst = {
+    memoryId,
+    memoryName: echoEntry.memoryName,
+    overflow,
+    overchargeTotal: state.echoState.overchargeTotal,
+    ultimateGauge: state.echoState.ultimateGauge,
+    t: Number(state.elapsed.toFixed(2)),
+    cycleIndex: state.runTimeline.currentBossIndex,
+  };
+  state.echoState.overchargeBursts.push(burst);
+  state.effects.push({ type: "ripple", x: p.x, y: p.y, r: 24, maxR: radius, life: 0.5, maxLife: 0.5 });
+  addBurst(p.x, p.y, "#e8c15d", 18, 3.2);
+  addFloater(`잔향 과부하 +${overflow}`, p.x, p.y - 58, "#e8c15d");
+  addLog(`${echoEntry.memoryName} 잔향이 +5를 넘어 과부하 폭발을 일으켰다.`);
+  logEvent("echo_overcharge", burst);
 }
 
 function echoUnlockFor(memoryId, tier = "safe") {
@@ -2560,14 +2667,47 @@ function echoPairForTags(tags) {
   return null;
 }
 
+function debugForgetNow() {
+  if (!state || state.mode !== "combat" || activeMemoryCount() <= 0) return;
+  const forgotten = forgetWeightedMemory({ automated: true, preferRecentUpgrade: true });
+  showCycleResultOverlay(forgotten);
+  logEvent("debug_forget_now", { forgotten: forgotten?.id || null });
+}
+
+function debugSetEchoCap() {
+  if (!state) return;
+  const targetId = state.forgotten || activeMemories()[0]?.id || selectedMemories[0];
+  if (!targetId) return;
+  applyEcho(targetId, maxEchoLevel);
+  renderEchoes();
+  addLog(`${memories[targetId].name} 잔향을 +5로 세팅했다.`);
+  logEvent("debug_echo_cap", { memoryId: targetId, echoState: structuredCloneSafe(state.echoState.memories[targetId]) });
+}
+
+function debugMarkUltimateEcho() {
+  if (!state) return;
+  ["hungry_blades", "blood_reflection"].forEach((id) => {
+    if (!state.echoState.memories[id] || state.echoState.memories[id].level < maxEchoLevel) {
+      applyEcho(id, maxEchoLevel);
+    }
+  });
+  state.echoState.ultimateGauge = Math.max(state.echoState.ultimateGauge || 0, 1);
+  updateWeaponEvolutions();
+  renderEchoes();
+  addFloater("궁극 잔향", state.player.x, state.player.y - 68, "#ff5d6c");
+  addLog("칼무리 잔향 + 혈반 잔향 궁극 표식을 세팅했다.");
+  logEvent("debug_ultimate_echo", { echoState: structuredCloneSafe(state.echoState) });
+}
+
 function showQuestionOverlay() {
   state.questions = { protect: null, predict: null, release: null };
   const probabilities = forgetProbabilities();
+  const highestEntries = highestLevelForgetEntries(probabilities);
   overlay.innerHTML = `
     <div class="panel question-panel fork-panel">
       <p class="eyebrow">망각 판정</p>
-      <h2>레테가 선명한 기억을 저울질한다.</h2>
-      <p class="panel-copy">가장 의존한 기억일수록 가져갈 확률이 높지만, 결과는 확률로 정해집니다. 무엇이 무기에 새겨질지 예측하세요.</p>
+      <h2>레테가 가장 높이 쌓은 기억을 바라본다.</h2>
+      <p class="panel-copy">다음 망각 후보는 최고 레벨 기억입니다. 동률이면 직접 가라앉힐 기억을 선택합니다.</p>
       <div class="question-block">
         <h3>레테가 가져갈 것 같은 기억은?</h3>
         <div id="predictChoices" class="pill-row"></div>
@@ -2600,17 +2740,51 @@ function showQuestionOverlay() {
     button.className = `choice fork-choice ${index === 0 ? "strong-fork" : "safe-fork"}`;
     button.type = "button";
     button.disabled = true;
+    const candidateLabel = entry.isHighestLevel ? "망각 후보" : "이번에는 안전";
     button.innerHTML = `
       <strong>${memory.name}</strong>
-      <span>망각 확률 ${entry.percent}% · 의존도 ${entry.deletionScore}</span>
-      <div class="fork-preview">${memory.echo}<br>망각되면 Lv. 잔향으로 무기에 새겨집니다.</div>
+      <span>${candidateLabel} · Lv.${entry.memoryLevel} · 의존도 ${entry.deletionScore}</span>
+      <div class="fork-preview">${memory.echo}<br>망각되면 같은 레벨만큼 잔향에 새겨집니다.</div>
     `;
     probabilityCards.appendChild(button);
   });
 
   submit.addEventListener("click", () => {
+    if (highestEntries.length > 1) {
+      showForgetTieOverlay(highestEntries, probabilities);
+      return;
+    }
     const forgotten = forgetWeightedMemory();
     showCycleResultOverlay(forgotten);
+  });
+}
+
+function showForgetTieOverlay(candidates, probabilities) {
+  overlay.innerHTML = `
+    <div class="panel question-panel fork-panel">
+      <p class="eyebrow">동률 망각</p>
+      <h2>같은 높이의 기억 중 하나를 내려놓는다.</h2>
+      <p class="panel-copy">모두 최고 레벨입니다. 지금 잃을 기억을 직접 선택하세요.</p>
+      <div id="tieForgetChoices" class="choice-list memory-list"></div>
+    </div>
+  `;
+  overlay.classList.add("show");
+  const container = overlay.querySelector("#tieForgetChoices");
+  candidates.forEach((entry) => {
+    const memory = memories[entry.memoryId];
+    const button = document.createElement("button");
+    button.className = "choice fork-choice strong-fork";
+    button.type = "button";
+    button.innerHTML = `
+      <strong>${memory.name} Lv.${entry.memoryLevel}</strong>
+      <span>${memory.role} · ${memory.desc}</span>
+      <div class="fork-preview">${memory.echo}<br>선택하면 Lv.${entry.memoryLevel} 잔향으로 남습니다.</div>
+    `;
+    button.addEventListener("click", () => {
+      const forgotten = forgetWeightedMemory({ memoryId: entry.memoryId, probabilities });
+      showCycleResultOverlay(forgotten);
+    });
+    container.appendChild(button);
   });
 }
 
@@ -2690,7 +2864,7 @@ function showRefillOverlay() {
     const button = document.createElement("button");
     button.className = "choice";
     button.type = "button";
-    button.innerHTML = memoryChoiceHtml(memory);
+    button.innerHTML = memoryChoiceHtml(memory, { resonance: resonanceForMemory(id) });
     button.addEventListener("click", () => applyMemoryRefill(id));
     container.appendChild(button);
   });
@@ -2703,11 +2877,19 @@ function showRefillOverlay() {
 
 function applyMemoryRefill(id) {
   if (activeMemoryIds().includes(id)) return;
-  const memory = createMemoryInstance(id);
+  const resonance = resonanceForMemory(id);
+  const memory = createMemoryInstance(id, {
+    level: resonance.startLevel,
+    resonant: resonance.bonusLevel > 0,
+  });
   memory.joinedAt = Number(state.elapsed.toFixed(2));
   state.memories.push(memory);
   if (!state.metrics[id]) state.metrics[id] = createMetricSeed([id])[id];
-  recordMemoryAcquisition("acquire", id, "refill", { cycleIndex: state.runTimeline.currentBossIndex, level: memory.level });
+  recordMemoryAcquisition("acquire", id, "refill", {
+    cycleIndex: state.runTimeline.currentBossIndex,
+    level: memory.level,
+    resonance,
+  });
   refreshActiveSynergies();
   markSlotsFilled("refill");
   const buildIdentity = buildIdentityFor(activeMemoryIds(), state);
@@ -2717,6 +2899,8 @@ function applyMemoryRefill(id) {
     t: Number(state.elapsed.toFixed(2)),
     memoryId: id,
     memoryName: memories[id].name,
+    level: memory.level,
+    resonance,
     activeAfter: activeMemoryIds(),
     buildIdentity,
   };
@@ -2733,8 +2917,9 @@ function applyMemoryRefill(id) {
   state.player.hp = Math.max(state.player.hp, state.player.maxHp * 0.95);
   state.player.shield = Math.max(state.player.shield || 0, 24);
   state.phase = "전투";
-  addLog(`${memories[id].name} 기억이 빈 슬롯을 채웠다.`);
-  addFloater("기억 보충", state.player.x, state.player.y - 34, "#6ddfd2");
+  addLog(`${memories[id].name} 기억이 빈 슬롯을 채웠다${resonance.bonusLevel ? `: 잔향 공명 Lv.${memory.level}` : "."}`);
+  addFloater(resonance.bonusLevel ? "공명 재획득" : "기억 보충", state.player.x, state.player.y - 34, resonance.bonusLevel ? "#e8c15d" : "#6ddfd2");
+  if (resonance.bonusLevel) logEvent("memory_resonance", { memoryId: id, memoryName: memories[id].name, resonance });
   logEvent("memory_refilled", choice);
   logEvent("build_identity_updated", { buildIdentity });
   updateUi();
@@ -2766,8 +2951,12 @@ function activeMemoryCount() {
   return activeMemoryIds().length;
 }
 
+function clampMemoryLevel(level) {
+  return clamp(Math.max(1, Number(level || 1)), 1, maxMemoryLevel);
+}
+
 function memoryLevel(memory) {
-  return Math.max(1, Number(memory?.level || 1));
+  return clampMemoryLevel(memory?.level || 1);
 }
 
 function memoryPower(memory) {
@@ -2789,6 +2978,21 @@ function refillCandidates() {
     .concat(recycled)
     .sort((a, b) => synergyFitScore(b, desiredTags) - synergyFitScore(a, desiredTags))
     .slice(0, 3);
+}
+
+function resonanceForMemory(memoryId) {
+  const echo = state?.echoState?.memories?.[memoryId];
+  const echoLevel = Math.min(maxEchoLevel, echo?.level || 0);
+  const bonusLevel = Math.floor(echoLevel / 2);
+  const baseLevel = 1;
+  return {
+    active: echoLevel > 0,
+    echoLevel,
+    baseLevel,
+    bonusLevel,
+    startLevel: clampMemoryLevel(baseLevel + bonusLevel),
+    echoConsumed: false,
+  };
 }
 
 function synergyFitScore(memoryId, desiredTags = []) {
@@ -2816,7 +3020,7 @@ function showResultOverlay() {
     <div class="result-card loss-card"><strong>사라진 행동</strong><br>${forgotten.name} 자동 발동이 멈춥니다.<br><small>${forgotten.desc}</small></div>
     <div class="result-card"><strong>예측 결과</strong><br>${predictionText}</div>
     <div class="result-card"><strong>망각 판정</strong><br>${forgetResultText()}</div>
-    <div class="result-card"><strong>망각 확률</strong><br>${deletionWeightText()}</div>
+    <div class="result-card"><strong>망각 후보</strong><br>${deletionWeightText()}</div>
     ${echoTransformationHtml(forgotten)}
     ${echoStateHtml(forgotten.id)}
     ${weaponEvolutionHtml(latestWeaponEvolution())}
@@ -2898,12 +3102,15 @@ function echoUnlockHtml(unlock) {
 function echoStateHtml(memoryId) {
   const echo = state.echoState.memories[memoryId];
   if (!echo) return "";
+  const awakened = echo.level >= maxEchoLevel ? " · +5 각성" : "";
+  const overcharge = echo.overcharge ? `<p>과부하 +${echo.overcharge} · 궁극 게이지 +${state.echoState.ultimateGauge || 0}</p>` : "";
   return `
     <div class="result-card echo-unlock-card">
       <strong>무기 잔향</strong>
-      <p>${echo.memoryName} Lv.${echo.level} · ${echo.tags.map(tagLabel).join("/")}</p>
+      <p>${echo.memoryName} Lv.${echo.level}/${maxEchoLevel}${awakened} · ${echo.tags.map(tagLabel).join("/")}</p>
       <p>${echoCombatSummary(memoryId)}</p>
-      <small>같은 기억이 다시 망각되면 잔향 레벨이 누적됩니다.</small>
+      ${overcharge}
+      <small>같은 기억이 다시 망각되면 잔향은 +5까지 누적되고, 초과분은 즉시 과부하 폭발이 됩니다.</small>
     </div>
   `;
 }
@@ -3008,7 +3215,7 @@ function forgetResultText() {
     : result.matched
       ? "예측 성공"
       : `예측 실패(${result.predictedMemoryName})`;
-  return `${result.chosenMemoryName} 망각 · ${prediction} · roll ${result.roll}`;
+  return `${result.chosenMemoryName} 망각 · ${prediction} · 최고 레벨 규칙`;
 }
 
 function predictionAccuracyLog() {
@@ -3025,10 +3232,12 @@ function predictionAccuracyLog() {
 }
 
 function deletionWeightText() {
-  return state.memories
+  const active = activeMemories();
+  const highest = Math.max(1, ...active.map(memoryLevel));
+  return active
     .slice()
-    .sort((a, b) => state.metrics[b.id].deletionScore - state.metrics[a.id].deletionScore)
-    .map((memory) => `${memory.name} ${Math.round((state.metrics[memory.id].deletionWeight || 0) * 100)}%`)
+    .sort((a, b) => memoryLevel(b) - memoryLevel(a) || state.metrics[b.id].deletionScore - state.metrics[a.id].deletionScore)
+    .map((memory) => `${memory.name} Lv.${memoryLevel(memory)}${memoryLevel(memory) === highest ? " 후보" : ""}`)
     .join(" / ");
 }
 
@@ -3137,6 +3346,7 @@ function runGrowthLog() {
     earlyKills: growth.earlyKills,
     maxEnemies: growth.maxEnemies,
     levelUpsBeforeBoss: growth.levelUpsBeforeBoss,
+    lastMemoryUpgrade: growth.lastMemoryUpgrade,
   };
 }
 
@@ -3342,11 +3552,13 @@ function renderMemorySlots() {
   const probabilityById = state && omenActive
     ? Object.fromEntries(forgetProbabilities().map((entry) => [entry.memoryId, entry.percent]))
     : {};
+  const highestLevel = Math.max(1, ...source.map(memoryLevel));
   source.forEach((memory, index) => {
     const maxCd = memory.cooldown || 1;
     const cdPercent = memory.id === "blood_reflection" ? 100 : (1 - (memory.cooldownLeft || 0) / maxCd) * 100;
     const clarityPercent = omenActive && state ? probabilityById[memory.id] || 0 : (memory.clarity || 0) * 100;
-    const watched = state && clarityPercent > 35 && (memory.clarity || 0) >= maxClarity - 0.01;
+    const nextForgetCandidate = state && memoryLevel(memory) === highestLevel;
+    const watched = nextForgetCandidate || (state && clarityPercent > 35 && (memory.clarity || 0) >= maxClarity - 0.01);
     const focused = state && activeTacticalFocus(memory.id);
     const tacticalStatus = state ? tacticalFocusStatus(memory) : "";
     const slot = document.createElement("div");
@@ -3358,11 +3570,11 @@ function renderMemorySlots() {
     slot.innerHTML = `
       <div class="slot-header"><strong>${memory.name}</strong><small>Lv.${memoryLevel(memory)} · ${memory.role}</small></div>
       <div class="tag-row">${tagBadges(memory.tags)}</div>
-      ${watched ? `<div class="risk-tag">레테의 시선</div>` : ""}
+      ${nextForgetCandidate ? `<div class="risk-tag">다음 망각 후보</div>` : watched ? `<div class="risk-tag">레테의 시선</div>` : ""}
       <div class="cooldown-track"><div class="cooldown-fill" style="width:${clamp(cdPercent, 0, 100)}%"></div></div>
       <small>${memory.forgotten ? "망각됨" : memory.desc}</small>
       ${state ? `<div class="tactical-row"><span>전술 집중</span><span>${tacticalStatus}</span></div>` : ""}
-      <div class="clarity-row"><span>${omenActive ? "망각 확률" : "의존도"}</span><span>${Math.round(clarityPercent)}%</span></div>
+      <div class="clarity-row"><span>${omenActive ? "후보 비중" : "의존도"}</span><span>${Math.round(clarityPercent)}%</span></div>
       <div class="clarity-track ${omenActive ? "omen-track" : ""}"><div class="clarity-fill" style="width:${clarityPercent}%"></div></div>
     `;
     if (state) {
@@ -3394,14 +3606,21 @@ function renderEchoes() {
   }
   const identity = buildIdentityFor(activeMemoryIds(), state);
   const lines = [];
+  const candidates = highestLevelForgetEntries(forgetProbabilities());
+  if (candidates.length) {
+    lines.push(`<strong>다음 망각 후보</strong><br>${candidates.map((entry) => `${entry.memoryName} Lv.${entry.memoryLevel}`).join(" / ")}`);
+  }
   if (state.activeSynergies?.length) {
     state.activeSynergies.forEach((rule) => lines.push(`<strong>시너지: ${rule.name}</strong><br>${rule.desc}`));
   }
   if (state.tagEchoes?.length) {
     state.tagEchoes.forEach((echo) => {
-      lines.push(`<strong>무기 잔향: ${echo.memoryName} Lv.${echo.level}</strong><br>${echoCombatSummary(echo.memoryId)}`);
+      const awakened = echo.level >= maxEchoLevel ? " · +5 각성" : "";
+      const overcharge = echo.overcharge ? ` · 과부하 +${echo.overcharge}` : "";
+      lines.push(`<strong>무기 잔향: ${echo.memoryName} Lv.${echo.level}/${maxEchoLevel}${awakened}${overcharge}</strong><br>${echoCombatSummary(echo.memoryId)}`);
     });
   }
+  if (state.echoState.ultimateGauge) lines.push(`궁극 잔향 게이지 +${state.echoState.ultimateGauge}`);
   if (state.weaponEvolution?.length) {
     state.weaponEvolution.forEach((evolution) => lines.push(`무기 진화: ${evolution.name}`));
   }

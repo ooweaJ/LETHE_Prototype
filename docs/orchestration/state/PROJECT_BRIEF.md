@@ -6,11 +6,11 @@ LETHE is an HTML prototype for testing whether a memory-loss roguelike loop is f
 
 ## Current Goal
 
-Use the HTML prototype evidence to define the Unity vertical-slice system contract. The current focus is not content expansion; it is freezing the memory, echo, resonance, awakened echo, and ultimate echo rules that should carry the Unity version.
+Use the HTML prototype to verify the new forgetting, echo, and reacquisition resonance loop before Unity setup. The current focus is not content expansion; it is a narrow HTML feel gate for the core emotional loop.
 
 ## Current Phase
 
-Unity-transition planning after v0.12 balance-loop validation.
+HTML `ITERATE_BEFORE_TEST` after v0.12 balance-loop validation and before Unity setup.
 
 ## Tech Stack
 

@@ -21,8 +21,8 @@ Until the user or planning review explicitly changes scope, do not add:
 
 ## Current Prototype Gate
 
-The current gate is human evidence for the v0.12 HTML prototype. The forgetting loop should feel regrettable rather than irritating, but only after early combat/growth is fun enough for players to reach it.
+The current gate is jaewoo solo human evidence for the v0.12 HTML prototype with the new forgetting model. The forgetting loop should feel regrettable rather than irritating, and the player should understand that the highest-level memory is the next forgetting candidate.
 
 ## Current Tuning Rule
 
-Do not continue blind numeric tuning before human session evidence unless the user explicitly changes scope.
+Do not continue blind numeric tuning before regression evidence and human session evidence unless the user explicitly changes scope. If regression fails, choose exactly one small lever.
