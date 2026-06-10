@@ -19,6 +19,7 @@ The design must answer:
 ## Done Criteria
 
 - `LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md` defines the image batches, MCP sequence, `_dev` folder structure, and slice tests.
+- The plan fixes the slice visual concept, imagegen prompt pack, and image-to-prefab-to-class matrix.
 - Existing Unity design docs reference the new plan in the right reading order.
 - `STATUS`, `NEXT_TASKS`, and `PROMPT_CONTEXT` point to imagegen + MCP slice assembly as the next step.
 - Report/devlog/state docs record the planning change.

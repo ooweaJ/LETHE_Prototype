@@ -99,6 +99,27 @@ Assets/_dev/
 
 ## 4. 이미지 제작 단위
 
+## 4-A. 고정할 이미지 콘셉트
+
+첫 slice의 아트 방향은 완성 일러스트가 아니라 **작게 봐도 읽히는 전투 기호**다.
+
+| 요소 | 콘셉트 | 팔레트 | 실패 조건 |
+| --- | --- | --- | --- |
+| 플레이어 | 어두운 망토형 실루엣, 쌍검 anchor가 보이는 작은 밝은 포인트 | 남색/검정 + 흰 포인트 | 캐릭터 디테일이 잔향보다 눈에 띔 |
+| 적 | 탁한 회색/보라 실루엣, 혈반이 붙을 공간이 큰 몸통 | 회색/보라 + 낮은 채도 | 붉은 혈반이 묻혀 안 보임 |
+| 맵 | 어두운 돌/흙 바닥, 반복 가능한 단순 타일 | 짙은 청회색/검정 | 바닥 무늬가 칼선/혈반보다 강함 |
+| 쌍검 | 작고 날카로운 금속 실루엣, 좌/우 방향 명확 | 은백색 + 어두운 손잡이 | 장식이 많아 축소 시 뭉침 |
+| 칼무리 | 흰 금속 칼날과 차가운 푸른 잔상 | 은백색/청백 | 기본 베기와 구분 안 됨 |
+| 혈반 | 적 몸에 붙는 붉은 표식, 회복 실은 얇은 선 | 짙은 적색/선홍 | 피 이펙트가 배경 장식처럼 보임 |
+| 피의 칼폭풍 | 흰 칼날 고리 + 붉은 실이 동시에 도는 궁극 | 은백색 + 선홍 + 어두운 중심 | 화면을 가려 전투 판독을 망침 |
+
+이미지 제작 원칙:
+
+- `잔향 VFX > 무기 > 적 > 캐릭터 > 맵` 순서로 시선을 설계한다.
+- 모든 런타임 파츠는 `파일 1개 = 역할 1개`로 만든다.
+- 캐릭터/적/맵은 처음부터 예쁘게 만들지 않는다. 잔향을 검증하는 무대 역할이면 충분하다.
+- 각 이미지는 Unity에서 100 PPU 기준으로 붙였을 때 형태가 읽혀야 한다.
+
 ### Batch A: 화면 판독용 기본 세트
 
 목표: 칼선/혈반이 잘 보이는 화면 환경을 먼저 만든다.
@@ -251,6 +272,73 @@ no shadows on the background, no gradient, generous padding.
 | 칼선/VFX | 1024x1024 | 100 |
 | 타일 | 512x512 | 100 |
 | 궁극 링 | 1024x1024 | 100 |
+
+## 5-A. Imagegen 프롬프트 팩
+
+공통 prefix:
+
+```text
+Use case: stylized-concept
+Asset type: Unity 2D top-down roguelite runtime sprite
+Style/medium: dark fantasy 2D game sprite, high-contrast readable silhouette, painterly but simplified for small scale
+Composition/framing: single isolated asset centered, generous padding, orthographic top-down or slightly angled top-down, no UI frame
+Background: perfectly flat solid #00ff00 chroma-key background for background removal
+Constraints: no text, no watermark, no cast shadow, no background texture, do not use #00ff00 in the subject
+```
+
+Phase 2 기본 판독 이미지:
+
+| 파일 | Primary request |
+| --- | --- |
+| `spr_player_echo_silhouette_01.png` | A small dark fantasy player silhouette for a top-down roguelite, hooded body shape, subtle pale chest mark, clear left/right weapon anchor space, quiet and lower contrast than VFX |
+| `spr_enemy_walker_01.png` | A simple hunched test walker enemy silhouette, grey-purple body, broad torso area where a red blood mark can be clearly visible |
+| `tile_dev_floor_dark_01.png` | A seamless dark stone floor tile for VFX readability, low contrast cracks, blue-grey charcoal palette, no bright red or white marks |
+| `spr_weapon_dual_blade_left_01.png` | A left-hand short curved dual blade sprite, silver edge, dark handle, readable direction, minimal ornament |
+| `spr_weapon_dual_blade_right_01.png` | A right-hand mirrored short curved dual blade sprite, silver edge, dark handle, readable direction, minimal ornament |
+
+Phase 3 잔향 핵심 이미지:
+
+| 파일 | Primary request |
+| --- | --- |
+| `spr_kalmuri_echo_slash_01.png` | A crescent delayed slash VFX sprite, bright white-blue blade trail, thin sharp leading edge, fading dark-blue afterimage, reads as a weapon echo not a normal swing |
+| `spr_kalmuri_orbit_blade_01.png` | A small floating orbit blade for a memory ring, silver dagger shard with blue-white glow, readable as an independent blade |
+| `spr_kalmuri_launch_blade_01.png` | A fast projectile blade shard, silver-white front, dark trailing echo, compact and readable at small size |
+| `spr_blood_mark_01.png` | A red blood sigil mark that can attach to an enemy torso, simple circular broken pattern, readable on grey enemies |
+| `spr_heal_thread_tip_01.png` | A tiny red glowing thread tip for a healing line renderer, bright center, soft red edge, not a full projectile |
+
+Phase 4 궁극 이미지:
+
+| 파일 | Primary request |
+| --- | --- |
+| `spr_blood_blade_storm_ring_01.png` | A thin circular storm ring VFX, mixed white blade arcs and red blood-thread traces, readable but not opaque |
+| `spr_blood_blade_storm_blade_01.png` | A rotating storm blade sprite, silver blade with red trailing streak, stronger than normal Kalmuri blade |
+| `spr_blood_bloom_01.png` | A short blood flower burst VFX, radial red petals/splashes from an enemy body, clear center, not realistic gore |
+
+검수 기준:
+
+- chroma-key 제거 후 네 모서리가 투명해야 한다.
+- 축소 미리보기에서 subject가 하나의 덩어리로 뭉치면 재생성한다.
+- 플레이어/적/맵이 잔향 VFX보다 밝으면 채도를 낮춘다.
+
+## 5-B. 프리팹 / 클래스 연결 매트릭스
+
+| 이미지/에셋 | Prefab | 주 클래스 | 보조 클래스/컴포넌트 | 테스트 역할 |
+| --- | --- | --- | --- | --- |
+| `spr_player_echo_silhouette_01.png` | `Assets/_dev/Prefabs/Player/Player_EchoShowcase.prefab` | `PlayerController` | `Health`, `MemoryInventory`, `EchoInventory`, `WeaponSlot` | anchor와 빌드 상태의 중심 |
+| `spr_enemy_walker_01.png` | `Assets/_dev/Prefabs/Enemies/Enemy_TestWalker.prefab` | `TestEnemyController` | `Health`, `HitReceiver`, `SpriteFlashReceiver` | 혈반/칼선 피격 대상 |
+| `tile_dev_floor_dark_01.png` | `Assets/_dev/Prefabs/Map/Dev_TestArena.prefab` | `DevArenaBounds` | `SpawnArea`, `CameraBounds` | VFX 가독성 배경 |
+| `spr_weapon_dual_blade_left/right_01.png` | `Assets/_dev/Prefabs/Weapons/Weapon_DualBlades_Runtime.prefab` | `DualBladesController` | `WeaponHitEmitter`, `SfxLayerSource` | 기본 온힛 발생원 |
+| `spr_dual_blade_swing_arc_01.png` | `Assets/_dev/Prefabs/Weapons/Hitbox_DualBladeArc_L.prefab` | `WeaponHitbox` | `HitResolver` | 기본 공격과 잔향 구분 기준 |
+| `spr_kalmuri_orbit_blade_01.png` | `Assets/_dev/Prefabs/Echoes/Kalmuri/Memory_HungryBlades_Ring.prefab` | `HungryBladesMemoryRuntime` | `OrbitShardController`, `PooledVfxHandle` | 활성 기억 형태 |
+| `spr_kalmuri_echo_slash_01.png` | `Assets/_dev/Prefabs/Echoes/Kalmuri/Echo_Kalmuri_DelayedSlash.prefab` | `KalmuriEchoRuntime` | `EchoHitEmitter`, `PooledVfxHandle` | 잔향 +1~+3 |
+| `spr_kalmuri_launch_blade_01.png` | `Assets/_dev/Prefabs/Echoes/Kalmuri/Echo_Kalmuri_LaunchBlade.prefab` | `KalmuriEchoRuntime` | `PooledProjectile`, `EchoProcLimiter` | 잔향 +5 온힛 발사 |
+| `spr_blood_mark_01.png` | `Assets/_dev/Prefabs/Echoes/Blood/Echo_Blood_Mark.prefab` | `BloodEchoRuntime` | `EnemyAttachVfx`, `PooledVfxHandle` | 혈반 부착 판독 |
+| `spr_heal_thread_tip_01.png` | `Assets/_dev/Prefabs/Echoes/Blood/Echo_Blood_HealThread.prefab` | `HealThreadVfx` | `LineRenderer`, `PooledVfxHandle` | 회복 피드백 |
+| `spr_blood_bloom_01.png` | `Assets/_dev/Prefabs/Echoes/Blood/Echo_Blood_Bloom.prefab` | `BloodBloomVfx` | `ParticleSystem`, `EchoHitEmitter` | 혈반 +5 |
+| `spr_blood_blade_storm_ring/blade_01.png` | `Assets/_dev/Prefabs/Ultimates/Ultimate_BloodBladeStorm.prefab` | `BloodBladeStormRuntime` | `OrbitShardController`, `EchoProcLimiter`, `HealThreadVfx` | 궁극 루프 |
+| debug UI sprites/text | `Assets/_dev/Prefabs/Debug/UI_DebugEchoPanel.prefab` | `DebugEchoPanel` | `RunBuildState`, `UltimateEchoService` | 상태 즉시 전환 |
+
+이 매트릭스가 MCP 작업의 기준이다. 프리팹을 만들 때는 먼저 SpriteRenderer만 붙인 placeholder라도 위 경로와 주 클래스를 유지한다.
 
 ## 6. MCP 구현 순서
 

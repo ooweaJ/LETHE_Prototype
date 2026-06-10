@@ -543,8 +543,12 @@
 <li><code>docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md</code>를 추가했다.</li>
 <li>첫 slice를 <code>Assets/_dev</code>에서 실험하고, 검증된 구조만 <code>Assets/Lethe</code>로 승격하는 원칙을 정했다.</li>
 <li>이미지 제작 대상을 Batch A~E로 나눴다: 기본 판독, 쌍검, 칼무리, 혈반, 피의 칼폭풍.</li>
+<li>첫 slice 이미지 콘셉트를 고정했다: 어두운 판독용 캐릭터/맵/적 위에 흰 칼날, 청백 잔상, 붉은 혈반/피실이 우선 보이도록 한다.</li>
+<li>asset별 imagegen 프롬프트 팩을 추가했다.</li>
+<li>이미지가 어느 프리팹과 주 클래스에 연결되는지 매트릭스로 정리했다.</li>
 <li>먼저 만들 이미지 5개를 확정했다: player silhouette, walker enemy, dark floor tile, left/right dual blades.</li>
 <li>다음 잔향 VFX 5개를 확정했다: 칼무리 반달 칼선, 고리 칼날, 발사 칼날, 혈반 표식, 회복 실 끝점.</li>
+<li>이미지 콘셉트 고정표, imagegen 프롬프트 팩, 프리팹/클래스 연결 매트릭스를 추가했다.</li>
 <li>MCP 구현 순서를 <code>_dev</code> 폴더 생성, PNG import, asset 인식 확인, import setting, <code>Dev_EchoSlice.unity</code>, debug panel 순서로 정리했다.</li>
 <li>design README, visual plan, asset binding plan, orchestration state, dashboard, command page를 새 플랜 기준으로 갱신했다.</li>
 </ul>
@@ -564,10 +568,10 @@
 <li>현재 계획은 문서이며, 실제 Unity prefab 조립은 다음 MCP 작업에서 검증해야 한다.</li>
 </ul>
 <h2>6. GPT/Claude 인계 요약</h2>
-<p>다음 작업은 <code>LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md</code>를 기준으로 시작한다. Codex imagegen으로 기본 판독 이미지 5개를 만들고, AnkleBreaker MCP로 <code>Assets/_dev/Art/Sprites</code>에 import한 뒤 Unity asset list로 인식 여부를 확인한다. gameplay code는 아직 만들지 않는다.</p>
+<p>다음 작업은 <code>LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md</code>를 기준으로 시작한다. Codex imagegen으로 문서의 프롬프트 팩을 사용해 기본 판독 이미지 5개를 만들고, AnkleBreaker MCP로 <code>Assets/_dev/Art/Sprites</code>에 import한 뒤 Unity asset list로 인식 여부를 확인한다. gameplay code는 아직 만들지 않는다.</p>
 <h2>7. 다음 Codex 작업</h2>
 <ul>
-<li>imagegen으로 기본 판독 이미지 5개를 만든다.</li>
+<li>문서의 <code>Imagegen 프롬프트 팩</code>으로 기본 판독 이미지 5개를 만든다.</li>
 <li>생성 결과를 chroma-key 제거/alpha PNG로 정리한다.</li>
 <li>MCP로 <code>Assets/_dev/Art/Sprites</code> 하위에 import하고 인식 확인한다.</li>
 <li>다음 잔향 VFX 5개 제작으로 넘어간다.</li>
