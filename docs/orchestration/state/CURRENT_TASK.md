@@ -2,27 +2,27 @@
 
 ## Goal
 
-Plan the first Unity echo slice as an image-first, MCP-driven production loop.
+Register Unity game development as the active agent workflow.
 
 ## Why Now
 
-The Unity skeleton and `_dev` folder now exist, and AnkleBreaker MCP can see `Assets/_dev`. Before creating prefabs or gameplay code, the project needs a concrete slice plan that says which images Codex imagegen will make, where Unity MCP will import them, and which tests prove the echo fantasy works.
+The Unity skeleton and `_dev` folder now exist, AnkleBreaker MCP can see `Assets/_dev`, and the first slice production plan exists. The root agent rules still referenced the old HTML prototype workflow, so the top-level rules need to point future Codex sessions toward Unity game development while preserving report/devlog/git requirements. Image generation is only the first resource step, not the overall workflow.
 
 The design must answer:
 
-- Which player/map/enemy/weapon/echo/ultimate images are required first?
-- Which images are placeholders and which are slice-critical?
-- How does each image connect to `_dev` prefabs and scene tests?
-- What order should imagegen, MCP import, prefab assembly, and review follow?
-- What makes the first slice a GO, ITERATE, or NO-GO?
+- What does Codex do next after the planning phase?
+- Which Unity game-development workflow should be treated as mandatory?
+- Which HTML rules are now legacy?
+- Which report and orchestration rules must remain active?
 
 ## Done Criteria
 
-- `LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md` defines the image batches, MCP sequence, `_dev` folder structure, and slice tests.
-- The plan fixes the slice visual concept, imagegen prompt pack, and image-to-prefab-to-class matrix.
-- Existing Unity design docs reference the new plan in the right reading order.
-- `STATUS`, `NEXT_TASKS`, and `PROMPT_CONTEXT` point to imagegen + MCP slice assembly as the next step.
-- Report/devlog/state docs record the planning change.
+- `AGENTS.md` makes Unity `_dev` game slice development the default agent workflow.
+- `AGENTS.md` treats imagegen as a resource pipeline inside Unity development, not the whole goal.
+- HTML autopilot/balance-loop work is marked legacy unless explicitly requested.
+- Report/devlog/orchestration/git rules remain active.
+- `PROMPT_CONTEXT`, decision log, devlog, and report record the rule transition.
+- `NEXT_TASKS` remains the concrete list of upcoming Unity slice tasks.
 
 ## Related Files
 
@@ -37,6 +37,7 @@ The design must answer:
 - `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`
 - `docs/design/LETHE_COMBAT_DESIGN.md`
 - `docs/design/LETHE_CONTENT_TABLES.md`
+- `AGENTS.md`
 - `docs/orchestration/state/NEXT_TASKS.md`
 - `docs/orchestration/reports/20260610/index.md`
 
@@ -49,8 +50,7 @@ npm run report:check
 
 ## Open Questions
 
-- Should imagegen create the basic readability set first, or should MCP create a placeholder-only scene before any generated art?
-- Should the first generated art be separate transparent sprites immediately, or larger contact sheets that we split later?
+- None for the rule transition. Next execution starts with basic slice image generation and `_dev` MCP folder setup.
 
 ## Do Not Touch
 

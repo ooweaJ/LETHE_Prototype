@@ -68,14 +68,14 @@
           <p class="eyebrow">LETHE 프로젝트 대시보드</p>
           <h1>상태 요약</h1>
         </div>
-        <span class="badge">Unity image slice</span>
+        <span class="badge">Unity game slice</span>
       </header>
 
       <section class="metrics" aria-label="핵심 상태 요약">
         <div class="metric green">
           <span>현재 단계</span>
-          <strong>Image-first Slice</strong>
-          <small>_dev 기준 제작 플랜</small>
+          <strong>Unity _dev Slice</strong>
+          <small>게임개발 규약 전환</small>
         </div>
         <div class="metric blue">
           <span>자동 검증</span>
@@ -84,13 +84,13 @@
         </div>
         <div class="metric amber">
           <span>막힌 점</span>
-          <strong>asset production</strong>
-          <small>이미지 5개부터 생성</small>
+          <strong>dev slice setup</strong>
+          <small>폴더/리소스/런타임 순서</small>
         </div>
         <div class="metric red">
           <span>다음 게이트</span>
-          <strong>imagegen + MCP</strong>
-          <small>Assets/_dev import</small>
+          <strong>MCP + resources</strong>
+          <small>이후 C# 기반 구현</small>
         </div>
       </section>
 
@@ -99,8 +99,8 @@
         <p>
           Unity 2D 프로젝트 skeleton과 <code>Assets/_dev</code> 작업 루트가 준비됐고,
           AnkleBreaker Unity MCP bridge는 <code>7890</code>에서 <code>_dev</code> 폴더를 읽는 것까지 확인됐습니다.
-          다음 작업은 <code>LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md</code>를 기준으로
-          기본 판독 이미지 5개를 imagegen으로 만들고 Unity MCP로 <code>Assets/_dev/Art/Sprites</code>에 import하는 것입니다.
+          다음 작업은 Unity 게임개발 규약에 따라 <code>_dev</code> 하위 구조를 만들고,
+          기본 리소스를 생성/import한 뒤 C# 런타임 기반과 <code>Dev_EchoSlice.unity</code> 조립으로 이어지는 것입니다.
         </p>
       </section>
 
@@ -110,15 +110,15 @@
           <div class="decision">
             <div>
               <span class="label">해야 할 일</span>
-              <span class="value">Unity 첫 slice 이미지 제작과 MCP import</span>
+              <span class="value">Unity 첫 _dev 게임 slice 세팅</span>
             </div>
             <div>
               <span class="label">필요한 입력</span>
-              <span class="value">player, enemy, dark floor, dual blades PNG</span>
+              <span class="value">_dev 폴더, 기본 리소스, 런타임 기반</span>
             </div>
             <div>
               <span class="label">완료 신호</span>
-              <span class="value"><code>Assets/_dev</code>에서 image asset 인식</span>
+              <span class="value"><code>Assets/_dev</code>에서 리소스/프리팹/씬 작업 가능</span>
             </div>
           </div>
         </article>
@@ -126,9 +126,10 @@
         <article class="panel">
           <h2>다음 판단</h2>
           <ul>
-            <li>기본 판독 이미지 5개가 작은 화면에서 읽히는가?</li>
-            <li>칼무리/혈반 VFX를 바로 이어서 만들까?</li>
-            <li><code>Dev_EchoSlice.unity</code>를 placeholder로 먼저 조립할까?</li>
+            <li><code>_dev</code> 개발 구조가 MCP에서 읽히는가?</li>
+            <li>기본 리소스가 게임 화면 판독에 충분한가?</li>
+            <li>C# 런타임 기반을 어떤 최소 단위로 만들까?</li>
+            <li><code>Dev_EchoSlice.unity</code>를 어떤 prefab 단위로 조립할까?</li>
             <li><code>Assets/Lethe</code> 승격은 언제 할까?</li>
           </ul>
         </article>

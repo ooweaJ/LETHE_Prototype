@@ -74,7 +74,7 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Current Blocker
 
-The current blocker has moved from setup choice to first-slice production order. The Unity 2D project skeleton now exists under `LETHE/`, AnkleBreaker Unity MCP is registered as `anklebreaker-unity`, and the Unity editor bridge is reachable on port `7890`. `Assets/_dev` is committed and was confirmed through `unity_asset_list`, so the next work should create `_dev` subfolders, generate the first player/map/enemy/weapon images, then import and assemble a debug slice.
+The current blocker has moved from setup choice to first-slice Unity development order. The Unity 2D project skeleton now exists under `LETHE/`, AnkleBreaker Unity MCP is registered as `anklebreaker-unity`, and the Unity editor bridge is reachable on port `7890`. `Assets/_dev` is committed and was confirmed through `unity_asset_list`, so the next work should create `_dev` subfolders, produce the first resources, build runtime foundations, and assemble a debug combat slice.
 
 Discord actual send for the latest orchestration structure cleanup succeeded after explicit user request. Historical approval blocks remain recorded in the relevant devlog/report entries.
 
@@ -82,7 +82,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Begin the first imagegen + MCP slice from `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md`: create `_dev` subfolders, generate the basic readability images, import them with AnkleBreaker MCP, and assemble `Dev_EchoSlice.unity` before moving into runtime combat code.
+Begin the first Unity `_dev` game slice from `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md` and `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`: create `_dev` subfolders, produce/import the basic resources, add runtime foundations, then assemble `Dev_EchoSlice.unity` with a basic combat/debug loop.
 
 For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` before real sends, then `npm run report:orchestrator:unit` when the Project Orchestrator is running and the report is ready.
 

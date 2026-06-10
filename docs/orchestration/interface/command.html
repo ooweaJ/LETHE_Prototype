@@ -59,8 +59,8 @@
       <div class="grid">
         <article>
           <h2>Codex에게 지금 시킬 일</h2>
-          <p>Unity 첫 slice를 imagegen + MCP 루프로 시작합니다.</p>
-          <textarea id="prompt-next" readonly>docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md를 읽고 Unity 첫 slice를 시작해줘. 먼저 Codex imagegen으로 기본 판독 이미지 5개(player silhouette, walker enemy, dark floor tile, left/right dual blades)를 만들고, AnkleBreaker Unity MCP(port 7890)로 Assets/_dev/Art/Sprites 하위에 import해줘. 그 다음 unity_asset_list로 인식 확인하고, 아직 gameplay code는 만들지 말고 Dev_EchoSlice용 폴더/프리팹 계획까지만 정리해줘.</textarea>
+          <p>Unity 첫 게임 slice를 _dev 기준으로 시작합니다.</p>
+          <textarea id="prompt-next" readonly>AGENTS.md와 docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md, docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md를 읽고 Unity 첫 _dev 게임 slice를 시작해줘. 먼저 AnkleBreaker Unity MCP(port 7890)로 Assets/_dev 인식을 확인하고 _dev/Art, Prefabs, Scripts, Data, Scenes 하위 구조를 만들어줘. 그 다음 기본 판독 리소스 5개(player silhouette, walker enemy, dark floor tile, left/right dual blades)를 imagegen으로 만들고 Assets/_dev/Art/Sprites에 import해줘. 이미지 생성은 리소스 단계일 뿐이고, 다음 단계에서 C# 런타임 기반과 Dev_EchoSlice 조립으로 이어질 수 있게 파일/프리팹/클래스 연결을 유지해줘.</textarea>
           <button type="button" data-copy-target="prompt-next">프롬프트 복사</button>
         </article>
 
@@ -77,10 +77,10 @@
         <article>
           <h2>완료 기준</h2>
           <ul>
-            <li>기본 이미지 5개 생성</li>
-            <li><code>Assets/_dev/Art/Sprites</code> import</li>
+            <li><code>Assets/_dev</code> 하위 개발 폴더 생성</li>
+            <li>기본 리소스 5개 생성 및 import</li>
             <li>AnkleBreaker MCP로 asset 인식 확인</li>
-            <li>다음 잔향 VFX 5개 생성 대상 확정</li>
+            <li>C# 런타임 기반/프리팹 조립 다음 단계가 막히지 않게 연결 유지</li>
             <li>상태, devlog, reports 갱신</li>
           </ul>
         </article>

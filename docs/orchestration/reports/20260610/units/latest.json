@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260610\\index.md",
-  "generatedAt": "2026-06-10T07:26:59.617Z",
-  "unitCount": 8,
+  "generatedAt": "2026-06-10T07:42:34.489Z",
+  "unitCount": 9,
   "latest": {
-    "title": "2026-06-10-08 - Unity slice 이미지 제작 플랜",
-    "number": "08",
-    "markdownPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-08-unity-slice-이미지-제작-플랜.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-08-unity-slice-이미지-제작-플랜.html"
+    "title": "2026-06-10-09 - Unity 게임개발 규약 전환",
+    "number": "09",
+    "markdownPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-09-unity-게임개발-규약-전환.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-09-unity-게임개발-규약-전환.html"
   }
 }

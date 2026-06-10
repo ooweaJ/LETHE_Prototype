@@ -204,6 +204,13 @@
           <p>코드와 Unity gameplay는 변경하지 않았다. Unity skeleton과 Assets/_dev 작업 루트가 준비된 상태에서, 첫 Unity slice를 imagegen + MCP 루프로 만들기 위한 제작 계획을 구체화했다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-10-09</span>
+          <h2><a href="#unit-2026-06-10-09" data-unit-link="unit-2026-06-10-09">Unity 게임개발 규약 전환</a></h2>
+          <p>Unity 2D skeleton과 Assets/_dev 작업 루트는 준비되어 있다. 이번 작업은 코드 구현이 아니라, 앞으로 Codex가 따를 top-level 작업 규약을 HTML 프로토타입 중심에서 Unity 게임개발 중심으로 바꾸는 문서 정리다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -582,6 +589,51 @@
 <li>방향: 전체 게임이 아니라 잔향 체감 slice를 이미지 단위, 프리팹 단위, 테스트 단위로 쪼갠다.</li>
 <li>행동: imagegen 제작 목록과 MCP 조립 순서를 하나의 플랜으로 고정했다.</li>
 <li>결과: 다음 작업은 &quot;이미지 생성 -&gt; Unity import -&gt; debug slice&quot;로 바로 이어질 수 있다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-10-09" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-10-09 - Unity 게임개발 규약 전환</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>Unity 2D skeleton과 <code>Assets/_dev</code> 작업 루트는 준비되어 있다. 이번 작업은 코드 구현이 아니라, 앞으로 Codex가 따를 top-level 작업 규약을 HTML 프로토타입 중심에서 Unity 게임개발 중심으로 바꾸는 문서 정리다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>AGENTS.md</code>의 기본 역할을 Unity 2D 게임개발, 리소스 제작, AnkleBreaker MCP 작업, C# 구현, 프리팹/씬 조립, 검증, 기록 갱신으로 바꿨다.</li>
+<li>imagegen은 전체 목표가 아니라 Unity 게임개발 안의 리소스 파이프라인 단계로 명시했다.</li>
+<li><code>Unity Game Development Workflow</code>를 추가했다: 문서 확인, MCP 확인, <code>_dev</code> 구조, 리소스, 런타임 기반, 기본 전투, 기억/망각/잔향, 프리팹/씬, 디버그 루프, 리뷰, 승격 판단.</li>
+<li>HTML 프로토타입 작업은 사용자가 명시적으로 요청할 때만 돌아가는 legacy 경로로 내렸다.</li>
+<li>보고서, devlog, orchestration, git 규약은 유지했다.</li>
+<li><code>NEXT_TASKS</code>를 Unity 게임개발 순서로 재정렬했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<p>이번 작업은 규약/문서 변경이다. 검증은 보고서 생성과 보고서 구조 검증으로 진행한다.</p>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>앞으로 기본 경로는 Unity <code>_dev</code> 게임 slice 개발이다.</li>
+<li>이미지 생성은 첫 실무 단계지만, 그 자체가 목표는 아니다.</li>
+<li>첫 개발 흐름은 <code>_dev</code> 폴더 세팅 -&gt; 기본 리소스 -&gt; 런타임 기반 -&gt; 기본 전투 씬 -&gt; 잔향 디버그 루프다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>규약이 너무 구현 중심으로만 흐르면 리소스와 체감 검증이 뒤로 밀릴 수 있다.</li>
+<li>반대로 리소스만 만들고 C# 런타임/프리팹 조립이 늦어지면 slice 검증이 지연된다.</li>
+<li><code>_dev</code>와 <code>Assets/Lethe</code> 승격 기준을 지키지 않으면 실험 코드와 확정 구조가 섞일 수 있다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>이제 LETHE의 기본 작업 단위는 HTML이 아니라 Unity <code>_dev</code> 게임 slice다. 다음 에이전트는 이미지 생성만 하지 말고, 리소스가 어디에 쓰이는지 기준으로 MCP import, C# 런타임 기반, 프리팹/씬 조립, 디버그 전환, 1인 리뷰까지 이어가야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>AnkleBreaker MCP로 <code>_dev</code> 하위 폴더를 만든다.</li>
+<li>기본 판독 리소스 5개를 만들고 import한다.</li>
+<li><code>RunBuildState</code>, hit event, pool/feedback 기반을 얇게 만든다.</li>
+<li><code>Dev_EchoSlice.unity</code>에서 기본 쌍검 타격이 보이는 상태까지 조립한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 기존 agent 규약이 HTML 프로토타입 중심이라 Unity 개발 단계와 맞지 않았다.</li>
+<li>방향: 보고 체계는 유지하고, 작업 규약만 Unity 게임개발 중심으로 전환한다.</li>
+<li>행동: top-level 규약, prompt context, task list, decision log, report를 정렬했다.</li>
+<li>결과: 다음 세션의 Codex가 이미지 생성에만 갇히지 않고 Unity slice 개발 전체 흐름을 따라갈 기준이 생겼다.</li>
 </ul>
     </article>
       </div>
