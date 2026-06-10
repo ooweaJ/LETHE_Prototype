@@ -2,27 +2,26 @@
 
 Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, legacy `docs/NEXT_TASKS.md`, or evidence files.
 
-## 1. Review Unity Asset Binding Plan
+## 1. Commit Unity Skeleton
 
 - Priority: high
-- Why: Unity MCP needs a concrete file-to-prefab-to-scene map before setup.
-- How: read `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md`.
-- Decide: are character, map, weapon, echo VFX, SO, prefab, and scene links specific enough?
-- Blocker: do not use the concept sheet as the final runtime sprite atlas.
+- Why: Unity project exists and should be versioned before MCP-driven edits.
+- Include: `LETHE/Assets`, `LETHE/Packages`, `LETHE/ProjectSettings`.
+- Exclude: `Library`, `Temp`, `Logs`, `UserSettings`, `.sln`, `.csproj`, `.vsconfig`.
+- Blocker: do not commit generated Unity cache files.
 
-## 2. Choose Next Asset Pass
-
-- Priority: high
-- Options: transparent runtime sprites, more concept variations, or Unity project setup.
-- Recommendation: create Unity project if placeholder character/map is acceptable; otherwise generate 3~5 transparent runtime VFX sprites first.
-- First candidates: 칼무리 반달 칼선, 혈반 표식, 회복 실 끝점, +5 발사 칼날, 피의 칼폭풍 칼날.
-
-## 3. Choose Next Implementation Surface
+## 2. Run First MCP Setup Pass
 
 - Priority: high
-- Options: HTML showcase pass or Unity first-slice backlog.
-- Recommendation: use HTML only for cheap rule visualization; use Unity when testing hitstop/sound/VFX/pooling matters.
-- Include: no new memories, no new weapon roster, no meta systems.
+- How: use AnkleBreaker Unity MCP after the tool surface reloads.
+- Start: create `Assets/Lethe/` folders and import the concept sheet as reference art.
+- Follow: `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md`.
+
+## 3. Generate Runtime VFX Sprites
+
+- Priority: high
+- Candidates: 칼무리 반달 칼선, 혈반 표식, 회복 실 끝점, +5 발사 칼날, 피의 칼폭풍 칼날.
+- Constraint: concept sheet is reference only, not runtime sprite atlas.
 
 ## 4. Convert PRD To Unity Backlog
 

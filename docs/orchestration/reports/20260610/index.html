@@ -190,6 +190,13 @@
           <p>코드는 변경하지 않았다. 이번 작업은 기존 콘셉트 이미지가 무기/VFX 중심이라는 점을 반영해, Unity MCP가 실제 프로젝트에서 따라 할 수 있는 파일-프리팹-Scene 연결 지도를 추가한 문서화 작업이다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-10-07</span>
+          <h2><a href="#unit-2026-06-10-07" data-unit-link="unit-2026-06-10-07">Unity 2D skeleton 커밋 준비</a></h2>
+          <p>Unity 2D 프로젝트가 LETHE/ 아래 생성됐다. 이번 작업은 gameplay 구현이 아니라, Unity baseline을 안전하게 버전관리하기 위한 정리다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -466,6 +473,57 @@
 <li>방향: 이미지 파일을 캐릭터, 맵, 무기, VFX, UI 프리팹과 직접 연결한다.</li>
 <li>행동: Unity MCP 실행용 asset binding map을 작성했다.</li>
 <li>결과: Unity 프로젝트 생성 시 문서를 보고 폴더/import/prefab/SO/scene 순서로 실행할 수 있게 됐다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-10-07" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-10-07 - Unity 2D skeleton 커밋 준비</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>Unity 2D 프로젝트가 <code>LETHE/</code> 아래 생성됐다. 이번 작업은 gameplay 구현이 아니라, Unity baseline을 안전하게 버전관리하기 위한 정리다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>AnkleBreaker Unity MCP 서버 경로를 확인했다: <code>C:\jaewoo\unity-mcp-server\src\index.js</code>.</li>
+<li>Codex MCP에 <code>anklebreaker-unity</code>를 등록했다.</li>
+<li>Unity Editor bridge <code>127.0.0.1:7890</code> 연결을 확인했다.</li>
+<li>이전 gamelovers/HTTP Unity MCP 등록인 <code>mcp-unity</code>, <code>unityMCP</code>를 제거했다.</li>
+<li><code>.gitignore</code>에 Unity 생성물 제외 규칙을 추가했다.</li>
+<li>이전 MCP 설정으로 보이는 <code>LETHE/ProjectSettings/McpUnitySettings.json</code>을 제거했다.</li>
+<li>Unity skeleton 커밋 대상은 <code>LETHE/Assets</code>, <code>LETHE/Packages</code>, <code>LETHE/ProjectSettings</code>로 좁혔다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>codex mcp list</code>: <code>anklebreaker-unity</code> 등록 확인.</li>
+<li><code>Test-NetConnection 127.0.0.1 -Port 7890</code>: <code>TcpTestSucceeded: True</code>.</li>
+<li>Unity instance registry: <code>LETHE</code>, Unity <code>6000.3.10f1</code>, project path <code>C:/jaewoo/LETHE_Prototype/LETHE</code>, port <code>7890</code>.</li>
+<li><code>git status --short --untracked-files=all</code>: Unity generated folders are ignored; project skeleton files remain as tracking candidates.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>Unity MCP는 AnkleBreaker 서버를 기준으로 사용한다.</li>
+<li>Unity generated cache/build/editor files는 커밋하지 않는다.</li>
+<li>Unity 기본 skeleton은 커밋해 이후 MCP 작업의 기준점으로 삼는다.</li>
+<li>첫 MCP 작업은 <code>LETHE_UNITY_ASSET_BINDING_PLAN.md</code>를 기준으로 <code>Assets/Lethe/</code> 구조와 reference art import부터 시작한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>현재 Codex 세션에는 AnkleBreaker MCP 도구가 아직 callable로 노출되지 않았다. 새 MCP 등록 후 세션/tool metadata reload가 필요할 수 있다.</li>
+<li>Unity skeleton은 기본 템플릿 상태라 실제 <code>Assets/Lethe/</code> 구조는 아직 없다.</li>
+<li>플레이어/맵/적/런타임 VFX sprite는 아직 placeholder 또는 다음 imagegen pass가 필요하다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Unity 프로젝트는 이제 버전관리 baseline으로 들어갈 준비가 됐다. AnkleBreaker MCP 연결은 포트 <code>7890</code>에서 확인됐고, 이전 MCP 등록은 제거됐다. 다음 구현은 Unity MCP 도구가 세션에 노출된 뒤 <code>LETHE_UNITY_ASSET_BINDING_PLAN.md</code>를 읽고 폴더/import/prefab/SO/scene 순서로 진행하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>Unity skeleton을 커밋/푸시한다.</li>
+<li>새 세션 또는 MCP tool reload 후 AnkleBreaker Unity MCP 도구 노출을 확인한다.</li>
+<li><code>Assets/Lethe/</code> 구조 생성과 콘셉트 이미지 reference import를 시작한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: Unity 프로젝트를 만들었지만 생성물과 실제 프로젝트 파일이 섞이면 repo가 무거워지고 재현성이 떨어진다.</li>
+<li>방향: Unity generated files를 제외하고, project skeleton만 baseline으로 버전관리한다.</li>
+<li>행동: MCP 연결과 gitignore를 정리하고 Unity skeleton 커밋 범위를 확정했다.</li>
+<li>결과: 이후 Unity MCP 작업을 안정적으로 쌓을 기준점이 생겼다.</li>
 </ul>
     </article>
       </div>

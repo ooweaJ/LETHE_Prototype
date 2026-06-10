@@ -74,7 +74,7 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Current Blocker
 
-The current blocker is Unity setup versus asset-pass choice. The first showcase is now specified as `절단쌍검 + 굶주린 칼무리 + 피의 반사 -> 피의 칼폭풍`, the first concept image exists, and the asset binding plan says how character, map, weapon, VFX, SOs, prefabs, and scene should connect. The project still needs to decide whether to generate transparent runtime sprites next or create the Unity 2D project with placeholders.
+The current blocker has moved from setup choice to Unity first-slice implementation. The Unity 2D project skeleton now exists under `LETHE/`, AnkleBreaker Unity MCP is registered as `anklebreaker-unity`, and the Unity editor bridge is reachable on port `7890`. Obsolete gamelovers/HTTP Unity MCP registrations were removed, and Unity generated folders/files are excluded by `.gitignore`.
 
 Discord actual send for the latest orchestration structure cleanup succeeded after explicit user request. Historical approval blocks remain recorded in the relevant devlog/report entries.
 
@@ -82,7 +82,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Review `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md`, then choose the next pass: transparent runtime sprites or Unity 2D project setup. If Unity is chosen, import the concept sheet as reference art only, use placeholder character/map/enemy as needed, and start with data SOs, hit event routing, echo runtime, pooling, feedback services, and debug panel.
+Commit the Unity 2D skeleton, then begin the first Unity slice from `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md`: create `Assets/Lethe/` folders, import the concept sheet as reference art only, keep player/map/enemy as placeholders, and start with data SOs, hit event routing, echo runtime, pooling, feedback services, and debug panel.
 
 For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` before real sends, then `npm run report:orchestrator:unit` when the Project Orchestrator is running and the report is ready.
 

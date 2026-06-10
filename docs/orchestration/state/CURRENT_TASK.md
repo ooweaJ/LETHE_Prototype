@@ -2,29 +2,29 @@
 
 ## Goal
 
-Prepare the Unity first-slice asset binding map: link character, map, weapon, echo VFX, concept references, prefabs, ScriptableObjects, and scene placement so Unity MCP can execute from the document.
+Commit the Unity 2D project skeleton safely after confirming AnkleBreaker Unity MCP connectivity and removing obsolete Unity MCP settings.
 
 ## Why Now
 
-The first VFX concept sheet exists, but it is mostly weapon/effect direction. Before creating the Unity 2D project, the project needs a clearer binding map that says character uses which file, map uses which file, sword uses which file, and echo effects use which generated image or future transparent sprite. The goal is to make the document executable by Unity MCP.
+The user created/opened the Unity project. Before implementing gameplay, the repository needs a clean Unity baseline commit: generated folders ignored, obsolete MCP settings removed, only actual project skeleton files tracked, and AnkleBreaker MCP connectivity recorded.
 
 The design must answer:
 
-- Which current image can be imported into Unity now, and is it runtime or reference?
-- Which character, map, weapon, echo, enemy, and UI prefabs need which image files?
-- Which missing images can be placeholder assets, and which need imagegen next?
-- Which ScriptableObjects link to which prefabs?
-- What exact Unity MCP sequence should create folders, import assets, create prefabs, and place the scene?
+- Is the active MCP server AnkleBreaker Unity MCP?
+- Are obsolete gamelovers/coplaydev MCP registrations removed?
+- Are Unity generated folders/files ignored?
+- Which Unity skeleton files should be committed?
+- Is the next implementation document still `LETHE_UNITY_ASSET_BINDING_PLAN.md`?
 
 ## Done Criteria
 
-- `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md` exists.
-- It maps current concept art to Unity `Art/Concept/`.
-- It maps character, map, weapon, Kalmuri, Blood, Blood Blade Storm, enemy, and UI assets to prefabs.
-- It marks missing files as placeholder or next imagegen target.
-- It defines the Unity MCP execution sequence.
-- Report/devlog/state docs record that Unity asset binding is ready before Unity setup.
-- No gameplay code is added in this planning unit.
+- AnkleBreaker MCP is registered as `anklebreaker-unity`.
+- Unity bridge port `7890` responds.
+- Obsolete `mcp-unity` and `unityMCP` registrations are removed.
+- `.gitignore` excludes Unity generated files.
+- Obsolete `LETHE/ProjectSettings/McpUnitySettings.json` is removed.
+- Unity skeleton files under `LETHE/Assets`, `LETHE/Packages`, and `LETHE/ProjectSettings` are committed.
+- Report/devlog/state docs record the Unity baseline.
 
 ## Related Files
 
@@ -50,10 +50,9 @@ npm run report:check
 
 ## Open Questions
 
-- Should the next step be Unity 2D project creation or transparent runtime sprite generation?
-- Should player/map/enemy stay placeholder for first slice?
-- Should the concept sheet be imported only as reference art in Unity?
+- Should the first MCP-driven Unity task create `Assets/Lethe/` folders and import the concept sheet?
+- Should transparent runtime sprite generation happen before or after the first placeholder scene?
 
 ## Do Not Touch
 
-Do not add new memories, weapons, enemies, shop, meta progression, multi-region structure, final boss, or Unity setup while this design is being clarified.
+Do not add new memories, weapons, enemies, shop, meta progression, multi-region structure, or final boss. Unity setup is now allowed only for the first-slice baseline and `LETHE_UNITY_ASSET_BINDING_PLAN.md`.
