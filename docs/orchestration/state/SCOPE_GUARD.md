@@ -19,9 +19,17 @@ Until the user or planning review explicitly changes scope, do not add:
 - Character selection.
 - Unlock systems.
 
-## Current Prototype Gate
+## Current Unity Gate
 
-The current gate is design clarity for the v0.12 forgetting loop. The forgetting loop should feel regrettable rather than irritating, the echo should visibly change combat, reacquisition should feel like resonance, and the player should understand that the highest-level memory is the next forgetting candidate.
+The current gate is the first Unity `_dev` game slice. The slice should prove that `절단쌍검 + 칼무리 잔향 + 혈반 잔향 + 피의 칼폭풍` can be read as combat action, not text labels.
+
+GO requires:
+
+- Basic player/enemy/map/weapon readability in `Dev_EchoSlice`.
+- Data-driven `WeaponDefinition`, `MemoryDefinition`, `EchoDefinition`, and `EchoSynergyDefinition` foundations.
+- Prefabs wired through definitions rather than hard-coded ids.
+- Debug states for basic attack, Kalmuri +1/+5, Blood +5, and Blood Blade Storm.
+- jaewoo review evidence recorded in orchestration docs.
 
 ## Current Tuning Rule
 

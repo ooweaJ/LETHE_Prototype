@@ -2,27 +2,27 @@
 
 ## Goal
 
-Register Unity game development as the active agent workflow.
+Audit and strengthen the Unity game-development architecture contract before starting implementation.
 
 ## Why Now
 
-The Unity skeleton and `_dev` folder now exist, AnkleBreaker MCP can see `Assets/_dev`, and the first slice production plan exists. The root agent rules still referenced the old HTML prototype workflow, so the top-level rules need to point future Codex sessions toward Unity game development while preserving report/devlog/git requirements. Image generation is only the first resource step, not the overall workflow.
+The Unity skeleton and `_dev` folder now exist, AnkleBreaker MCP can see `Assets/_dev`, and the first slice production plan exists. Before creating assets or scripts, the technical docs need to prove that the Unity structure is OOP-friendly and data-driven enough for future weapons, memories, echoes, prefabs, and images to be added without rewriting core services.
 
 The design must answer:
 
-- What does Codex do next after the planning phase?
-- Which Unity game-development workflow should be treated as mandatory?
-- Which HTML rules are now legacy?
-- Which report and orchestration rules must remain active?
+- Do `WeaponDefinition`, `MemoryDefinition`, `EchoDefinition`, and `EchoSynergyDefinition` support adding new content as data?
+- Are runtime classes separated from core services enough to avoid `if echoId == ...` growth?
+- Are image, prefab, class, and ScriptableObject paths concrete enough for MCP implementation?
+- Is `_dev` staging clearly separated from `Assets/Lethe` promotion?
+- Is Discord notification part of the document/development workflow?
 
 ## Done Criteria
 
-- `AGENTS.md` makes Unity `_dev` game slice development the default agent workflow.
-- `AGENTS.md` treats imagegen as a resource pipeline inside Unity development, not the whole goal.
-- HTML autopilot/balance-loop work is marked legacy unless explicitly requested.
-- Report/devlog/orchestration/git rules remain active.
-- `PROMPT_CONTEXT`, decision log, devlog, and report record the rule transition.
-- `NEXT_TASKS` remains the concrete list of upcoming Unity slice tasks.
+- `LETHE_UNITY_ECHO_SYSTEM_PRD.md` includes OOP/data extension rules.
+- `LETHE_UNITY_ASSET_BINDING_PLAN.md` clearly separates `_dev` staging from `Assets/Lethe` promotion.
+- `SCOPE_GUARD` and `RUNBOOK` reflect the Unity `_dev` gate and Discord notification rule.
+- Report/devlog/state docs record the architecture audit and next implementation sequence.
+- Discord notification is sent for this document unit.
 
 ## Related Files
 
@@ -38,6 +38,8 @@ The design must answer:
 - `docs/design/LETHE_COMBAT_DESIGN.md`
 - `docs/design/LETHE_CONTENT_TABLES.md`
 - `AGENTS.md`
+- `docs/orchestration/state/RUNBOOK.md`
+- `docs/orchestration/state/SCOPE_GUARD.md`
 - `docs/orchestration/state/NEXT_TASKS.md`
 - `docs/orchestration/reports/20260610/index.md`
 
@@ -50,7 +52,7 @@ npm run report:check
 
 ## Open Questions
 
-- None for the rule transition. Next execution starts with basic slice image generation and `_dev` MCP folder setup.
+- Should the first Unity implementation use abstract base classes only, or interfaces plus abstract base classes? Current decision: both, with abstract `MonoBehaviour` base classes for Unity serialization.
 
 ## Do Not Touch
 

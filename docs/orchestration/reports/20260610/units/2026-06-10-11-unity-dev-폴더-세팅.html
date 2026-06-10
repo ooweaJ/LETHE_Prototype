@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-10-11 - Unity _dev 폴더 세팅</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-10-11 - Unity _dev 폴더 세팅</h1>
+      <p class="meta">Generated from 2026-06-10-11-unity-dev-폴더-세팅.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260610/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-10-11 - Unity _dev 폴더 세팅</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>Unity 2D 프로젝트는 열려 있고 AnkleBreaker MCP bridge는 <code>7890</code>에서 응답한다. 이번 작업은 gameplay 구현이 아니라, 앞으로 리소스, C# 스크립트, 프리팹, 데이터, 씬을 넣을 <code>_dev</code> staging 구조를 만드는 단계다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>LETHE/Assets/_dev</code> 아래 개발 폴더 구조를 만들었다.</li>
+<li><code>Art/Source</code>, <code>Art/Sprites</code>, <code>Art/Materials</code>, <code>Art/Particles</code>를 만들었다.</li>
+<li><code>Prefabs</code>, <code>Scripts</code>, <code>Data</code>, <code>Scenes</code> 하위 구조를 만들었다.</li>
+<li>각 leaf 폴더에 <code>.gitkeep</code>를 추가해 빈 폴더도 Git에서 유지되게 했다.</li>
+<li>AnkleBreaker MCP로 Unity가 주요 <code>_dev</code> 폴더를 읽는지 확인했다.</li>
+<li><code>NEXT_TASKS</code>에서 폴더 세팅을 제거하고 다음 작업을 기본 리소스 생성/import로 이동했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>unity_editor_ping(port=7890)</code>: connected true, project <code>LETHE</code>, Unity <code>6000.3.10f1</code>.</li>
+<li><code>unity_asset_list(folder=&quot;Assets/_dev&quot;)</code>: success true.</li>
+<li><code>unity_asset_list(folder=&quot;Assets/_dev/Art&quot;)</code>: success true.</li>
+<li><code>unity_asset_list(folder=&quot;Assets/_dev/Art/Sprites&quot;)</code>: success true.</li>
+<li><code>unity_asset_list(folder=&quot;Assets/_dev/Prefabs&quot;)</code>: success true.</li>
+<li><code>unity_asset_list(folder=&quot;Assets/_dev/Scripts&quot;)</code>: success true.</li>
+<li><code>unity_asset_list(folder=&quot;Assets/_dev/Data&quot;)</code>: success true.</li>
+<li><code>unity_asset_list(folder=&quot;Assets/_dev/Scenes&quot;)</code>: success true.</li>
+<li><code>npm.cmd run report</code>: 통과.</li>
+<li><code>npm.cmd run report:check</code>: 통과.</li>
+<li><code>npm.cmd run report:discord:unit:dry</code>: 통과. 단, fallback payload에 추가 review prompt 첨부가 포함되어 실제 전송은 재시도하지 않았다.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>빈 Unity 개발 폴더는 <code>.gitkeep</code>로 유지한다.</li>
+<li>실제 리소스/스크립트가 들어오면 해당 <code>.gitkeep</code>는 필요할 때 제거해도 된다.</li>
+<li>다음 작업은 기본 판독 리소스 5개 생성/import다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li><code>.gitkeep</code>는 Unity Project 창에서 보일 수 있다. <code>_dev</code> staging 단계에서는 허용하고, 승격 전 정리한다.</li>
+<li>아직 runtime C#과 prefab은 없다. 폴더만 준비된 상태다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Unity <code>_dev</code> 구조는 준비됐고 MCP가 읽는다. 다음 Codex는 imagegen으로 player, walker enemy, dark floor tile, left/right dual blades를 만들고, chroma-key/alpha 정리 후 <code>Assets/_dev/Art/Sprites</code>에 import하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>기본 판독 리소스 5개 생성.</li>
+<li>Unity import와 sprite setting 확인.</li>
+<li>이후 <code>RunBuildState</code>, Definition classes, hit event 기반 구현으로 이동.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: Unity 작업을 시작하기 전 리소스/코드/프리팹/데이터가 들어갈 staging 구조가 없었다.</li>
+<li>방향: 실험은 <code>_dev</code>, 승격은 GO 이후 <code>Assets/Lethe</code>로 분리한다.</li>
+<li>행동: <code>_dev</code> 하위 폴더와 Git 유지 파일을 만들고 MCP 인식을 확인했다.</li>
+<li>결과: 이제 리소스 생성과 Unity 런타임 구현을 병렬로 쌓을 수 있는 작업 표면이 생겼다.</li>
+</ul>
+  </main>
+</body>
+</html>

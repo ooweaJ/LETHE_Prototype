@@ -236,6 +236,125 @@ lightIntensity
 particlePrefab
 ```
 
+## 5-A. OOP / 데이터 확장 계약
+
+첫 slice 코드는 "칼무리와 혈반만 돌아가게 만든 코드"가 아니라, 다음 무기/기억/잔향을 데이터와 프리팹으로 추가할 수 있는 구조여야 한다.
+
+### 핵심 원칙
+
+- 코어 서비스는 특정 id를 직접 비교하지 않는다. `if echoId == "Echo_Kalmuri"` 같은 분기는 금지한다.
+- 무기, 기억, 잔향, 궁극은 `ScriptableObject Definition -> Runtime Prefab -> Runtime Component` 순서로 연결한다.
+- `Definition`은 데이터와 prefab 참조만 가진다. 실제 동작은 runtime component가 담당한다.
+- 트리거 종류는 `TriggerFamily`로 라우팅하고, 세부 행동은 `EchoBehavior` flags와 `EchoLevelData`로 결정한다.
+- 새 잔향이 기존 트리거 패밀리와 behavior flags로 표현 가능하면 코어 코드를 수정하지 않는다.
+- 코어 코드를 수정해도 되는 경우는 새 트리거 패밀리, 새 공통 behavior flag, 새 공통 이벤트 타입이 필요한 경우뿐이다.
+
+### 권장 인터페이스 / 추상 클래스
+
+Unity 직렬화와 Inspector 연결을 고려해 interface만 고집하지 말고, `abstract MonoBehaviour` + 명시적 interface를 같이 쓴다.
+
+```text
+IWeaponRuntime
+  Initialize(WeaponDefinition definition, WeaponContext context)
+  SetEnabled(bool enabled)
+
+IActiveMemoryRuntime
+  Initialize(MemoryDefinition definition, MemoryRuntimeContext context)
+  ApplyLevel(int level)
+  AttachResonance(EchoDefinition echoDefinition, int echoLevel)
+
+IEchoRuntime
+  Initialize(EchoDefinition definition, EchoRuntimeContext context)
+  ApplyLevel(int level)
+  HandleHit(HitEvent hitEvent)
+  HandleKill(KillEvent killEvent)
+  HandleDamageTaken(DamageTakenEvent damageTakenEvent)
+
+IUltimateEchoRuntime
+  Initialize(EchoSynergyDefinition definition, UltimateRuntimeContext context)
+  SetActive(bool active)
+
+IPooledObject
+  OnSpawn()
+  OnDespawn()
+```
+
+권장 base classes:
+
+```text
+WeaponRuntimeBase : MonoBehaviour, IWeaponRuntime
+ActiveMemoryRuntimeBase : MonoBehaviour, IActiveMemoryRuntime
+EchoRuntimeBase : MonoBehaviour, IEchoRuntime
+UltimateEchoRuntimeBase : MonoBehaviour, IUltimateEchoRuntime
+PooledBehaviour : MonoBehaviour, IPooledObject
+```
+
+### 코어 서비스 책임 분리
+
+| 클래스 | 해야 하는 일 | 하지 말아야 할 일 |
+| --- | --- | --- |
+| `RunBuildState` | 현재 무기/기억/잔향/궁극 상태 snapshot 제공 | VFX spawn, damage 계산 |
+| `MemoryInventory` | 활성 기억 추가/강화/제거, 최고 레벨 후보 제공 | 잔향 runtime 직접 생성 |
+| `EchoInventory` | 잔향 레벨, +5 cap, overcharge, 각성 여부 계산 | 특정 잔향별 시각 효과 실행 |
+| `WeaponHitEmitter` | `WeaponHit` 이벤트 생성 | 잔향 발동 조건 판단 |
+| `HitResolver` | 피해, 처치, 피격 플래시 요청 | 잔향 발동 또는 궁극 unlock |
+| `EchoTriggerRouter` | 이벤트를 trigger family별 runtime에 전달 | 특정 echo id 분기 |
+| `UltimateEchoService` | `EchoSynergyDefinition` 조건 판정 | 궁극 VFX 세부 동작 |
+| `PoolService` | prefab pooling, spawn/despawn | 게임 규칙 판정 |
+| `FeedbackService` | hitstop, flash, sound, light 실행 | 기억/잔향 상태 변경 |
+
+### 신규 콘텐츠 추가 절차
+
+새 무기 추가:
+
+1. `WeaponDefinition` asset 생성.
+2. `WeaponRuntimeBase`를 상속한 runtime component 생성.
+3. weapon prefab에 sprite, hitbox prefab, runtime component 연결.
+4. reward/drop table에 definition 추가.
+5. 코어 수정 금지. 단, 완전히 새 입력/공격 event가 필요하면 event layer만 확장한다.
+
+새 기억 추가:
+
+1. `MemoryDefinition` asset 생성.
+2. active memory prefab과 `ActiveMemoryRuntimeBase` 구현체 생성.
+3. 연결되는 `EchoDefinition` id 지정.
+4. reward/drop table에 definition 추가.
+5. `ForgetService`와 `ResonanceService`는 수정하지 않는다.
+
+새 잔향 추가:
+
+1. `EchoDefinition` asset 생성.
+2. 기존 `TriggerFamily`와 `EchoBehavior` flags로 레벨 데이터를 작성한다.
+3. echo runtime prefab에 `EchoRuntimeBase` 구현체와 필요한 VFX prefab을 연결한다.
+4. `EchoTriggerRouter`는 definition의 trigger family만 보고 라우팅한다.
+5. 새 behavior flag 없이 표현 가능하면 코어 수정 금지.
+
+새 궁극 잔향 추가:
+
+1. `EchoSynergyDefinition` asset 생성.
+2. required echo ids와 required level을 지정한다.
+3. ultimate runtime prefab과 `UltimateEchoRuntimeBase` 구현체를 연결한다.
+4. `UltimateEchoService`는 definition 리스트만 읽는다.
+
+### 첫 slice 데이터-프리팹-리소스 매트릭스
+
+첫 `_dev` 구현은 아래 id와 경로를 그대로 사용한다. 나중에 `Assets/Lethe`로 승격할 때도 id는 바꾸지 않는다.
+
+| ID / Asset | Definition 경로 | Runtime Prefab | Runtime Component | 주요 리소스 |
+| --- | --- | --- | --- | --- |
+| `Weapon_DualBlades` | `Assets/_dev/Data/Weapons/Weapon_DualBlades.asset` | `Assets/_dev/Prefabs/Weapons/Weapon_DualBlades_Runtime.prefab` | `DualBladesController : WeaponRuntimeBase` | left/right blade sprites, swing arc |
+| `Memory_HungryBlades` | `Assets/_dev/Data/Memories/Memory_HungryBlades.asset` | `Assets/_dev/Prefabs/Echoes/Kalmuri/Memory_HungryBlades_Ring.prefab` | `HungryBladesMemoryRuntime : ActiveMemoryRuntimeBase` | orbit blade sprite |
+| `Memory_BloodReflection` | `Assets/_dev/Data/Memories/Memory_BloodReflection.asset` | `Assets/_dev/Prefabs/Echoes/Blood/Memory_BloodReflection_Strike.prefab` | `BloodReflectionMemoryRuntime : ActiveMemoryRuntimeBase` | blood strike placeholder |
+| `Echo_Kalmuri` | `Assets/_dev/Data/Echoes/Echo_Kalmuri.asset` | `Assets/_dev/Prefabs/Echoes/Kalmuri/Echo_Kalmuri_Runtime.prefab` | `KalmuriEchoRuntime : EchoRuntimeBase` | slash, orbit blade, launch blade |
+| `Echo_Blood` | `Assets/_dev/Data/Echoes/Echo_Blood.asset` | `Assets/_dev/Prefabs/Echoes/Blood/Echo_Blood_Runtime.prefab` | `BloodEchoRuntime : EchoRuntimeBase` | blood mark, heal thread, blood bloom |
+| `Synergy_BloodBladeStorm` | `Assets/_dev/Data/Synergies/Synergy_BloodBladeStorm.asset` | `Assets/_dev/Prefabs/Ultimates/Ultimate_BloodBladeStorm.prefab` | `BloodBladeStormRuntime : UltimateEchoRuntimeBase` | storm ring, storm blade, blood thread |
+
+통과 기준:
+
+- 새 echo를 추가할 때 `EchoTriggerRouter`, `HitResolver`, `ForgetService`를 수정하지 않아도 된다.
+- 새 weapon을 추가할 때 `EchoInventory`, `UltimateEchoService`를 수정하지 않아도 된다.
+- 신규 리소스는 Definition과 Prefab 참조만 바꾸면 교체 가능해야 한다.
+
 ## 6. 런타임 핵심 클래스
 
 ### 빌드 상태

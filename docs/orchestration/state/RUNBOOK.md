@@ -45,8 +45,8 @@ Current balance source of truth is the loop result, not a one-off run.
 ## Reports
 
 ```bash
-npm run report
-npm run report:check
+npm.cmd run report
+npm.cmd run report:check
 ```
 
 `npm run report` regenerates the current date-folder report HTML and unit pages from Markdown.
@@ -88,6 +88,8 @@ npm run report:discord:unit
 
 If actual Discord send is blocked by policy, webhook, network, permissions, or missing Project Orchestrator intake, record the exact reason and next trusted-local command in devlog/report.
 
+For the current Unity development phase, send a Discord notification after meaningful document, resource, Unity MCP, or C# implementation units. Do not wait until multiple units have accumulated if the work changes the next step or the active rules.
+
 ## Orchestration HTML
 
 Current human-facing pages:
@@ -111,9 +113,11 @@ Rules:
 - `reports/YYYYMMDD/units/` contains generated work-unit details and JSON summaries.
 - Until a generator exists, update the HTML manually when orchestration status changes.
 
-## Autopilot
+## Legacy HTML Autopilot
 
-Before unattended implement -> test -> review -> implement loops:
+HTML autopilot is legacy. Do not start it unless the user explicitly asks to return to HTML prototype automation.
+
+Historical command:
 
 ```bash
 npm run autopilot:preflight

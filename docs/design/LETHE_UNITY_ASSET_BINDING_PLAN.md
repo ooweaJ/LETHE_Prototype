@@ -21,6 +21,42 @@
 
 MCP가 이 문서를 보면 "이 파일을 이 경로로 import하고, 이 prefab의 이 역할에 연결한다"까지 따라 할 수 있어야 한다. 단, 첫 실험은 `LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md`에 따라 `Assets/_dev/`에서 먼저 진행하고, 검증된 구조만 `Assets/Lethe/`로 승격한다.
 
+## 0-A. `_dev` staging과 `Assets/Lethe` 승격 규칙
+
+현재 작업의 실제 대상은 `Assets/_dev`다. 이 문서의 `Assets/Lethe` 경로는 첫 slice가 GO 판정을 받은 뒤 승격할 최종 경로다.
+
+| 단계 | 경로 | 용도 | 규칙 |
+| --- | --- | --- | --- |
+| 실험/staging | `Assets/_dev/...` | 이미지 생성, import, C# 런타임, prefab, debug scene 검증 | 현재 모든 MCP 작업은 여기서 시작 |
+| 승격/main | `Assets/Lethe/...` | GO 판정 후 유지할 실제 게임 구조 | jaewoo 리뷰 전에는 직접 생성하지 않음 |
+
+경로 변환 규칙:
+
+```text
+Assets/_dev/Art/Sprites/...      -> Assets/Lethe/Art/Sprites/...
+Assets/_dev/Prefabs/...          -> Assets/Lethe/Prefabs/...
+Assets/_dev/Scripts/...          -> Assets/Lethe/Scripts/...
+Assets/_dev/Data/...             -> Assets/Lethe/Data/...
+Assets/_dev/Scenes/Dev_EchoSlice -> Assets/Lethe/Scenes/Slice_EchoShowcase
+```
+
+id 안정성:
+
+- `Weapon_DualBlades`, `Memory_HungryBlades`, `Echo_Kalmuri` 같은 data id는 `_dev`와 `Assets/Lethe`에서 동일하게 유지한다.
+- 승격 때 바뀌는 것은 파일 경로와 prefab 위치뿐이다.
+- id를 바꾸면 저장 데이터, debug panel, reward table, report evidence가 끊기므로 금지한다.
+
+현재 slice에서 MCP가 생성해야 하는 경로는 아래 `_dev` 기준이다.
+
+```text
+Assets/_dev/
+  Art/
+  Prefabs/
+  Scripts/
+  Data/
+  Scenes/
+```
+
 ## 1. 현재 사용 가능한 이미지
 
 | 구분 | 현재 파일 | Unity 용도 | 바로 런타임 사용 여부 |
@@ -53,7 +89,7 @@ MCP가 이 문서를 보면 "이 파일을 이 경로로 import하고, 이 prefa
 
 ## 3. Unity 폴더와 파일 배치
 
-Unity 프로젝트가 생기면 MCP는 아래 구조를 만든다.
+Unity 프로젝트가 생기면 MCP는 먼저 `_dev`에 같은 구조를 만든다. 아래 `Assets/Lethe` 구조는 GO 판정 뒤 승격 형태다.
 
 ```text
 Assets/Lethe/
@@ -224,17 +260,17 @@ Assets/Lethe/
 
 ## 6. Unity MCP 실행 순서
 
-Unity 프로젝트가 열린 뒤 MCP는 아래 순서로 실행한다.
+Unity 프로젝트가 열린 뒤 MCP는 아래 순서로 실행한다. 현재는 `Assets/_dev` 경로를 사용하고, GO 판정 후에만 `Assets/Lethe`로 승격한다.
 
-1. 프로젝트 상태 확인: `project(action="get_status")`.
-2. 폴더 생성: `Assets/Lethe/...` 구조 생성.
+1. 프로젝트 상태 확인: AnkleBreaker MCP `unity_list_instances`, `unity_editor_ping(port=7890)`.
+2. 폴더 생성: `Assets/_dev/...` 구조 생성.
 3. 콘셉트 이미지 import:
    - Source: `docs/design/assets/lethe-first-echo-showcase-concept.png`
-   - Target: `Assets/Lethe/Art/Concept/lethe-first-echo-showcase-concept.png`
+   - Target: `Assets/_dev/Art/Source/lethe-first-echo-showcase-concept.png`
 4. placeholder sprite 생성 또는 import:
    - player, map, enemy는 placeholder로 시작 가능.
 5. runtime sprite import:
-   - 투명 PNG가 준비된 것부터 `Art/Sprites/...`에 넣는다.
+   - 투명 PNG가 준비된 것부터 `Assets/_dev/Art/Sprites/...`에 넣는다.
 6. material 생성:
    - `mat_heal_thread_line`, `mat_blood_thread`, `mat_echo_additive`.
 7. prefab 생성:
@@ -247,6 +283,8 @@ Unity 프로젝트가 열린 뒤 MCP는 아래 순서로 실행한다.
    - `Slice_EchoShowcase.unity`에 player, map, test enemy spawner, debug panel 배치.
 11. 검증:
    - debug button으로 칼무리/혈반/+5/피의 칼폭풍 상태를 즉시 켠다.
+12. 승격:
+   - GO 판정 후 `_dev` 구조를 `Assets/Lethe`로 옮긴다.
 
 ## 7. 아직 없는 이미지와 다음 생성 대상
 
