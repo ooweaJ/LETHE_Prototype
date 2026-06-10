@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260610\\index.md",
-  "generatedAt": "2026-06-10T06:11:01.121Z",
-  "unitCount": 4,
+  "generatedAt": "2026-06-10T06:25:34.648Z",
+  "unitCount": 5,
   "latest": {
-    "title": "2026-06-10-04 - Unity 잔향 시스템 PRD",
-    "number": "04",
-    "markdownPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-04-unity-잔향-시스템-prd.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-04-unity-잔향-시스템-prd.html"
+    "title": "2026-06-10-05 - 첫 스프라이트/VFX 콘셉트 시트",
+    "number": "05",
+    "markdownPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-05-첫-스프라이트-vfx-콘셉트-시트.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-05-첫-스프라이트-vfx-콘셉트-시트.html"
   }
 }

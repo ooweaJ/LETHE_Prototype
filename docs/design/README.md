@@ -20,15 +20,17 @@
    - 활성 기억, 망각, 잔향, 각성, 공명, 궁극의 화면 형태 변환 문법.
 7. `LETHE_UNITY_ECHO_SYSTEM_PRD.md`
    - Unity 첫 slice의 잔향 시스템 PRD, 클래스 역할, ScriptableObject, 프리팹, 에셋 구조.
-8. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
+8. `LETHE_VISUAL_ASSET_PLAN.md`
+   - Unity 첫 slice에 사용할 스프라이트/VFX 콘셉트 이미지, 파츠, import 계획, 프리팹 연결.
+9. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
    - Unity 첫 구현 범위와 완료 기준.
-9. `LETHE_RUN_STRUCTURE.md`
+10. `LETHE_RUN_STRUCTURE.md`
    - 한 판 흐름, 성장, 망각, 보충.
-10. `LETHE_COMBAT_DESIGN.md`
+11. `LETHE_COMBAT_DESIGN.md`
    - 무기, 적 역할, 전투 감각.
-11. `LETHE_CONTENT_TABLES.md`
+12. `LETHE_CONTENT_TABLES.md`
    - 기억, 잔향, 시너지, 적 표.
-12. `LETHE_BALANCE_BASELINE.md`
+13. `LETHE_BALANCE_BASELINE.md`
    - v0.12 기준 수치와 Unity 초기 목표.
 
 ## 문서 운영 원칙

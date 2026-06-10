@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-10-05 - 첫 스프라이트/VFX 콘셉트 시트</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-10-05 - 첫 스프라이트/VFX 콘셉트 시트</h1>
+      <p class="meta">Generated from 2026-06-10-05-첫-스프라이트-vfx-콘셉트-시트.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260610/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-10-05 - 첫 스프라이트/VFX 콘셉트 시트</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>코드는 변경하지 않았다. Unity 2D 프로젝트를 만들기 전에, 첫 slice의 스프라이트/VFX 방향을 잡는 콘셉트 이미지와 에셋 계획 문서를 추가했다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>Codex imagegen으로 첫 echo showcase 콘셉트 시트를 생성했다.</li>
+<li>생성 이미지를 <code>docs/design/assets/lethe-first-echo-showcase-concept.png</code>에 보관했다.</li>
+<li><code>docs/design/LETHE_VISUAL_ASSET_PLAN.md</code>를 추가했다.</li>
+<li>콘셉트 이미지의 각 영역을 Unity 프리팹 후보와 연결했다: 쌍검, 칼무리 고리, 지연 칼선, 혈반 표식, 회복 실, 피의 칼폭풍.</li>
+<li>Unity MCP가 연결된 뒤 어떤 폴더에 import하고 어떤 prefab에 연결할지 계획을 적었다.</li>
+<li>design README와 orchestration state를 비주얼 에셋 계획까지 포함하도록 갱신했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<p>이번 작업은 이미지/문서 기획이다. 생성 이미지는 직접 확인했고, 런타임 최종 스프라이트가 아니라 첫 Unity slice의 아트 방향 참조로 쓰는 것이 적절하다고 판단했다.</p>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>지금 생성한 이미지는 최종 투명 스프라이트가 아니라 콘셉트 시트로 사용한다.</li>
+<li>실제 Unity 런타임에는 칼선, 혈반, 회복 실, 발사 칼날, 궁극 칼날을 투명 PNG 파츠로 별도 생성한다.</li>
+<li>Unity MCP는 이미지 생성이 아니라 import, prefab 연결, scene 배치에 사용한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>콘셉트 이미지는 디테일이 많아 축소하면 뭉칠 수 있다.</li>
+<li>최종 sprite는 더 단순한 실루엣과 높은 대비가 필요하다.</li>
+<li>투명 PNG 생성/크로마키 제거는 다음 별도 asset pass로 처리해야 한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>첫 비주얼 방향은 흰 금속 칼날, 어두운 잔향, 붉은 혈반/피실 조합이다. <code>피의 칼폭풍</code>은 칼날 고리와 붉은 실이 같이 도는 궁극 형태로 잡혔다. 다음 판단은 이 콘셉트를 기준으로 투명 runtime sprite를 만들지, Unity 프로젝트를 먼저 만들지다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li><code>LETHE_VISUAL_ASSET_PLAN.md</code>를 검토한다.</li>
+<li>다음 asset pass를 고른다: 투명 runtime sprites, 추가 콘셉트 변형, 또는 Unity 2D 프로젝트 생성.</li>
+<li>투명 sprite를 만들 경우 우선순위는 칼무리 반달 칼선, 혈반 표식, 회복 실 끝점, +5 발사 칼날, 피의 칼폭풍 칼날이다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: Unity 구현 전에 잔향의 시각 방향이 없으면 좋은 구조도 밋밋하게 보일 수 있다.</li>
+<li>방향: 첫 slice의 핵심 VFX를 한 장의 콘셉트 시트로 고정한다.</li>
+<li>행동: Codex imagegen으로 콘셉트 이미지를 만들고, Unity prefab/import 계획으로 연결했다.</li>
+<li>결과: Unity 프로젝트 생성 전에 클래스, 프리팹, 이미지 방향이 함께 맞물린 상태가 됐다.</li>
+</ul>
+  </main>
+</body>
+</html>

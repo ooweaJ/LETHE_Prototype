@@ -2,29 +2,28 @@
 
 ## Goal
 
-Turn the concrete weapon/memory/echo design into a Unity-ready system PRD: form transformation grammar, class roles, ScriptableObjects, prefabs, event boundaries, and first-slice acceptance criteria.
+Prepare the Unity first-slice visual asset direction: generate a concept sheet, define sprite/VFX parts, map them to prefabs, and record how Unity MCP should import/connect them later.
 
 ## Why Now
 
-The weapon/memory/echo detail is now concrete enough to expose the next risk: if Unity implementation starts without a class/event/prefab contract, echoes can collapse back into generic proc text or tangled on-hit loops. The current task is to define how Unity should build the first showcase without implementing the project yet.
+The Unity echo PRD now defines classes, ScriptableObjects, prefabs, and event boundaries. Before creating the Unity 2D project, the first slice also needs a visual asset direction so the echo system has concrete sprites/VFX to aim at. The goal is not to create final production art yet; it is to establish the first concept sheet and import plan.
 
 The design must answer:
 
-- How are active memories, echoes, awakened echoes, resonance, and ultimate echoes visually different?
-- Which Unity classes own build state, forgetting, resonance, hit events, echo routing, and feedback?
-- Which ScriptableObjects hold weapon, memory, echo, synergy, and feedback data?
-- Which prefabs are required for the first `절단쌍검 + 칼무리 + 혈반 -> 피의 칼폭풍` slice?
-- How do `WeaponHit`, `EchoHit`, `UltimateHit`, `Kill`, and `ShieldBreak` avoid recursive proc loops?
-- What acceptance criteria prove that echoes became transformed combat events rather than weak copies?
+- What concept image anchors the first `피의 칼폭풍` visual direction?
+- Which sprite/VFX parts should be generated first?
+- Which Unity prefabs consume each sprite/VFX part?
+- What should Unity MCP do after the Unity project exists?
+- Which assets are concept-only and which need transparent sprite generation?
 
 ## Done Criteria
 
-- `docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md` exists.
-- `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md` exists.
-- The form spec defines active memory, forgetting transition, echo, awakened echo, resonance, and ultimate shape differences.
-- The PRD defines Unity data SOs, runtime classes, event boundaries, prefab list, folder layout, and first-slice acceptance criteria.
-- `docs/design/README.md` links the new docs in the reading order.
-- Report/devlog/state docs record that the design is now implementation-architecture ready.
+- A first echo showcase concept image exists under `docs/design/assets/`.
+- `docs/design/LETHE_VISUAL_ASSET_PLAN.md` exists.
+- The asset plan maps concept image regions to Unity prefabs.
+- The asset plan lists the first transparent sprite/VFX generation priorities.
+- The asset plan explains how Unity MCP should import/connect assets later.
+- Report/devlog/state docs record that the visual asset direction is ready before Unity setup.
 - No gameplay code is added in this planning unit.
 
 ## Related Files
@@ -33,6 +32,8 @@ The design must answer:
 - `docs/design/LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`
 - `docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md`
 - `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`
+- `docs/design/LETHE_VISUAL_ASSET_PLAN.md`
+- `docs/design/assets/lethe-first-echo-showcase-concept.png`
 - `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`
 - `docs/design/LETHE_COMBAT_DESIGN.md`
 - `docs/design/LETHE_CONTENT_TABLES.md`
@@ -48,10 +49,9 @@ npm run report:check
 
 ## Open Questions
 
-- Should the next work be HTML showcase implementation or Unity project setup/backlog conversion?
-- Should `피의 칼폭풍` be always-on once unlocked, or triggered by a gauge?
-- Should the first Unity slice use automatic attacks like HTML or manual attack input?
-- What healing cap should `혈반` and `피의 칼폭풍` use?
+- Should the next image generation produce transparent runtime sprites or more concept variations?
+- Should the Unity 2D project be created now?
+- Should first transparent assets be chroma-key processed locally or created later inside a full art pass?
 
 ## Do Not Touch
 

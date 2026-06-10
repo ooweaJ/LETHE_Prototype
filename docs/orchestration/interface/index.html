@@ -68,14 +68,14 @@
           <p class="eyebrow">LETHE 프로젝트 대시보드</p>
           <h1>상태 요약</h1>
         </div>
-        <span class="badge">Unity 잔향 PRD</span>
+        <span class="badge">비주얼 에셋 계획</span>
       </header>
 
       <section class="metrics" aria-label="핵심 상태 요약">
         <div class="metric green">
           <span>현재 단계</span>
-          <strong>Echo System PRD</strong>
-          <small>형태 변환 + Unity 구조 설계</small>
+          <strong>Asset Direction</strong>
+          <small>첫 스프라이트/VFX 콘셉트</small>
         </div>
         <div class="metric blue">
           <span>자동 검증</span>
@@ -84,23 +84,23 @@
         </div>
         <div class="metric amber">
           <span>막힌 점</span>
-          <strong>surface choice</strong>
-          <small>HTML pass 또는 Unity backlog 결정</small>
+          <strong>asset pass choice</strong>
+          <small>투명 sprite 또는 Unity setup 결정</small>
         </div>
         <div class="metric red">
           <span>다음 게이트</span>
-          <strong>PRD review</strong>
-          <small>클래스·프리팹 구조 검토</small>
+          <strong>visual review</strong>
+          <small>콘셉트 시트와 import 계획 검토</small>
         </div>
       </section>
 
       <section class="heroPanel">
         <h2>현재 결론</h2>
         <p>
-          잔향은 약해진 같은 효과가 아니라 잃어버린 기억이 무기에 남긴 버릇이어야 합니다.
-          새 기준 문서는 <code>docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md</code>와
-          <code>docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md</code>이며,
-          첫 Unity slice 후보는 절단쌍검 + 굶주린 칼무리 + 피의 반사 -> 피의 칼폭풍입니다.
+          Unity 첫 slice 전에 스프라이트/VFX 방향을 잡는 콘셉트 시트를 만들었습니다.
+          기준 문서는 <code>docs/design/LETHE_VISUAL_ASSET_PLAN.md</code>이고,
+          이미지는 <code>docs/design/assets/lethe-first-echo-showcase-concept.png</code>입니다.
+          다음 판단은 투명 runtime sprite를 만들지, Unity 2D 프로젝트를 먼저 만들지입니다.
         </p>
       </section>
 
@@ -110,15 +110,15 @@
           <div class="decision">
             <div>
               <span class="label">해야 할 일</span>
-              <span class="value">Unity 잔향 시스템 PRD 검토</span>
+              <span class="value">첫 비주얼 에셋 계획 검토</span>
             </div>
             <div>
               <span class="label">필요한 입력</span>
-              <span class="value"><code>LETHE_UNITY_ECHO_SYSTEM_PRD.md</code></span>
+              <span class="value"><code>LETHE_VISUAL_ASSET_PLAN.md</code></span>
             </div>
             <div>
               <span class="label">완료 신호</span>
-              <span class="value">HTML pass 또는 Unity backlog 선택</span>
+              <span class="value">투명 sprite 또는 Unity setup 선택</span>
             </div>
           </div>
         </article>
@@ -126,10 +126,10 @@
         <article class="panel">
           <h2>다음 판단</h2>
           <ul>
-            <li>형태 변환 문법이 충분히 선명한가?</li>
-            <li>Unity 클래스·SO·프리팹 구조가 충분한가?</li>
-            <li>피의 칼폭풍은 상시 궁극인가, 게이지 발동인가?</li>
-            <li>HTML showcase pass가 필요한가?</li>
+            <li>콘셉트 시트가 LETHE 첫 slice 방향으로 맞는가?</li>
+            <li>어떤 파츠를 투명 PNG로 먼저 만들까?</li>
+            <li>Unity MCP import 전에 추가 이미지가 필요한가?</li>
+            <li>Unity 2D 프로젝트를 지금 만들까?</li>
           </ul>
         </article>
 
@@ -138,15 +138,15 @@
           <div class="decision">
             <div>
               <span class="label">완료 작업</span>
-              <span class="value">형태 변환 문법과 Unity PRD 추가</span>
+              <span class="value">첫 스프라이트/VFX 콘셉트 시트 추가</span>
             </div>
             <div>
               <span class="label">검증</span>
-              <span class="value">문서 설계 단위, 보고서 재생성 필요</span>
+              <span class="value">imagegen 생성 이미지 확인, 보고서 재생성 필요</span>
             </div>
             <div>
               <span class="label">주의</span>
-              <span class="value">Unity 셋업은 PRD 검토와 표면 결정 후</span>
+              <span class="value">콘셉트 이미지는 참조용, 런타임 sprite는 별도 생성</span>
             </div>
           </div>
         </article>

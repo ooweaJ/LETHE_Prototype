@@ -2,21 +2,20 @@
 
 Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, legacy `docs/NEXT_TASKS.md`, or evidence files.
 
-## 1. Review Unity Echo System PRD
+## 1. Review Visual Asset Plan
 
 - Priority: high
-- Why: Unity work should start from a class/event/prefab contract, not improvised proc code.
-- How: read `docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md` and `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`.
-- Decide: are the class roles, ScriptableObjects, prefabs, and event boundaries enough for the first slice?
-- Blocker: do not implement Unity echoes without `WeaponHit/EchoHit/UltimateHit` loop rules.
+- Why: Unity setup should know which sprites/VFX concept and import targets to use.
+- How: read `docs/design/LETHE_VISUAL_ASSET_PLAN.md`.
+- Decide: is the first concept sheet good enough as the art direction anchor?
+- Blocker: do not import concept art as final runtime sprite atlas.
 
-## 2. Lock First Showcase And Trigger Rules
+## 2. Choose Next Asset Pass
 
 - Priority: high
-- Recommendation: `절단쌍검 + 굶주린 칼무리 + 피의 반사 -> 피의 칼폭풍`.
-- Include: 망각 변환 연출, 칼무리 +1~+5, 혈반 +1~+5, 공명, 피의 칼폭풍.
-- Decide: 궁극은 unlock 후 상시인지, 게이지 발동인지.
-- Blocker: if +5 looks like active memory copy, revise form language.
+- Options: transparent runtime sprites, more concept variations, or Unity project setup.
+- Recommendation: generate 3~5 transparent runtime VFX sprites only after the concept direction is accepted.
+- First candidates: 칼무리 반달 칼선, 혈반 표식, 회복 실 끝점, +5 발사 칼날, 피의 칼폭풍 칼날.
 
 ## 3. Choose Next Implementation Surface
 
