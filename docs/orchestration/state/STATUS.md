@@ -4,9 +4,9 @@ Last updated: 2026-06-10
 
 ## Current Snapshot
 
-LETHE HTML Alpha v0.12 implemented the new forgetting model and passed automated regression, but the user feedback is that the play experience still does not feel like a big change. The current task has shifted from raw rule implementation to Unity-ready echo architecture: echoes should not feel like `잔향!` labels on basic attacks, but like weapon-specific combat events with clear form transformation, data contracts, prefabs, and event boundaries.
+LETHE HTML Alpha v0.12 implemented the new forgetting model and passed automated regression, but the user feedback is that the play experience still does not feel like a big change. The current task has shifted from raw rule implementation to a Unity-ready echo slice: echoes should not feel like `잔향!` labels on basic attacks, but like weapon-specific combat events supported by concrete images, `_dev` prefabs, debug scene states, and one-person feel tests.
 
-The new design sources are `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`, `docs/design/LETHE_WEAPON_MEMORY_ECHO_SPEC.md`, `docs/design/LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`, `docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md`, `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`, `docs/design/LETHE_VISUAL_ASSET_PLAN.md`, and `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md`. Together they define the first showcase, active-to-echo form transformation, loop-safe hit event taxonomy, Unity class roles, ScriptableObjects, prefabs, first-slice acceptance criteria, the first sprite/VFX concept sheet, and the file-to-prefab-to-scene binding map for Unity MCP. No gameplay code should be added until this combat fantasy, architecture, and visual direction target is accepted or revised.
+The new design sources are `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`, `docs/design/LETHE_WEAPON_MEMORY_ECHO_SPEC.md`, `docs/design/LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`, `docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md`, `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`, `docs/design/LETHE_VISUAL_ASSET_PLAN.md`, `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md`, and `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md`. Together they define the first showcase, active-to-echo form transformation, loop-safe hit event taxonomy, Unity class roles, ScriptableObjects, prefabs, first-slice acceptance criteria, the first sprite/VFX concept sheet, the imagegen production plan, and the file-to-prefab-to-scene binding map for Unity MCP. No gameplay code should be added until this combat fantasy, image plan, architecture, and visual direction target is accepted or revised.
 
 The orchestration HTML interface now exists at `docs/orchestration/interface/index.html`, `docs/orchestration/interface/command.html`, and `docs/orchestration/interface/runbook.html`. AI-facing state lives under `docs/orchestration/state/`; human-facing reports live under `docs/orchestration/reports/YYYYMMDD/`.
 
@@ -74,7 +74,7 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Current Blocker
 
-The current blocker has moved from setup choice to Unity first-slice implementation. The Unity 2D project skeleton now exists under `LETHE/`, AnkleBreaker Unity MCP is registered as `anklebreaker-unity`, and the Unity editor bridge is reachable on port `7890`. Obsolete gamelovers/HTTP Unity MCP registrations were removed, and Unity generated folders/files are excluded by `.gitignore`.
+The current blocker has moved from setup choice to first-slice production order. The Unity 2D project skeleton now exists under `LETHE/`, AnkleBreaker Unity MCP is registered as `anklebreaker-unity`, and the Unity editor bridge is reachable on port `7890`. `Assets/_dev` is committed and was confirmed through `unity_asset_list`, so the next work should create `_dev` subfolders, generate the first player/map/enemy/weapon images, then import and assemble a debug slice.
 
 Discord actual send for the latest orchestration structure cleanup succeeded after explicit user request. Historical approval blocks remain recorded in the relevant devlog/report entries.
 
@@ -82,7 +82,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Commit the Unity 2D skeleton, then begin the first Unity slice from `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md`: create `Assets/Lethe/` folders, import the concept sheet as reference art only, keep player/map/enemy as placeholders, and start with data SOs, hit event routing, echo runtime, pooling, feedback services, and debug panel.
+Begin the first imagegen + MCP slice from `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md`: create `_dev` subfolders, generate the basic readability images, import them with AnkleBreaker MCP, and assemble `Dev_EchoSlice.unity` before moving into runtime combat code.
 
 For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` before real sends, then `npm run report:orchestrator:unit` when the Project Orchestrator is running and the report is ready.
 

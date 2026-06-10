@@ -9,6 +9,7 @@
 관련 문서:
 
 - `LETHE_VISUAL_ASSET_PLAN.md`: 첫 스프라이트/VFX 콘셉트와 파츠 계획.
+- `LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md`: 어떤 이미지를 어떤 순서로 만들고 `_dev`에서 검증할지 정하는 제작/테스트 플랜.
 - `LETHE_UNITY_ECHO_SYSTEM_PRD.md`: Unity 클래스, SO, prefab 구조.
 - `LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md`: 잔향 형태 변환 문법.
 
@@ -18,7 +19,7 @@
 이미지 파일 -> Unity Art 폴더 -> Sprite/Material/Particle -> Prefab -> ScriptableObject -> Scene
 ```
 
-MCP가 이 문서를 보면 "이 파일을 이 경로로 import하고, 이 prefab의 이 역할에 연결한다"까지 따라 할 수 있어야 한다.
+MCP가 이 문서를 보면 "이 파일을 이 경로로 import하고, 이 prefab의 이 역할에 연결한다"까지 따라 할 수 있어야 한다. 단, 첫 실험은 `LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md`에 따라 `Assets/_dev/`에서 먼저 진행하고, 검증된 구조만 `Assets/Lethe/`로 승격한다.
 
 ## 1. 현재 사용 가능한 이미지
 

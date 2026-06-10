@@ -6,8 +6,8 @@ Codex works in this repository as the implementation, verification, git, reporti
 
 - The project goal is to validate LETHE's core fun and possibility in HTML before deciding whether Unity implementation is justified.
 - AI proxy metrics are planning evidence only. They are not human emotion, balance, or Unity-transition proof.
-- Current state: the new forgetting model is implemented, Unity-ready design docs exist, a first sprite/VFX concept sheet exists, a Unity asset binding plan exists, and the Unity 2D skeleton is being committed.
-- The next gate is the first MCP-driven Unity setup pass based on `LETHE_UNITY_ASSET_BINDING_PLAN.md`.
+- Current state: the new forgetting model is implemented, Unity-ready design docs exist, a first sprite/VFX concept sheet exists, the Unity 2D skeleton is committed, and `Assets/_dev` is confirmed through AnkleBreaker MCP.
+- The next gate is the first imagegen + MCP Unity slice pass based on `LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md`.
 
 ## Operating Rules
 

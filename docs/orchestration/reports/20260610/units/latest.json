@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260610\\index.md",
-  "generatedAt": "2026-06-10T07:06:21.027Z",
-  "unitCount": 7,
+  "generatedAt": "2026-06-10T07:24:52.419Z",
+  "unitCount": 8,
   "latest": {
-    "title": "2026-06-10-07 - Unity 2D skeleton 커밋 준비",
-    "number": "07",
-    "markdownPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-07-unity-2d-skeleton-커밋-준비.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-07-unity-2d-skeleton-커밋-준비.html"
+    "title": "2026-06-10-08 - Unity slice 이미지 제작 플랜",
+    "number": "08",
+    "markdownPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-08-unity-slice-이미지-제작-플랜.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260610\\units\\2026-06-10-08-unity-slice-이미지-제작-플랜.html"
   }
 }

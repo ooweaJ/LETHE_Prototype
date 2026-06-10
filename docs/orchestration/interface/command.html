@@ -59,8 +59,8 @@
       <div class="grid">
         <article>
           <h2>Codex에게 지금 시킬 일</h2>
-          <p>Unity skeleton 이후 첫 MCP setup pass를 시작합니다.</p>
-          <textarea id="prompt-next" readonly>docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md를 읽고 Unity MCP로 첫 setup pass를 진행해줘. AnkleBreaker Unity MCP를 사용하고, 먼저 연결 상태와 현재 scene/project를 확인한 뒤 Assets/Lethe 폴더 구조를 만들고 docs/design/assets/lethe-first-echo-showcase-concept.png를 Unity의 Assets/Lethe/Art/Concept/ 참조 이미지로 import해줘. 아직 런타임 sprite atlas로 쓰지 말고, player/map/enemy는 placeholder로 유지해.</textarea>
+          <p>Unity 첫 slice를 imagegen + MCP 루프로 시작합니다.</p>
+          <textarea id="prompt-next" readonly>docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md를 읽고 Unity 첫 slice를 시작해줘. 먼저 Codex imagegen으로 기본 판독 이미지 5개(player silhouette, walker enemy, dark floor tile, left/right dual blades)를 만들고, AnkleBreaker Unity MCP(port 7890)로 Assets/_dev/Art/Sprites 하위에 import해줘. 그 다음 unity_asset_list로 인식 확인하고, 아직 gameplay code는 만들지 말고 Dev_EchoSlice용 폴더/프리팹 계획까지만 정리해줘.</textarea>
           <button type="button" data-copy-target="prompt-next">프롬프트 복사</button>
         </article>
 
@@ -69,6 +69,7 @@
           <ul>
             <li>새 기억, 무기, 적, 슬롯 추가 금지</li>
             <li>새 지역, 최종 보스, 장기 구조 확장 금지</li>
+            <li><code>Assets/Lethe</code> 승격은 보류하고 <code>Assets/_dev</code>에서 먼저 검증</li>
             <li>콘셉트 시트를 최종 runtime sprite atlas로 바로 사용하지 않기</li>
           </ul>
         </article>
@@ -76,10 +77,10 @@
         <article>
           <h2>완료 기준</h2>
           <ul>
-            <li>AnkleBreaker MCP 연결 확인</li>
-            <li><code>Assets/Lethe/</code> 폴더 생성</li>
-            <li>콘셉트 이미지 reference import</li>
-            <li>console/error 확인</li>
+            <li>기본 이미지 5개 생성</li>
+            <li><code>Assets/_dev/Art/Sprites</code> import</li>
+            <li>AnkleBreaker MCP로 asset 인식 확인</li>
+            <li>다음 잔향 VFX 5개 생성 대상 확정</li>
             <li>상태, devlog, reports 갱신</li>
           </ul>
         </article>
@@ -90,6 +91,7 @@
             <li><a href="../state/CURRENT_TASK.md">CURRENT_TASK.md</a></li>
             <li><a href="../state/NEXT_TASKS.md">NEXT_TASKS.md</a></li>
             <li><a href="../../design/LETHE_GAME_DESIGN_OVERVIEW.md">LETHE_GAME_DESIGN_OVERVIEW.md</a></li>
+            <li><a href="../../design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md">LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md</a></li>
             <li><a href="../../design/LETHE_UNITY_VERTICAL_SLICE_SPEC.md">LETHE_UNITY_VERTICAL_SLICE_SPEC.md</a></li>
             <li><a href="../state/SCOPE_GUARD.md">SCOPE_GUARD.md</a></li>
           </ul>
