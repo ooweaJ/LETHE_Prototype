@@ -17,9 +17,9 @@ This is not a balance test. It is a feel/readability test.
 ## Controls
 
 - `1`: Base dual blades only.
-- `2`: Kalmuri +1. Weapon hit creates delayed slash.
-- `3`: Kalmuri +5. Orbit blades plus launch blade on hit.
-- `4`: Blood +5. Blood mark, blood bloom, and heal thread on hit.
+- `2`: Kalmuri +1. Weapon hit creates a short delayed slash.
+- `3`: Kalmuri +5. Orbit blades plus launch blade on hit; the orbit should pulse when it reacts.
+- `4`: Blood +5. Blood mark, blood bloom, and three heal threads on hit.
 - `5`: Blood Blade Storm. Orbit/storm ring plus blood feedback.
 - `Space`: Force one attack.
 
@@ -35,7 +35,7 @@ Question:
 
 Pass:
 
-- Basic setup is readable enough to judge later effects.
+- Basic setup is readable enough to judge later effects, and the short dual-blade arc makes the weapon hit direction clear.
 
 Fail:
 
@@ -49,7 +49,7 @@ Question:
 
 Pass:
 
-- It reads as a separate white-blue slash after the weapon hit.
+- It reads as a separate white-blue slash after the weapon hit, not the same frame as the base attack.
 
 Fail:
 
@@ -63,7 +63,7 @@ Question:
 
 Pass:
 
-- Orbit blades and launch blade are visually distinct from +1.
+- Orbit blades, launch blade, and hit pulse are visually distinct from +1.
 
 Fail:
 
@@ -77,7 +77,7 @@ Question:
 
 Pass:
 
-- Blood mark/bloom and heal thread feel connected: enemy gets marked, something returns to player.
+- Blood mark/bloom and three heal threads feel connected: enemy gets marked, something returns to player.
 
 Fail:
 

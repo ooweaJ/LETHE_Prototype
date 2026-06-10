@@ -176,3 +176,58 @@ jaewoo가 Unity에서 직접 플레이한 뒤 `GO`, `ITERATE`, `NO-GO`를 정하
 - 방향: 구현 완료가 아니라 리뷰 가능한 의사결정 단위로 묶는다.
 - 행동: 리뷰 프롬프트, 승격 게이트, task 상태, report를 한 번에 정리했다.
 - 결과: jaewoo가 아침에 Unity를 열고 판단하면 바로 다음 Codex 작업으로 이어질 수 있다.
+
+# 2026-06-11-04 - Unity 리뷰 전 타격감 보강
+
+## 1. 현재 빌드 상태
+
+`Dev_EchoSlice.unity`는 기존 `1~5` 리뷰 루프를 유지하면서, 기본 공격과 잔향 타격의 체감 피드백이 더 잘 보이도록 보강됐다. 여전히 `_dev` debug slice이며, `Assets/Lethe` 승격은 하지 않았다.
+
+## 2. 오늘 바뀐 것
+
+- 기본 쌍검 타격마다 절단 arc가 짧게 보이게 했다.
+- 칼무리 +1 칼선은 즉시 발생이 아니라 짧은 지연 후 발생하게 바꿨다.
+- 타격 순간 2-frame debug hit stop과 짧은 camera shake를 추가했다.
+- 혈반 +5 회복 피드백은 1가닥에서 3가닥 heal thread로 바꿨다.
+- 칼무리 +5와 피의 칼폭풍은 타격 시 고리가 잠깐 펄스되게 했다.
+
+## 3. 테스트 결과와 근거
+
+- `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`, `isCompiling=false`.
+- Play Mode runtime check에서 mode `0~4` 전환과 강제 공격을 직접 호출했다.
+- 런타임 생성 확인: `Debug_DualBladeSwingArc`, `Debug_HealThreadLine`, `Echo_Kalmuri_LaunchBlade(Clone)`, `Ultimate_BloodBladeStorm(Clone)`, `Debug_KalmuriOrbit`.
+- `unity_console_log(port=7890, type="error")`: `count=0`.
+- `unity_search_missing_references(port=7890, scope="scene")`: `totalFound=0`.
+- Play Mode 정지 후 editor state: `isPlaying=false`, `isCompiling=false`, active scene `Assets/_dev/Scenes/Dev_EchoSlice.unity`, `sceneDirty=false`.
+- `npm.cmd run report`: 통과, 4개 unit report 생성.
+- `npm.cmd run report:check`: 통과, 4개 unit heading 확인.
+- `npm.cmd run report:orchestrator:unit:dry`: `fetch failed`로 실패. Project Orchestrator intake endpoint가 현재 응답하지 않는 상태로 판단.
+
+## 4. 결정한 것
+
+- GO 전에도 리뷰 품질을 높이는 `_dev` polish는 진행한다.
+- production runtime split, data asset binding, `Assets/Lethe` 승격은 jaewoo 리뷰 전에는 진행하지 않는다.
+- 이번 변경은 새 무기/새 기억/새 콘텐츠가 아니라 기존 slice의 판독성 보강으로 본다.
+
+## 5. 문제 또는 리스크
+
+- hit stop과 camera shake는 `_dev` debug controller 안에 임시로 있다.
+- line renderer 기반 arc와 heal thread는 최종 VFX가 아니다.
+- camera shake 강도와 blood thread 밀도는 실제 사람 눈으로 과한지 봐야 한다.
+
+## 6. GPT/Claude 인계 요약
+
+기존 리뷰 씬에 첫 타격감 보강이 들어갔다. 리뷰 질문은 그대로 유지하되, 이제 Base/Kalmuri/Blood/Storm이 더 잘 구분되는지 확인하면 된다.
+
+## 7. 다음 Codex 작업
+
+- jaewoo 리뷰 결과를 기다린다.
+- `ITERATE`면 가장 약한 상태의 VFX scale, timing, camera shake, heal thread density를 우선 조정한다.
+- `GO`면 debug-only feedback을 production feedback/runtime 구조로 분리한다.
+
+## 8. 포트폴리오 메모
+
+- 문제: 기능은 작동하지만 첫 인상에서 공격이 밋밋하면 리뷰 판단이 왜곡된다.
+- 방향: 시스템 확장보다 hit feel과 판독성만 좁게 보강한다.
+- 행동: 기본 arc, delayed slash, hit stop, camera shake, heal thread 다발, orbit pulse를 한 파일에 제한해 추가했다.
+- 결과: 아침 리뷰에서 “잔향이 붙어 있다”보다 “무기와 잔향이 반응한다”를 더 빠르게 판단할 수 있다.

@@ -47,6 +47,9 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 - Unity morning review docs status: jaewoo can open `Assets/_dev/Scenes/Dev_EchoSlice.unity`, press Play, use `1~5` and `Space`, then return `GO`, `ITERATE`, or `NO-GO` with weakest state and first fix.
 - Unity final morning-readiness verification: `unity_editor_ping(port=7890)` connected to `LETHE`; `unity_editor_state(port=7890)` active scene `Assets/_dev/Scenes/Dev_EchoSlice.unity`, `isCompiling=false`, `sceneDirty=false`; compilation errors `count=0`; scene missing references `totalFound=0`; console errors `count=0`.
 - Unity morning review docs reporting: `npm.cmd run report` pass, `npm.cmd run report:check` pass, `npm.cmd run report:orchestrator:unit:dry` failed with `fetch failed`.
+- Unity pre-review hit feel polish: `DevEchoSliceDebugController` now adds procedural base swing arc, delayed Kalmuri +1 slash, 2-frame debug hit stop, short camera shake, 3-strand Blood heal thread, and orbit pulse for Kalmuri +5 / Blood Blade Storm.
+- Unity pre-review hit feel verification: Unity refresh completed; compilation errors `count=0`; Play Mode mode `0~4` forced attack check observed `Debug_DualBladeSwingArc`, `Debug_HealThreadLine`, `Echo_Kalmuri_LaunchBlade(Clone)`, `Ultimate_BloodBladeStorm(Clone)`, and `Debug_KalmuriOrbit`; console errors `count=0`; missing references `totalFound=0`; editor state after stopping Play Mode `sceneDirty=false`.
+- Unity pre-review hit feel reporting: `npm.cmd run report` pass, `npm.cmd run report:check` pass, `npm.cmd run report:orchestrator:unit:dry` failed with `fetch failed`.
 - New forgetting model `npm run qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.19s`.
 - New forgetting model `npm run balance:loop`: `GO_BALANCE_BASELINE`, first boss clear `80%`, full clear `60%`, death `40%`, first boss TTK median `23.91s`.
 - `npm run playtest:package:dry`: pass.
@@ -115,7 +118,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Wait for jaewoo's morning Unity echo slice review. Open `LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity`, press Play, test `1` base, `2` Kalmuri +1, `3` Kalmuri +5, `4` Blood +5, `5` Blood Blade Storm, and `Space` forced attack. Return `GO`, `ITERATE`, or `NO-GO`, plus weakest state and first fix.
+Wait for jaewoo's morning Unity echo slice review. Open `LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity`, press Play, test `1` base, `2` Kalmuri +1 delayed slash, `3` Kalmuri +5 orbit/launch/pulse, `4` Blood +5 mark/bloom/3-strand heal thread, `5` Blood Blade Storm, and `Space` forced attack. Return `GO`, `ITERATE`, or `NO-GO`, plus weakest state and first fix.
 
 Do not promote `_dev` assets to `Assets/Lethe` until jaewoo explicitly returns `GO`.
 

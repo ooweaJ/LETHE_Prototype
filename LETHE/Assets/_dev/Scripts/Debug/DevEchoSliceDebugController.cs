@@ -28,6 +28,7 @@ namespace Lethe.Dev
         [SerializeField] private GameObject player;
         [SerializeField] private GameObject targetEnemy;
         [SerializeField] private Transform echoAnchor;
+        [SerializeField] private Transform cameraTransform;
         [SerializeField] private bool autoAttack = true;
 
         [Header("Kalmuri")]
@@ -52,9 +53,18 @@ namespace Lethe.Dev
         [SerializeField] private float healThreadLifetime = 0.35f;
         [SerializeField] private float persistentOrbitRadius = 0.85f;
         [SerializeField] private float orbitSpeed = 140f;
+        [SerializeField] private float delayedSlashDelay = 0.12f;
+        [SerializeField] private int bloodThreadCount = 3;
+        [SerializeField] private int debugHitStopFrames = 2;
+        [SerializeField] private float cameraShakeDuration = 0.08f;
+        [SerializeField] private float cameraShakeMagnitude = 0.045f;
 
         private readonly List<GameObject> persistentObjects = new List<GameObject>();
         private Material healThreadMaterial;
+        private Material swingArcMaterial;
+        private Coroutine cameraShakeRoutine;
+        private Coroutine hitStopRoutine;
+        private float orbitPulseRemaining;
 
         private void Awake()
         {
@@ -207,14 +217,18 @@ namespace Lethe.Dev
             var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             var hitPosition = hitEvent.target != null ? hitEvent.target.transform.position : (Vector3)hitEvent.position;
 
+            SpawnSwingArc(hitPosition, direction);
+            PulseHitFeedback();
+
             if (currentMode == DevEchoSliceMode.KalmuriOne)
             {
-                SpawnTimed(kalmuriSlashPrefab, hitPosition + (Vector3)(direction * -0.2f), Quaternion.Euler(0f, 0f, angle), slashLifetime);
+                StartCoroutine(SpawnDelayed(kalmuriSlashPrefab, hitPosition + (Vector3)(direction * -0.2f), Quaternion.Euler(0f, 0f, angle), slashLifetime, delayedSlashDelay));
             }
             else if (currentMode == DevEchoSliceMode.KalmuriFive)
             {
                 SpawnTimed(kalmuriSlashPrefab, hitPosition, Quaternion.Euler(0f, 0f, angle), slashLifetime);
                 SpawnTimed(kalmuriLaunchBladePrefab, hitPosition + (Vector3)(direction * 0.35f), Quaternion.Euler(0f, 0f, angle), launchLifetime);
+                orbitPulseRemaining = 0.18f;
             }
             else if (currentMode == DevEchoSliceMode.BloodFive)
             {
@@ -224,6 +238,7 @@ namespace Lethe.Dev
             {
                 SpawnTimed(kalmuriLaunchBladePrefab, hitPosition + (Vector3)(direction * 0.4f), Quaternion.Euler(0f, 0f, angle), launchLifetime);
                 SpawnBloodHit(hitPosition, hitEvent.target);
+                orbitPulseRemaining = 0.22f;
             }
         }
 
@@ -231,7 +246,14 @@ namespace Lethe.Dev
         {
             SpawnTimed(bloodMarkPrefab, hitPosition + Vector3.up * 0.05f, Quaternion.identity, bloodMarkLifetime, target != null ? target.transform : null);
             SpawnTimed(bloodBloomPrefab, hitPosition, Quaternion.identity, bloomLifetime);
-            StartCoroutine(HealThread(hitPosition, PlayerPosition(), healThreadLifetime));
+            var threads = Mathf.Max(1, bloodThreadCount);
+            for (var index = 0; index < threads; index += 1)
+            {
+                var offset = threads == 1 ? 0f : (index - (threads - 1) * 0.5f) * 0.12f;
+                var from = hitPosition + new Vector3(offset, Mathf.Abs(offset) * 0.35f, 0f);
+                var to = PlayerPosition() + new Vector3(-offset * 0.4f, 0.08f * index, 0f);
+                StartCoroutine(HealThread(from, to, healThreadLifetime + index * 0.04f));
+            }
         }
 
         private void ApplyBuildState(DevEchoSliceMode mode)
@@ -286,6 +308,12 @@ namespace Lethe.Dev
             return instance;
         }
 
+        private IEnumerator SpawnDelayed(GameObject prefab, Vector3 position, Quaternion rotation, float lifetime, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            SpawnTimed(prefab, position, rotation, lifetime);
+        }
+
         private IEnumerator DespawnAfter(GameObject prefab, GameObject instance, float lifetime)
         {
             yield return new WaitForSeconds(lifetime);
@@ -297,6 +325,32 @@ namespace Lethe.Dev
             {
                 Destroy(instance);
             }
+        }
+
+        private void SpawnSwingArc(Vector3 hitPosition, Vector2 direction)
+        {
+            var normal = new Vector3(-direction.y, direction.x, 0f);
+            var forward = new Vector3(direction.x, direction.y, 0f);
+            var center = hitPosition - forward * 0.18f;
+            var lineObject = new GameObject("Debug_DualBladeSwingArc");
+            var line = lineObject.AddComponent<LineRenderer>();
+            line.positionCount = 5;
+            line.startWidth = 0.055f;
+            line.endWidth = 0.012f;
+            line.startColor = new Color(0.85f, 0.96f, 1f, 0.9f);
+            line.endColor = new Color(0.55f, 0.8f, 1f, 0.2f);
+            line.sortingOrder = 18;
+            line.material = GetSwingArcMaterial();
+
+            for (var index = 0; index < line.positionCount; index += 1)
+            {
+                var t = index / (float)(line.positionCount - 1);
+                var side = Mathf.Lerp(-0.45f, 0.45f, t);
+                var bow = Mathf.Sin(t * Mathf.PI) * 0.22f;
+                line.SetPosition(index, center + normal * side + forward * bow);
+            }
+
+            Destroy(lineObject, 0.09f);
         }
 
         private IEnumerator HealThread(Vector3 from, Vector3 to, float lifetime)
@@ -342,6 +396,65 @@ namespace Lethe.Dev
             return healThreadMaterial;
         }
 
+        private Material GetSwingArcMaterial()
+        {
+            if (swingArcMaterial == null)
+            {
+                var shader = Shader.Find("Sprites/Default");
+                swingArcMaterial = new Material(shader);
+            }
+
+            return swingArcMaterial;
+        }
+
+        private void PulseHitFeedback()
+        {
+            if (hitStopRoutine == null && debugHitStopFrames > 0)
+            {
+                hitStopRoutine = StartCoroutine(DebugHitStop(debugHitStopFrames));
+            }
+
+            if (cameraTransform != null && cameraShakeDuration > 0f && cameraShakeMagnitude > 0f)
+            {
+                if (cameraShakeRoutine != null)
+                {
+                    StopCoroutine(cameraShakeRoutine);
+                }
+
+                cameraShakeRoutine = StartCoroutine(CameraShake(cameraShakeDuration, cameraShakeMagnitude));
+            }
+        }
+
+        private IEnumerator DebugHitStop(int frames)
+        {
+            var previousScale = Time.timeScale;
+            Time.timeScale = 0f;
+            for (var index = 0; index < frames; index += 1)
+            {
+                yield return null;
+            }
+
+            Time.timeScale = previousScale;
+            hitStopRoutine = null;
+        }
+
+        private IEnumerator CameraShake(float duration, float magnitude)
+        {
+            var startPosition = cameraTransform.localPosition;
+            var elapsed = 0f;
+            while (elapsed < duration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                var falloff = 1f - Mathf.Clamp01(elapsed / duration);
+                var shake = Random.insideUnitCircle * magnitude * falloff;
+                cameraTransform.localPosition = startPosition + new Vector3(shake.x, shake.y, 0f);
+                yield return null;
+            }
+
+            cameraTransform.localPosition = startPosition;
+            cameraShakeRoutine = null;
+        }
+
         private void CreateKalmuriOrbit(int count, float radius)
         {
             if (kalmuriOrbitBladePrefab == null)
@@ -378,6 +491,12 @@ namespace Lethe.Dev
         private void RotatePersistentObjects()
         {
             var center = echoAnchor != null ? echoAnchor.position : PlayerPosition();
+            if (orbitPulseRemaining > 0f)
+            {
+                orbitPulseRemaining = Mathf.Max(0f, orbitPulseRemaining - Time.unscaledDeltaTime);
+            }
+
+            var pulse = orbitPulseRemaining > 0f ? 1f + Mathf.Sin((orbitPulseRemaining / 0.22f) * Mathf.PI) * 0.16f : 1f;
             for (var index = 0; index < persistentObjects.Count; index += 1)
             {
                 var item = persistentObjects[index];
@@ -387,7 +506,8 @@ namespace Lethe.Dev
                 }
 
                 item.transform.position = center;
-                item.transform.Rotate(0f, 0f, orbitSpeed * Time.deltaTime);
+                item.transform.localScale = Vector3.one * pulse;
+                item.transform.Rotate(0f, 0f, orbitSpeed * pulse * Time.deltaTime);
             }
         }
 
@@ -432,6 +552,11 @@ namespace Lethe.Dev
             {
                 var anchor = player.transform.Find("EchoAnchor");
                 echoAnchor = anchor != null ? anchor : player.transform;
+            }
+
+            if (cameraTransform == null && Camera.main != null)
+            {
+                cameraTransform = Camera.main.transform;
             }
         }
     }
