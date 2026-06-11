@@ -106,3 +106,28 @@ Unity MCP verification:
 ## Do Not Touch
 
 Do not continue polishing `Dev_EchoSlice` as the main path. Do not add shop, meta progression, multi-region structure, or final boss.
+
+## Latest Combat Feel Fix
+
+- User review: prototype is not bad, but attack range is too small and weapon/enemy interaction does not yet feel physical enough.
+- Changed base dual blades from nearest-single-target hit to wide cleave:
+  - actual range `2.35`.
+  - attack arc `108` degrees.
+  - up to `5` enemies per swing.
+  - primary damage `10.5`, secondary damage `72%`.
+  - primary/secondary knockback with immediate hit snap.
+- Added runtime arc targeting through `PrototypeEnemySpawner.FindTargetsInArc`.
+- Added enemy hit reaction through `PrototypeEnemy.ApplyKnockback`.
+- Synced scene and player prefab serialized weapon values.
+- Evidence:
+  - `LETHE/Assets/_dev/Evidence/prototype_weapon_range_interaction_game.png`
+- Verification:
+  - Unity compile errors: `0`.
+  - Scene missing references: `0`.
+  - Play Mode console errors: `0`.
+  - Forced base dual-blade swing against five enemies:
+    - primary target `28.0 -> 17.5`.
+    - secondary targets `28.0 -> 20.4`.
+    - all five targets moved outward immediately after hit.
+    - weapon cleave/primary hit line VFX count observed: `12`.
+  - Editor state after stop: active scene `Dev_Prototype_v0`, `sceneDirty=false`.

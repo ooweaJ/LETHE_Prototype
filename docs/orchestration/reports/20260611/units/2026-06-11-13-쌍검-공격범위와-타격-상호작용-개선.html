@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-11-13 - 쌍검 공격범위와 타격 상호작용 개선</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-11-13 - 쌍검 공격범위와 타격 상호작용 개선</h1>
+      <p class="meta">Generated from 2026-06-11-13-쌍검-공격범위와-타격-상호작용-개선.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260611/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-11-13 - 쌍검 공격범위와 타격 상호작용 개선</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v0</code>의 기본 쌍검이 단일 타겟 찌르기처럼 보이던 상태에서, 넓은 부채꼴 cleave와 적 knockback이 있는 전투 상호작용으로 바뀌었다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>쌍검 기본 공격을 가장 가까운 1명만 때리던 구조에서 최대 5명 부채꼴 공격으로 변경했다.</li>
+<li>실제 공격 범위를 <code>2.35</code>, 공격각을 <code>108도</code>로 키웠다.</li>
+<li>primary/secondary damage를 분리했다.</li>
+<li>적에게 즉시 밀림과 감속 knockback을 추가했다.</li>
+<li>타격 직후 접촉 피해가 바로 겹치지 않도록 짧은 lockout을 넣었다.</li>
+<li>cleave core/left/right 선과 primary/secondary hit 선을 추가했다.</li>
+<li>씬과 player prefab의 serialized weapon 값을 동기화했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>Unity compile errors: <code>0</code>.</li>
+<li>Scene missing references: <code>0</code>.</li>
+<li>Play Mode console errors: <code>0</code>.</li>
+<li><code>npm.cmd run report</code>: 통과.</li>
+<li><code>npm.cmd run report:check</code>: 통과, unit heading <code>13</code>개 확인.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패. 중앙 Discord intake가 현재 환경에서 닿지 않는다.</li>
+<li>강제 기본 쌍검 테스트:</li>
+<li>5마리 모두 공격 판정에 들어왔다.</li>
+<li>primary target: <code>28.0 -&gt; 17.5</code>.</li>
+<li>secondary targets: <code>28.0 -&gt; 20.4</code>.</li>
+<li>모든 적이 타격 직후 바깥으로 밀렸다.</li>
+<li>weapon cleave/primary hit VFX <code>12</code>개 생성 확인.</li>
+<li>evidence:</li>
+<li><code>LETHE/Assets/_dev/Evidence/prototype_weapon_range_interaction_game.png</code></li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>현재 단계에서는 쌍검의 공격 판정과 화면 궤적을 먼저 크게 맞춘다.</li>
+<li>&quot;검이 닿았다&quot;는 감각은 damage, knockback, contact lockout, VFX가 함께 만들어야 한다.</li>
+<li>최종 VFX는 line-renderer만으로 끝내지 않고 sprite/pool 기반 slash로 가야 한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>넓어진 cleave 때문에 킬 속도와 Blood Blade Storm 밸런스는 다시 봐야 한다.</li>
+<li>타격 VFX는 아직 선 기반이라 최종 뽕맛은 부족하다.</li>
+<li>적끼리 겹치는 압박감과 spacing/collision은 별도 패스가 필요하다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>프로토타입의 첫 불만은 &quot;범위와 상호작용이 작다&quot;였다. Codex는 기본 쌍검을 5타겟 부채꼴 cleave로 바꾸고, 적 knockback과 접촉 lockout을 넣었다. 다음 리뷰는 이 변화가 실제 손맛을 올렸는지, 아니면 enemy density/weapon animation/VFX를 더 보강해야 하는지 판단하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>enemy spacing/collision 압박감 조정.</li>
+<li>쌍검 sprite slash VFX 제작/연동.</li>
+<li>무기 anchor 모션과 캐릭터 방향 애니메이션 연결 강화.</li>
+<li>넓어진 cleave 기준으로 60초 밸런스 smoke 재측정.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 시스템은 있었지만 기본 공격이 너무 작아 게임 상호작용처럼 느껴지지 않았다.</li>
+<li>방향: 먼저 판정, 반응, 시각 궤적을 같은 크기로 키운다.</li>
+<li>행동: cleave targeting, knockback, contact lockout, wider VFX를 구현했다.</li>
+<li>결과: 한 번의 기본 공격으로 여러 적을 베고 밀어내는 최소 전투감 기준이 생겼다.</li>
+</ul>
+  </main>
+</body>
+</html>

@@ -45,11 +45,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04d00a8bc6fa608499db7c48be7f1f32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Lethe.Dev.PrototypeWeaponController
-  attackInterval: 0.28
-  attackRange: 1.7
-  baseDamage: 9
-  swingDuration: 0.1
-  swingDegrees: 60
+  attackInterval: 0.23
+  attackRange: 2.35
+  baseDamage: 10.5
+  swingDuration: 0.13
+  swingDegrees: 86
+  attackArcDegrees: 108
+  maxTargetsPerSwing: 5
+  secondaryDamageMultiplier: 0.72
+  primaryKnockback: 3.8
+  secondaryKnockback: 2.6
   visualRoot: {fileID: 4287695231876782212}
 --- !u!1 &1814754247995259025
 GameObject:

@@ -373,6 +373,7 @@ namespace Lethe.Dev
                 }
 
                 enemy.Health.ApplyDamage(damage, gameObject);
+                enemy.ApplyKnockback((enemy.transform.position - center).normalized, 1.8f);
                 SpawnLineVfx(effectName, center, enemy.transform.position, color, 0.16f, 0.032f);
             }
         }

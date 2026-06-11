@@ -232,6 +232,13 @@
           <p>Dev_Prototype_v0의 player, enemy, map, weapon, memory/echo VFX를 LETHE 컨셉 기준으로 교체했고, Pretendard 기반 한글 HUD까지 연결했다. 초록 배경은 source chroma-key용이고, Unity runtime은 alpha PNG를 사용한다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-11-13</span>
+          <h2><a href="#unit-2026-06-11-13" data-unit-link="unit-2026-06-11-13">쌍검 공격범위와 타격 상호작용 개선</a></h2>
+          <p>Dev_Prototype_v0의 기본 쌍검이 단일 타겟 찌르기처럼 보이던 상태에서, 넓은 부채꼴 cleave와 적 knockback이 있는 전투 상호작용으로 바뀌었다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -943,6 +950,67 @@
 <li>방향: LETHE의 망각/기억/혈색/칼무리 컨셉과 한글 UI가 화면에서 먼저 읽히게 만든다.</li>
 <li>행동: player/enemy/map/weapon/VFX를 전면 교체하고 Unity runtime VFX spawn 경로와 한글 HUD를 추가했다.</li>
 <li>결과: 핵심 gameplay 화면이 LETHE 컨셉 평가 가능한 수준으로 이동했다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-11-13" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-11-13 - 쌍검 공격범위와 타격 상호작용 개선</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v0</code>의 기본 쌍검이 단일 타겟 찌르기처럼 보이던 상태에서, 넓은 부채꼴 cleave와 적 knockback이 있는 전투 상호작용으로 바뀌었다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>쌍검 기본 공격을 가장 가까운 1명만 때리던 구조에서 최대 5명 부채꼴 공격으로 변경했다.</li>
+<li>실제 공격 범위를 <code>2.35</code>, 공격각을 <code>108도</code>로 키웠다.</li>
+<li>primary/secondary damage를 분리했다.</li>
+<li>적에게 즉시 밀림과 감속 knockback을 추가했다.</li>
+<li>타격 직후 접촉 피해가 바로 겹치지 않도록 짧은 lockout을 넣었다.</li>
+<li>cleave core/left/right 선과 primary/secondary hit 선을 추가했다.</li>
+<li>씬과 player prefab의 serialized weapon 값을 동기화했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>Unity compile errors: <code>0</code>.</li>
+<li>Scene missing references: <code>0</code>.</li>
+<li>Play Mode console errors: <code>0</code>.</li>
+<li><code>npm.cmd run report</code>: 통과.</li>
+<li><code>npm.cmd run report:check</code>: 통과, unit heading <code>13</code>개 확인.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패. 중앙 Discord intake가 현재 환경에서 닿지 않는다.</li>
+<li>강제 기본 쌍검 테스트:</li>
+<li>5마리 모두 공격 판정에 들어왔다.</li>
+<li>primary target: <code>28.0 -&gt; 17.5</code>.</li>
+<li>secondary targets: <code>28.0 -&gt; 20.4</code>.</li>
+<li>모든 적이 타격 직후 바깥으로 밀렸다.</li>
+<li>weapon cleave/primary hit VFX <code>12</code>개 생성 확인.</li>
+<li>evidence:</li>
+<li><code>LETHE/Assets/_dev/Evidence/prototype_weapon_range_interaction_game.png</code></li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>현재 단계에서는 쌍검의 공격 판정과 화면 궤적을 먼저 크게 맞춘다.</li>
+<li>&quot;검이 닿았다&quot;는 감각은 damage, knockback, contact lockout, VFX가 함께 만들어야 한다.</li>
+<li>최종 VFX는 line-renderer만으로 끝내지 않고 sprite/pool 기반 slash로 가야 한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>넓어진 cleave 때문에 킬 속도와 Blood Blade Storm 밸런스는 다시 봐야 한다.</li>
+<li>타격 VFX는 아직 선 기반이라 최종 뽕맛은 부족하다.</li>
+<li>적끼리 겹치는 압박감과 spacing/collision은 별도 패스가 필요하다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>프로토타입의 첫 불만은 &quot;범위와 상호작용이 작다&quot;였다. Codex는 기본 쌍검을 5타겟 부채꼴 cleave로 바꾸고, 적 knockback과 접촉 lockout을 넣었다. 다음 리뷰는 이 변화가 실제 손맛을 올렸는지, 아니면 enemy density/weapon animation/VFX를 더 보강해야 하는지 판단하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>enemy spacing/collision 압박감 조정.</li>
+<li>쌍검 sprite slash VFX 제작/연동.</li>
+<li>무기 anchor 모션과 캐릭터 방향 애니메이션 연결 강화.</li>
+<li>넓어진 cleave 기준으로 60초 밸런스 smoke 재측정.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 시스템은 있었지만 기본 공격이 너무 작아 게임 상호작용처럼 느껴지지 않았다.</li>
+<li>방향: 먼저 판정, 반응, 시각 궤적을 같은 크기로 키운다.</li>
+<li>행동: cleave targeting, knockback, contact lockout, wider VFX를 구현했다.</li>
+<li>결과: 한 번의 기본 공격으로 여러 적을 베고 밀어내는 최소 전투감 기준이 생겼다.</li>
 </ul>
     </article>
       </div>

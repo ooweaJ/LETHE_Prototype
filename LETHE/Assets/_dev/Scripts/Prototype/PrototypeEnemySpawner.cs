@@ -47,6 +47,51 @@ namespace Lethe.Dev
             return best;
         }
 
+        public void FindTargetsInArc(Vector3 origin, Vector3 forward, float range, float arcDegrees, int maxTargets, List<PrototypeEnemy> results)
+        {
+            results.Clear();
+            forward.z = 0f;
+            if (forward.sqrMagnitude <= 0.0001f)
+            {
+                return;
+            }
+
+            forward.Normalize();
+            var rangeSqr = range * range;
+            var minDot = Mathf.Cos(Mathf.Clamp(arcDegrees, 1f, 360f) * 0.5f * Mathf.Deg2Rad);
+            for (var index = 0; index < enemies.Count; index += 1)
+            {
+                var enemy = enemies[index];
+                if (enemy == null || enemy.Health == null || enemy.Health.IsDead || !enemy.gameObject.activeSelf)
+                {
+                    continue;
+                }
+
+                var toEnemy = enemy.transform.position - origin;
+                toEnemy.z = 0f;
+                var sqr = toEnemy.sqrMagnitude;
+                if (sqr > rangeSqr || sqr <= 0.0001f)
+                {
+                    continue;
+                }
+
+                if (Vector3.Dot(forward, toEnemy.normalized) < minDot)
+                {
+                    continue;
+                }
+
+                results.Add(enemy);
+            }
+
+            results.Sort((left, right) =>
+                (left.transform.position - origin).sqrMagnitude.CompareTo((right.transform.position - origin).sqrMagnitude));
+
+            if (maxTargets > 0 && results.Count > maxTargets)
+            {
+                results.RemoveRange(maxTargets, results.Count - maxTargets);
+            }
+        }
+
         public void Respawn(PrototypeEnemy enemy)
         {
             if (enemy == null || player == null)

@@ -236,3 +236,25 @@ For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` b
     - `spr_blood_blade_storm_ring_01`
   - Active scene `Dev_Prototype_v0`, `sceneDirty=false`.
 - Excluded from this commit by scope: `LETHE/Assets/_dev/Fonts/` and `.vscode/`. The scene `koreanFont` reference is cleared so the committed scene does not depend on local-only font files.
+
+## Latest Combat Interaction Pass
+
+- Jaewoo review after the first prototype: not bad, but attack range felt too small and weapon/enemy interaction was not physical enough.
+- Prototype dual blades now use a real cleave model instead of one nearest-target poke:
+  - range `2.35`.
+  - arc `108` degrees.
+  - max `5` targets per swing.
+  - primary/secondary damage split.
+  - immediate enemy knockback snap plus decay velocity.
+- `PrototypeEnemySpawner` now exposes arc target collection for runtime combat.
+- `PrototypeEnemy` now has hit knockback and short contact-damage lockout.
+- Scene and player prefab serialized weapon values were synced.
+- Verification:
+  - Unity compile errors `0`.
+  - scene missing references `0`.
+  - Play Mode console errors `0`.
+  - forced base swing hit 5 enemies: primary `28.0 -> 17.5`, secondary `28.0 -> 20.4`, all targets snapped outward.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, `13` unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+  - evidence: `LETHE/Assets/_dev/Evidence/prototype_weapon_range_interaction_game.png`.

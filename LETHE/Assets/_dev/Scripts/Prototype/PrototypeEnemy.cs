@@ -8,6 +8,9 @@ namespace Lethe.Dev
         [SerializeField] private float contactDamage = 3.5f;
         [SerializeField] private float contactCooldown = 0.95f;
         [SerializeField] private float stopDistance = 0.45f;
+        [SerializeField] private float knockbackDecay = 11f;
+        [SerializeField] private float knockbackContactLock = 0.18f;
+        [SerializeField] private float knockbackSnapDistance = 0.07f;
         [SerializeField] private Vector2 arenaHalfExtents = new Vector2(7.6f, 4.6f);
         [SerializeField] private PrototypeSpriteSheetAnimator animator;
         [SerializeField] private PrototypeHealth health;
@@ -15,6 +18,7 @@ namespace Lethe.Dev
         private PrototypeGameManager game;
         private Transform target;
         private float nextContactAt;
+        private Vector3 knockbackVelocity;
 
         public PrototypeHealth Health => health;
 
@@ -48,12 +52,18 @@ namespace Lethe.Dev
             var distance = delta.magnitude;
             var direction = distance > 0.001f ? (Vector2)(delta / distance) : Vector2.down;
 
-            if (distance > stopDistance)
+            var recoveringFromHit = knockbackVelocity.sqrMagnitude > 0.25f;
+            if (knockbackVelocity.sqrMagnitude > 0.0001f)
+            {
+                var nextPosition = transform.position + knockbackVelocity * Time.deltaTime;
+                transform.position = ClampToArena(nextPosition);
+                knockbackVelocity = Vector3.MoveTowards(knockbackVelocity, Vector3.zero, knockbackDecay * Time.deltaTime);
+            }
+
+            if (!recoveringFromHit && distance > stopDistance)
             {
                 var nextPosition = transform.position + (Vector3)(direction * moveSpeed * Time.deltaTime);
-                nextPosition.x = Mathf.Clamp(nextPosition.x, -arenaHalfExtents.x, arenaHalfExtents.x);
-                nextPosition.y = Mathf.Clamp(nextPosition.y, -arenaHalfExtents.y, arenaHalfExtents.y);
-                transform.position = nextPosition;
+                transform.position = ClampToArena(nextPosition);
             }
 
             animator?.SetMotion(direction, distance > stopDistance);
@@ -78,7 +88,34 @@ namespace Lethe.Dev
         public void Respawn(Vector3 position)
         {
             transform.position = position;
+            knockbackVelocity = Vector3.zero;
             health?.ResetHealth();
+        }
+
+        public void ApplyKnockback(Vector3 direction, float impulse)
+        {
+            if (health != null && health.IsDead)
+            {
+                return;
+            }
+
+            direction.z = 0f;
+            if (direction.sqrMagnitude <= 0.0001f)
+            {
+                return;
+            }
+
+            knockbackVelocity += direction.normalized * Mathf.Max(0f, impulse);
+            knockbackVelocity = Vector3.ClampMagnitude(knockbackVelocity, 4.8f);
+            transform.position = ClampToArena(transform.position + direction.normalized * Mathf.Min(0.3f, impulse * knockbackSnapDistance));
+            nextContactAt = Mathf.Max(nextContactAt, Time.time + knockbackContactLock);
+        }
+
+        private Vector3 ClampToArena(Vector3 position)
+        {
+            position.x = Mathf.Clamp(position.x, -arenaHalfExtents.x, arenaHalfExtents.x);
+            position.y = Mathf.Clamp(position.y, -arenaHalfExtents.y, arenaHalfExtents.y);
+            return position;
         }
 
         private void HandleDied(PrototypeHealth deadHealth, GameObject source)

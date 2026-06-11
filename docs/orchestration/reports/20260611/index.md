@@ -730,3 +730,66 @@ LETHE prototype의 시각 기준을 placeholder에서 dark fantasy memory/forget
 - 방향: LETHE의 망각/기억/혈색/칼무리 컨셉과 한글 UI가 화면에서 먼저 읽히게 만든다.
 - 행동: player/enemy/map/weapon/VFX를 전면 교체하고 Unity runtime VFX spawn 경로와 한글 HUD를 추가했다.
 - 결과: 핵심 gameplay 화면이 LETHE 컨셉 평가 가능한 수준으로 이동했다.
+
+# 2026-06-11-13 - 쌍검 공격범위와 타격 상호작용 개선
+
+## 1. 현재 빌드 상태
+
+`Dev_Prototype_v0`의 기본 쌍검이 단일 타겟 찌르기처럼 보이던 상태에서, 넓은 부채꼴 cleave와 적 knockback이 있는 전투 상호작용으로 바뀌었다.
+
+## 2. 오늘 바뀐 것
+
+- 쌍검 기본 공격을 가장 가까운 1명만 때리던 구조에서 최대 5명 부채꼴 공격으로 변경했다.
+- 실제 공격 범위를 `2.35`, 공격각을 `108도`로 키웠다.
+- primary/secondary damage를 분리했다.
+- 적에게 즉시 밀림과 감속 knockback을 추가했다.
+- 타격 직후 접촉 피해가 바로 겹치지 않도록 짧은 lockout을 넣었다.
+- cleave core/left/right 선과 primary/secondary hit 선을 추가했다.
+- 씬과 player prefab의 serialized weapon 값을 동기화했다.
+
+## 3. 테스트 결과와 근거
+
+- Unity compile errors: `0`.
+- Scene missing references: `0`.
+- Play Mode console errors: `0`.
+- `npm.cmd run report`: 통과.
+- `npm.cmd run report:check`: 통과, unit heading `13`개 확인.
+- `npm.cmd run report:orchestrator:unit:dry`: `fetch failed`로 실패. 중앙 Discord intake가 현재 환경에서 닿지 않는다.
+- 강제 기본 쌍검 테스트:
+  - 5마리 모두 공격 판정에 들어왔다.
+  - primary target: `28.0 -> 17.5`.
+  - secondary targets: `28.0 -> 20.4`.
+  - 모든 적이 타격 직후 바깥으로 밀렸다.
+  - weapon cleave/primary hit VFX `12`개 생성 확인.
+- evidence:
+  - `LETHE/Assets/_dev/Evidence/prototype_weapon_range_interaction_game.png`
+
+## 4. 결정한 것
+
+- 현재 단계에서는 쌍검의 공격 판정과 화면 궤적을 먼저 크게 맞춘다.
+- "검이 닿았다"는 감각은 damage, knockback, contact lockout, VFX가 함께 만들어야 한다.
+- 최종 VFX는 line-renderer만으로 끝내지 않고 sprite/pool 기반 slash로 가야 한다.
+
+## 5. 문제 또는 리스크
+
+- 넓어진 cleave 때문에 킬 속도와 Blood Blade Storm 밸런스는 다시 봐야 한다.
+- 타격 VFX는 아직 선 기반이라 최종 뽕맛은 부족하다.
+- 적끼리 겹치는 압박감과 spacing/collision은 별도 패스가 필요하다.
+
+## 6. GPT/Claude 인계 요약
+
+프로토타입의 첫 불만은 "범위와 상호작용이 작다"였다. Codex는 기본 쌍검을 5타겟 부채꼴 cleave로 바꾸고, 적 knockback과 접촉 lockout을 넣었다. 다음 리뷰는 이 변화가 실제 손맛을 올렸는지, 아니면 enemy density/weapon animation/VFX를 더 보강해야 하는지 판단하면 된다.
+
+## 7. 다음 Codex 작업
+
+- enemy spacing/collision 압박감 조정.
+- 쌍검 sprite slash VFX 제작/연동.
+- 무기 anchor 모션과 캐릭터 방향 애니메이션 연결 강화.
+- 넓어진 cleave 기준으로 60초 밸런스 smoke 재측정.
+
+## 8. 포트폴리오 메모
+
+- 문제: 시스템은 있었지만 기본 공격이 너무 작아 게임 상호작용처럼 느껴지지 않았다.
+- 방향: 먼저 판정, 반응, 시각 궤적을 같은 크기로 키운다.
+- 행동: cleave targeting, knockback, contact lockout, wider VFX를 구현했다.
+- 결과: 한 번의 기본 공격으로 여러 적을 베고 밀어내는 최소 전투감 기준이 생겼다.
