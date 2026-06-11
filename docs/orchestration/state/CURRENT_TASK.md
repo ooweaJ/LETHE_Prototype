@@ -131,3 +131,20 @@ Do not continue polishing `Dev_EchoSlice` as the main path. Do not add shop, met
     - all five targets moved outward immediately after hit.
     - weapon cleave/primary hit line VFX count observed: `12`.
   - Editor state after stop: active scene `Dev_Prototype_v0`, `sceneDirty=false`.
+
+## Latest Memory Hunting Window Fix
+
+- User review: memory seemed to turn into echo too quickly, making it hard to judge whether active memories are good for hunting.
+- Diagnosis: after the cleave range pass, kill speed increased, but auto-forget still used the old early threshold.
+- Changed automatic forgetting so every newly chosen/reacquired memory gets a protected active hunting window:
+  - first auto-forget target moved to `26` kills.
+  - subsequent auto-forget interval moved to `14` kills.
+  - new active memory protection: at least `14` kills and `18` seconds before auto-forget can fire.
+  - HUD now shows `보호 N킬/N초` beside the next forget candidate while protection is active.
+- Verification:
+  - Unity compile errors: `0`.
+  - Scene missing references: `0`.
+  - Play Mode console errors: `0`.
+  - Forced state with `kills=31` during protection: `activeCount=1`, `echoCount=0`.
+  - Forced state after protection expired: `activeCount=0`, `echoCount=1`.
+  - Editor state after stop: active scene `Dev_Prototype_v0`, `sceneDirty=false`.

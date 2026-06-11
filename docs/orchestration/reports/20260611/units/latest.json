@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260611\\index.md",
-  "generatedAt": "2026-06-11T05:30:47.253Z",
-  "unitCount": 13,
+  "generatedAt": "2026-06-11T05:46:17.676Z",
+  "unitCount": 14,
   "latest": {
-    "title": "2026-06-11-13 - 쌍검 공격범위와 타격 상호작용 개선",
-    "number": "13",
-    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-13-쌍검-공격범위와-타격-상호작용-개선.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-13-쌍검-공격범위와-타격-상호작용-개선.html"
+    "title": "2026-06-11-14 - 기억 사냥 구간 보호 추가",
+    "number": "14",
+    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-14-기억-사냥-구간-보호-추가.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-14-기억-사냥-구간-보호-추가.html"
   }
 }

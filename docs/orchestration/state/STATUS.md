@@ -258,3 +258,21 @@ For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` b
   - `npm.cmd run report:check`: passed, `13` unit headings ok.
   - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
   - evidence: `LETHE/Assets/_dev/Evidence/prototype_weapon_range_interaction_game.png`.
+
+## Latest Memory Hunting Window Pass
+
+- Jaewoo review after the cleave pass: memory seemed to become echo too quickly, so active memory hunting strength was hard to judge.
+- Added an active-memory protection gate before automatic forgetting:
+  - first forget `26` kills.
+  - forget interval `14` kills.
+  - memory protection `14` kills and `18` seconds after choosing/reacquiring a memory.
+  - HUD shows remaining protection as `보호 N킬/N초`.
+- Verification:
+  - Unity compile errors `0`.
+  - scene missing references `0`.
+  - Play Mode console errors `0`.
+  - protected forced state at `kills=31`: active memory stayed active and no echo was created.
+  - expired forced state: active memory converted to echo normally.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, `14` unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.

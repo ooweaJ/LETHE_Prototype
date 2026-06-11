@@ -239,6 +239,13 @@
           <p>Dev_Prototype_v0의 기본 쌍검이 단일 타겟 찌르기처럼 보이던 상태에서, 넓은 부채꼴 cleave와 적 knockback이 있는 전투 상호작용으로 바뀌었다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-11-14</span>
+          <h2><a href="#unit-2026-06-11-14" data-unit-link="unit-2026-06-11-14">기억 사냥 구간 보호 추가</a></h2>
+          <p>Dev_Prototype_v0에서 새 기억을 얻은 직후 바로 잔향으로 넘어가지 않도록 보호 구간을 추가했다. 이제 먼저 활성 기억으로 사냥하는 시간을 가진 뒤, 이후 자동 망각과 잔향으로 넘어간다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -1011,6 +1018,63 @@
 <li>방향: 먼저 판정, 반응, 시각 궤적을 같은 크기로 키운다.</li>
 <li>행동: cleave targeting, knockback, contact lockout, wider VFX를 구현했다.</li>
 <li>결과: 한 번의 기본 공격으로 여러 적을 베고 밀어내는 최소 전투감 기준이 생겼다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-11-14" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-11-14 - 기억 사냥 구간 보호 추가</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v0</code>에서 새 기억을 얻은 직후 바로 잔향으로 넘어가지 않도록 보호 구간을 추가했다. 이제 먼저 활성 기억으로 사냥하는 시간을 가진 뒤, 이후 자동 망각과 잔향으로 넘어간다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>첫 자동 망각 시점을 <code>12킬 -&gt; 26킬</code>로 늦췄다.</li>
+<li>이후 자동 망각 간격을 <code>9킬 -&gt; 14킬</code>로 늘렸다.</li>
+<li>기억을 선택하거나 공명으로 재획득하면 최소 <code>14킬 / 18초</code> 동안 자동 망각이 막히게 했다.</li>
+<li>HUD의 다음 망각 후보 옆에 <code>보호 N킬/N초</code>를 표시한다.</li>
+<li>런 리셋 시 선택/망각/보호 카운터가 같이 초기화되게 했다.</li>
+<li>씬 serialized 값을 새 기준으로 동기화했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>Unity compile errors: <code>0</code>.</li>
+<li>Scene missing references: <code>0</code>.</li>
+<li>Play Mode console errors: <code>0</code>.</li>
+<li><code>npm.cmd run report</code>: 통과.</li>
+<li><code>npm.cmd run report:check</code>: 통과, unit heading <code>14</code>개 확인.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패. 중앙 Discord intake가 현재 환경에서 닿지 않는다.</li>
+<li>보호 중 강제 상태:</li>
+<li><code>kills=31</code>.</li>
+<li><code>CanAutoForget=false</code>.</li>
+<li>kill event 이후에도 <code>activeCount=1</code>, <code>echoCount=0</code>.</li>
+<li>보호 종료 강제 상태:</li>
+<li>kill event 이후 <code>activeCount=0</code>, <code>echoCount=1</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>프로토타입 평가는 <code>활성 기억으로 사냥 -&gt; 망각 -&gt; 잔향</code> 순서를 먼저 읽히게 한다.</li>
+<li>자동 망각은 보호 구간을 존중한다.</li>
+<li>F2 강제 망각은 디버그 목적이라 보호 구간을 우회해도 된다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>기억 체험 시간이 늘어나면서 전체 런 길이와 잔향 도달 타이밍은 다시 봐야 한다.</li>
+<li>넓어진 쌍검 cleave와 보호 구간 때문에 초반이 쉬워졌을 수 있다.</li>
+<li>다음 밸런스 smoke에서 60초 전투 긴장감을 다시 측정해야 한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>문제는 기억이 너무 빨리 잔향으로 바뀌어 활성 기억의 사냥 성능을 평가하기 어렵다는 점이었다. Codex는 자동 망각 전에 <code>14킬/18초</code> 보호 구간을 넣고, 첫 망각도 <code>26킬</code>로 늦췄다. 다음 리뷰는 활성 기억으로 사냥하는 구간이 충분히 느껴지는지 보면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>60초 전투 smoke로 초반 난이도 재측정.</li>
+<li>활성 기억 VFX가 사냥 성능과 충분히 연결되어 보이는지 확인.</li>
+<li>기억 선택 UI가 전투 흐름을 덜 끊도록 UI 개선.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 기억/망각 시스템은 있었지만 기억 체험 구간이 짧아 기능의 재미를 판단하기 어려웠다.</li>
+<li>방향: 시스템의 감정 순서를 <code>기억 사냥 -&gt; 상실 -&gt; 잔향</code>으로 고정한다.</li>
+<li>행동: 자동 망각 보호 게이트와 HUD 보호 표시를 추가했다.</li>
+<li>결과: 활성 기억의 사냥감과 잔향 변환감을 분리해서 평가할 수 있게 됐다.</li>
 </ul>
     </article>
       </div>

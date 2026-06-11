@@ -1028,8 +1028,10 @@ MonoBehaviour:
   playerMaxHealth: 100
   firstChoiceKills: 3
   choiceKillInterval: 4
-  firstForgetKills: 9
-  forgetKillInterval: 7
+  firstForgetKills: 26
+  forgetKillInterval: 14
+  minActiveMemoryKillsBeforeForget: 14
+  minActiveMemorySecondsBeforeForget: 18
   autoPrototypeLoop: 1
 --- !u!1 &78557653
 GameObject:

@@ -31,8 +31,10 @@ namespace Lethe.Dev
         [SerializeField] private float playerMaxHealth = 100f;
         [SerializeField] private int firstChoiceKills = 4;
         [SerializeField] private int choiceKillInterval = 5;
-        [SerializeField] private int firstForgetKills = 12;
-        [SerializeField] private int forgetKillInterval = 9;
+        [SerializeField] private int firstForgetKills = 26;
+        [SerializeField] private int forgetKillInterval = 14;
+        [SerializeField] private int minActiveMemoryKillsBeforeForget = 14;
+        [SerializeField] private float minActiveMemorySecondsBeforeForget = 18f;
         [SerializeField] private bool autoPrototypeLoop = true;
 
         private readonly Dictionary<string, int> activeMemories = new Dictionary<string, int>();
@@ -43,7 +45,9 @@ namespace Lethe.Dev
         private int kills;
         private int nextChoiceKills;
         private int nextForgetKills;
+        private int earliestForgetKills;
         private float runTime;
+        private float earliestForgetTime;
         private bool offeringChoice;
         private bool ultimateUnlocked;
         private string notice = "프로토타입 v0";
@@ -62,6 +66,8 @@ namespace Lethe.Dev
             playerHealth = playerMaxHealth;
             nextChoiceKills = firstChoiceKills;
             nextForgetKills = firstForgetKills;
+            earliestForgetKills = firstForgetKills;
+            earliestForgetTime = 0f;
         }
 
         private void Start()
@@ -118,7 +124,7 @@ namespace Lethe.Dev
         {
             kills += 1;
             StartCoroutine(RespawnEnemy(enemy));
-            if (autoPrototypeLoop && activeMemories.Count > 0 && kills >= nextForgetKills)
+            if (autoPrototypeLoop && activeMemories.Count > 0 && kills >= nextForgetKills && CanAutoForget())
             {
                 nextForgetKills += forgetKillInterval;
                 TriggerForget();
@@ -287,6 +293,8 @@ namespace Lethe.Dev
             {
                 activeMemories[memoryId] = baseLevel;
             }
+
+            ArmMemoryHuntingWindow();
         }
 
         private void TriggerForget()
@@ -414,6 +422,10 @@ namespace Lethe.Dev
         {
             playerHealth = playerMaxHealth;
             kills = 0;
+            nextChoiceKills = firstChoiceKills;
+            nextForgetKills = firstForgetKills;
+            earliestForgetKills = firstForgetKills;
+            earliestForgetTime = 0f;
             activeMemories.Clear();
             echoes.Clear();
             resonance.Clear();
@@ -447,7 +459,13 @@ namespace Lethe.Dev
         private string NextForgetCandidate()
         {
             var id = NextForgetCandidateId();
-            return string.IsNullOrEmpty(id) ? "-" : $"{DisplayName(id)} +{activeMemories[id]}";
+            if (string.IsNullOrEmpty(id))
+            {
+                return "-";
+            }
+
+            var protection = ForgetProtectionLabel();
+            return string.IsNullOrEmpty(protection) ? $"{DisplayName(id)} +{activeMemories[id]}" : $"{DisplayName(id)} +{activeMemories[id]} ({protection})";
         }
 
         private string NextForgetCandidateId()
@@ -464,6 +482,41 @@ namespace Lethe.Dev
             }
 
             return best;
+        }
+
+        private void ArmMemoryHuntingWindow()
+        {
+            earliestForgetKills = Mathf.Max(earliestForgetKills, kills + minActiveMemoryKillsBeforeForget);
+            earliestForgetTime = Mathf.Max(earliestForgetTime, runTime + minActiveMemorySecondsBeforeForget);
+            nextForgetKills = Mathf.Max(nextForgetKills, earliestForgetKills);
+            ShowNotice($"기억 사냥 구간: {minActiveMemoryKillsBeforeForget}킬 / {minActiveMemorySecondsBeforeForget:0}s");
+        }
+
+        private bool CanAutoForget()
+        {
+            return kills >= earliestForgetKills && runTime >= earliestForgetTime;
+        }
+
+        private string ForgetProtectionLabel()
+        {
+            if (CanAutoForget())
+            {
+                return string.Empty;
+            }
+
+            var remainingKills = Mathf.Max(0, earliestForgetKills - kills);
+            var remainingTime = Mathf.Max(0f, earliestForgetTime - runTime);
+            if (remainingKills > 0 && remainingTime > 0.1f)
+            {
+                return $"보호 {remainingKills}킬/{Mathf.CeilToInt(remainingTime)}초";
+            }
+
+            if (remainingKills > 0)
+            {
+                return $"보호 {remainingKills}킬";
+            }
+
+            return $"보호 {Mathf.CeilToInt(remainingTime)}초";
         }
 
         private string StormProgress()
