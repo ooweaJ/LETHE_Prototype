@@ -36,15 +36,17 @@
    - slice 접근을 폐기하고 Unity Prototype v0.1을 직접 구현하기 위한 최신 기준.
 15. `LETHE_UNITY_PROTOTYPE_V0_PRD.md`
    - 기존 기획/개발 문서를 통합한 Unity Prototype v0.1 실행 PRD. 구현 순서와 수락 기준의 최신 기준.
-16. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
+16. `LETHE_RELEASE_ART_FONT_VFX_PLAN.md`
+   - 출시 후보 감각을 위한 폰트, 정식 아트, 활성 기억/잔향/궁극 VFX 계층 기준.
+17. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
    - Unity 첫 구현 범위와 완료 기준.
-17. `LETHE_RUN_STRUCTURE.md`
+18. `LETHE_RUN_STRUCTURE.md`
    - 한 판 흐름, 성장, 망각, 보충.
-18. `LETHE_COMBAT_DESIGN.md`
+19. `LETHE_COMBAT_DESIGN.md`
    - 무기, 적 역할, 전투 감각.
-19. `LETHE_CONTENT_TABLES.md`
+20. `LETHE_CONTENT_TABLES.md`
    - 기억, 잔향, 시너지, 적 표.
-20. `LETHE_BALANCE_BASELINE.md`
+21. `LETHE_BALANCE_BASELINE.md`
    - v0.12 기준 수치와 Unity 초기 목표.
 
 ## 문서 운영 원칙

@@ -164,7 +164,7 @@ namespace Lethe.Dev
             Destroy(lineObject, lifetime);
         }
 
-        public void SpawnSpriteVfx(string name, Sprite sprite, Vector3 position, float scale, float lifetime, Color color, float spin = 0f)
+        public void SpawnSpriteVfx(string name, Sprite sprite, Vector3 position, float scale, float lifetime, Color color, float spin = 0f, int sortingOrder = 45)
         {
             if (sprite == null)
             {
@@ -180,7 +180,7 @@ namespace Lethe.Dev
             var renderer = vfxObject.AddComponent<SpriteRenderer>();
             renderer.sprite = sprite;
             renderer.color = color;
-            renderer.sortingOrder = 45;
+            renderer.sortingOrder = sortingOrder;
 
             var vfx = vfxObject.AddComponent<PrototypeSpriteVfx>();
             vfx.Configure(lifetime, scale, scale * 1.35f, spin);
@@ -209,7 +209,7 @@ namespace Lethe.Dev
             if (activeMemories.TryGetValue(KalmuriMemory, out var kalmuriLevel))
             {
                 SpawnLineVfx("HungryBlades", hitPosition + Vector3.up * 0.18f, hitPosition - Vector3.up * 0.18f, new Color(0.45f, 0.85f, 1f, 0.9f), 0.12f, 0.035f);
-                SpawnSpriteVfx("HungryBladesActive", hungryBladesActiveSprite, enemy.transform.position, 0.35f + kalmuriLevel * 0.05f, 0.28f, new Color(0.65f, 0.95f, 1f, 0.85f), 220f);
+                SpawnSpriteVfx("HungryBladesActive", hungryBladesActiveSprite, enemy.transform.position, 0.26f + kalmuriLevel * 0.035f, 0.28f, new Color(0.65f, 0.95f, 1f, 0.85f), 220f, 36);
                 enemy.Health.ApplyDamage(1.4f * kalmuriLevel, gameObject);
             }
 
@@ -218,7 +218,7 @@ namespace Lethe.Dev
                 enemy.Health.ApplyDamage(0.9f * bloodLevel, gameObject);
                 HealPlayer(0.35f * bloodLevel);
                 SpawnLineVfx("BloodReflection", hitPosition, player.transform.position, new Color(1f, 0.05f, 0.12f, 0.85f), 0.16f, 0.028f);
-                SpawnSpriteVfx("BloodReflectionActive", bloodReflectionSprite, enemy.transform.position, 0.28f + bloodLevel * 0.04f, 0.32f, new Color(1f, 0.22f, 0.28f, 0.8f), 60f);
+                SpawnSpriteVfx("BloodReflectionActive", bloodReflectionSprite, enemy.transform.position, 0.22f + bloodLevel * 0.03f, 0.32f, new Color(1f, 0.22f, 0.28f, 0.8f), 60f, 36);
             }
         }
 
@@ -238,7 +238,7 @@ namespace Lethe.Dev
                 if (kalmuriEchoLevel >= 5)
                 {
                     DamageEnemiesInRadius(hitPosition, 1.05f, baseDamage * 0.38f, "KalmuriAwakened", new Color(0.55f, 0.95f, 1f, 0.9f));
-                    SpawnSpriteVfx("KalmuriAwakenedRing", hungryBladesActiveSprite, hitPosition, 0.72f, 0.38f, new Color(0.65f, 1f, 1f, 0.9f), 360f);
+                    SpawnSpriteVfx("KalmuriAwakenedRing", hungryBladesActiveSprite, hitPosition, 0.48f, 0.38f, new Color(0.65f, 1f, 1f, 0.9f), 360f, 42);
                 }
             }
 
@@ -251,7 +251,7 @@ namespace Lethe.Dev
                 if (bloodEchoLevel >= 5)
                 {
                     DamageEnemiesInRadius(hitPosition, 0.95f, baseDamage * 0.28f, "BloodBloom", new Color(1f, 0.04f, 0.08f, 0.9f));
-                    SpawnSpriteVfx("BloodAwakenedBloom", bloodBloomSprite, hitPosition, 0.62f, 0.42f, new Color(1f, 0.08f, 0.12f, 0.95f), 120f);
+                    SpawnSpriteVfx("BloodAwakenedBloom", bloodBloomSprite, hitPosition, 0.44f, 0.42f, new Color(1f, 0.08f, 0.12f, 0.95f), 120f, 42);
                     HealPlayer(1.2f);
                 }
             }
@@ -261,7 +261,7 @@ namespace Lethe.Dev
                 var center = player != null ? player.transform.position : hitPosition;
                 SpawnLineVfx("BloodBladeStorm", center + Vector3.left * 0.85f, center + Vector3.right * 0.85f, new Color(1f, 0.12f, 0.12f, 1f), 0.22f, 0.06f);
                 SpawnLineVfx("BloodBladeStormThread", center + Vector3.down * 0.72f, center + Vector3.up * 0.72f, new Color(1f, 0.05f, 0.18f, 0.88f), 0.22f, 0.05f);
-                SpawnSpriteVfx("BloodBladeStormRing", bloodBladeStormSprite, center, 0.92f, 0.55f, new Color(1f, 0.16f, 0.18f, 0.95f), 260f);
+                SpawnSpriteVfx("BloodBladeStormRing", bloodBladeStormSprite, center, 0.72f, 0.55f, new Color(1f, 0.16f, 0.18f, 0.95f), 260f, 43);
                 DamageEnemiesInRadius(center, 1.75f, baseDamage * 0.48f, "BloodBladeStormPulse", new Color(1f, 0.1f, 0.16f, 1f));
                 HealPlayer(1.4f);
             }
@@ -388,7 +388,7 @@ namespace Lethe.Dev
             if (activeMemories.ContainsKey(KalmuriMemory))
             {
                 SpawnLineVfx("ActiveHungryBladesOrbit", center + Vector3.left * 0.62f, center + Vector3.right * 0.62f, new Color(0.35f, 0.75f, 1f, 0.45f), 0.12f, 0.018f);
-                SpawnSpriteVfx("ActiveHungryBladesLoop", hungryBladesActiveSprite, center, 0.54f, 0.16f, new Color(0.55f, 0.95f, 1f, 0.34f), 180f);
+                SpawnSpriteVfx("ActiveHungryBladesLoop", hungryBladesActiveSprite, center, 0.24f, 0.16f, new Color(0.55f, 0.95f, 1f, 0.24f), 180f, 8);
             }
 
             if (echoes.TryGetValue(KalmuriEcho, out var kalmuri) && kalmuri >= 5)
@@ -399,7 +399,7 @@ namespace Lethe.Dev
             if (ultimateUnlocked)
             {
                 SpawnLineVfx("StormGoalLoop", center + Vector3.left * 1.05f, center + Vector3.right * 1.05f, new Color(1f, 0.04f, 0.14f, 0.55f), 0.14f, 0.03f);
-                SpawnSpriteVfx("StormGoalLoop", bloodBladeStormSprite, center, 0.95f, 0.18f, new Color(1f, 0.12f, 0.16f, 0.4f), 220f);
+                SpawnSpriteVfx("StormGoalLoop", bloodBladeStormSprite, center, 0.58f, 0.18f, new Color(1f, 0.12f, 0.16f, 0.3f), 220f, 9);
             }
         }
 

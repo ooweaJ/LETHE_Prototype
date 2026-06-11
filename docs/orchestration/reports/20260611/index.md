@@ -601,11 +601,65 @@ Unity Prototype v0는 M1~M5 루프가 들어간 상태다. 다음 판단은 jaew
 - 행동: weaponless character sheet를 다시 만들고 Unity prefab/scene scale을 조정했다.
 - 결과: 플레이어 body와 쌍검 장비가 분리된 prototype 기준이 생겼다.
 
-# 2026-06-11-11 - LETHE 아트 전면 교체와 sprite VFX 적용
+# 2026-06-11-11 - 한글 폰트와 기억 VFX 계층 정리
 
 ## 1. 현재 빌드 상태
 
-`Dev_Prototype_v0`의 player, enemy, map, weapon, memory/echo VFX를 LETHE 컨셉 기준으로 교체했다. 초록 배경은 source chroma-key용이고, Unity runtime은 alpha PNG를 사용한다.
+`Dev_Prototype_v0`는 이제 Pretendard 기반 한글 HUD를 사용한다. 또한 초반 활성 기억 VFX, 중반 잔향 VFX, 후반 피의 칼폭풍 VFX의 역할을 나눠서 볼 수 있게 했다.
+
+## 2. 오늘 바뀐 것
+
+- Pretendard 공식 release에서 OTF와 라이선스를 추가했다.
+- `PrototypeGameManager` HUD를 한국어로 바꿨다.
+- `koreanFont` 필드를 추가하고 씬에서 `Pretendard-Regular.otf`를 연결했다.
+- 활성 기억/잔향/궁극 sprite VFX 레퍼런스를 씬에 연결했다.
+- 활성 기억 loop VFX가 플레이어를 덮지 않도록 scale/sorting을 낮췄다.
+- `LETHE_RELEASE_ART_FONT_VFX_PLAN.md`를 추가했다.
+
+## 3. 테스트 결과와 근거
+
+- Unity compile errors: `0`.
+- Scene missing references: `0`.
+- Play Mode console errors: `0`.
+- editor state after stop: active scene `Dev_Prototype_v0`, `sceneDirty=false`.
+- evidence:
+  - `LETHE/Assets/_dev/Evidence/korean_hud_memory_vfx_game.png`
+
+## 4. 결정한 것
+
+- 폰트는 사용자가 직접 넣지 않아도 된다. Codex가 공식 배포본과 라이선스를 프로젝트에 넣을 수 있다.
+- 현재 한글 폰트 후보는 Pretendard다.
+- 초반 재미는 활성 기억 VFX가 담당한다.
+- 후반 뽕맛은 잔향 +5와 잔향 조합 궁극이 담당한다.
+
+## 5. 문제 또는 리스크
+
+- 현재 HUD는 아직 OnGUI라 출시 UI는 아니다. 다음 단계에서 TMP/UGUI로 전환해야 한다.
+- `spr_blood_bloom_01.png` 오른쪽에 궁극 링 일부가 끼어 있어 다음 아트 패스에서 잘라내거나 재생성해야 한다.
+- 정식 캐릭터/적 sprite는 아직 더 다듬어야 한다.
+
+## 6. GPT/Claude 인계 요약
+
+폰트/한글 HUD는 적용됐다. 기억 VFX와 잔향 VFX의 역할도 분리되었다. 다음 작업은 TMP/UGUI 전환 또는 정식 VFX crop/regeneration 중 하나를 선택하면 된다.
+
+## 7. 다음 Codex 작업
+
+- `spr_blood_bloom_01.png`를 깨끗하게 crop/regenerate.
+- OnGUI HUD를 UGUI/TMP 기반 HUD로 전환.
+- 기억/잔향 HUD icon set 제작.
+
+## 8. 포트폴리오 메모
+
+- 문제: 영어 HUD와 잔향 중심 VFX만으로는 LETHE의 성장 곡선을 평가하기 어렵다.
+- 방향: 출시 가능한 폰트와 VFX 계층을 먼저 잡는다.
+- 행동: Pretendard를 추가하고 한글 HUD/기억 VFX/잔향 VFX/궁극 VFX 연결을 정리했다.
+- 결과: 초반 기억 성장과 후반 잔향 조합을 나눠 평가할 수 있는 기준이 생겼다.
+
+# 2026-06-11-12 - LETHE 아트 전면 교체와 한글 HUD 적용
+
+## 1. 현재 빌드 상태
+
+`Dev_Prototype_v0`의 player, enemy, map, weapon, memory/echo VFX를 LETHE 컨셉 기준으로 교체했고, Pretendard 기반 한글 HUD까지 연결했다. 초록 배경은 source chroma-key용이고, Unity runtime은 alpha PNG를 사용한다.
 
 ## 2. 오늘 바뀐 것
 
@@ -620,14 +674,19 @@ Unity Prototype v0는 M1~M5 루프가 들어간 상태다. 다음 판단은 jaew
 - Unity runtime 이미지는 alpha PNG로 변환했다.
 - `PrototypeSpriteVfx`를 추가했다.
 - `PrototypeGameManager`가 기억/잔향/궁극 상태에서 sprite VFX를 spawn하도록 연결했다.
+- Pretendard OTF와 라이선스를 `Assets/_dev/Fonts`에 추가했다.
+- `PrototypeGameManager` 한글 HUD와 `koreanFont` 연결을 적용했다.
+- 활성 기억 VFX가 플레이어를 덮지 않도록 sorting/scale을 낮췄다.
 - evidence screenshot을 추가했다:
   - `LETHE/Assets/_dev/Evidence/lethe_art_replacement_vfx_game.png`
+  - `LETHE/Assets/_dev/Evidence/korean_hud_memory_vfx_game.png`
 
 ## 3. 테스트 결과와 근거
 
 - Unity compile errors: `0`.
 - Scene missing references: `0`.
 - Play Mode console errors: `0`.
+- 한글 HUD가 Pretendard로 표시되는 것을 screenshot으로 확인.
 - Runtime sprite VFX reference 확인:
   - `spr_kalmuri_orbit_blade_01`
   - `spr_kalmuri_echo_slash_01`
@@ -645,28 +704,29 @@ Unity Prototype v0는 M1~M5 루프가 들어간 상태다. 다음 판단은 jaew
 - 초록 배경은 최종 리소스가 아니라 chroma-key source로만 사용한다.
 - Unity에는 alpha PNG를 연결한다.
 - line-renderer VFX는 당장 삭제하지 않고, damage/log 안정성을 유지하면서 sprite VFX를 추가한다.
-- 폰트 작업은 다음 단계로 분리한다.
+- 한글 폰트는 Pretendard를 `_dev` 기준 후보로 사용하고 라이선스를 함께 보관한다.
 
 ## 5. 문제 또는 리스크
 
 - OnGUI 선택 UI가 아직 중앙 VFX를 가린다.
 - VFX는 화려해졌지만, 최종 게임용으로는 pooling/animation/sorting 정리가 필요하다.
-- `Assets/_dev/Fonts/`에 로컬 Pretendard 파일이 있으나 이번 범위가 아니므로 커밋하지 않는다. 씬의 `koreanFont` 참조도 비워둬서 커밋된 빌드가 untracked 폰트에 의존하지 않게 했다.
+- 현재 HUD는 아직 OnGUI라 출시 UI는 아니다. 다음 단계에서 TMP/UGUI 전환이 필요하다.
+- `spr_blood_bloom_01.png` 오른쪽에 궁극 링 일부가 끼어 있어 다음 아트 패스에서 잘라내거나 재생성해야 한다.
 - Discord 보고는 중앙 intake 연결 실패로 미전송이다.
 
 ## 6. GPT/Claude 인계 요약
 
-LETHE prototype의 시각 기준을 placeholder에서 dark fantasy memory/forgetting 방향으로 바꿨다. 다음 평가는 sprite 자체가 LETHE처럼 보이는지, VFX가 기억/잔향/궁극 차이를 충분히 보여주는지다.
+LETHE prototype의 시각 기준을 placeholder에서 dark fantasy memory/forgetting 방향으로 바꿨고, 한글 HUD도 Pretendard로 연결했다. 다음 평가는 sprite 자체가 LETHE처럼 보이는지, VFX가 기억/잔향/궁극 차이를 충분히 보여주는지다.
 
 ## 7. 다음 Codex 작업
 
-- OnGUI HUD를 제거하고 한글 폰트/TextMeshPro UI로 교체.
+- OnGUI HUD를 제거하고 TextMeshPro/UGUI 기반 HUD로 교체.
 - sprite VFX를 pooling/animation 기반으로 정리.
 - memory choice overlay가 전투 화면을 가리지 않도록 UI 배치 재설계.
 
 ## 8. 포트폴리오 메모
 
-- 문제: prototype sprite는 시스템 평가를 방해할 만큼 임시 느낌이 강했다.
-- 방향: LETHE의 망각/기억/혈색/칼무리 컨셉이 화면에서 먼저 읽히게 만든다.
-- 행동: player/enemy/map/weapon/VFX를 전면 교체하고 Unity runtime VFX spawn 경로를 추가했다.
-- 결과: 폰트/UI를 제외한 핵심 gameplay 화면이 LETHE 컨셉 평가 가능한 수준으로 이동했다.
+- 문제: prototype sprite와 영어 HUD는 시스템 평가를 방해할 만큼 임시 느낌이 강했다.
+- 방향: LETHE의 망각/기억/혈색/칼무리 컨셉과 한글 UI가 화면에서 먼저 읽히게 만든다.
+- 행동: player/enemy/map/weapon/VFX를 전면 교체하고 Unity runtime VFX spawn 경로와 한글 HUD를 추가했다.
+- 결과: 핵심 gameplay 화면이 LETHE 컨셉 평가 가능한 수준으로 이동했다.

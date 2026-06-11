@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260611\\index.md",
-  "generatedAt": "2026-06-11T04:15:29.009Z",
-  "unitCount": 11,
+  "generatedAt": "2026-06-11T04:44:16.485Z",
+  "unitCount": 12,
   "latest": {
-    "title": "2026-06-11-11 - LETHE 아트 전면 교체와 sprite VFX 적용",
-    "number": "11",
-    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-11-lethe-아트-전면-교체와-sprite-vfx-적용.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-11-lethe-아트-전면-교체와-sprite-vfx-적용.html"
+    "title": "2026-06-11-12 - LETHE 아트 전면 교체와 한글 HUD 적용",
+    "number": "12",
+    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-12-lethe-아트-전면-교체와-한글-hud-적용.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-12-lethe-아트-전면-교체와-한글-hud-적용.html"
   }
 }

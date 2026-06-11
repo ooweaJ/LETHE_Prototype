@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-11-11 - 한글 폰트와 기억 VFX 계층 정리</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-11-11 - 한글 폰트와 기억 VFX 계층 정리</h1>
+      <p class="meta">Generated from 2026-06-11-11-한글-폰트와-기억-vfx-계층-정리.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260611/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-11-11 - 한글 폰트와 기억 VFX 계층 정리</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v0</code>는 이제 Pretendard 기반 한글 HUD를 사용한다. 또한 초반 활성 기억 VFX, 중반 잔향 VFX, 후반 피의 칼폭풍 VFX의 역할을 나눠서 볼 수 있게 했다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>Pretendard 공식 release에서 OTF와 라이선스를 추가했다.</li>
+<li><code>PrototypeGameManager</code> HUD를 한국어로 바꿨다.</li>
+<li><code>koreanFont</code> 필드를 추가하고 씬에서 <code>Pretendard-Regular.otf</code>를 연결했다.</li>
+<li>활성 기억/잔향/궁극 sprite VFX 레퍼런스를 씬에 연결했다.</li>
+<li>활성 기억 loop VFX가 플레이어를 덮지 않도록 scale/sorting을 낮췄다.</li>
+<li><code>LETHE_RELEASE_ART_FONT_VFX_PLAN.md</code>를 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>Unity compile errors: <code>0</code>.</li>
+<li>Scene missing references: <code>0</code>.</li>
+<li>Play Mode console errors: <code>0</code>.</li>
+<li>editor state after stop: active scene <code>Dev_Prototype_v0</code>, <code>sceneDirty=false</code>.</li>
+<li>evidence:</li>
+<li><code>LETHE/Assets/_dev/Evidence/korean_hud_memory_vfx_game.png</code></li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>폰트는 사용자가 직접 넣지 않아도 된다. Codex가 공식 배포본과 라이선스를 프로젝트에 넣을 수 있다.</li>
+<li>현재 한글 폰트 후보는 Pretendard다.</li>
+<li>초반 재미는 활성 기억 VFX가 담당한다.</li>
+<li>후반 뽕맛은 잔향 +5와 잔향 조합 궁극이 담당한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>현재 HUD는 아직 OnGUI라 출시 UI는 아니다. 다음 단계에서 TMP/UGUI로 전환해야 한다.</li>
+<li><code>spr_blood_bloom_01.png</code> 오른쪽에 궁극 링 일부가 끼어 있어 다음 아트 패스에서 잘라내거나 재생성해야 한다.</li>
+<li>정식 캐릭터/적 sprite는 아직 더 다듬어야 한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>폰트/한글 HUD는 적용됐다. 기억 VFX와 잔향 VFX의 역할도 분리되었다. 다음 작업은 TMP/UGUI 전환 또는 정식 VFX crop/regeneration 중 하나를 선택하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li><code>spr_blood_bloom_01.png</code>를 깨끗하게 crop/regenerate.</li>
+<li>OnGUI HUD를 UGUI/TMP 기반 HUD로 전환.</li>
+<li>기억/잔향 HUD icon set 제작.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 영어 HUD와 잔향 중심 VFX만으로는 LETHE의 성장 곡선을 평가하기 어렵다.</li>
+<li>방향: 출시 가능한 폰트와 VFX 계층을 먼저 잡는다.</li>
+<li>행동: Pretendard를 추가하고 한글 HUD/기억 VFX/잔향 VFX/궁극 VFX 연결을 정리했다.</li>
+<li>결과: 초반 기억 성장과 후반 잔향 조합을 나눠 평가할 수 있는 기준이 생겼다.</li>
+</ul>
+  </main>
+</body>
+</html>

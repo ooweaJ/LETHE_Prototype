@@ -196,6 +196,17 @@ For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` b
   - `LETHE/Assets/_dev/Evidence/player_weapon_separated_clean.png`
 - Verification: Unity compile errors `0`, missing references `0`, Play Mode console errors `0`, active scene `Dev_Prototype_v0`, `sceneDirty=false`.
 
+## Latest Font / VFX Fix
+
+- Added Pretendard OTF files and license under `LETHE/Assets/_dev/Fonts`.
+- Connected `Pretendard-Regular.otf` to `PrototypeGameManager.koreanFont`.
+- Converted the prototype HUD labels and memory/echo names to Korean.
+- Connected sprite VFX references for active Kalmuri, echo Kalmuri, active Blood, echo Blood, and Blood Blade Storm.
+- Reduced active memory loop VFX scale/sorting so it supports the character instead of covering it.
+- Added `docs/design/LETHE_RELEASE_ART_FONT_VFX_PLAN.md`.
+- Evidence: `LETHE/Assets/_dev/Evidence/korean_hud_memory_vfx_game.png`.
+- Verification: Unity compile errors `0`, missing references `0`, Play Mode console errors `0`, active scene `Dev_Prototype_v0`, `sceneDirty=false`.
+
 ## Latest Art Replacement Pass
 
 - Added `docs/design/LETHE_UNITY_ART_DIRECTION_REPLACEMENT_PLAN.md`.
