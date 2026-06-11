@@ -1033,6 +1033,10 @@ MonoBehaviour:
   minActiveMemoryKillsBeforeForget: 14
   minActiveMemorySecondsBeforeForget: 18
   autoPrototypeLoop: 1
+  activeKalmuriRadius: 1.75
+  activeKalmuriInterval: 0.72
+  activeBloodRadius: 2.05
+  activeBloodInterval: 1.05
 --- !u!1 &78557653
 GameObject:
   m_ObjectHideFlags: 0
@@ -10255,16 +10259,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04d00a8bc6fa608499db7c48be7f1f32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Lethe.Dev.PrototypeWeaponController
-  attackInterval: 0.23
-  attackRange: 2.35
-  baseDamage: 10.5
+  attackInterval: 0.28
+  attackRange: 2.15
+  baseDamage: 5.8
   swingDuration: 0.13
   swingDegrees: 86
   attackArcDegrees: 108
-  maxTargetsPerSwing: 5
-  secondaryDamageMultiplier: 0.72
-  primaryKnockback: 3.8
-  secondaryKnockback: 2.6
+  maxTargetsPerSwing: 4
+  secondaryDamageMultiplier: 0.48
+  primaryKnockback: 1.45
+  secondaryKnockback: 0.85
   visualRoot: {fileID: 1741077886}
 --- !u!4 &1290602248
 Transform:

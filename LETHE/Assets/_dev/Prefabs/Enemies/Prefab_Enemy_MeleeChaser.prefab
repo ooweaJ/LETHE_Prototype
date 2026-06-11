@@ -214,6 +214,9 @@ MonoBehaviour:
   contactDamage: 8
   contactCooldown: 0.7
   stopDistance: 0.45
+  knockbackDecay: 11
+  knockbackContactLock: 0.18
+  knockbackSnapDistance: 0.035
   arenaHalfExtents: {x: 7.6, y: 4.6}
   animator: {fileID: 0}
   health: {fileID: 0}

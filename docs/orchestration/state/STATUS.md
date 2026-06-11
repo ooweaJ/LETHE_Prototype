@@ -276,3 +276,27 @@ For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` b
   - `npm.cmd run report`: passed.
   - `npm.cmd run report:check`: passed, `14` unit headings ok.
   - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+
+## Latest Memory Identity / Base Balance Pass
+
+- Jaewoo review: Kalmuri/Blood memory identity was not readable; basic attack was carrying too much damage and knockback; blue character-side line VFX was distracting.
+- Basic dual blades were nerfed into a weaker base layer:
+  - damage `5.8`.
+  - range `2.15`.
+  - max targets `4`.
+  - secondary damage multiplier `0.48`.
+  - primary/secondary knockback `1.45/0.85`.
+- Active Kalmuri now has independent orbit blade ticks around the player and nearby enemy cuts, instead of relying mostly on basic attack on-hit text/lines.
+- Active Blood now has periodic red mark pulses and a heal bloom, separating it from Kalmuri's cyan blade language.
+- Removed the old persistent blue `ActiveHungryBladesOrbit` line that was drawing across the character.
+- Verification:
+  - Unity compile errors `0`.
+  - scene missing references `0`.
+  - Play Mode console errors `0`.
+  - base swing primary `28.0 -> 22.2`, secondary `28.0 -> 25.2`, fifth target not hit.
+  - Kalmuri level 1 tick damaged `2` targets, spawned `4` Kalmuri sprites, old blue orbit lines `0`.
+  - Blood level 1 tick damaged `2` targets, healed player `72.0 -> 72.7`, spawned `3` blood sprites.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, `15` unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+  - evidence: `LETHE/Assets/_dev/Evidence/prototype_memory_identity_pass_game.png`.

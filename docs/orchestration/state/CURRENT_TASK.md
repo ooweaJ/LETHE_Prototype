@@ -148,3 +148,31 @@ Do not continue polishing `Dev_EchoSlice` as the main path. Do not add shop, met
   - Forced state with `kills=31` during protection: `activeCount=1`, `echoCount=0`.
   - Forced state after protection expired: `activeCount=0`, `echoCount=1`.
   - Editor state after stop: active scene `Dev_Prototype_v0`, `sceneDirty=false`.
+
+## Latest Memory Identity / Balance Fix
+
+- User review: Kalmuri and Blood memory effects are not readable; base attack is too strong with too much knockback; the blue line near the character is distracting.
+- Changed basic dual blades into a weaker base layer:
+  - damage `10.5 -> 5.8`.
+  - range `2.35 -> 2.15`.
+  - max targets `5 -> 4`.
+  - secondary damage `72% -> 48%`.
+  - primary knockback `3.8 -> 1.45`.
+  - secondary knockback `2.6 -> 0.85`.
+  - enemy knockback snap reduced and velocity clamp lowered.
+- Changed active Kalmuri into an independent orbit blade memory:
+  - periodic orbit blade sprites around player.
+  - periodic nearby enemy cuts independent of weapon swing.
+  - removed old persistent blue `ActiveHungryBladesOrbit` line.
+- Changed active Blood into a red mark/heal identity:
+  - periodic red mark pulse on nearby enemies.
+  - visible heal bloom near player.
+  - reduced on-hit thread strength so it supports, not dominates.
+- Verification:
+  - Unity compile errors: `0`.
+  - Scene missing references: `0`.
+  - Play Mode console errors: `0`.
+  - Basic swing smoke: primary `28.0 -> 22.2`, secondary `28.0 -> 25.2`, fifth target not hit.
+  - Kalmuri smoke: level 1 tick damaged `2` nearby enemies and spawned `4` Kalmuri sprites; old blue orbit lines `0`.
+  - Blood smoke: level 1 tick damaged `2` nearby enemies, healed player `72.0 -> 72.7`, spawned `3` blood sprites.
+  - Evidence: `LETHE/Assets/_dev/Evidence/prototype_memory_identity_pass_game.png`.

@@ -10,7 +10,7 @@ namespace Lethe.Dev
         [SerializeField] private float stopDistance = 0.45f;
         [SerializeField] private float knockbackDecay = 11f;
         [SerializeField] private float knockbackContactLock = 0.18f;
-        [SerializeField] private float knockbackSnapDistance = 0.07f;
+        [SerializeField] private float knockbackSnapDistance = 0.035f;
         [SerializeField] private Vector2 arenaHalfExtents = new Vector2(7.6f, 4.6f);
         [SerializeField] private PrototypeSpriteSheetAnimator animator;
         [SerializeField] private PrototypeHealth health;
@@ -106,8 +106,8 @@ namespace Lethe.Dev
             }
 
             knockbackVelocity += direction.normalized * Mathf.Max(0f, impulse);
-            knockbackVelocity = Vector3.ClampMagnitude(knockbackVelocity, 4.8f);
-            transform.position = ClampToArena(transform.position + direction.normalized * Mathf.Min(0.3f, impulse * knockbackSnapDistance));
+            knockbackVelocity = Vector3.ClampMagnitude(knockbackVelocity, 2.6f);
+            transform.position = ClampToArena(transform.position + direction.normalized * Mathf.Min(0.14f, impulse * knockbackSnapDistance));
             nextContactAt = Mathf.Max(nextContactAt, Time.time + knockbackContactLock);
         }
 

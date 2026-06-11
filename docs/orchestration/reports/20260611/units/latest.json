@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260611\\index.md",
-  "generatedAt": "2026-06-11T05:46:17.676Z",
-  "unitCount": 14,
+  "generatedAt": "2026-06-11T06:09:41.274Z",
+  "unitCount": 15,
   "latest": {
-    "title": "2026-06-11-14 - 기억 사냥 구간 보호 추가",
-    "number": "14",
-    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-14-기억-사냥-구간-보호-추가.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-14-기억-사냥-구간-보호-추가.html"
+    "title": "2026-06-11-15 - 기억 정체성과 기본공격 밸런스 정리",
+    "number": "15",
+    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-15-기억-정체성과-기본공격-밸런스-정리.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-15-기억-정체성과-기본공격-밸런스-정리.html"
   }
 }

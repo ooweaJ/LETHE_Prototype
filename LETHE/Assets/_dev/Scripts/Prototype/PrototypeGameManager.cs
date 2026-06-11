@@ -37,6 +37,12 @@ namespace Lethe.Dev
         [SerializeField] private float minActiveMemorySecondsBeforeForget = 18f;
         [SerializeField] private bool autoPrototypeLoop = true;
 
+        [Header("Memory Feel")]
+        [SerializeField] private float activeKalmuriRadius = 1.75f;
+        [SerializeField] private float activeKalmuriInterval = 0.72f;
+        [SerializeField] private float activeBloodRadius = 2.05f;
+        [SerializeField] private float activeBloodInterval = 1.05f;
+
         private readonly Dictionary<string, int> activeMemories = new Dictionary<string, int>();
         private readonly Dictionary<string, int> echoes = new Dictionary<string, int>();
         private readonly HashSet<string> resonance = new HashSet<string>();
@@ -48,6 +54,8 @@ namespace Lethe.Dev
         private int earliestForgetKills;
         private float runTime;
         private float earliestForgetTime;
+        private float nextKalmuriTickAt;
+        private float nextBloodTickAt;
         private bool offeringChoice;
         private bool ultimateUnlocked;
         private string notice = "프로토타입 v0";
@@ -88,6 +96,7 @@ namespace Lethe.Dev
             }
 
             DrawPersistentLoops();
+            TickActiveMemoryEffects();
         }
 
         private void OnGUI()
@@ -214,17 +223,16 @@ namespace Lethe.Dev
 
             if (activeMemories.TryGetValue(KalmuriMemory, out var kalmuriLevel))
             {
-                SpawnLineVfx("HungryBlades", hitPosition + Vector3.up * 0.18f, hitPosition - Vector3.up * 0.18f, new Color(0.45f, 0.85f, 1f, 0.9f), 0.12f, 0.035f);
-                SpawnSpriteVfx("HungryBladesActive", hungryBladesActiveSprite, enemy.transform.position, 0.26f + kalmuriLevel * 0.035f, 0.28f, new Color(0.65f, 0.95f, 1f, 0.85f), 220f, 36);
-                enemy.Health.ApplyDamage(1.4f * kalmuriLevel, gameObject);
+                SpawnSpriteVfx("HungryBladesActiveSlash", hungryBladesActiveSprite, enemy.transform.position, 0.36f + kalmuriLevel * 0.035f, 0.28f, new Color(0.65f, 0.95f, 1f, 0.9f), 260f, 38);
+                enemy.Health.ApplyDamage(0.7f * kalmuriLevel, gameObject);
             }
 
             if (activeMemories.TryGetValue(BloodMemory, out var bloodLevel))
             {
-                enemy.Health.ApplyDamage(0.9f * bloodLevel, gameObject);
-                HealPlayer(0.35f * bloodLevel);
-                SpawnLineVfx("BloodReflection", hitPosition, player.transform.position, new Color(1f, 0.05f, 0.12f, 0.85f), 0.16f, 0.028f);
-                SpawnSpriteVfx("BloodReflectionActive", bloodReflectionSprite, enemy.transform.position, 0.22f + bloodLevel * 0.03f, 0.32f, new Color(1f, 0.22f, 0.28f, 0.8f), 60f, 36);
+                enemy.Health.ApplyDamage(0.55f * bloodLevel, gameObject);
+                HealPlayer(0.25f * bloodLevel);
+                SpawnLineVfx("BloodReflectionThread", hitPosition, player.transform.position, new Color(1f, 0.05f, 0.12f, 0.62f), 0.16f, 0.022f);
+                SpawnSpriteVfx("BloodReflectionMark", bloodReflectionSprite, enemy.transform.position, 0.26f + bloodLevel * 0.025f, 0.34f, new Color(1f, 0.22f, 0.28f, 0.86f), 60f, 38);
             }
         }
 
@@ -238,8 +246,8 @@ namespace Lethe.Dev
             if (echoes.TryGetValue(KalmuriEcho, out var kalmuriEchoLevel))
             {
                 var delayOffset = Quaternion.Euler(0f, 0f, 90f) * direction * 0.35f;
-                SpawnLineVfx("KalmuriEcho", hitPosition - delayOffset, hitPosition + delayOffset, new Color(0.7f, 0.95f, 1f, 0.95f), 0.18f, 0.04f);
-                SpawnSpriteVfx("KalmuriEchoSlash", kalmuriSlashSprite, hitPosition + direction * 0.08f, 0.28f + kalmuriEchoLevel * 0.04f, 0.22f, new Color(0.7f, 0.98f, 1f, 0.95f), 0f);
+                SpawnLineVfx("KalmuriEcho", hitPosition - delayOffset, hitPosition + delayOffset, new Color(0.7f, 0.95f, 1f, 0.72f), 0.16f, 0.032f);
+                SpawnSpriteVfx("KalmuriEchoSlash", kalmuriSlashSprite, hitPosition + direction * 0.08f, 0.32f + kalmuriEchoLevel * 0.045f, 0.24f, new Color(0.7f, 0.98f, 1f, 0.95f), 0f);
                 enemy.Health.ApplyDamage(baseDamage * (0.12f + 0.05f * kalmuriEchoLevel), gameObject);
                 if (kalmuriEchoLevel >= 5)
                 {
@@ -250,8 +258,8 @@ namespace Lethe.Dev
 
             if (echoes.TryGetValue(BloodEcho, out var bloodEchoLevel))
             {
-                SpawnLineVfx("BloodEcho", hitPosition + Vector3.left * 0.12f, player.transform.position, new Color(1f, 0.02f, 0.08f, 0.9f), 0.2f, 0.035f);
-                SpawnSpriteVfx("BloodEchoBloom", bloodBloomSprite, hitPosition, 0.24f + bloodEchoLevel * 0.04f, 0.28f, new Color(1f, 0.15f, 0.2f, 0.9f), 80f);
+                SpawnLineVfx("BloodEchoThread", hitPosition + Vector3.left * 0.12f, player.transform.position, new Color(1f, 0.02f, 0.08f, 0.78f), 0.2f, 0.028f);
+                SpawnSpriteVfx("BloodEchoBloom", bloodBloomSprite, hitPosition, 0.28f + bloodEchoLevel * 0.04f, 0.3f, new Color(1f, 0.15f, 0.2f, 0.92f), 80f);
                 enemy.Health.ApplyDamage(baseDamage * (0.08f + 0.04f * bloodEchoLevel), gameObject);
                 HealPlayer(0.5f + bloodEchoLevel * 0.35f);
                 if (bloodEchoLevel >= 5)
@@ -386,9 +394,88 @@ namespace Lethe.Dev
             }
         }
 
+        private void TickActiveMemoryEffects()
+        {
+            if (player == null || spawner == null)
+            {
+                return;
+            }
+
+            var center = player.transform.position;
+            if (activeMemories.TryGetValue(KalmuriMemory, out var kalmuriLevel) && Time.time >= nextKalmuriTickAt)
+            {
+                nextKalmuriTickAt = Time.time + Mathf.Max(0.34f, activeKalmuriInterval - kalmuriLevel * 0.045f);
+                var radius = activeKalmuriRadius + kalmuriLevel * 0.08f;
+                SpawnKalmuriOrbit(center, kalmuriLevel);
+                DamageClosestEnemiesInRadius(center, radius, Mathf.Clamp(2 + kalmuriLevel / 2, 2, 4), 2.4f + kalmuriLevel * 1.0f, "HungryBladesOrbitCut", new Color(0.58f, 0.94f, 1f, 0.85f), 0.3f, hungryBladesActiveSprite);
+            }
+
+            if (activeMemories.TryGetValue(BloodMemory, out var bloodLevel) && Time.time >= nextBloodTickAt)
+            {
+                nextBloodTickAt = Time.time + Mathf.Max(0.55f, activeBloodInterval - bloodLevel * 0.035f);
+                var hitCount = DamageClosestEnemiesInRadius(center, activeBloodRadius + bloodLevel * 0.06f, 1 + Mathf.CeilToInt(bloodLevel * 0.4f), 1.4f + bloodLevel * 0.7f, "BloodReflectionPulse", new Color(1f, 0.04f, 0.12f, 0.78f), 0.12f, bloodReflectionSprite);
+                if (hitCount > 0)
+                {
+                    HealPlayer(0.45f + bloodLevel * 0.28f);
+                    SpawnSpriteVfx("BloodReflectionHeal", bloodBloomSprite, center + Vector3.up * 0.12f, 0.24f + bloodLevel * 0.025f, 0.3f, new Color(1f, 0.12f, 0.18f, 0.78f), 90f, 39);
+                }
+            }
+        }
+
+        private int DamageClosestEnemiesInRadius(Vector3 center, float radius, int maxTargets, float damage, string effectName, Color color, float knockback, Sprite sprite)
+        {
+            var candidates = new List<PrototypeEnemy>();
+            var radiusSqr = radius * radius;
+            var enemies = spawner.Enemies;
+            for (var index = 0; index < enemies.Count; index += 1)
+            {
+                var enemy = enemies[index];
+                if (enemy == null || enemy.Health == null || enemy.Health.IsDead)
+                {
+                    continue;
+                }
+
+                if ((enemy.transform.position - center).sqrMagnitude <= radiusSqr)
+                {
+                    candidates.Add(enemy);
+                }
+            }
+
+            candidates.Sort((left, right) =>
+                (left.transform.position - center).sqrMagnitude.CompareTo((right.transform.position - center).sqrMagnitude));
+
+            var hits = Mathf.Min(maxTargets, candidates.Count);
+            for (var index = 0; index < hits; index += 1)
+            {
+                var enemy = candidates[index];
+                var direction = enemy.transform.position - center;
+                direction.z = 0f;
+                direction = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector3.right;
+                enemy.Health.ApplyDamage(damage, gameObject);
+                enemy.ApplyKnockback(direction, knockback);
+                var tangent = Quaternion.Euler(0f, 0f, 86f) * direction * 0.34f;
+                SpawnLineVfx(effectName, enemy.transform.position - tangent, enemy.transform.position + tangent, color, 0.16f, 0.03f);
+                SpawnSpriteVfx(effectName + "Sprite", sprite, enemy.transform.position, 0.3f, 0.28f, color, 160f, 41);
+            }
+
+            return hits;
+        }
+
+        private void SpawnKalmuriOrbit(Vector3 center, int level)
+        {
+            var count = Mathf.Clamp(2 + level / 2, 2, 4);
+            var orbitRadius = 0.72f + level * 0.035f;
+            for (var index = 0; index < count; index += 1)
+            {
+                var angle = Time.time * 210f + index * (360f / count);
+                var offset = Quaternion.Euler(0f, 0f, angle) * Vector3.right * orbitRadius;
+                SpawnSpriteVfx("HungryBladesOrbitBlade", hungryBladesActiveSprite, center + offset, 0.18f + level * 0.018f, 0.32f, new Color(0.58f, 0.95f, 1f, 0.72f), 260f, 18);
+            }
+        }
+
         private void DrawPersistentLoops()
         {
-            if (player == null || Time.frameCount % 8 != 0)
+            if (player == null || Time.frameCount % 12 != 0)
             {
                 return;
             }
@@ -396,18 +483,18 @@ namespace Lethe.Dev
             var center = player.transform.position;
             if (activeMemories.ContainsKey(KalmuriMemory))
             {
-                SpawnLineVfx("ActiveHungryBladesOrbit", center + Vector3.left * 0.62f, center + Vector3.right * 0.62f, new Color(0.35f, 0.75f, 1f, 0.45f), 0.12f, 0.018f);
-                SpawnSpriteVfx("ActiveHungryBladesLoop", hungryBladesActiveSprite, center, 0.24f, 0.16f, new Color(0.55f, 0.95f, 1f, 0.24f), 180f, 8);
+                var angle = Time.time * 180f;
+                var offset = Quaternion.Euler(0f, 0f, angle) * Vector3.right * 0.72f;
+                SpawnSpriteVfx("ActiveHungryBladesLoop", hungryBladesActiveSprite, center + offset, 0.16f, 0.18f, new Color(0.55f, 0.95f, 1f, 0.34f), 180f, 12);
             }
 
             if (echoes.TryGetValue(KalmuriEcho, out var kalmuri) && kalmuri >= 5)
             {
-                SpawnLineVfx("AwakenedKalmuriRing", center + Vector3.down * 0.82f, center + Vector3.up * 0.82f, new Color(0.62f, 1f, 1f, 0.5f), 0.14f, 0.026f);
+                SpawnSpriteVfx("AwakenedKalmuriRing", hungryBladesActiveSprite, center, 0.34f + kalmuri * 0.02f, 0.22f, new Color(0.62f, 1f, 1f, 0.32f), 260f, 13);
             }
 
             if (ultimateUnlocked)
             {
-                SpawnLineVfx("StormGoalLoop", center + Vector3.left * 1.05f, center + Vector3.right * 1.05f, new Color(1f, 0.04f, 0.14f, 0.55f), 0.14f, 0.03f);
                 SpawnSpriteVfx("StormGoalLoop", bloodBladeStormSprite, center, 0.58f, 0.18f, new Color(1f, 0.12f, 0.16f, 0.3f), 220f, 9);
             }
         }

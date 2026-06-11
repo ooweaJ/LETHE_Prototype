@@ -5,16 +5,16 @@ namespace Lethe.Dev
 {
     public sealed class PrototypeWeaponController : MonoBehaviour
     {
-        [SerializeField] private float attackInterval = 0.24f;
-        [SerializeField] private float attackRange = 2.35f;
-        [SerializeField] private float baseDamage = 10.5f;
+        [SerializeField] private float attackInterval = 0.28f;
+        [SerializeField] private float attackRange = 2.15f;
+        [SerializeField] private float baseDamage = 5.8f;
         [SerializeField] private float swingDuration = 0.13f;
         [SerializeField] private float swingDegrees = 86f;
         [SerializeField] private float attackArcDegrees = 108f;
-        [SerializeField] private int maxTargetsPerSwing = 5;
-        [SerializeField] private float secondaryDamageMultiplier = 0.72f;
-        [SerializeField] private float primaryKnockback = 3.8f;
-        [SerializeField] private float secondaryKnockback = 2.6f;
+        [SerializeField] private int maxTargetsPerSwing = 4;
+        [SerializeField] private float secondaryDamageMultiplier = 0.48f;
+        [SerializeField] private float primaryKnockback = 1.45f;
+        [SerializeField] private float secondaryKnockback = 0.85f;
         [SerializeField] private Transform visualRoot;
 
         private readonly System.Collections.Generic.List<PrototypeEnemy> hitBuffer = new System.Collections.Generic.List<PrototypeEnemy>(8);
@@ -129,9 +129,9 @@ namespace Lethe.Dev
             var left = Quaternion.Euler(0f, 0f, attackArcDegrees * 0.5f) * direction;
             var right = Quaternion.Euler(0f, 0f, -attackArcDegrees * 0.5f) * direction;
             var near = origin + direction * 0.35f;
-            game.SpawnLineVfx("WeaponCleaveCore", near, rangeEnd, new Color(0.78f, 0.96f, 1f, 0.98f), 0.11f, 0.07f);
-            game.SpawnLineVfx("WeaponCleaveLeft", origin + left * 0.85f, rangeEnd, new Color(0.52f, 0.92f, 1f, 0.74f), 0.1f, 0.045f);
-            game.SpawnLineVfx("WeaponCleaveRight", origin + right * 0.85f, rangeEnd, new Color(0.52f, 0.92f, 1f, 0.74f), 0.1f, 0.045f);
+            game.SpawnLineVfx("WeaponCleaveCore", near, rangeEnd, new Color(0.78f, 0.96f, 1f, 0.62f), 0.09f, 0.045f);
+            game.SpawnLineVfx("WeaponCleaveLeft", origin + left * 0.72f, rangeEnd, new Color(0.52f, 0.92f, 1f, 0.42f), 0.08f, 0.026f);
+            game.SpawnLineVfx("WeaponCleaveRight", origin + right * 0.72f, rangeEnd, new Color(0.52f, 0.92f, 1f, 0.42f), 0.08f, 0.026f);
         }
 
         private void SpawnContactSlash(Vector3 hitPosition, Vector3 direction, bool primary)
@@ -140,9 +140,9 @@ namespace Lethe.Dev
             game.SpawnLineVfx(primary ? "WeaponPrimaryHit" : "WeaponCleaveHit",
                 hitPosition - cross * 0.32f,
                 hitPosition + cross * 0.38f,
-                primary ? new Color(0.95f, 1f, 1f, 1f) : new Color(0.6f, 0.92f, 1f, 0.78f),
+                primary ? new Color(0.95f, 1f, 1f, 0.78f) : new Color(0.6f, 0.92f, 1f, 0.48f),
                 primary ? 0.12f : 0.09f,
-                primary ? 0.06f : 0.038f);
+                primary ? 0.045f : 0.026f);
         }
     }
 }
