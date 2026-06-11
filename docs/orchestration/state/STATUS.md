@@ -134,14 +134,25 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Implement C1 from `docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`: split the current hard-coded prototype toward a data-driven complete prototype core.
+Run a jaewoo hands-on review of the first Complete Prototype implementation in `Assets/_dev/Scenes/Dev_Prototype_v0.unity`.
 
-Immediate order:
+Implemented now:
 
-- Fix and create data contracts for `WeaponDefinition`, `MemoryDefinition`, `EchoDefinition`, `EchoLevelData`, `EchoSynergyDefinition`, `EnemyDefinition`, `RewardPoolDefinition`, and `FeedbackProfile`.
-- Create runtime/service seams for `MemoryInventory`, `EchoInventory`, `ForgetService`, `ResonanceService`, `UltimateEchoService`, `RewardService`, and `DebugStateInjector`.
-- Register `Weapon_DualBlades`, `Weapon_Greatsword`, 8 memory ids, 8 echo ids, and 4 ultimate echo ids under `_dev`.
-- Only after that, implement C2 weapon pair and C3 8 active memories.
+- C1 service/data scaffolding.
+- C2 weapon pair: 쌍검 and 대검 switch.
+- C3 active memories 8.
+- C4 echoes 8.
+- C5 ultimate echoes 4.
+- 4 enemy role ids.
+- compressed debug controls F1-F8 and OnGUI buttons.
+
+Review focus:
+
+- Does 대검 give a real second standard compared with 쌍검?
+- Which of the 8 memories is readable immediately?
+- Which echo still feels like a recolored placeholder?
+- Which of the 4 ultimates deserves first polish?
+- Is the complete prototype now enough to set direction, even before final sprites?
 
 Do not promote `_dev` assets to `Assets/Lethe` until the Complete Prototype receives explicit `GO`.
 
@@ -180,6 +191,44 @@ For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` b
   - `npm.cmd run report`: passed, 16 unit reports generated.
   - `npm.cmd run report:check`: passed, 16 unit headings ok.
   - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+
+## Latest Complete Prototype Implementation
+
+- Added C1 scaffolding:
+  - `EnemyDefinition`
+  - `RewardPoolDefinition`
+  - `MemoryInventory`
+  - `EchoInventory`
+  - `ForgetService`
+  - `ResonanceService`
+  - `UltimateEchoService`
+  - `RewardService`
+  - `DebugStateInjector`
+- `PrototypeWeaponController` now supports:
+  - `Weapon_DualBlades`: fast, smaller proc rhythm.
+  - `Weapon_Greatsword`: slower, wider, heavier rhythm.
+- `PrototypeGameManager` now has a complete prototype catalog:
+  - 8 memories.
+  - 8 echoes.
+  - 4 ultimate echoes.
+  - F1-F8/debug buttons for choice, forget, memory add, echo levels, weapon switch, all memories, all ultimates.
+- `PrototypeEnemySpawner` now creates four role ids:
+  - `Enemy_MeleeChaser`
+  - `Enemy_RangedEye`
+  - `Enemy_Splitter`
+  - `Enemy_EliteGatekeeper`
+- Verification:
+  - Unity compile errors `0`.
+  - scene missing references `0`.
+  - Play Mode console errors `0` after snapshot iteration fix.
+  - runtime smoke confirmed 대검, 8 active memories, 8 echoes, 4 synergies, and 4 enemy roles.
+  - `npm.cmd run report`: passed, 17 unit reports generated.
+  - `npm.cmd run report:check`: passed, 17 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+- Remaining risk:
+  - most non-Kalmuri/Blood effects reuse placeholder sprites/colors.
+  - data is in code catalog first, not yet `_dev/Data` ScriptableObject assets.
+  - balance and final runtime class split still need follow-up.
 
 ## Latest Prototype v0 Result
 

@@ -5,7 +5,7 @@ namespace Lethe.Dev
 {
     public sealed class PrototypeEnemySpawner : MonoBehaviour
     {
-        [SerializeField] private int targetCount = 5;
+        [SerializeField] private int targetCount = 8;
         [SerializeField] private float spawnRadius = 4.2f;
         [SerializeField] private Vector2 arenaHalfExtents = new Vector2(7.4f, 4.4f);
         [SerializeField] private Texture2D enemySheet;
@@ -113,7 +113,15 @@ namespace Lethe.Dev
 
         private PrototypeEnemy CreateEnemy(int index)
         {
-            var root = new GameObject($"Enemy_MeleeChaser_{index + 1:00}");
+            var role = index % 4;
+            var roleId = role switch
+            {
+                1 => "Enemy_RangedEye",
+                2 => "Enemy_Splitter",
+                3 => "Enemy_EliteGatekeeper",
+                _ => "Enemy_MeleeChaser"
+            };
+            var root = new GameObject($"{roleId}_{index + 1:00}");
             root.transform.SetParent(transform, false);
             root.transform.position = RandomSpawnPosition();
 
@@ -130,9 +138,29 @@ namespace Lethe.Dev
             var enemy = root.AddComponent<PrototypeEnemy>();
             var body = root.AddComponent<CircleCollider2D>();
             body.isTrigger = true;
-            body.radius = 0.34f;
+            body.radius = role == 3 ? 0.46f : 0.34f;
 
             enemy.Initialize(game, player, enemySheet);
+            if (role == 1)
+            {
+                enemy.ConfigureRole(roleId, "떠도는 눈", 20f, 1.15f, 2.4f, 1.55f);
+                renderer.color = new Color(0.72f, 0.86f, 1f, 1f);
+            }
+            else if (role == 2)
+            {
+                enemy.ConfigureRole(roleId, "쪼개진 자", 18f, 1.55f, 2.8f, 0.38f);
+                renderer.color = new Color(1f, 0.72f, 0.78f, 1f);
+            }
+            else if (role == 3)
+            {
+                enemy.ConfigureRole(roleId, "문지기", 74f, 0.82f, 5.6f, 0.58f);
+                root.transform.localScale = Vector3.one * 1.24f;
+                renderer.color = new Color(0.92f, 0.82f, 1f, 1f);
+            }
+            else
+            {
+                enemy.ConfigureRole(roleId, "침식자", 28f, 1.35f, 3.5f, 0.45f);
+            }
             return enemy;
         }
 

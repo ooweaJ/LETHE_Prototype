@@ -6,10 +6,44 @@ namespace Lethe.Dev
 {
     public sealed class PrototypeGameManager : MonoBehaviour
     {
-        private const string KalmuriMemory = "Memory_HungryBlades";
-        private const string BloodMemory = "Memory_BloodReflection";
-        private const string KalmuriEcho = "Echo_Kalmuri";
-        private const string BloodEcho = "Echo_Blood";
+        private const string WeaponDualBlades = "Weapon_DualBlades";
+        private const string WeaponGreatsword = "Weapon_Greatsword";
+        private const string SynergyBloodBladeStorm = "Synergy_BloodBladeStorm";
+        private const string SynergyExecutionBrand = "Synergy_ExecutionBrand";
+        private const string SynergyFrozenHunt = "Synergy_FrozenHunt";
+        private const string SynergyBastionWave = "Synergy_BastionWave";
+
+        private static readonly List<PrototypeMemorySpec> MemorySpecs = new List<PrototypeMemorySpec>
+        {
+            new PrototypeMemorySpec("Memory_HungryBlades", "굶주린 칼무리", "Echo_Kalmuri", PrototypeEffectKind.Kalmuri, new Color(0.58f, 0.96f, 1f, 0.9f), "주변 독립 칼날 고리", "무기 공격 칼자국"),
+            new PrototypeMemorySpec("Memory_BloodReflection", "피의 반사", "Echo_Blood", PrototypeEffectKind.Blood, new Color(1f, 0.12f, 0.18f, 0.9f), "붉은 표식과 회복", "혈반과 회복 실"),
+            new PrototypeMemorySpec("Memory_ExecutionFlash", "처형자의 섬광", "Echo_Execution", PrototypeEffectKind.Execution, new Color(1f, 0.96f, 0.82f, 0.92f), "약한 적 처형 보조", "하얀 균열 처형"),
+            new PrototypeMemorySpec("Memory_HunterOath", "추적자의 맹세", "Echo_Homing", PrototypeEffectKind.Homing, new Color(0.72f, 0.84f, 1f, 0.9f), "원거리/약한 적 추적", "유도 잔탄"),
+            new PrototypeMemorySpec("Memory_ShatterWave", "파쇄의 파문", "Echo_Shockwave", PrototypeEffectKind.Shockwave, new Color(0.88f, 0.9f, 1f, 0.88f), "포위 해제 충격파", "타격 위치 파문"),
+            new PrototypeMemorySpec("Memory_StoppedSecond", "멈춘 초침", "Echo_TimeStop", PrototypeEffectKind.TimeStop, new Color(0.62f, 0.78f, 1f, 0.86f), "둔화와 시간 제어", "시간 균열"),
+            new PrototypeMemorySpec("Memory_AshenShield", "잿빛 보호막", "Echo_AshenGuard", PrototypeEffectKind.AshenGuard, new Color(0.72f, 0.76f, 0.82f, 0.86f), "방어 후 반격", "잿빛 반응"),
+            new PrototypeMemorySpec("Memory_OblivionBrand", "망각의 낙인", "Echo_Brand", PrototypeEffectKind.Brand, new Color(0.72f, 0.55f, 1f, 0.86f), "취약 표식", "낙인 증폭")
+        };
+
+        private static readonly List<PrototypeEchoSpec> EchoSpecs = new List<PrototypeEchoSpec>
+        {
+            new PrototypeEchoSpec("Echo_Kalmuri", "칼무리 잔향", "Memory_HungryBlades", PrototypeEffectKind.Kalmuri, new Color(0.62f, 1f, 1f, 0.9f)),
+            new PrototypeEchoSpec("Echo_Blood", "혈반 잔향", "Memory_BloodReflection", PrototypeEffectKind.Blood, new Color(1f, 0.1f, 0.16f, 0.92f)),
+            new PrototypeEchoSpec("Echo_Execution", "처형 잔향", "Memory_ExecutionFlash", PrototypeEffectKind.Execution, new Color(1f, 0.96f, 0.78f, 0.9f)),
+            new PrototypeEchoSpec("Echo_Homing", "추적 잔향", "Memory_HunterOath", PrototypeEffectKind.Homing, new Color(0.66f, 0.78f, 1f, 0.9f)),
+            new PrototypeEchoSpec("Echo_Shockwave", "파문 잔향", "Memory_ShatterWave", PrototypeEffectKind.Shockwave, new Color(0.86f, 0.9f, 1f, 0.9f)),
+            new PrototypeEchoSpec("Echo_TimeStop", "정지 잔향", "Memory_StoppedSecond", PrototypeEffectKind.TimeStop, new Color(0.58f, 0.74f, 1f, 0.9f)),
+            new PrototypeEchoSpec("Echo_AshenGuard", "잿빛 잔향", "Memory_AshenShield", PrototypeEffectKind.AshenGuard, new Color(0.68f, 0.7f, 0.76f, 0.9f)),
+            new PrototypeEchoSpec("Echo_Brand", "낙인 잔향", "Memory_OblivionBrand", PrototypeEffectKind.Brand, new Color(0.74f, 0.48f, 1f, 0.9f))
+        };
+
+        private static readonly List<PrototypeSynergySpec> SynergySpecs = new List<PrototypeSynergySpec>
+        {
+            new PrototypeSynergySpec(SynergyBloodBladeStorm, "피의 칼폭풍", new[] { "Echo_Kalmuri", "Echo_Blood" }, new Color(1f, 0.12f, 0.18f, 0.95f), "칼날이 혈반을 묻히고 회복 실을 돌려준다"),
+            new PrototypeSynergySpec(SynergyExecutionBrand, "처형 각인", new[] { "Echo_Execution", "Echo_Brand" }, new Color(1f, 0.86f, 0.62f, 0.95f), "낙인 적 처형이 하얀 파편으로 연쇄된다"),
+            new PrototypeSynergySpec(SynergyFrozenHunt, "정지 추적", new[] { "Echo_Homing", "Echo_TimeStop" }, new Color(0.55f, 0.75f, 1f, 0.95f), "둔화 적을 추적 잔탄이 우선 공격한다"),
+            new PrototypeSynergySpec(SynergyBastionWave, "성채 파문", new[] { "Echo_Shockwave", "Echo_AshenGuard" }, new Color(0.76f, 0.78f, 0.9f, 0.95f), "방어 반응이 큰 파문과 안전지대를 만든다")
+        };
 
         [Header("Scene")]
         [SerializeField] private PrototypePlayerController player;
@@ -43,8 +77,14 @@ namespace Lethe.Dev
         [SerializeField] private float activeBloodRadius = 2.05f;
         [SerializeField] private float activeBloodInterval = 1.05f;
 
-        private readonly Dictionary<string, int> activeMemories = new Dictionary<string, int>();
-        private readonly Dictionary<string, int> echoes = new Dictionary<string, int>();
+        private readonly MemoryInventory activeMemories = new MemoryInventory();
+        private readonly EchoInventory echoes = new EchoInventory();
+        private readonly ForgetService forgetService = new ForgetService();
+        private readonly ResonanceService resonanceService = new ResonanceService();
+        private readonly UltimateEchoService ultimateService = new UltimateEchoService();
+        private readonly RewardService rewardService = new RewardService();
+        private readonly DebugStateInjector debugStateInjector = new DebugStateInjector();
+        private readonly Dictionary<string, float> nextMemoryTickAt = new Dictionary<string, float>();
         private readonly HashSet<string> resonance = new HashSet<string>();
 
         private float playerHealth;
@@ -54,11 +94,8 @@ namespace Lethe.Dev
         private int earliestForgetKills;
         private float runTime;
         private float earliestForgetTime;
-        private float nextKalmuriTickAt;
-        private float nextBloodTickAt;
         private bool offeringChoice;
-        private bool ultimateUnlocked;
-        private string notice = "프로토타입 v0";
+        private string notice = "Complete Prototype";
         private float noticeUntil;
         private GUIStyle panelStyle;
         private GUIStyle labelStyle;
@@ -68,6 +105,10 @@ namespace Lethe.Dev
         public float PlayerHealth => playerHealth;
         public float PlayerMaxHealth => playerMaxHealth;
         public int Kills => kills;
+        public IReadOnlyDictionary<string, int> ActiveMemoryLevels => activeMemories.Levels;
+        public IReadOnlyDictionary<string, int> EchoLevels => echoes.Levels;
+        public IReadOnlyCollection<string> UnlockedSynergies => ultimateService.Unlocked;
+        public string CurrentWeaponId => weapon != null ? weapon.CurrentWeaponId : WeaponDualBlades;
 
         private void Awake()
         {
@@ -81,7 +122,7 @@ namespace Lethe.Dev
         private void Start()
         {
             WireScene();
-            ShowNotice("M1-M5 Prototype Ready");
+            ShowNotice("Complete Prototype: 2무기 8기억 8잔향 4궁극");
         }
 
         private void Update()
@@ -95,43 +136,42 @@ namespace Lethe.Dev
                 nextChoiceKills += choiceKillInterval;
             }
 
-            DrawPersistentLoops();
             TickActiveMemoryEffects();
+            DrawPersistentLoops();
         }
 
         private void OnGUI()
         {
             EnsureGuiStyles();
-            GUI.Box(new Rect(8f, 8f, 382f, 168f), "LETHE 프로토타입 v0", panelStyle);
-            GUI.Label(new Rect(18f, 34f, 350f, 20f), $"체력 {Mathf.CeilToInt(playerHealth)} / {Mathf.CeilToInt(playerMaxHealth)}   처치 {kills}   시간 {runTime:0}s", labelStyle);
-            GUI.Label(new Rect(18f, 58f, 350f, 20f), $"기억: {FormatState(activeMemories)}", labelStyle);
-            GUI.Label(new Rect(18f, 82f, 350f, 20f), $"잔향: {FormatState(echoes)}", labelStyle);
-            GUI.Label(new Rect(18f, 106f, 350f, 20f), $"다음 망각: {NextForgetCandidate()}   칼폭풍: {(ultimateUnlocked ? "준비됨" : StormProgress())}", labelStyle);
-            GUI.Label(new Rect(18f, 130f, 355f, 34f), "F1 기억 선택  F2 망각  F3 잔향+5  F4 공명  F5 기억 강화", labelStyle);
+            GUI.Box(new Rect(8f, 8f, 462f, 214f), "LETHE Complete Prototype", panelStyle);
+            GUI.Label(new Rect(18f, 34f, 430f, 20f), $"무기 {CurrentWeaponName()}   체력 {Mathf.CeilToInt(playerHealth)} / {Mathf.CeilToInt(playerMaxHealth)}   처치 {kills}   시간 {runTime:0}s", labelStyle);
+            GUI.Label(new Rect(18f, 58f, 430f, 34f), $"기억: {FormatState(activeMemories.Levels, true)}", labelStyle);
+            GUI.Label(new Rect(18f, 92f, 430f, 34f), $"잔향: {FormatState(echoes.Levels, false)}", labelStyle);
+            GUI.Label(new Rect(18f, 126f, 430f, 20f), $"다음 망각: {NextForgetCandidate()}   궁극: {FormatSynergies()}", labelStyle);
+            GUI.Label(new Rect(18f, 150f, 430f, 20f), "F1 선택  F2 망각  F3 다음기억  F4 잔향+1  F5 잔향+5  F6 무기  F7 전체기억  F8 전체궁극", labelStyle);
+
+            var y = 176f;
+            if (GUI.Button(new Rect(18f, y, 62f, 28f), "무기", buttonStyle)) ToggleWeapon();
+            if (GUI.Button(new Rect(86f, y, 72f, 28f), "기억+1", buttonStyle)) AddNextMemory();
+            if (GUI.Button(new Rect(164f, y, 72f, 28f), "망각", buttonStyle)) TriggerForget();
+            if (GUI.Button(new Rect(242f, y, 82f, 28f), "잔향+1", buttonStyle)) ForceAllEchoes(1);
+            if (GUI.Button(new Rect(330f, y, 82f, 28f), "궁극", buttonStyle)) ForceAllUltimate();
 
             if (Time.time < noticeUntil)
             {
-                GUI.Box(new Rect(Screen.width * 0.5f - 190f, 38f, 380f, 42f), notice, noticeStyle);
+                GUI.Box(new Rect(Screen.width * 0.5f - 220f, 38f, 440f, 44f), notice, noticeStyle);
             }
 
             if (offeringChoice)
             {
-                GUI.Box(new Rect(Screen.width * 0.5f - 205f, Screen.height * 0.5f - 88f, 410f, 176f), "기억 선택", panelStyle);
-                GUI.Label(new Rect(Screen.width * 0.5f - 178f, Screen.height * 0.5f - 52f, 356f, 22f), "초반 재미는 활성 기억이 만든다. 무엇을 몸에 새길까?", labelStyle);
-                if (GUI.Button(new Rect(Screen.width * 0.5f - 178f, Screen.height * 0.5f - 18f, 168f, 48f), "굶주린 칼무리", buttonStyle))
-                {
-                    ChooseMemory(KalmuriMemory);
-                }
-                if (GUI.Button(new Rect(Screen.width * 0.5f + 10f, Screen.height * 0.5f - 18f, 168f, 48f), "피의 반사", buttonStyle))
-                {
-                    ChooseMemory(BloodMemory);
-                }
+                DrawMemoryChoiceOverlay();
             }
         }
 
         public void RegisterEnemyKilled(PrototypeEnemy enemy)
         {
             kills += 1;
+            ApplyKillEchoes(enemy);
             StartCoroutine(RespawnEnemy(enemy));
             if (autoPrototypeLoop && activeMemories.Count > 0 && kills >= nextForgetKills && CanAutoForget())
             {
@@ -149,17 +189,26 @@ namespace Lethe.Dev
         public void DamagePlayer(float amount)
         {
             playerHealth = Mathf.Max(0f, playerHealth - amount);
-            ShowNotice($"Hit -{amount:0}");
+            if (activeMemories.GetLevel("Memory_AshenShield") > 0 || echoes.GetLevel("Echo_AshenGuard") > 0)
+            {
+                var level = Mathf.Max(activeMemories.GetLevel("Memory_AshenShield"), echoes.GetLevel("Echo_AshenGuard"));
+                HealPlayer(0.4f * level);
+                var center = player != null ? player.transform.position : transform.position;
+                DamageEnemiesInRadius(center, 1.1f + level * 0.08f, 1.4f + level * 0.55f, "AshenGuardRetaliate", FindEcho("Echo_AshenGuard").Color);
+            }
+
+            ShowNotice($"피격 -{amount:0}");
             if (playerHealth <= 0f)
             {
                 ResetRun();
             }
         }
 
-        public void HandleWeaponHit(PrototypeEnemy enemy, Vector3 hitPosition, Vector3 direction, float baseDamage, bool killed)
+        public void HandleWeaponHit(PrototypeEnemy enemy, Vector3 hitPosition, Vector3 direction, float baseDamage, bool killed, string weaponId = WeaponDualBlades)
         {
-            ApplyActiveMemories(enemy, hitPosition, direction, baseDamage);
-            ApplyEchoes(enemy, hitPosition, direction, baseDamage);
+            ApplyActiveMemoryOnHit(enemy, hitPosition, direction, baseDamage, weaponId);
+            ApplyEchoes(enemy, hitPosition, direction, baseDamage, weaponId);
+            ApplyUnlockedSynergies(enemy, hitPosition, direction, baseDamage, weaponId);
         }
 
         public void SpawnLineVfx(string name, Vector3 from, Vector3 to, Color color, float lifetime, float width)
@@ -210,161 +259,342 @@ namespace Lethe.Dev
 
             var animator = player != null ? player.GetComponentInChildren<PrototypeSpriteSheetAnimator>() : null;
             animator?.SetSheet(playerSheet);
-            spawner?.Initialize(this, player.transform, enemySheet);
+            if (spawner != null && player != null)
+            {
+                spawner.Initialize(this, player.transform, enemySheet);
+            }
+
             weapon?.Initialize(this, spawner);
         }
 
-        private void ApplyActiveMemories(PrototypeEnemy enemy, Vector3 hitPosition, Vector3 direction, float baseDamage)
+        private void ApplyActiveMemoryOnHit(PrototypeEnemy enemy, Vector3 hitPosition, Vector3 direction, float baseDamage, string weaponId)
         {
             if (enemy == null || enemy.Health == null)
             {
                 return;
             }
 
-            if (activeMemories.TryGetValue(KalmuriMemory, out var kalmuriLevel))
+            var memorySnapshot = new List<KeyValuePair<string, int>>(activeMemories.Levels);
+            foreach (var pair in memorySnapshot)
             {
-                SpawnSpriteVfx("HungryBladesActiveSlash", hungryBladesActiveSprite, enemy.transform.position, 0.36f + kalmuriLevel * 0.035f, 0.28f, new Color(0.65f, 0.95f, 1f, 0.9f), 260f, 38);
-                enemy.Health.ApplyDamage(0.7f * kalmuriLevel, gameObject);
-            }
-
-            if (activeMemories.TryGetValue(BloodMemory, out var bloodLevel))
-            {
-                enemy.Health.ApplyDamage(0.55f * bloodLevel, gameObject);
-                HealPlayer(0.25f * bloodLevel);
-                SpawnLineVfx("BloodReflectionThread", hitPosition, player.transform.position, new Color(1f, 0.05f, 0.12f, 0.62f), 0.16f, 0.022f);
-                SpawnSpriteVfx("BloodReflectionMark", bloodReflectionSprite, enemy.transform.position, 0.26f + bloodLevel * 0.025f, 0.34f, new Color(1f, 0.22f, 0.28f, 0.86f), 60f, 38);
+                var spec = FindMemory(pair.Key);
+                var level = pair.Value;
+                var heavy = weaponId == WeaponGreatsword;
+                switch (spec.Kind)
+                {
+                    case PrototypeEffectKind.Kalmuri:
+                        SpawnSpriteVfx("ActiveKalmuriCut", hungryBladesActiveSprite, enemy.transform.position, 0.3f + level * 0.03f, 0.25f, spec.Color, 220f, 38);
+                        enemy.Health.ApplyDamage((heavy ? 1.05f : 0.7f) * level, gameObject);
+                        break;
+                    case PrototypeEffectKind.Blood:
+                        enemy.Health.ApplyDamage((heavy ? 0.75f : 0.5f) * level, gameObject);
+                        HealPlayer((heavy ? 0.36f : 0.25f) * level);
+                        SpawnLineVfx("ActiveBloodThread", hitPosition, player.transform.position, spec.Color, 0.16f, 0.022f);
+                        break;
+                    case PrototypeEffectKind.Execution:
+                        if (enemy.Health.CurrentHealth <= enemy.Health.MaxHealth * (0.32f + level * 0.02f) || heavy)
+                        {
+                            enemy.Health.ApplyDamage(baseDamage * (0.18f + level * 0.08f), gameObject);
+                            SpawnLineVfx("ActiveExecutionFlash", hitPosition + Vector3.left * 0.38f, hitPosition + Vector3.right * 0.38f, spec.Color, 0.12f, 0.04f);
+                        }
+                        break;
+                    case PrototypeEffectKind.Homing:
+                        HitNearestOther(enemy, hitPosition, 2.8f + level * 0.25f, 1.2f + level * 0.45f, "ActiveHunterOath", spec.Color, kalmuriSlashSprite);
+                        break;
+                    case PrototypeEffectKind.Shockwave:
+                        DamageEnemiesInRadius(hitPosition, 0.72f + level * 0.12f + (heavy ? 0.35f : 0f), 0.9f + level * 0.4f, "ActiveShatterWave", spec.Color);
+                        break;
+                    case PrototypeEffectKind.TimeStop:
+                        SpawnLineVfx("ActiveStoppedSecond", hitPosition + Vector3.down * 0.32f, hitPosition + Vector3.up * 0.32f, spec.Color, 0.22f, 0.035f);
+                        enemy.ApplyKnockback(-direction, 0.35f + level * 0.08f);
+                        break;
+                    case PrototypeEffectKind.AshenGuard:
+                        if (playerHealth < playerMaxHealth * 0.65f)
+                        {
+                            HealPlayer(0.22f * level);
+                            SpawnSpriteVfx("ActiveAshenGuard", bloodBloomSprite, player.transform.position, 0.22f + level * 0.02f, 0.26f, spec.Color, 40f, 17);
+                        }
+                        break;
+                    case PrototypeEffectKind.Brand:
+                        enemy.Health.ApplyDamage(baseDamage * (0.06f + level * 0.035f), gameObject);
+                        SpawnSpriteVfx("ActiveOblivionBrand", bloodReflectionSprite, hitPosition, 0.24f + level * 0.025f, 0.32f, spec.Color, 80f, 39);
+                        break;
+                }
             }
         }
 
-        private void ApplyEchoes(PrototypeEnemy enemy, Vector3 hitPosition, Vector3 direction, float baseDamage)
+        private void ApplyEchoes(PrototypeEnemy enemy, Vector3 hitPosition, Vector3 direction, float baseDamage, string weaponId)
         {
             if (enemy == null || enemy.Health == null)
             {
                 return;
             }
 
-            if (echoes.TryGetValue(KalmuriEcho, out var kalmuriEchoLevel))
+            var echoSnapshot = new List<KeyValuePair<string, int>>(echoes.Levels);
+            foreach (var pair in echoSnapshot)
             {
-                var delayOffset = Quaternion.Euler(0f, 0f, 90f) * direction * 0.35f;
-                SpawnLineVfx("KalmuriEcho", hitPosition - delayOffset, hitPosition + delayOffset, new Color(0.7f, 0.95f, 1f, 0.72f), 0.16f, 0.032f);
-                SpawnSpriteVfx("KalmuriEchoSlash", kalmuriSlashSprite, hitPosition + direction * 0.08f, 0.32f + kalmuriEchoLevel * 0.045f, 0.24f, new Color(0.7f, 0.98f, 1f, 0.95f), 0f);
-                enemy.Health.ApplyDamage(baseDamage * (0.12f + 0.05f * kalmuriEchoLevel), gameObject);
-                if (kalmuriEchoLevel >= 5)
+                var level = pair.Value;
+                if (level <= 0)
                 {
-                    DamageEnemiesInRadius(hitPosition, 1.05f, baseDamage * 0.38f, "KalmuriAwakened", new Color(0.55f, 0.95f, 1f, 0.9f));
-                    SpawnSpriteVfx("KalmuriAwakenedRing", hungryBladesActiveSprite, hitPosition, 0.48f, 0.38f, new Color(0.65f, 1f, 1f, 0.9f), 360f, 42);
+                    continue;
+                }
+
+                var spec = FindEcho(pair.Key);
+                var heavy = weaponId == WeaponGreatsword;
+                var levelScale = 0.08f + level * 0.035f;
+                var radiusBonus = level >= 3 ? 0.38f : 0f;
+                switch (spec.Kind)
+                {
+                    case PrototypeEffectKind.Kalmuri:
+                        SpawnCross(hitPosition, direction, "EchoKalmuriSlash", spec.Color, level >= 5 ? 0.58f : 0.38f, level >= 5 ? 0.05f : 0.032f);
+                        SpawnSpriteVfx("EchoKalmuriSprite", kalmuriSlashSprite, hitPosition, 0.28f + level * 0.035f, 0.24f, spec.Color, 140f);
+                        enemy.Health.ApplyDamage(baseDamage * levelScale, gameObject);
+                        if (level >= 3) DamageEnemiesInRadius(hitPosition, 0.72f + radiusBonus, baseDamage * 0.1f * level, "EchoKalmuriLinger", spec.Color);
+                        break;
+                    case PrototypeEffectKind.Blood:
+                        SpawnLineVfx("EchoBloodThread", hitPosition, player.transform.position, spec.Color, 0.2f, 0.028f);
+                        SpawnSpriteVfx("EchoBloodBloom", bloodBloomSprite, hitPosition, 0.24f + level * 0.035f, 0.3f, spec.Color, 90f);
+                        enemy.Health.ApplyDamage(baseDamage * (0.06f + level * 0.032f), gameObject);
+                        HealPlayer(0.34f + level * 0.25f);
+                        if (level >= 5) DamageEnemiesInRadius(hitPosition, 0.95f, baseDamage * 0.22f, "EchoBloodFlower", spec.Color);
+                        break;
+                    case PrototypeEffectKind.Execution:
+                        if (enemy.Health.CurrentHealth <= enemy.Health.MaxHealth * 0.36f || level >= 5)
+                        {
+                            enemy.Health.ApplyDamage(baseDamage * (0.2f + level * 0.08f), gameObject);
+                            DamageEnemiesInRadius(hitPosition, 0.55f + level * 0.08f, baseDamage * 0.08f * level, "EchoExecutionCrack", spec.Color);
+                        }
+                        break;
+                    case PrototypeEffectKind.Homing:
+                        HitNearestOther(enemy, hitPosition, 3.2f + level * 0.25f, baseDamage * (0.12f + level * 0.04f), "EchoHomingShot", spec.Color, kalmuriSlashSprite);
+                        if (level >= 5) HitNearestOther(enemy, hitPosition + Vector3.up * 0.18f, 3.6f, baseDamage * 0.18f, "EchoHomingSplit", spec.Color, kalmuriSlashSprite);
+                        break;
+                    case PrototypeEffectKind.Shockwave:
+                        DamageEnemiesInRadius(hitPosition, 0.86f + level * 0.1f + (heavy ? 0.3f : 0f), baseDamage * (0.08f + level * 0.035f), "EchoShockwave", spec.Color);
+                        break;
+                    case PrototypeEffectKind.TimeStop:
+                        SpawnCross(hitPosition, direction, "EchoTimeFracture", spec.Color, 0.34f + level * 0.04f, 0.034f);
+                        DamageEnemiesInRadius(hitPosition, 0.55f + level * 0.08f, baseDamage * 0.06f * level, "EchoTimeSlow", spec.Color);
+                        break;
+                    case PrototypeEffectKind.AshenGuard:
+                        if (playerHealth < playerMaxHealth || level >= 5)
+                        {
+                            HealPlayer(0.18f + level * 0.18f);
+                            SpawnSpriteVfx("EchoAshenGuard", bloodBloomSprite, player.transform.position + Vector3.down * 0.08f, 0.22f + level * 0.025f, 0.3f, spec.Color, 50f, 18);
+                        }
+                        break;
+                    case PrototypeEffectKind.Brand:
+                        SpawnSpriteVfx("EchoOblivionBrand", bloodReflectionSprite, hitPosition, 0.26f + level * 0.03f, 0.34f, spec.Color, 120f);
+                        enemy.Health.ApplyDamage(baseDamage * (0.08f + level * 0.04f), gameObject);
+                        if (level >= 3) DamageEnemiesInRadius(hitPosition, 0.58f + level * 0.06f, baseDamage * 0.08f * level, "EchoBrandSpread", spec.Color);
+                        break;
                 }
             }
+        }
 
-            if (echoes.TryGetValue(BloodEcho, out var bloodEchoLevel))
+        private void ApplyUnlockedSynergies(PrototypeEnemy enemy, Vector3 hitPosition, Vector3 direction, float baseDamage, string weaponId)
+        {
+            if (ultimateService.Unlocked.Count == 0)
             {
-                SpawnLineVfx("BloodEchoThread", hitPosition + Vector3.left * 0.12f, player.transform.position, new Color(1f, 0.02f, 0.08f, 0.78f), 0.2f, 0.028f);
-                SpawnSpriteVfx("BloodEchoBloom", bloodBloomSprite, hitPosition, 0.28f + bloodEchoLevel * 0.04f, 0.3f, new Color(1f, 0.15f, 0.2f, 0.92f), 80f);
-                enemy.Health.ApplyDamage(baseDamage * (0.08f + 0.04f * bloodEchoLevel), gameObject);
-                HealPlayer(0.5f + bloodEchoLevel * 0.35f);
-                if (bloodEchoLevel >= 5)
-                {
-                    DamageEnemiesInRadius(hitPosition, 0.95f, baseDamage * 0.28f, "BloodBloom", new Color(1f, 0.04f, 0.08f, 0.9f));
-                    SpawnSpriteVfx("BloodAwakenedBloom", bloodBloomSprite, hitPosition, 0.44f, 0.42f, new Color(1f, 0.08f, 0.12f, 0.95f), 120f, 42);
-                    HealPlayer(1.2f);
-                }
+                return;
             }
 
-            if (ultimateUnlocked)
+            foreach (var synergyId in ultimateService.Unlocked)
             {
+                var spec = FindSynergy(synergyId);
                 var center = player != null ? player.transform.position : hitPosition;
-                SpawnLineVfx("BloodBladeStorm", center + Vector3.left * 0.85f, center + Vector3.right * 0.85f, new Color(1f, 0.12f, 0.12f, 1f), 0.22f, 0.06f);
-                SpawnLineVfx("BloodBladeStormThread", center + Vector3.down * 0.72f, center + Vector3.up * 0.72f, new Color(1f, 0.05f, 0.18f, 0.88f), 0.22f, 0.05f);
-                SpawnSpriteVfx("BloodBladeStormRing", bloodBladeStormSprite, center, 0.72f, 0.55f, new Color(1f, 0.16f, 0.18f, 0.95f), 260f, 43);
-                DamageEnemiesInRadius(center, 1.75f, baseDamage * 0.48f, "BloodBladeStormPulse", new Color(1f, 0.1f, 0.16f, 1f));
-                HealPlayer(1.4f);
+                switch (synergyId)
+                {
+                    case SynergyBloodBladeStorm:
+                        SpawnSpriteVfx("SynergyBloodBladeStorm", bloodBladeStormSprite, center, 0.58f, 0.42f, spec.Color, 260f, 43);
+                        DamageEnemiesInRadius(center, 1.65f, baseDamage * 0.34f, "SynergyBloodBladeStormPulse", spec.Color);
+                        HealPlayer(0.9f);
+                        break;
+                    case SynergyExecutionBrand:
+                        SpawnCross(hitPosition, direction, "SynergyExecutionBrand", spec.Color, 0.74f, 0.07f);
+                        DamageEnemiesInRadius(hitPosition, 1.15f, baseDamage * 0.36f, "SynergyExecutionBrandBurst", spec.Color);
+                        break;
+                    case SynergyFrozenHunt:
+                        HitNearestOther(enemy, hitPosition, 4.4f, baseDamage * 0.42f, "SynergyFrozenHuntShot", spec.Color, kalmuriSlashSprite);
+                        SpawnLineVfx("SynergyFrozenHuntClock", center + Vector3.left * 0.58f, center + Vector3.right * 0.58f, spec.Color, 0.18f, 0.042f);
+                        break;
+                    case SynergyBastionWave:
+                        DamageEnemiesInRadius(center, 1.95f, baseDamage * 0.3f, "SynergyBastionWave", spec.Color);
+                        HealPlayer(0.65f);
+                        SpawnSpriteVfx("SynergyBastionSafeZone", bloodBloomSprite, center, 0.62f, 0.35f, spec.Color, 80f, 16);
+                        break;
+                }
             }
+        }
+
+        private void ApplyKillEchoes(PrototypeEnemy enemy)
+        {
+            if (enemy == null)
+            {
+                return;
+            }
+
+            if (echoes.GetLevel("Echo_Execution") >= 3 || echoes.GetLevel("Echo_Brand") >= 3)
+            {
+                var level = Mathf.Max(echoes.GetLevel("Echo_Execution"), echoes.GetLevel("Echo_Brand"));
+                var color = level >= 5 ? FindSynergy(SynergyExecutionBrand).Color : FindEcho("Echo_Execution").Color;
+                DamageEnemiesInRadius(enemy.transform.position, 0.75f + level * 0.08f, 1.8f + level * 0.65f, "KillExecutionBrand", color);
+            }
+        }
+
+        private void TickActiveMemoryEffects()
+        {
+            if (player == null || spawner == null)
+            {
+                return;
+            }
+
+            var memorySnapshot = new List<KeyValuePair<string, int>>(activeMemories.Levels);
+            foreach (var pair in memorySnapshot)
+            {
+                var memoryId = pair.Key;
+                var level = pair.Value;
+                var spec = FindMemory(memoryId);
+                var interval = ActiveInterval(spec.Kind, level);
+                if (nextMemoryTickAt.TryGetValue(memoryId, out var nextAt) && Time.time < nextAt)
+                {
+                    continue;
+                }
+
+                nextMemoryTickAt[memoryId] = Time.time + interval;
+                TickOneActiveMemory(spec, level);
+            }
+        }
+
+        private void TickOneActiveMemory(PrototypeMemorySpec spec, int level)
+        {
+            var center = player.transform.position;
+            switch (spec.Kind)
+            {
+                case PrototypeEffectKind.Kalmuri:
+                    SpawnKalmuriOrbit(center, level, spec.Color);
+                    DamageClosestEnemiesInRadius(center, activeKalmuriRadius + level * 0.08f, Mathf.Clamp(2 + level / 2, 2, 4), 2.4f + level, "ActiveKalmuriOrbitCut", spec.Color, 0.3f, hungryBladesActiveSprite);
+                    break;
+                case PrototypeEffectKind.Blood:
+                    var hitCount = DamageClosestEnemiesInRadius(center, activeBloodRadius + level * 0.06f, 1 + Mathf.CeilToInt(level * 0.4f), 1.4f + level * 0.7f, "ActiveBloodPulse", spec.Color, 0.12f, bloodReflectionSprite);
+                    if (hitCount > 0)
+                    {
+                        HealPlayer(0.45f + level * 0.28f);
+                        SpawnSpriteVfx("ActiveBloodHeal", bloodBloomSprite, center + Vector3.up * 0.12f, 0.24f + level * 0.025f, 0.3f, spec.Color, 90f, 39);
+                    }
+                    break;
+                case PrototypeEffectKind.Execution:
+                    ExecuteWeakestEnemy(center, 2.4f + level * 0.15f, 1.8f + level * 0.8f, spec.Color);
+                    break;
+                case PrototypeEffectKind.Homing:
+                    HitNearestEnemy(center, 3.4f + level * 0.2f, 1.6f + level * 0.55f, "ActiveHunterOathPeriodic", spec.Color, kalmuriSlashSprite);
+                    break;
+                case PrototypeEffectKind.Shockwave:
+                    DamageEnemiesInRadius(center, 0.95f + level * 0.1f, 1.1f + level * 0.35f, "ActiveShatterWavePeriodic", spec.Color);
+                    break;
+                case PrototypeEffectKind.TimeStop:
+                    DamageEnemiesInRadius(center, 1.2f + level * 0.08f, 0.7f + level * 0.28f, "ActiveStoppedSecondField", spec.Color);
+                    break;
+                case PrototypeEffectKind.AshenGuard:
+                    if (playerHealth < playerMaxHealth)
+                    {
+                        HealPlayer(0.28f + level * 0.12f);
+                        SpawnSpriteVfx("ActiveAshenShieldLoop", bloodBloomSprite, center, 0.2f + level * 0.02f, 0.24f, spec.Color, 35f, 14);
+                    }
+                    break;
+                case PrototypeEffectKind.Brand:
+                    HitNearestEnemy(center, 2.6f + level * 0.12f, 1.2f + level * 0.42f, "ActiveOblivionBrandPulse", spec.Color, bloodReflectionSprite);
+                    break;
+            }
+        }
+
+        private float ActiveInterval(PrototypeEffectKind kind, int level)
+        {
+            return kind switch
+            {
+                PrototypeEffectKind.Kalmuri => Mathf.Max(0.34f, activeKalmuriInterval - level * 0.045f),
+                PrototypeEffectKind.Blood => Mathf.Max(0.55f, activeBloodInterval - level * 0.035f),
+                PrototypeEffectKind.Execution => 1.15f,
+                PrototypeEffectKind.Homing => 0.82f,
+                PrototypeEffectKind.Shockwave => 1.05f,
+                PrototypeEffectKind.TimeStop => 1.25f,
+                PrototypeEffectKind.AshenGuard => 1.3f,
+                PrototypeEffectKind.Brand => 0.95f,
+                _ => 1f
+            };
         }
 
         private void ChooseMemory(string memoryId)
         {
             offeringChoice = false;
-            var baseLevel = 1;
-            var echoId = MatchingEcho(memoryId);
-            if (echoes.TryGetValue(echoId, out var echoLevel))
+            var spec = FindMemory(memoryId);
+            var echoLevel = echoes.GetLevel(spec.EchoId);
+            var baseLevel = echoLevel > 0 ? resonanceService.GetReacquiredLevel(1, echoLevel) : 1;
+            if (echoLevel > 0)
             {
-                baseLevel = Mathf.Min(5, baseLevel + Mathf.FloorToInt(echoLevel / 2f));
                 resonance.Add(memoryId);
-                ShowNotice($"공명: {DisplayName(memoryId)} +{baseLevel}");
+                ShowNotice($"공명: {spec.DisplayName} +{baseLevel}");
             }
 
-            if (activeMemories.TryGetValue(memoryId, out var current))
-            {
-                activeMemories[memoryId] = Mathf.Min(5, current + 1);
-            }
-            else
-            {
-                activeMemories[memoryId] = baseLevel;
-            }
-
+            activeMemories.SetLevel(memoryId, Mathf.Max(baseLevel, activeMemories.GetLevel(memoryId) + 1));
             ArmMemoryHuntingWindow();
         }
 
         private void TriggerForget()
         {
-            var candidate = NextForgetCandidateId();
-            if (string.IsNullOrEmpty(candidate))
+            if (!forgetService.ForgetHighest(activeMemories, echoes, MatchingEcho, out var memoryId, out var echoId, out var lostLevel, out var echoLevel, out var overflow))
             {
                 ShowNotice("망각할 기억이 없음");
                 return;
             }
 
-            var level = activeMemories[candidate];
-            activeMemories.Remove(candidate);
-            var echoId = MatchingEcho(candidate);
-            var before = echoes.TryGetValue(echoId, out var echoLevel) ? echoLevel : 0;
-            var next = Mathf.Min(5, before + level);
-            echoes[echoId] = next;
-            var overflow = Mathf.Max(0, before + level - 5);
-            ShowNotice($"{DisplayName(candidate)} 망각 -> {DisplayName(echoId)} +{next}" + (overflow > 0 ? $" 과부하 {overflow}" : ""));
-            CheckUltimate();
+            RefreshUltimates();
+            ShowNotice($"{DisplayName(memoryId)} 망각 -> {DisplayName(echoId)} +{echoLevel}" + (overflow > 0 ? $" 과부하 {overflow}" : ""));
         }
 
-        private void ForceEchoFive()
+        private void AddNextMemory()
         {
-            echoes[KalmuriEcho] = 5;
-            echoes[BloodEcho] = 5;
-            CheckUltimate();
-            ShowNotice("잔향 각성: 칼무리 + 혈반");
+            ChooseMemory(rewardService.NextMemory(MemorySpecs));
         }
 
-        private void ForceResonance()
+        private void ForceAllEchoes(int level)
         {
-            ChooseMemory(KalmuriMemory);
-            ChooseMemory(BloodMemory);
-            ShowNotice("공명 강제 발동");
+            debugStateInjector.SetAllEchoes(echoes, EchoSpecs, level);
+            RefreshUltimates();
+            ShowNotice($"8잔향 +{level}");
         }
 
-        private void ForceBothMemories()
+        private void ForceAllUltimate()
         {
-            activeMemories[KalmuriMemory] = Mathf.Min(5, GetActiveLevel(KalmuriMemory) + 1);
-            activeMemories[BloodMemory] = Mathf.Min(5, GetActiveLevel(BloodMemory) + 1);
-            ShowNotice("두 기억 강화");
+            debugStateInjector.SetAllEchoes(echoes, EchoSpecs, 5);
+            RefreshUltimates();
+            ShowNotice("4궁극 조건 충족");
         }
 
-        private void CheckUltimate()
+        private void ForceAllMemories()
         {
-            ultimateUnlocked = echoes.TryGetValue(KalmuriEcho, out var k) && k >= 5 &&
-                               echoes.TryGetValue(BloodEcho, out var b) && b >= 5;
-            if (ultimateUnlocked)
+            debugStateInjector.SetAllMemories(activeMemories, MemorySpecs, 1);
+            ArmMemoryHuntingWindow();
+            ShowNotice("8기억 활성화");
+        }
+
+        private void ToggleWeapon()
+        {
+            weapon?.ToggleWeapon();
+            ShowNotice($"무기 전환: {CurrentWeaponName()}");
+        }
+
+        private void RefreshUltimates()
+        {
+            if (ultimateService.Refresh(echoes, SynergySpecs))
             {
-                ShowNotice("피의 칼폭풍 준비됨");
+                ShowNotice($"궁극 준비: {FormatSynergies()}");
             }
         }
 
         private void HealPlayer(float amount)
         {
-            playerHealth = Mathf.Min(playerMaxHealth, playerHealth + amount);
-        }
-
-        private int GetActiveLevel(string id)
-        {
-            return activeMemories.TryGetValue(id, out var level) ? level : 0;
+            playerHealth = Mathf.Min(playerMaxHealth, playerHealth + Mathf.Max(0f, amount));
         }
 
         private void DamageEnemiesInRadius(Vector3 center, float radius, float damage, string effectName, Color color)
@@ -389,42 +619,38 @@ namespace Lethe.Dev
                 }
 
                 enemy.Health.ApplyDamage(damage, gameObject);
-                enemy.ApplyKnockback((enemy.transform.position - center).normalized, 1.8f);
+                enemy.ApplyKnockback((enemy.transform.position - center).normalized, 1.25f + radius * 0.25f);
                 SpawnLineVfx(effectName, center, enemy.transform.position, color, 0.16f, 0.032f);
-            }
-        }
-
-        private void TickActiveMemoryEffects()
-        {
-            if (player == null || spawner == null)
-            {
-                return;
-            }
-
-            var center = player.transform.position;
-            if (activeMemories.TryGetValue(KalmuriMemory, out var kalmuriLevel) && Time.time >= nextKalmuriTickAt)
-            {
-                nextKalmuriTickAt = Time.time + Mathf.Max(0.34f, activeKalmuriInterval - kalmuriLevel * 0.045f);
-                var radius = activeKalmuriRadius + kalmuriLevel * 0.08f;
-                SpawnKalmuriOrbit(center, kalmuriLevel);
-                DamageClosestEnemiesInRadius(center, radius, Mathf.Clamp(2 + kalmuriLevel / 2, 2, 4), 2.4f + kalmuriLevel * 1.0f, "HungryBladesOrbitCut", new Color(0.58f, 0.94f, 1f, 0.85f), 0.3f, hungryBladesActiveSprite);
-            }
-
-            if (activeMemories.TryGetValue(BloodMemory, out var bloodLevel) && Time.time >= nextBloodTickAt)
-            {
-                nextBloodTickAt = Time.time + Mathf.Max(0.55f, activeBloodInterval - bloodLevel * 0.035f);
-                var hitCount = DamageClosestEnemiesInRadius(center, activeBloodRadius + bloodLevel * 0.06f, 1 + Mathf.CeilToInt(bloodLevel * 0.4f), 1.4f + bloodLevel * 0.7f, "BloodReflectionPulse", new Color(1f, 0.04f, 0.12f, 0.78f), 0.12f, bloodReflectionSprite);
-                if (hitCount > 0)
-                {
-                    HealPlayer(0.45f + bloodLevel * 0.28f);
-                    SpawnSpriteVfx("BloodReflectionHeal", bloodBloomSprite, center + Vector3.up * 0.12f, 0.24f + bloodLevel * 0.025f, 0.3f, new Color(1f, 0.12f, 0.18f, 0.78f), 90f, 39);
-                }
             }
         }
 
         private int DamageClosestEnemiesInRadius(Vector3 center, float radius, int maxTargets, float damage, string effectName, Color color, float knockback, Sprite sprite)
         {
+            var candidates = CollectEnemiesInRadius(center, radius);
+            var hits = Mathf.Min(maxTargets, candidates.Count);
+            for (var index = 0; index < hits; index += 1)
+            {
+                var enemy = candidates[index];
+                var direction = enemy.transform.position - center;
+                direction.z = 0f;
+                direction = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector3.right;
+                enemy.Health.ApplyDamage(damage, gameObject);
+                enemy.ApplyKnockback(direction, knockback);
+                SpawnCross(enemy.transform.position, direction, effectName, color, 0.34f, 0.03f);
+                SpawnSpriteVfx(effectName + "Sprite", sprite, enemy.transform.position, 0.3f, 0.28f, color, 160f, 41);
+            }
+
+            return hits;
+        }
+
+        private List<PrototypeEnemy> CollectEnemiesInRadius(Vector3 center, float radius)
+        {
             var candidates = new List<PrototypeEnemy>();
+            if (spawner == null)
+            {
+                return candidates;
+            }
+
             var radiusSqr = radius * radius;
             var enemies = spawner.Enemies;
             for (var index = 0; index < enemies.Count; index += 1)
@@ -443,25 +669,79 @@ namespace Lethe.Dev
 
             candidates.Sort((left, right) =>
                 (left.transform.position - center).sqrMagnitude.CompareTo((right.transform.position - center).sqrMagnitude));
-
-            var hits = Mathf.Min(maxTargets, candidates.Count);
-            for (var index = 0; index < hits; index += 1)
-            {
-                var enemy = candidates[index];
-                var direction = enemy.transform.position - center;
-                direction.z = 0f;
-                direction = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector3.right;
-                enemy.Health.ApplyDamage(damage, gameObject);
-                enemy.ApplyKnockback(direction, knockback);
-                var tangent = Quaternion.Euler(0f, 0f, 86f) * direction * 0.34f;
-                SpawnLineVfx(effectName, enemy.transform.position - tangent, enemy.transform.position + tangent, color, 0.16f, 0.03f);
-                SpawnSpriteVfx(effectName + "Sprite", sprite, enemy.transform.position, 0.3f, 0.28f, color, 160f, 41);
-            }
-
-            return hits;
+            return candidates;
         }
 
-        private void SpawnKalmuriOrbit(Vector3 center, int level)
+        private void ExecuteWeakestEnemy(Vector3 center, float radius, float damage, Color color)
+        {
+            var candidates = CollectEnemiesInRadius(center, radius);
+            PrototypeEnemy weakest = null;
+            var lowestRatio = 2f;
+            for (var index = 0; index < candidates.Count; index += 1)
+            {
+                var enemy = candidates[index];
+                var ratio = enemy.Health.CurrentHealth / Mathf.Max(1f, enemy.Health.MaxHealth);
+                if (ratio < lowestRatio)
+                {
+                    lowestRatio = ratio;
+                    weakest = enemy;
+                }
+            }
+
+            if (weakest == null)
+            {
+                return;
+            }
+
+            weakest.Health.ApplyDamage(damage * (lowestRatio < 0.42f ? 2f : 1f), gameObject);
+            SpawnCross(weakest.transform.position, Vector3.right, "ActiveExecutionPeriodic", color, 0.54f, 0.045f);
+        }
+
+        private void HitNearestEnemy(Vector3 origin, float range, float damage, string effectName, Color color, Sprite sprite)
+        {
+            if (spawner == null)
+            {
+                return;
+            }
+
+            var enemy = spawner.FindNearest(origin, range);
+            if (enemy == null)
+            {
+                return;
+            }
+
+            enemy.Health.ApplyDamage(damage, gameObject);
+            SpawnLineVfx(effectName, origin, enemy.transform.position, color, 0.18f, 0.032f);
+            SpawnSpriteVfx(effectName + "Sprite", sprite, enemy.transform.position, 0.24f, 0.28f, color, 180f, 41);
+        }
+
+        private void HitNearestOther(PrototypeEnemy excluded, Vector3 origin, float range, float damage, string effectName, Color color, Sprite sprite)
+        {
+            var candidates = CollectEnemiesInRadius(origin, range);
+            for (var index = 0; index < candidates.Count; index += 1)
+            {
+                var enemy = candidates[index];
+                if (enemy == excluded)
+                {
+                    continue;
+                }
+
+                enemy.Health.ApplyDamage(damage, gameObject);
+                SpawnLineVfx(effectName, origin, enemy.transform.position, color, 0.18f, 0.032f);
+                SpawnSpriteVfx(effectName + "Sprite", sprite, enemy.transform.position, 0.24f, 0.28f, color, 180f, 41);
+                return;
+            }
+        }
+
+        private void SpawnCross(Vector3 center, Vector3 direction, string name, Color color, float length, float width)
+        {
+            direction.z = 0f;
+            direction = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector3.right;
+            var cross = Quaternion.Euler(0f, 0f, 86f) * direction;
+            SpawnLineVfx(name, center - cross * length, center + cross * length, color, 0.16f, width);
+        }
+
+        private void SpawnKalmuriOrbit(Vector3 center, int level, Color color)
         {
             var count = Mathf.Clamp(2 + level / 2, 2, 4);
             var orbitRadius = 0.72f + level * 0.035f;
@@ -469,7 +749,7 @@ namespace Lethe.Dev
             {
                 var angle = Time.time * 210f + index * (360f / count);
                 var offset = Quaternion.Euler(0f, 0f, angle) * Vector3.right * orbitRadius;
-                SpawnSpriteVfx("HungryBladesOrbitBlade", hungryBladesActiveSprite, center + offset, 0.18f + level * 0.018f, 0.32f, new Color(0.58f, 0.95f, 1f, 0.72f), 260f, 18);
+                SpawnSpriteVfx("ActiveKalmuriOrbitBlade", hungryBladesActiveSprite, center + offset, 0.18f + level * 0.018f, 0.32f, color, 260f, 18);
             }
         }
 
@@ -481,21 +761,19 @@ namespace Lethe.Dev
             }
 
             var center = player.transform.position;
-            if (activeMemories.ContainsKey(KalmuriMemory))
+            var memorySnapshot = new List<KeyValuePair<string, int>>(activeMemories.Levels);
+            foreach (var pair in memorySnapshot)
             {
-                var angle = Time.time * 180f;
-                var offset = Quaternion.Euler(0f, 0f, angle) * Vector3.right * 0.72f;
-                SpawnSpriteVfx("ActiveHungryBladesLoop", hungryBladesActiveSprite, center + offset, 0.16f, 0.18f, new Color(0.55f, 0.95f, 1f, 0.34f), 180f, 12);
+                var spec = FindMemory(pair.Key);
+                var offset = Quaternion.Euler(0f, 0f, Time.time * 110f + (int)spec.Kind * 31f) * Vector3.right * (0.52f + (int)spec.Kind * 0.015f);
+                SpawnSpriteVfx("ActiveMemoryLoop", SpriteForKind(spec.Kind), center + offset, 0.12f + pair.Value * 0.012f, 0.18f, new Color(spec.Color.r, spec.Color.g, spec.Color.b, 0.26f), 120f, 12);
             }
 
-            if (echoes.TryGetValue(KalmuriEcho, out var kalmuri) && kalmuri >= 5)
+            var synergySnapshot = new List<string>(ultimateService.Unlocked);
+            foreach (var synergyId in synergySnapshot)
             {
-                SpawnSpriteVfx("AwakenedKalmuriRing", hungryBladesActiveSprite, center, 0.34f + kalmuri * 0.02f, 0.22f, new Color(0.62f, 1f, 1f, 0.32f), 260f, 13);
-            }
-
-            if (ultimateUnlocked)
-            {
-                SpawnSpriteVfx("StormGoalLoop", bloodBladeStormSprite, center, 0.58f, 0.18f, new Color(1f, 0.12f, 0.16f, 0.3f), 220f, 9);
+                var spec = FindSynergy(synergyId);
+                SpawnSpriteVfx("UltimateGoalLoop", bloodBladeStormSprite, center, 0.48f, 0.18f, new Color(spec.Color.r, spec.Color.g, spec.Color.b, 0.24f), 220f, 9);
             }
         }
 
@@ -509,15 +787,17 @@ namespace Lethe.Dev
         {
             playerHealth = playerMaxHealth;
             kills = 0;
+            runTime = 0f;
             nextChoiceKills = firstChoiceKills;
             nextForgetKills = firstForgetKills;
             earliestForgetKills = firstForgetKills;
             earliestForgetTime = 0f;
             activeMemories.Clear();
             echoes.Clear();
+            ultimateService.Clear();
+            rewardService.Reset();
             resonance.Clear();
-            ultimateUnlocked = false;
-            ShowNotice("사망 -> 프로토타입 리셋");
+            ShowNotice("사망 -> Complete Prototype 리셋");
         }
 
         private void HandleDebugKeys()
@@ -528,47 +808,64 @@ namespace Lethe.Dev
             {
                 if (keyboard.f1Key.wasPressedThisFrame) offeringChoice = true;
                 if (keyboard.f2Key.wasPressedThisFrame) TriggerForget();
-                if (keyboard.f3Key.wasPressedThisFrame) ForceEchoFive();
-                if (keyboard.f4Key.wasPressedThisFrame) ForceResonance();
-                if (keyboard.f5Key.wasPressedThisFrame) ForceBothMemories();
+                if (keyboard.f3Key.wasPressedThisFrame) AddNextMemory();
+                if (keyboard.f4Key.wasPressedThisFrame) ForceAllEchoes(1);
+                if (keyboard.f5Key.wasPressedThisFrame) ForceAllEchoes(5);
+                if (keyboard.f6Key.wasPressedThisFrame) ToggleWeapon();
+                if (keyboard.f7Key.wasPressedThisFrame) ForceAllMemories();
+                if (keyboard.f8Key.wasPressedThisFrame) ForceAllUltimate();
                 return;
             }
 #endif
 #if ENABLE_LEGACY_INPUT_MANAGER
             if (Input.GetKeyDown(KeyCode.F1)) offeringChoice = true;
             if (Input.GetKeyDown(KeyCode.F2)) TriggerForget();
-            if (Input.GetKeyDown(KeyCode.F3)) ForceEchoFive();
-            if (Input.GetKeyDown(KeyCode.F4)) ForceResonance();
-            if (Input.GetKeyDown(KeyCode.F5)) ForceBothMemories();
+            if (Input.GetKeyDown(KeyCode.F3)) AddNextMemory();
+            if (Input.GetKeyDown(KeyCode.F4)) ForceAllEchoes(1);
+            if (Input.GetKeyDown(KeyCode.F5)) ForceAllEchoes(5);
+            if (Input.GetKeyDown(KeyCode.F6)) ToggleWeapon();
+            if (Input.GetKeyDown(KeyCode.F7)) ForceAllMemories();
+            if (Input.GetKeyDown(KeyCode.F8)) ForceAllUltimate();
 #endif
+        }
+
+        private void DrawMemoryChoiceOverlay()
+        {
+            var width = 560f;
+            var height = 250f;
+            var x = Screen.width * 0.5f - width * 0.5f;
+            var y = Screen.height * 0.5f - height * 0.5f;
+            GUI.Box(new Rect(x, y, width, height), "기억 선택", panelStyle);
+            GUI.Label(new Rect(x + 22f, y + 36f, width - 44f, 22f), "8기억 중 하나를 활성화한다. 잔향이 있으면 재획득 공명으로 시작 레벨이 오른다.", labelStyle);
+
+            for (var index = 0; index < MemorySpecs.Count; index += 1)
+            {
+                var spec = MemorySpecs[index];
+                var row = index / 4;
+                var col = index % 4;
+                var rect = new Rect(x + 22f + col * 130f, y + 72f + row * 72f, 118f, 58f);
+                if (GUI.Button(rect, $"{spec.DisplayName}\n{spec.ActiveNote}", buttonStyle))
+                {
+                    ChooseMemory(spec.Id);
+                }
+            }
+
+            if (GUI.Button(new Rect(x + width - 112f, y + height - 42f, 90f, 28f), "닫기", buttonStyle))
+            {
+                offeringChoice = false;
+            }
         }
 
         private string NextForgetCandidate()
         {
-            var id = NextForgetCandidateId();
+            var id = activeMemories.FindHighestLevelMemory();
             if (string.IsNullOrEmpty(id))
             {
                 return "-";
             }
 
             var protection = ForgetProtectionLabel();
-            return string.IsNullOrEmpty(protection) ? $"{DisplayName(id)} +{activeMemories[id]}" : $"{DisplayName(id)} +{activeMemories[id]} ({protection})";
-        }
-
-        private string NextForgetCandidateId()
-        {
-            string best = null;
-            var bestLevel = -1;
-            foreach (var pair in activeMemories)
-            {
-                if (pair.Value > bestLevel)
-                {
-                    best = pair.Key;
-                    bestLevel = pair.Value;
-                }
-            }
-
-            return best;
+            return string.IsNullOrEmpty(protection) ? $"{DisplayName(id)} +{activeMemories.GetLevel(id)}" : $"{DisplayName(id)} +{activeMemories.GetLevel(id)} ({protection})";
         }
 
         private void ArmMemoryHuntingWindow()
@@ -576,7 +873,6 @@ namespace Lethe.Dev
             earliestForgetKills = Mathf.Max(earliestForgetKills, kills + minActiveMemoryKillsBeforeForget);
             earliestForgetTime = Mathf.Max(earliestForgetTime, runTime + minActiveMemorySecondsBeforeForget);
             nextForgetKills = Mathf.Max(nextForgetKills, earliestForgetKills);
-            ShowNotice($"기억 사냥 구간: {minActiveMemoryKillsBeforeForget}킬 / {minActiveMemorySecondsBeforeForget:0}s");
         }
 
         private bool CanAutoForget()
@@ -606,31 +902,97 @@ namespace Lethe.Dev
             return $"보호 {Mathf.CeilToInt(remainingTime)}초";
         }
 
-        private string StormProgress()
+        private string CurrentWeaponName()
         {
-            echoes.TryGetValue(KalmuriEcho, out var k);
-            echoes.TryGetValue(BloodEcho, out var b);
-            return $"칼 {k}/5 혈 {b}/5";
+            return weapon != null ? weapon.CurrentWeaponName : "절단쌍검";
         }
 
         private static string MatchingEcho(string memoryId)
         {
-            return memoryId == BloodMemory ? BloodEcho : KalmuriEcho;
+            return FindMemory(memoryId).EchoId;
+        }
+
+        private static PrototypeMemorySpec FindMemory(string id)
+        {
+            for (var index = 0; index < MemorySpecs.Count; index += 1)
+            {
+                if (MemorySpecs[index].Id == id)
+                {
+                    return MemorySpecs[index];
+                }
+            }
+
+            return MemorySpecs[0];
+        }
+
+        private static PrototypeEchoSpec FindEcho(string id)
+        {
+            for (var index = 0; index < EchoSpecs.Count; index += 1)
+            {
+                if (EchoSpecs[index].Id == id)
+                {
+                    return EchoSpecs[index];
+                }
+            }
+
+            return EchoSpecs[0];
+        }
+
+        private static PrototypeSynergySpec FindSynergy(string id)
+        {
+            for (var index = 0; index < SynergySpecs.Count; index += 1)
+            {
+                if (SynergySpecs[index].Id == id)
+                {
+                    return SynergySpecs[index];
+                }
+            }
+
+            return SynergySpecs[0];
+        }
+
+        private Sprite SpriteForKind(PrototypeEffectKind kind)
+        {
+            return kind switch
+            {
+                PrototypeEffectKind.Blood => bloodReflectionSprite,
+                PrototypeEffectKind.AshenGuard => bloodBloomSprite,
+                PrototypeEffectKind.Brand => bloodReflectionSprite,
+                PrototypeEffectKind.Kalmuri => hungryBladesActiveSprite,
+                _ => kalmuriSlashSprite != null ? kalmuriSlashSprite : hungryBladesActiveSprite
+            };
         }
 
         private static string DisplayName(string id)
         {
-            return id switch
+            for (var index = 0; index < MemorySpecs.Count; index += 1)
             {
-                KalmuriMemory => "굶주린 칼무리",
-                BloodMemory => "피의 반사",
-                KalmuriEcho => "칼무리 잔향",
-                BloodEcho => "혈반 잔향",
-                _ => id
-            };
+                if (MemorySpecs[index].Id == id)
+                {
+                    return MemorySpecs[index].DisplayName;
+                }
+            }
+
+            for (var index = 0; index < EchoSpecs.Count; index += 1)
+            {
+                if (EchoSpecs[index].Id == id)
+                {
+                    return EchoSpecs[index].DisplayName;
+                }
+            }
+
+            for (var index = 0; index < SynergySpecs.Count; index += 1)
+            {
+                if (SynergySpecs[index].Id == id)
+                {
+                    return SynergySpecs[index].DisplayName;
+                }
+            }
+
+            return id;
         }
 
-        private static string FormatState(Dictionary<string, int> state)
+        private static string FormatState(IReadOnlyDictionary<string, int> state, bool memories)
         {
             if (state.Count == 0)
             {
@@ -641,6 +1003,22 @@ namespace Lethe.Dev
             foreach (var pair in state)
             {
                 parts.Add($"{DisplayName(pair.Key)} +{pair.Value}");
+            }
+
+            return string.Join(", ", parts);
+        }
+
+        private string FormatSynergies()
+        {
+            if (ultimateService.Unlocked.Count == 0)
+            {
+                return "대기";
+            }
+
+            var parts = new List<string>();
+            foreach (var id in ultimateService.Unlocked)
+            {
+                parts.Add(DisplayName(id));
             }
 
             return string.Join(", ", parts);
@@ -671,7 +1049,7 @@ namespace Lethe.Dev
             labelStyle = new GUIStyle(GUI.skin.label)
             {
                 font = baseFont,
-                fontSize = 14,
+                fontSize = 13,
                 normal = { textColor = new Color(0.9f, 0.94f, 0.98f, 1f) },
                 wordWrap = true
             };
@@ -683,7 +1061,7 @@ namespace Lethe.Dev
             buttonStyle = new GUIStyle(GUI.skin.button)
             {
                 font = baseFont,
-                fontSize = 15,
+                fontSize = 12,
                 alignment = TextAnchor.MiddleCenter,
                 wordWrap = true
             };

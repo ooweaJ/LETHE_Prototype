@@ -9,6 +9,12 @@ namespace Lethe.Dev
         HeavyConditional
     }
 
+    public enum WeaponRhythm
+    {
+        FastProc,
+        HeavyConditional
+    }
+
     public enum TriggerFamily
     {
         OnWeaponHit,
@@ -36,7 +42,13 @@ namespace Lethe.Dev
         BloodMark = 1 << 4,
         HealThread = 1 << 5,
         BloodBloom = 1 << 6,
-        KillAcceleration = 1 << 7
+        KillAcceleration = 1 << 7,
+        ExecuteCrack = 1 << 8,
+        HomingShot = 1 << 9,
+        Shockwave = 1 << 10,
+        TimeFracture = 1 << 11,
+        AshenGuard = 1 << 12,
+        OblivionBrand = 1 << 13
     }
 
     [Serializable]
@@ -64,6 +76,10 @@ namespace Lethe.Dev
         public FeedbackProfile hitStopProfile;
         public AudioClip[] sfxLayers;
         public EchoStyle echoStyle = EchoStyle.SmallFrequent;
+        public WeaponRhythm rhythm = WeaponRhythm.FastProc;
+        public float attackRange = 2f;
+        public float attackArcDegrees = 100f;
+        public int maxTargetsPerSwing = 3;
     }
 
     [CreateAssetMenu(menuName = "LETHE/Memory Definition")]
@@ -135,5 +151,28 @@ namespace Lethe.Dev
         public Color lightColor = Color.cyan;
         public float lightIntensity = 1f;
         public GameObject particlePrefab;
+    }
+
+    [CreateAssetMenu(menuName = "LETHE/Enemy Definition")]
+    public sealed class EnemyDefinition : ScriptableObject
+    {
+        public string id = "Enemy_MeleeChaser";
+        public string displayName = "침식자";
+        public float maxHealth = 28f;
+        public float moveSpeed = 1.35f;
+        public float contactDamage = 3.5f;
+        public float stopDistance = 0.45f;
+        public string roleNote = "기본 압박";
+    }
+
+    [CreateAssetMenu(menuName = "LETHE/Reward Pool Definition")]
+    public sealed class RewardPoolDefinition : ScriptableObject
+    {
+        public string id = "RewardPool_CompletePrototype";
+        public WeaponDefinition[] weapons = Array.Empty<WeaponDefinition>();
+        public MemoryDefinition[] memories = Array.Empty<MemoryDefinition>();
+        public EchoDefinition[] echoes = Array.Empty<EchoDefinition>();
+        public EchoSynergyDefinition[] synergies = Array.Empty<EchoSynergyDefinition>();
+        public EnemyDefinition[] enemies = Array.Empty<EnemyDefinition>();
     }
 }

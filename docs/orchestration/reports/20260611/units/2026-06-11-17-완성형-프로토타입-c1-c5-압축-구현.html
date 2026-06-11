@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-11-17 - 완성형 프로토타입 C1-C5 압축 구현</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-11-17 - 완성형 프로토타입 C1-C5 압축 구현</h1>
+      <p class="meta">Generated from 2026-06-11-17-완성형-프로토타입-c1-c5-압축-구현.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260611/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-11-17 - 완성형 프로토타입 C1-C5 압축 구현</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v0</code>는 이제 쌍검 1종/기억 2종이 아니라, 압축 디버그 루프로 <code>쌍검 + 대검 + 8기억 + 8잔향 + 4궁극</code>을 모두 켜고 확인할 수 있는 상태다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>EnemyDefinition</code>, <code>RewardPoolDefinition</code>, <code>WeaponRhythm</code>, 추가 <code>EchoBehavior</code> 플래그를 만들었다.</li>
+<li><code>MemoryInventory</code>, <code>EchoInventory</code>, <code>ForgetService</code>, <code>ResonanceService</code>, <code>UltimateEchoService</code>, <code>RewardService</code>, <code>DebugStateInjector</code>를 추가했다.</li>
+<li><code>PrototypeWeaponController</code>가 쌍검/대검을 전환하게 했다.</li>
+<li><code>PrototypeEnemySpawner</code>가 근접, 원거리, 분열, 엘리트 역할 id를 가진 적을 생성하게 했다.</li>
+<li><code>PrototypeGameManager</code>를 complete prototype 카탈로그 기반으로 교체했다.</li>
+<li>8기억, 8잔향, 4궁극 잔향을 F1-F8과 debug 버튼으로 강제 테스트할 수 있게 했다.</li>
+<li>전투 중 kill/forget이 Dictionary 순회를 깨던 예외를 snapshot 순회로 고쳤다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Scene missing references: <code>0</code>.</li>
+<li>Play Mode smoke:</li>
+<li>manager present: <code>true</code>.</li>
+<li>weapon switched to <code>Weapon_Greatsword</code>.</li>
+<li>active memories: <code>8</code>.</li>
+<li>echoes: <code>8</code>.</li>
+<li>synergies: <code>4</code>.</li>
+<li>enemy roles: <code>Enemy_MeleeChaser</code>, <code>Enemy_RangedEye</code>, <code>Enemy_Splitter</code>, <code>Enemy_EliteGatekeeper</code>.</li>
+<li>최초 Play Mode에서 <code>Collection was modified</code> 예외를 확인했고, snapshot 순회 패치 후 console errors <code>0</code>을 확인했다.</li>
+<li>editor state after stop: <code>Dev_Prototype_v0</code>, <code>isPlaying=false</code>, <code>isCompiling=false</code>, <code>sceneDirty=false</code>.</li>
+<li><code>npm.cmd run report</code>: 통과, 17개 unit report 생성.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 17개 unit heading 확인.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패. Project Orchestrator intake endpoint가 현재 응답하지 않는 상태로 판단.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>완성형 기준을 잡기 위해 모든 기억/잔향/궁극을 먼저 한 씬에서 호출 가능하게 만든다.</li>
+<li>지금 단계에서는 나머지 6개 기억/잔향이 전용 sprite를 갖지 않아도 된다.</li>
+<li>단, 역할과 행동 차이는 반드시 보여야 하므로 색, 반경, 타이밍, 타겟팅, 회복/처형/파문/낙인 로직을 분리했다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li><code>PrototypeGameManager</code>에는 아직 switch 기반 effect routing이 많다.</li>
+<li>데이터는 먼저 code catalog로 들어갔고, 아직 <code>_dev/Data</code> ScriptableObject asset으로 완전히 빠지지 않았다.</li>
+<li>처형, 추적, 파문, 정지, 잿빛, 낙인은 전용 VFX가 아니라 기존 칼무리/혈반 sprite를 재사용한다.</li>
+<li>밸런스는 아직 GO 기준이 아니라 기능 smoke 기준이다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>새 PRD 기준의 첫 구현이 들어갔다. Unity에서 Play 후 F6으로 대검 전환, F7로 8기억, F8로 8잔향+4궁극을 즉시 켤 수 있다. 다음 리뷰는 어떤 기억/잔향/궁극이 실제로 방향성이 보이고, 어떤 것이 아직 색만 다른 placeholder처럼 보이는지 판단하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo hands-on review 결과를 받는다.</li>
+<li><code>_dev/Data</code> ScriptableObject asset binding으로 code catalog를 옮긴다.</li>
+<li>처형/추적/파문/정지/잿빛/낙인 전용 VFX 이미지를 생성/import한다.</li>
+<li>쌍검/대검 각각 60~120초 balance smoke를 측정한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 두 개 기억 slice만으로는 시스템의 기준을 잡을 수 없었다.</li>
+<li>방향: 완성형 범위를 먼저 플레이 가능한 상태로 올린 뒤, 약한 축을 선별한다.</li>
+<li>행동: 데이터 골격, 무기 전환, 8기억/8잔향/4궁극, 4적 역할, debug injection을 구현했다.</li>
+<li>결과: LETHE의 전체 기억/잔향 구조를 Unity에서 한 번에 비교할 수 있는 첫 기준점이 생겼다.</li>
+</ul>
+  </main>
+</body>
+</html>

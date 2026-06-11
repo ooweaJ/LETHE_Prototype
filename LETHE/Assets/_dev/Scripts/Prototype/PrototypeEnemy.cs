@@ -17,10 +17,14 @@ namespace Lethe.Dev
 
         private PrototypeGameManager game;
         private Transform target;
+        private string roleId = "Enemy_MeleeChaser";
+        private string roleName = "침식자";
         private float nextContactAt;
         private Vector3 knockbackVelocity;
 
         public PrototypeHealth Health => health;
+        public string RoleId => roleId;
+        public string RoleName => roleName;
 
         private void Awake()
         {
@@ -62,7 +66,8 @@ namespace Lethe.Dev
 
             if (!recoveringFromHit && distance > stopDistance)
             {
-                var nextPosition = transform.position + (Vector3)(direction * moveSpeed * Time.deltaTime);
+                var roleDirection = roleId == "Enemy_RangedEye" && distance < stopDistance + 0.65f ? -direction : direction;
+                var nextPosition = transform.position + (Vector3)(roleDirection * moveSpeed * Time.deltaTime);
                 transform.position = ClampToArena(nextPosition);
             }
 
@@ -90,6 +95,18 @@ namespace Lethe.Dev
             transform.position = position;
             knockbackVelocity = Vector3.zero;
             health?.ResetHealth();
+        }
+
+        public void ConfigureRole(string id, string displayName, float maxHealth, float speed, float damage, float stoppingDistance)
+        {
+            roleId = id;
+            roleName = displayName;
+            moveSpeed = speed;
+            contactDamage = damage;
+            stopDistance = stoppingDistance;
+            health ??= GetComponent<PrototypeHealth>();
+            health?.ConfigureMaxHealth(maxHealth);
+            name = id;
         }
 
         public void ApplyKnockback(Vector3 direction, float impulse)

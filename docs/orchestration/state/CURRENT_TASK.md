@@ -2,7 +2,7 @@
 
 ## Goal
 
-Reset the Unity implementation target from the narrow `Dev_Prototype_v0` slice to the Complete Prototype PRD.
+Implement the first complete prototype pass from the new PRD.
 
 ## Why Now
 
@@ -20,7 +20,7 @@ Legacy reference:
 docs/design/LETHE_UNITY_PROTOTYPE_V0_PRD.md
 ```
 
-The correct next move is not another small tuning pass. The next implementation should first split the current hard-coded prototype into a data-driven complete prototype structure.
+The correct next move is to make the full scope testable in Unity before more slice-level tuning. This pass should get the complete prototype into a compressed playable/debuggable state, then jaewoo can judge which parts deserve polish or redesign.
 
 Main target:
 
@@ -34,22 +34,32 @@ Reference only:
 Assets/_dev/Scenes/Dev_EchoSlice.unity
 ```
 
-## Done Criteria For This Planning Reset
+## Done Criteria For This Work Unit
 
-- `LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md` exists and is registered in the design index.
-- `NEXT_TASKS.md` uses Complete Prototype milestones, not the old hands-on review list.
-- `STATUS.md` names the new scope clearly:
+- C1 service/data scaffolding exists:
+  - `EnemyDefinition`
+  - `RewardPoolDefinition`
+  - `MemoryInventory`
+  - `EchoInventory`
+  - `ForgetService`
+  - `ResonanceService`
+  - `UltimateEchoService`
+  - `RewardService`
+  - `DebugStateInjector`
+- C2 weapon pair is testable:
   - `Weapon_DualBlades`
   - `Weapon_Greatsword`
-  - 8 memories
-  - 8 echoes
-  - 4 ultimate echoes
-- Devlog/report record the scope change and next implementation order.
-- Report generation and report check pass.
+  - debug weapon switch.
+- C3/C4/C5 compressed prototype is testable:
+  - 8 active memories.
+  - 8 echoes.
+  - 4 ultimate echoes.
+- 4 enemy role ids appear in the scene runtime.
+- Unity compile error 0, console error 0, missing reference 0.
 
 ## Complete Prototype Done Criteria
 
-Implemented by the next work sequence:
+Implemented in the broader complete prototype sequence:
 
 - Data-driven core replaces `PrototypeGameManager` memory/echo hard-code.
 - 쌍검 and 대검 are both playable.
@@ -57,7 +67,7 @@ Implemented by the next work sequence:
 - 8 echoes have at least +1 behavior.
 - Debug can force +3/+5 and four ultimate echo conditions.
 - Complete prototype smoke can run in 60~120 seconds.
-- Unity compile error 0, console error 0, missing reference 0.
+- Dedicated sprite VFX, balance, data asset binding, and runtime class split still need follow-up.
 
 ## Related Files
 
@@ -87,6 +97,20 @@ Unity MCP verification:
 - Play Mode runtime check for player movement, enemy spawn/chase, attack, player HP, enemy death/respawn.
 
 ## Latest Verification
+
+- Complete Prototype implementation pass:
+  - Unity compile errors: `0`.
+  - Scene missing references: `0`.
+  - Play Mode console errors after retry: `0`.
+  - Runtime smoke injection:
+    - manager present: `true`.
+    - weapon switched to `Weapon_Greatsword`.
+    - active memories: `8`.
+    - echoes: `8`.
+    - unlocked synergies: `4`.
+    - enemy roles present: `Enemy_MeleeChaser`, `Enemy_RangedEye`, `Enemy_Splitter`, `Enemy_EliteGatekeeper`.
+  - Fixed a Play Mode exception where active memory iteration could be modified by kill/forget side effects; memory/echo/synergy loops now use snapshots.
+  - Editor state after stop: active scene `Assets/_dev/Scenes/Dev_Prototype_v0.unity`, `isPlaying=false`, `isCompiling=false`, `sceneDirty=false`.
 
 - Unity compile errors: `0`.
 - Scene missing references: `0`.

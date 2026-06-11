@@ -2,34 +2,33 @@
 
 Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, legacy `docs/NEXT_TASKS.md`, or evidence files.
 
-## 1. Complete Prototype Data Contract
+## 1. Complete Prototype Hands-On Review
 
 - Priority: highest
 - Source: `docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`
-- Include: fix ids and ScriptableObject contracts for 2 weapons, 8 memories, 8 echoes, 4 ultimate echoes, enemy roles, reward pools, feedback profiles.
-- Done: data assets and runtime contracts exist so adding a memory/echo does not require new branches inside `PrototypeGameManager`.
+- Include: open `Assets/_dev/Scenes/Dev_Prototype_v0.unity`, press Play, use F1-F8/debug buttons, compare 쌍검 vs 대검, force 8 memories, 8 echoes, 4 ultimates.
+- Done: record which weapon, memory, echo, and ultimate are readable/exciting, and which one feels weakest.
 
-## 2. Weapon Pair Implementation
+## 2. ScriptableObject Asset Binding
 
 - Priority: highest
-- Source: `docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`
-- Include: `Weapon_DualBlades` and `Weapon_Greatsword` runtime, weapon switching debug button, separate weapon sprites and hit profiles.
-- Done: 쌍검은 빠른 proc형, 대검은 느린 강타형으로 같은 적 무리에서 리듬 차이가 보인다.
+- Include: turn the in-code complete prototype catalog into `_dev/Data` `WeaponDefinition`, `MemoryDefinition`, `EchoDefinition`, `EchoSynergyDefinition`, `EnemyDefinition`, `RewardPoolDefinition` assets.
+- Done: `PrototypeGameManager` can read ids/display names/levels from data assets rather than only static code tables.
 
-## 3. Active Memories 8 L1
-
-- Priority: high
-- Include: implement level 1 behavior for HungryBlades, BloodReflection, ExecutionFlash, HunterOath, ShatterWave, StoppedSecond, AshenShield, OblivionBrand.
-- Done: 8개 기억이 모두 전투 중 역할이 다르게 보이고 debug panel에서 즉시 부여 가능하다.
-
-## 4. Echoes 8 +1 Prototype
+## 3. Dedicated VFX For Remaining Memories
 
 - Priority: high
-- Include: implement +1 form for Echo_Kalmuri, Echo_Blood, Echo_Execution, Echo_Homing, Echo_Shockwave, Echo_TimeStop, Echo_AshenGuard, Echo_Brand.
-- Done: 잔향이 활성 기억의 약화판이 아니라 무기/몸에 남은 다른 형태로 읽힌다.
+- Include: generate/import readable sprite VFX for 처형, 추적, 파문, 정지, 잿빛, 낙인 active/echo states.
+- Done: no remaining memory/echo depends only on recolored Kalmuri/Blood placeholder sprites.
 
-## 5. Complete Prototype Debug / Smoke Loop
+## 4. Complete Prototype Balance Smoke
 
 - Priority: high
-- Include: debug panel for weapon switch, memory add/level, forced forget, echo +1/+3/+5, 4 ultimate conditions, 60 second smoke metrics.
-- Done: jaewoo가 60~120초 안에 대검, 8기억, 8잔향, 4궁극의 기준을 모두 확인할 수 있다.
+- Include: run 60~120 second smoke for 쌍검 and 대검 with 8 memories/echoes, measuring kills, HP, synergies, strongest effect.
+- Done: complete prototype is tense enough to review without instant collapse or full-screen deletion.
+
+## 5. Runtime Service Split
+
+- Priority: high
+- Include: move effect routing from `PrototypeGameManager` into dedicated runtime classes using the new C1 services.
+- Done: adding or disabling a memory/echo no longer requires editing the manager's switch statements.
