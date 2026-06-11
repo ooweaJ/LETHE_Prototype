@@ -86,6 +86,12 @@ Unity MCP verification:
 - Unity compile errors: `0`.
 - Scene missing references: `0`.
 - Play Mode console errors: `0`.
+- LETHE art replacement pass:
+  - player/enemy/map/weapon sprites replaced.
+  - Kalmuri/Blood/Blood Blade Storm sprite VFX wired into `PrototypeGameManager`.
+  - chroma source images preserved under `Assets/_dev/Art/Source`.
+  - runtime Unity sprites use alpha PNG, not green backgrounds.
+  - scene `koreanFont` reference cleared; local font files remain out of scope.
 - Enemy spawn runtime check: `7` enemies, player and manager present.
 - Combat smoke: enemies forced near player; after 8 seconds, `kills=7`, `playerHp=26.5`.
 - M5 state smoke: active memories `Memory_HungryBlades:3`, `Memory_BloodReflection:2`; echoes `Echo_Kalmuri:5`, `Echo_Blood:5`; ultimate `true`.

@@ -195,3 +195,33 @@ For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` b
   - `LETHE/Assets/_dev/Evidence/player_weapon_separated_game.png`
   - `LETHE/Assets/_dev/Evidence/player_weapon_separated_clean.png`
 - Verification: Unity compile errors `0`, missing references `0`, Play Mode console errors `0`, active scene `Dev_Prototype_v0`, `sceneDirty=false`.
+
+## Latest Art Replacement Pass
+
+- Added `docs/design/LETHE_UNITY_ART_DIRECTION_REPLACEMENT_PLAN.md`.
+- Replaced the main `_dev` visual set with LETHE-specific generated art:
+  - player 4-direction body sheet.
+  - enemy chaser 4-direction sheet.
+  - dark river/obsidian arena tile.
+  - short cyan memory-glass dual blades.
+  - Kalmuri/Blood/Blood Blade Storm VFX sprites.
+- Preserved chroma-key source files under `LETHE/Assets/_dev/Art/Source`.
+- Converted runtime sprites to alpha PNG for Unity use; the green background is not used at runtime.
+- Added `PrototypeSpriteVfx` and wired `PrototypeGameManager` so active memory, echo, awakened echo, and ultimate events spawn sprite VFX in addition to existing damage/log paths.
+- Evidence:
+  - `LETHE/Assets/_dev/Evidence/lethe_art_replacement_vfx_game.png`.
+- Verification:
+  - Unity compile errors: `0`.
+  - Scene missing references: `0`.
+  - Play Mode console errors: `0`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+  - Runtime review spawn confirmed 5 VFX sprite references:
+    - `spr_kalmuri_orbit_blade_01`
+    - `spr_kalmuri_echo_slash_01`
+    - `spr_blood_mark_01`
+    - `spr_blood_bloom_01`
+    - `spr_blood_blade_storm_ring_01`
+  - Active scene `Dev_Prototype_v0`, `sceneDirty=false`.
+- Excluded from this commit by scope: `LETHE/Assets/_dev/Fonts/` and `.vscode/`. The scene `koreanFont` reference is cleared so the committed scene does not depend on local-only font files.

@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260611\\index.md",
-  "generatedAt": "2026-06-11T02:40:22.600Z",
-  "unitCount": 10,
+  "generatedAt": "2026-06-11T04:15:29.009Z",
+  "unitCount": 11,
   "latest": {
-    "title": "2026-06-11-10 - Unity 캐릭터와 무기 시각 분리",
-    "number": "10",
-    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-10-unity-캐릭터와-무기-시각-분리.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-10-unity-캐릭터와-무기-시각-분리.html"
+    "title": "2026-06-11-11 - LETHE 아트 전면 교체와 sprite VFX 적용",
+    "number": "11",
+    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-11-lethe-아트-전면-교체와-sprite-vfx-적용.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-11-lethe-아트-전면-교체와-sprite-vfx-적용.html"
   }
 }
