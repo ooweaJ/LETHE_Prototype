@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260611\\index.md",
-  "generatedAt": "2026-06-11T00:34:44.464Z",
-  "unitCount": 7,
+  "generatedAt": "2026-06-11T00:41:14.633Z",
+  "unitCount": 8,
   "latest": {
-    "title": "2026-06-11-07 - Unity slice 폐기와 Prototype v0 계획",
-    "number": "07",
-    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-07-unity-slice-폐기와-prototype-v0-계획.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-07-unity-slice-폐기와-prototype-v0-계획.html"
+    "title": "2026-06-11-08 - Unity Prototype v0 PRD 통합",
+    "number": "08",
+    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-08-unity-prototype-v0-prd-통합.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-08-unity-prototype-v0-prd-통합.html"
   }
 }

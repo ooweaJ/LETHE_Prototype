@@ -197,6 +197,13 @@
           <p>Dev_EchoSlice는 더 이상 메인 작업 대상이 아니다. 현재 결론은 slice를 계속 고치는 것이 아니라 Dev_Prototype_v0.unity를 새로 만들어 HTML보다 나은 Unity 프로토타입을 직접 구현하는 것이다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-11-08</span>
+          <h2><a href="#unit-2026-06-11-08" data-unit-link="unit-2026-06-11-08">Unity Prototype v0 PRD 통합</a></h2>
+          <p>구현을 더 진행하기 전에 기존 기획/개발 문서를 하나의 실행 PRD로 통합했다. 이제 Unity 작업의 최신 기준은 LETHE_UNITY_PROTOTYPE_V0_PRD.md다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -615,6 +622,64 @@
 <li>방향: 시스템 검증 장치가 아니라 실제 게임 프로토타입을 만든다.</li>
 <li>행동: 기존 slice 경로를 폐기하고 Prototype v0 계획과 작업 순서를 다시 정의했다.</li>
 <li>결과: 다음 작업 기준이 “잔향 보기”에서 “플레이 가능한 LETHE 프로토타입”으로 바뀌었다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-11-08" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-11-08 - Unity Prototype v0 PRD 통합</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>구현을 더 진행하기 전에 기존 기획/개발 문서를 하나의 실행 PRD로 통합했다. 이제 Unity 작업의 최신 기준은 <code>LETHE_UNITY_PROTOTYPE_V0_PRD.md</code>다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>LETHE_UNITY_PROTOTYPE_V0_PRD.md</code>를 추가했다.</li>
+<li>디자인 문서 index를 갱신했다.</li>
+<li><code>CURRENT_TASK.md</code>를 PRD 기준 구현으로 바꿨다.</li>
+<li><code>NEXT_TASKS.md</code>를 PRD milestone 순서로 바꿨다.</li>
+<li><code>STATUS.md</code>의 다음 작업을 M1 Prototype Scene Skeleton으로 정리했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>이 유닛은 구현 검증이 아니라 PRD/작업 기준 정리다.</li>
+<li>PRD는 기존 문서를 참고한다:</li>
+<li>게임 개요</li>
+<li>핵심 시스템</li>
+<li>런 구조</li>
+<li>전투 기획</li>
+<li>기억/잔향 상세</li>
+<li>Unity 잔향 시스템 PRD</li>
+<li>콘텐츠 표</li>
+<li>밸런스 기준</li>
+<li>Prototype v0 계획</li>
+<li><code>npm.cmd run report</code>: 통과, 8개 unit report 생성.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 8개 unit heading 확인.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패. Project Orchestrator intake endpoint가 현재 응답하지 않는 상태로 판단.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>PRD가 구현 순서와 수락 기준의 최신 기준이다.</li>
+<li>다음 구현은 M1부터 시작한다.</li>
+<li><code>Dev_EchoSlice</code>는 더 이상 메인 구현 대상이 아니다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>PRD만으로는 아직 playable prototype이 생기지 않는다.</li>
+<li>다음 작업에서 M1을 바로 구현하지 않으면 다시 문서만 늘어날 위험이 있다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Unity Prototype v0.1은 PRD milestone 기반으로 진행한다. 다음 Codex 작업은 <code>Dev_Prototype_v0.unity</code> 생성과 root scene skeleton 구축이다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>M1 Prototype Scene Skeleton 구현.</li>
+<li><code>Dev_Prototype_v0.unity</code> 생성.</li>
+<li><code>PrototypeRoot</code>, <code>Services</code>, <code>Player</code>, <code>EnemySpawner</code>, <code>Arena</code>, <code>RuntimeVFX</code>, <code>HUD</code> 구성.</li>
+<li>Play Mode에서 새 prototype scene이 열리는지 검증.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 기획 문서는 많았지만 실행 기준이 흩어져 있었다.</li>
+<li>방향: 상위 PRD를 만들어 구현 순서와 수락 기준을 고정한다.</li>
+<li>행동: 기존 문서들을 하나의 Unity Prototype v0 PRD로 통합했다.</li>
+<li>결과: 다음 구현이 M1부터 M5까지 추적 가능한 milestone 구조로 정리됐다.</li>
 </ul>
     </article>
       </div>

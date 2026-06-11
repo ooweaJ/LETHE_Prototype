@@ -62,6 +62,8 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 - Unity slice approach decision: `Dev_EchoSlice` is no longer the main path. It remains only as reference until `Dev_Prototype_v0` replaces it.
 - Unity Prototype v0 plan: `docs/design/LETHE_UNITY_PROTOTYPE_V0_PLAN.md` added. The new main target is `Assets/_dev/Scenes/Dev_Prototype_v0.unity`, with a real combat loop before memory/forgetting/echo systems.
 - Unity Prototype v0 planning reporting: `npm.cmd run report` pass, `npm.cmd run report:check` pass, `npm.cmd run report:orchestrator:unit:dry` failed with `fetch failed`.
+- Unity Prototype v0 PRD: `docs/design/LETHE_UNITY_PROTOTYPE_V0_PRD.md` added as the consolidated execution contract across game design, combat, run structure, memory/forgetting/echo, data structure, milestones, and acceptance tests.
+- Unity Prototype v0 PRD reporting: `npm.cmd run report` pass, `npm.cmd run report:check` pass, `npm.cmd run report:orchestrator:unit:dry` failed with `fetch failed`.
 - New forgetting model `npm run qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.19s`.
 - New forgetting model `npm run balance:loop`: `GO_BALANCE_BASELINE`, first boss clear `80%`, full clear `60%`, death `40%`, first boss TTK median `23.91s`.
 - `npm run playtest:package:dry`: pass.
@@ -130,7 +132,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Start Unity Prototype v0.1 directly. Create `Assets/_dev/Scenes/Dev_Prototype_v0.unity`, build the root scene structure, then implement the first playable combat loop: movement, camera, arena, 5 enemies, nearest enemy targeting, enemy HP/death/respawn, player HP/contact damage, and minimal HUD.
+Implement PRD milestone M1: create `Assets/_dev/Scenes/Dev_Prototype_v0.unity`, build the root scene structure, camera, arena, player, enemy spawner, services, HUD root, and verify Play Mode opens into the new prototype scene.
 
 Do not promote `_dev` assets to `Assets/Lethe` until jaewoo explicitly returns `GO`.
 

@@ -2,11 +2,19 @@
 
 ## Goal
 
-Stop the `Dev_EchoSlice` path and start Unity Prototype v0.1 directly.
+Use the new Unity Prototype v0 PRD as the execution contract, then start implementation from M1.
 
 ## Why Now
 
-Jaewoo's feedback is that the slice approach is below the HTML prototype and does not prove LETHE as a game. The correct next move is not more patching of `Dev_EchoSlice`; it is a new prototype scene with a real combat loop first, then memory/forgetting/echo systems on top.
+Jaewoo's feedback is that the existing planning/design docs should be consolidated into a proper PRD before implementation continues. That is correct: the project needs one execution contract that ties game design, run structure, combat, memory/forgetting/echo, data structure, milestones, and acceptance tests together.
+
+Current source of truth:
+
+```text
+docs/design/LETHE_UNITY_PROTOTYPE_V0_PRD.md
+```
+
+The correct next move is to implement from PRD milestone M1, not continue patching `Dev_EchoSlice`.
 
 Main target:
 
@@ -45,6 +53,7 @@ Phase A/B first implementation should produce:
 
 ## Related Files
 
+- `docs/design/LETHE_UNITY_PROTOTYPE_V0_PRD.md`
 - `docs/design/LETHE_UNITY_PROTOTYPE_V0_PLAN.md`
 - `LETHE/Assets/_dev/Scenes/Dev_Prototype_v0.unity`
 - `LETHE/Assets/_dev/Scripts/**`

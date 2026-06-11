@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-11-08 - Unity Prototype v0 PRD 통합</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-11-08 - Unity Prototype v0 PRD 통합</h1>
+      <p class="meta">Generated from 2026-06-11-08-unity-prototype-v0-prd-통합.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260611/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-11-08 - Unity Prototype v0 PRD 통합</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>구현을 더 진행하기 전에 기존 기획/개발 문서를 하나의 실행 PRD로 통합했다. 이제 Unity 작업의 최신 기준은 <code>LETHE_UNITY_PROTOTYPE_V0_PRD.md</code>다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>LETHE_UNITY_PROTOTYPE_V0_PRD.md</code>를 추가했다.</li>
+<li>디자인 문서 index를 갱신했다.</li>
+<li><code>CURRENT_TASK.md</code>를 PRD 기준 구현으로 바꿨다.</li>
+<li><code>NEXT_TASKS.md</code>를 PRD milestone 순서로 바꿨다.</li>
+<li><code>STATUS.md</code>의 다음 작업을 M1 Prototype Scene Skeleton으로 정리했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>이 유닛은 구현 검증이 아니라 PRD/작업 기준 정리다.</li>
+<li>PRD는 기존 문서를 참고한다:</li>
+<li>게임 개요</li>
+<li>핵심 시스템</li>
+<li>런 구조</li>
+<li>전투 기획</li>
+<li>기억/잔향 상세</li>
+<li>Unity 잔향 시스템 PRD</li>
+<li>콘텐츠 표</li>
+<li>밸런스 기준</li>
+<li>Prototype v0 계획</li>
+<li><code>npm.cmd run report</code>: 통과, 8개 unit report 생성.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 8개 unit heading 확인.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패. Project Orchestrator intake endpoint가 현재 응답하지 않는 상태로 판단.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>PRD가 구현 순서와 수락 기준의 최신 기준이다.</li>
+<li>다음 구현은 M1부터 시작한다.</li>
+<li><code>Dev_EchoSlice</code>는 더 이상 메인 구현 대상이 아니다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>PRD만으로는 아직 playable prototype이 생기지 않는다.</li>
+<li>다음 작업에서 M1을 바로 구현하지 않으면 다시 문서만 늘어날 위험이 있다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Unity Prototype v0.1은 PRD milestone 기반으로 진행한다. 다음 Codex 작업은 <code>Dev_Prototype_v0.unity</code> 생성과 root scene skeleton 구축이다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>M1 Prototype Scene Skeleton 구현.</li>
+<li><code>Dev_Prototype_v0.unity</code> 생성.</li>
+<li><code>PrototypeRoot</code>, <code>Services</code>, <code>Player</code>, <code>EnemySpawner</code>, <code>Arena</code>, <code>RuntimeVFX</code>, <code>HUD</code> 구성.</li>
+<li>Play Mode에서 새 prototype scene이 열리는지 검증.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 기획 문서는 많았지만 실행 기준이 흩어져 있었다.</li>
+<li>방향: 상위 PRD를 만들어 구현 순서와 수락 기준을 고정한다.</li>
+<li>행동: 기존 문서들을 하나의 Unity Prototype v0 PRD로 통합했다.</li>
+<li>결과: 다음 구현이 M1부터 M5까지 추적 가능한 milestone 구조로 정리됐다.</li>
+</ul>
+  </main>
+</body>
+</html>
