@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-11-06 - Unity 완성형 slice 계획과 화면 기준 1차</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-11-06 - Unity 완성형 slice 계획과 화면 기준 1차</h1>
+      <p class="meta">Generated from 2026-06-11-06-unity-완성형-slice-계획과-화면-기준-1차.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260611/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-11-06 - Unity 완성형 slice 계획과 화면 기준 1차</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_EchoSlice.unity</code>의 목표를 잔향/VFX 테스트에서 1분짜리 playable combat slice로 재정의했다. Phase 1로 카메라 거리, 캐릭터/몹/무기 크기, arena 경계, debug panel 크기를 정리했다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>LETHE_UNITY_PLAYABLE_GAME_SLICE_PLAN.md</code>를 추가했다.</li>
+<li>현재 작업 기준을 Phase 1 카메라/스케일/구도 정리로 바꿨다.</li>
+<li>다음 작업 목록을 Phase 2 생존 루프, 타겟팅, 다수 적, 실제 echo damage 순서로 재정렬했다.</li>
+<li>Main Camera orthographic size를 <code>4.15</code>로 설정했다.</li>
+<li>floor scale을 <code>13.5 x 8.2</code>로 조정했다.</li>
+<li><code>Arena_Bounds</code> line renderer를 추가했다.</li>
+<li>player scale <code>0.92</code>, enemy scale <code>0.84</code>, weapon scale <code>1.12</code>로 조정했다.</li>
+<li>weapon anchor, blade local transform, sorting order를 정리했다.</li>
+<li>debug panel을 작게 줄였다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>unity_get_compilation_errors(port=7890, severity=&quot;all&quot;)</code>: <code>count=0</code>, <code>isCompiling=false</code>.</li>
+<li><code>unity_search_missing_references(port=7890, scope=&quot;scene&quot;)</code>: <code>totalFound=0</code>.</li>
+<li><code>unity_console_log(port=7890, type=&quot;error&quot;)</code>: <code>count=0</code>.</li>
+<li>첫 Play Mode 요청은 MCP queue <code>fetch failed</code>가 났지만, <code>unity_editor_ping(port=7890)</code>은 정상 연결을 반환했다.</li>
+<li>두 번째 Play Mode 요청은 성공했다.</li>
+<li>Play Mode composition check:</li>
+<li><code>cameraSize=4.15</code></li>
+<li><code>playerScale=(0.92, 0.92, 1.00)</code></li>
+<li><code>enemyScale=(0.84, 0.84, 1.00)</code></li>
+<li><code>weaponParent=WeaponAnchor</code></li>
+<li><code>weaponScale=(1.12, 1.12, 1.00)</code></li>
+<li><code>arenaBounds=true</code></li>
+<li><code>swingArcPresent=true</code></li>
+<li>Play Mode 정지 후 editor state: <code>isPlaying=false</code>, <code>isCompiling=false</code>, active scene <code>Assets/_dev/Scenes/Dev_EchoSlice.unity</code>, <code>sceneDirty=false</code>.</li>
+<li><code>npm.cmd run report</code>: 통과, 6개 unit report 생성.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 6개 unit heading 확인.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패. Project Orchestrator intake endpoint가 현재 응답하지 않는 상태로 판단.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>지금부터 기준은 “잔향이 보이냐”가 아니라 “게임 위에서 잔향을 판단할 수 있냐”다.</li>
+<li>Phase 1은 화면 기준과 기본 구도를 먼저 맞춘다.</li>
+<li>Phase 2는 HP/접촉 피해/가까운 적 타겟팅/다수 적으로 간다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>아직 플레이어 HP와 적 접촉 피해가 없다.</li>
+<li>적은 아직 1마리다.</li>
+<li>실제 echo damage는 아직 연결되지 않았다.</li>
+<li>시각적으로 최종 art는 아니고, 스케일/구도 baseline만 잡은 상태다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Unity 방향을 playable game slice로 재정의했고, Phase 1 카메라/스케일/구도 baseline을 적용했다. 다음 판단은 Phase 2에서 생존 루프와 다수 적을 먼저 넣을지, 타겟팅을 먼저 넣을지다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>player HP와 enemy contact damage.</li>
+<li>nearest enemy targeting.</li>
+<li>enemy 3~8마리 spawn loop.</li>
+<li>hit/recoil polish.</li>
+<li>echo VFX를 실제 damage로 연결.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 화면 크기와 카메라 기준이 틀리면 시스템이 있어도 게임처럼 보이지 않는다.</li>
+<li>방향: 기능 확장 전에 화면 구도와 플레이 기준을 먼저 고정한다.</li>
+<li>행동: playable game slice 플랜을 만들고 카메라/스케일/arena/weapon anchor/debug panel을 정리했다.</li>
+<li>결과: 다음 전투 시스템을 올릴 수 있는 화면 baseline이 생겼다.</li>
+</ul>
+  </main>
+</body>
+</html>

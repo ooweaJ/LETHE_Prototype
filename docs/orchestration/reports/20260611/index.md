@@ -304,3 +304,73 @@ jaewoo가 Unity에서 직접 플레이한 뒤 `GO`, `ITERATE`, `NO-GO`를 정하
 - 방향: 기획 확장보다 먼저 조작, 추적, 장착, 공격 동작을 갖춘 최소 게임 형태를 만든다.
 - 행동: 이동/추적/카메라/무기 장착/스윙/절차 애니메이션/문서 리스트를 한 번에 추가했다.
 - 결과: 이제 Unity에서 움직이고 쫓기고 휘두르는 상태 위에서 잔향을 판단할 수 있다.
+
+# 2026-06-11-06 - Unity 완성형 slice 계획과 화면 기준 1차
+
+## 1. 현재 빌드 상태
+
+`Dev_EchoSlice.unity`의 목표를 잔향/VFX 테스트에서 1분짜리 playable combat slice로 재정의했다. Phase 1로 카메라 거리, 캐릭터/몹/무기 크기, arena 경계, debug panel 크기를 정리했다.
+
+## 2. 오늘 바뀐 것
+
+- `LETHE_UNITY_PLAYABLE_GAME_SLICE_PLAN.md`를 추가했다.
+- 현재 작업 기준을 Phase 1 카메라/스케일/구도 정리로 바꿨다.
+- 다음 작업 목록을 Phase 2 생존 루프, 타겟팅, 다수 적, 실제 echo damage 순서로 재정렬했다.
+- Main Camera orthographic size를 `4.15`로 설정했다.
+- floor scale을 `13.5 x 8.2`로 조정했다.
+- `Arena_Bounds` line renderer를 추가했다.
+- player scale `0.92`, enemy scale `0.84`, weapon scale `1.12`로 조정했다.
+- weapon anchor, blade local transform, sorting order를 정리했다.
+- debug panel을 작게 줄였다.
+
+## 3. 테스트 결과와 근거
+
+- `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`, `isCompiling=false`.
+- `unity_search_missing_references(port=7890, scope="scene")`: `totalFound=0`.
+- `unity_console_log(port=7890, type="error")`: `count=0`.
+- 첫 Play Mode 요청은 MCP queue `fetch failed`가 났지만, `unity_editor_ping(port=7890)`은 정상 연결을 반환했다.
+- 두 번째 Play Mode 요청은 성공했다.
+- Play Mode composition check:
+  - `cameraSize=4.15`
+  - `playerScale=(0.92, 0.92, 1.00)`
+  - `enemyScale=(0.84, 0.84, 1.00)`
+  - `weaponParent=WeaponAnchor`
+  - `weaponScale=(1.12, 1.12, 1.00)`
+  - `arenaBounds=true`
+  - `swingArcPresent=true`
+- Play Mode 정지 후 editor state: `isPlaying=false`, `isCompiling=false`, active scene `Assets/_dev/Scenes/Dev_EchoSlice.unity`, `sceneDirty=false`.
+- `npm.cmd run report`: 통과, 6개 unit report 생성.
+- `npm.cmd run report:check`: 통과, 6개 unit heading 확인.
+- `npm.cmd run report:orchestrator:unit:dry`: `fetch failed`로 실패. Project Orchestrator intake endpoint가 현재 응답하지 않는 상태로 판단.
+
+## 4. 결정한 것
+
+- 지금부터 기준은 “잔향이 보이냐”가 아니라 “게임 위에서 잔향을 판단할 수 있냐”다.
+- Phase 1은 화면 기준과 기본 구도를 먼저 맞춘다.
+- Phase 2는 HP/접촉 피해/가까운 적 타겟팅/다수 적으로 간다.
+
+## 5. 문제 또는 리스크
+
+- 아직 플레이어 HP와 적 접촉 피해가 없다.
+- 적은 아직 1마리다.
+- 실제 echo damage는 아직 연결되지 않았다.
+- 시각적으로 최종 art는 아니고, 스케일/구도 baseline만 잡은 상태다.
+
+## 6. GPT/Claude 인계 요약
+
+Unity 방향을 playable game slice로 재정의했고, Phase 1 카메라/스케일/구도 baseline을 적용했다. 다음 판단은 Phase 2에서 생존 루프와 다수 적을 먼저 넣을지, 타겟팅을 먼저 넣을지다.
+
+## 7. 다음 Codex 작업
+
+- player HP와 enemy contact damage.
+- nearest enemy targeting.
+- enemy 3~8마리 spawn loop.
+- hit/recoil polish.
+- echo VFX를 실제 damage로 연결.
+
+## 8. 포트폴리오 메모
+
+- 문제: 화면 크기와 카메라 기준이 틀리면 시스템이 있어도 게임처럼 보이지 않는다.
+- 방향: 기능 확장 전에 화면 구도와 플레이 기준을 먼저 고정한다.
+- 행동: playable game slice 플랜을 만들고 카메라/스케일/arena/weapon anchor/debug panel을 정리했다.
+- 결과: 다음 전투 시스템을 올릴 수 있는 화면 baseline이 생겼다.

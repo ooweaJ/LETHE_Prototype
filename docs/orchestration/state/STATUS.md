@@ -55,6 +55,10 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 - Unity gameplay repair scene wiring: `Weapon_DualBlades_Runtime` is now parented under `Player_EchoShowcase/WeaponAnchor`; player/enemy sprites are under `Visual` children; camera follows player; enemy chases player; debug panel now says WASD/arrow movement is available.
 - Unity gameplay repair verification: compile errors `count=0`; scene missing references `totalFound=0`; console errors `count=0`; Play Mode check showed enemy moved toward player (`Enemy_TestWalker` near `-0.03` from original `1.40`), weapon parent `WeaponAnchor`, swing arc present, heal thread present; editor stopped with active scene `Assets/_dev/Scenes/Dev_EchoSlice.unity`, `sceneDirty=false`.
 - Unity gameplay repair reporting: `npm.cmd run report` pass, `npm.cmd run report:check` pass, `npm.cmd run report:orchestrator:unit:dry` failed with `fetch failed`.
+- Unity playable game slice plan: `docs/design/LETHE_UNITY_PLAYABLE_GAME_SLICE_PLAN.md` added to reset the working goal from echo VFX testing to a real 1-minute playable combat slice.
+- Unity Phase 1 composition pass: camera orthographic size set to `4.15`; arena floor scale set to `13.5 x 8.2`; arena border line added; player scale set to `0.92`; enemy scale set to `0.84`; weapon scale set to `1.12`; weapon anchor/blade local transforms and sorting orders normalized; debug panel reduced.
+- Unity Phase 1 verification: compile errors `count=0`; missing references `totalFound=0`; console errors `count=0`; Play Mode composition check returned `cameraSize=4.15`, `playerScale=(0.92,0.92,1.00)`, `enemyScale=(0.84,0.84,1.00)`, `weaponParent=WeaponAnchor`, `weaponScale=(1.12,1.12,1.00)`, `arenaBounds=true`, `swingArcPresent=true`; editor stopped with `sceneDirty=false`.
+- Unity Phase 1 reporting: `npm.cmd run report` pass, `npm.cmd run report:check` pass, `npm.cmd run report:orchestrator:unit:dry` failed with `fetch failed`.
 - New forgetting model `npm run qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.19s`.
 - New forgetting model `npm run balance:loop`: `GO_BALANCE_BASELINE`, first boss clear `80%`, full clear `60%`, death `40%`, first boss TTK median `23.91s`.
 - `npm run playtest:package:dry`: pass.
@@ -123,7 +127,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Continue repairing `Dev_EchoSlice` into a minimal playable game slice. Current scene now supports WASD/arrow movement, camera follow, enemy chase, held weapon, weapon swing, simple sprite bob/tilt, `1~5` echo mode switching, and `Space` forced attack. Next likely repair pass is player HP/contact damage, nearest-enemy targeting, or multi-enemy spawn.
+Continue Phase 2 of the playable game slice: player HP/contact damage, nearest-enemy targeting, and multi-enemy spawn. Phase 1 camera/scale/composition has been applied and verified.
 
 Do not promote `_dev` assets to `Assets/Lethe` until jaewoo explicitly returns `GO`.
 

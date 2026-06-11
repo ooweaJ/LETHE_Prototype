@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260611\\index.md",
-  "generatedAt": "2026-06-11T00:11:08.920Z",
-  "unitCount": 5,
+  "generatedAt": "2026-06-11T00:27:14.704Z",
+  "unitCount": 6,
   "latest": {
-    "title": "2026-06-11-05 - Unity 게임 형식 수리 1차",
-    "number": "05",
-    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-05-unity-게임-형식-수리-1차.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-05-unity-게임-형식-수리-1차.html"
+    "title": "2026-06-11-06 - Unity 완성형 slice 계획과 화면 기준 1차",
+    "number": "06",
+    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-06-unity-완성형-slice-계획과-화면-기준-1차.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-06-unity-완성형-slice-계획과-화면-기준-1차.html"
   }
 }
