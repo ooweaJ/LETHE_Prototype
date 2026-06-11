@@ -97,6 +97,45 @@ Assets/_dev/Scenes/Dev_EchoSlice.unity
 - hit flash, hitstop, recoil/knockback 중 최소 2개.
 - 최소 HUD: HP, kills, time, active memory, echo, next forget candidate.
 
+### 4.2-A Prototype Sprite / Animation
+
+Prototype v0.1은 정식 아트 완성이 아니어도, 캐릭터와 적이 정지 이미지처럼 보이면 실패로 본다.
+
+필수:
+
+- Player 4방향 idle animation.
+  - down, up, left, right.
+  - 각 방향 최소 2프레임, 권장 4프레임.
+- Player 4방향 walk animation.
+  - down, up, left, right.
+  - 각 방향 최소 4프레임.
+- Enemy 4방향 idle animation.
+  - down, up, left, right.
+  - 각 방향 최소 2프레임.
+- Enemy 4방향 walk/chase animation.
+  - down, up, left, right.
+  - 각 방향 최소 4프레임.
+- Sprite sheet 기준:
+  - 한 frame은 64x64 또는 96x96 기준.
+  - player와 enemy는 별도 sheet.
+  - chroma-key source 보존 후 alpha PNG로 변환.
+  - Unity import는 Multiple Sprite 기준으로 slice한다.
+
+첫 구현 파일명:
+
+```text
+Assets/_dev/Art/Source/sheet_player_4dir_chroma.png
+Assets/_dev/Art/Source/sheet_enemy_chaser_4dir_chroma.png
+Assets/_dev/Art/Sprites/Characters/Player/sheet_player_4dir.png
+Assets/_dev/Art/Sprites/Enemies/Chaser/sheet_enemy_chaser_4dir.png
+```
+
+Animator 요구사항:
+
+- `PrototypeSpriteAnimator` 또는 동등한 runtime이 이동 방향과 속도에 따라 idle/walk frame을 바꾼다.
+- 첫 버전은 Unity Animator Controller를 쓰지 않아도 된다. C# frame swap runtime 허용.
+- 방향 판정은 마지막 이동 방향을 기준으로 한다.
+
 ### 4.3 First Content
 
 무기:
@@ -249,6 +288,7 @@ UI 원칙:
 - `Dev_Prototype_v0.unity` 존재.
 - `PrototypeRoot`, `Services`, `Player`, `EnemySpawner`, `Arena`, `RuntimeVFX`, `HUD` 존재.
 - 플레이어 이동과 카메라 follow 작동.
+- player/enemy 4방향 idle/walk sprite sheet가 import되어 runtime frame swap이 가능하다.
 - compile/console/missing reference 0.
 
 ### M2. Combat Loop

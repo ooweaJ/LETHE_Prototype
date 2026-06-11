@@ -1,0 +1,962 @@
+fileFormatVersion: 2
+guid: f0eda2248cac6cf4d9d7383fbcf0bef4
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5665664449728097129
+    second: sheet_enemy_chaser_4dir_0
+  - first:
+      213: -2549565201533520363
+    second: sheet_enemy_chaser_4dir_1
+  - first:
+      213: 5043354475956238057
+    second: sheet_enemy_chaser_4dir_2
+  - first:
+      213: -3896509394325584243
+    second: sheet_enemy_chaser_4dir_3
+  - first:
+      213: -3906962853515846998
+    second: sheet_enemy_chaser_4dir_4
+  - first:
+      213: -4298684902138689729
+    second: sheet_enemy_chaser_4dir_5
+  - first:
+      213: -2826038369779026233
+    second: sheet_enemy_chaser_4dir_6
+  - first:
+      213: 2515443760705393555
+    second: sheet_enemy_chaser_4dir_7
+  - first:
+      213: -4009331278522920766
+    second: sheet_enemy_chaser_4dir_8
+  - first:
+      213: 7813410636485860542
+    second: sheet_enemy_chaser_4dir_9
+  - first:
+      213: -8836470713234222103
+    second: sheet_enemy_chaser_4dir_10
+  - first:
+      213: -7322915881490090049
+    second: sheet_enemy_chaser_4dir_11
+  - first:
+      213: -3896534969720195816
+    second: sheet_enemy_chaser_4dir_12
+  - first:
+      213: -7146383123130806176
+    second: sheet_enemy_chaser_4dir_13
+  - first:
+      213: -4835235749179720577
+    second: sheet_enemy_chaser_4dir_14
+  - first:
+      213: 969973451457479486
+    second: sheet_enemy_chaser_4dir_15
+  - first:
+      213: 4064467668388491889
+    second: sheet_enemy_chaser_4dir_16
+  - first:
+      213: 8877958442226451910
+    second: sheet_enemy_chaser_4dir_17
+  - first:
+      213: 2019635680161056298
+    second: sheet_enemy_chaser_4dir_18
+  - first:
+      213: 4516468149206275571
+    second: sheet_enemy_chaser_4dir_19
+  - first:
+      213: 5511043073057428976
+    second: sheet_enemy_chaser_4dir_20
+  - first:
+      213: 5510958195084713255
+    second: sheet_enemy_chaser_4dir_21
+  - first:
+      213: -5871984029934824168
+    second: sheet_enemy_chaser_4dir_22
+  - first:
+      213: -7623055002722284355
+    second: sheet_enemy_chaser_4dir_23
+  - first:
+      213: -3593223734006724893
+    second: sheet_enemy_chaser_4dir_24
+  - first:
+      213: 3441160667192021080
+    second: sheet_enemy_chaser_4dir_25
+  - first:
+      213: -9158633474736754909
+    second: sheet_enemy_chaser_4dir_26
+  - first:
+      213: -916622228931715379
+    second: sheet_enemy_chaser_4dir_27
+  - first:
+      213: 639993572201363417
+    second: sheet_enemy_chaser_4dir_28
+  - first:
+      213: -7022375680234202675
+    second: sheet_enemy_chaser_4dir_29
+  - first:
+      213: 3157094834399198600
+    second: sheet_enemy_chaser_4dir_30
+  - first:
+      213: -2908597587398255069
+    second: sheet_enemy_chaser_4dir_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 1
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 128
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_0
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 1085
+        width: 121
+        height: 138
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96b2a9e8ccb70ae40800000000000000
+      internalID: 5665664449728097129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_1
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 1086
+        width: 117
+        height: 136
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 516b5e615ff1e9cd0800000000000000
+      internalID: -2549565201533520363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_2
+      rect:
+        serializedVersion: 2
+        x: 701
+        y: 1085
+        width: 124
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e67fbfcc289df540800000000000000
+      internalID: 5043354475956238057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_3
+      rect:
+        serializedVersion: 2
+        x: 990
+        y: 1085
+        width: 124
+        height: 136
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d864047b951dce9c0800000000000000
+      internalID: -3896509394325584243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_4
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 932
+        width: 112
+        height: 133
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aaa9a851cfda7c9c0800000000000000
+      internalID: -3906962853515846998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_5
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 929
+        width: 113
+        height: 136
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3740be5bd00854c0800000000000000
+      internalID: -4298684902138689729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_6
+      rect:
+        serializedVersion: 2
+        x: 702
+        y: 930
+        width: 117
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c672bf5315e7c8d0800000000000000
+      internalID: -2826038369779026233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_7
+      rect:
+        serializedVersion: 2
+        x: 992
+        y: 930
+        width: 117
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3935151e5c6a8e220800000000000000
+      internalID: 2515443760705393555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_8
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 787
+        width: 148
+        height: 120
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c057ccc17efb58c0800000000000000
+      internalID: -4009331278522920766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_9
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 784
+        width: 150
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebc9fff939fce6c60800000000000000
+      internalID: 7813410636485860542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_10
+      rect:
+        serializedVersion: 2
+        x: 679
+        y: 782
+        width: 161
+        height: 125
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e3188534bc8e5580800000000000000
+      internalID: -8836470713234222103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_11
+      rect:
+        serializedVersion: 2
+        x: 962
+        y: 784
+        width: 171
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb777b3edc6cf5a90800000000000000
+      internalID: -7322915881490090049
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_12
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 640
+        width: 130
+        height: 120
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 815b0faf61abce9c0800000000000000
+      internalID: -3896534969720195816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_13
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 635
+        width: 130
+        height: 125
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06011f4a962f2dc90800000000000000
+      internalID: -7146383123130806176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_14
+      rect:
+        serializedVersion: 2
+        x: 681
+        y: 635
+        width: 137
+        height: 123
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7c7fdc44bac5ecb0800000000000000
+      internalID: -4835235749179720577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_15
+      rect:
+        serializedVersion: 2
+        x: 971
+        y: 639
+        width: 148
+        height: 120
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e33cea707b9067d00800000000000000
+      internalID: 969973451457479486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_16
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 474
+        width: 118
+        height: 138
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1723b575fc3e76830800000000000000
+      internalID: 4064467668388491889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_17
+      rect:
+        serializedVersion: 2
+        x: 409
+        y: 483
+        width: 126
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c5869f6a28d43b70800000000000000
+      internalID: 8877958442226451910
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_18
+      rect:
+        serializedVersion: 2
+        x: 703
+        y: 474
+        width: 120
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2644bb53ff270c10800000000000000
+      internalID: 2019635680161056298
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_19
+      rect:
+        serializedVersion: 2
+        x: 992
+        y: 475
+        width: 122
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f55ec83ad7bdae30800000000000000
+      internalID: 4516468149206275571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_20
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 311
+        width: 117
+        height: 145
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f51777e9782b7c40800000000000000
+      internalID: 5511043073057428976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_21
+      rect:
+        serializedVersion: 2
+        x: 407
+        y: 311
+        width: 112
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 72d5d06b74bda7c40800000000000000
+      internalID: 5510958195084713255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_22
+      rect:
+        serializedVersion: 2
+        x: 689
+        y: 311
+        width: 138
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 815d7f8c2a5828ea0800000000000000
+      internalID: -5871984029934824168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_23
+      rect:
+        serializedVersion: 2
+        x: 981
+        y: 311
+        width: 123
+        height: 145
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dbc497b1dd7753690800000000000000
+      internalID: -7623055002722284355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_24
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 184
+        width: 171
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e6c6083d0e422ec0800000000000000
+      internalID: -3593223734006724893
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_25
+      rect:
+        serializedVersion: 2
+        x: 393
+        y: 186
+        width: 160
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 850d60f056571cf20800000000000000
+      internalID: 3441160667192021080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_26
+      rect:
+        serializedVersion: 2
+        x: 667
+        y: 184
+        width: 166
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32f6056116ff5e080800000000000000
+      internalID: -9158633474736754909
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_27
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 184
+        width: 168
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dce5c4370f08743f0800000000000000
+      internalID: -916622228931715379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_28
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 37
+        width: 171
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d7789953c6b1e800800000000000000
+      internalID: 639993572201363417
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_29
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 37
+        width: 180
+        height: 115
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc95c4466828b8e90800000000000000
+      internalID: -7022375680234202675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_30
+      rect:
+        serializedVersion: 2
+        x: 670
+        y: 37
+        width: 167
+        height: 115
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88db59e560140db20800000000000000
+      internalID: 3157094834399198600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_chaser_4dir_31
+      rect:
+        serializedVersion: 2
+        x: 954
+        y: 37
+        width: 176
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32e919897e592a7d0800000000000000
+      internalID: -2908597587398255069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      sheet_enemy_chaser_4dir_0: 5665664449728097129
+      sheet_enemy_chaser_4dir_1: -2549565201533520363
+      sheet_enemy_chaser_4dir_10: -8836470713234222103
+      sheet_enemy_chaser_4dir_11: -7322915881490090049
+      sheet_enemy_chaser_4dir_12: -3896534969720195816
+      sheet_enemy_chaser_4dir_13: -7146383123130806176
+      sheet_enemy_chaser_4dir_14: -4835235749179720577
+      sheet_enemy_chaser_4dir_15: 969973451457479486
+      sheet_enemy_chaser_4dir_16: 4064467668388491889
+      sheet_enemy_chaser_4dir_17: 8877958442226451910
+      sheet_enemy_chaser_4dir_18: 2019635680161056298
+      sheet_enemy_chaser_4dir_19: 4516468149206275571
+      sheet_enemy_chaser_4dir_2: 5043354475956238057
+      sheet_enemy_chaser_4dir_20: 5511043073057428976
+      sheet_enemy_chaser_4dir_21: 5510958195084713255
+      sheet_enemy_chaser_4dir_22: -5871984029934824168
+      sheet_enemy_chaser_4dir_23: -7623055002722284355
+      sheet_enemy_chaser_4dir_24: -3593223734006724893
+      sheet_enemy_chaser_4dir_25: 3441160667192021080
+      sheet_enemy_chaser_4dir_26: -9158633474736754909
+      sheet_enemy_chaser_4dir_27: -916622228931715379
+      sheet_enemy_chaser_4dir_28: 639993572201363417
+      sheet_enemy_chaser_4dir_29: -7022375680234202675
+      sheet_enemy_chaser_4dir_3: -3896509394325584243
+      sheet_enemy_chaser_4dir_30: 3157094834399198600
+      sheet_enemy_chaser_4dir_31: -2908597587398255069
+      sheet_enemy_chaser_4dir_4: -3906962853515846998
+      sheet_enemy_chaser_4dir_5: -4298684902138689729
+      sheet_enemy_chaser_4dir_6: -2826038369779026233
+      sheet_enemy_chaser_4dir_7: 2515443760705393555
+      sheet_enemy_chaser_4dir_8: -4009331278522920766
+      sheet_enemy_chaser_4dir_9: 7813410636485860542
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
