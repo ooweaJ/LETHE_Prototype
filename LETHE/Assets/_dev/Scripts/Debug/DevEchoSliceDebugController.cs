@@ -165,10 +165,12 @@ namespace Lethe.Dev
 
         private void OnGUI()
         {
-            GUILayout.BeginArea(new Rect(8f, 8f, 220f, 112f), GUI.skin.box);
+            GUILayout.BeginArea(new Rect(8f, 8f, 260f, 138f), GUI.skin.box);
             GUILayout.Label($"Echo Slice: {currentMode}");
+            GUILayout.Label("WASD/Arrows Move");
             GUILayout.Label("1 Base  2 K+1  3 K+5");
             GUILayout.Label("4 Blood+5  5 Storm  Space Hit");
+            GUILayout.Label("Enemy chases. Weapon follows player.");
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("1")) SetMode(DevEchoSliceMode.BaseDualBlades);
             if (GUILayout.Button("2")) SetMode(DevEchoSliceMode.KalmuriOne);

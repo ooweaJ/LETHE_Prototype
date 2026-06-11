@@ -28,15 +28,17 @@
    - 캐릭터, 맵, 무기, 잔향 VFX 이미지 파일을 Unity 프리팹, ScriptableObject, Scene에 연결하는 MCP 실행용 지도.
 11. `LETHE_UNITY_ECHO_SLICE_PROMOTION_GATE.md`
    - `_dev` echo slice를 언제 `Assets/Lethe`로 승격할지 정하는 GO/ITERATE/NO-GO 체크리스트.
-12. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
+12. `LETHE_UNITY_GAMEPLAY_SLICE_REPAIR_PLAN.md`
+   - 허접한 VFX 확인 장치를 실제로 움직이는 최소 게임 slice로 끌어올리기 위한 수리 계획.
+13. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
    - Unity 첫 구현 범위와 완료 기준.
-13. `LETHE_RUN_STRUCTURE.md`
+14. `LETHE_RUN_STRUCTURE.md`
    - 한 판 흐름, 성장, 망각, 보충.
-14. `LETHE_COMBAT_DESIGN.md`
+15. `LETHE_COMBAT_DESIGN.md`
    - 무기, 적 역할, 전투 감각.
-15. `LETHE_CONTENT_TABLES.md`
+16. `LETHE_CONTENT_TABLES.md`
    - 기억, 잔향, 시너지, 적 표.
-16. `LETHE_BALANCE_BASELINE.md`
+17. `LETHE_BALANCE_BASELINE.md`
    - v0.12 기준 수치와 Unity 초기 목표.
 
 ## 문서 운영 원칙

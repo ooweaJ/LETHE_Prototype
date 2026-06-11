@@ -7,12 +7,14 @@ namespace Lethe.Dev
         [SerializeField] private float resetDelay = 0.5f;
 
         private Health health;
+        private DevEnemyChaseController chaseController;
         private Vector3 spawnPosition;
         private float resetAt = -1f;
 
         private void Awake()
         {
             health = GetComponent<Health>();
+            chaseController = GetComponent<DevEnemyChaseController>();
             spawnPosition = transform.position;
             if (health != null)
             {
@@ -25,7 +27,15 @@ namespace Lethe.Dev
             if (resetAt > 0f && Time.time >= resetAt)
             {
                 resetAt = -1f;
-                transform.position = spawnPosition;
+                if (chaseController != null)
+                {
+                    chaseController.ResetToSpawn();
+                }
+                else
+                {
+                    transform.position = spawnPosition;
+                }
+
                 health?.ResetHealth();
             }
         }

@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260611\\index.md",
-  "generatedAt": "2026-06-10T16:36:23.696Z",
-  "unitCount": 4,
+  "generatedAt": "2026-06-11T00:11:08.920Z",
+  "unitCount": 5,
   "latest": {
-    "title": "2026-06-11-04 - Unity 리뷰 전 타격감 보강",
-    "number": "04",
-    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-04-unity-리뷰-전-타격감-보강.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-04-unity-리뷰-전-타격감-보강.html"
+    "title": "2026-06-11-05 - Unity 게임 형식 수리 1차",
+    "number": "05",
+    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-05-unity-게임-형식-수리-1차.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-05-unity-게임-형식-수리-1차.html"
   }
 }

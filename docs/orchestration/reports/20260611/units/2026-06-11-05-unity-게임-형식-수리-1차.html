@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-11-05 - Unity 게임 형식 수리 1차</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-11-05 - Unity 게임 형식 수리 1차</h1>
+      <p class="meta">Generated from 2026-06-11-05-unity-게임-형식-수리-1차.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260611/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-11-05 - Unity 게임 형식 수리 1차</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_EchoSlice.unity</code>는 더 이상 정적인 VFX 확인 장치만은 아니다. 이제 플레이어 이동, 카메라 추적, 적 추적, 플레이어 손 위치에 붙은 무기, 공격 스윙, 간단한 sprite bob/tilt, 기존 <code>1~5</code> 잔향 상태 전환이 같은 씬 안에서 작동한다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>LETHE_UNITY_GAMEPLAY_SLICE_REPAIR_PLAN.md</code>를 추가했다.</li>
+<li><code>DevPlayerController2D</code>를 추가해 WASD/방향키 이동을 지원했다.</li>
+<li><code>DevEnemyChaseController</code>를 추가해 적이 플레이어를 추적하게 했다.</li>
+<li><code>DevCameraFollow2D</code>를 추가해 카메라가 플레이어를 따라가게 했다.</li>
+<li><code>DevSpriteMotionAnimator</code>를 추가해 플레이어/적 <code>Visual</code> 자식에 bob/tilt 애니메이션을 적용했다.</li>
+<li><code>DualBladesController</code>에 공격 스윙을 추가했다.</li>
+<li><code>Weapon_DualBlades_Runtime</code>를 <code>Player_EchoShowcase/WeaponAnchor</code> 밑으로 옮겼다.</li>
+<li>플레이어/적 SpriteRenderer를 루트에서 <code>Visual</code> 자식으로 분리했다.</li>
+<li>debug panel에 WASD 이동, 적 추적, 무기 장착 안내를 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>unity_get_compilation_errors(port=7890, severity=&quot;all&quot;)</code>: <code>count=0</code>, <code>isCompiling=false</code>.</li>
+<li><code>unity_search_missing_references(port=7890, scope=&quot;scene&quot;)</code>: <code>totalFound=0</code>.</li>
+<li><code>unity_console_log(port=7890, type=&quot;error&quot;)</code>: <code>count=0</code>.</li>
+<li>Scene composition check:</li>
+<li><code>playerController=true</code></li>
+<li><code>playerVisual=true</code></li>
+<li><code>weaponParent=WeaponAnchor</code></li>
+<li><code>dualBlades=true</code></li>
+<li><code>enemyChase=true</code></li>
+<li><code>enemyVisual=true</code></li>
+<li><code>cameraFollow=true</code></li>
+<li>Play Mode runtime check:</li>
+<li>적이 오른쪽 시작 위치에서 플레이어 쪽으로 이동해 <code>(-0.03, 0.00, 0.00)</code> 근처까지 접근했다.</li>
+<li>무기 parent는 <code>WeaponAnchor</code>로 유지됐다.</li>
+<li>공격 시 <code>Debug_DualBladeSwingArc</code>와 <code>Debug_HealThreadLine</code>이 생성됐다.</li>
+<li>Play Mode 정지 후 <code>isPlaying=false</code>, <code>sceneDirty=false</code>.</li>
+<li><code>npm.cmd run report</code>: 통과, 5개 unit report 생성.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 5개 unit heading 확인.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패. Project Orchestrator intake endpoint가 현재 응답하지 않는 상태로 판단.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>이전 리뷰 기준은 너무 낮았다. 이제 “잔향이 보이냐”보다 “게임 상황 위에서 잔향을 판단할 수 있냐”를 기준으로 삼는다.</li>
+<li><code>Dev_EchoSlice</code>는 여전히 <code>_dev</code>에 둔다.</li>
+<li><code>Assets/Lethe</code> 승격은 아직 하지 않는다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>아직 플레이어 HP와 적 접촉 피해가 없다.</li>
+<li>적은 1마리라 arena 압박이 약하다.</li>
+<li>무기는 가까운 적 자동 탐색이 아니라 여전히 debug target 중심이다.</li>
+<li>잔향 VFX는 실제 echo damage가 아니라 대부분 표시용이다.</li>
+<li>sprite animation은 정식 프레임 애니메이션이 아니라 절차적 bob/tilt다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>정적인 효과 확인 씬을 최소 게임 형태로 수리했다. 다음 판단은 생존 루프, 다수 적, 실제 echo damage 중 무엇을 먼저 넣을지다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>플레이어 HP + 적 접촉 피해 + 피격 flash.</li>
+<li>가장 가까운 적 자동 타겟팅.</li>
+<li>적 3~8마리 spawn loop.</li>
+<li>Kalmuri/Blood/Storm VFX를 실제 <code>EchoHit</code> damage로 연결.</li>
+<li>ScriptableObject data asset binding.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: VFX가 있어도 캐릭터/몹/무기가 가만히 있으면 게임 slice로 평가할 수 없다.</li>
+<li>방향: 기획 확장보다 먼저 조작, 추적, 장착, 공격 동작을 갖춘 최소 게임 형태를 만든다.</li>
+<li>행동: 이동/추적/카메라/무기 장착/스윙/절차 애니메이션/문서 리스트를 한 번에 추가했다.</li>
+<li>결과: 이제 Unity에서 움직이고 쫓기고 휘두르는 상태 위에서 잔향을 판단할 수 있다.</li>
+</ul>
+  </main>
+</body>
+</html>

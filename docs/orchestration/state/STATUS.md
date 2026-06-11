@@ -50,6 +50,11 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 - Unity pre-review hit feel polish: `DevEchoSliceDebugController` now adds procedural base swing arc, delayed Kalmuri +1 slash, 2-frame debug hit stop, short camera shake, 3-strand Blood heal thread, and orbit pulse for Kalmuri +5 / Blood Blade Storm.
 - Unity pre-review hit feel verification: Unity refresh completed; compilation errors `count=0`; Play Mode mode `0~4` forced attack check observed `Debug_DualBladeSwingArc`, `Debug_HealThreadLine`, `Echo_Kalmuri_LaunchBlade(Clone)`, `Ultimate_BloodBladeStorm(Clone)`, and `Debug_KalmuriOrbit`; console errors `count=0`; missing references `totalFound=0`; editor state after stopping Play Mode `sceneDirty=false`.
 - Unity pre-review hit feel reporting: `npm.cmd run report` pass, `npm.cmd run report:check` pass, `npm.cmd run report:orchestrator:unit:dry` failed with `fetch failed`.
+- Unity gameplay slice repair plan: `docs/design/LETHE_UNITY_GAMEPLAY_SLICE_REPAIR_PLAN.md` added to define why the previous scene felt insufficient and how to turn it into a minimal game-like slice.
+- Unity gameplay repair pass 1: added `DevPlayerController2D`, `DevEnemyChaseController`, `DevCameraFollow2D`, and `DevSpriteMotionAnimator`; updated `DualBladesController`, `TestEnemyController`, and `DevEchoSliceDebugController`.
+- Unity gameplay repair scene wiring: `Weapon_DualBlades_Runtime` is now parented under `Player_EchoShowcase/WeaponAnchor`; player/enemy sprites are under `Visual` children; camera follows player; enemy chases player; debug panel now says WASD/arrow movement is available.
+- Unity gameplay repair verification: compile errors `count=0`; scene missing references `totalFound=0`; console errors `count=0`; Play Mode check showed enemy moved toward player (`Enemy_TestWalker` near `-0.03` from original `1.40`), weapon parent `WeaponAnchor`, swing arc present, heal thread present; editor stopped with active scene `Assets/_dev/Scenes/Dev_EchoSlice.unity`, `sceneDirty=false`.
+- Unity gameplay repair reporting: `npm.cmd run report` pass, `npm.cmd run report:check` pass, `npm.cmd run report:orchestrator:unit:dry` failed with `fetch failed`.
 - New forgetting model `npm run qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.19s`.
 - New forgetting model `npm run balance:loop`: `GO_BALANCE_BASELINE`, first boss clear `80%`, full clear `60%`, death `40%`, first boss TTK median `23.91s`.
 - `npm run playtest:package:dry`: pass.
@@ -118,7 +123,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Wait for jaewoo's morning Unity echo slice review. Open `LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity`, press Play, test `1` base, `2` Kalmuri +1 delayed slash, `3` Kalmuri +5 orbit/launch/pulse, `4` Blood +5 mark/bloom/3-strand heal thread, `5` Blood Blade Storm, and `Space` forced attack. Return `GO`, `ITERATE`, or `NO-GO`, plus weakest state and first fix.
+Continue repairing `Dev_EchoSlice` into a minimal playable game slice. Current scene now supports WASD/arrow movement, camera follow, enemy chase, held weapon, weapon swing, simple sprite bob/tilt, `1~5` echo mode switching, and `Space` forced attack. Next likely repair pass is player HP/contact damage, nearest-enemy targeting, or multi-enemy spawn.
 
 Do not promote `_dev` assets to `Assets/Lethe` until jaewoo explicitly returns `GO`.
 

@@ -2,44 +2,45 @@
 
 ## Goal
 
-Await jaewoo's morning review of the Unity `_dev` echo slice.
+Turn `Dev_EchoSlice.unity` from a VFX-only check scene into a minimal playable gameplay slice.
 
 ## Why Now
 
-The Unity skeleton, basic sprites, runtime foundation, basic combat scene, core echo VFX prefabs, and playable debug loop now exist. The next decision is not more implementation by default; it is jaewoo review.
+Jaewoo's review is correct: the previous scene showed echo VFX, but it did not yet feel like a game. The character and enemy were effectively static, the weapon did not read as held by the player, and there was no movement pressure. That makes echo feel impossible to judge.
 
-This task must answer:
+The immediate target is not production promotion. The target is a playable `_dev` scene where:
 
-- Does jaewoo choose `GO`, `ITERATE`, or `NO-GO` after playing the scene?
-- Which state is weakest: Base, Kalmuri +1, Kalmuri +5, Blood +5, or Storm?
-- Is `_dev -> Assets/Lethe` promotion allowed or blocked?
+- the player moves,
+- the camera follows,
+- the enemy chases,
+- the weapon is attached to the player,
+- the weapon visibly swings,
+- player/enemy sprites have simple motion,
+- the existing `1~5` echo states still work.
 
 ## Done Criteria
 
-- Morning review prompt exists at `docs/orchestration/review_prompts/2026-06-11-unity-echo-slice-jaewoo-review.md`.
-- Promotion gate exists at `docs/design/LETHE_UNITY_ECHO_SLICE_PROMOTION_GATE.md`.
-- Latest report/devlog/status mention controls, known rough edges, and next decision.
-- No actual `Assets/Lethe` promotion happens before jaewoo GO.
+- `DevPlayerController2D` moves the player with WASD/arrow keys.
+- `DevEnemyChaseController` makes the test enemy chase the player.
+- `DevCameraFollow2D` follows the player.
+- `Weapon_DualBlades_Runtime` is parented under `Player_EchoShowcase/WeaponAnchor`.
+- `DualBladesController` visibly swings on attack.
+- `DevSpriteMotionAnimator` gives player/enemy simple bob/tilt animation through `Visual` child objects.
+- `DevEchoSliceDebugController` still supports `1~5` and `Space`.
+- Unity Play Mode verification confirms enemy movement, weapon parent, attack VFX, compile error 0, console error 0, missing reference 0.
+- Report/devlog/status are updated.
 
 ## Related Files
 
-- `docs/design/LETHE_WEAPON_MEMORY_ECHO_SPEC.md`
-- `docs/design/LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`
-- `docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md`
-- `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`
-- `docs/design/LETHE_VISUAL_ASSET_PLAN.md`
-- `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md`
-- `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md`
-- `LETHE/Assets/_dev/Art/Source/*.png`
-- `LETHE/Assets/_dev/Art/Sprites/**/*.png`
-- `LETHE/Assets/_dev/Prefabs/Echoes/**/*.prefab`
-- `LETHE/Assets/_dev/Prefabs/Ultimates/**/*.prefab`
-- `LETHE/Assets/_dev/Scripts/Debug/**/*.cs`
+- `docs/design/LETHE_UNITY_GAMEPLAY_SLICE_REPAIR_PLAN.md`
 - `LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity`
-- `docs/design/LETHE_UNITY_ECHO_SLICE_PROMOTION_GATE.md`
-- `docs/orchestration/review_prompts/2026-06-11-unity-echo-slice-jaewoo-review.md`
-- `docs/orchestration/state/NEXT_TASKS.md`
-- `docs/orchestration/reports/20260611/index.md`
+- `LETHE/Assets/_dev/Scripts/Player/DevPlayerController2D.cs`
+- `LETHE/Assets/_dev/Scripts/Combat/Enemies/DevEnemyChaseController.cs`
+- `LETHE/Assets/_dev/Scripts/Camera/DevCameraFollow2D.cs`
+- `LETHE/Assets/_dev/Scripts/Feedback/DevSpriteMotionAnimator.cs`
+- `LETHE/Assets/_dev/Scripts/Combat/Weapons/DualBladesController.cs`
+- `LETHE/Assets/_dev/Scripts/Combat/Enemies/TestEnemyController.cs`
+- `LETHE/Assets/_dev/Scripts/Debug/DevEchoSliceDebugController.cs`
 
 ## Verification Commands
 
@@ -49,10 +50,17 @@ npm.cmd run report:check
 npm.cmd run report:orchestrator:unit:dry
 ```
 
+Unity MCP verification:
+
+- `unity_get_compilation_errors(port=7890, severity="all")`
+- `unity_search_missing_references(port=7890, scope="scene")`
+- `unity_console_log(port=7890, type="error")`
+- Play Mode runtime check for enemy chase and weapon attachment.
+
 ## Open Questions
 
-- Waiting for jaewoo review result.
+- Should the next repair pass prioritize player HP/contact damage, multi-enemy spawn, or real echo damage?
 
 ## Do Not Touch
 
-Do not add new memories, weapons, shop, meta progression, multi-region structure, or final boss. Use `Assets/_dev` for experimental Unity slice work until the first echo slice earns promotion to `Assets/Lethe`.
+Do not add shop, meta progression, multi-region structure, final boss, or promote `_dev` to `Assets/Lethe` yet.

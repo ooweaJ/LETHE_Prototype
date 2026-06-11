@@ -231,3 +231,76 @@ jaewoo가 Unity에서 직접 플레이한 뒤 `GO`, `ITERATE`, `NO-GO`를 정하
 - 방향: 시스템 확장보다 hit feel과 판독성만 좁게 보강한다.
 - 행동: 기본 arc, delayed slash, hit stop, camera shake, heal thread 다발, orbit pulse를 한 파일에 제한해 추가했다.
 - 결과: 아침 리뷰에서 “잔향이 붙어 있다”보다 “무기와 잔향이 반응한다”를 더 빠르게 판단할 수 있다.
+
+# 2026-06-11-05 - Unity 게임 형식 수리 1차
+
+## 1. 현재 빌드 상태
+
+`Dev_EchoSlice.unity`는 더 이상 정적인 VFX 확인 장치만은 아니다. 이제 플레이어 이동, 카메라 추적, 적 추적, 플레이어 손 위치에 붙은 무기, 공격 스윙, 간단한 sprite bob/tilt, 기존 `1~5` 잔향 상태 전환이 같은 씬 안에서 작동한다.
+
+## 2. 오늘 바뀐 것
+
+- `LETHE_UNITY_GAMEPLAY_SLICE_REPAIR_PLAN.md`를 추가했다.
+- `DevPlayerController2D`를 추가해 WASD/방향키 이동을 지원했다.
+- `DevEnemyChaseController`를 추가해 적이 플레이어를 추적하게 했다.
+- `DevCameraFollow2D`를 추가해 카메라가 플레이어를 따라가게 했다.
+- `DevSpriteMotionAnimator`를 추가해 플레이어/적 `Visual` 자식에 bob/tilt 애니메이션을 적용했다.
+- `DualBladesController`에 공격 스윙을 추가했다.
+- `Weapon_DualBlades_Runtime`를 `Player_EchoShowcase/WeaponAnchor` 밑으로 옮겼다.
+- 플레이어/적 SpriteRenderer를 루트에서 `Visual` 자식으로 분리했다.
+- debug panel에 WASD 이동, 적 추적, 무기 장착 안내를 추가했다.
+
+## 3. 테스트 결과와 근거
+
+- `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`, `isCompiling=false`.
+- `unity_search_missing_references(port=7890, scope="scene")`: `totalFound=0`.
+- `unity_console_log(port=7890, type="error")`: `count=0`.
+- Scene composition check:
+  - `playerController=true`
+  - `playerVisual=true`
+  - `weaponParent=WeaponAnchor`
+  - `dualBlades=true`
+  - `enemyChase=true`
+  - `enemyVisual=true`
+  - `cameraFollow=true`
+- Play Mode runtime check:
+  - 적이 오른쪽 시작 위치에서 플레이어 쪽으로 이동해 `(-0.03, 0.00, 0.00)` 근처까지 접근했다.
+  - 무기 parent는 `WeaponAnchor`로 유지됐다.
+  - 공격 시 `Debug_DualBladeSwingArc`와 `Debug_HealThreadLine`이 생성됐다.
+  - Play Mode 정지 후 `isPlaying=false`, `sceneDirty=false`.
+- `npm.cmd run report`: 통과, 5개 unit report 생성.
+- `npm.cmd run report:check`: 통과, 5개 unit heading 확인.
+- `npm.cmd run report:orchestrator:unit:dry`: `fetch failed`로 실패. Project Orchestrator intake endpoint가 현재 응답하지 않는 상태로 판단.
+
+## 4. 결정한 것
+
+- 이전 리뷰 기준은 너무 낮았다. 이제 “잔향이 보이냐”보다 “게임 상황 위에서 잔향을 판단할 수 있냐”를 기준으로 삼는다.
+- `Dev_EchoSlice`는 여전히 `_dev`에 둔다.
+- `Assets/Lethe` 승격은 아직 하지 않는다.
+
+## 5. 문제 또는 리스크
+
+- 아직 플레이어 HP와 적 접촉 피해가 없다.
+- 적은 1마리라 arena 압박이 약하다.
+- 무기는 가까운 적 자동 탐색이 아니라 여전히 debug target 중심이다.
+- 잔향 VFX는 실제 echo damage가 아니라 대부분 표시용이다.
+- sprite animation은 정식 프레임 애니메이션이 아니라 절차적 bob/tilt다.
+
+## 6. GPT/Claude 인계 요약
+
+정적인 효과 확인 씬을 최소 게임 형태로 수리했다. 다음 판단은 생존 루프, 다수 적, 실제 echo damage 중 무엇을 먼저 넣을지다.
+
+## 7. 다음 Codex 작업
+
+- 플레이어 HP + 적 접촉 피해 + 피격 flash.
+- 가장 가까운 적 자동 타겟팅.
+- 적 3~8마리 spawn loop.
+- Kalmuri/Blood/Storm VFX를 실제 `EchoHit` damage로 연결.
+- ScriptableObject data asset binding.
+
+## 8. 포트폴리오 메모
+
+- 문제: VFX가 있어도 캐릭터/몹/무기가 가만히 있으면 게임 slice로 평가할 수 없다.
+- 방향: 기획 확장보다 먼저 조작, 추적, 장착, 공격 동작을 갖춘 최소 게임 형태를 만든다.
+- 행동: 이동/추적/카메라/무기 장착/스윙/절차 애니메이션/문서 리스트를 한 번에 추가했다.
+- 결과: 이제 Unity에서 움직이고 쫓기고 휘두르는 상태 위에서 잔향을 판단할 수 있다.
