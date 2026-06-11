@@ -69,6 +69,26 @@ Implemented in the broader complete prototype sequence:
 - Complete prototype smoke can run in 60~120 seconds.
 - Dedicated sprite VFX, balance, data asset binding, and runtime class split still need follow-up.
 
+## Latest Visibility Patch
+
+- Added procedural VFX for the six memory/echo families that did not have dedicated sprites:
+  - `Memory_ExecutionFlash` / `Echo_Execution`
+  - `Memory_HunterOath` / `Echo_Homing`
+  - `Memory_ShatterWave` / `Echo_Shockwave`
+  - `Memory_StoppedSecond` / `Echo_TimeStop`
+  - `Memory_AshenShield` / `Echo_AshenGuard`
+  - `Memory_OblivionBrand` / `Echo_Brand`
+- `F7` and echo debug actions now spawn immediate preview shapes so the user can tell whether the state changed.
+- Verification:
+  - Unity compile errors `0`.
+  - scene missing references `0`.
+  - Play Mode console errors `0`.
+  - F7/F5 smoke: active memories `8`, echoes `8`, procedural VFX objects `276`.
+
+Next question for hands-on review:
+
+- Are the new shapes readable, or are they too noisy?
+
 ## Related Files
 
 - `docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`

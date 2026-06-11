@@ -1042,3 +1042,64 @@ Unity runtime 자체는 직전 `Dev_Prototype_v0` 상태를 유지한다. 이번
 - 방향: 완성형 범위를 먼저 플레이 가능한 상태로 올린 뒤, 약한 축을 선별한다.
 - 행동: 데이터 골격, 무기 전환, 8기억/8잔향/4궁극, 4적 역할, debug injection을 구현했다.
 - 결과: LETHE의 전체 기억/잔향 구조를 Unity에서 한 번에 비교할 수 있는 첫 기준점이 생겼다.
+
+# 2026-06-11-18 - 기억/잔향 VFX 가시성 패치
+
+## 1. 현재 빌드 상태
+
+`Dev_Prototype_v0`에서 칼무리/혈반 외의 기억들도 이제 화면에 절차형 VFX로 보인다. 전용 sprite art는 아직 아니지만, F7/F4/F5/F8로 상태를 주입했을 때 "뭔가 켜졌다"가 즉시 읽히게 했다.
+
+## 2. 오늘 바뀐 것
+
+- F7 전체 기억 활성화 시 8개 기억 미리보기 VFX가 플레이어 주변에 뜨게 했다.
+- F4/F5/F8 잔향 주입 시 8개 잔향 미리보기 VFX가 뜨게 했다.
+- 처형: 흰 균열 십자.
+- 추적: 화살표/유도선.
+- 파문: 이중 원형 충격파.
+- 정지: 시계 원과 시곗바늘.
+- 잿빛: 보호막 링과 가드 바.
+- 낙인: 보라 다이아몬드와 slash.
+- 비칼무리/비혈반 활성 기억은 persistent loop에서도 절차형 모양을 계속 보여준다.
+
+## 3. 테스트 결과와 근거
+
+- Unity compilation errors: `0`.
+- Scene missing references: `0`.
+- Play Mode console errors: `0`.
+- F7/F5 runtime smoke:
+  - active memories: `8`.
+  - echoes: `8`.
+  - line renderers: `283`.
+  - procedural VFX objects: `276`.
+- `npm.cmd run report`: 통과, 18개 unit report 생성.
+- `npm.cmd run report:check`: 통과, 18개 unit heading 확인.
+- `npm.cmd run report:orchestrator:unit:dry`: `fetch failed`로 실패. Project Orchestrator intake endpoint가 현재 응답하지 않는 상태로 판단.
+
+## 4. 결정한 것
+
+- 지금 단계에서는 전용 이미지보다 "판독 가능성"을 우선한다.
+- 색만 다른 placeholder는 부족하므로 기억별 실루엣을 라인 VFX로 먼저 나눈다.
+- 단, 이 밀도는 의도적으로 강하게 잡았고 다음 리뷰에서 줄일 수 있다.
+
+## 5. 문제 또는 리스크
+
+- VFX 개수가 많아 화면이 과할 수 있다.
+- 절차형 라인은 최종 아트가 아니다.
+- 처형/추적/파문/정지/잿빛/낙인은 여전히 전용 sprite/VFX 이미지 생성이 필요하다.
+
+## 6. GPT/Claude 인계 요약
+
+사용자가 "다른 기억 VFX가 안 보인다"고 피드백했다. Codex는 전용 아트가 없는 6개 기억/잔향에 절차형 모양 VFX를 추가했다. 다음 리뷰는 이제 보이는지, 너무 시끄러운지, 어떤 기억부터 전용 이미지를 만들어야 하는지 판단하면 된다.
+
+## 7. 다음 Codex 작업
+
+- jaewoo가 F7/F5/F8로 가시성 확인.
+- 과하면 procedural VFX 밀도와 lifetime을 줄인다.
+- 통과하면 6개 기억/잔향 전용 sprite atlas를 imagegen으로 만든다.
+
+## 8. 포트폴리오 메모
+
+- 문제: 기능은 들어갔지만 시각 언어가 없으면 플레이어는 없는 효과처럼 느낀다.
+- 방향: 최종 아트 전에도 기억별 실루엣을 먼저 분리한다.
+- 행동: 라인 기반 균열, 화살표, 링, 시계, 방패, 낙인을 구현했다.
+- 결과: 완성형 프로토타입에서 8기억/8잔향을 화면상 비교할 수 있는 최소 판독성이 생겼다.

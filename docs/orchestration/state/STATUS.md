@@ -230,6 +230,32 @@ For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` b
   - data is in code catalog first, not yet `_dev/Data` ScriptableObject assets.
   - balance and final runtime class split still need follow-up.
 
+## Latest Memory / Echo Visibility Patch
+
+- User review: other memories appeared to have no VFX.
+- Clarification: only Kalmuri/Blood/Blood Blade Storm had dedicated sprite VFX; the remaining memory/echo families were mostly logic plus reused sprite/color placeholders.
+- Added procedural VFX so every memory/echo family has a visible shape even before dedicated art:
+  - Execution: white crack cross.
+  - Homing: directional arrow/shot lines.
+  - Shockwave: double expanding rings.
+  - TimeStop: clock ring and clock hands.
+  - AshenGuard: shield ring and guard bar.
+  - Brand: purple diamond/brand slash.
+- `F7` now spawns an immediate 8-memory preview around the player.
+- `F4/F5/F8` now spawn immediate echo preview shapes around the player.
+- Persistent active memory loops now draw procedural shapes for the six non-Kalmuri/Blood memories.
+- Verification:
+  - Unity compile errors `0`.
+  - scene missing references `0`.
+  - Play Mode console errors `0`.
+  - runtime smoke after F7/F5: active memories `8`, echoes `8`, line renderers `283`, procedural VFX objects `276`.
+  - `npm.cmd run report`: passed, 18 unit reports generated.
+  - `npm.cmd run report:check`: passed, 18 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+- Remaining risk:
+  - this pass intentionally makes effects very visible; density may be too high.
+  - dedicated sprite/VFX art is still needed for the six non-Kalmuri/Blood families.
+
 ## Latest Prototype v0 Result
 
 - `Assets/_dev/Scenes/Dev_Prototype_v0.unity` now exists as the main Unity prototype scene.

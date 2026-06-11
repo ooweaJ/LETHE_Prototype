@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-11-18 - 기억/잔향 VFX 가시성 패치</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-11-18 - 기억/잔향 VFX 가시성 패치</h1>
+      <p class="meta">Generated from 2026-06-11-18-기억-잔향-vfx-가시성-패치.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260611/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-11-18 - 기억/잔향 VFX 가시성 패치</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v0</code>에서 칼무리/혈반 외의 기억들도 이제 화면에 절차형 VFX로 보인다. 전용 sprite art는 아직 아니지만, F7/F4/F5/F8로 상태를 주입했을 때 &quot;뭔가 켜졌다&quot;가 즉시 읽히게 했다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>F7 전체 기억 활성화 시 8개 기억 미리보기 VFX가 플레이어 주변에 뜨게 했다.</li>
+<li>F4/F5/F8 잔향 주입 시 8개 잔향 미리보기 VFX가 뜨게 했다.</li>
+<li>처형: 흰 균열 십자.</li>
+<li>추적: 화살표/유도선.</li>
+<li>파문: 이중 원형 충격파.</li>
+<li>정지: 시계 원과 시곗바늘.</li>
+<li>잿빛: 보호막 링과 가드 바.</li>
+<li>낙인: 보라 다이아몬드와 slash.</li>
+<li>비칼무리/비혈반 활성 기억은 persistent loop에서도 절차형 모양을 계속 보여준다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Scene missing references: <code>0</code>.</li>
+<li>Play Mode console errors: <code>0</code>.</li>
+<li>F7/F5 runtime smoke:</li>
+<li>active memories: <code>8</code>.</li>
+<li>echoes: <code>8</code>.</li>
+<li>line renderers: <code>283</code>.</li>
+<li>procedural VFX objects: <code>276</code>.</li>
+<li><code>npm.cmd run report</code>: 통과, 18개 unit report 생성.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 18개 unit heading 확인.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패. Project Orchestrator intake endpoint가 현재 응답하지 않는 상태로 판단.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>지금 단계에서는 전용 이미지보다 &quot;판독 가능성&quot;을 우선한다.</li>
+<li>색만 다른 placeholder는 부족하므로 기억별 실루엣을 라인 VFX로 먼저 나눈다.</li>
+<li>단, 이 밀도는 의도적으로 강하게 잡았고 다음 리뷰에서 줄일 수 있다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>VFX 개수가 많아 화면이 과할 수 있다.</li>
+<li>절차형 라인은 최종 아트가 아니다.</li>
+<li>처형/추적/파문/정지/잿빛/낙인은 여전히 전용 sprite/VFX 이미지 생성이 필요하다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>사용자가 &quot;다른 기억 VFX가 안 보인다&quot;고 피드백했다. Codex는 전용 아트가 없는 6개 기억/잔향에 절차형 모양 VFX를 추가했다. 다음 리뷰는 이제 보이는지, 너무 시끄러운지, 어떤 기억부터 전용 이미지를 만들어야 하는지 판단하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo가 F7/F5/F8로 가시성 확인.</li>
+<li>과하면 procedural VFX 밀도와 lifetime을 줄인다.</li>
+<li>통과하면 6개 기억/잔향 전용 sprite atlas를 imagegen으로 만든다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 기능은 들어갔지만 시각 언어가 없으면 플레이어는 없는 효과처럼 느낀다.</li>
+<li>방향: 최종 아트 전에도 기억별 실루엣을 먼저 분리한다.</li>
+<li>행동: 라인 기반 균열, 화살표, 링, 시계, 방패, 낙인을 구현했다.</li>
+<li>결과: 완성형 프로토타입에서 8기억/8잔향을 화면상 비교할 수 있는 최소 판독성이 생겼다.</li>
+</ul>
+  </main>
+</body>
+</html>

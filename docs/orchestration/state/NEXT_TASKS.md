@@ -6,8 +6,8 @@ Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, 
 
 - Priority: highest
 - Source: `docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`
-- Include: open `Assets/_dev/Scenes/Dev_Prototype_v0.unity`, press Play, use F1-F8/debug buttons, compare 쌍검 vs 대검, force 8 memories, 8 echoes, 4 ultimates.
-- Done: record which weapon, memory, echo, and ultimate are readable/exciting, and which one feels weakest.
+- Include: open `Assets/_dev/Scenes/Dev_Prototype_v0.unity`, press Play, use F1-F8/debug buttons, compare 쌍검 vs 대검, force 8 memories, 8 echoes, 4 ultimates, and judge the new procedural VFX readability.
+- Done: record which weapon, memory, echo, and ultimate are readable/exciting, which one feels weakest, and whether procedural VFX density is too high.
 
 ## 2. ScriptableObject Asset Binding
 
@@ -19,7 +19,7 @@ Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, 
 
 - Priority: high
 - Include: generate/import readable sprite VFX for 처형, 추적, 파문, 정지, 잿빛, 낙인 active/echo states.
-- Done: no remaining memory/echo depends only on recolored Kalmuri/Blood placeholder sprites.
+- Done: no remaining memory/echo depends on procedural line placeholder shapes as its main read.
 
 ## 4. Complete Prototype Balance Smoke
 

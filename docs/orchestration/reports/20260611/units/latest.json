@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260611\\index.md",
-  "generatedAt": "2026-06-11T07:19:20.395Z",
-  "unitCount": 17,
+  "generatedAt": "2026-06-11T08:12:22.718Z",
+  "unitCount": 18,
   "latest": {
-    "title": "2026-06-11-17 - 완성형 프로토타입 C1-C5 압축 구현",
-    "number": "17",
-    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-17-완성형-프로토타입-c1-c5-압축-구현.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-17-완성형-프로토타입-c1-c5-압축-구현.html"
+    "title": "2026-06-11-18 - 기억/잔향 VFX 가시성 패치",
+    "number": "18",
+    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-18-기억-잔향-vfx-가시성-패치.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-18-기억-잔향-vfx-가시성-패치.html"
   }
 }
