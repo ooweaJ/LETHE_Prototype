@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260611\\index.md",
-  "generatedAt": "2026-06-11T06:09:41.274Z",
-  "unitCount": 15,
+  "generatedAt": "2026-06-11T06:36:41.146Z",
+  "unitCount": 16,
   "latest": {
-    "title": "2026-06-11-15 - 기억 정체성과 기본공격 밸런스 정리",
-    "number": "15",
-    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-15-기억-정체성과-기본공격-밸런스-정리.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-15-기억-정체성과-기본공격-밸런스-정리.html"
+    "title": "2026-06-11-16 - 완성형 프로토타입 PRD와 전체 범위 확정",
+    "number": "16",
+    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-16-완성형-프로토타입-prd와-전체-범위-확정.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-16-완성형-프로토타입-prd와-전체-범위-확정.html"
   }
 }

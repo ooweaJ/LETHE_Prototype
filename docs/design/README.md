@@ -2,7 +2,7 @@
 
 최종 갱신: 2026-06-11
 
-이 폴더는 LETHE의 기억/망각/잔향/공명 루프를 구체화하기 위한 한글 기획 문서 묶음이다. 현재는 Unity 셋업보다 "망각이 실제로 크게 느껴지는 장면"을 먼저 확정한다.
+이 폴더는 LETHE의 기억/망각/잔향/공명 루프를 구체화하기 위한 한글 기획 문서 묶음이다. 현재 Unity 구현 기준은 `LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`다. 쌍검-only slice는 기준 확정용으로 부족하다고 판단했고, 다음 구현은 `쌍검 + 대검 + 8기억 + 8잔향 + 4궁극` complete prototype으로 진행한다.
 
 ## 읽는 순서
 
@@ -36,17 +36,19 @@
    - slice 접근을 폐기하고 Unity Prototype v0.1을 직접 구현하기 위한 최신 기준.
 15. `LETHE_UNITY_PROTOTYPE_V0_PRD.md`
    - 기존 기획/개발 문서를 통합한 Unity Prototype v0.1 실행 PRD. 구현 순서와 수락 기준의 최신 기준.
-16. `LETHE_RELEASE_ART_FONT_VFX_PLAN.md`
+16. `LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`
+   - `Dev_Prototype_v0` 이후의 최신 상위 실행 PRD. 대검, 8개 기억, 8개 잔향, 4개 궁극 잔향까지 포함한 완성형 프로토타입 범위와 데이터 구조, milestone, 수락 기준.
+17. `LETHE_RELEASE_ART_FONT_VFX_PLAN.md`
    - 출시 후보 감각을 위한 폰트, 정식 아트, 활성 기억/잔향/궁극 VFX 계층 기준.
-17. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
+18. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
    - Unity 첫 구현 범위와 완료 기준.
-18. `LETHE_RUN_STRUCTURE.md`
+19. `LETHE_RUN_STRUCTURE.md`
    - 한 판 흐름, 성장, 망각, 보충.
-19. `LETHE_COMBAT_DESIGN.md`
+20. `LETHE_COMBAT_DESIGN.md`
    - 무기, 적 역할, 전투 감각.
-20. `LETHE_CONTENT_TABLES.md`
+21. `LETHE_CONTENT_TABLES.md`
    - 기억, 잔향, 시너지, 적 표.
-21. `LETHE_BALANCE_BASELINE.md`
+22. `LETHE_BALANCE_BASELINE.md`
    - v0.12 기준 수치와 Unity 초기 목표.
 
 ## 문서 운영 원칙
@@ -54,4 +56,5 @@
 - `LETHE_GAME_DESIGN_OVERVIEW.md`는 사람이 처음 읽는 입구다.
 - 세부 수치와 표는 별도 문서에서 관리한다.
 - 오래된 HTML 프로토타입 문서는 근거 자료로 남기고, 최신 판단은 이 폴더와 `docs/orchestration/state/`를 우선한다.
-- Unity 첫 slice 전에는 상점, 메타 진행, 다중 지역, 최종보스, 대규모 기억 확장을 시작하지 않는다.
+- Complete Prototype 전에는 상점, 메타 진행, 다중 지역 완성, 최종보스, 출시급 UI/사운드를 시작하지 않는다.
+- 장송대검, 8종 기억, 8종 잔향, 4종 궁극 잔향은 이제 실험 범위 안에 있다.

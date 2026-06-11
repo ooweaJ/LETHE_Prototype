@@ -2,19 +2,25 @@
 
 ## Goal
 
-Prepare `Dev_Prototype_v0` for jaewoo hands-on review after implementing PRD milestones M1-M5.
+Reset the Unity implementation target from the narrow `Dev_Prototype_v0` slice to the Complete Prototype PRD.
 
 ## Why Now
 
-Jaewoo's feedback is that the existing planning/design docs should be consolidated into a proper PRD before implementation continues. That is correct: the project needs one execution contract that ties game design, run structure, combat, memory/forgetting/echo, data structure, milestones, and acceptance tests together.
+Jaewoo's latest feedback is that a dual-blades-only prototype with two memories cannot establish LETHE's real standard. The project needs a complete execution contract that includes greatsword, all planned core memories, all echoes, and the first four ultimate echoes before the next implementation push.
 
 Current source of truth:
+
+```text
+docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md
+```
+
+Legacy reference:
 
 ```text
 docs/design/LETHE_UNITY_PROTOTYPE_V0_PRD.md
 ```
 
-The correct next move is to play the new prototype scene and decide the first tuning target, not continue patching `Dev_EchoSlice`.
+The correct next move is not another small tuning pass. The next implementation should first split the current hard-coded prototype into a data-driven complete prototype structure.
 
 Main target:
 
@@ -28,38 +34,37 @@ Reference only:
 Assets/_dev/Scenes/Dev_EchoSlice.unity
 ```
 
-## Done Criteria
+## Done Criteria For This Planning Reset
 
-Implemented in this work unit:
+- `LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md` exists and is registered in the design index.
+- `NEXT_TASKS.md` uses Complete Prototype milestones, not the old hands-on review list.
+- `STATUS.md` names the new scope clearly:
+  - `Weapon_DualBlades`
+  - `Weapon_Greatsword`
+  - 8 memories
+  - 8 echoes
+  - 4 ultimate echoes
+- Devlog/report record the scope change and next implementation order.
+- Report generation and report check pass.
 
-- `Dev_Prototype_v0.unity` exists.
-- Scene root structure exists:
-  - `PrototypeRoot`
-  - `Services`
-  - `Player`
-  - `EnemySpawner`
-  - `Arena`
-  - `RuntimeVFX`
-  - `HUD`
-- Player moves with WASD/arrow keys.
-- Camera follows player.
-- Arena bounds are readable.
-- At least 5 enemies spawn/chase.
-- Player can attack nearest enemies.
-- Enemies have HP/death/respawn.
-- Player has HP/contact damage.
-- Minimal HUD shows HP, kills, active memory/echo placeholders.
-- Memory choice can happen from kills/debug.
-- Highest-level forgetting creates matching echo.
-- Kalmuri/Blood echo effects affect combat.
-- Echo +5 unlock path exists.
-- Reacquiring echoed memories applies resonance.
-- Kalmuri +5 and Blood +5 unlock Blood Blade Storm.
+## Complete Prototype Done Criteria
+
+Implemented by the next work sequence:
+
+- Data-driven core replaces `PrototypeGameManager` memory/echo hard-code.
+- 쌍검 and 대검 are both playable.
+- 8 active memories have at least level 1 behavior.
+- 8 echoes have at least +1 behavior.
+- Debug can force +3/+5 and four ultimate echo conditions.
+- Complete prototype smoke can run in 60~120 seconds.
 - Unity compile error 0, console error 0, missing reference 0.
 
 ## Related Files
 
+- `docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`
 - `docs/design/LETHE_UNITY_PROTOTYPE_V0_PRD.md`
+- `docs/design/LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`
+- `docs/design/LETHE_CONTENT_TABLES.md`
 - `docs/design/LETHE_UNITY_PROTOTYPE_V0_PLAN.md`
 - `LETHE/Assets/_dev/Scenes/Dev_Prototype_v0.unity`
 - `LETHE/Assets/_dev/Scripts/**`

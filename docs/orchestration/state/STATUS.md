@@ -4,9 +4,11 @@ Last updated: 2026-06-11
 
 ## Current Snapshot
 
-LETHE HTML Alpha v0.12 implemented the new forgetting model and passed automated regression, but the user feedback is that the play experience still does not feel like a big change. The current task has shifted from raw rule implementation to a Unity-ready echo slice: echoes should not feel like `잔향!` labels on basic attacks, but like weapon-specific combat events supported by concrete images, `_dev` prefabs, debug scene states, and one-person feel tests. The first Unity `_dev` readability resource pass is now imported: player silhouette, walker enemy, dark floor tile, and left/right dual blade sprites are in `LETHE/Assets/_dev/Art/Sprites`, with chroma source images preserved in `LETHE/Assets/_dev/Art/Source`.
+LETHE HTML Alpha v0.12 implemented the new forgetting model and passed automated regression, but the user feedback is that the play experience still does not feel like a big change. The Unity prototype then moved through a dual-blades playable baseline, but the latest direction is clearer: a 쌍검-only prototype with two memories cannot set the real standard. The current source of truth is now `docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`, and the next implementation target is a complete prototype with `쌍검 + 대검 + 8기억 + 8잔향 + 4궁극`.
 
-The new design sources are `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`, `docs/design/LETHE_WEAPON_MEMORY_ECHO_SPEC.md`, `docs/design/LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`, `docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md`, `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`, `docs/design/LETHE_VISUAL_ASSET_PLAN.md`, `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md`, and `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md`. Together they define the first showcase, active-to-echo form transformation, loop-safe hit event taxonomy, Unity class roles, ScriptableObjects, prefabs, first-slice acceptance criteria, the first sprite/VFX concept sheet, the imagegen production plan, and the file-to-prefab-to-scene binding map for Unity MCP. The current implementation target is now a playable `_dev` debug slice for morning review.
+This is an explicit scope change from the previous `Dev_Prototype_v0` tuning loop. `Weapon_Greatsword`, all 8 core memories, all 8 matching echoes, and 4 ultimate echoes are now inside the prototype validation scope. Shop, meta progression, multi-region completion, final boss, release UI/audio, Steam/build deployment, and `Assets/Lethe` promotion remain out of scope.
+
+The new design sources are `docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`, `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`, `docs/design/LETHE_WEAPON_MEMORY_ECHO_SPEC.md`, `docs/design/LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`, `docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md`, `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`, `docs/design/LETHE_VISUAL_ASSET_PLAN.md`, `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md`, and `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md`. Together they define the complete prototype scope, active-to-echo form transformation, loop-safe hit event taxonomy, Unity class roles, ScriptableObjects, prefabs, first-slice acceptance criteria, the sprite/VFX concept sheet, the imagegen production plan, and the file-to-prefab-to-scene binding map for Unity MCP. The current implementation target remains `Assets/_dev/Scenes/Dev_Prototype_v0.unity`, but the work now starts with data-driven structure rather than more hard-coded combat tuning.
 
 The orchestration HTML interface now exists at `docs/orchestration/interface/index.html`, `docs/orchestration/interface/command.html`, and `docs/orchestration/interface/runbook.html`. AI-facing state lives under `docs/orchestration/state/`; human-facing reports live under `docs/orchestration/reports/YYYYMMDD/`.
 
@@ -132,27 +134,52 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Run a jaewoo hands-on review of `Assets/_dev/Scenes/Dev_Prototype_v0.unity`.
+Implement C1 from `docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`: split the current hard-coded prototype toward a data-driven complete prototype core.
 
-Focus the review on:
+Immediate order:
 
-- 4-direction player/enemy animation readability.
-- Camera scale and arena framing.
-- Whether the auto dual-blade combat loop feels like a game rather than a debug toy.
-- Whether memory choice, highest-level forgetting, echo +5, resonance, and Blood Blade Storm are understandable enough for the next tuning pass.
+- Fix and create data contracts for `WeaponDefinition`, `MemoryDefinition`, `EchoDefinition`, `EchoLevelData`, `EchoSynergyDefinition`, `EnemyDefinition`, `RewardPoolDefinition`, and `FeedbackProfile`.
+- Create runtime/service seams for `MemoryInventory`, `EchoInventory`, `ForgetService`, `ResonanceService`, `UltimateEchoService`, `RewardService`, and `DebugStateInjector`.
+- Register `Weapon_DualBlades`, `Weapon_Greatsword`, 8 memory ids, 8 echo ids, and 4 ultimate echo ids under `_dev`.
+- Only after that, implement C2 weapon pair and C3 8 active memories.
 
-Do not promote `_dev` assets to `Assets/Lethe` until jaewoo explicitly returns `GO`.
-
-Do not promote `_dev` assets to `Assets/Lethe` until jaewoo explicitly returns `GO`.
+Do not promote `_dev` assets to `Assets/Lethe` until the Complete Prototype receives explicit `GO`.
 
 For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` before real sends, then `npm run report:orchestrator:unit` when the Project Orchestrator is running and the report is ready.
 
 ## Current Source Of Truth
 
 - Top-level rules: `AGENTS.md`
+- Complete prototype PRD: `docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`
 - Detailed legacy status archive: `docs/CODEX_STATUS.md`
 - Detailed legacy task archive: `docs/NEXT_TASKS.md`
 - Current orchestration task: `docs/orchestration/state/CURRENT_TASK.md`
+
+## Latest Complete Prototype PRD
+
+- Added `docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`.
+- The new prototype target is no longer `쌍검 + 칼무리 + 혈반` only.
+- Complete Prototype scope:
+  - `Weapon_DualBlades`
+  - `Weapon_Greatsword`
+  - 8 active memories
+  - 8 matching echoes
+  - 4 ultimate echoes
+  - 4 enemy role types
+  - 60~120 second compressed debug smoke
+- Next implementation sequence:
+  - C1 Data-Driven Core
+  - C2 Weapon Pair
+  - C3 Active Memories 8
+  - C4 Echoes 8
+  - C5 Ultimate Echoes 4
+  - C6 Enemies / Encounter
+  - C7 Visual / Feedback Pass
+  - C8 Complete Prototype Gate
+- Reporting verification:
+  - `npm.cmd run report`: passed, 16 unit reports generated.
+  - `npm.cmd run report:check`: passed, 16 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
 
 ## Latest Prototype v0 Result
 

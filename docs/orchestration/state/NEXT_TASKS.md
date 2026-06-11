@@ -2,33 +2,34 @@
 
 Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, legacy `docs/NEXT_TASKS.md`, or evidence files.
 
-## 1. Jaewoo Prototype v0 Hands-On Review
+## 1. Complete Prototype Data Contract
 
 - Priority: highest
-- Source: `docs/design/LETHE_UNITY_PROTOTYPE_V0_PRD.md`
-- Include: open `Assets/_dev/Scenes/Dev_Prototype_v0.unity`, press Play, move, fight, use F1-F5 debug jumps, judge camera/combat/memory/echo/ultimate feel.
-- Done: record GO / ITERATE / NO-GO and the first weakest point.
+- Source: `docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`
+- Include: fix ids and ScriptableObject contracts for 2 weapons, 8 memories, 8 echoes, 4 ultimate echoes, enemy roles, reward pools, feedback profiles.
+- Done: data assets and runtime contracts exist so adding a memory/echo does not require new branches inside `PrototypeGameManager`.
 
-## 2. Prototype Balance Pass
+## 2. Weapon Pair Implementation
 
 - Priority: highest
-- Include: player contact damage, enemy health, auto-attack cadence, Blood Blade Storm damage/heal.
-- Done: 60 seconds is tense without instant collapse or instant full-screen deletion.
+- Source: `docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`
+- Include: `Weapon_DualBlades` and `Weapon_Greatsword` runtime, weapon switching debug button, separate weapon sprites and hit profiles.
+- Done: 쌍검은 빠른 proc형, 대검은 느린 강타형으로 같은 적 무리에서 리듬 차이가 보인다.
 
-## 3. Sprite Sheet Cleanup
-
-- Priority: high
-- Include: regenerate or clean player/enemy 4-direction sheets if jaewoo says direction frames are unclear.
-- Done: idle/walk direction reads at current camera size.
-
-## 4. Echo VFX Upgrade
+## 3. Active Memories 8 L1
 
 - Priority: high
-- Include: replace line-renderer placeholder effects with sprite/pool based Kalmuri slash, blood bloom, heal thread, orbit ring.
-- Done: echo form transformation reads before text.
+- Include: implement level 1 behavior for HungryBlades, BloodReflection, ExecutionFlash, HunterOath, ShatterWave, StoppedSecond, AshenShield, OblivionBrand.
+- Done: 8개 기억이 모두 전투 중 역할이 다르게 보이고 debug panel에서 즉시 부여 가능하다.
 
-## 5. Data-Driven Runtime Refactor
+## 4. Echoes 8 +1 Prototype
 
 - Priority: high
-- Include: move prototype hard-coded branches toward `RunBuildState`, Definition assets, runtime prefabs, and trigger routing.
-- Done: adding another memory/echo does not require editing `PrototypeGameManager` core branches.
+- Include: implement +1 form for Echo_Kalmuri, Echo_Blood, Echo_Execution, Echo_Homing, Echo_Shockwave, Echo_TimeStop, Echo_AshenGuard, Echo_Brand.
+- Done: 잔향이 활성 기억의 약화판이 아니라 무기/몸에 남은 다른 형태로 읽힌다.
+
+## 5. Complete Prototype Debug / Smoke Loop
+
+- Priority: high
+- Include: debug panel for weapon switch, memory add/level, forced forget, echo +1/+3/+5, 4 ultimate conditions, 60 second smoke metrics.
+- Done: jaewoo가 60~120초 안에 대검, 8기억, 8잔향, 4궁극의 기준을 모두 확인할 수 있다.
