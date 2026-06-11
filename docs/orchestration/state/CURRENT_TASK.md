@@ -89,6 +89,25 @@ Next question for hands-on review:
 
 - Are the new shapes readable, or are they too noisy?
 
+## Latest Behavior Correction
+
+- The previous VFX visibility patch overcorrected and made memories look like character-centered clutter.
+- Corrected implementation:
+  - active memory cap: `3`.
+  - F7 showcase: Kalmuri + ShatterWave + StoppedSecond only.
+  - Kalmuri is the only player-orbit memory.
+  - ShatterWave and StoppedSecond now trigger around target/enemy positions.
+  - removed all-memory persistent orbit/preview behavior.
+- Verification:
+  - Unity compile errors `0`.
+  - scene missing references `0`.
+  - Play Mode console errors `0`.
+  - F7 smoke confirms active memory count `3` and no old Persistent/Preview VFX.
+
+Next hands-on review question:
+
+- Does F7 now feel like a real three-memory build instead of an all-effects debug mess?
+
 ## Related Files
 
 - `docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`

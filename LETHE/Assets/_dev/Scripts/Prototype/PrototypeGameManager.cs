@@ -67,6 +67,7 @@ namespace Lethe.Dev
         [SerializeField] private int choiceKillInterval = 5;
         [SerializeField] private int firstForgetKills = 26;
         [SerializeField] private int forgetKillInterval = 14;
+        [SerializeField] private int maxActiveMemorySlots = 3;
         [SerializeField] private int minActiveMemoryKillsBeforeForget = 14;
         [SerializeField] private float minActiveMemorySecondsBeforeForget = 18f;
         [SerializeField] private bool autoPrototypeLoop = true;
@@ -148,7 +149,7 @@ namespace Lethe.Dev
             GUI.Label(new Rect(18f, 58f, 430f, 34f), $"기억: {FormatState(activeMemories.Levels, true)}", labelStyle);
             GUI.Label(new Rect(18f, 92f, 430f, 34f), $"잔향: {FormatState(echoes.Levels, false)}", labelStyle);
             GUI.Label(new Rect(18f, 126f, 430f, 20f), $"다음 망각: {NextForgetCandidate()}   궁극: {FormatSynergies()}", labelStyle);
-            GUI.Label(new Rect(18f, 150f, 430f, 20f), "F1 선택  F2 망각  F3 다음기억  F4 잔향+1  F5 잔향+5  F6 무기  F7 전체기억  F8 전체궁극", labelStyle);
+            GUI.Label(new Rect(18f, 150f, 430f, 20f), "F1 선택  F2 망각  F3 다음기억  F4 잔향+1  F5 잔향+5  F6 무기  F7 3기억  F8 전체궁극", labelStyle);
 
             var y = 176f;
             if (GUI.Button(new Rect(18f, y, 62f, 28f), "무기", buttonStyle)) ToggleWeapon();
@@ -283,7 +284,7 @@ namespace Lethe.Dev
                 switch (spec.Kind)
                 {
                     case PrototypeEffectKind.Kalmuri:
-                        SpawnSpriteVfx("ActiveKalmuriCut", hungryBladesActiveSprite, enemy.transform.position, 0.3f + level * 0.03f, 0.25f, spec.Color, 220f, 38);
+                        SpawnSpriteVfx("ActiveKalmuriContactCut", hungryBladesActiveSprite, enemy.transform.position, 0.3f + level * 0.03f, 0.25f, spec.Color, 220f, 38);
                         enemy.Health.ApplyDamage((heavy ? 1.05f : 0.7f) * level, gameObject);
                         break;
                     case PrototypeEffectKind.Blood:
@@ -312,7 +313,7 @@ namespace Lethe.Dev
                         if (playerHealth < playerMaxHealth * 0.65f)
                         {
                             HealPlayer(0.22f * level);
-                            SpawnSpriteVfx("ActiveAshenGuard", bloodBloomSprite, player.transform.position, 0.22f + level * 0.02f, 0.26f, spec.Color, 40f, 17);
+                            SpawnRingVfx("ActiveAshenGuardLowHpShield", player.transform.position, 0.46f + level * 0.03f, spec.Color, 0.18f, 0.028f, 14);
                         }
                         break;
                     case PrototypeEffectKind.Brand:
@@ -473,7 +474,7 @@ namespace Lethe.Dev
             {
                 case PrototypeEffectKind.Kalmuri:
                     SpawnKalmuriOrbit(center, level, spec.Color);
-                    DamageClosestEnemiesInRadius(center, activeKalmuriRadius + level * 0.08f, Mathf.Clamp(2 + level / 2, 2, 4), 2.4f + level, "ActiveKalmuriOrbitCut", spec.Color, 0.3f, hungryBladesActiveSprite);
+                    DamageClosestEnemiesInRadius(center, activeKalmuriRadius + level * 0.1f, Mathf.Clamp(1 + level, 2, 6), 1.8f + level * 0.85f, "ActiveKalmuriOrbitCut", spec.Color, 0.3f + level * 0.08f, hungryBladesActiveSprite);
                     break;
                 case PrototypeEffectKind.Blood:
                     var hitCount = DamageClosestEnemiesInRadius(center, activeBloodRadius + level * 0.06f, 1 + Mathf.CeilToInt(level * 0.4f), 1.4f + level * 0.7f, "ActiveBloodPulse", spec.Color, 0.12f, bloodReflectionSprite);
@@ -484,31 +485,25 @@ namespace Lethe.Dev
                     }
                     break;
                 case PrototypeEffectKind.Execution:
-                    SpawnProceduralMemoryVfx(spec.Kind, center, spec.Color, level, "ActiveExecutionAura");
                     ExecuteWeakestEnemy(center, 2.4f + level * 0.15f, 1.8f + level * 0.8f, spec.Color);
                     break;
                 case PrototypeEffectKind.Homing:
-                    SpawnProceduralMemoryVfx(spec.Kind, center, spec.Color, level, "ActiveHunterOathAura");
                     HitNearestEnemy(center, 3.4f + level * 0.2f, 1.6f + level * 0.55f, "ActiveHunterOathPeriodic", spec.Color, kalmuriSlashSprite);
                     break;
                 case PrototypeEffectKind.Shockwave:
-                    SpawnProceduralMemoryVfx(spec.Kind, center, spec.Color, level, "ActiveShatterWaveAura");
-                    DamageEnemiesInRadius(center, 0.95f + level * 0.1f, 1.1f + level * 0.35f, "ActiveShatterWavePeriodic", spec.Color);
+                    DamageAroundNearestEnemy(center, 3.2f + level * 0.2f, 0.95f + level * 0.12f, 1.1f + level * 0.35f, "ActiveShatterWavePeriodic", spec.Color, PrototypeEffectKind.Shockwave);
                     break;
                 case PrototypeEffectKind.TimeStop:
-                    SpawnProceduralMemoryVfx(spec.Kind, center, spec.Color, level, "ActiveStoppedSecondAura");
-                    DamageEnemiesInRadius(center, 1.2f + level * 0.08f, 0.7f + level * 0.28f, "ActiveStoppedSecondField", spec.Color);
+                    DamageAroundNearestEnemy(center, 3.1f + level * 0.18f, 0.78f + level * 0.08f, 0.7f + level * 0.28f, "ActiveStoppedSecondField", spec.Color, PrototypeEffectKind.TimeStop);
                     break;
                 case PrototypeEffectKind.AshenGuard:
-                    SpawnProceduralMemoryVfx(spec.Kind, center, spec.Color, level, "ActiveAshenShieldAura");
                     if (playerHealth < playerMaxHealth)
                     {
                         HealPlayer(0.28f + level * 0.12f);
-                        SpawnSpriteVfx("ActiveAshenShieldLoop", bloodBloomSprite, center, 0.2f + level * 0.02f, 0.24f, spec.Color, 35f, 14);
+                        SpawnRingVfx("ActiveAshenShieldOnlyWhenNeeded", center, 0.44f + level * 0.035f, spec.Color, 0.22f, 0.032f, 16);
                     }
                     break;
                 case PrototypeEffectKind.Brand:
-                    SpawnProceduralMemoryVfx(spec.Kind, center, spec.Color, level, "ActiveOblivionBrandAura");
                     HitNearestEnemy(center, 2.6f + level * 0.12f, 1.2f + level * 0.42f, "ActiveOblivionBrandPulse", spec.Color, bloodReflectionSprite);
                     break;
             }
@@ -542,7 +537,14 @@ namespace Lethe.Dev
                 ShowNotice($"공명: {spec.DisplayName} +{baseLevel}");
             }
 
-            activeMemories.SetLevel(memoryId, Mathf.Max(baseLevel, activeMemories.GetLevel(memoryId) + 1));
+            var currentLevel = activeMemories.GetLevel(memoryId);
+            if (currentLevel <= 0 && activeMemories.Count >= maxActiveMemorySlots)
+            {
+                ShowNotice($"기억 슬롯 가득참 ({maxActiveMemorySlots})");
+                return;
+            }
+
+            activeMemories.SetLevel(memoryId, Mathf.Max(baseLevel, currentLevel + 1));
             ArmMemoryHuntingWindow();
         }
 
@@ -567,7 +569,6 @@ namespace Lethe.Dev
         {
             debugStateInjector.SetAllEchoes(echoes, EchoSpecs, level);
             RefreshUltimates();
-            SpawnAllEchoPreview();
             ShowNotice($"8잔향 +{level}");
         }
 
@@ -580,10 +581,26 @@ namespace Lethe.Dev
 
         private void ForceAllMemories()
         {
-            debugStateInjector.SetAllMemories(activeMemories, MemorySpecs, 1);
+            activeMemories.Clear();
+            activeMemories.SetLevel("Memory_HungryBlades", 3);
+            activeMemories.SetLevel("Memory_ShatterWave", 2);
+            activeMemories.SetLevel("Memory_StoppedSecond", 1);
             ArmMemoryHuntingWindow();
-            SpawnAllMemoryPreview();
-            ShowNotice("8기억 활성화");
+            SpawnShowcaseMemoryActivation();
+            ShowNotice("3기억 쇼케이스: 칼무리/파문/정지");
+        }
+
+        private void SpawnShowcaseMemoryActivation()
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            var center = player.transform.position;
+            SpawnKalmuriOrbit(center, 3, FindMemory("Memory_HungryBlades").Color);
+            DamageAroundNearestEnemy(center, 4.2f, 1.25f, 0f, "ShowcaseShatterWave", FindMemory("Memory_ShatterWave").Color, PrototypeEffectKind.Shockwave);
+            DamageAroundNearestEnemy(center, 4.2f, 1f, 0f, "ShowcaseStoppedSecond", FindMemory("Memory_StoppedSecond").Color, PrototypeEffectKind.TimeStop);
         }
 
         private void ToggleWeapon()
@@ -632,36 +649,22 @@ namespace Lethe.Dev
             }
         }
 
-        private void SpawnAllMemoryPreview()
+        private void DamageAroundNearestEnemy(Vector3 origin, float searchRange, float radius, float damage, string effectName, Color color, PrototypeEffectKind shape)
         {
-            if (player == null)
+            if (spawner == null)
             {
                 return;
             }
 
-            var center = player.transform.position;
-            for (var index = 0; index < MemorySpecs.Count; index += 1)
-            {
-                var spec = MemorySpecs[index];
-                var offset = Quaternion.Euler(0f, 0f, index * 45f) * Vector3.right * 1.0f;
-                SpawnProceduralMemoryVfx(spec.Kind, center + offset, spec.Color, 3, "MemoryPreview" + spec.Kind);
-            }
-        }
-
-        private void SpawnAllEchoPreview()
-        {
-            if (player == null)
+            var enemy = spawner.FindNearest(origin, searchRange);
+            if (enemy == null)
             {
                 return;
             }
 
-            var center = player.transform.position;
-            for (var index = 0; index < EchoSpecs.Count; index += 1)
-            {
-                var spec = EchoSpecs[index];
-                var offset = Quaternion.Euler(0f, 0f, index * 45f + 22.5f) * Vector3.right * 1.35f;
-                SpawnProceduralMemoryVfx(spec.Kind, center + offset, spec.Color, 5, "EchoPreview" + spec.Kind);
-            }
+            var center = enemy.transform.position;
+            SpawnProceduralMemoryVfx(shape, center, color, Mathf.Clamp(Mathf.RoundToInt(radius * 3f), 1, 5), effectName);
+            DamageEnemiesInRadius(center, radius, damage, effectName + "Damage", color);
         }
 
         private void SpawnProceduralMemoryVfx(PrototypeEffectKind kind, Vector3 center, Color color, int level, string name)
@@ -679,13 +682,13 @@ namespace Lethe.Dev
                     SpawnLineVfx(name + "ArrowHeadB", center + Vector3.right * scale, center + new Vector3(scale * 0.55f, -scale * 0.26f, 0f), color, 0.22f, 0.03f);
                     break;
                 case PrototypeEffectKind.Shockwave:
-                    SpawnRingVfx(name + "RingOuter", center, scale * 1.25f, color, 0.24f, 0.035f, 20);
-                    SpawnRingVfx(name + "RingInner", center, scale * 0.72f, new Color(color.r, color.g, color.b, color.a * 0.65f), 0.22f, 0.024f, 16);
+                    SpawnRingVfx(name + "RingOuter", center, scale * 1.25f, color, 0.55f, 0.035f, 20);
+                    SpawnRingVfx(name + "RingInner", center, scale * 0.72f, new Color(color.r, color.g, color.b, color.a * 0.65f), 0.48f, 0.024f, 16);
                     break;
                 case PrototypeEffectKind.TimeStop:
-                    SpawnRingVfx(name + "Clock", center, scale, color, 0.28f, 0.026f, 24);
-                    SpawnLineVfx(name + "HandA", center, center + Vector3.up * scale, color, 0.28f, 0.032f);
-                    SpawnLineVfx(name + "HandB", center, center + Vector3.right * (scale * 0.68f), color, 0.28f, 0.026f);
+                    SpawnRingVfx(name + "Clock", center, scale, color, 0.58f, 0.026f, 24);
+                    SpawnLineVfx(name + "HandA", center, center + Vector3.up * scale, color, 0.58f, 0.032f);
+                    SpawnLineVfx(name + "HandB", center, center + Vector3.right * (scale * 0.68f), color, 0.58f, 0.026f);
                     break;
                 case PrototypeEffectKind.AshenGuard:
                     SpawnRingVfx(name + "Shield", center, scale * 1.08f, color, 0.32f, 0.044f, 18);
@@ -848,13 +851,14 @@ namespace Lethe.Dev
 
         private void SpawnKalmuriOrbit(Vector3 center, int level, Color color)
         {
-            var count = Mathf.Clamp(2 + level / 2, 2, 4);
-            var orbitRadius = 0.72f + level * 0.035f;
+            var count = Mathf.Clamp(1 + level, 2, 6);
+            var orbitRadius = 0.66f + level * 0.06f;
+            var speed = 130f + level * 75f;
             for (var index = 0; index < count; index += 1)
             {
-                var angle = Time.time * 210f + index * (360f / count);
+                var angle = Time.time * speed + index * (360f / count);
                 var offset = Quaternion.Euler(0f, 0f, angle) * Vector3.right * orbitRadius;
-                SpawnSpriteVfx("ActiveKalmuriOrbitBlade", hungryBladesActiveSprite, center + offset, 0.18f + level * 0.018f, 0.32f, color, 260f, 18);
+                SpawnSpriteVfx("ActiveKalmuriOrbitBlade", hungryBladesActiveSprite, center + offset, 0.2f + level * 0.025f, 0.28f, color, 260f + level * 24f, 18);
             }
         }
 
@@ -866,16 +870,11 @@ namespace Lethe.Dev
             }
 
             var center = player.transform.position;
-            var memorySnapshot = new List<KeyValuePair<string, int>>(activeMemories.Levels);
-            foreach (var pair in memorySnapshot)
+            var kalmuriLevel = activeMemories.GetLevel("Memory_HungryBlades");
+            if (kalmuriLevel > 0)
             {
-                var spec = FindMemory(pair.Key);
-                var offset = Quaternion.Euler(0f, 0f, Time.time * 110f + (int)spec.Kind * 31f) * Vector3.right * (0.52f + (int)spec.Kind * 0.015f);
-                SpawnSpriteVfx("ActiveMemoryLoop", SpriteForKind(spec.Kind), center + offset, 0.12f + pair.Value * 0.012f, 0.18f, new Color(spec.Color.r, spec.Color.g, spec.Color.b, 0.26f), 120f, 12);
-                if (spec.Kind != PrototypeEffectKind.Kalmuri && spec.Kind != PrototypeEffectKind.Blood)
-                {
-                    SpawnProceduralMemoryVfx(spec.Kind, center + offset * 1.15f, new Color(spec.Color.r, spec.Color.g, spec.Color.b, 0.42f), Mathf.Max(1, pair.Value), "Persistent" + spec.Kind);
-                }
+                var spec = FindMemory("Memory_HungryBlades");
+                SpawnKalmuriOrbit(center, kalmuriLevel, new Color(spec.Color.r, spec.Color.g, spec.Color.b, 0.32f));
             }
 
             var synergySnapshot = new List<string>(ultimateService.Unlocked);

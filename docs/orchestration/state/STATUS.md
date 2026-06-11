@@ -256,6 +256,34 @@ For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` b
   - this pass intentionally makes effects very visible; density may be too high.
   - dedicated sprite/VFX art is still needed for the six non-Kalmuri/Blood families.
 
+## Latest Memory Behavior Correction
+
+- User review: making every memory orbit or preview around the character is wrong and does not reflect the HTML prototype/design.
+- Diagnosis: this was an implementation shortcut, not a source-document problem. The design already says:
+  - Kalmuri is the player-orbit blade memory.
+  - ShatterWave should create shockwaves at weapon/enemy positions.
+  - StoppedSecond should create time effects around affected enemies.
+  - Active memory builds should operate around 2~3 memories, not all 8 at once.
+- Corrected prototype behavior:
+  - `F7` now activates only 3 showcase memories: HungryBlades +3, ShatterWave +2, StoppedSecond +1.
+  - Active memory slot cap is now `3`.
+  - Removed the all-memory player-orbit preview/persistent loop behavior.
+  - Kalmuri remains the only player-orbit memory, with blade count and orbit speed scaling by level.
+  - ShatterWave now triggers wave VFX/damage around the nearest enemy.
+  - StoppedSecond now triggers clock/time VFX around the nearest enemy.
+  - AshenGuard only shows player-side shield feedback when defensive conditions matter.
+- Verification:
+  - Unity compile errors `0`.
+  - scene missing references `0`.
+  - Play Mode console errors `0`.
+  - F7 smoke: active memories `3`, `Memory_HungryBlades:3`, `Memory_ShatterWave:2`, `Memory_StoppedSecond:1`.
+  - F7 smoke VFX: Kalmuri orbit `4`, ShatterWave enemy waves `39`, StoppedSecond enemy clocks `29`.
+  - Wrong previous VFX categories: `Persistent=0`, `MemoryPreview/EchoPreview=0`.
+  - Editor state after stop: `isPlaying=false`, `isCompiling=false`, scene `Dev_Prototype_v0`, `sceneDirty=false`.
+  - `npm.cmd run report`: passed, 19 unit reports generated.
+  - `npm.cmd run report:check`: passed, 19 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+
 ## Latest Prototype v0 Result
 
 - `Assets/_dev/Scenes/Dev_Prototype_v0.unity` now exists as the main Unity prototype scene.

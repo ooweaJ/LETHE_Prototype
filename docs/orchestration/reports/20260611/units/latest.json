@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260611\\index.md",
-  "generatedAt": "2026-06-11T08:12:22.718Z",
-  "unitCount": 18,
+  "generatedAt": "2026-06-11T08:25:44.385Z",
+  "unitCount": 19,
   "latest": {
-    "title": "2026-06-11-18 - 기억/잔향 VFX 가시성 패치",
-    "number": "18",
-    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-18-기억-잔향-vfx-가시성-패치.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-18-기억-잔향-vfx-가시성-패치.html"
+    "title": "2026-06-11-19 - 기억 행동 정체성 재정렬",
+    "number": "19",
+    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-19-기억-행동-정체성-재정렬.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-19-기억-행동-정체성-재정렬.html"
   }
 }

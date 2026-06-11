@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-11-19 - 기억 행동 정체성 재정렬</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-11-19 - 기억 행동 정체성 재정렬</h1>
+      <p class="meta">Generated from 2026-06-11-19-기억-행동-정체성-재정렬.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260611/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-11-19 - 기억 행동 정체성 재정렬</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v0</code>의 F7 쇼케이스가 이제 8개 기억 전체를 캐릭터 주변에 뿌리는 상태가 아니다. 현재 F7은 HTML/기획에 맞춰 <code>굶주린 칼무리 + 파쇄의 파문 + 멈춘 초침</code> 3기억 빌드만 활성화한다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>active memory cap을 <code>3</code>으로 추가했다.</li>
+<li>F7을 <code>8기억 활성화</code>에서 <code>3기억 쇼케이스</code>로 바꿨다.</li>
+<li>칼무리만 플레이어 주변 칼날 고리를 유지한다.</li>
+<li>칼무리는 레벨에 따라 칼날 수와 회전 속도가 늘어난다.</li>
+<li>파쇄의 파문은 가장 가까운 적 주변에서 파동 VFX와 데미지가 발생한다.</li>
+<li>멈춘 초침은 가장 가까운 적 주변에서 시계/시간 VFX가 발생한다.</li>
+<li>모든 기억이 캐릭터 주변에 도는 persistent/preview VFX를 제거했다.</li>
+<li>잿빛 보호막은 방어 조건에서만 플레이어 쪽에 보이게 제한했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Scene missing references: <code>0</code>.</li>
+<li>Play Mode console errors: <code>0</code>.</li>
+<li>F7 runtime smoke:</li>
+<li>active memory count: <code>3</code>.</li>
+<li>active memories: <code>Memory_HungryBlades:3</code>, <code>Memory_ShatterWave:2</code>, <code>Memory_StoppedSecond:1</code>.</li>
+<li>Kalmuri orbit VFX: <code>4</code>.</li>
+<li>ShatterWave enemy wave VFX: <code>39</code>.</li>
+<li>StoppedSecond enemy clock VFX: <code>29</code>.</li>
+<li>old wrong Persistent VFX: <code>0</code>.</li>
+<li>old wrong MemoryPreview/EchoPreview VFX: <code>0</code>.</li>
+<li>editor state after stop: <code>Dev_Prototype_v0</code>, <code>isPlaying=false</code>, <code>isCompiling=false</code>, <code>sceneDirty=false</code>.</li>
+<li><code>npm.cmd run report</code>: 통과, 19개 unit report 생성.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 19개 unit heading 확인.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패. Project Orchestrator intake endpoint가 현재 응답하지 않는 상태로 판단.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>이 문제는 문서 문제가 아니라 구현 압축 과정의 오판이었다.</li>
+<li>모든 기억을 플레이어 주변에 보여주는 debug preview는 폐기한다.</li>
+<li>완성형 테스트도 실제 빌드 규칙인 2~3기억 중심으로 본다.</li>
+<li>기억별 VFX는 위치와 발동 조건이 먼저 맞아야 하고, 예쁜 이미지는 그 다음이다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>아직 처형/추적/혈반/잿빛/낙인까지 모두 완성도 있게 재정렬한 것은 아니다.</li>
+<li>파문/정지 VFX는 절차형 라인이라 최종 아트는 아니다.</li>
+<li>F4/F5로 8잔향을 강제하는 debug는 남아 있으므로, 사람 리뷰에서는 F7부터 먼저 보는 것이 맞다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>사용자는 &quot;모든 기억이 캐릭터 주변으로 도는 것은 말이 안 된다&quot;고 피드백했다. Codex는 이것이 문서 문제가 아니라 구현 오판이라고 판단하고, F7을 3기억 빌드로 제한했다. 칼무리는 플레이어 주변 고리, 파문과 정지는 적 주변 효과로 수정됐다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>F7 쇼케이스를 사람이 직접 확인한다.</li>
+<li>파문/정지 위치와 크기가 충분히 읽히는지 판단한다.</li>
+<li>처형/추적/혈반/잿빛/낙인도 같은 방식으로 위치/조건 기반 재정렬을 이어간다.</li>
+<li>전용 VFX 이미지는 행동 정체성 통과 후 만든다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 빠른 구현이 기획 정체성을 망가뜨리면 프로토타입 가치가 사라진다.</li>
+<li>방향: 먼저 &quot;어디서, 왜, 어떤 조건으로&quot; 효과가 발생하는지 바로잡는다.</li>
+<li>행동: 기억 슬롯, F7 쇼케이스, 칼무리/파문/정지 위치와 발동 방식을 수정했다.</li>
+<li>결과: 최소한 첫 3기억 빌드는 HTML/기획 의도에 맞는 평가 기준으로 돌아왔다.</li>
+</ul>
+  </main>
+</body>
+</html>
