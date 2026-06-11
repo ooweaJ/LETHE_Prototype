@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260611\\index.md",
-  "generatedAt": "2026-06-11T01:10:57.005Z",
-  "unitCount": 9,
+  "generatedAt": "2026-06-11T02:40:22.600Z",
+  "unitCount": 10,
   "latest": {
-    "title": "2026-06-11-09 - Unity Prototype v0 M1-M5 플레이 루프",
-    "number": "09",
-    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-09-unity-prototype-v0-m1-m5-플레이-루프.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-09-unity-prototype-v0-m1-m5-플레이-루프.html"
+    "title": "2026-06-11-10 - Unity 캐릭터와 무기 시각 분리",
+    "number": "10",
+    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-10-unity-캐릭터와-무기-시각-분리.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-10-unity-캐릭터와-무기-시각-분리.html"
   }
 }

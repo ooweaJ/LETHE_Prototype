@@ -543,3 +543,60 @@ Unity Prototype v0는 M1~M5 루프가 들어간 상태다. 다음 판단은 jaew
 - 방향: 먼저 게임 루프가 도는 Unity 프로토타입을 만든다.
 - 행동: 스프라이트, 씬, 전투, 기억/망각/잔향/궁극 루프를 한 번에 연결하고 MCP로 검증했다.
 - 결과: HTML보다 낮은 테스트 장치가 아니라, 실제 플레이 리뷰 가능한 Unity prototype baseline이 생겼다.
+
+# 2026-06-11-10 - Unity 캐릭터와 무기 시각 분리
+
+## 1. 현재 빌드 상태
+
+`Dev_Prototype_v0`의 플레이어가 더 이상 큰 검처럼 보이지 않는다. 캐릭터는 무기 없는 4방향 body sheet를 쓰고, 쌍검은 `WeaponAnchor` 아래 별도 작은 sprite로 붙는다.
+
+## 2. 오늘 바뀐 것
+
+- 무기 없는 player 4방향 idle/walk sprite sheet를 새로 생성했다.
+- player chroma source와 runtime alpha PNG를 교체했다.
+- player sheet import 기준을 `PPU 115`로 조정했다.
+- dual blade sprite import 기준을 `PPU 800`으로 조정했다.
+- player prefab과 scene의 `Blade_Left`, `Blade_Right` 크기를 `0.25`로 줄였다.
+- evidence screenshot을 갱신했다:
+  - `LETHE/Assets/_dev/Evidence/player_weapon_separated_game.png`
+  - `LETHE/Assets/_dev/Evidence/player_weapon_separated_clean.png`
+
+## 3. 테스트 결과와 근거
+
+- runtime player PNG alpha 확인:
+  - corner alpha `0`
+  - subject sample alpha `255`
+- Unity compile errors: `0`.
+- Scene missing references: `0`.
+- Play Mode console errors: `0`.
+- editor state after stop: `sceneDirty=false`.
+- `npm.cmd run report`: 통과, 10개 unit report 생성.
+- `npm.cmd run report:check`: 통과, 10개 unit heading 확인.
+- `npm.cmd run report:orchestrator:unit:dry`: `fetch failed`로 실패. Project Orchestrator intake endpoint가 현재 응답하지 않는 상태로 판단.
+
+## 4. 결정한 것
+
+- 캐릭터 sheet에는 무기를 굽지 않는다.
+- 무기는 `WeaponAnchor` 자식 sprite로 붙인다.
+- 공격의 강함은 캐릭터 그림 크기가 아니라 slash/echo VFX로 표현한다.
+
+## 5. 문제 또는 리스크
+
+- 현재 쌍검 sprite는 아직 prototype 장비 이미지라 더 작거나 더 단순한 아이콘형 검으로 바꿀 여지가 있다.
+- 근접 적이 겹치면 player가 가려지므로 다음 튜닝에서 enemy collision/spacing도 봐야 한다.
+
+## 6. GPT/Claude 인계 요약
+
+플레이어가 검처럼 보이던 원인은 player sheet에 큰 검이 이미 들어가 있었고 별도 weapon sprite도 동시에 붙어 있었기 때문이다. 이제 player body와 weapon visual이 분리되었고, 다음 리뷰는 크기/가독성만 보면 된다.
+
+## 7. 다음 Codex 작업
+
+- jaewoo가 화면을 보고 검 크기가 아직 크면 weapon scale을 `0.20~0.23`으로 더 줄인다.
+- 공격 판독은 weapon sprite가 아니라 swing arc와 Kalmuri/Blood VFX로 강화한다.
+
+## 8. 포트폴리오 메모
+
+- 문제: 생성 리소스가 구조와 맞지 않으면 캐릭터가 무기처럼 보인다.
+- 방향: 캐릭터, 장비, 공격 이펙트를 분리해서 읽히게 만든다.
+- 행동: weaponless character sheet를 다시 만들고 Unity prefab/scene scale을 조정했다.
+- 결과: 플레이어 body와 쌍검 장비가 분리된 prototype 기준이 생겼다.

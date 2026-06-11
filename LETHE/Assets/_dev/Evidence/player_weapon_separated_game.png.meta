@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 691d8a000ca16fc41b69e21c808eb5e9
+guid: 498cee89225b44e4eae806304cb1eb9e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5411456860533168679
-    second: spr_weapon_dual_blade_left_01_0
+      213: -3009263009463360724
+    second: player_weapon_separated_game_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -24,7 +24,7 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
     flipGreenChannel: 0
-  isReadable: 1
+  isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -46,12 +46,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 800
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: spr_weapon_dual_blade_left_01_0
+      name: player_weapon_separated_game_0
       rect:
         serializedVersion: 2
-        x: 283
-        y: 235
-        width: 745
-        height: 838
+        x: 0
+        y: 0
+        width: 1810
+        height: 872
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9d5e19e08a4a6e4b0800000000000000
-      internalID: -5411456860533168679
+      spriteID: c23a6359c33fc36d0800000000000000
+      internalID: -3009263009463360724
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      spr_weapon_dual_blade_left_01_0: -5411456860533168679
+      player_weapon_separated_game_0: -3009263009463360724
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

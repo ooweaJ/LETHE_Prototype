@@ -2697,7 +2697,7 @@ MonoBehaviour:
   spriteSheet: {fileID: 2800000, guid: dea559106af34cb4a9aa1e2484114b35, type: 3}
   columns: 4
   rows: 8
-  pixelsPerUnit: 128
+  pixelsPerUnit: 115
   idleFps: 4
   walkFps: 8
 --- !u!212 &235666586
@@ -9379,9 +9379,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1191535831}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.15643448, w: 0.98768836}
-  m_LocalPosition: {x: -0.14, y: 0.02, z: 0}
-  m_LocalScale: {x: 0.72, y: 0.72, z: 0.72}
+  m_LocalRotation: {x: 0, y: 0, z: 0.2079117, w: 0.9781476}
+  m_LocalPosition: {x: -0.035, y: 0.012, z: 0}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1741077886}
@@ -10202,9 +10202,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04d00a8bc6fa608499db7c48be7f1f32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Lethe.Dev.PrototypeWeaponController
-  attackInterval: 0.28
+  attackInterval: 0.24
   attackRange: 1.7
-  baseDamage: 9
+  baseDamage: 12
   swingDuration: 0.1
   swingDegrees: 60
   visualRoot: {fileID: 1741077886}
@@ -10217,7 +10217,7 @@ Transform:
   m_GameObject: {fileID: 1290602246}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.2, z: 0}
+  m_LocalPosition: {x: 0.18, y: -0.08, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10795,9 +10795,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1372749525}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.15643448, w: 0.98768836}
-  m_LocalPosition: {x: 0.14, y: -0.02, z: 0}
-  m_LocalScale: {x: 0.72, y: 0.72, z: 0.72}
+  m_LocalRotation: {x: 0, y: 0, z: -0.2079117, w: 0.9781476}
+  m_LocalPosition: {x: 0.045, y: -0.012, z: 0}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1741077886}
@@ -14108,7 +14108,7 @@ Transform:
   m_GameObject: {fileID: 1741077885}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

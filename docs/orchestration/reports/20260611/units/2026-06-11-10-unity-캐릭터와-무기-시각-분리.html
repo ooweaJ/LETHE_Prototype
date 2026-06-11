@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-11-10 - Unity 캐릭터와 무기 시각 분리</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-11-10 - Unity 캐릭터와 무기 시각 분리</h1>
+      <p class="meta">Generated from 2026-06-11-10-unity-캐릭터와-무기-시각-분리.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260611/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-11-10 - Unity 캐릭터와 무기 시각 분리</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v0</code>의 플레이어가 더 이상 큰 검처럼 보이지 않는다. 캐릭터는 무기 없는 4방향 body sheet를 쓰고, 쌍검은 <code>WeaponAnchor</code> 아래 별도 작은 sprite로 붙는다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>무기 없는 player 4방향 idle/walk sprite sheet를 새로 생성했다.</li>
+<li>player chroma source와 runtime alpha PNG를 교체했다.</li>
+<li>player sheet import 기준을 <code>PPU 115</code>로 조정했다.</li>
+<li>dual blade sprite import 기준을 <code>PPU 800</code>으로 조정했다.</li>
+<li>player prefab과 scene의 <code>Blade_Left</code>, <code>Blade_Right</code> 크기를 <code>0.25</code>로 줄였다.</li>
+<li>evidence screenshot을 갱신했다:</li>
+<li><code>LETHE/Assets/_dev/Evidence/player_weapon_separated_game.png</code></li>
+<li><code>LETHE/Assets/_dev/Evidence/player_weapon_separated_clean.png</code></li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>runtime player PNG alpha 확인:</li>
+<li>corner alpha <code>0</code></li>
+<li>subject sample alpha <code>255</code></li>
+<li>Unity compile errors: <code>0</code>.</li>
+<li>Scene missing references: <code>0</code>.</li>
+<li>Play Mode console errors: <code>0</code>.</li>
+<li>editor state after stop: <code>sceneDirty=false</code>.</li>
+<li><code>npm.cmd run report</code>: 통과, 10개 unit report 생성.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 10개 unit heading 확인.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패. Project Orchestrator intake endpoint가 현재 응답하지 않는 상태로 판단.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>캐릭터 sheet에는 무기를 굽지 않는다.</li>
+<li>무기는 <code>WeaponAnchor</code> 자식 sprite로 붙인다.</li>
+<li>공격의 강함은 캐릭터 그림 크기가 아니라 slash/echo VFX로 표현한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>현재 쌍검 sprite는 아직 prototype 장비 이미지라 더 작거나 더 단순한 아이콘형 검으로 바꿀 여지가 있다.</li>
+<li>근접 적이 겹치면 player가 가려지므로 다음 튜닝에서 enemy collision/spacing도 봐야 한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>플레이어가 검처럼 보이던 원인은 player sheet에 큰 검이 이미 들어가 있었고 별도 weapon sprite도 동시에 붙어 있었기 때문이다. 이제 player body와 weapon visual이 분리되었고, 다음 리뷰는 크기/가독성만 보면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo가 화면을 보고 검 크기가 아직 크면 weapon scale을 <code>0.20~0.23</code>으로 더 줄인다.</li>
+<li>공격 판독은 weapon sprite가 아니라 swing arc와 Kalmuri/Blood VFX로 강화한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 생성 리소스가 구조와 맞지 않으면 캐릭터가 무기처럼 보인다.</li>
+<li>방향: 캐릭터, 장비, 공격 이펙트를 분리해서 읽히게 만든다.</li>
+<li>행동: weaponless character sheet를 다시 만들고 Unity prefab/scene scale을 조정했다.</li>
+<li>결과: 플레이어 body와 쌍검 장비가 분리된 prototype 기준이 생겼다.</li>
+</ul>
+  </main>
+</body>
+</html>

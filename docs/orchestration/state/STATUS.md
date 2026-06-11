@@ -184,3 +184,14 @@ For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` b
   - Combat smoke: enemies forced near player, 8 seconds produced `kills=7`.
   - M5 smoke: forced resonance/echo +5 unlocked ultimate; 5 seconds produced `kills=148`, `playerHp=100`, console errors `0`.
 - Known tuning risk: Blood Blade Storm is intentionally overpowered for first hype verification and needs a balance pass after jaewoo review.
+
+## Latest Visual Fix
+
+- Fixed the player-looking-like-a-sword issue.
+- Replaced the player sheet with a weaponless 4-direction idle/walk body sheet.
+- Kept weapons as separate `WeaponAnchor/BladeVisuals` children.
+- Adjusted player PPU to `115`, blade sprite PPU to `800`, and blade scene/prefab scale to `0.25`.
+- Evidence:
+  - `LETHE/Assets/_dev/Evidence/player_weapon_separated_game.png`
+  - `LETHE/Assets/_dev/Evidence/player_weapon_separated_clean.png`
+- Verification: Unity compile errors `0`, missing references `0`, Play Mode console errors `0`, active scene `Dev_Prototype_v0`, `sceneDirty=false`.
