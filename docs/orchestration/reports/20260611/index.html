@@ -204,6 +204,13 @@
           <p>구현을 더 진행하기 전에 기존 기획/개발 문서를 하나의 실행 PRD로 통합했다. 이제 Unity 작업의 최신 기준은 LETHE_UNITY_PROTOTYPE_V0_PRD.md다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-11-09</span>
+          <h2><a href="#unit-2026-06-11-09" data-unit-link="unit-2026-06-11-09">Unity Prototype v0 M1-M5 플레이 루프</a></h2>
+          <p>Dev_EchoSlice가 아니라 Assets/_dev/Scenes/Dev_Prototype_v0.unity가 새 메인 프로토타입 씬이다. 이제 이동, 적 추격, 자동 쌍검 공격, 처치, 기억 선택, 망각, 잔향, 공명, 피의 칼폭풍까지 한 씬에서 확인할 수 있다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -680,6 +687,60 @@
 <li>방향: 상위 PRD를 만들어 구현 순서와 수락 기준을 고정한다.</li>
 <li>행동: 기존 문서들을 하나의 Unity Prototype v0 PRD로 통합했다.</li>
 <li>결과: 다음 구현이 M1부터 M5까지 추적 가능한 milestone 구조로 정리됐다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-11-09" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-11-09 - Unity Prototype v0 M1-M5 플레이 루프</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_EchoSlice</code>가 아니라 <code>Assets/_dev/Scenes/Dev_Prototype_v0.unity</code>가 새 메인 프로토타입 씬이다. 이제 이동, 적 추격, 자동 쌍검 공격, 처치, 기억 선택, 망각, 잔향, 공명, 피의 칼폭풍까지 한 씬에서 확인할 수 있다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>플레이어/적 4방향 idle/walk용 스프라이트 시트를 새로 만들고 Unity에 넣었다.</li>
+<li><code>Assets/_dev/Scripts/Prototype</code> 런타임 스크립트를 추가했다.</li>
+<li><code>Dev_Prototype_v0.unity</code> 씬을 만들었다.</li>
+<li>플레이어, 적, arena, camera, HUD, services 구조를 구성했다.</li>
+<li>플레이어/적 prototype prefab과 첫 무기/기억/잔향/궁극 데이터 에셋을 만들었다.</li>
+<li>F1~F5 디버그 점프를 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>Unity compile errors: <code>0</code>.</li>
+<li>Scene missing references: <code>0</code>.</li>
+<li>Play Mode console errors: <code>0</code>.</li>
+<li>런타임 생성 확인: player/manager 존재, enemy <code>7</code>.</li>
+<li>전투 smoke: 적을 플레이어 근처로 강제 배치 후 8초 동안 <code>kills=7</code>, <code>playerHp=26.5</code>.</li>
+<li>M5 상태 smoke: 활성 기억 <code>Memory_HungryBlades:3</code>, <code>Memory_BloodReflection:2</code>; 잔향 <code>Echo_Kalmuri:5</code>, <code>Echo_Blood:5</code>; ultimate <code>true</code>.</li>
+<li>궁극 smoke: 피의 칼폭풍 상태에서 5초 후 <code>kills=148</code>, <code>playerHp=100</code>, console errors <code>0</code>.</li>
+<li><code>npm.cmd run report</code>: 통과, 9개 unit report 생성.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 9개 unit heading 확인.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패. Project Orchestrator intake endpoint가 현재 응답하지 않는 상태로 판단.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li><code>Dev_Prototype_v0</code>를 jaewoo 리뷰 대상 씬으로 둔다.</li>
+<li><code>_dev</code>에서 계속 검증하고, 아직 <code>Assets/Lethe</code>로 승격하지 않는다.</li>
+<li>피의 칼폭풍은 첫 뽕맛 검증을 위해 강하게 둔 상태이며, 다음 단계에서 밸런스를 잡는다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>궁극 처치 속도가 과하다.</li>
+<li>VFX 상당수는 아직 line-renderer placeholder다.</li>
+<li>생성 스프라이트는 프로토타입 판독용이며, 방향/프레임 가독성이 부족하면 다음 pass에서 재생성해야 한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Unity Prototype v0는 M1~M5 루프가 들어간 상태다. 다음 판단은 jaewoo가 직접 Play Mode에서 카메라/스케일/전투 압박/기억 선택/망각/잔향/궁극 체감을 확인하고 GO 또는 ITERATE를 주는 것이다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo 리뷰 결과를 받아 첫 튜닝 지점을 고른다.</li>
+<li>유력 후보는 camera/framing, contact damage, enemy health, Blood Blade Storm damage/heal, sprite readability, line-renderer VFX 교체다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 작은 echo slice는 빨랐지만 게임 검증에는 부족했다.</li>
+<li>방향: 먼저 게임 루프가 도는 Unity 프로토타입을 만든다.</li>
+<li>행동: 스프라이트, 씬, 전투, 기억/망각/잔향/궁극 루프를 한 번에 연결하고 MCP로 검증했다.</li>
+<li>결과: HTML보다 낮은 테스트 장치가 아니라, 실제 플레이 리뷰 가능한 Unity prototype baseline이 생겼다.</li>
 </ul>
     </article>
       </div>

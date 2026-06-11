@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260611\\index.md",
-  "generatedAt": "2026-06-11T00:41:14.633Z",
-  "unitCount": 8,
+  "generatedAt": "2026-06-11T01:10:57.005Z",
+  "unitCount": 9,
   "latest": {
-    "title": "2026-06-11-08 - Unity Prototype v0 PRD 통합",
-    "number": "08",
-    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-08-unity-prototype-v0-prd-통합.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-08-unity-prototype-v0-prd-통합.html"
+    "title": "2026-06-11-09 - Unity Prototype v0 M1-M5 플레이 루프",
+    "number": "09",
+    "markdownPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-09-unity-prototype-v0-m1-m5-플레이-루프.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260611\\units\\2026-06-11-09-unity-prototype-v0-m1-m5-플레이-루프.html"
   }
 }

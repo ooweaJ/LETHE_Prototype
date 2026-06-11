@@ -2,33 +2,33 @@
 
 Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, legacy `docs/NEXT_TASKS.md`, or evidence files.
 
-## 1. M1 Prototype Scene Skeleton
+## 1. Jaewoo Prototype v0 Hands-On Review
 
 - Priority: highest
 - Source: `docs/design/LETHE_UNITY_PROTOTYPE_V0_PRD.md`
-- Include: new scene, root hierarchy, camera, arena, player, enemy spawner, services, HUD root.
-- Done: Play Mode opens into a real prototype scene, not the old echo slice.
+- Include: open `Assets/_dev/Scenes/Dev_Prototype_v0.unity`, press Play, move, fight, use F1-F5 debug jumps, judge camera/combat/memory/echo/ultimate feel.
+- Done: record GO / ITERATE / NO-GO and the first weakest point.
 
-## 2. M2 Combat Loop
+## 2. Prototype Balance Pass
 
 - Priority: highest
-- Include: player movement, nearest enemy targeting, weapon hit area, enemy HP/death/respawn, player HP/contact damage.
-- Done: 30 seconds of movement/attack/pain/death/restart can be played.
+- Include: player contact damage, enemy health, auto-attack cadence, Blood Blade Storm damage/heal.
+- Done: 60 seconds is tense without instant collapse or instant full-screen deletion.
 
-## 3. M3 Memory Selection
-
-- Priority: high
-- Include: kill/time based selection, Kalmuri/Blood memory choices, level up, HUD update.
-- Done: growth happens through gameplay, not debug keys.
-
-## 4. M4 Forgetting / Echo
+## 3. Sprite Sheet Cleanup
 
 - Priority: high
-- Include: highest-level memory forget, echo creation, echo level +1~+5, Kalmuri/Blood echo combat effects.
-- Done: losing a memory changes weapon behavior through a real echo system.
+- Include: regenerate or clean player/enemy 4-direction sheets if jaewoo says direction frames are unclear.
+- Done: idle/walk direction reads at current camera size.
 
-## 5. M5 Resonance / Ultimate
+## 4. Echo VFX Upgrade
 
 - Priority: high
-- Include: resonance reacquire bonus, Kalmuri +5 and Blood +5 condition, Blood Blade Storm unlock/activation.
-- Done: LETHE's core loop has a prototype end goal.
+- Include: replace line-renderer placeholder effects with sprite/pool based Kalmuri slash, blood bloom, heal thread, orbit ring.
+- Done: echo form transformation reads before text.
+
+## 5. Data-Driven Runtime Refactor
+
+- Priority: high
+- Include: move prototype hard-coded branches toward `RunBuildState`, Definition assets, runtime prefabs, and trigger routing.
+- Done: adding another memory/echo does not require editing `PrototypeGameManager` core branches.

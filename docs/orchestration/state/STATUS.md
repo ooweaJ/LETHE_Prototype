@@ -132,7 +132,16 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Implement PRD milestone M1: create `Assets/_dev/Scenes/Dev_Prototype_v0.unity`, build the root scene structure, camera, arena, player, enemy spawner, services, HUD root, and verify Play Mode opens into the new prototype scene.
+Run a jaewoo hands-on review of `Assets/_dev/Scenes/Dev_Prototype_v0.unity`.
+
+Focus the review on:
+
+- 4-direction player/enemy animation readability.
+- Camera scale and arena framing.
+- Whether the auto dual-blade combat loop feels like a game rather than a debug toy.
+- Whether memory choice, highest-level forgetting, echo +5, resonance, and Blood Blade Storm are understandable enough for the next tuning pass.
+
+Do not promote `_dev` assets to `Assets/Lethe` until jaewoo explicitly returns `GO`.
 
 Do not promote `_dev` assets to `Assets/Lethe` until jaewoo explicitly returns `GO`.
 
@@ -144,3 +153,34 @@ For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` b
 - Detailed legacy status archive: `docs/CODEX_STATUS.md`
 - Detailed legacy task archive: `docs/NEXT_TASKS.md`
 - Current orchestration task: `docs/orchestration/state/CURRENT_TASK.md`
+
+## Latest Prototype v0 Result
+
+- `Assets/_dev/Scenes/Dev_Prototype_v0.unity` now exists as the main Unity prototype scene.
+- Generated and imported new 4-direction player/enemy sprite sheets:
+  - `Assets/_dev/Art/Sprites/Characters/Player/sheet_player_4dir.png`
+  - `Assets/_dev/Art/Sprites/Enemies/Chaser/sheet_enemy_chaser_4dir.png`
+- Added runtime prototype scripts under `Assets/_dev/Scripts/Prototype/`.
+- Added prototype prefabs:
+  - `Assets/_dev/Prefabs/Characters/Prefab_Player_Prototype.prefab`
+  - `Assets/_dev/Prefabs/Enemies/Prefab_Enemy_MeleeChaser.prefab`
+- Added first data assets:
+  - `Weapon_DualBlades`
+  - `Memory_HungryBlades`
+  - `Memory_BloodReflection`
+  - `Echo_Kalmuri`
+  - `Echo_Blood`
+  - `Synergy_BloodBladeStorm`
+- M1-M5 prototype loop exists in `_dev`:
+  - M1 scene skeleton, camera follow, arena, sprite animation.
+  - M2 7 enemy spawn/chase, auto targeting, dual-blade hits, HP/death/respawn.
+  - M3 kill-based memory choice UI.
+  - M4 highest-level forgetting and Kalmuri/Blood echo combat effects.
+  - M5 resonance reacquire bonus and Blood Blade Storm unlock/effect.
+- Verification:
+  - Unity compilation errors: `0`.
+  - Scene missing references: `0`.
+  - Console errors during Play Mode smoke: `0`.
+  - Combat smoke: enemies forced near player, 8 seconds produced `kills=7`.
+  - M5 smoke: forced resonance/echo +5 unlocked ultimate; 5 seconds produced `kills=148`, `playerHp=100`, console errors `0`.
+- Known tuning risk: Blood Blade Storm is intentionally overpowered for first hype verification and needs a balance pass after jaewoo review.
