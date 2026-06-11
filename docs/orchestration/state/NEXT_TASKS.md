@@ -2,32 +2,32 @@
 
 Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, legacy `docs/NEXT_TASKS.md`, or evidence files.
 
-## 1. Phase 1 Camera/Scale/Composition
+## 1. Create `Dev_Prototype_v0`
+
+- Priority: highest
+- Include: new scene, root hierarchy, camera, arena, player, enemy spawner, services, HUD root.
+- Done: Play Mode opens into a real prototype scene, not the old echo slice.
+
+## 2. Combat Loop First
+
+- Priority: highest
+- Include: player movement, nearest enemy targeting, weapon hit area, enemy HP/death/respawn, player HP/contact damage.
+- Done: 30 seconds of movement/attack/pain/death/restart can be played.
+
+## 3. Minimal HUD
 
 - Priority: high
-- Include: camera orthographic size, follow settings, player/enemy/weapon scale, weapon anchor, sorting, arena bounds, compact debug panel.
-- Done: opening Play Mode immediately looks like a small playable arena, not a debug board.
+- Include: HP, kills, wave/time, active memory placeholder, echo placeholder.
+- Done: player state is readable without reading debug panel text.
 
-## 2. Player Survival Loop
-
-- Priority: high
-- Include: player HP, enemy contact damage, player hit flash, debug revive/reset.
-- Done: enemy chasing creates actual danger instead of only visual pressure.
-
-## 3. Nearest Enemy Targeting
+## 4. Memory Selection
 
 - Priority: high
-- Include: dual blades pick nearest living enemy within range instead of one hard-coded target.
-- Done: combat still works after adding multiple enemies.
+- Include: kill/time based selection, Kalmuri/Blood memory choices, level up, HUD update.
+- Done: growth happens through gameplay, not debug keys.
 
-## 4. Multi-Enemy Spawn Loop
+## 5. Forgetting/Echo Loop
 
 - Priority: high
-- Include: 3-8 test enemies, respawn around player, death replacement.
-- Done: the scene feels like a small arena test rather than a duel.
-
-## 5. Real Echo Damage
-
-- Priority: medium
-- Include: Kalmuri/Blood/Storm VFX create `EchoHit` events through `HitResolver`, with recursive echo blocked.
-- Done: echoes affect combat, not only visuals.
+- Include: highest-level memory forget, echo creation, echo level +1~+5, Kalmuri/Blood echo combat effects, resonance, Blood Blade Storm unlock.
+- Done: LETHE's core loop works in Unity prototype form.

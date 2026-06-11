@@ -190,6 +190,13 @@
           <p>Dev_EchoSlice.unity의 목표를 잔향/VFX 테스트에서 1분짜리 playable combat slice로 재정의했다. Phase 1로 카메라 거리, 캐릭터/몹/무기 크기, arena 경계, debug panel 크기를 정리했다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-11-07</span>
+          <h2><a href="#unit-2026-06-11-07" data-unit-link="unit-2026-06-11-07">Unity slice 폐기와 Prototype v0 계획</a></h2>
+          <p>Dev_EchoSlice는 더 이상 메인 작업 대상이 아니다. 현재 결론은 slice를 계속 고치는 것이 아니라 Dev_Prototype_v0.unity를 새로 만들어 HTML보다 나은 Unity 프로토타입을 직접 구현하는 것이다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -557,6 +564,57 @@
 <li>방향: 기능 확장 전에 화면 구도와 플레이 기준을 먼저 고정한다.</li>
 <li>행동: playable game slice 플랜을 만들고 카메라/스케일/arena/weapon anchor/debug panel을 정리했다.</li>
 <li>결과: 다음 전투 시스템을 올릴 수 있는 화면 baseline이 생겼다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-11-07" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-11-07 - Unity slice 폐기와 Prototype v0 계획</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_EchoSlice</code>는 더 이상 메인 작업 대상이 아니다. 현재 결론은 slice를 계속 고치는 것이 아니라 <code>Dev_Prototype_v0.unity</code>를 새로 만들어 HTML보다 나은 Unity 프로토타입을 직접 구현하는 것이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>LETHE_UNITY_PROTOTYPE_V0_PLAN.md</code>를 추가했다.</li>
+<li>디자인 문서 index를 갱신했다.</li>
+<li>현재 작업을 <code>Dev_Prototype_v0</code> 구현으로 바꿨다.</li>
+<li>다음 작업 목록을 새 프로토타입 기준으로 바꿨다.</li>
+<li><code>Dev_EchoSlice</code>는 reference only로 격하했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>이 유닛은 구현 검증이 아니라 전략/계획 수정이다.</li>
+<li>기존 <code>Dev_EchoSlice</code>는 삭제하지 않았다.</li>
+<li>새 메인 target은 <code>Assets/_dev/Scenes/Dev_Prototype_v0.unity</code>다.</li>
+<li><code>npm.cmd run report</code>: 통과, 7개 unit report 생성.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 7개 unit heading 확인.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패. Project Orchestrator intake endpoint가 현재 응답하지 않는 상태로 판단.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li><code>slice</code> 접근은 폐기한다.</li>
+<li><code>Dev_EchoSlice</code>를 더 polish하지 않는다.</li>
+<li>새 프로토타입은 combat loop first로 만든다.</li>
+<li>잔향은 전투 루프 위에 올라가는 시스템으로 구현한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>새 scene을 만들기 전까지 Unity playable prototype은 아직 없다.</li>
+<li>기존 slice 에셋을 참고하되, 그 구조를 그대로 복사하면 같은 문제가 반복될 수 있다.</li>
+<li>첫 구현에서 욕심내서 잔향부터 넣으면 다시 테스트 장치가 될 위험이 있다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>LETHE Unity 작업은 <code>Dev_EchoSlice</code> 중심 slice에서 <code>Dev_Prototype_v0</code> 직접 구현으로 전환한다. 첫 성공 기준은 이동/공격/적 다수/피격/처치/리스폰/HUD가 있는 30초 combat loop다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li><code>Assets/_dev/Scenes/Dev_Prototype_v0.unity</code> 생성.</li>
+<li><code>PrototypeRoot</code>, <code>Services</code>, <code>Player</code>, <code>EnemySpawner</code>, <code>Arena</code>, <code>RuntimeVFX</code>, <code>HUD</code> 구성.</li>
+<li>player movement, camera follow, 5 enemy spawn/chase, nearest targeting, player HP/contact damage, enemy death/respawn 구현.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 작은 slice는 빠르게 만들 수 있었지만 HTML보다 낮은 체감이면 의미가 없다.</li>
+<li>방향: 시스템 검증 장치가 아니라 실제 게임 프로토타입을 만든다.</li>
+<li>행동: 기존 slice 경로를 폐기하고 Prototype v0 계획과 작업 순서를 다시 정의했다.</li>
+<li>결과: 다음 작업 기준이 “잔향 보기”에서 “플레이 가능한 LETHE 프로토타입”으로 바뀌었다.</li>
 </ul>
     </article>
       </div>

@@ -2,41 +2,54 @@
 
 ## Goal
 
-Rebuild the Unity `_dev` scene foundation so `Dev_EchoSlice.unity` first reads as a playable game, not a VFX debug board.
+Stop the `Dev_EchoSlice` path and start Unity Prototype v0.1 directly.
 
 ## Why Now
 
-Jaewoo's review is that the current result is not enough: camera distance, character scale, monster presence, weapon readability, and overall game feel are not yet acceptable. That means continuing echo-system work first would be premature.
+Jaewoo's feedback is that the slice approach is below the HTML prototype and does not prove LETHE as a game. The correct next move is not more patching of `Dev_EchoSlice`; it is a new prototype scene with a real combat loop first, then memory/forgetting/echo systems on top.
 
-Current priority is Phase 1 from `docs/design/LETHE_UNITY_PLAYABLE_GAME_SLICE_PLAN.md`:
+Main target:
 
-- camera size and follow feel,
-- player/enemy/weapon scale,
-- weapon anchor and sorting,
-- arena floor and boundary readability,
-- debug panel not blocking the view,
-- Play Mode screenshot/evidence.
+```text
+Assets/_dev/Scenes/Dev_Prototype_v0.unity
+```
+
+Reference only:
+
+```text
+Assets/_dev/Scenes/Dev_EchoSlice.unity
+```
 
 ## Done Criteria
 
-- `Main Camera` orthographic size and follow settings are tuned for readable 16:9 gameplay.
-- Player/enemy/weapon scales are consistent.
-- `Weapon_DualBlades_Runtime` clearly reads as held by the player.
-- Arena floor and bounds give spatial context.
-- Debug panel is compact and does not dominate the screen.
-- Play Mode verification confirms scene has compile error 0, console error 0, missing reference 0.
-- A screenshot/evidence file is captured or documented if MCP screenshot is available.
-- Report/devlog/status are updated.
+Phase A/B first implementation should produce:
+
+- `Dev_Prototype_v0.unity` exists.
+- Scene root structure exists:
+  - `PrototypeRoot`
+  - `Services`
+  - `Player`
+  - `EnemySpawner`
+  - `Arena`
+  - `RuntimeVFX`
+  - `HUD`
+- Player moves with WASD/arrow keys.
+- Camera follows player.
+- Arena bounds are readable.
+- At least 5 enemies spawn/chase.
+- Player can attack nearest enemies.
+- Enemies have HP/death/respawn.
+- Player has HP/contact damage.
+- Minimal HUD shows HP, kills, active memory/echo placeholders.
+- Unity compile error 0, console error 0, missing reference 0.
 
 ## Related Files
 
-- `docs/design/LETHE_UNITY_PLAYABLE_GAME_SLICE_PLAN.md`
-- `LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity`
-- `LETHE/Assets/_dev/Scripts/Camera/DevCameraFollow2D.cs`
-- `LETHE/Assets/_dev/Scripts/Player/DevPlayerController2D.cs`
-- `LETHE/Assets/_dev/Scripts/Combat/Enemies/DevEnemyChaseController.cs`
-- `LETHE/Assets/_dev/Scripts/Combat/Weapons/DualBladesController.cs`
-- `LETHE/Assets/_dev/Scripts/Debug/DevEchoSliceDebugController.cs`
+- `docs/design/LETHE_UNITY_PROTOTYPE_V0_PLAN.md`
+- `LETHE/Assets/_dev/Scenes/Dev_Prototype_v0.unity`
+- `LETHE/Assets/_dev/Scripts/**`
+- `LETHE/Assets/_dev/Art/Sprites/**`
+- `LETHE/Assets/_dev/Prefabs/**`
 
 ## Verification Commands
 
@@ -51,12 +64,12 @@ Unity MCP verification:
 - `unity_get_compilation_errors(port=7890, severity="all")`
 - `unity_search_missing_references(port=7890, scope="scene")`
 - `unity_console_log(port=7890, type="error")`
-- Play Mode composition check for camera/player/enemy/weapon.
+- Play Mode runtime check for player movement, enemy spawn/chase, attack, player HP, enemy death/respawn.
 
 ## Open Questions
 
-- After Phase 1, should Phase 2 start with player HP/contact damage or multi-enemy spawn?
+- None blocking. Use existing placeholder sprites first; art polish comes after the prototype loop exists.
 
 ## Do Not Touch
 
-Do not add new content, shop, meta progression, multi-region structure, final boss, or promote `_dev` to `Assets/Lethe` yet.
+Do not continue polishing `Dev_EchoSlice` as the main path. Do not add shop, meta progression, multi-region structure, or final boss.

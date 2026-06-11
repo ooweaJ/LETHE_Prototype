@@ -59,6 +59,9 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 - Unity Phase 1 composition pass: camera orthographic size set to `4.15`; arena floor scale set to `13.5 x 8.2`; arena border line added; player scale set to `0.92`; enemy scale set to `0.84`; weapon scale set to `1.12`; weapon anchor/blade local transforms and sorting orders normalized; debug panel reduced.
 - Unity Phase 1 verification: compile errors `count=0`; missing references `totalFound=0`; console errors `count=0`; Play Mode composition check returned `cameraSize=4.15`, `playerScale=(0.92,0.92,1.00)`, `enemyScale=(0.84,0.84,1.00)`, `weaponParent=WeaponAnchor`, `weaponScale=(1.12,1.12,1.00)`, `arenaBounds=true`, `swingArcPresent=true`; editor stopped with `sceneDirty=false`.
 - Unity Phase 1 reporting: `npm.cmd run report` pass, `npm.cmd run report:check` pass, `npm.cmd run report:orchestrator:unit:dry` failed with `fetch failed`.
+- Unity slice approach decision: `Dev_EchoSlice` is no longer the main path. It remains only as reference until `Dev_Prototype_v0` replaces it.
+- Unity Prototype v0 plan: `docs/design/LETHE_UNITY_PROTOTYPE_V0_PLAN.md` added. The new main target is `Assets/_dev/Scenes/Dev_Prototype_v0.unity`, with a real combat loop before memory/forgetting/echo systems.
+- Unity Prototype v0 planning reporting: `npm.cmd run report` pass, `npm.cmd run report:check` pass, `npm.cmd run report:orchestrator:unit:dry` failed with `fetch failed`.
 - New forgetting model `npm run qa:balance`: `GO_BALANCE_BASELINE`, first boss clear `100%`, full clear `60%`, death `40%`, first boss TTK median `20.19s`.
 - New forgetting model `npm run balance:loop`: `GO_BALANCE_BASELINE`, first boss clear `80%`, full clear `60%`, death `40%`, first boss TTK median `23.91s`.
 - `npm run playtest:package:dry`: pass.
@@ -127,7 +130,7 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Continue Phase 2 of the playable game slice: player HP/contact damage, nearest-enemy targeting, and multi-enemy spawn. Phase 1 camera/scale/composition has been applied and verified.
+Start Unity Prototype v0.1 directly. Create `Assets/_dev/Scenes/Dev_Prototype_v0.unity`, build the root scene structure, then implement the first playable combat loop: movement, camera, arena, 5 enemies, nearest enemy targeting, enemy HP/death/respawn, player HP/contact damage, and minimal HUD.
 
 Do not promote `_dev` assets to `Assets/Lethe` until jaewoo explicitly returns `GO`.
 

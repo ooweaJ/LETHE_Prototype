@@ -32,15 +32,17 @@
    - 허접한 VFX 확인 장치를 실제로 움직이는 최소 게임 slice로 끌어올리기 위한 수리 계획.
 13. `LETHE_UNITY_PLAYABLE_GAME_SLICE_PLAN.md`
    - Unity 작업을 잔향 VFX 테스트에서 실제 playable game slice로 전환하기 위한 단계별 기준.
-14. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
+14. `LETHE_UNITY_PROTOTYPE_V0_PLAN.md`
+   - slice 접근을 폐기하고 Unity Prototype v0.1을 직접 구현하기 위한 최신 기준.
+15. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
    - Unity 첫 구현 범위와 완료 기준.
-15. `LETHE_RUN_STRUCTURE.md`
+16. `LETHE_RUN_STRUCTURE.md`
    - 한 판 흐름, 성장, 망각, 보충.
-16. `LETHE_COMBAT_DESIGN.md`
+17. `LETHE_COMBAT_DESIGN.md`
    - 무기, 적 역할, 전투 감각.
-17. `LETHE_CONTENT_TABLES.md`
+18. `LETHE_CONTENT_TABLES.md`
    - 기억, 잔향, 시너지, 적 표.
-18. `LETHE_BALANCE_BASELINE.md`
+19. `LETHE_BALANCE_BASELINE.md`
    - v0.12 기준 수치와 Unity 초기 목표.
 
 ## 문서 운영 원칙
