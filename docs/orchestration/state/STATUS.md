@@ -42,6 +42,21 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 M1/M2 loop pass:
+  - `V1GameManager` now has debug smoke entry points for M1 and M2 (`DebugRunM1Smoke`, `DebugRunM2Smoke`, `DebugSnapshot`) plus an OnGUI `M2 Loop` button and `F8` shortcut.
+  - Enemy kills now spawn collectable XP orbs instead of granting XP directly.
+  - Enemy ranged shots can damage the player through `DamagePlayer`.
+  - M2 smoke forces highest-level forgetting, result continuation, resonance reacquire, Kalmuri/Blood echoes at +5, and Blood Blade Storm activation.
+  - Fixed runtime XP collection mutation by iterating a snapshot of the XP orb list.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 0 warnings, 0 errors.
+  - `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`.
+  - Unity Play Mode M2 smoke snapshot after 120 forced frames: `scene=v1 elapsed=8.5 hp=155.2/210.0 level=2 xp=7/9 kills=10 memories=[BloodReflection:3,HungryBlades:3] echoes=[HungryBlades:5,BloodReflection:5] enemies=24 storm=True result=False refill=False death=False`.
+  - Unity console errors after smoke: `count=0`.
+  - Evidence capture saved: `LETHE/Assets/_dev/Evidence/v1_m2_smoke_20260612.png`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 2 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+
 - Unity v1 reset implementation:
   - Added `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`.
   - Added `LETHE/Assets/_dev/Scripts/PrototypeV1/Editor/V1SceneBuilder.cs`.
@@ -179,9 +194,9 @@ Continue from `Dev_Prototype_v1`, not `Dev_Prototype_v0`.
 
 Next implementation step:
 
-1. Make the v1 M1 loop more game-like: actual enemy chase/combat readability, kill pacing, XP choice feel, and camera scale.
-2. Add a debug smoke action that programmatically forces level-up, forgetting, echo +5, and Blood Blade Storm without keyboard-only review.
-3. Then advance to M2: first Gatekeeper kill -> result screen -> deficit survival -> resonance.
+1. Let jaewoo review the v1 M1/M2 compressed loop in Play Mode.
+2. If v1 direction is accepted, replace the compressed M2 shortcut with real pacing: Gatekeeper kill -> forgetting result -> deficit survival -> resonance.
+3. Then split the current v1 hard-coded catalog into data assets and prefabs only after the feel target is stable.
 
 Do not promote `_dev` assets to `Assets/Lethe` until `Dev_Prototype_v1` receives explicit `GO`.
 

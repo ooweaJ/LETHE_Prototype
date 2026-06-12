@@ -41,6 +41,8 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 - Fresh v1 scene exists under `_dev`.
 - Fresh v1 runtime code is isolated under `Scripts/PrototypeV1`.
 - Player, camera, arena, dual blades, enemy spawn, XP/level-up, HUD, highest-level forgetting, echo cap, resonance, and Blood Blade Storm debug path exist.
+- M1 and M2 debug smoke paths can be triggered without keyboard-only review.
+- M2 smoke reaches forgetting, result continuation, resonance, +5 echoes, and Blood Blade Storm.
 - Unity compile error 0.
 - Play Mode smoke creates player and enemies with no v1 runtime console exceptions.
 - v1 screenshot/capture confirms player/enemy sheets are not rendered as whole sheets.
@@ -56,6 +58,7 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 ## Verification
 
 - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 0 warnings, 0 errors.
+- latest `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 0 warnings, 0 errors.
 - `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`.
 - `unity_scene_open(path="Assets/_dev/Scenes/Dev_Prototype_v1.unity")`: success.
 - hierarchy: `V1_GameManager` has `V1GameManager`, `Main Camera` has `Camera` + `AudioListener`.
@@ -63,17 +66,21 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 - Console after Input System fix: no v1 runtime exception.
 - Game capture: sprite sheets are cropped to single character/enemy frames.
 - Scene saved: `sceneDirty=false`.
+- M2 compressed smoke after 120 forced frames: `scene=v1 elapsed=8.5 hp=155.2/210.0 level=2 xp=7/9 kills=10 memories=[BloodReflection:3,HungryBlades:3] echoes=[HungryBlades:5,BloodReflection:5] enemies=24 storm=True result=False refill=False death=False`.
+- Unity console errors after M2 smoke: `count=0`.
+- Evidence capture saved: `LETHE/Assets/_dev/Evidence/v1_m2_smoke_20260612.png`.
 
 ## Next Implementation
 
-1. Make the v1 M1 shell feel like a game: camera scale, enemy pressure, weapon interaction, XP pacing, HUD readability.
-2. Add debug smoke injection for level-up, forced forget, echo +5, Blood Blade Storm, and Gatekeeper.
-3. Implement M2 Gatekeeper -> forgetting result -> deficit survival -> resonance loop.
+1. Jaewoo Play Mode review of v1 M1/M2 compressed loop.
+2. Replace the compressed M2 shortcut with real pacing: Gatekeeper kill -> result screen -> deficit survival -> resonance.
+3. Split hard-coded v1 catalog into data assets only after the feel target is accepted.
 
 ## Open Questions
 
 - Is v1 camera/framing acceptable as the new baseline?
 - Is the M1 shell game-like enough to continue to M2?
+- Does the compressed M2 loop prove the direction, or does the real pacing need to be built before judgment?
 - Should generated sheets be sliced/imported properly next, instead of runtime-cropped in the manager?
 
 ## Do Not Touch

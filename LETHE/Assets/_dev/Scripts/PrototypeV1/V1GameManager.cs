@@ -86,6 +86,7 @@ namespace Lethe.PrototypeV1
         bool resultOverlay;
         bool refillOverlay;
         bool deathOverlay;
+        bool fastDebugRun;
         string overlayTitle = "";
         string overlayBody = "";
         V1MemoryId? lastForgotten;
@@ -117,7 +118,7 @@ namespace Lethe.PrototypeV1
         {
             if (deathOverlay)
             {
-            if (KeyDown(KeyCode.R))
+                if (KeyDown(KeyCode.R))
                 {
                     UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
                 }
@@ -131,10 +132,10 @@ namespace Lethe.PrototypeV1
             if (KeyDown(KeyCode.F5)) SetEcho(V1MemoryId.BloodReflection, 5);
             if (KeyDown(KeyCode.F6)) SpawnGatekeeper();
             if (KeyDown(KeyCode.F7)) GrantXp(nextXp);
+            if (KeyDown(KeyCode.F8)) DebugRunM2Smoke();
             if (KeyDown(KeyCode.Space) && resultOverlay)
             {
-                resultOverlay = false;
-                refillTimer = 54f;
+                ContinueAfterForgetResult();
             }
             if (KeyDown(KeyCode.Space) && refillOverlay)
             {
@@ -187,6 +188,62 @@ namespace Lethe.PrototypeV1
                 overlayTitle = "사망";
                 overlayBody = $"생존 {Mathf.FloorToInt(elapsed)}초 / 처치 {kills} / Lv.{level}\nR 키로 재시작";
             }
+        }
+
+        public string DebugSnapshot()
+        {
+            var memoryText = string.Join(",", activeMemories.Select(m => $"{m.Id}:{m.Level}"));
+            var echoText = string.Join(",", echoLevels.Where(kv => kv.Value > 0).Select(kv => $"{kv.Key}:{kv.Value}"));
+            var liveEnemies = enemies.Count(e => e != null && e.IsAlive);
+            return $"scene=v1 elapsed={elapsed:0.0} hp={playerHp:0.0}/{playerMaxHp:0.0} level={level} xp={xp}/{nextXp} kills={kills} memories=[{memoryText}] echoes=[{echoText}] enemies={liveEnemies} storm={BloodBladeStormReady} result={resultOverlay} refill={refillOverlay} death={deathOverlay}";
+        }
+
+        public void DebugRunM1Smoke()
+        {
+            pausedForChoice = false;
+            resultOverlay = false;
+            refillOverlay = false;
+            deathOverlay = false;
+            fastDebugRun = true;
+            bossTimer = 42f;
+            playerHp = Mathf.Max(playerHp, playerMaxHp * 0.65f);
+            AddMemory(V1MemoryId.HungryBlades, 3, true);
+            AddMemory(V1MemoryId.BloodReflection, 2, true);
+            for (int i = 0; i < 8; i++)
+            {
+                var angle = i * Mathf.PI * 2f / 8f;
+                var kind = i % 4 == 0 ? V1EnemyKind.DriftingEye : V1EnemyKind.Eroder;
+                SpawnEnemy(kind, player.position + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * 2.35f);
+            }
+            Log("디버그 M1: 전투 셸 압축 시작");
+        }
+
+        public void DebugRunM2Smoke()
+        {
+            pausedForChoice = false;
+            resultOverlay = false;
+            refillOverlay = false;
+            deathOverlay = false;
+            fastDebugRun = true;
+            playerHp = Mathf.Max(playerHp, playerMaxHp * 0.75f);
+            AddMemory(V1MemoryId.HungryBlades, 5, true);
+            AddMemory(V1MemoryId.BloodReflection, 3, true);
+            ForgetHighestMemory();
+            ContinueAfterForgetResult();
+            ReacquireLastForgotten();
+            SetEcho(V1MemoryId.HungryBlades, 5);
+            SetEcho(V1MemoryId.BloodReflection, 5);
+            for (int i = 0; i < 10; i++)
+            {
+                var angle = i * Mathf.PI * 2f / 10f;
+                var kind = i % 5 == 0 ? V1EnemyKind.SplitOne : V1EnemyKind.Eroder;
+                SpawnEnemy(kind, player.position + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * 2.45f);
+            }
+            SpawnEchoTransformVfx(V1MemoryId.HungryBlades);
+            overlayTitle = "M2 압축 스모크";
+            overlayBody = "망각 -> 잔향 +5 -> 공명 재획득 -> 피의 칼폭풍 활성.\nContinue 버튼 또는 Space로 전투 복귀.";
+            resultOverlay = true;
+            Log("디버그 M2: 망각/공명/궁극 루프 압축 완료");
         }
 
         void OnGUI()
@@ -397,10 +454,10 @@ namespace Lethe.PrototypeV1
                 SpawnTransientSprite("피의 칼폭풍", LoadSprite("Assets/_dev/Art/Sprites/Ultimates/spr_blood_blade_storm_blade_01.png"), pos, Quaternion.Euler(0f, 0f, angle + 90f), 0.28f, new Color(1f, 0.28f, 0.34f, 0.55f), 0.08f);
             }
 
-            foreach (var enemy in enemies.Where(e => e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 3f))
+            foreach (var enemy in enemies.Where(e => e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 3.25f))
             {
                 enemy.BloodMarked = true;
-                DealDamage(enemy, 9f * dt, "피의 칼폭풍", false);
+                DealDamage(enemy, 16f * dt, "피의 칼폭풍", false);
             }
         }
 
@@ -560,7 +617,7 @@ namespace Lethe.PrototypeV1
         void OnEnemyKilled(V1Enemy enemy)
         {
             kills++;
-            GrantXp(enemy.Kind == V1EnemyKind.Gatekeeper ? 18 : enemy.Score);
+            SpawnXpOrb(enemy.transform.position, enemy.Kind == V1EnemyKind.Gatekeeper ? 18 : enemy.Score);
             SpawnFloatingText(enemy.transform.position, $"+{enemy.Score}", Color.white);
             if (enemy.Kind == V1EnemyKind.SplitOne)
             {
@@ -589,11 +646,29 @@ namespace Lethe.PrototypeV1
 
         void UpdateXpCollection(float dt)
         {
-            foreach (var orb in xpOrbs)
+            foreach (var orb in xpOrbs.ToArray())
             {
                 if (orb == null) continue;
                 orb.Tick(player, dt);
             }
+        }
+
+        void SpawnXpOrb(Vector3 position, int amount)
+        {
+            var go = new GameObject("XP_Orb");
+            go.transform.position = position;
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = MakeCircleSprite("xp", new Color(0.25f, 0.95f, 1f), 24);
+            sr.sortingOrder = 32;
+            var orb = go.AddComponent<V1XpOrb>();
+            orb.Configure(this, amount);
+            xpOrbs.Add(orb);
+        }
+
+        public void CollectXpOrb(V1XpOrb orb, int amount)
+        {
+            xpOrbs.Remove(orb);
+            GrantXp(amount);
         }
 
         void AddMemory(V1MemoryId id, int targetLevel, bool allowUpgrade)
@@ -630,6 +705,13 @@ namespace Lethe.PrototypeV1
             Log($"{MemoryName(forgotten.Id)} 망각 -> {EchoName(forgotten.Id)} +{after}");
         }
 
+        void ContinueAfterForgetResult()
+        {
+            resultOverlay = false;
+            refillTimer = fastDebugRun ? 6f : 54f;
+            Log($"결손 생존 시작: {Mathf.CeilToInt(refillTimer)}초");
+        }
+
         void SpawnEchoTransformVfx(V1MemoryId id)
         {
             var color = id == V1MemoryId.BloodReflection ? new Color(1f, 0.1f, 0.18f, 0.95f) : new Color(0.58f, 0.95f, 1f, 0.95f);
@@ -644,6 +726,7 @@ namespace Lethe.PrototypeV1
         void ReacquireLastForgotten()
         {
             refillOverlay = false;
+            resultOverlay = false;
             if (lastForgotten.HasValue)
             {
                 AddMemory(lastForgotten.Value, 1, true);
@@ -652,6 +735,7 @@ namespace Lethe.PrototypeV1
             {
                 AddMemory(V1MemoryId.BloodReflection, 1, true);
             }
+            Log("공명 재획득 완료");
         }
 
         void SetEcho(V1MemoryId id, int levelValue)
@@ -671,11 +755,18 @@ namespace Lethe.PrototypeV1
             GUI.Label(new Rect(24, 104, 380, 24), $"잔향: {EchoText()}", smallStyle);
             GUI.Label(new Rect(24, 132, 380, 24), BloodBladeStormReady ? "궁극: 피의 칼폭풍 활성" : "궁극: 칼무리+5 / 혈반+5 필요", smallStyle);
 
-            GUI.Box(new Rect(Screen.width - 372, 12, 360, 168), "", panelStyle);
+            GUI.Box(new Rect(Screen.width - 372, 12, 360, 196), "", panelStyle);
             GUI.Label(new Rect(Screen.width - 358, 22, 340, 22), "F1 칼무리+5  F2 혈반+5  F3 망각", smallStyle);
             GUI.Label(new Rect(Screen.width - 358, 46, 340, 22), "F4 칼무리잔향+5  F5 혈반잔향+5", smallStyle);
-            GUI.Label(new Rect(Screen.width - 358, 70, 340, 22), "F6 문지기  F7 레벨업  Space 진행", smallStyle);
-            var y = 98;
+            GUI.Label(new Rect(Screen.width - 358, 70, 340, 22), "F6 문지기  F7 레벨업  F8 M2압축", smallStyle);
+            if (GUI.Button(new Rect(Screen.width - 358, 96, 106, 28), "M1 Smoke", buttonStyle)) DebugRunM1Smoke();
+            if (GUI.Button(new Rect(Screen.width - 246, 96, 106, 28), "M2 Loop", buttonStyle)) DebugRunM2Smoke();
+            if (GUI.Button(new Rect(Screen.width - 134, 96, 106, 28), "Continue", buttonStyle))
+            {
+                if (resultOverlay) ContinueAfterForgetResult();
+                else if (refillOverlay) ReacquireLastForgotten();
+            }
+            var y = 130;
             foreach (var line in combatLog.TakeLast(3))
             {
                 GUI.Label(new Rect(Screen.width - 358, y, 340, 22), line, smallStyle);
@@ -704,6 +795,14 @@ namespace Lethe.PrototypeV1
             GUI.Box(new Rect(Screen.width * 0.5f - 280, Screen.height * 0.5f - 140, 560, 280), "", panelStyle);
             GUI.Label(new Rect(Screen.width * 0.5f - 230, Screen.height * 0.5f - 108, 460, 40), overlayTitle, titleStyle);
             GUI.Label(new Rect(Screen.width * 0.5f - 230, Screen.height * 0.5f - 52, 460, 140), overlayBody, smallStyle);
+            if (resultOverlay && GUI.Button(new Rect(Screen.width * 0.5f - 110, Screen.height * 0.5f + 76, 220, 38), "결손 생존 시작", buttonStyle))
+            {
+                ContinueAfterForgetResult();
+            }
+            if (refillOverlay && GUI.Button(new Rect(Screen.width * 0.5f - 110, Screen.height * 0.5f + 76, 220, 38), "공명 재획득", buttonStyle))
+            {
+                ReacquireLastForgotten();
+            }
         }
 
         List<Choice> BuildChoices()
@@ -867,6 +966,15 @@ namespace Lethe.PrototypeV1
         {
             combatLog.Add(text);
             if (combatLog.Count > 8) combatLog.RemoveAt(0);
+        }
+
+        public void DamagePlayer(float amount, string source)
+        {
+            if (deathOverlay || amount <= 0f) return;
+            var finalDamage = amount * EarlyDamageMul();
+            playerHp -= finalDamage;
+            SpawnFloatingText(player.position + Vector3.up * 0.45f, $"-{Mathf.CeilToInt(finalDamage)}", new Color(1f, 0.45f, 0.55f));
+            Log($"{source}: 피해 {finalDamage:0.0}");
         }
 
         static Vector2 MoveInput()
@@ -1088,7 +1196,7 @@ namespace Lethe.PrototypeV1
                     shotTimer = 2.2f;
                     var go = new GameObject("EyeShot");
                     go.transform.position = transform.position;
-                    go.AddComponent<V1EnemyShot>().Configure(player, 4.8f, TouchDamage * 2.1f);
+                    go.AddComponent<V1EnemyShot>().Configure(manager, player, 4.8f, TouchDamage * 2.1f);
                 }
             }
             else
@@ -1182,13 +1290,15 @@ namespace Lethe.PrototypeV1
 
     public sealed class V1EnemyShot : MonoBehaviour
     {
+        V1GameManager manager;
         Transform target;
         Vector3 velocity;
         float damage;
         float life = 3f;
 
-        public void Configure(Transform target, float speed, float damage)
+        public void Configure(V1GameManager manager, Transform target, float speed, float damage)
         {
+            this.manager = manager;
             this.target = target;
             this.damage = damage;
             velocity = (target.position - transform.position).normalized * speed;
@@ -1204,6 +1314,7 @@ namespace Lethe.PrototypeV1
             transform.position += velocity * Time.deltaTime;
             if (target != null && Vector2.Distance(transform.position, target.position) < 0.28f)
             {
+                manager?.DamagePlayer(damage, "떠도는 눈");
                 Destroy(gameObject);
             }
             if (life <= 0f) Destroy(gameObject);
@@ -1225,6 +1336,15 @@ namespace Lethe.PrototypeV1
 
     public sealed class V1XpOrb : MonoBehaviour
     {
+        V1GameManager manager;
+        int amount;
+
+        public void Configure(V1GameManager manager, int amount)
+        {
+            this.manager = manager;
+            this.amount = amount;
+        }
+
         public void Tick(Transform player, float dt)
         {
             if (player == null) return;
@@ -1232,6 +1352,11 @@ namespace Lethe.PrototypeV1
             if (dist < 2.4f)
             {
                 transform.position = Vector3.MoveTowards(transform.position, player.position, 5f * dt);
+            }
+            if (dist < 0.28f)
+            {
+                manager?.CollectXpOrb(this, amount);
+                Destroy(gameObject);
             }
         }
     }
