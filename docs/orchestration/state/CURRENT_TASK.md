@@ -43,6 +43,7 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 - Player, camera, arena, dual blades, enemy spawn, XP/level-up, HUD, highest-level forgetting, echo cap, resonance, and Blood Blade Storm debug path exist.
 - M1 and M2 debug smoke paths can be triggered without keyboard-only review.
 - M2 smoke reaches forgetting, result continuation, resonance, +5 echoes, and Blood Blade Storm.
+- Combat feel pass responds to jaewoo feedback: smaller Kalmuri echo, clearer dual-blade swing, hit feedback, XP bar, larger 3-card level-up UI.
 - Unity compile error 0.
 - Play Mode smoke creates player and enemies with no v1 runtime console exceptions.
 - v1 screenshot/capture confirms player/enemy sheets are not rendered as whole sheets.
@@ -69,17 +70,24 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 - M2 compressed smoke after 120 forced frames: `scene=v1 elapsed=8.5 hp=155.2/210.0 level=2 xp=7/9 kills=10 memories=[BloodReflection:3,HungryBlades:3] echoes=[HungryBlades:5,BloodReflection:5] enemies=24 storm=True result=False refill=False death=False`.
 - Unity console errors after M2 smoke: `count=0`.
 - Evidence capture saved: `LETHE/Assets/_dev/Evidence/v1_m2_smoke_20260612.png`.
+- Combat feel pass:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors. Warnings are old v0/debug deprecated API usage, not v1 errors.
+  - `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`.
+  - Play Mode M1 smoke snapshot: `scene=v1 elapsed=1.2 hp=210.0/210.0 level=2 xp=1/9 kills=4 memories=[HungryBlades:3,BloodReflection:2] echoes=[] enemies=8 storm=False result=False refill=False death=False dualSlash=12 hitSpark=6 xpOrb=4`.
+  - Unity console errors: `count=0`.
+  - Evidence direct camera render: `LETHE/Assets/_dev/Evidence/v1_combat_feel_pass_20260612.png`.
 
 ## Next Implementation
 
-1. Jaewoo Play Mode review of v1 M1/M2 compressed loop.
-2. Replace the compressed M2 shortcut with real pacing: Gatekeeper kill -> result screen -> deficit survival -> resonance.
-3. Split hard-coded v1 catalog into data assets only after the feel target is accepted.
+1. Jaewoo Play Mode review of the combat feel pass: dual-blade attack, hit feedback, Kalmuri size, XP bar, and 3-card level-up UI.
+2. Discuss/decide the final basic-attack and hit-feedback model per weapon.
+3. If M1 feel is accepted, replace the compressed M2 shortcut with real pacing: Gatekeeper kill -> result screen -> deficit survival -> resonance.
 
 ## Open Questions
 
-- Is v1 camera/framing acceptable as the new baseline?
-- Is the M1 shell game-like enough to continue to M2?
+- Is the new dual-blade attack readable enough, or does it need stronger animation/sound/VFX timing?
+- Is the softened Kalmuri size acceptable in actual Play Mode?
+- What should be the shared rule for weapon-specific echo synergy between dual blades and greatsword?
 - Does the compressed M2 loop prove the direction, or does the real pacing need to be built before judgment?
 - Should generated sheets be sliced/imported properly next, instead of runtime-cropped in the manager?
 

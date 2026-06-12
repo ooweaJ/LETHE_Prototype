@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260612\\index.md",
-  "generatedAt": "2026-06-12T04:14:44.664Z",
-  "unitCount": 2,
+  "generatedAt": "2026-06-12T05:55:37.791Z",
+  "unitCount": 3,
   "latest": {
-    "title": "2026-06-12-02 - Dev_Prototype_v1 M1/M2 루프 보강",
-    "number": "02",
-    "markdownPath": "docs\\orchestration\\reports\\20260612\\units\\2026-06-12-02-dev-prototype-v1-m1-m2-루프-보강.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260612\\units\\2026-06-12-02-dev-prototype-v1-m1-m2-루프-보강.html"
+    "title": "2026-06-12-03 - Dev_Prototype_v1 M1 전투 손맛 패스",
+    "number": "03",
+    "markdownPath": "docs\\orchestration\\reports\\20260612\\units\\2026-06-12-03-dev-prototype-v1-m1-전투-손맛-패스.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260612\\units\\2026-06-12-03-dev-prototype-v1-m1-전투-손맛-패스.html"
   }
 }

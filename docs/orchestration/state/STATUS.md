@@ -32,7 +32,7 @@ Implemented in v1 now:
 
 This is an explicit scope change from the previous `Dev_Prototype_v0` tuning loop. `Weapon_Greatsword`, all 8 core memories, all 8 matching echoes, and 4 ultimate echoes are now inside the prototype validation scope. Shop, meta progression, multi-region completion, final boss, release UI/audio, Steam/build deployment, and `Assets/Lethe` promotion remain out of scope.
 
-The new design sources are `docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`, `docs/design/LETHE_FORGETTING_FEEL_SPEC.md`, `docs/design/LETHE_WEAPON_MEMORY_ECHO_SPEC.md`, `docs/design/LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`, `docs/design/LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md`, `docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md`, `docs/design/LETHE_VISUAL_ASSET_PLAN.md`, `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md`, and `docs/design/LETHE_UNITY_ASSET_BINDING_PLAN.md`. Together they define the complete prototype scope, active-to-echo form transformation, loop-safe hit event taxonomy, Unity class roles, ScriptableObjects, prefabs, first-slice acceptance criteria, the sprite/VFX concept sheet, the imagegen production plan, and the file-to-prefab-to-scene binding map for Unity MCP. The current implementation target remains `Assets/_dev/Scenes/Dev_Prototype_v0.unity`, but the work now starts with data-driven structure rather than more hard-coded combat tuning.
+The current design sources are `docs/design/README.md` and `docs/design/LETHE_DESIGN_00..07`. The deleted older `LETHE_UNITY_*`, `LETHE_WEAPON_MEMORY_*`, and scattered balance/combat docs are superseded by that set.
 
 The orchestration HTML interface now exists at `docs/orchestration/interface/index.html`, `docs/orchestration/interface/command.html`, and `docs/orchestration/interface/runbook.html`. AI-facing state lives under `docs/orchestration/state/`; human-facing reports live under `docs/orchestration/reports/YYYYMMDD/`.
 
@@ -41,6 +41,24 @@ The report/devlog/review migration is now applied physically: old `docs/reports/
 The current development-docs plugin baseline from `docs/orchestration/MIGRATION_PROMPT.md` has been applied. `AGENTS.md` now uses a `Development Docs Plugin` section, `docs/orchestration/templates/HTML_INTERFACE_TEMPLATE.md` exists, legacy review pointer READMEs are readable, `reports/index.html` is generated as a newest-first date archive, daily report pages are generated as unit-card pages, and Discord delivery is documented as Project Orchestrator first with local direct-send scripts as trusted fallback only.
 
 ## Latest Verified Result
+
+- Unity v1 combat feel pass:
+  - Jaewoo review: camera/character scale were acceptable, but Kalmuri echo felt too large, basic dual-blade attacks lacked feel, XP needed a bar, and level-up choices should be larger 3-card selections.
+  - Dual blades now spawn two offset slash arcs per attack instead of one flat arc.
+  - Weapon sprites animate briefly on swing.
+  - Weapon hits add short hitstop, light camera shake, enemy flash, hit spark, and enemy knockback/squash feedback.
+  - Kalmuri echo slash scale and alpha were reduced; active Kalmuri orbit trail was also softened.
+  - HUD now includes HP and XP bars.
+  - Level-up UI is now a large 3-card choice layout with tag, title, and description.
+  - `F8` input path was fixed in the Input System key switch.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors. Warnings are legacy v0/debug deprecated API warnings, not v1 errors.
+  - `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`.
+  - Unity Play Mode M1 smoke snapshot: `scene=v1 elapsed=1.2 hp=210.0/210.0 level=2 xp=1/9 kills=4 memories=[HungryBlades:3,BloodReflection:2] echoes=[] enemies=8 storm=False result=False refill=False death=False dualSlash=12 hitSpark=6 xpOrb=4`.
+  - Unity console errors after smoke: `count=0`.
+  - Evidence direct camera render saved: `LETHE/Assets/_dev/Evidence/v1_combat_feel_pass_20260612.png`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 3 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
 
 - Unity v1 M1/M2 loop pass:
   - `V1GameManager` now has debug smoke entry points for M1 and M2 (`DebugRunM1Smoke`, `DebugRunM2Smoke`, `DebugSnapshot`) plus an OnGUI `M2 Loop` button and `F8` shortcut.

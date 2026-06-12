@@ -38,7 +38,7 @@ namespace Lethe.PrototypeV1
     {
         const float PixelsPerUnit = 40f;
         const float PlayerSpeed = 184f / PixelsPerUnit;
-        const float TwinBladeRange = 86f / PixelsPerUnit;
+        const float TwinBladeRange = 94f / PixelsPerUnit;
         const float TwinBladeInterval = 0.36f;
         const float TwinBladeDamage = 15f;
         const float TwinBladeArcDeg = 119f;
@@ -74,10 +74,15 @@ namespace Lethe.PrototypeV1
         float playerMaxHp = 210f;
         float elapsed;
         float weaponTimer;
+        float weaponAnimTimer;
+        bool leftBladeLead = true;
+        Vector2 lastAim = Vector2.up;
         float spawnTimer;
         float bossTimer = 180f;
         float refillTimer;
         float hitstopTimer;
+        float cameraShakeTimer;
+        float cameraShakeAmount;
         int level = 1;
         int xp;
         int nextXp = 5;
@@ -175,6 +180,7 @@ namespace Lethe.PrototypeV1
 
             UpdatePlayer(dt);
             UpdateCamera();
+            UpdateWeaponVisuals(dt);
             UpdateWeapon(dt);
             UpdateActiveMemories(dt);
             UpdateEchoUltimate(dt);
@@ -306,6 +312,7 @@ namespace Lethe.PrototypeV1
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = LoadSprite(path) ?? MakeBoxSprite(name, new Color(0.86f, 0.93f, 1f), 18, 72);
             sr.sortingOrder = 30;
+            sr.transform.localRotation = Quaternion.Euler(0f, 0f, name.Contains("Left") ? 12f : -12f);
             return sr;
         }
 
@@ -320,6 +327,7 @@ namespace Lethe.PrototypeV1
             {
                 var angle = Mathf.Atan2(move.y, move.x) * Mathf.Rad2Deg;
                 weaponAnchor.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
+                lastAim = move.normalized;
                 playerSprite.flipX = move.x < -0.1f;
             }
 
@@ -338,7 +346,29 @@ namespace Lethe.PrototypeV1
         void UpdateCamera()
         {
             var target = player.position + new Vector3(0f, 0f, -10f);
+            if (cameraShakeTimer > 0f)
+            {
+                cameraShakeTimer -= Time.deltaTime;
+                target += (Vector3)(UnityEngine.Random.insideUnitCircle * cameraShakeAmount);
+                cameraShakeAmount = Mathf.Lerp(cameraShakeAmount, 0f, Time.deltaTime * 12f);
+            }
             mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, target, 0.15f);
+        }
+
+        void UpdateWeaponVisuals(float dt)
+        {
+            if (weaponAnimTimer > 0f)
+            {
+                weaponAnimTimer -= dt;
+            }
+
+            var t = Mathf.Clamp01(weaponAnimTimer / 0.16f);
+            var swing = Mathf.Sin(t * Mathf.PI);
+            var leadMul = leftBladeLead ? 1f : -1f;
+            leftBladeSprite.transform.localPosition = new Vector3(-0.22f - 0.06f * swing * leadMul, -0.05f + 0.03f * swing, 0f);
+            rightBladeSprite.transform.localPosition = new Vector3(0.22f + 0.06f * swing * leadMul, -0.05f + 0.03f * swing, 0f);
+            leftBladeSprite.transform.localRotation = Quaternion.Euler(0f, 0f, 12f - 38f * swing * leadMul);
+            rightBladeSprite.transform.localRotation = Quaternion.Euler(0f, 0f, -12f - 38f * swing * leadMul);
         }
 
         void UpdateWeapon(float dt)
@@ -347,21 +377,33 @@ namespace Lethe.PrototypeV1
             if (weaponTimer > 0f) return;
             weaponTimer = TwinBladeInterval * StatAttackIntervalMul();
 
-            var forward = weaponAnchor.up;
-            SpawnSwingArc(forward);
+            var forward = ((Vector2)weaponAnchor.up).sqrMagnitude > 0.01f ? (Vector2)weaponAnchor.up : lastAim;
+            weaponAnimTimer = 0.16f;
+            leftBladeLead = !leftBladeLead;
+            SpawnTwinBladeSwing(forward);
             var hits = enemies
                 .Where(e => e.IsAlive)
                 .Select(e => new { Enemy = e, Dir = (Vector2)(e.transform.position - player.position) })
                 .Where(x => x.Dir.magnitude <= TwinBladeRange + x.Enemy.TouchRadius)
                 .Where(x => Vector2.Angle(forward, x.Dir.normalized) <= TwinBladeArcDeg * 0.5f)
                 .OrderBy(x => x.Dir.magnitude)
-                .Take(7)
+                .Take(6)
                 .ToList();
 
+            var hitIndex = 0;
             foreach (var hit in hits)
             {
-                DealDamage(hit.Enemy, TwinBladeDamage, "절단쌍검", true);
+                var damageMul = hitIndex == 0 ? 1f : 0.72f;
+                DealDamage(hit.Enemy, TwinBladeDamage * damageMul, "절단쌍검", true, hit.Dir.normalized, hitIndex == 0 ? 1.15f : 0.72f);
                 TriggerWeaponEchoes(hit.Enemy, forward);
+                hitIndex++;
+            }
+
+            if (hits.Count > 0)
+            {
+                hitstopTimer = 0.025f;
+                cameraShakeTimer = 0.06f;
+                cameraShakeAmount = 0.025f;
             }
         }
 
@@ -391,7 +433,7 @@ namespace Lethe.PrototypeV1
             {
                 var angle = memory.VisualTimer * 160f + i * 360f / bladeCount;
                 var pos = player.position + Quaternion.Euler(0f, 0f, angle) * Vector3.right * (HungryBladesRadius + memory.Level * 0.12f);
-                SpawnTransientSprite("칼무리", LoadSprite("Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_orbit_blade_01.png"), pos, Quaternion.Euler(0f, 0f, angle + 30f), 0.22f, new Color(0.65f, 0.95f, 1f, 0.65f), 0.08f);
+                SpawnTransientSprite("칼무리", LoadSprite("Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_orbit_blade_01.png"), pos, Quaternion.Euler(0f, 0f, angle + 30f), 0.16f, new Color(0.65f, 0.95f, 1f, 0.44f), 0.045f);
             }
 
             memory.TickTimer -= dt;
@@ -419,10 +461,11 @@ namespace Lethe.PrototypeV1
                 var chance = kalmuriLevel >= 2 ? 1f : 0.30f;
                 if (UnityEngine.Random.value <= chance)
                 {
-                    var damage = TwinBladeDamage * (0.40f + kalmuriLevel * 0.08f);
-                    var pos = enemy.transform.position + (Vector3)(forward.normalized * 0.18f);
-                    SpawnTransientSprite("칼자국 잔향", LoadSprite("Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_echo_slash_01.png"), pos, Quaternion.Euler(0f, 0f, Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg), 0.62f + kalmuriLevel * 0.08f, new Color(0.75f, 0.98f, 1f, 0.9f), 0.24f);
-                    DealDamage(enemy, damage, "칼무리 잔향", true);
+                    var damage = TwinBladeDamage * (0.34f + kalmuriLevel * 0.06f);
+                    var pos = enemy.transform.position + (Vector3)(forward.normalized * 0.32f);
+                    var scale = kalmuriLevel >= 5 ? 0.42f : 0.27f + kalmuriLevel * 0.025f;
+                    SpawnTransientSprite("칼자국 잔향", LoadSprite("Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_echo_slash_01.png"), pos, Quaternion.Euler(0f, 0f, Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg), scale, new Color(0.75f, 0.98f, 1f, kalmuriLevel >= 5 ? 0.82f : 0.58f), 0.18f);
+                    DealDamage(enemy, damage, "칼무리 잔향", true, forward.normalized, 0.45f);
                     if (kalmuriLevel >= 5)
                     {
                         LaunchKalmuriBlade(enemy);
@@ -598,11 +641,17 @@ namespace Lethe.PrototypeV1
             _ => 13f
         }) / PixelsPerUnit;
 
-        void DealDamage(V1Enemy enemy, float amount, string source, bool weaponHit)
+        void DealDamage(V1Enemy enemy, float amount, string source, bool weaponHit, Vector2 hitDir = default, float knockStrength = 0f)
         {
             if (enemy == null || !enemy.IsAlive) return;
             var before = enemy.Hp;
-            enemy.TakeDamage(amount, source, weaponHit);
+            var finalAmount = weaponHit ? amount * (1f + TwinBladeStat.DamageMul) : amount;
+            enemy.TakeDamage(finalAmount, source, weaponHit);
+            SpawnHitSpark(enemy.transform.position, hitDir, weaponHit);
+            if (hitDir.sqrMagnitude > 0.01f && knockStrength > 0f)
+            {
+                enemy.ApplyHitFeedback(hitDir.normalized, knockStrength);
+            }
             if (before > 0f && !enemy.IsAlive)
             {
                 OnEnemyKilled(enemy);
@@ -748,12 +797,14 @@ namespace Lethe.PrototypeV1
 
         void DrawHud()
         {
-            GUI.Box(new Rect(12, 12, 420, 158), "", panelStyle);
+            GUI.Box(new Rect(12, 12, 432, 190), "", panelStyle);
             GUI.Label(new Rect(24, 20, 380, 28), $"LETHE v1 / {PhaseName()} / {Mathf.FloorToInt(elapsed)}s / HP {Mathf.CeilToInt(playerHp)}/{Mathf.CeilToInt(playerMaxHp)}", smallStyle);
-            GUI.Label(new Rect(24, 48, 380, 24), $"Lv.{level} XP {xp}/{nextXp} / 처치 {kills} / 활성 기억 {activeMemories.Count}/{MaxActiveMemories}", smallStyle);
-            GUI.Label(new Rect(24, 76, 380, 24), $"다음 망각 후보: {ForgetCandidateText()}", smallStyle);
-            GUI.Label(new Rect(24, 104, 380, 24), $"잔향: {EchoText()}", smallStyle);
-            GUI.Label(new Rect(24, 132, 380, 24), BloodBladeStormReady ? "궁극: 피의 칼폭풍 활성" : "궁극: 칼무리+5 / 혈반+5 필요", smallStyle);
+            DrawBar(new Rect(24, 47, 396, 12), Mathf.Clamp01(playerHp / playerMaxHp), new Color(0.18f, 0.95f, 0.62f), new Color(0.08f, 0.12f, 0.13f));
+            GUI.Label(new Rect(24, 64, 380, 24), $"Lv.{level} XP {xp}/{nextXp} / 처치 {kills} / 활성 기억 {activeMemories.Count}/{MaxActiveMemories}", smallStyle);
+            DrawBar(new Rect(24, 91, 396, 14), Mathf.Clamp01(nextXp <= 0 ? 0f : (float)xp / nextXp), new Color(0.32f, 0.88f, 1f), new Color(0.07f, 0.10f, 0.13f));
+            GUI.Label(new Rect(24, 112, 380, 24), $"다음 망각 후보: {ForgetCandidateText()}", smallStyle);
+            GUI.Label(new Rect(24, 140, 380, 24), $"잔향: {EchoText()}", smallStyle);
+            GUI.Label(new Rect(24, 166, 380, 24), BloodBladeStormReady ? "궁극: 피의 칼폭풍 활성" : "궁극: 칼무리+5 / 혈반+5 필요", smallStyle);
 
             GUI.Box(new Rect(Screen.width - 372, 12, 360, 196), "", panelStyle);
             GUI.Label(new Rect(Screen.width - 358, 22, 340, 22), "F1 칼무리+5  F2 혈반+5  F3 망각", smallStyle);
@@ -776,17 +827,29 @@ namespace Lethe.PrototypeV1
 
         void DrawLevelUpOverlay()
         {
-            GUI.Box(new Rect(Screen.width * 0.5f - 260, Screen.height * 0.5f - 150, 520, 300), "", panelStyle);
-            GUI.Label(new Rect(Screen.width * 0.5f - 220, Screen.height * 0.5f - 126, 440, 36), "레벨업", titleStyle);
+            var width = Mathf.Min(980f, Screen.width - 80f);
+            var height = Mathf.Min(430f, Screen.height - 80f);
+            var origin = new Rect(Screen.width * 0.5f - width * 0.5f, Screen.height * 0.5f - height * 0.5f, width, height);
+            GUI.Box(origin, "", panelStyle);
+            GUI.Label(new Rect(origin.x + 32, origin.y + 24, origin.width - 64, 38), $"레벨업 Lv.{level}", titleStyle);
+            GUI.Label(new Rect(origin.x + 42, origin.y + 66, origin.width - 84, 28), "하나의 기억 또는 전투 성향을 선택합니다.", smallStyle);
             var choices = BuildChoices();
+            var cardGap = 18f;
+            var cardWidth = (origin.width - 84f - cardGap * 2f) / 3f;
+            var cardHeight = origin.height - 138f;
             for (int i = 0; i < choices.Count; i++)
             {
                 var choice = choices[i];
-                if (GUI.Button(new Rect(Screen.width * 0.5f - 220, Screen.height * 0.5f - 78 + i * 74, 440, 58), choice.Label, buttonStyle))
+                var card = new Rect(origin.x + 42f + i * (cardWidth + cardGap), origin.y + 106f, cardWidth, cardHeight);
+                if (GUI.Button(card, "", buttonStyle))
                 {
                     choice.Apply();
                     pausedForChoice = false;
                 }
+                GUI.Label(new Rect(card.x + 18, card.y + 18, card.width - 36, 26), choice.Tag, smallStyle);
+                GUI.Label(new Rect(card.x + 18, card.y + 50, card.width - 36, 36), choice.Title, titleStyle);
+                GUI.Label(new Rect(card.x + 18, card.y + 104, card.width - 36, card.height - 154), choice.Body, smallStyle);
+                GUI.Label(new Rect(card.x + 18, card.yMax - 38, card.width - 36, 24), "선택", smallStyle);
             }
         }
 
@@ -810,16 +873,16 @@ namespace Lethe.PrototypeV1
             var choices = new List<Choice>();
             if (activeMemories.Count < MaxActiveMemories && !HasMemory(V1MemoryId.BloodReflection))
             {
-                choices.Add(new Choice("새 기억: 피의 반사\n타격한 적에게 혈반을 남기고, 잔향/궁극의 혈류 축을 엽니다.", () => AddMemory(V1MemoryId.BloodReflection, 1, true)));
+                choices.Add(new Choice("새 기억", "피의 반사", "타격한 적에게 혈반을 남깁니다.\n\n후반에 혈반 잔향과 피의 칼폭풍으로 이어지는 회복/출혈 축입니다.", () => AddMemory(V1MemoryId.BloodReflection, 1, true)));
             }
             var lowest = activeMemories.OrderBy(m => m.Level).FirstOrDefault(m => m.Level < MaxMemoryLevel);
             if (lowest != null)
             {
-                choices.Add(new Choice($"기억 강화: {MemoryName(lowest.Id)}\nLv.{lowest.Level} -> Lv.{lowest.Level + 1}", () => AddMemory(lowest.Id, lowest.Level + 1, true)));
+                choices.Add(new Choice("기억 강화", MemoryName(lowest.Id), $"현재 Lv.{lowest.Level} -> Lv.{lowest.Level + 1}\n\n효과의 빈도, 개수, 화면 존재감이 함께 올라갑니다.", () => AddMemory(lowest.Id, lowest.Level + 1, true)));
             }
-            choices.Add(new Choice("칼날 가속\n공격 간격 -11%, 기억 쿨감 -4%", () => { TwinBladeStat.AttackSpeed += 0.11f; Log("스탯: 칼날 가속"); }));
-            choices.Add(new Choice("검은 물의 힘\n피해 +14%", () => { TwinBladeStat.DamageMul += 0.14f; Log("스탯: 피해 증가"); }));
-            choices.Add(new Choice("가라앉지 않는 숨\n최대 HP +16, 즉시 회복 +28", () => { playerMaxHp += 16f; playerHp = Mathf.Min(playerMaxHp, playerHp + 28f); Log("스탯: 생존"); }));
+            choices.Add(new Choice("무기 성향", "칼날 가속", "절단쌍검 공격 간격 -11%.\n\n잔향 발동 기회도 늘어나 쌍검다운 연타 빌드에 어울립니다.", () => { TwinBladeStat.AttackSpeed += 0.11f; Log("스탯: 칼날 가속"); }));
+            choices.Add(new Choice("무기 성향", "검은 물의 힘", "기본공격과 무기 기반 잔향 피해 +14%.\n\n한 번의 베기가 더 선명해집니다.", () => { TwinBladeStat.DamageMul += 0.14f; Log("스탯: 피해 증가"); }));
+            choices.Add(new Choice("생존", "가라앉지 않는 숨", "최대 HP +16, 즉시 회복 +28.\n\n망각 뒤 결손 생존 구간을 버틸 여유를 만듭니다.", () => { playerMaxHp += 16f; playerHp = Mathf.Min(playerMaxHp, playerHp + 28f); Log("스탯: 생존"); }));
             return choices.Take(3).ToList();
         }
 
@@ -857,11 +920,31 @@ namespace Lethe.PrototypeV1
             return string.IsNullOrEmpty(text) ? "없음" : text;
         }
 
-        void SpawnSwingArc(Vector2 forward)
+        void SpawnTwinBladeSwing(Vector2 forward)
         {
-            var pos = player.position + (Vector3)(forward.normalized * 0.8f);
-            var rot = Quaternion.Euler(0f, 0f, Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg);
-            SpawnTransientSprite("쌍검 공격", MakeArcSprite("arc", new Color(0.68f, 0.94f, 1f, 0.9f)), pos, rot, 1.35f, new Color(0.72f, 0.95f, 1f, 0.9f), 0.12f);
+            var f = forward.normalized;
+            var side = new Vector2(-f.y, f.x);
+            var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
+            var leadSide = leftBladeLead ? -1f : 1f;
+            SpawnTransientSprite("쌍검 좌참", MakeArcSprite("dual-left", new Color(0.68f, 0.94f, 1f, 0.85f)), player.position + (Vector3)(f * 0.82f + side * 0.16f * leadSide), Quaternion.Euler(0f, 0f, baseAngle - 9f * leadSide), 0.94f, new Color(0.72f, 0.95f, 1f, 0.72f), 0.09f);
+            SpawnTransientSprite("쌍검 우참", MakeArcSprite("dual-right", new Color(0.86f, 1f, 1f, 0.72f)), player.position + (Vector3)(f * 1.02f - side * 0.16f * leadSide), Quaternion.Euler(0f, 0f, baseAngle + 18f * leadSide), 0.78f, new Color(0.86f, 1f, 1f, 0.52f), 0.13f);
+            SpawnTransientSprite("쌍검 절단점", null, player.position + (Vector3)(f * 1.18f), Quaternion.identity, 0.11f, new Color(0.9f, 1f, 1f, 0.72f), 0.10f);
+        }
+
+        void SpawnHitSpark(Vector3 pos, Vector2 dir, bool weaponHit)
+        {
+            if (!weaponHit) return;
+            var angle = dir.sqrMagnitude > 0.01f ? Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg : UnityEngine.Random.Range(0f, 360f);
+            SpawnTransientSprite("피격 섬광", MakeArcSprite("hit-spark", Color.white), pos + (Vector3)(dir.normalized * 0.16f), Quaternion.Euler(0f, 0f, angle), 0.28f, new Color(1f, 1f, 1f, 0.82f), 0.06f);
+        }
+
+        void DrawBar(Rect rect, float value, Color fill, Color background)
+        {
+            GUI.color = background;
+            GUI.DrawTexture(rect, Texture2D.whiteTexture);
+            GUI.color = fill;
+            GUI.DrawTexture(new Rect(rect.x, rect.y, rect.width * Mathf.Clamp01(value), rect.height), Texture2D.whiteTexture);
+            GUI.color = Color.white;
         }
 
         void SpawnFloatingText(Vector3 pos, string text, Color color)
@@ -1012,6 +1095,7 @@ namespace Lethe.PrototypeV1
                     KeyCode.F5 => keyboard.f5Key.wasPressedThisFrame,
                     KeyCode.F6 => keyboard.f6Key.wasPressedThisFrame,
                     KeyCode.F7 => keyboard.f7Key.wasPressedThisFrame,
+                    KeyCode.F8 => keyboard.f8Key.wasPressedThisFrame,
                     _ => false
                 };
             }
@@ -1114,11 +1198,15 @@ namespace Lethe.PrototypeV1
 
         readonly struct Choice
         {
-            public readonly string Label;
+            public readonly string Tag;
+            public readonly string Title;
+            public readonly string Body;
             public readonly Action Apply;
-            public Choice(string label, Action apply)
+            public Choice(string tag, string title, string body, Action apply)
             {
-                Label = label;
+                Tag = tag;
+                Title = title;
+                Body = body;
                 Apply = apply;
             }
         }
@@ -1151,10 +1239,13 @@ namespace Lethe.PrototypeV1
         V1GameManager manager;
         Transform player;
         SpriteRenderer sr;
+        Vector3 baseScale;
+        Vector2 knockVelocity;
         float maxHp;
         float speed;
         float shotTimer;
         float healTimer;
+        float hitSquashTimer;
 
         public V1EnemyKind Kind { get; private set; }
         public float Hp { get; private set; }
@@ -1177,12 +1268,30 @@ namespace Lethe.PrototypeV1
             TouchRadius = radius;
             sr = GetComponent<SpriteRenderer>();
             transform.localScale = Vector3.one * (kind == V1EnemyKind.Gatekeeper ? 1.35f : 0.72f);
+            baseScale = transform.localScale;
         }
 
         void Update()
         {
             if (!IsAlive || player == null) return;
             var dt = Time.deltaTime;
+            if (knockVelocity.sqrMagnitude > 0.001f)
+            {
+                transform.position += (Vector3)(knockVelocity * dt);
+                knockVelocity = Vector2.Lerp(knockVelocity, Vector2.zero, dt * 9f);
+            }
+
+            if (hitSquashTimer > 0f)
+            {
+                hitSquashTimer -= dt;
+                var pulse = Mathf.Sin(Mathf.Clamp01(hitSquashTimer / 0.08f) * Mathf.PI);
+                transform.localScale = new Vector3(baseScale.x * (1f + pulse * 0.10f), baseScale.y * (1f - pulse * 0.06f), baseScale.z);
+            }
+            else
+            {
+                transform.localScale = baseScale;
+            }
+
             var toPlayer = (Vector2)(player.position - transform.position);
             var dist = toPlayer.magnitude;
             var dir = dist > 0.01f ? toPlayer / dist : Vector2.zero;
@@ -1230,6 +1339,7 @@ namespace Lethe.PrototypeV1
         public void TakeDamage(float amount, string source, bool weaponHit)
         {
             Hp -= amount;
+            hitSquashTimer = weaponHit ? 0.08f : 0.04f;
             if (sr != null)
             {
                 sr.color = BloodMarked ? new Color(1f, 0.35f, 0.38f) : Color.white;
@@ -1240,6 +1350,11 @@ namespace Lethe.PrototypeV1
             {
                 Destroy(gameObject);
             }
+        }
+
+        public void ApplyHitFeedback(Vector2 direction, float strength)
+        {
+            knockVelocity += direction.normalized * Mathf.Clamp(strength, 0f, 2.4f);
         }
 
         void Heal(float amount)
