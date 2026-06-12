@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-12-04 - 무기 리듬과 잔향 변형 법칙 보정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-12-04 - 무기 리듬과 잔향 변형 법칙 보정</h1>
+      <p class="meta">Generated from 2026-06-12-04-무기-리듬과-잔향-변형-법칙-보정.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260612/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-12-04 - 무기 리듬과 잔향 변형 법칙 보정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>이번 단위는 코드 구현이 아니라 설계 보정이다. Claude가 제안한 <code>허공 베기 금지</code>, <code>쌍검=nearest</code>, <code>대검=densest arc</code>, <code>잔향/궁극은 무기 리듬을 탄다</code>는 방향을 수용하되, 단일 <code>echoScale</code> 하나로 모든 차이를 처리하지 않도록 문서를 보정했다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>LETHE_DESIGN_02_COMBAT.md</code>에 기본공격 트리거/조준 모델을 확정했다.</li>
+<li>근접 무기는 적이 사거리 안에 없으면 허공에 스윙하지 않는다.</li>
+<li>쌍검은 가장 가까운 적을 향해 빠르게 베고, 대검은 가장 많이 맞는 부채꼴 방향을 고른다.</li>
+<li><code>echoScale</code> 단일값 대신 <code>echoSizeScale</code>, <code>echoDamageScale</code>, <code>echoProcStyle</code>, <code>ultimatePattern</code>으로 분리했다.</li>
+<li><code>LETHE_DESIGN_03_MEMORY_ECHO.md</code>에 피의 칼폭풍의 쌍검/대검 표현 차이를 고정 규칙으로 적었다.</li>
+<li><code>LETHE_DESIGN_06_BUILD_PLAN.md</code>의 <code>WeaponDefinition</code> 필드를 새 구조로 바꿨고 대상 씬을 <code>Dev_Prototype_v1</code>로 맞췄다.</li>
+<li><code>DECISION_LOG.md</code>에 <code>DEC-2026-06-12-04</code>를 정리했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>npm.cmd run report:check</code>: 통과.</li>
+<li><code>npm.cmd run report</code>: 통과, 4개 unit report 생성.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 4개 unit heading 확인.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>기본공격은 허공에 나가지 않는다.</li>
+<li>기본공격은 히어로 딜이 아니라 온힛 잔향을 전달하는 장치다.</li>
+<li>잔향/궁극 정의는 하나만 두고, 무기별 리듬 파라미터로 맛을 바꾼다.</li>
+<li>피의 칼폭풍 쌍검 버전은 작은 혈검 다수, 빠른 회전, 여러 번 베는 연쇄감으로 간다.</li>
+<li>피의 칼폭풍 대검 버전은 큰 혈검 소수, 느린 회전 또는 큰 2~3회 참격, 강한 hitstop, 큰 화면 흔들림으로 간다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>아직 구현은 문서를 따라가지 않는다. 현재 v1 쌍검은 허공 베기 제거와 nearest targeting이 다음 구현 과제다.</li>
+<li><code>echoSizeScale</code>/<code>echoDamageScale</code> 수치는 첫값이므로 실제 플레이에서 조정될 수 있다.</li>
+<li>Project Orchestrator Discord intake가 현재 응답하지 않아 dry-run 보고가 실패했다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Claude의 방향은 수용했다. 다만 단일 <code>echoScale</code>은 너무 거칠어서 크기/피해/형태/궁극 패턴으로 분리했다. 다음 Codex 구현은 이 문서를 기준으로 기본공격 타겟팅과 칼무리 잔향의 무기별 표현을 바꿔야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>v1 쌍검 허공 베기 제거.</li>
+<li>쌍검 nearest targeting 구현.</li>
+<li>칼무리 잔향을 쌍검 <code>MultiSmall</code> 방식으로 적용.</li>
+<li>대검 추가 전 <code>DensestArc</code>, <code>SingleHeavy</code>, <code>FewHeavy</code> 구조 준비.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 기본공격이 허공에 나가고, 무기별 잔향 차이가 스케일 하나로 뭉개질 위험이 있었다.</li>
+<li>방향: 무기 리듬이 잔향과 궁극의 형태를 결정하는 구조로 문서화했다.</li>
+<li>행동: 전투/기억/구현계획/결정 로그를 같은 용어로 맞췄다.</li>
+<li>결과: <code>무기 + 기억 + 잔향</code> 조합의 설계 축이 더 선명해졌다.</li>
+</ul>
+  </main>
+</body>
+</html>

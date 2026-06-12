@@ -169,6 +169,13 @@
           <p>Dev_Prototype_v1은 카메라/캐릭터 크기 기준을 유지한 채, 기본 쌍검 공격과 레벨업 UI를 한 차례 보강한 상태다. 다음 리뷰는 M1 Smoke와 일반 플레이에서 쌍검 손맛, 피격 반응, 칼무리 크기, XP bar, 3카드 선택 UI를 보는 것이다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-12-04</span>
+          <h2><a href="#unit-2026-06-12-04" data-unit-link="unit-2026-06-12-04">무기 리듬과 잔향 변형 법칙 보정</a></h2>
+          <p>이번 단위는 코드 구현이 아니라 설계 보정이다. Claude가 제안한 허공 베기 금지, 쌍검=nearest, 대검=densest arc, 잔향/궁극은 무기 리듬을 탄다는 방향을 수용하되, 단일 echoScale 하나로 모든 차이를 처리하지 않도록 문서를 보정했다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -339,6 +346,59 @@
 <li>방향: 망각/잔향 확장 전에 무기 자체의 전투 감각을 먼저 살린다.</li>
 <li>행동: 쌍검 slash, hit feedback, XP bar, 3카드 UI를 구현하고 Unity MCP로 검증했다.</li>
 <li>결과: M1 전투 리뷰 기준이 “시스템이 있나”에서 “쌍검으로 사냥이 재미있나”로 올라갔다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-12-04" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-12-04 - 무기 리듬과 잔향 변형 법칙 보정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>이번 단위는 코드 구현이 아니라 설계 보정이다. Claude가 제안한 <code>허공 베기 금지</code>, <code>쌍검=nearest</code>, <code>대검=densest arc</code>, <code>잔향/궁극은 무기 리듬을 탄다</code>는 방향을 수용하되, 단일 <code>echoScale</code> 하나로 모든 차이를 처리하지 않도록 문서를 보정했다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>LETHE_DESIGN_02_COMBAT.md</code>에 기본공격 트리거/조준 모델을 확정했다.</li>
+<li>근접 무기는 적이 사거리 안에 없으면 허공에 스윙하지 않는다.</li>
+<li>쌍검은 가장 가까운 적을 향해 빠르게 베고, 대검은 가장 많이 맞는 부채꼴 방향을 고른다.</li>
+<li><code>echoScale</code> 단일값 대신 <code>echoSizeScale</code>, <code>echoDamageScale</code>, <code>echoProcStyle</code>, <code>ultimatePattern</code>으로 분리했다.</li>
+<li><code>LETHE_DESIGN_03_MEMORY_ECHO.md</code>에 피의 칼폭풍의 쌍검/대검 표현 차이를 고정 규칙으로 적었다.</li>
+<li><code>LETHE_DESIGN_06_BUILD_PLAN.md</code>의 <code>WeaponDefinition</code> 필드를 새 구조로 바꿨고 대상 씬을 <code>Dev_Prototype_v1</code>로 맞췄다.</li>
+<li><code>DECISION_LOG.md</code>에 <code>DEC-2026-06-12-04</code>를 정리했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>npm.cmd run report:check</code>: 통과.</li>
+<li><code>npm.cmd run report</code>: 통과, 4개 unit report 생성.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 4개 unit heading 확인.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>기본공격은 허공에 나가지 않는다.</li>
+<li>기본공격은 히어로 딜이 아니라 온힛 잔향을 전달하는 장치다.</li>
+<li>잔향/궁극 정의는 하나만 두고, 무기별 리듬 파라미터로 맛을 바꾼다.</li>
+<li>피의 칼폭풍 쌍검 버전은 작은 혈검 다수, 빠른 회전, 여러 번 베는 연쇄감으로 간다.</li>
+<li>피의 칼폭풍 대검 버전은 큰 혈검 소수, 느린 회전 또는 큰 2~3회 참격, 강한 hitstop, 큰 화면 흔들림으로 간다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>아직 구현은 문서를 따라가지 않는다. 현재 v1 쌍검은 허공 베기 제거와 nearest targeting이 다음 구현 과제다.</li>
+<li><code>echoSizeScale</code>/<code>echoDamageScale</code> 수치는 첫값이므로 실제 플레이에서 조정될 수 있다.</li>
+<li>Project Orchestrator Discord intake가 현재 응답하지 않아 dry-run 보고가 실패했다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Claude의 방향은 수용했다. 다만 단일 <code>echoScale</code>은 너무 거칠어서 크기/피해/형태/궁극 패턴으로 분리했다. 다음 Codex 구현은 이 문서를 기준으로 기본공격 타겟팅과 칼무리 잔향의 무기별 표현을 바꿔야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>v1 쌍검 허공 베기 제거.</li>
+<li>쌍검 nearest targeting 구현.</li>
+<li>칼무리 잔향을 쌍검 <code>MultiSmall</code> 방식으로 적용.</li>
+<li>대검 추가 전 <code>DensestArc</code>, <code>SingleHeavy</code>, <code>FewHeavy</code> 구조 준비.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 기본공격이 허공에 나가고, 무기별 잔향 차이가 스케일 하나로 뭉개질 위험이 있었다.</li>
+<li>방향: 무기 리듬이 잔향과 궁극의 형태를 결정하는 구조로 문서화했다.</li>
+<li>행동: 전투/기억/구현계획/결정 로그를 같은 용어로 맞췄다.</li>
+<li>결과: <code>무기 + 기억 + 잔향</code> 조합의 설계 축이 더 선명해졌다.</li>
 </ul>
     </article>
       </div>

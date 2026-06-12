@@ -1,6 +1,6 @@
 # 06. Unity 구현 계획 / 마일스톤 / 데이터 구조
 
-최종 갱신: 2026-06-12 · 대상 씬: `Assets/_dev/Scenes/Dev_Prototype_v0.unity`
+최종 갱신: 2026-06-12 · 대상 씬: `Assets/_dev/Scenes/Dev_Prototype_v1.unity`
 
 이 문서는 위 기획(00~05)을 Unity로 옮기는 개발 실행 계획이다. 핵심 전략: **HTML 코어를 먼저 이식해 게임 셸을 세우고, 그 위에 잔향/공명/궁극을 얹고, 마지막에 8종으로 넓힌다.** 8종을 placeholder로 동시에 늘리는 방식은 금지.
 
@@ -17,7 +17,12 @@
 ### Definition
 
 ```text
-WeaponDefinition   { id, displayName, role, range, damage, interval, arcDegrees }
+WeaponDefinition   { id, displayName, role, range, damage, interval, arcDegrees, targetingMode,
+                     echoSizeScale, echoDamageScale, echoProcStyle, ultimatePattern }
+                   // targetingMode: Nearest(쌍검) | DensestArc(대검) — 02_COMBAT 트리거 모델
+                   // echoSizeScale / echoDamageScale: 온힛 잔향의 크기·피해 배수
+                   // echoProcStyle: MultiSmall(쌍검) | SingleHeavy(대검)
+                   // ultimatePattern: ManyFast(쌍검) | FewHeavy(대검)
 MemoryDefinition   { id, displayName, role, cooldown, tags[], levelBonus, matchingEchoId, activeBehavior }
 EchoDefinition     { id, sourceMemoryId, displayName, levelScaling, awakenedEffect, resonanceRider, triggerFamily }
 EchoLevelData      { level, behavior }   // +1/+3/+5 차이
