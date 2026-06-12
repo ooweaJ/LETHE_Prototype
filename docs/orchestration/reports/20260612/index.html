@@ -183,6 +183,13 @@
           <p>Dev_Prototype_v1 쌍검은 이제 적이 없을 때 허공에 스윙하지 않는다. 적이 사거리 안에 들어오면 가장 가까운 적을 향해 자동 조준하고, 그 방향으로 쌍검 참격과 칼무리 잔향이 발생한다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-12-06</span>
+          <h2><a href="#unit-2026-06-12-06" data-unit-link="unit-2026-06-12-06">기본공격 VFX와 잔향 후속타 방향 정리</a></h2>
+          <p>이번 단위는 코드 구현이 아니라 다음 구현 방향 정리다. 현재 쌍검은 허공 베기가 제거됐지만, 기본공격 VFX가 플레이어 주변 부채꼴처럼 보이면 여전히 어색하다. 다음 구현은 기본공격 VFX를 적 위치 발도/절단선으로 바꾸고, 칼무리 잔향은 그 적중 위치에서 나오는 후속타로 만든다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -462,6 +469,60 @@
 <li>방향: 공격은 적이 있을 때만 발생하고, 무기 리듬이 잔향 형태를 결정하게 한다.</li>
 <li>행동: 쌍검 nearest targeting과 칼무리 <code>MultiSmall</code>을 구현하고 Unity MCP로 검증했다.</li>
 <li>결과: 무기+잔향 조합이 시스템 문서에서 실제 전투 코드로 내려오기 시작했다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-12-06" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-12-06 - 기본공격 VFX와 잔향 후속타 방향 정리</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>이번 단위는 코드 구현이 아니라 다음 구현 방향 정리다. 현재 쌍검은 허공 베기가 제거됐지만, 기본공격 VFX가 플레이어 주변 부채꼴처럼 보이면 여전히 어색하다. 다음 구현은 기본공격 VFX를 적 위치 발도/절단선으로 바꾸고, 칼무리 잔향은 그 적중 위치에서 나오는 후속타로 만든다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>LETHE_DESIGN_02_COMBAT.md</code>에 기본공격 VFX/판정 분리 규칙을 추가했다.</li>
+<li>판정은 range/arc/cleave를 쓸 수 있지만, 화면 VFX는 적 위치에 생기는 발도선으로 간다.</li>
+<li><code>LETHE_DESIGN_03_MEMORY_ECHO.md</code>에 온힛 잔향 후속타 규칙을 추가했다.</li>
+<li>잔향 origin은 player가 아니라 <code>hit.position</code> 또는 <code>primaryTarget.position</code>이다.</li>
+<li>칼무리 <code>MultiSmall</code>은 기본공격 절단선 뒤에 적중 지점 주변에서 작은 후속타로 나온다.</li>
+<li><code>LETHE_DESIGN_06_BUILD_PLAN.md</code>에 다음 회귀 체크를 추가했다: <code>targetLocalSlash&gt;0</code>, <code>playerFanArc=0</code>, <code>kalmuriFollowup&gt;0</code>.</li>
+<li><code>CURRENT_TASK.md</code>, <code>NEXT_TASKS.md</code>, <code>STATUS.md</code>를 다른 로컬에서 바로 이어받을 수 있게 갱신했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>문서 정리 단위라 Unity 실행은 하지 않았다.</li>
+<li>다음 검증 기준은 문서에 명시했다.</li>
+<li><code>npm.cmd run report</code>: 통과, 6개 unit report 생성.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 6개 unit heading 확인.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>기본공격 VFX는 플레이어 부채꼴이 아니라 대상 위치 발도/절단선이다.</li>
+<li>잔향은 기본공격 hit 이후 같은 위치에서 나오는 후속타다.</li>
+<li>쌍검 잔향은 캐릭터가 멈추는 느낌을 주면 안 된다.</li>
+<li>대검은 나중에 큰 hitstop과 큰 참격을 허용한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>아직 코드가 이 방향을 완전히 따르지 않는다.</li>
+<li>현재 다음 구현에서 기존 player-origin/fan-like slash VFX를 제거해야 한다.</li>
+<li>Project Orchestrator Discord intake가 현재 응답하지 않아 dry-run 보고가 실패했다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>다음 Codex는 <code>V1GameManager</code>의 쌍검 VFX를 target-local로 바꿔야 한다. 공격 판정은 현재 nearest/no-air-swing을 유지하되, VFX는 적 위치에 2개의 작은 발도선으로 만들고, 칼무리 <code>MultiSmall</code>은 그 hit origin에서 0~0.08초 후 후속타처럼 나오게 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>player-origin/fan-like 쌍검 arc VFX 제거.</li>
+<li>primary target 위치에 쌍검 발도선 2개 생성.</li>
+<li>cleave 대상에는 작은 보조 절단선 생성.</li>
+<li>칼무리 <code>MultiSmall</code>을 hit origin 후속타로 이동.</li>
+<li>Unity smoke에서 <code>targetLocalSlash&gt;0</code>, <code>playerFanArc=0</code>, <code>kalmuriFollowup&gt;0</code> 확인.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 기본공격이 여전히 플레이어 주변 arc로 보이면 허공 베기 인상이 남는다.</li>
+<li>방향: 판정과 VFX를 분리해, 공격은 적에게 찍히고 잔향은 적중 지점에서 번지게 한다.</li>
+<li>행동: 전투/잔향/빌드/오케스트레이션 문서에 다음 구현 기준을 남겼다.</li>
+<li>결과: 다른 로컬에서도 바로 이어서 구현할 수 있는 다음 작업 계약이 생겼다.</li>
 </ul>
     </article>
       </div>

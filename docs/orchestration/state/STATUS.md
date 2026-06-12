@@ -42,6 +42,16 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Basic attack VFX direction update:
+  - New decision: basic attack VFX should not be a player-origin fan arc.
+  - Twin-blade basic attack should read as target-local iai/slash marks on the enemy.
+  - On-hit echoes should spawn as follow-up hits from the weapon hit origin.
+  - Kalmuri `MultiSmall` should appear after the target-local weapon hit, not as a character-origin pause effect.
+  - Next implementation target: remove current player/fan-like slash VFX and replace it with target-local slash + Kalmuri follow-up.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 6 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+
 - Unity v1 no-air-swing / Kalmuri MultiSmall implementation:
   - Implemented the first code pass for DEC-2026-06-12-04.
   - Twin blades no longer swing when no enemy is inside `range * 1.15`.

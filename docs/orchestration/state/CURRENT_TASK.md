@@ -86,14 +86,15 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Next Implementation
 
-1. Jaewoo Play Mode review of the no-air-swing twin-blade pass: no idle air swings, nearest target feel, Kalmuri MultiSmall size/readability.
-2. If accepted, prepare greatsword scaffolding for `DensestArc`, `SingleHeavy`, and `FewHeavy`.
-3. Then replace the compressed M2 shortcut with real pacing: Gatekeeper kill -> result screen -> deficit survival -> resonance.
+1. Replace current twin-blade player-origin/fan-like slash VFX with target-local iai/slash marks.
+2. Make Kalmuri `MultiSmall` read as a follow-up from the weapon hit origin, not as a character-origin pause effect.
+3. Then ask jaewoo to review no-air-swing + target-local slash + echo follow-up together.
 
 ## Open Questions
 
 - Does no-air-swing make the twin blades feel more intentional, or does it make idle combat feel too quiet?
-- Is Kalmuri `MultiSmall` readable as a weapon echo rather than a giant independent memory?
+- Does target-local slash make twin blades feel cleaner than player fan arcs?
+- Does Kalmuri `MultiSmall` feel like a follow-up hit from the enemy, or still like the character is stopping?
 - What should be the shared rule for weapon-specific echo synergy between dual blades and greatsword?
 - Does the compressed M2 loop prove the direction, or does the real pacing need to be built before judgment?
 - Should generated sheets be sliced/imported properly next, instead of runtime-cropped in the manager?

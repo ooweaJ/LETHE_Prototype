@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260612\\index.md",
-  "generatedAt": "2026-06-12T07:58:11.577Z",
-  "unitCount": 5,
+  "generatedAt": "2026-06-12T08:32:02.350Z",
+  "unitCount": 6,
   "latest": {
-    "title": "2026-06-12-05 - 쌍검 허공 베기 제거와 칼무리 MultiSmall 구현",
-    "number": "05",
-    "markdownPath": "docs\\orchestration\\reports\\20260612\\units\\2026-06-12-05-쌍검-허공-베기-제거와-칼무리-multismall-구현.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260612\\units\\2026-06-12-05-쌍검-허공-베기-제거와-칼무리-multismall-구현.html"
+    "title": "2026-06-12-06 - 기본공격 VFX와 잔향 후속타 방향 정리",
+    "number": "06",
+    "markdownPath": "docs\\orchestration\\reports\\20260612\\units\\2026-06-12-06-기본공격-vfx와-잔향-후속타-방향-정리.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260612\\units\\2026-06-12-06-기본공격-vfx와-잔향-후속타-방향-정리.html"
   }
 }

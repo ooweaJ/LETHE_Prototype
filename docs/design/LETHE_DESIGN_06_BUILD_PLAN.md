@@ -55,6 +55,8 @@ PoolService · FeedbackService · DebugStateInjector
 ### M1. 게임 셸 (HTML parity) — 최우선
 - 플레이어 이동/카메라/아레나.
 - 쌍검 기본공격(사거리 86, 피해 15, 간격 0.36, 호 119°).
+- 기본공격 VFX는 플레이어 부채꼴 표시가 아니라 대상 위치 발도/절단선으로 구현.
+- 온힛 잔향은 기본공격 hit 위치에서 후속타로 생성.
 - 적 4종 스폰/추격 + 적 스케일링.
 - 압박 페이즈 곡선([01](LETHE_DESIGN_01_RUN_LOOP.md)).
 - XP/레벨업 곡선 + 레벨업 화면([04](LETHE_DESIGN_04_BALANCE.md)/[05](LETHE_DESIGN_05_UI_UX.md)).
@@ -101,6 +103,8 @@ PoolService · FeedbackService · DebugStateInjector
 ### 자동/MCP 체크 (매 마일스톤)
 - Unity compile errors 0, console errors 0, scene missing refs 0.
 - Play Mode 스모크.
+- 쌍검 no-air-swing 회귀: 적 없음 `slash=0`, 적 있음 `targetLocalSlash>0`.
+- 칼무리 후속타 회귀: 기본공격 VFX 후 hit origin 주변에 `KalmuriFollowup` 생성, player-origin 대형 arc 없음.
 - `npm run report` / `report:check` pass.
 
 ## 4. 비범위
