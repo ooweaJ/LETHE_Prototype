@@ -1,34 +1,37 @@
 # Next Tasks
 
-Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, legacy `docs/NEXT_TASKS.md`, or evidence files.
+Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, or evidence files.
 
-## 1. Complete Prototype Hands-On Review
+Current source of truth: `docs/design/` (LETHE_DESIGN_00..06 + README). Build plan: `docs/design/LETHE_DESIGN_06_BUILD_PLAN.md`.
 
-- Priority: highest
-- Source: `docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`
-- Include: open `Assets/_dev/Scenes/Dev_Prototype_v0.unity`, press Play, use F1-F8/debug buttons, compare 쌍검 vs 대검, force 8 memories, 8 echoes, 4 ultimates, and judge the new procedural VFX readability.
-- Done: record whether the corrected F7 three-memory showcase reads as Kalmuri orbit + ShatterWave enemy wave + StoppedSecond enemy clock, which weapon feels better, and which memory still violates its design role.
-
-## 2. ScriptableObject Asset Binding
+## 1. Dev_Prototype_v1 M1 체감 보강 — 최우선
 
 - Priority: highest
-- Include: turn the in-code complete prototype catalog into `_dev/Data` `WeaponDefinition`, `MemoryDefinition`, `EchoDefinition`, `EchoSynergyDefinition`, `EnemyDefinition`, `RewardPoolDefinition` assets.
-- Done: `PrototypeGameManager` can read ids/display names/levels from data assets rather than only static code tables.
+- Source: `docs/design/LETHE_DESIGN_06_BUILD_PLAN.md` (M1), `LETHE_DESIGN_05_UI_UX.md`, `LETHE_DESIGN_01_RUN_LOOP.md`
+- Include: `Dev_Prototype_v1` 기준으로 카메라/프레이밍, 적 추격 체감, 쌍검 판정, XP/레벨업 선택, HUD 읽힘을 다듬는다. v0는 더 이상 main path가 아니다.
+- Done: jaewoo가 Play Mode에서 "게임 셸은 이제 됐다"고 판단할 수 있다.
 
-## 3. Dedicated VFX For Remaining Memories
+## 2. M2 1코어 수직 슬라이스
 
-- Priority: high
-- Include: generate/import readable sprite VFX for 처형, 추적, 파문, 정지, 잿빛, 낙인 active/echo states.
-- Done: no remaining memory/echo depends on procedural line placeholder shapes as its main read.
+- Priority: highest
+- Include: 쌍검 + 굶주린 칼무리 + 피의 반사 → 첫 보스(2050) → 첫 망각 → 망각 결과 화면 → 결손 생존 → 공명 → 칼무리/혈반 +5 → 피의 칼폭풍.
+- Done: "Unity도 HTML만큼 된다"가 증명됨.
 
-## 4. Complete Prototype Balance Smoke
-
-- Priority: high
-- Include: run 60~120 second smoke for 쌍검 and 대검 with 8 memories/echoes, measuring kills, HP, synergies, strongest effect.
-- Done: complete prototype is tense enough to review without instant collapse or full-screen deletion.
-
-## 5. Runtime Service Split
+## 3. Debug smoke injector
 
 - Priority: high
-- Include: move effect routing from `PrototypeGameManager` into dedicated runtime classes using the new C1 services.
-- Done: adding or disabling a memory/echo no longer requires editing the manager's switch statements.
+- Include: v1에서 keyboard 없이 MCP/OnGUI로 level-up, forced forget, echo +5, Blood Blade Storm, Gatekeeper를 즉시 만들 수 있는 상태 주입 API.
+- Done: 자동 스모크가 player/enemy/memory/echo/ultimate 상태를 읽어 회귀 확인 가능.
+
+## 4. ScriptableObject 데이터화 + 클래스 연결
+
+- Priority: medium
+- Source: `LETHE_DESIGN_06_BUILD_PLAN.md`, `LETHE_DESIGN_02/03/04` 수치표
+- Include: v1 manager 하드코딩을 `_dev/Data` Definition 자산으로 분리(Weapon/Memory/Echo/EchoSynergy/Enemy).
+- Done: 매니저가 코드 분기 대신 데이터에서 id/레벨/수치를 읽는다.
+
+## 5. 에셋·클래스 연결 (07 기준)
+
+- Priority: low (M2 GO 이후)
+- Include: 대검 → 6기억/6잔향 VFX → 3궁극 → 적 4dir/보스 순(07 §12 우선순위).
+- Done: 8/8/4+대검+적4가 각각 sprite·prefab·클래스에 연결되고 line renderer 의존 제거.

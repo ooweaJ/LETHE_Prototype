@@ -1,10 +1,34 @@
 # Status
 
-Last updated: 2026-06-11
+Last updated: 2026-06-12
 
 ## Current Snapshot
 
-LETHE HTML Alpha v0.12 implemented the new forgetting model and passed automated regression, but the user feedback is that the play experience still does not feel like a big change. The Unity prototype then moved through a dual-blades playable baseline, but the latest direction is clearer: a 쌍검-only prototype with two memories cannot set the real standard. The current source of truth is now `docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`, and the next implementation target is a complete prototype with `쌍검 + 대검 + 8기억 + 8잔향 + 4궁극`.
+LETHE Unity work has been reset around the new consolidated design source of truth: `docs/design/README.md` + `LETHE_DESIGN_00..07`. The previous `Dev_Prototype_v0` attempt is kept only as historical/reference evidence; it is not the main implementation path anymore.
+
+The current playable target is now:
+
+```text
+LETHE/Assets/_dev/Scenes/Dev_Prototype_v1.unity
+LETHE/Assets/_dev/Scripts/PrototypeV1/
+```
+
+`Dev_Prototype_v1` starts from M1 HTML parity instead of patching the failed v0 prototype. It contains a fresh scene with only `Main Camera` and `V1_GameManager`; runtime objects are spawned by the new `Lethe.PrototypeV1.V1GameManager`.
+
+Implemented in v1 now:
+
+- player movement with separated weapon anchor and dual blade sprites.
+- arena floor generation and camera follow.
+- dual blades using the documented baseline: range `86px`, damage `15`, interval `0.36s`, arc `119°`.
+- enemy spawn pressure profile with four role types represented in the runtime: eroder, drifting eye, split one, void priest, plus debug Gatekeeper.
+- early survival damage ramp `0.24 -> 1.0` by `320s`.
+- XP/level-up curve and OnGUI level-up overlay.
+- HUD with HP/timer/phase/memory slots/echo panel/next forget candidate/ultimate progress.
+- active Hungry Blades as real player-orbit blade damage, not generic all-memory orbit.
+- Blood Reflection as blood mark/heal identity.
+- highest-level forgetting, echo cap +5, resonance reacquire, and Blood Blade Storm debug path.
+- Input System and Legacy input compatibility.
+- 8x4 player/enemy sheets are cropped to one runtime frame instead of rendering the whole sheet.
 
 This is an explicit scope change from the previous `Dev_Prototype_v0` tuning loop. `Weapon_Greatsword`, all 8 core memories, all 8 matching echoes, and 4 ultimate echoes are now inside the prototype validation scope. Shop, meta progression, multi-region completion, final boss, release UI/audio, Steam/build deployment, and `Assets/Lethe` promotion remain out of scope.
 
@@ -14,9 +38,26 @@ The orchestration HTML interface now exists at `docs/orchestration/interface/ind
 
 The report/devlog/review migration is now applied physically: old `docs/reports/` daily files moved to `docs/orchestration/reports/YYYYMMDD/index.md|html`, old unit reports moved to `docs/orchestration/reports/YYYYMMDD/units/`, old `docs/devlog/` files moved to `docs/orchestration/devlog/YYYYMMDD.md`, and old review prompt/response files moved to `docs/orchestration/review_prompts/` and `docs/orchestration/review_responses/`. New work should not recreate legacy `docs/reports/`, `docs/devlog/`, `docs/review_prompts/`, or `docs/review_responses/` as normal source-of-truth folders.
 
-The current development-docs plugin baseline from `docs/orchestration/MIGRATION_PROMPT.md` has been applied without committing: `AGENTS.md` now uses a `Development Docs Plugin` section, `docs/orchestration/templates/HTML_INTERFACE_TEMPLATE.md` exists, legacy review pointer READMEs are readable, `reports/index.html` is generated as a newest-first date archive, daily report pages are generated as unit-card pages, and Discord delivery is documented as Project Orchestrator first with local direct-send scripts as trusted fallback only.
+The current development-docs plugin baseline from `docs/orchestration/MIGRATION_PROMPT.md` has been applied. `AGENTS.md` now uses a `Development Docs Plugin` section, `docs/orchestration/templates/HTML_INTERFACE_TEMPLATE.md` exists, legacy review pointer READMEs are readable, `reports/index.html` is generated as a newest-first date archive, daily report pages are generated as unit-card pages, and Discord delivery is documented as Project Orchestrator first with local direct-send scripts as trusted fallback only.
 
 ## Latest Verified Result
+
+- Unity v1 reset implementation:
+  - Added `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`.
+  - Added `LETHE/Assets/_dev/Scripts/PrototypeV1/Editor/V1SceneBuilder.cs`.
+  - Added fresh scene `LETHE/Assets/_dev/Scenes/Dev_Prototype_v1.unity`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 0 warnings, 0 errors after the v1 patch.
+  - Unity MCP selected `LETHE` on port `7890`.
+  - `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`.
+  - `unity_scene_open(path="Assets/_dev/Scenes/Dev_Prototype_v1.unity")`: success.
+  - hierarchy check: roots are `V1_GameManager` with `V1GameManager` and `Main Camera`.
+  - Play Mode smoke: `player=True`, `enemies=2`, `renderers=107`, `playing=True`, `paused=False`.
+  - Console after Input System fix: only AnkleBreaker MCP startup logs, no v1 runtime exception.
+  - Game capture confirmed the 4-direction sprite sheet is now cropped to single player/enemy frames.
+  - Scene saved with `unity_scene_save(port=7890)`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
 
 - Unity basic resource pass: Codex imagegen produced 5 first-slice images; chroma-key cleanup produced transparent runtime sprites for player, enemy, and dual blades; the floor tile remains opaque by design.
 - Unity MCP import: `unity_asset_import(port=7890)` imported 5 runtime sprites and 4 chroma source textures under `Assets/_dev/Art`; `unity_texture_set_sprite` configured the 5 runtime sprites as Sprite/Single with 100 pixels per unit.
@@ -134,37 +175,34 @@ Project Orchestrator Discord intake is now connected through `scripts/send_orche
 
 ## Current Next Step
 
-Run a jaewoo hands-on review of the first Complete Prototype implementation in `Assets/_dev/Scenes/Dev_Prototype_v0.unity`.
+Continue from `Dev_Prototype_v1`, not `Dev_Prototype_v0`.
 
-Implemented now:
+Next implementation step:
 
-- C1 service/data scaffolding.
-- C2 weapon pair: 쌍검 and 대검 switch.
-- C3 active memories 8.
-- C4 echoes 8.
-- C5 ultimate echoes 4.
-- 4 enemy role ids.
-- compressed debug controls F1-F8 and OnGUI buttons.
+1. Make the v1 M1 loop more game-like: actual enemy chase/combat readability, kill pacing, XP choice feel, and camera scale.
+2. Add a debug smoke action that programmatically forces level-up, forgetting, echo +5, and Blood Blade Storm without keyboard-only review.
+3. Then advance to M2: first Gatekeeper kill -> result screen -> deficit survival -> resonance.
 
-Review focus:
-
-- Does 대검 give a real second standard compared with 쌍검?
-- Which of the 8 memories is readable immediately?
-- Which echo still feels like a recolored placeholder?
-- Which of the 4 ultimates deserves first polish?
-- Is the complete prototype now enough to set direction, even before final sprites?
-
-Do not promote `_dev` assets to `Assets/Lethe` until the Complete Prototype receives explicit `GO`.
+Do not promote `_dev` assets to `Assets/Lethe` until `Dev_Prototype_v1` receives explicit `GO`.
 
 For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` before real sends, then `npm run report:orchestrator:unit` when the Project Orchestrator is running and the report is ready.
 
 ## Current Source Of Truth
 
 - Top-level rules: `AGENTS.md`
-- Complete prototype PRD: `docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`
+- 기획·개발 기준 세트 (단일 source of truth): `docs/design/` → `README.md` + `LETHE_DESIGN_00..06`
+  - 코어/감정/범위: `LETHE_DESIGN_00_OVERVIEW.md`
+  - 런 루프/타임라인: `LETHE_DESIGN_01_RUN_LOOP.md`
+  - 전투/무기/적/보스: `LETHE_DESIGN_02_COMBAT.md`
+  - 기억/망각/잔향/공명/궁극: `LETHE_DESIGN_03_MEMORY_ECHO.md`
+  - 밸런스/수치: `LETHE_DESIGN_04_BALANCE.md`
+  - UI/UX: `LETHE_DESIGN_05_UI_UX.md`
+  - Unity 구현 계획: `LETHE_DESIGN_06_BUILD_PLAN.md`
+  - 에셋/VFX/클래스 연결: `LETHE_DESIGN_07_ASSETS_VFX.md`
 - Detailed legacy status archive: `docs/CODEX_STATUS.md`
-- Detailed legacy task archive: `docs/NEXT_TASKS.md`
 - Current orchestration task: `docs/orchestration/state/CURRENT_TASK.md`
+
+> 2026-06-12: 분산·충돌하던 게임 기획/PRD 문서(A군 18개)와 에셋/아트 가이드(B군 5개)는 위 `LETHE_DESIGN_00..07` 세트로 통합·삭제됨. HTML 코어 수치(`src/game.js`, `v0.12-balance-1`)를 이식 기준으로 삼는다. 결정: DEC-2026-06-12-01/02/03.
 
 ## Latest Complete Prototype PRD
 

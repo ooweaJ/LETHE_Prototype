@@ -2,245 +2,80 @@
 
 ## Goal
 
-Implement the first complete prototype pass from the new PRD.
+Rebuild the Unity prototype from the consolidated `LETHE_DESIGN_00..07` docs as a fresh v1, treating the previous `Dev_Prototype_v0` as failed reference only.
 
 ## Why Now
 
-Jaewoo's latest feedback is that a dual-blades-only prototype with two memories cannot establish LETHE's real standard. The project needs a complete execution contract that includes greatsword, all planned core memories, all echoes, and the first four ultimate echoes before the next implementation push.
+Jaewoo rejected the previous Unity prototype as a trustworthy evaluation target. The issues were not just tuning: sprite framing, memory behavior, orbit/echo interpretation, and overall game-shell feel had drifted away from the design. Patching v0 risks carrying those assumptions forward.
 
-Current source of truth:
+The current source of truth is:
 
 ```text
-docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md
+docs/design/README.md
+docs/design/LETHE_DESIGN_00_OVERVIEW.md
+docs/design/LETHE_DESIGN_01_RUN_LOOP.md
+docs/design/LETHE_DESIGN_02_COMBAT.md
+docs/design/LETHE_DESIGN_03_MEMORY_ECHO.md
+docs/design/LETHE_DESIGN_04_BALANCE.md
+docs/design/LETHE_DESIGN_05_UI_UX.md
+docs/design/LETHE_DESIGN_06_BUILD_PLAN.md
+docs/design/LETHE_DESIGN_07_ASSETS_VFX.md
 ```
 
-Legacy reference:
+## Main Target
 
 ```text
-docs/design/LETHE_UNITY_PROTOTYPE_V0_PRD.md
-```
-
-The correct next move is to make the full scope testable in Unity before more slice-level tuning. This pass should get the complete prototype into a compressed playable/debuggable state, then jaewoo can judge which parts deserve polish or redesign.
-
-Main target:
-
-```text
-Assets/_dev/Scenes/Dev_Prototype_v0.unity
+LETHE/Assets/_dev/Scenes/Dev_Prototype_v1.unity
+LETHE/Assets/_dev/Scripts/PrototypeV1/
 ```
 
 Reference only:
 
 ```text
-Assets/_dev/Scenes/Dev_EchoSlice.unity
+LETHE/Assets/_dev/Scenes/Dev_Prototype_v0.unity
+LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 ```
 
 ## Done Criteria For This Work Unit
 
-- C1 service/data scaffolding exists:
-  - `EnemyDefinition`
-  - `RewardPoolDefinition`
-  - `MemoryInventory`
-  - `EchoInventory`
-  - `ForgetService`
-  - `ResonanceService`
-  - `UltimateEchoService`
-  - `RewardService`
-  - `DebugStateInjector`
-- C2 weapon pair is testable:
-  - `Weapon_DualBlades`
-  - `Weapon_Greatsword`
-  - debug weapon switch.
-- C3/C4/C5 compressed prototype is testable:
-  - 8 active memories.
-  - 8 echoes.
-  - 4 ultimate echoes.
-- 4 enemy role ids appear in the scene runtime.
-- Unity compile error 0, console error 0, missing reference 0.
+- Fresh v1 scene exists under `_dev`.
+- Fresh v1 runtime code is isolated under `Scripts/PrototypeV1`.
+- Player, camera, arena, dual blades, enemy spawn, XP/level-up, HUD, highest-level forgetting, echo cap, resonance, and Blood Blade Storm debug path exist.
+- Unity compile error 0.
+- Play Mode smoke creates player and enemies with no v1 runtime console exceptions.
+- v1 screenshot/capture confirms player/enemy sheets are not rendered as whole sheets.
 
-## Complete Prototype Done Criteria
+## Latest v1 Reset
 
-Implemented in the broader complete prototype sequence:
+- Added `V1GameManager` and `V1SceneBuilder`.
+- Added `Assets/_dev/Scenes/Dev_Prototype_v1.unity`.
+- v1 starts with only `Main Camera` and `V1_GameManager`; runtime creates arena/player/weapon/enemies.
+- Fixed Unity Input System-only exception by supporting `Keyboard.current` with legacy fallback.
+- Fixed whole-sheet rendering by cropping the generated 8x4 player/enemy sheets at runtime.
 
-- Data-driven core replaces `PrototypeGameManager` memory/echo hard-code.
-- 쌍검 and 대검 are both playable.
-- 8 active memories have at least level 1 behavior.
-- 8 echoes have at least +1 behavior.
-- Debug can force +3/+5 and four ultimate echo conditions.
-- Complete prototype smoke can run in 60~120 seconds.
-- Dedicated sprite VFX, balance, data asset binding, and runtime class split still need follow-up.
+## Verification
 
-## Latest Visibility Patch
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 0 warnings, 0 errors.
+- `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`.
+- `unity_scene_open(path="Assets/_dev/Scenes/Dev_Prototype_v1.unity")`: success.
+- hierarchy: `V1_GameManager` has `V1GameManager`, `Main Camera` has `Camera` + `AudioListener`.
+- Play Mode smoke: `player=True`, `enemies=2`, `renderers=107`, `playing=True`, `paused=False`.
+- Console after Input System fix: no v1 runtime exception.
+- Game capture: sprite sheets are cropped to single character/enemy frames.
+- Scene saved: `sceneDirty=false`.
 
-- Added procedural VFX for the six memory/echo families that did not have dedicated sprites:
-  - `Memory_ExecutionFlash` / `Echo_Execution`
-  - `Memory_HunterOath` / `Echo_Homing`
-  - `Memory_ShatterWave` / `Echo_Shockwave`
-  - `Memory_StoppedSecond` / `Echo_TimeStop`
-  - `Memory_AshenShield` / `Echo_AshenGuard`
-  - `Memory_OblivionBrand` / `Echo_Brand`
-- `F7` and echo debug actions now spawn immediate preview shapes so the user can tell whether the state changed.
-- Verification:
-  - Unity compile errors `0`.
-  - scene missing references `0`.
-  - Play Mode console errors `0`.
-  - F7/F5 smoke: active memories `8`, echoes `8`, procedural VFX objects `276`.
+## Next Implementation
 
-Next question for hands-on review:
-
-- Are the new shapes readable, or are they too noisy?
-
-## Latest Behavior Correction
-
-- The previous VFX visibility patch overcorrected and made memories look like character-centered clutter.
-- Corrected implementation:
-  - active memory cap: `3`.
-  - F7 showcase: Kalmuri + ShatterWave + StoppedSecond only.
-  - Kalmuri is the only player-orbit memory.
-  - ShatterWave and StoppedSecond now trigger around target/enemy positions.
-  - removed all-memory persistent orbit/preview behavior.
-- Verification:
-  - Unity compile errors `0`.
-  - scene missing references `0`.
-  - Play Mode console errors `0`.
-  - F7 smoke confirms active memory count `3` and no old Persistent/Preview VFX.
-
-Next hands-on review question:
-
-- Does F7 now feel like a real three-memory build instead of an all-effects debug mess?
-
-## Related Files
-
-- `docs/design/LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`
-- `docs/design/LETHE_UNITY_PROTOTYPE_V0_PRD.md`
-- `docs/design/LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`
-- `docs/design/LETHE_CONTENT_TABLES.md`
-- `docs/design/LETHE_UNITY_PROTOTYPE_V0_PLAN.md`
-- `LETHE/Assets/_dev/Scenes/Dev_Prototype_v0.unity`
-- `LETHE/Assets/_dev/Scripts/**`
-- `LETHE/Assets/_dev/Art/Sprites/**`
-- `LETHE/Assets/_dev/Prefabs/**`
-
-## Verification Commands
-
-```bash
-npm.cmd run report
-npm.cmd run report:check
-npm.cmd run report:orchestrator:unit:dry
-```
-
-Unity MCP verification:
-
-- `unity_get_compilation_errors(port=7890, severity="all")`
-- `unity_search_missing_references(port=7890, scope="scene")`
-- `unity_console_log(port=7890, type="error")`
-- Play Mode runtime check for player movement, enemy spawn/chase, attack, player HP, enemy death/respawn.
-
-## Latest Verification
-
-- Complete Prototype implementation pass:
-  - Unity compile errors: `0`.
-  - Scene missing references: `0`.
-  - Play Mode console errors after retry: `0`.
-  - Runtime smoke injection:
-    - manager present: `true`.
-    - weapon switched to `Weapon_Greatsword`.
-    - active memories: `8`.
-    - echoes: `8`.
-    - unlocked synergies: `4`.
-    - enemy roles present: `Enemy_MeleeChaser`, `Enemy_RangedEye`, `Enemy_Splitter`, `Enemy_EliteGatekeeper`.
-  - Fixed a Play Mode exception where active memory iteration could be modified by kill/forget side effects; memory/echo/synergy loops now use snapshots.
-  - Editor state after stop: active scene `Assets/_dev/Scenes/Dev_Prototype_v0.unity`, `isPlaying=false`, `isCompiling=false`, `sceneDirty=false`.
-
-- Unity compile errors: `0`.
-- Scene missing references: `0`.
-- Play Mode console errors: `0`.
-- LETHE art replacement pass:
-  - player/enemy/map/weapon sprites replaced.
-  - Kalmuri/Blood/Blood Blade Storm sprite VFX wired into `PrototypeGameManager`.
-  - chroma source images preserved under `Assets/_dev/Art/Source`.
-  - runtime Unity sprites use alpha PNG, not green backgrounds.
-  - scene `koreanFont` reference cleared; local font files remain out of scope.
-- Enemy spawn runtime check: `7` enemies, player and manager present.
-- Combat smoke: enemies forced near player; after 8 seconds, `kills=7`, `playerHp=26.5`.
-- M5 state smoke: active memories `Memory_HungryBlades:3`, `Memory_BloodReflection:2`; echoes `Echo_Kalmuri:5`, `Echo_Blood:5`; ultimate `true`.
-- Ultimate smoke: after 5 seconds, `kills=148`, `playerHp=100`, console errors `0`.
+1. Make the v1 M1 shell feel like a game: camera scale, enemy pressure, weapon interaction, XP pacing, HUD readability.
+2. Add debug smoke injection for level-up, forced forget, echo +5, Blood Blade Storm, and Gatekeeper.
+3. Implement M2 Gatekeeper -> forgetting result -> deficit survival -> resonance loop.
 
 ## Open Questions
 
-- Is the camera scale/framing now acceptable?
-- Is Blood Blade Storm too strong even for hype validation?
-- Are the generated 4-direction sprites readable enough, or should the next pass regenerate cleaner sheets?
+- Is v1 camera/framing acceptable as the new baseline?
+- Is the M1 shell game-like enough to continue to M2?
+- Should generated sheets be sliced/imported properly next, instead of runtime-cropped in the manager?
 
 ## Do Not Touch
 
-Do not continue polishing `Dev_EchoSlice` as the main path. Do not add shop, meta progression, multi-region structure, or final boss.
-
-## Latest Combat Feel Fix
-
-- User review: prototype is not bad, but attack range is too small and weapon/enemy interaction does not yet feel physical enough.
-- Changed base dual blades from nearest-single-target hit to wide cleave:
-  - actual range `2.35`.
-  - attack arc `108` degrees.
-  - up to `5` enemies per swing.
-  - primary damage `10.5`, secondary damage `72%`.
-  - primary/secondary knockback with immediate hit snap.
-- Added runtime arc targeting through `PrototypeEnemySpawner.FindTargetsInArc`.
-- Added enemy hit reaction through `PrototypeEnemy.ApplyKnockback`.
-- Synced scene and player prefab serialized weapon values.
-- Evidence:
-  - `LETHE/Assets/_dev/Evidence/prototype_weapon_range_interaction_game.png`
-- Verification:
-  - Unity compile errors: `0`.
-  - Scene missing references: `0`.
-  - Play Mode console errors: `0`.
-  - Forced base dual-blade swing against five enemies:
-    - primary target `28.0 -> 17.5`.
-    - secondary targets `28.0 -> 20.4`.
-    - all five targets moved outward immediately after hit.
-    - weapon cleave/primary hit line VFX count observed: `12`.
-  - Editor state after stop: active scene `Dev_Prototype_v0`, `sceneDirty=false`.
-
-## Latest Memory Hunting Window Fix
-
-- User review: memory seemed to turn into echo too quickly, making it hard to judge whether active memories are good for hunting.
-- Diagnosis: after the cleave range pass, kill speed increased, but auto-forget still used the old early threshold.
-- Changed automatic forgetting so every newly chosen/reacquired memory gets a protected active hunting window:
-  - first auto-forget target moved to `26` kills.
-  - subsequent auto-forget interval moved to `14` kills.
-  - new active memory protection: at least `14` kills and `18` seconds before auto-forget can fire.
-  - HUD now shows `보호 N킬/N초` beside the next forget candidate while protection is active.
-- Verification:
-  - Unity compile errors: `0`.
-  - Scene missing references: `0`.
-  - Play Mode console errors: `0`.
-  - Forced state with `kills=31` during protection: `activeCount=1`, `echoCount=0`.
-  - Forced state after protection expired: `activeCount=0`, `echoCount=1`.
-  - Editor state after stop: active scene `Dev_Prototype_v0`, `sceneDirty=false`.
-
-## Latest Memory Identity / Balance Fix
-
-- User review: Kalmuri and Blood memory effects are not readable; base attack is too strong with too much knockback; the blue line near the character is distracting.
-- Changed basic dual blades into a weaker base layer:
-  - damage `10.5 -> 5.8`.
-  - range `2.35 -> 2.15`.
-  - max targets `5 -> 4`.
-  - secondary damage `72% -> 48%`.
-  - primary knockback `3.8 -> 1.45`.
-  - secondary knockback `2.6 -> 0.85`.
-  - enemy knockback snap reduced and velocity clamp lowered.
-- Changed active Kalmuri into an independent orbit blade memory:
-  - periodic orbit blade sprites around player.
-  - periodic nearby enemy cuts independent of weapon swing.
-  - removed old persistent blue `ActiveHungryBladesOrbit` line.
-- Changed active Blood into a red mark/heal identity:
-  - periodic red mark pulse on nearby enemies.
-  - visible heal bloom near player.
-  - reduced on-hit thread strength so it supports, not dominates.
-- Verification:
-  - Unity compile errors: `0`.
-  - Scene missing references: `0`.
-  - Play Mode console errors: `0`.
-  - Basic swing smoke: primary `28.0 -> 22.2`, secondary `28.0 -> 25.2`, fifth target not hit.
-  - Kalmuri smoke: level 1 tick damaged `2` nearby enemies and spawned `4` Kalmuri sprites; old blue orbit lines `0`.
-  - Blood smoke: level 1 tick damaged `2` nearby enemies, healed player `72.0 -> 72.7`, spawned `3` blood sprites.
-  - Evidence: `LETHE/Assets/_dev/Evidence/prototype_memory_identity_pass_game.png`.
+Do not continue polishing `Dev_EchoSlice` or `Dev_Prototype_v0` as the main path. Do not add shop, meta progression, multi-region structure, or final boss.

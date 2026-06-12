@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LETHE 개발 보고서 - 2026-06-12</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f3;
+      --paper: #ffffff;
+      --ink: #17201d;
+      --muted: #64706b;
+      --line: #dce2da;
+      --accent: #1f6b4d;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); }
+    body.panel-open { overflow: hidden; }
+    main { width: min(980px, 100%); margin: 0 auto; padding: 30px 22px 44px; }
+    nav { margin-bottom: 18px; font-size: 14px; }
+    a { color: var(--accent); font-weight: 900; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .eyebrow { margin: 0 0 8px; color: var(--accent); font-size: 13px; font-weight: 900; }
+    h1 { margin: 0 0 10px; font-size: clamp(30px, 5vw, 46px); line-height: 1.08; }
+    .intro { margin: 0 0 18px; color: var(--muted); line-height: 1.65; }
+    ul { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+    li { margin: 0; }
+    .unit-card {
+      min-height: 136px;
+      padding: 17px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+    .unit-card:focus-within,
+    .unit-card:hover,
+    .unit-card.is-active {
+      border-color: rgba(31, 107, 77, 0.55);
+      box-shadow: 0 14px 30px rgba(23, 32, 29, 0.08);
+      transform: translateY(-1px);
+    }
+    .unit-panel[hidden] { display: none; }
+    .unit-panel {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: flex;
+      justify-content: flex-end;
+      background: rgba(23, 32, 29, 0.22);
+    }
+    .unit-panel__scrim {
+      position: absolute;
+      inset: 0;
+      cursor: pointer;
+    }
+    .unit-panel__shell {
+      position: relative;
+      width: min(760px, calc(100% - 28px));
+      height: calc(100% - 28px);
+      margin: 14px;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: 0 24px 70px rgba(23, 32, 29, 0.22);
+    }
+    .unit-panel__bar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+    }
+    .unit-panel__title {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .unit-panel__close {
+      min-width: 38px;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .unit-panel__close:hover {
+      border-color: rgba(31, 107, 77, 0.55);
+      color: var(--accent);
+    }
+    .unit-detail {
+      padding: 22px;
+    }
+    .unit-detail h1 { font-size: 28px; }
+    .unit-detail h2 {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      font-size: 21px;
+    }
+    .unit-detail ul { display: block; padding-left: 22px; list-style: disc; }
+    .unit-detail li { margin-bottom: 6px; }
+    .unit-detail code {
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: #eef2f7;
+    }
+    .back-inline { margin-bottom: 16px; }
+    .number { display: block; margin-bottom: 8px; color: var(--muted); font-size: 13px; font-weight: 900; }
+    h2 { margin: 0 0 8px; font-size: 20px; line-height: 1.3; }
+    p { margin: 0; color: var(--muted); line-height: 1.6; }
+    footer { margin-top: 20px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 720px) {
+      main { padding: 24px 16px 36px; }
+      .unit-panel {
+        align-items: flex-end;
+      }
+      .unit-panel__shell {
+        width: 100%;
+        height: min(86vh, calc(100% - 18px));
+        margin: 9px;
+      }
+      .unit-detail { padding: 18px; }
+      .unit-detail h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <nav><a href="/api/projects/lethe/reports/index.html">전체 리포트 목록</a></nav>
+    <p class="eyebrow">20260612 개발 기록</p>
+    <h1>LETHE 개발 보고서 - 2026-06-12</h1>
+    <p class="intro">새 통합 설계 문서(LETHE_DESIGN_00..07)를 기준으로 Unity 프로토타입을 v1로 다시 시작했다.</p>
+    <ul id="unit-list">
+      <li>
+        <article class="unit-card">
+          <span class="number">2026-06-12-01</span>
+          <h2><a href="#unit-2026-06-12-01" data-unit-link="unit-2026-06-12-01">Dev_Prototype_v1 새 출발</a></h2>
+          <p>Dev_Prototype_v0는 실패한 참고용으로 내리고, 새 메인 대상은 Assets/_dev/Scenes/Dev_Prototype_v1.unity다. v1은 Scripts/PrototypeV1 아래 새 코드로 분리했다.</p>
+        </article>
+      </li>
+    </ul>
+    <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
+      <div class="unit-panel__scrim" data-panel-close></div>
+      <div class="unit-panel__shell" role="dialog" aria-modal="true" aria-label="작업 단위 상세">
+        <div class="unit-panel__bar">
+          <p class="unit-panel__title">작업 단위 상세</p>
+          <button class="unit-panel__close" type="button" data-panel-close aria-label="패널 닫기">&times;</button>
+        </div>
+        <article class="unit-detail" id="unit-2026-06-12-01" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-12-01 - Dev_Prototype_v1 새 출발</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v0</code>는 실패한 참고용으로 내리고, 새 메인 대상은 <code>Assets/_dev/Scenes/Dev_Prototype_v1.unity</code>다. v1은 <code>Scripts/PrototypeV1</code> 아래 새 코드로 분리했다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>V1GameManager</code>를 추가했다.</li>
+<li><code>Dev_Prototype_v1.unity</code> 새 씬을 만들었다.</li>
+<li>플레이어, 카메라, 맵, 쌍검, 적 스폰, HUD, XP/레벨업, 망각/잔향/공명 기초 루프를 새로 구성했다.</li>
+<li>Input System 전용 프로젝트에서 입력 예외가 나지 않도록 고쳤다.</li>
+<li>4방향 sprite sheet가 통째로 보이는 문제를 런타임 frame crop으로 고쳤다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, 0 warning / 0 error.</li>
+<li>Unity compile errors: <code>count=0</code>.</li>
+<li>Unity scene open: <code>Assets/_dev/Scenes/Dev_Prototype_v1.unity</code> 성공.</li>
+<li>Play Mode smoke: player 생성 <code>true</code>, enemy <code>2</code>, SpriteRenderer <code>107</code>.</li>
+<li>Console: v1 runtime exception 없음.</li>
+<li>Game capture: 플레이어/적이 sprite sheet 전체가 아니라 단일 프레임으로 표시됨.</li>
+<li><code>npm.cmd run report</code>: 통과.</li>
+<li><code>npm.cmd run report:check</code>: 통과.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>v0를 더 고치지 않고 v1을 메인으로 한다.</li>
+<li>지금은 8기억 전체 확장보다 M1 게임 셸 완성이 우선이다.</li>
+<li>대검/8기억/8잔향/4궁극은 v1 M1/M2가 납득된 뒤 다시 확장한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>v1은 아직 출시형 구조가 아니라 M1 검증용 런타임이다.</li>
+<li>sprite sheet는 import slicing이 아니라 런타임 crop으로 임시 처리했다.</li>
+<li>아직 자동화 smoke injector와 M2 Gatekeeper 루프가 부족하다.</li>
+<li>Project Orchestrator Discord intake가 현재 응답하지 않아 dry-run 보고가 실패했다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>이전 Unity 프로토타입은 실패 기준으로 보고, 새 문서 기준의 v1을 시작했다. 다음 판단은 v1의 카메라/적/무기/XP/HUD가 게임 셸로 충분한지다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>v1 카메라와 전투 체감 보강.</li>
+<li>debug smoke injector 추가.</li>
+<li>Gatekeeper -&gt; 망각 결과 -&gt; 결손 생존 -&gt; 공명 루프 구현.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 이전 프로토타입은 설계 의도를 반영하지 못해 평가 기준이 흔들렸다.</li>
+<li>방향: 실패한 v0를 패치하지 않고 새 설계 문서 기준으로 v1을 분리했다.</li>
+<li>행동: 새 씬/새 namespace/새 런타임을 만들고 Unity MCP로 컴파일·Play Mode 검증했다.</li>
+<li>결과: 다시 평가 가능한 최소 게임 셸의 출발점이 생겼다.</li>
+</ul>
+    </article>
+      </div>
+    </section>
+    <footer>기준: 2026-06-12</footer>
+  </main>
+  <script>
+    (() => {
+      const panel = document.getElementById('unit-detail-root');
+      const panelShell = panel?.querySelector('.unit-panel__shell');
+      const closeButton = panel?.querySelector('.unit-panel__close');
+      const details = Array.from(document.querySelectorAll('.unit-detail'));
+      const links = Array.from(document.querySelectorAll('[data-unit-link]'));
+      const setActiveCard = (id) => {
+        links.forEach((link) => {
+          const isActive = link.getAttribute('data-unit-link') === id;
+          link.closest('.unit-card')?.classList.toggle('is-active', isActive);
+        });
+      };
+      const closePanel = () => {
+        if (!panel) return;
+        panel.hidden = true;
+        document.body.classList.remove('panel-open');
+        details.forEach((detail) => { detail.hidden = true; });
+        setActiveCard('');
+        if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+      };
+      const showUnit = (id) => {
+        const target = document.getElementById(id);
+        if (!target) return;
+        if (!panel) return;
+        panel.hidden = false;
+        document.body.classList.add('panel-open');
+        details.forEach((detail) => { detail.hidden = detail !== target; });
+        setActiveCard(id);
+        if (panelShell) panelShell.scrollTop = 0;
+        if (closeButton) closeButton.focus({ preventScroll: true });
+      };
+      document.addEventListener('click', (event) => {
+        const unitLink = event.target.closest('[data-unit-link]');
+        if (unitLink) {
+          event.preventDefault();
+          const id = unitLink.getAttribute('data-unit-link');
+          history.pushState(null, '', '#' + id);
+          showUnit(id);
+          return;
+        }
+        if (event.target.closest('[data-panel-close]')) {
+          event.preventDefault();
+          closePanel();
+        }
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && panel && !panel.hidden) closePanel();
+      });
+      window.addEventListener('popstate', () => {
+        const id = location.hash.replace(/^#/, '');
+        if (id) showUnit(id);
+        else closePanel();
+      });
+      const initial = location.hash.replace(/^#/, '');
+      if (initial) showUnit(initial);
+    })();
+  </script>
+</body>
+</html>
