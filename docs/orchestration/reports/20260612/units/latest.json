@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260612\\index.md",
-  "generatedAt": "2026-06-12T07:43:48.415Z",
-  "unitCount": 4,
+  "generatedAt": "2026-06-12T07:58:11.577Z",
+  "unitCount": 5,
   "latest": {
-    "title": "2026-06-12-04 - 무기 리듬과 잔향 변형 법칙 보정",
-    "number": "04",
-    "markdownPath": "docs\\orchestration\\reports\\20260612\\units\\2026-06-12-04-무기-리듬과-잔향-변형-법칙-보정.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260612\\units\\2026-06-12-04-무기-리듬과-잔향-변형-법칙-보정.html"
+    "title": "2026-06-12-05 - 쌍검 허공 베기 제거와 칼무리 MultiSmall 구현",
+    "number": "05",
+    "markdownPath": "docs\\orchestration\\reports\\20260612\\units\\2026-06-12-05-쌍검-허공-베기-제거와-칼무리-multismall-구현.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260612\\units\\2026-06-12-05-쌍검-허공-베기-제거와-칼무리-multismall-구현.html"
   }
 }

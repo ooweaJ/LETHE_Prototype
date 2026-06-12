@@ -42,6 +42,7 @@ namespace Lethe.PrototypeV1
         const float TwinBladeInterval = 0.36f;
         const float TwinBladeDamage = 15f;
         const float TwinBladeArcDeg = 119f;
+        const float TwinBladeEngageMul = 1.15f;
         const float HungryBladesRadius = 72f / PixelsPerUnit;
         const float HungryBladesDps = 28f;
         const int MaxMemoryLevel = 5;
@@ -375,27 +376,31 @@ namespace Lethe.PrototypeV1
         {
             weaponTimer -= dt;
             if (weaponTimer > 0f) return;
-            weaponTimer = TwinBladeInterval * StatAttackIntervalMul();
 
-            var forward = ((Vector2)weaponAnchor.up).sqrMagnitude > 0.01f ? (Vector2)weaponAnchor.up : lastAim;
+            var target = FindTwinBladeTarget();
+            if (target == null)
+            {
+                weaponTimer = 0f;
+                return;
+            }
+
+            var forward = (Vector2)(target.transform.position - player.position);
+            if (forward.sqrMagnitude <= 0.001f) forward = lastAim;
+            forward.Normalize();
+            lastAim = forward;
+            weaponAnchor.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg - 90f);
+            weaponTimer = TwinBladeInterval * StatAttackIntervalMul();
             weaponAnimTimer = 0.16f;
             leftBladeLead = !leftBladeLead;
             SpawnTwinBladeSwing(forward);
-            var hits = enemies
-                .Where(e => e.IsAlive)
-                .Select(e => new { Enemy = e, Dir = (Vector2)(e.transform.position - player.position) })
-                .Where(x => x.Dir.magnitude <= TwinBladeRange + x.Enemy.TouchRadius)
-                .Where(x => Vector2.Angle(forward, x.Dir.normalized) <= TwinBladeArcDeg * 0.5f)
-                .OrderBy(x => x.Dir.magnitude)
-                .Take(6)
-                .ToList();
+            var hits = CollectTwinBladeHits(forward);
 
             var hitIndex = 0;
             foreach (var hit in hits)
             {
                 var damageMul = hitIndex == 0 ? 1f : 0.72f;
                 DealDamage(hit.Enemy, TwinBladeDamage * damageMul, "절단쌍검", true, hit.Dir.normalized, hitIndex == 0 ? 1.15f : 0.72f);
-                TriggerWeaponEchoes(hit.Enemy, forward);
+                TriggerWeaponEchoes(hit.Enemy, forward, hitIndex);
                 hitIndex++;
             }
 
@@ -405,6 +410,30 @@ namespace Lethe.PrototypeV1
                 cameraShakeTimer = 0.06f;
                 cameraShakeAmount = 0.025f;
             }
+        }
+
+        V1Enemy FindTwinBladeTarget()
+        {
+            var engageRadius = TwinBladeRange * TwinBladeEngageMul;
+            return enemies
+                .Where(e => e != null && e.IsAlive)
+                .Select(e => new { Enemy = e, Dir = (Vector2)(e.transform.position - player.position) })
+                .Where(x => x.Dir.magnitude <= engageRadius + x.Enemy.TouchRadius)
+                .OrderBy(x => x.Dir.sqrMagnitude)
+                .Select(x => x.Enemy)
+                .FirstOrDefault();
+        }
+
+        List<WeaponHit> CollectTwinBladeHits(Vector2 forward)
+        {
+            return enemies
+                .Where(e => e != null && e.IsAlive)
+                .Select(e => new WeaponHit(e, (Vector2)(e.transform.position - player.position)))
+                .Where(x => x.Distance <= TwinBladeRange + x.Enemy.TouchRadius)
+                .Where(x => x.Distance <= 0.001f || Vector2.Angle(forward, x.Dir.normalized) <= TwinBladeArcDeg * 0.5f)
+                .OrderBy(x => x.Distance)
+                .Take(6)
+                .ToList();
         }
 
         void UpdateActiveMemories(float dt)
@@ -453,7 +482,7 @@ namespace Lethe.PrototypeV1
             }
         }
 
-        void TriggerWeaponEchoes(V1Enemy enemy, Vector2 forward)
+        void TriggerWeaponEchoes(V1Enemy enemy, Vector2 forward, int hitIndex)
         {
             var kalmuriLevel = EchoLevel(V1MemoryId.HungryBlades);
             if (kalmuriLevel > 0)
@@ -461,11 +490,7 @@ namespace Lethe.PrototypeV1
                 var chance = kalmuriLevel >= 2 ? 1f : 0.30f;
                 if (UnityEngine.Random.value <= chance)
                 {
-                    var damage = TwinBladeDamage * (0.34f + kalmuriLevel * 0.06f);
-                    var pos = enemy.transform.position + (Vector3)(forward.normalized * 0.32f);
-                    var scale = kalmuriLevel >= 5 ? 0.42f : 0.27f + kalmuriLevel * 0.025f;
-                    SpawnTransientSprite("칼자국 잔향", LoadSprite("Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_echo_slash_01.png"), pos, Quaternion.Euler(0f, 0f, Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg), scale, new Color(0.75f, 0.98f, 1f, kalmuriLevel >= 5 ? 0.82f : 0.58f), 0.18f);
-                    DealDamage(enemy, damage, "칼무리 잔향", true, forward.normalized, 0.45f);
+                    TriggerTwinBladeKalmuriEcho(enemy, forward, kalmuriLevel, hitIndex);
                     if (kalmuriLevel >= 5)
                     {
                         LaunchKalmuriBlade(enemy);
@@ -483,6 +508,40 @@ namespace Lethe.PrototypeV1
                 {
                     BloodBloom(enemy, bloodLevel);
                 }
+            }
+        }
+
+        void TriggerTwinBladeKalmuriEcho(V1Enemy center, Vector2 forward, int level, int hitIndex)
+        {
+            var echoSizeScale = 0.80f;
+            var echoDamageScale = 0.75f;
+            var burstCount = Mathf.Clamp(1 + level / 2, 1, 3);
+            var radius = (0.44f + level * 0.045f) * echoSizeScale;
+            var damage = TwinBladeDamage * (0.22f + level * 0.045f) * echoDamageScale;
+            var baseAngle = Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg;
+            var origin = center.transform.position;
+            var side = new Vector2(-forward.y, forward.x).normalized;
+
+            for (int i = 0; i < burstCount; i++)
+            {
+                var offset = side * ((i - (burstCount - 1) * 0.5f) * 0.18f);
+                var pos = origin + (Vector3)(forward.normalized * (0.20f + i * 0.07f) + offset);
+                var rot = Quaternion.Euler(0f, 0f, baseAngle + (i - 1) * 18f + hitIndex * 7f);
+                var scale = 0.18f + level * 0.014f;
+                SpawnTransientSprite("칼무리 잔향 소참", MakeArcSprite("kalmuri-small", Color.white), pos, rot, scale, new Color(0.75f, 0.98f, 1f, level >= 5 ? 0.68f : 0.48f), 0.13f);
+            }
+
+            var targets = enemies
+                .Where(e => e != null && e.IsAlive && Vector2.Distance(origin, e.transform.position) <= radius + e.TouchRadius)
+                .OrderBy(e => Vector2.Distance(origin, e.transform.position))
+                .Take(level >= 5 ? 5 : 3)
+                .ToList();
+
+            for (int i = 0; i < targets.Count; i++)
+            {
+                var toTarget = (Vector2)(targets[i].transform.position - origin);
+                var mul = i == 0 ? 1f : 0.55f;
+                DealDamage(targets[i], damage * mul, "칼무리 잔향", true, toTarget.sqrMagnitude > 0.01f ? toTarget.normalized : forward.normalized, 0.28f);
             }
         }
 
@@ -510,6 +569,7 @@ namespace Lethe.PrototypeV1
             if (target == null) return;
             var go = new GameObject("KalmuriLaunchBlade");
             go.transform.position = player.position;
+            go.transform.localScale = Vector3.one * 0.18f;
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = LoadSprite("Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_launch_blade_01.png") ?? MakeBoxSprite("launch", Color.cyan, 16, 64);
             sr.sortingOrder = 45;
@@ -1208,6 +1268,20 @@ namespace Lethe.PrototypeV1
                 Title = title;
                 Body = body;
                 Apply = apply;
+            }
+        }
+
+        readonly struct WeaponHit
+        {
+            public readonly V1Enemy Enemy;
+            public readonly Vector2 Dir;
+            public readonly float Distance;
+
+            public WeaponHit(V1Enemy enemy, Vector2 dir)
+            {
+                Enemy = enemy;
+                Dir = dir;
+                Distance = dir.magnitude;
             }
         }
 

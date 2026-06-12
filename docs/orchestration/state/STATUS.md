@@ -42,6 +42,22 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 no-air-swing / Kalmuri MultiSmall implementation:
+  - Implemented the first code pass for DEC-2026-06-12-04.
+  - Twin blades no longer swing when no enemy is inside `range * 1.15`.
+  - Twin blades now acquire the nearest enemy and rotate the weapon anchor toward that target before swinging.
+  - Twin blade cleave is collected from the target direction, not from stale movement direction.
+  - Kalmuri echo now uses the twin-blade `MultiSmall` style: several small slash arcs around the hit enemy with local AoE damage.
+  - Kalmuri +5 launch blade scale was reduced so it no longer covers the screen.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors. Warnings are legacy v0/debug deprecated API warnings.
+  - `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`.
+  - Unity smoke result: `noAirBefore=0 noAirAfter=0 slashAfterTarget=3 kalmuriSmall=3 launch=1 hitSpark=2`.
+  - Unity console errors after smoke: `count=0`.
+  - Evidence direct camera render saved: `LETHE/Assets/_dev/Evidence/v1_no_air_swing_kalmuri_multismall_20260612.png`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 5 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+
 - Unity v1 combat feel pass:
   - Jaewoo review: camera/character scale were acceptable, but Kalmuri echo felt too large, basic dual-blade attacks lacked feel, XP needed a bar, and level-up choices should be larger 3-card selections.
   - Dual blades now spawn two offset slash arcs per attack instead of one flat arc.

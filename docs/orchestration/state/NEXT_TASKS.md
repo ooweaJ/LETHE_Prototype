@@ -8,14 +8,14 @@ Current source of truth: `docs/design/` (LETHE_DESIGN_00..07 + README). Build pl
 
 - Priority: highest
 - Source: `docs/design/LETHE_DESIGN_06_BUILD_PLAN.md` (M1), `LETHE_DESIGN_05_UI_UX.md`, `LETHE_DESIGN_01_RUN_LOOP.md`
-- Include: `Dev_Prototype_v1`을 Play Mode로 열고 쌍검 공격, 피격 피드백, 줄어든 칼무리, XP bar, 큰 3카드 선택 UI를 직접 확인한다. `M1 Smoke`, `M2 Loop`, `F8`도 같이 본다.
+- Include: `Dev_Prototype_v1`을 Play Mode로 열고 쌍검이 허공에 베지 않는지, nearest target으로 도는지, 칼무리 `MultiSmall`이 작은 잔향으로 읽히는지, XP bar/3카드 UI가 괜찮은지 확인한다. `M1 Smoke`, `M2 Loop`, `F8`도 같이 본다.
 - Done: jaewoo가 M1 전투 손맛에 대해 `GO`, `ITERATE`, `NO-GO` 중 하나를 준다.
 
-## 2. 기본공격/피격효과 설계 확정
+## 2. 대검 공격 구조 준비
 
 - Priority: highest
-- Include: 쌍검/대검 각각의 기본공격 리듬, 범위, hitstop, knockback, 피격 flash, 잔향 발동 방식 차이를 문서와 구현에 맞춘다.
-- Done: 무기별 기본공격이 "각 무기의 재미"로 기능한다.
+- Include: `DensestArc`, `SingleHeavy`, `FewHeavy`를 구현할 수 있게 weapon targeting/echo proc 구조를 분리한다.
+- Done: 대검을 추가할 때 쌍검 코드를 복사하지 않고 무기 정의/전략으로 갈아낄 수 있다.
 
 ## 3. M2 실제 페이싱화
 

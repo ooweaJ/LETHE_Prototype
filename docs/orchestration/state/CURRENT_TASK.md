@@ -44,6 +44,7 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 - M1 and M2 debug smoke paths can be triggered without keyboard-only review.
 - M2 smoke reaches forgetting, result continuation, resonance, +5 echoes, and Blood Blade Storm.
 - Combat feel pass responds to jaewoo feedback: smaller Kalmuri echo, clearer dual-blade swing, hit feedback, XP bar, larger 3-card level-up UI.
+- DEC-2026-06-12-04 first implementation exists: no air swings, twin-blade nearest targeting, Kalmuri `MultiSmall` echo style.
 - Unity compile error 0.
 - Play Mode smoke creates player and enemies with no v1 runtime console exceptions.
 - v1 screenshot/capture confirms player/enemy sheets are not rendered as whole sheets.
@@ -76,17 +77,23 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - Play Mode M1 smoke snapshot: `scene=v1 elapsed=1.2 hp=210.0/210.0 level=2 xp=1/9 kills=4 memories=[HungryBlades:3,BloodReflection:2] echoes=[] enemies=8 storm=False result=False refill=False death=False dualSlash=12 hitSpark=6 xpOrb=4`.
   - Unity console errors: `count=0`.
   - Evidence direct camera render: `LETHE/Assets/_dev/Evidence/v1_combat_feel_pass_20260612.png`.
+- No-air-swing / Kalmuri MultiSmall pass:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors. Warnings are old v0/debug deprecated API usage.
+  - `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`.
+  - Play Mode targeted smoke: `noAirBefore=0 noAirAfter=0 slashAfterTarget=3 kalmuriSmall=3 launch=1 hitSpark=2`.
+  - Unity console errors: `count=0`.
+  - Evidence direct camera render: `LETHE/Assets/_dev/Evidence/v1_no_air_swing_kalmuri_multismall_20260612.png`.
 
 ## Next Implementation
 
-1. Jaewoo Play Mode review of the combat feel pass: dual-blade attack, hit feedback, Kalmuri size, XP bar, and 3-card level-up UI.
-2. Discuss/decide the final basic-attack and hit-feedback model per weapon.
-3. If M1 feel is accepted, replace the compressed M2 shortcut with real pacing: Gatekeeper kill -> result screen -> deficit survival -> resonance.
+1. Jaewoo Play Mode review of the no-air-swing twin-blade pass: no idle air swings, nearest target feel, Kalmuri MultiSmall size/readability.
+2. If accepted, prepare greatsword scaffolding for `DensestArc`, `SingleHeavy`, and `FewHeavy`.
+3. Then replace the compressed M2 shortcut with real pacing: Gatekeeper kill -> result screen -> deficit survival -> resonance.
 
 ## Open Questions
 
-- Is the new dual-blade attack readable enough, or does it need stronger animation/sound/VFX timing?
-- Is the softened Kalmuri size acceptable in actual Play Mode?
+- Does no-air-swing make the twin blades feel more intentional, or does it make idle combat feel too quiet?
+- Is Kalmuri `MultiSmall` readable as a weapon echo rather than a giant independent memory?
 - What should be the shared rule for weapon-specific echo synergy between dual blades and greatsword?
 - Does the compressed M2 loop prove the direction, or does the real pacing need to be built before judgment?
 - Should generated sheets be sliced/imported properly next, instead of runtime-cropped in the manager?
