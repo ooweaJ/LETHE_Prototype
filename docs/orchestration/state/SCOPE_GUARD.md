@@ -1,36 +1,39 @@
 # Scope Guard
 
-Until the user or planning review explicitly changes scope, do not add:
+최종 갱신: 2026-06-12 · 기준: `docs/design/LETHE_DESIGN_00..07`
 
-- Meta progression.
-- Shop systems.
-- Final boss expansion.
-- More than the current memory scope.
-- More than 3 active memory slots.
-- Multi-region run structure.
-- Additional bosses.
-- Large weapon expansion.
-- Memory synthesis, strengthening, or upgrade systems.
-- Complex ending branches.
-- Narrative cutscene expansion.
-- Save/load campaign structure.
-- Log analysis dashboard as gameplay scope.
-- Difficulty selection.
-- Character selection.
-- Unlock systems.
+방향 확정(DEC-2026-06-12-01): Unity가 공식 방향. HTML-first 검증 게이트 종료. 범위는 무기 2 + 기억 8 + 잔향 8 + 궁극 4 + 적 4 + 보스(문지기).
 
-## Current Unity Gate
+## 범위 안 (이제 허용)
 
-The current gate is the first Unity `_dev` game slice. The slice should prove that `절단쌍검 + 칼무리 잔향 + 혈반 잔향 + 피의 칼폭풍` can be read as combat action, not text labels.
+- 장송대검(`Weapon_Greatsword`).
+- 기억 8종, 잔향 8종, 궁극 잔향 4종.
+- 기억 레벨업(+1~+5), 잔향 누적/각성(+5), 공명 재획득.
+- 적 4종 + 문지기 보스.
 
-GO requires:
+## 범위 밖 (사용자/기획 리뷰가 명시적으로 바꾸기 전까지 금지)
 
-- Basic player/enemy/map/weapon readability in `Dev_EchoSlice`.
-- Data-driven `WeaponDefinition`, `MemoryDefinition`, `EchoDefinition`, and `EchoSynergyDefinition` foundations.
-- Prefabs wired through definitions rather than hard-coded ids.
-- Debug states for basic attack, Kalmuri +1/+5, Blood +5, and Blood Blade Storm.
-- jaewoo review evidence recorded in orchestration docs.
+- 상점 시스템.
+- 메타 progression / 영구 성장.
+- 다중 지역 run structure.
+- 최종 보스 / 문지기 외 추가 보스 라인.
+- 무기/기억/잔향의 추가 확장(2/8/8/4를 넘는 것).
+- 활성 기억 슬롯 3개 초과(`maxActiveMemorySlots = 3` 유지).
+- 출시급 UI/사운드 전체, Steam/빌드 배포.
+- `Assets/_dev` → `Assets/Lethe` 승격(코어 슬라이스 GO 전까지).
+- 저장/로드 캠페인 구조, 난이도/캐릭터 선택, unlock 시스템, 서사 컷신 확장.
+- 로그 분석 대시보드를 게임플레이 범위로 만드는 것.
 
-## Current Tuning Rule
+## 현재 Unity 게이트
 
-Do not continue blind numeric tuning before regression evidence and human session evidence unless the user explicitly changes scope. If regression fails, choose exactly one small lever.
+현재 게이트는 `LETHE_DESIGN_06_BUILD_PLAN.md`의 **M1(게임 셸 HTML 이식) → M2(1코어 수직 슬라이스, HTML 이상 퀄)**다. `Dev_Prototype_v1`에서 8/8/4를 placeholder로 동시에 넓히지 말고, 코어 1조합(쌍검 + 굶주린 칼무리 + 피의 반사 + 피의 칼폭풍)을 HTML 수준으로 먼저 증명한다.
+
+M2 GO 요건:
+- HTML 수준의 게임 셸(HUD·레벨업·망각 결과 화면)이 `Dev_Prototype_v1`에서 돈다.
+- HTML 검증 수치(`src/game.js`, `v0.12-balance-1`)를 재유도하지 않고 이식.
+- 잔향이 텍스트가 아니라 전투 행동/형태 변화로 읽힌다.
+- jaewoo 1인 리뷰 GO/ITERATE/NO-GO 기록.
+
+## 현재 튜닝 규칙
+
+회귀 근거와 사람 세션 근거 없이 맹목적 수치 튜닝을 계속하지 않는다. 회귀가 실패하면 정확히 작은 레버 하나만 고른다. 새 수치는 design 세트와 `src/game.js`를 함께 갱신한다.

@@ -1,60 +1,35 @@
-# LETHE Design Docs
+# LETHE 기획·개발 기준 문서 (단일 source of truth)
 
-최종 갱신: 2026-06-11
+최종 갱신: 2026-06-12
 
-이 폴더는 LETHE의 기억/망각/잔향/공명 루프를 구체화하기 위한 한글 기획 문서 묶음이다. 현재 Unity 구현 기준은 `LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`다. 쌍검-only slice는 기준 확정용으로 부족하다고 판단했고, 다음 구현은 `쌍검 + 대검 + 8기억 + 8잔향 + 4궁극` complete prototype으로 진행한다.
+이 폴더는 LETHE의 **유일한 기획·개발 기준 문서 세트**다. HTML v0.12 프로토타입에서 검증된 코어(전투·런 루프·밸런스·UI)를 기준선으로 삼고, 그 위에 잔향·공명·궁극 잔향 확장 개념을 얹었다. **이 세트만 보고 Unity 구현이 가능하도록** 모든 수치를 포함한다.
 
-## 읽는 순서
+이전의 분산된 기획/PRD 문서(A군: `LETHE_GAME_DESIGN_OVERVIEW`, `LETHE_CORE_SYSTEMS_UNITY_PLAN`, `LETHE_UNITY_*_PRD`, `LETHE_RUN_STRUCTURE`, `LETHE_COMBAT_DESIGN`, `LETHE_CONTENT_TABLES`, `LETHE_BALANCE_BASELINE` 등)와 에셋/아트 가이드(B군: `LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN`, `LETHE_UNITY_ASSET_BINDING_PLAN`, `LETHE_VISUAL_ASSET_PLAN`, `LETHE_UNITY_ART_DIRECTION_REPLACEMENT_PLAN`, `LETHE_RELEASE_ART_FONT_VFX_PLAN`)는 이 세트(특히 07)로 통합·대체되었다.
 
-1. `LETHE_GAME_DESIGN_OVERVIEW.md`
-   - 프로젝트 전체 비전, 핵심 재미, 현재 단계.
-2. `LETHE_CORE_SYSTEMS_UNITY_PLAN.md`
-   - 기억, 잔향, 공명, 각성 잔향, 궁극 잔향.
-3. `LETHE_FORGETTING_FEEL_SPEC.md`
-   - 망각, 잔향, 공명, 궁극 목표가 플레이 중 어떻게 보여야 하는지.
-4. `LETHE_WEAPON_MEMORY_ECHO_SPEC.md`
-   - 무기, 기억, 잔향, 각성, 공명, 궁극 잔향의 구체 전투 행동.
-5. `LETHE_WEAPON_MEMORY_ECHO_DETAIL.md`
-   - 잔향을 레벨 단위, 동작 단위, 무기별 표현까지 내려 쓴 상세 구현 설계.
-6. `LETHE_ECHO_FORM_TRANSFORMATION_SPEC.md`
-   - 활성 기억, 망각, 잔향, 각성, 공명, 궁극의 화면 형태 변환 문법.
-7. `LETHE_UNITY_ECHO_SYSTEM_PRD.md`
-   - Unity 첫 slice의 잔향 시스템 PRD, 클래스 역할, ScriptableObject, 프리팹, 에셋 구조.
-8. `LETHE_VISUAL_ASSET_PLAN.md`
-   - Unity 첫 slice에 사용할 스프라이트/VFX 콘셉트 이미지, 파츠, import 계획, 프리팹 연결.
-9. `LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md`
-   - 첫 Unity slice를 위해 어떤 이미지를 어떤 순서로 만들고, 어떤 MCP/프리팹/테스트 게이트로 검증할지 정의.
-10. `LETHE_UNITY_ASSET_BINDING_PLAN.md`
-   - 캐릭터, 맵, 무기, 잔향 VFX 이미지 파일을 Unity 프리팹, ScriptableObject, Scene에 연결하는 MCP 실행용 지도.
-11. `LETHE_UNITY_ECHO_SLICE_PROMOTION_GATE.md`
-   - `_dev` echo slice를 언제 `Assets/Lethe`로 승격할지 정하는 GO/ITERATE/NO-GO 체크리스트.
-12. `LETHE_UNITY_GAMEPLAY_SLICE_REPAIR_PLAN.md`
-   - 허접한 VFX 확인 장치를 실제로 움직이는 최소 게임 slice로 끌어올리기 위한 수리 계획.
-13. `LETHE_UNITY_PLAYABLE_GAME_SLICE_PLAN.md`
-   - Unity 작업을 잔향 VFX 테스트에서 실제 playable game slice로 전환하기 위한 단계별 기준.
-14. `LETHE_UNITY_PROTOTYPE_V0_PLAN.md`
-   - slice 접근을 폐기하고 Unity Prototype v0.1을 직접 구현하기 위한 최신 기준.
-15. `LETHE_UNITY_PROTOTYPE_V0_PRD.md`
-   - 기존 기획/개발 문서를 통합한 Unity Prototype v0.1 실행 PRD. 구현 순서와 수락 기준의 최신 기준.
-16. `LETHE_UNITY_COMPLETE_PROTOTYPE_PRD.md`
-   - `Dev_Prototype_v0` 이후의 최신 상위 실행 PRD. 대검, 8개 기억, 8개 잔향, 4개 궁극 잔향까지 포함한 완성형 프로토타입 범위와 데이터 구조, milestone, 수락 기준.
-17. `LETHE_RELEASE_ART_FONT_VFX_PLAN.md`
-   - 출시 후보 감각을 위한 폰트, 정식 아트, 활성 기억/잔향/궁극 VFX 계층 기준.
-18. `LETHE_UNITY_VERTICAL_SLICE_SPEC.md`
-   - Unity 첫 구현 범위와 완료 기준.
-19. `LETHE_RUN_STRUCTURE.md`
-   - 한 판 흐름, 성장, 망각, 보충.
-20. `LETHE_COMBAT_DESIGN.md`
-   - 무기, 적 역할, 전투 감각.
-21. `LETHE_CONTENT_TABLES.md`
-   - 기억, 잔향, 시너지, 적 표.
-22. `LETHE_BALANCE_BASELINE.md`
-   - v0.12 기준 수치와 Unity 초기 목표.
+## 핵심 원칙
 
-## 문서 운영 원칙
+- HTML 코어는 "참고 자료"가 아니라 **이식(port) 대상**이다. 검증된 수치는 재유도하지 말고 그대로 옮긴다.
+- 새 개념(잔향·공명·궁극)은 HTML 코어를 대체하지 않고 **그 위에 얹는다**.
+- "역할이 화면에서 읽히는가"가 스프라이트 퀄리티보다 우선이다. 단, 기본 게임 셸(HUD·레벨업·망각 결과 화면)은 HTML 수준을 먼저 재현한다.
 
-- `LETHE_GAME_DESIGN_OVERVIEW.md`는 사람이 처음 읽는 입구다.
-- 세부 수치와 표는 별도 문서에서 관리한다.
-- 오래된 HTML 프로토타입 문서는 근거 자료로 남기고, 최신 판단은 이 폴더와 `docs/orchestration/state/`를 우선한다.
-- Complete Prototype 전에는 상점, 메타 진행, 다중 지역 완성, 최종보스, 출시급 UI/사운드를 시작하지 않는다.
-- 장송대검, 8종 기억, 8종 잔향, 4종 궁극 잔향은 이제 실험 범위 안에 있다.
+## 문서 인덱스
+
+| 문서 | 역할 |
+| --- | --- |
+| [00_OVERVIEW](LETHE_DESIGN_00_OVERVIEW.md) | 제품 비전, 코어 루프, 플레이어 감정, 범위 |
+| [01_RUN_LOOP](LETHE_DESIGN_01_RUN_LOOP.md) | 런 타임라인, 압박 페이즈, 망각 타이밍, 결손 생존, 보충 |
+| [02_COMBAT](LETHE_DESIGN_02_COMBAT.md) | 플레이어, 무기 2종, 적 4종, 보스, 전투 수치 |
+| [03_MEMORY_ECHO](LETHE_DESIGN_03_MEMORY_ECHO.md) | 8기억, 망각→잔향 변환, 과부하, 공명, 각성, 4궁극 |
+| [04_BALANCE](LETHE_DESIGN_04_BALANCE.md) | XP 곡선, 레벨업 선택, 스탯, 적 스케일링, 전 상수표 |
+| [05_UI_UX](LETHE_DESIGN_05_UI_UX.md) | HUD, 시작/레벨업/망각결과/사망 화면, 패널, 디버그 |
+| [06_BUILD_PLAN](LETHE_DESIGN_06_BUILD_PLAN.md) | Unity 구현 순서, 마일스톤, 데이터 구조, 수락 기준 |
+| [07_ASSETS_VFX](LETHE_DESIGN_07_ASSETS_VFX.md) | 에셋·VFX·프리팹·클래스 연결 매트릭스(8/8/4+대검), imagegen·폰트·MCP |
+
+## 수치 출처
+
+모든 코어 수치는 `src/game.js`(HTML v0.12, `balance.version = "v0.12-balance-1"`)에서 추출했다. 각 표에 원본 식별자를 병기한다. 수치를 바꿀 때는 이 문서 세트와 `src/game.js`를 함께 갱신한다.
+
+## 범위 (이 세트가 다루는 것 / 안 다루는 것)
+
+- 다룬다: 무기 2종, 기억 8종, 잔향 8종, 궁극 4종, 적 4종 + 보스, 런 1판 루프, UI 전체, 밸런스 수치.
+- 안 다룬다(보류): 상점, 메타 성장, 다중 지역, 최종 보스 확장, 출시급 사운드, 빌드 배포, `Assets/Lethe` 승격.

@@ -2,14 +2,14 @@
 
 이 저장소에서 Codex는 Unity 2D 게임개발, 리소스 제작, AnkleBreaker Unity MCP 작업, C# 구현, 프리팹/씬 조립, 검증, 기록 갱신을 담당한다.
 
-현재 목표는 HTML 프로토타입에서 검증한 LETHE의 기억/망각/잔향 구조를 Unity 2D 게임 slice로 옮겨, `절단쌍검 + 칼무리 잔향 + 혈반 잔향 + 피의 칼폭풍`이 실제 전투, 리소스, 프리팹, 디버그 루프에서 작동하는지 검증하는 것이다.
+현재 목표는 HTML v0.12에서 검증된 코어(전투·런 루프·밸런스·UI)를 Unity `Dev_Prototype_v1`로 이식해 HTML 수준의 게임 셸을 먼저 세우고, 그 위에 잔향/공명/궁극 확장(무기 2종, 기억 8종, 잔향 8종, 궁극 4종)을 얹는 것이다. 기준 문서는 `docs/design/`의 `LETHE_DESIGN_00..07` 세트다(2026-06-12 통합, DEC-2026-06-12-01/02/03). 구현 순서는 `LETHE_DESIGN_06_BUILD_PLAN.md`를 따른다: 게임 셸(M1) → 1코어 수직 슬라이스(M2) → 대검(M3) → 8종 확장(M4) → 4궁극(M5).
 
 ## Core Workflow
 
 1. 구현 전 현재 파일과 문서를 확인한다.
 2. Unity 작업은 `Assets/_dev`에서 먼저 진행한다. 첫 slice가 통과하기 전에는 `Assets/Lethe`로 승격하지 않는다.
 3. Unity Editor 조작은 AnkleBreaker Unity MCP를 우선 사용한다. 직접 Unity HTTP bridge를 호출하지 않는다.
-4. 리소스가 필요한 작업은 `docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md`의 파일명/프리팹/클래스 매트릭스를 따른다. imagegen은 리소스 제작 수단이지 전체 개발 목표가 아니다.
+4. 리소스가 필요한 작업은 `docs/design/LETHE_DESIGN_07_ASSETS_VFX.md`의 파일명/프리팹/클래스 매트릭스를 따른다. imagegen은 리소스 제작 수단이지 전체 개발 목표가 아니다.
 5. 코드, 리소스, 문서 변경 후 가능한 검증을 실행한다.
 6. 결과를 `docs/orchestration/state/STATUS.md`에 반영하고, 필요한 경우 `docs/CODEX_STATUS.md`는 상세 레거시 아카이브로만 갱신한다.
 7. 의미 있는 작업 단위가 끝나면 AI용 기록은 `docs/orchestration/devlog/YYYY-MM-DD.md`, 사람용 보고는 `docs/orchestration/reports/YYYYMMDD/index.md`에 갱신한다. 기존 `YYYYMMDD.md` devlog는 레거시 연속성 기록으로 유지한다.
@@ -23,14 +23,14 @@
 
 첫 Unity slice는 아래 순서로 진행한다.
 
-1. **규약/문서 확인**: `AGENTS.md`, orchestration state, `LETHE_UNITY_ECHO_SYSTEM_PRD.md`, `LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md`, `LETHE_UNITY_ASSET_BINDING_PLAN.md`를 읽는다.
+1. **규약/문서 확인**: `AGENTS.md`, orchestration state, `docs/design/LETHE_DESIGN_00..07`(에셋 작업 시 특히 `LETHE_DESIGN_07_ASSETS_VFX.md`)를 읽는다.
 2. **개발 루트 확인**: AnkleBreaker MCP로 Unity `LETHE` 인스턴스와 `Assets/_dev` 인식을 확인한다.
 3. **프로젝트 구조 생성**: `_dev/Art`, `_dev/Prefabs`, `_dev/Scripts`, `_dev/Data`, `_dev/Scenes` 하위 구조를 만든다.
 4. **리소스 파이프라인**: player, enemy, map, weapon, echo VFX, ultimate VFX 이미지를 필요한 순서로 만든다. 현재 첫 단계는 기본 판독 이미지 5개다.
 5. **런타임 기반 구현**: `RunBuildState`, `WeaponDefinition`, `MemoryDefinition`, `EchoDefinition`, `HitEvent`, `HitResolver`, `EchoTriggerRouter`, `PoolService` 같은 핵심 C# 구조를 만든다.
 6. **기본 전투 루프**: player 이동/anchor, test enemy, dual blades, hitbox, damage/flash를 연결한다.
 7. **기억/망각/잔향 루프**: 활성 칼무리, 혈반 잔향, 잔향 레벨, +5 각성, 공명, 피의 칼폭풍을 구현한다.
-8. **프리팹/씬 조립**: `Dev_EchoSlice.unity`에 player, arena, enemies, weapon, echo prefabs, debug panel을 배치한다.
+8. **프리팹/씬 조립**: `Dev_Prototype_v1.unity`에 player, arena, enemies, weapon, echo prefabs, debug panel을 배치한다.
 9. **디버그 루프**: debug panel에서 기본 쌍검, 칼무리 +1, 칼무리 +5, 혈반 +5, 피의 칼폭풍 상태를 즉시 전환할 수 있게 한다.
 10. **검증/리뷰**: Unity console, MCP asset/scene 확인, 필요 시 테스트 또는 스크린샷, jaewoo 1인 리뷰로 GO/ITERATE/NO-GO를 판단한다.
 11. **승격 판단**: `_dev` slice가 GO일 때만 구조와 리소스를 `Assets/Lethe`로 승격한다.
