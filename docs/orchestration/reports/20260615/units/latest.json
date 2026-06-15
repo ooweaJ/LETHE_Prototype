@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260615\\index.md",
-  "generatedAt": "2026-06-15T06:52:38.880Z",
-  "unitCount": 1,
+  "generatedAt": "2026-06-15T08:57:26.726Z",
+  "unitCount": 2,
   "latest": {
-    "title": "2026-06-15-01 - 쌍검 타겟 발도선과 칼무리 후속타 구현",
-    "number": "01",
-    "markdownPath": "docs\\orchestration\\reports\\20260615\\units\\2026-06-15-01-쌍검-타겟-발도선과-칼무리-후속타-구현.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260615\\units\\2026-06-15-01-쌍검-타겟-발도선과-칼무리-후속타-구현.html"
+    "title": "2026-06-15-02 - 대검을 위한 무기 리듬 구조 준비",
+    "number": "02",
+    "markdownPath": "docs\\orchestration\\reports\\20260615\\units\\2026-06-15-02-대검을-위한-무기-리듬-구조-준비.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260615\\units\\2026-06-15-02-대검을-위한-무기-리듬-구조-준비.html"
   }
 }

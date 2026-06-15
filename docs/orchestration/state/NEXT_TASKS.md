@@ -18,11 +18,11 @@ Current source of truth: `docs/design/` (LETHE_DESIGN_00..07 + README). Build pl
 - Include: 플레이 리뷰에서 공격감이 약하면 발도선 크기/위치, 보조 slash 수, 칼무리 지연 시간, hitstop 값을 조정한다. 코드 구현은 완료됐으므로 수치와 화면 리듬 보정에 한정한다.
 - Done: jaewoo가 쌍검 기본공격과 칼무리 잔향 후속타를 구분해서 읽을 수 있다고 판단한다.
 
-## 3. 대검 공격 구조 준비
+## 3. 대검 시각/애니메이션 체감 패스
 
 - Priority: high
-- Include: `DensestArc`, `SingleHeavy`, `FewHeavy`를 구현할 수 있게 weapon targeting/echo proc 구조를 분리한다.
-- Done: 대검을 추가할 때 쌍검 코드를 복사하지 않고 무기 정의/전략으로 갈아낄 수 있다.
+- Include: 이미 준비된 `WeaponRuntimeSpec` 대검 경로에 실제 대검 무기 시각, 큰 발도선 위치, 공격 애니메이션, 강한 hitstop/shake를 붙인다. 현재 F9 디버그 경로는 구조 확인용이지 최종 체감 검증용이 아니다.
+- Done: F9 대검 상태가 "쌍검을 키운 것"이 아니라 느리고 큰 한 방 무기로 읽힌다.
 
 ## 4. M2 실제 페이싱화
 

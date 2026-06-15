@@ -34,6 +34,30 @@ namespace Lethe.PrototypeV1
         OblivionBrand
     }
 
+    public enum V1WeaponId
+    {
+        DualBlades,
+        Greatsword
+    }
+
+    enum V1WeaponTargetingMode
+    {
+        Nearest,
+        DensestArc
+    }
+
+    enum V1EchoProcStyle
+    {
+        MultiSmall,
+        SingleHeavy
+    }
+
+    enum V1UltimatePattern
+    {
+        ManyFast,
+        FewHeavy
+    }
+
     public sealed class V1GameManager : MonoBehaviour
     {
         const float PixelsPerUnit = 40f;
@@ -43,6 +67,11 @@ namespace Lethe.PrototypeV1
         const float TwinBladeDamage = 15f;
         const float TwinBladeArcDeg = 119f;
         const float TwinBladeEngageMul = 1.15f;
+        const float GreatswordRange = 126f / PixelsPerUnit;
+        const float GreatswordInterval = 1.02f;
+        const float GreatswordDamage = 42f;
+        const float GreatswordArcDeg = 82f;
+        const float GreatswordEngageMul = 1.08f;
         const float HungryBladesRadius = 72f / PixelsPerUnit;
         const float HungryBladesDps = 28f;
         const int MaxMemoryLevel = 5;
@@ -96,6 +125,7 @@ namespace Lethe.PrototypeV1
         bool fastDebugRun;
         string overlayTitle = "";
         string overlayBody = "";
+        V1WeaponId currentWeaponId = V1WeaponId.DualBlades;
         V1MemoryId? lastForgotten;
 
         public bool BloodBladeStormReady => EchoLevel(V1MemoryId.HungryBlades) >= 5 && EchoLevel(V1MemoryId.BloodReflection) >= 5;
@@ -140,6 +170,7 @@ namespace Lethe.PrototypeV1
             if (KeyDown(KeyCode.F6)) SpawnGatekeeper();
             if (KeyDown(KeyCode.F7)) GrantXp(nextXp);
             if (KeyDown(KeyCode.F8)) DebugRunM2Smoke();
+            if (KeyDown(KeyCode.F9)) ToggleDebugWeapon();
             if (KeyDown(KeyCode.Space) && resultOverlay)
             {
                 ContinueAfterForgetResult();
@@ -204,7 +235,7 @@ namespace Lethe.PrototypeV1
             var memoryText = string.Join(",", activeMemories.Select(m => $"{m.Id}:{m.Level}"));
             var echoText = string.Join(",", echoLevels.Where(kv => kv.Value > 0).Select(kv => $"{kv.Key}:{kv.Value}"));
             var liveEnemies = enemies.Count(e => e != null && e.IsAlive);
-            return $"scene=v1 elapsed={elapsed:0.0} hp={playerHp:0.0}/{playerMaxHp:0.0} level={level} xp={xp}/{nextXp} kills={kills} memories=[{memoryText}] echoes=[{echoText}] enemies={liveEnemies} storm={BloodBladeStormReady} result={resultOverlay} refill={refillOverlay} death={deathOverlay}";
+            return $"scene=v1 weapon={CurrentWeaponSpec().DisplayName} elapsed={elapsed:0.0} hp={playerHp:0.0}/{playerMaxHp:0.0} level={level} xp={xp}/{nextXp} kills={kills} memories=[{memoryText}] echoes=[{echoText}] enemies={liveEnemies} storm={BloodBladeStormReady} result={resultOverlay} refill={refillOverlay} death={deathOverlay}";
         }
 
         public void DebugRunM1Smoke()
@@ -379,7 +410,8 @@ namespace Lethe.PrototypeV1
             weaponTimer -= dt;
             if (weaponTimer > 0f) return;
 
-            var target = FindTwinBladeTarget();
+            var weapon = CurrentWeaponSpec();
+            var target = FindWeaponTarget(weapon);
             if (target == null)
             {
                 weaponTimer = 0f;
@@ -391,50 +423,75 @@ namespace Lethe.PrototypeV1
             forward.Normalize();
             lastAim = forward;
             weaponAnchor.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg - 90f);
-            weaponTimer = TwinBladeInterval * StatAttackIntervalMul();
+            weaponTimer = weapon.Interval * StatAttackIntervalMul();
             weaponAnimTimer = 0.16f;
             leftBladeLead = !leftBladeLead;
-            var hits = CollectTwinBladeHits(forward);
-            SpawnTwinBladeHitVfx(hits, forward);
+            var hits = CollectWeaponHits(weapon, forward);
+            SpawnWeaponHitVfx(weapon, hits, forward);
 
             var hitIndex = 0;
             foreach (var hit in hits)
             {
-                var damageMul = hitIndex == 0 ? 1f : 0.72f;
-                DealDamage(hit.Enemy, TwinBladeDamage * damageMul, "절단쌍검", true, hit.Dir.normalized, hitIndex == 0 ? 1.15f : 0.72f);
-                TriggerWeaponEchoes(hit.Enemy, forward, hitIndex);
+                var damageMul = hitIndex == 0 ? 1f : weapon.SecondaryDamageMul;
+                var knock = hitIndex == 0 ? weapon.PrimaryKnock : weapon.SecondaryKnock;
+                DealDamage(hit.Enemy, weapon.Damage * damageMul, weapon.DisplayName, true, hit.Dir.normalized, knock);
+                if (weapon.EchoProcStyle != V1EchoProcStyle.SingleHeavy || hitIndex == 0)
+                {
+                    TriggerWeaponEchoes(hit.Enemy, forward, hitIndex, weapon);
+                }
                 hitIndex++;
             }
 
             if (hits.Count > 0)
             {
-                hitstopTimer = 0.018f;
+                hitstopTimer = weapon.Hitstop;
                 cameraShakeTimer = 0.06f;
-                cameraShakeAmount = 0.025f;
+                cameraShakeAmount = weapon.ShakeAmount;
             }
         }
 
-        V1Enemy FindTwinBladeTarget()
+        V1Enemy FindWeaponTarget(WeaponRuntimeSpec weapon)
         {
-            var engageRadius = TwinBladeRange * TwinBladeEngageMul;
-            return enemies
+            var engageRadius = weapon.Range * weapon.EngageMul;
+            var candidates = enemies
                 .Where(e => e != null && e.IsAlive)
                 .Select(e => new { Enemy = e, Dir = (Vector2)(e.transform.position - player.position) })
                 .Where(x => x.Dir.magnitude <= engageRadius + x.Enemy.TouchRadius)
-                .OrderBy(x => x.Dir.sqrMagnitude)
+                .ToList();
+
+            if (weapon.TargetingMode == V1WeaponTargetingMode.Nearest)
+            {
+                return candidates
+                    .OrderBy(x => x.Dir.sqrMagnitude)
+                    .Select(x => x.Enemy)
+                    .FirstOrDefault();
+            }
+
+            return candidates
+                .Select(x =>
+                {
+                    var forward = x.Dir.sqrMagnitude > 0.001f ? x.Dir.normalized : lastAim.normalized;
+                    var hits = CollectWeaponHits(weapon, forward);
+                    var center = hits.Count == 0 ? x.Enemy.transform.position : (Vector3)hits.Aggregate(Vector2.zero, (sum, h) => sum + (Vector2)h.Enemy.transform.position) / hits.Count;
+                    return new { x.Enemy, x.Dir, HitCount = hits.Count, CenterDistance = Vector2.Distance(player.position, center) };
+                })
+                .OrderByDescending(x => x.HitCount)
+                .ThenBy(x => x.CenterDistance)
+                .ThenBy(x => x.Dir.sqrMagnitude)
                 .Select(x => x.Enemy)
                 .FirstOrDefault();
         }
 
-        List<WeaponHit> CollectTwinBladeHits(Vector2 forward)
+        List<WeaponHit> CollectWeaponHits(WeaponRuntimeSpec weapon, Vector2 forward)
         {
+            var f = forward.sqrMagnitude > 0.001f ? forward.normalized : lastAim.normalized;
             return enemies
                 .Where(e => e != null && e.IsAlive)
                 .Select(e => new WeaponHit(e, (Vector2)(e.transform.position - player.position)))
-                .Where(x => x.Distance <= TwinBladeRange + x.Enemy.TouchRadius)
-                .Where(x => x.Distance <= 0.001f || Vector2.Angle(forward, x.Dir.normalized) <= TwinBladeArcDeg * 0.5f)
+                .Where(x => x.Distance <= weapon.Range + x.Enemy.TouchRadius)
+                .Where(x => x.Distance <= 0.001f || Vector2.Angle(f, x.Dir.normalized) <= weapon.ArcDegrees * 0.5f)
                 .OrderBy(x => x.Distance)
-                .Take(6)
+                .Take(weapon.MaxTargets)
                 .ToList();
         }
 
@@ -484,7 +541,7 @@ namespace Lethe.PrototypeV1
             }
         }
 
-        void TriggerWeaponEchoes(V1Enemy enemy, Vector2 forward, int hitIndex)
+        void TriggerWeaponEchoes(V1Enemy enemy, Vector2 forward, int hitIndex, WeaponRuntimeSpec weapon)
         {
             var kalmuriLevel = EchoLevel(V1MemoryId.HungryBlades);
             if (kalmuriLevel > 0)
@@ -492,7 +549,7 @@ namespace Lethe.PrototypeV1
                 var chance = kalmuriLevel >= 2 ? 1f : 0.30f;
                 if (UnityEngine.Random.value <= chance)
                 {
-                    TriggerTwinBladeKalmuriEcho(enemy, forward, kalmuriLevel, hitIndex);
+                    TriggerKalmuriEcho(enemy, forward, kalmuriLevel, hitIndex, weapon);
                     if (kalmuriLevel >= 5)
                     {
                         LaunchKalmuriBlade(enemy);
@@ -513,10 +570,11 @@ namespace Lethe.PrototypeV1
             }
         }
 
-        void TriggerTwinBladeKalmuriEcho(V1Enemy center, Vector2 forward, int level, int hitIndex)
+        void TriggerKalmuriEcho(V1Enemy center, Vector2 forward, int level, int hitIndex, WeaponRuntimeSpec weapon)
         {
             if (center == null) return;
-            pendingKalmuriFollowups.Add(new PendingKalmuriFollowup(center.transform.position, forward.normalized, level, hitIndex, 0.035f + Mathf.Min(hitIndex, 2) * 0.012f));
+            var delay = weapon.FollowupBaseDelay + Mathf.Min(hitIndex, 2) * weapon.FollowupStagger;
+            pendingKalmuriFollowups.Add(new PendingKalmuriFollowup(center.transform.position, forward.normalized, level, hitIndex, weapon, delay));
         }
 
         void UpdatePendingKalmuriFollowups(float dt)
@@ -532,34 +590,42 @@ namespace Lethe.PrototypeV1
                 }
 
                 pendingKalmuriFollowups.RemoveAt(i);
-                ResolveTwinBladeKalmuriFollowup(followup.Origin, followup.Forward, followup.Level, followup.HitIndex);
+                ResolveKalmuriFollowup(followup.Origin, followup.Forward, followup.Level, followup.HitIndex, followup.Weapon);
             }
         }
 
-        void ResolveTwinBladeKalmuriFollowup(Vector3 origin, Vector2 forward, int level, int hitIndex)
+        void ResolveKalmuriFollowup(Vector3 origin, Vector2 forward, int level, int hitIndex, WeaponRuntimeSpec weapon)
         {
-            var echoSizeScale = 0.80f;
-            var echoDamageScale = 0.75f;
-            var burstCount = Mathf.Clamp(1 + level / 2, 1, 3);
-            var radius = (0.44f + level * 0.045f) * echoSizeScale;
-            var damage = TwinBladeDamage * (0.22f + level * 0.045f) * echoDamageScale;
+            var isHeavy = weapon.EchoProcStyle == V1EchoProcStyle.SingleHeavy;
+            var burstCount = isHeavy ? 1 : Mathf.Clamp(1 + level / 2, 1, 3);
+            var radius = (0.44f + level * 0.045f) * weapon.EchoSizeScale;
+            var damage = weapon.Damage * (0.22f + level * 0.045f) * weapon.EchoDamageScale;
             var f = forward.sqrMagnitude > 0.01f ? forward.normalized : lastAim.normalized;
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
             var side = new Vector2(-f.y, f.x).normalized;
 
             for (int i = 0; i < burstCount; i++)
             {
-                var offset = side * ((i - (burstCount - 1) * 0.5f) * 0.18f);
-                var pos = origin + (Vector3)(f * (0.12f + i * 0.06f) + offset);
-                var rot = Quaternion.Euler(0f, 0f, baseAngle + (i - 1) * 18f + hitIndex * 7f);
-                var scale = 0.18f + level * 0.014f;
-                SpawnTransientSprite("KalmuriFollowup", MakeArcSprite("kalmuri-followup", Color.white), pos, rot, scale, new Color(0.75f, 0.98f, 1f, level >= 5 ? 0.68f : 0.48f), 0.13f);
+                var offset = isHeavy ? Vector2.zero : side * ((i - (burstCount - 1) * 0.5f) * 0.18f);
+                var pos = origin + (Vector3)(f * (isHeavy ? 0.04f : 0.12f + i * 0.06f) + offset);
+                var rot = Quaternion.Euler(0f, 0f, baseAngle + (isHeavy ? 0f : (i - 1) * 18f + hitIndex * 7f));
+                var scale = isHeavy ? 0.42f + level * 0.035f : 0.18f + level * 0.014f;
+                var name = isHeavy ? "KalmuriFollowup_Heavy" : "KalmuriFollowup";
+                var color = isHeavy ? new Color(0.82f, 0.98f, 1f, level >= 5 ? 0.84f : 0.64f) : new Color(0.75f, 0.98f, 1f, level >= 5 ? 0.68f : 0.48f);
+                SpawnTransientSprite(name, MakeArcSprite(isHeavy ? "kalmuri-followup-heavy" : "kalmuri-followup", Color.white), pos, rot, scale, color, isHeavy ? 0.18f : 0.13f);
+            }
+
+            if (isHeavy)
+            {
+                hitstopTimer = Mathf.Max(hitstopTimer, 0.045f);
+                cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.10f);
+                cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.05f);
             }
 
             var targets = enemies
                 .Where(e => e != null && e.IsAlive && Vector2.Distance(origin, e.transform.position) <= radius + e.TouchRadius)
                 .OrderBy(e => Vector2.Distance(origin, e.transform.position))
-                .Take(level >= 5 ? 5 : 3)
+                .Take(isHeavy ? 6 : level >= 5 ? 5 : 3)
                 .ToList();
 
             for (int i = 0; i < targets.Count; i++)
@@ -730,7 +796,7 @@ namespace Lethe.PrototypeV1
         {
             if (enemy == null || !enemy.IsAlive) return;
             var before = enemy.Hp;
-            var finalAmount = weaponHit ? amount * (1f + TwinBladeStat.DamageMul) : amount;
+            var finalAmount = weaponHit ? amount * (1f + WeaponStat.DamageMul) : amount;
             enemy.TakeDamage(finalAmount, source, weaponHit);
             SpawnHitSpark(enemy.transform.position, hitDir, weaponHit);
             if (hitDir.sqrMagnitude > 0.01f && knockStrength > 0f)
@@ -880,12 +946,31 @@ namespace Lethe.PrototypeV1
 
         int EchoLevel(V1MemoryId id) => echoLevels.TryGetValue(id, out var levelValue) ? levelValue : 0;
 
+        WeaponRuntimeSpec CurrentWeaponSpec() => currentWeaponId == V1WeaponId.Greatsword
+            ? WeaponRuntimeSpec.Greatsword()
+            : WeaponRuntimeSpec.DualBlades();
+
+        void SetDebugWeapon(V1WeaponId weaponId)
+        {
+            currentWeaponId = weaponId;
+            weaponTimer = 0f;
+            weaponAnimTimer = 0f;
+            var weapon = CurrentWeaponSpec();
+            Log($"무기 전환: {weapon.DisplayName}");
+        }
+
+        void ToggleDebugWeapon()
+        {
+            SetDebugWeapon(currentWeaponId == V1WeaponId.DualBlades ? V1WeaponId.Greatsword : V1WeaponId.DualBlades);
+        }
+
         void DrawHud()
         {
+            var weapon = CurrentWeaponSpec();
             GUI.Box(new Rect(12, 12, 432, 190), "", panelStyle);
             GUI.Label(new Rect(24, 20, 380, 28), $"LETHE v1 / {PhaseName()} / {Mathf.FloorToInt(elapsed)}s / HP {Mathf.CeilToInt(playerHp)}/{Mathf.CeilToInt(playerMaxHp)}", smallStyle);
             DrawBar(new Rect(24, 47, 396, 12), Mathf.Clamp01(playerHp / playerMaxHp), new Color(0.18f, 0.95f, 0.62f), new Color(0.08f, 0.12f, 0.13f));
-            GUI.Label(new Rect(24, 64, 380, 24), $"Lv.{level} XP {xp}/{nextXp} / 처치 {kills} / 활성 기억 {activeMemories.Count}/{MaxActiveMemories}", smallStyle);
+            GUI.Label(new Rect(24, 64, 380, 24), $"Lv.{level} XP {xp}/{nextXp} / 처치 {kills} / 무기 {weapon.DisplayName}", smallStyle);
             DrawBar(new Rect(24, 91, 396, 14), Mathf.Clamp01(nextXp <= 0 ? 0f : (float)xp / nextXp), new Color(0.32f, 0.88f, 1f), new Color(0.07f, 0.10f, 0.13f));
             GUI.Label(new Rect(24, 112, 380, 24), $"다음 망각 후보: {ForgetCandidateText()}", smallStyle);
             GUI.Label(new Rect(24, 140, 380, 24), $"잔향: {EchoText()}", smallStyle);
@@ -894,7 +979,7 @@ namespace Lethe.PrototypeV1
             GUI.Box(new Rect(Screen.width - 372, 12, 360, 196), "", panelStyle);
             GUI.Label(new Rect(Screen.width - 358, 22, 340, 22), "F1 칼무리+5  F2 혈반+5  F3 망각", smallStyle);
             GUI.Label(new Rect(Screen.width - 358, 46, 340, 22), "F4 칼무리잔향+5  F5 혈반잔향+5", smallStyle);
-            GUI.Label(new Rect(Screen.width - 358, 70, 340, 22), "F6 문지기  F7 레벨업  F8 M2압축", smallStyle);
+            GUI.Label(new Rect(Screen.width - 358, 70, 340, 22), "F6 문지기  F7 레벨업  F8 M2압축  F9 무기", smallStyle);
             if (GUI.Button(new Rect(Screen.width - 358, 96, 106, 28), "M1 Smoke", buttonStyle)) DebugRunM1Smoke();
             if (GUI.Button(new Rect(Screen.width - 246, 96, 106, 28), "M2 Loop", buttonStyle)) DebugRunM2Smoke();
             if (GUI.Button(new Rect(Screen.width - 134, 96, 106, 28), "Continue", buttonStyle))
@@ -965,8 +1050,8 @@ namespace Lethe.PrototypeV1
             {
                 choices.Add(new Choice("기억 강화", MemoryName(lowest.Id), $"현재 Lv.{lowest.Level} -> Lv.{lowest.Level + 1}\n\n효과의 빈도, 개수, 화면 존재감이 함께 올라갑니다.", () => AddMemory(lowest.Id, lowest.Level + 1, true)));
             }
-            choices.Add(new Choice("무기 성향", "칼날 가속", "절단쌍검 공격 간격 -11%.\n\n잔향 발동 기회도 늘어나 쌍검다운 연타 빌드에 어울립니다.", () => { TwinBladeStat.AttackSpeed += 0.11f; Log("스탯: 칼날 가속"); }));
-            choices.Add(new Choice("무기 성향", "검은 물의 힘", "기본공격과 무기 기반 잔향 피해 +14%.\n\n한 번의 베기가 더 선명해집니다.", () => { TwinBladeStat.DamageMul += 0.14f; Log("스탯: 피해 증가"); }));
+            choices.Add(new Choice("무기 성향", "칼날 가속", "장착 무기 공격 간격 -11%.\n\n잔향 발동 기회도 늘어나 무기 리듬이 더 선명해집니다.", () => { WeaponStat.AttackSpeed += 0.11f; Log("스탯: 칼날 가속"); }));
+            choices.Add(new Choice("무기 성향", "검은 물의 힘", "기본공격과 무기 기반 잔향 피해 +14%.\n\n한 번의 베기가 더 선명해집니다.", () => { WeaponStat.DamageMul += 0.14f; Log("스탯: 피해 증가"); }));
             choices.Add(new Choice("생존", "가라앉지 않는 숨", "최대 HP +16, 즉시 회복 +28.\n\n망각 뒤 결손 생존 구간을 버틸 여유를 만듭니다.", () => { playerMaxHp += 16f; playerHp = Mathf.Min(playerMaxHp, playerHp + 28f); Log("스탯: 생존"); }));
             return choices.Take(3).ToList();
         }
@@ -979,7 +1064,7 @@ namespace Lethe.PrototypeV1
             return Mathf.Lerp(0.24f, 1f, Mathf.Clamp01((elapsed - 12f) / (320f - 12f)));
         }
 
-        float StatAttackIntervalMul() => 1f / (1f + TwinBladeStat.AttackSpeed);
+        float StatAttackIntervalMul() => 1f / (1f + WeaponStat.AttackSpeed);
 
         string PhaseName()
         {
@@ -1005,6 +1090,17 @@ namespace Lethe.PrototypeV1
             return string.IsNullOrEmpty(text) ? "없음" : text;
         }
 
+        void SpawnWeaponHitVfx(WeaponRuntimeSpec weapon, List<WeaponHit> hits, Vector2 forward)
+        {
+            if (weapon.Id == V1WeaponId.Greatsword)
+            {
+                SpawnGreatswordHitVfx(hits, forward);
+                return;
+            }
+
+            SpawnTwinBladeHitVfx(hits, forward);
+        }
+
         void SpawnTwinBladeHitVfx(List<WeaponHit> hits, Vector2 forward)
         {
             if (hits.Count == 0) return;
@@ -1026,6 +1122,24 @@ namespace Lethe.PrototypeV1
 
                 var assistAngle = baseAngle + (i % 2 == 0 ? -14f : 14f);
                 SpawnTransientSprite("TargetLocalSlash_Assist", MakeArcSprite("target-slash-assist", Color.white), origin + (Vector3)(f * 0.04f), Quaternion.Euler(0f, 0f, assistAngle), 0.21f, new Color(0.62f, 0.88f, 1f, 0.45f), 0.07f);
+            }
+        }
+
+        void SpawnGreatswordHitVfx(List<WeaponHit> hits, Vector2 forward)
+        {
+            if (hits.Count == 0) return;
+
+            var f = forward.sqrMagnitude > 0.001f ? forward.normalized : lastAim.normalized;
+            var side = new Vector2(-f.y, f.x);
+            var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
+            var center = (Vector3)hits.Aggregate(Vector2.zero, (sum, hit) => sum + (Vector2)hit.Enemy.transform.position) / hits.Count;
+            SpawnTransientSprite("GreatswordTargetSlash_Primary", MakeArcSprite("greatsword-target-slash", Color.white), center + (Vector3)(f * 0.07f), Quaternion.Euler(0f, 0f, baseAngle), 0.72f, new Color(0.86f, 0.96f, 1f, 0.82f), 0.15f);
+            SpawnTransientSprite("GreatswordTargetCutPoint", null, center + (Vector3)(f * 0.10f), Quaternion.identity, 0.16f, new Color(0.95f, 1f, 1f, 0.78f), 0.12f);
+
+            for (int i = 1; i < hits.Count; i++)
+            {
+                var pos = hits[i].Enemy.transform.position + (Vector3)(side * (i % 2 == 0 ? 0.09f : -0.09f));
+                SpawnTransientSprite("GreatswordTargetSlash_Assist", MakeArcSprite("greatsword-target-assist", Color.white), pos, Quaternion.Euler(0f, 0f, baseAngle + (i % 2 == 0 ? -8f : 8f)), 0.38f, new Color(0.62f, 0.86f, 1f, 0.42f), 0.10f);
             }
         }
 
@@ -1194,6 +1308,7 @@ namespace Lethe.PrototypeV1
                     KeyCode.F6 => keyboard.f6Key.wasPressedThisFrame,
                     KeyCode.F7 => keyboard.f7Key.wasPressedThisFrame,
                     KeyCode.F8 => keyboard.f8Key.wasPressedThisFrame,
+                    KeyCode.F9 => keyboard.f9Key.wasPressedThisFrame,
                     _ => false
                 };
             }
@@ -1323,20 +1438,134 @@ namespace Lethe.PrototypeV1
             }
         }
 
+        readonly struct WeaponRuntimeSpec
+        {
+            public readonly V1WeaponId Id;
+            public readonly string DisplayName;
+            public readonly float Range;
+            public readonly float Damage;
+            public readonly float Interval;
+            public readonly float ArcDegrees;
+            public readonly float EngageMul;
+            public readonly int MaxTargets;
+            public readonly float SecondaryDamageMul;
+            public readonly float PrimaryKnock;
+            public readonly float SecondaryKnock;
+            public readonly float Hitstop;
+            public readonly float ShakeAmount;
+            public readonly float EchoSizeScale;
+            public readonly float EchoDamageScale;
+            public readonly V1WeaponTargetingMode TargetingMode;
+            public readonly V1EchoProcStyle EchoProcStyle;
+            public readonly V1UltimatePattern UltimatePattern;
+            public readonly float FollowupBaseDelay;
+            public readonly float FollowupStagger;
+
+            WeaponRuntimeSpec(
+                V1WeaponId id,
+                string displayName,
+                float range,
+                float damage,
+                float interval,
+                float arcDegrees,
+                float engageMul,
+                int maxTargets,
+                float secondaryDamageMul,
+                float primaryKnock,
+                float secondaryKnock,
+                float hitstop,
+                float shakeAmount,
+                float echoSizeScale,
+                float echoDamageScale,
+                V1WeaponTargetingMode targetingMode,
+                V1EchoProcStyle echoProcStyle,
+                V1UltimatePattern ultimatePattern,
+                float followupBaseDelay,
+                float followupStagger)
+            {
+                Id = id;
+                DisplayName = displayName;
+                Range = range;
+                Damage = damage;
+                Interval = interval;
+                ArcDegrees = arcDegrees;
+                EngageMul = engageMul;
+                MaxTargets = maxTargets;
+                SecondaryDamageMul = secondaryDamageMul;
+                PrimaryKnock = primaryKnock;
+                SecondaryKnock = secondaryKnock;
+                Hitstop = hitstop;
+                ShakeAmount = shakeAmount;
+                EchoSizeScale = echoSizeScale;
+                EchoDamageScale = echoDamageScale;
+                TargetingMode = targetingMode;
+                EchoProcStyle = echoProcStyle;
+                UltimatePattern = ultimatePattern;
+                FollowupBaseDelay = followupBaseDelay;
+                FollowupStagger = followupStagger;
+            }
+
+            public static WeaponRuntimeSpec DualBlades() => new(
+                V1WeaponId.DualBlades,
+                "절단쌍검",
+                TwinBladeRange,
+                TwinBladeDamage,
+                TwinBladeInterval,
+                TwinBladeArcDeg,
+                TwinBladeEngageMul,
+                6,
+                0.72f,
+                1.15f,
+                0.72f,
+                0.018f,
+                0.025f,
+                0.80f,
+                0.75f,
+                V1WeaponTargetingMode.Nearest,
+                V1EchoProcStyle.MultiSmall,
+                V1UltimatePattern.ManyFast,
+                0.035f,
+                0.012f);
+
+            public static WeaponRuntimeSpec Greatsword() => new(
+                V1WeaponId.Greatsword,
+                "장송대검",
+                GreatswordRange,
+                GreatswordDamage,
+                GreatswordInterval,
+                GreatswordArcDeg,
+                GreatswordEngageMul,
+                5,
+                0.58f,
+                2.25f,
+                1.35f,
+                0.052f,
+                0.060f,
+                1.80f,
+                1.60f,
+                V1WeaponTargetingMode.DensestArc,
+                V1EchoProcStyle.SingleHeavy,
+                V1UltimatePattern.FewHeavy,
+                0.065f,
+                0.000f);
+        }
+
         struct PendingKalmuriFollowup
         {
             public readonly Vector3 Origin;
             public readonly Vector2 Forward;
             public readonly int Level;
             public readonly int HitIndex;
+            public readonly WeaponRuntimeSpec Weapon;
             public float Delay;
 
-            public PendingKalmuriFollowup(Vector3 origin, Vector2 forward, int level, int hitIndex, float delay)
+            public PendingKalmuriFollowup(Vector3 origin, Vector2 forward, int level, int hitIndex, WeaponRuntimeSpec weapon, float delay)
             {
                 Origin = origin;
                 Forward = forward;
                 Level = level;
                 HitIndex = hitIndex;
+                Weapon = weapon;
                 Delay = delay;
             }
         }
@@ -1357,7 +1586,7 @@ namespace Lethe.PrototypeV1
             public V1EnemyKind Pick(System.Random random) => pool[random.Next(pool.Length)];
         }
 
-        static class TwinBladeStat
+        static class WeaponStat
         {
             public static float AttackSpeed;
             public static float DamageMul;

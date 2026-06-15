@@ -42,6 +42,23 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 weapon spec / greatsword prep implementation:
+  - Refactored `V1GameManager` weapon flow around `WeaponRuntimeSpec`, matching the design fields: range, damage, interval, arc, targeting mode, echo size/damage scale, echo proc style, and ultimate pattern.
+  - Current default remains `절단쌍검`.
+  - Added `장송대검` debug spec with `DensestArc`, `SingleHeavy`, larger range/damage/knockback/hitstop, `echoSizeScale=1.80`, `echoDamageScale=1.60`, and `ultimatePattern=FewHeavy`.
+  - Added `F9` debug weapon toggle and HUD weapon display.
+  - Weapon targeting and hit collection now use the active spec instead of twin-blade-only methods.
+  - Kalmuri echo follow-up now carries the weapon spec through the pending queue:
+    - 쌍검 `MultiSmall`: multiple small `KalmuriFollowup` cuts.
+    - 대검 `SingleHeavy`: one `KalmuriFollowup_Heavy` per swing from the primary hit path.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors. Warnings are legacy v0/debug deprecated API warnings.
+  - `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`.
+  - Unity Play Mode targeted smoke: `noAir=0 dualSlash=3 dualOldFan=0 dualFollow=6 greatSlash=4 heavyFollow=1 multiFollowStill=0`.
+  - Evidence capture saved: `LETHE/Assets/_dev/Evidence/v1_weapon_spec_greatsword_prep_20260615.png`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 2 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `404 Not Found`, `project not found`.
+
 - Unity v1 target-local slash / Kalmuri follow-up implementation:
   - Implemented DEC-2026-06-12-05 in `V1GameManager`.
   - Twin-blade basic attack VFX no longer spawns player-origin fan/arc slash objects.
@@ -255,8 +272,9 @@ Continue from `Dev_Prototype_v1`, not `Dev_Prototype_v0`.
 Next implementation step:
 
 1. Let jaewoo review target-local twin-blade basic attacks + Kalmuri follow-up in `Dev_Prototype_v1` Play Mode.
-2. If the attack readability is accepted, prepare the greatsword attack/echo rhythm using the same weapon-targeted structure.
-3. If readability still fails, tune slash size, hit origin, Kalmuri delay, and hitstop before expanding scope.
+2. Optionally press `F9` to inspect the greatsword-prep path, but do not judge greatsword final feel yet because sprite/animation polish is not done.
+3. If twin-blade readability is accepted, choose between M2 real pacing or a focused greatsword visual/animation pass.
+4. If readability still fails, tune slash size, hit origin, Kalmuri delay, and hitstop before expanding scope.
 
 Do not promote `_dev` assets to `Assets/Lethe` until `Dev_Prototype_v1` receives explicit `GO`.
 

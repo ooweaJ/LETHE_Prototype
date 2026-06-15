@@ -46,6 +46,7 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 - Combat feel pass responds to jaewoo feedback: smaller Kalmuri echo, clearer dual-blade swing, hit feedback, XP bar, larger 3-card level-up UI.
 - DEC-2026-06-12-04 first implementation exists: no air swings, twin-blade nearest targeting, Kalmuri `MultiSmall` echo style.
 - DEC-2026-06-12-05 first implementation exists: target-local twin-blade slash VFX and delayed Kalmuri follow-up from hit origin.
+- Weapon rhythm structure prep exists: `WeaponRuntimeSpec` supports current dual blades and debug greatsword paths without copying the weapon/echo loop.
 - Unity compile error 0.
 - Play Mode smoke creates player and enemies with no v1 runtime console exceptions.
 - v1 screenshot/capture confirms player/enemy sheets are not rendered as whole sheets.
@@ -94,11 +95,23 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - `npm.cmd run report`: passed.
   - `npm.cmd run report:check`: passed, 1 unit heading ok.
   - `npm.cmd run report:orchestrator:unit:dry`: failed with `404 Not Found`, `project not found`.
+- Weapon spec / greatsword prep pass:
+  - `V1GameManager` now uses `WeaponRuntimeSpec` for targeting, hit collection, base damage, hitstop/shake, echo size/damage scale, echo proc style, and ultimate pattern.
+  - Default weapon remains dual blades.
+  - `F9` toggles the debug greatsword spec.
+  - Greatsword path uses `DensestArc` targeting and `SingleHeavy` Kalmuri follow-up.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors. Warnings are old v0/debug deprecated API usage.
+  - `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`.
+  - Play Mode targeted smoke: `noAir=0 dualSlash=3 dualOldFan=0 dualFollow=6 greatSlash=4 heavyFollow=1 multiFollowStill=0`.
+  - Evidence capture: `LETHE/Assets/_dev/Evidence/v1_weapon_spec_greatsword_prep_20260615.png`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 2 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `404 Not Found`, `project not found`.
 
 ## Next Implementation
 
 1. Ask jaewoo to review no-air-swing + target-local slash + echo follow-up together in Play Mode.
-2. If it feels readable, start the greatsword attack/echo rhythm prep without duplicating echo logic.
+2. If it feels readable, choose between M2 real pacing or a focused greatsword visual/animation pass.
 3. If it still feels off, tune slash position/size, Kalmuri delay, and hitstop before expanding scope.
 
 ## Open Questions
