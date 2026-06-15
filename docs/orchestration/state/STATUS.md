@@ -1,6 +1,6 @@
 # Status
 
-Last updated: 2026-06-12
+Last updated: 2026-06-15
 
 ## Current Snapshot
 
@@ -41,6 +41,22 @@ The report/devlog/review migration is now applied physically: old `docs/reports/
 The current development-docs plugin baseline from `docs/orchestration/MIGRATION_PROMPT.md` has been applied. `AGENTS.md` now uses a `Development Docs Plugin` section, `docs/orchestration/templates/HTML_INTERFACE_TEMPLATE.md` exists, legacy review pointer READMEs are readable, `reports/index.html` is generated as a newest-first date archive, daily report pages are generated as unit-card pages, and Discord delivery is documented as Project Orchestrator first with local direct-send scripts as trusted fallback only.
 
 ## Latest Verified Result
+
+- Unity v1 target-local slash / Kalmuri follow-up implementation:
+  - Implemented DEC-2026-06-12-05 in `V1GameManager`.
+  - Twin-blade basic attack VFX no longer spawns player-origin fan/arc slash objects.
+  - Primary weapon hit now spawns two target-local iai/slash marks on the enemy; cleave targets spawn smaller assist slash marks.
+  - Kalmuri `MultiSmall` echo is queued as a short delayed follow-up from the weapon hit origin instead of firing in the same character-origin moment.
+  - Twin-blade hitstop was reduced from `0.025s` to `0.018s` so echo follow-ups feel less like the character is pausing.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors. Warnings are legacy v0/debug deprecated API warnings.
+  - `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`.
+  - Unity Play Mode targeted smoke: `noAirAfter=0 targetLocalSlash=3 playerFanArc=0 kalmuriFollowup=6 hitSpark=6`.
+  - Evidence captures saved:
+    - `LETHE/Assets/_dev/Evidence/v1_target_local_slash_echo_followup_20260615.png`
+    - `LETHE/Assets/_dev/Evidence/v1_target_local_slash_echo_followup_20260615_scene.png`
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 1 unit heading ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `404 Not Found`, `project not found`.
 
 - Basic attack VFX direction update:
   - New decision: basic attack VFX should not be a player-origin fan arc.
@@ -238,9 +254,9 @@ Continue from `Dev_Prototype_v1`, not `Dev_Prototype_v0`.
 
 Next implementation step:
 
-1. Let jaewoo review the v1 M1/M2 compressed loop in Play Mode.
-2. If v1 direction is accepted, replace the compressed M2 shortcut with real pacing: Gatekeeper kill -> forgetting result -> deficit survival -> resonance.
-3. Then split the current v1 hard-coded catalog into data assets and prefabs only after the feel target is stable.
+1. Let jaewoo review target-local twin-blade basic attacks + Kalmuri follow-up in `Dev_Prototype_v1` Play Mode.
+2. If the attack readability is accepted, prepare the greatsword attack/echo rhythm using the same weapon-targeted structure.
+3. If readability still fails, tune slash size, hit origin, Kalmuri delay, and hitstop before expanding scope.
 
 Do not promote `_dev` assets to `Assets/Lethe` until `Dev_Prototype_v1` receives explicit `GO`.
 

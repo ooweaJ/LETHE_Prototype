@@ -8,15 +8,15 @@ Current source of truth: `docs/design/` (LETHE_DESIGN_00..07 + README). Build pl
 
 - Priority: highest
 - Source: `docs/design/LETHE_DESIGN_06_BUILD_PLAN.md` (M1), `LETHE_DESIGN_05_UI_UX.md`, `LETHE_DESIGN_01_RUN_LOOP.md`
-- Include: 다음 구현 후 `Dev_Prototype_v1`을 Play Mode로 열고 쌍검이 허공에 베지 않는지, 기본공격 VFX가 적 위치 발도/절단선으로 보이는지, 칼무리 `MultiSmall`이 적중 위치 후속타로 읽히는지 확인한다. XP bar/3카드 UI도 같이 본다.
+- Include: `Dev_Prototype_v1`을 Play Mode로 열고 쌍검이 허공에 베지 않는지, 기본공격 VFX가 적 위치 발도/절단선으로 보이는지, 칼무리 `MultiSmall`이 적중 위치 후속타로 읽히는지 확인한다. XP bar/3카드 UI도 같이 본다.
 - Done: jaewoo가 target-local basic attack + echo follow-up에 대해 `GO`, `ITERATE`, `NO-GO` 중 하나를 준다.
 
-## 2. 쌍검 target-local VFX + 잔향 후속타 구현
+## 2. 쌍검 target-local VFX 체감 보정
 
-- Priority: highest
+- Priority: high
 - Source: `DEC-2026-06-12-05`, `LETHE_DESIGN_02_COMBAT.md`, `LETHE_DESIGN_03_MEMORY_ECHO.md`
-- Include: 플레이어 앞 부채꼴/큰 arc VFX 제거, 적 위치에 기본공격 발도선 2개 생성, 칼무리 잔향은 그 hit origin에서 0~0.08초 후 작은 후속타로 생성. 잔향 발동 시 캐릭터가 멈추는 느낌을 줄인다.
-- Done: no-air-swing 스모크에 더해 `targetLocalSlash>0`, `playerFanArc=0`, `kalmuriFollowup>0` 회귀 확인.
+- Include: 플레이 리뷰에서 공격감이 약하면 발도선 크기/위치, 보조 slash 수, 칼무리 지연 시간, hitstop 값을 조정한다. 코드 구현은 완료됐으므로 수치와 화면 리듬 보정에 한정한다.
+- Done: jaewoo가 쌍검 기본공격과 칼무리 잔향 후속타를 구분해서 읽을 수 있다고 판단한다.
 
 ## 3. 대검 공격 구조 준비
 

@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-15-01 - 쌍검 타겟 발도선과 칼무리 후속타 구현</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-15-01 - 쌍검 타겟 발도선과 칼무리 후속타 구현</h1>
+      <p class="meta">Generated from 2026-06-15-01-쌍검-타겟-발도선과-칼무리-후속타-구현.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260615/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-15-01 - 쌍검 타겟 발도선과 칼무리 후속타 구현</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 이제 쌍검이 허공에 베지 않고, 적이 사거리 안에 들어왔을 때 적 위치에 기본공격 발도선이 생긴다. 칼무리 잔향은 같은 프레임에 캐릭터 쪽에서 터지는 느낌이 아니라, 맞은 적 위치에서 짧게 늦게 터지는 후속타로 바뀌었다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>V1GameManager</code>의 기존 플레이어-origin 쌍검 arc VFX를 제거했다.</li>
+<li>주 대상에는 <code>TargetLocalSlash_Primary_A/B</code> 두 줄의 발도선을 만든다.</li>
+<li>보조 cleave 대상에는 작은 <code>TargetLocalSlash_Assist</code>를 만든다.</li>
+<li>칼무리 잔향은 <code>PendingKalmuriFollowup</code> 큐에 넣었다가 0.035초 전후로 <code>KalmuriFollowup</code>을 생성한다.</li>
+<li>쌍검 hitstop을 <code>0.025s</code>에서 <code>0.018s</code>로 줄여 잔향 발동 때 캐릭터가 멈추는 느낌을 낮췄다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, 7 warning / 0 error.</li>
+<li>Unity MCP <code>LETHE</code> 포트 <code>7890</code> 연결 확인.</li>
+<li>Unity compile errors: <code>count=0</code>.</li>
+<li>Play Mode targeted smoke: <code>noAirAfter=0 targetLocalSlash=3 playerFanArc=0 kalmuriFollowup=6 hitSpark=6</code>.</li>
+<li><code>npm.cmd run report</code>: 통과.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 1 unit heading ok.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>404 Not Found</code>, <code>project not found</code>로 실패.</li>
+<li>증거:</li>
+<li><code>LETHE/Assets/_dev/Evidence/v1_target_local_slash_echo_followup_20260615.png</code></li>
+<li><code>LETHE/Assets/_dev/Evidence/v1_target_local_slash_echo_followup_20260615_scene.png</code></li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li><code>DEC-2026-06-12-05</code>를 실제 코드로 반영했다.</li>
+<li>기본공격 VFX의 기준점은 플레이어가 아니라 적중 대상이다.</li>
+<li>잔향은 무기 히트 다음에 따라오는 후속타로 보여야 한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>아직 사람이 본 체감 검증은 필요하다.</li>
+<li>발도선 크기, 보조 slash 수, 칼무리 지연 시간은 플레이 리뷰 후 조정할 수 있다.</li>
+<li>이번 작업은 쌍검에 집중했고, 대검 리듬은 다음 구조 작업에서 확장해야 한다.</li>
+<li>Project Orchestrator Discord intake는 현재 <code>project not found</code>를 반환한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>쌍검 VFX가 캐릭터 앞 부채꼴에서 적 위치 발도선으로 바뀌었다. 칼무리 잔향은 적중 위치 후속타로 분리됐다. 다음 판단은 이 방식이 기본공격과 잔향을 눈으로 구분하게 만드는지다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>Jaewoo 플레이 리뷰 결과를 받아 쌍검 VFX/잔향 후속타를 보정한다.</li>
+<li><code>GO</code>면 대검 공격 구조와 weapon-specific echo rhythm을 준비한다.</li>
+<li><code>ITERATE</code>면 slash 위치/크기, Kalmuri delay, hitstop을 먼저 조정한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 쌍검 기본공격이 플레이어 앞 허공 arc처럼 보여 무기와 잔향 상호작용이 약했다.</li>
+<li>방향: 공격 VFX를 적중 위치로 옮기고 잔향을 후속타로 분리했다.</li>
+<li>행동: target-local slash, delayed Kalmuri follow-up, 회귀 스모크를 구현했다.</li>
+<li>결과: 자동 검증에서 허공 VFX 0, 타겟 발도선 3, 칼무리 후속타 6을 확인했다.</li>
+</ul>
+  </main>
+</body>
+</html>

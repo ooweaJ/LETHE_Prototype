@@ -55,6 +55,7 @@ namespace Lethe.PrototypeV1
         readonly List<V1XpOrb> xpOrbs = new();
         readonly List<string> combatLog = new();
         readonly List<MemoryState> activeMemories = new();
+        readonly List<PendingKalmuriFollowup> pendingKalmuriFollowups = new();
         readonly Dictionary<V1MemoryId, int> echoLevels = new();
         readonly Dictionary<string, Sprite> spriteCache = new();
         readonly System.Random rng = new(120612);
@@ -185,6 +186,7 @@ namespace Lethe.PrototypeV1
             UpdateWeapon(dt);
             UpdateActiveMemories(dt);
             UpdateEchoUltimate(dt);
+            UpdatePendingKalmuriFollowups(dt);
             UpdateSpawning(dt);
             UpdateXpCollection(dt);
             CleanupLists();
@@ -392,8 +394,8 @@ namespace Lethe.PrototypeV1
             weaponTimer = TwinBladeInterval * StatAttackIntervalMul();
             weaponAnimTimer = 0.16f;
             leftBladeLead = !leftBladeLead;
-            SpawnTwinBladeSwing(forward);
             var hits = CollectTwinBladeHits(forward);
+            SpawnTwinBladeHitVfx(hits, forward);
 
             var hitIndex = 0;
             foreach (var hit in hits)
@@ -406,7 +408,7 @@ namespace Lethe.PrototypeV1
 
             if (hits.Count > 0)
             {
-                hitstopTimer = 0.025f;
+                hitstopTimer = 0.018f;
                 cameraShakeTimer = 0.06f;
                 cameraShakeAmount = 0.025f;
             }
@@ -513,22 +515,45 @@ namespace Lethe.PrototypeV1
 
         void TriggerTwinBladeKalmuriEcho(V1Enemy center, Vector2 forward, int level, int hitIndex)
         {
+            if (center == null) return;
+            pendingKalmuriFollowups.Add(new PendingKalmuriFollowup(center.transform.position, forward.normalized, level, hitIndex, 0.035f + Mathf.Min(hitIndex, 2) * 0.012f));
+        }
+
+        void UpdatePendingKalmuriFollowups(float dt)
+        {
+            for (int i = pendingKalmuriFollowups.Count - 1; i >= 0; i--)
+            {
+                var followup = pendingKalmuriFollowups[i];
+                followup.Delay -= dt;
+                if (followup.Delay > 0f)
+                {
+                    pendingKalmuriFollowups[i] = followup;
+                    continue;
+                }
+
+                pendingKalmuriFollowups.RemoveAt(i);
+                ResolveTwinBladeKalmuriFollowup(followup.Origin, followup.Forward, followup.Level, followup.HitIndex);
+            }
+        }
+
+        void ResolveTwinBladeKalmuriFollowup(Vector3 origin, Vector2 forward, int level, int hitIndex)
+        {
             var echoSizeScale = 0.80f;
             var echoDamageScale = 0.75f;
             var burstCount = Mathf.Clamp(1 + level / 2, 1, 3);
             var radius = (0.44f + level * 0.045f) * echoSizeScale;
             var damage = TwinBladeDamage * (0.22f + level * 0.045f) * echoDamageScale;
-            var baseAngle = Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg;
-            var origin = center.transform.position;
-            var side = new Vector2(-forward.y, forward.x).normalized;
+            var f = forward.sqrMagnitude > 0.01f ? forward.normalized : lastAim.normalized;
+            var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
+            var side = new Vector2(-f.y, f.x).normalized;
 
             for (int i = 0; i < burstCount; i++)
             {
                 var offset = side * ((i - (burstCount - 1) * 0.5f) * 0.18f);
-                var pos = origin + (Vector3)(forward.normalized * (0.20f + i * 0.07f) + offset);
+                var pos = origin + (Vector3)(f * (0.12f + i * 0.06f) + offset);
                 var rot = Quaternion.Euler(0f, 0f, baseAngle + (i - 1) * 18f + hitIndex * 7f);
                 var scale = 0.18f + level * 0.014f;
-                SpawnTransientSprite("칼무리 잔향 소참", MakeArcSprite("kalmuri-small", Color.white), pos, rot, scale, new Color(0.75f, 0.98f, 1f, level >= 5 ? 0.68f : 0.48f), 0.13f);
+                SpawnTransientSprite("KalmuriFollowup", MakeArcSprite("kalmuri-followup", Color.white), pos, rot, scale, new Color(0.75f, 0.98f, 1f, level >= 5 ? 0.68f : 0.48f), 0.13f);
             }
 
             var targets = enemies
@@ -541,7 +566,7 @@ namespace Lethe.PrototypeV1
             {
                 var toTarget = (Vector2)(targets[i].transform.position - origin);
                 var mul = i == 0 ? 1f : 0.55f;
-                DealDamage(targets[i], damage * mul, "칼무리 잔향", true, toTarget.sqrMagnitude > 0.01f ? toTarget.normalized : forward.normalized, 0.28f);
+                DealDamage(targets[i], damage * mul, "칼무리 잔향", true, toTarget.sqrMagnitude > 0.01f ? toTarget.normalized : f, 0.28f);
             }
         }
 
@@ -980,15 +1005,28 @@ namespace Lethe.PrototypeV1
             return string.IsNullOrEmpty(text) ? "없음" : text;
         }
 
-        void SpawnTwinBladeSwing(Vector2 forward)
+        void SpawnTwinBladeHitVfx(List<WeaponHit> hits, Vector2 forward)
         {
+            if (hits.Count == 0) return;
+
             var f = forward.normalized;
             var side = new Vector2(-f.y, f.x);
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
             var leadSide = leftBladeLead ? -1f : 1f;
-            SpawnTransientSprite("쌍검 좌참", MakeArcSprite("dual-left", new Color(0.68f, 0.94f, 1f, 0.85f)), player.position + (Vector3)(f * 0.82f + side * 0.16f * leadSide), Quaternion.Euler(0f, 0f, baseAngle - 9f * leadSide), 0.94f, new Color(0.72f, 0.95f, 1f, 0.72f), 0.09f);
-            SpawnTransientSprite("쌍검 우참", MakeArcSprite("dual-right", new Color(0.86f, 1f, 1f, 0.72f)), player.position + (Vector3)(f * 1.02f - side * 0.16f * leadSide), Quaternion.Euler(0f, 0f, baseAngle + 18f * leadSide), 0.78f, new Color(0.86f, 1f, 1f, 0.52f), 0.13f);
-            SpawnTransientSprite("쌍검 절단점", null, player.position + (Vector3)(f * 1.18f), Quaternion.identity, 0.11f, new Color(0.9f, 1f, 1f, 0.72f), 0.10f);
+            for (int i = 0; i < hits.Count; i++)
+            {
+                var origin = hits[i].Enemy.transform.position;
+                if (i == 0)
+                {
+                    SpawnTransientSprite("TargetLocalSlash_Primary_A", MakeArcSprite("target-slash-a", Color.white), origin + (Vector3)(side * 0.10f * leadSide + f * 0.04f), Quaternion.Euler(0f, 0f, baseAngle - 17f * leadSide), 0.34f, new Color(0.75f, 0.96f, 1f, 0.82f), 0.08f);
+                    SpawnTransientSprite("TargetLocalSlash_Primary_B", MakeArcSprite("target-slash-b", Color.white), origin + (Vector3)(-side * 0.10f * leadSide + f * 0.13f), Quaternion.Euler(0f, 0f, baseAngle + 23f * leadSide), 0.28f, new Color(0.90f, 1f, 1f, 0.62f), 0.10f);
+                    SpawnTransientSprite("TargetLocalCutPoint", null, origin + (Vector3)(f * 0.08f), Quaternion.identity, 0.075f, new Color(0.90f, 1f, 1f, 0.74f), 0.08f);
+                    continue;
+                }
+
+                var assistAngle = baseAngle + (i % 2 == 0 ? -14f : 14f);
+                SpawnTransientSprite("TargetLocalSlash_Assist", MakeArcSprite("target-slash-assist", Color.white), origin + (Vector3)(f * 0.04f), Quaternion.Euler(0f, 0f, assistAngle), 0.21f, new Color(0.62f, 0.88f, 1f, 0.45f), 0.07f);
+            }
         }
 
         void SpawnHitSpark(Vector3 pos, Vector2 dir, bool weaponHit)
@@ -1282,6 +1320,24 @@ namespace Lethe.PrototypeV1
                 Enemy = enemy;
                 Dir = dir;
                 Distance = dir.magnitude;
+            }
+        }
+
+        struct PendingKalmuriFollowup
+        {
+            public readonly Vector3 Origin;
+            public readonly Vector2 Forward;
+            public readonly int Level;
+            public readonly int HitIndex;
+            public float Delay;
+
+            public PendingKalmuriFollowup(Vector3 origin, Vector2 forward, int level, int hitIndex, float delay)
+            {
+                Origin = origin;
+                Forward = forward;
+                Level = level;
+                HitIndex = hitIndex;
+                Delay = delay;
             }
         }
 

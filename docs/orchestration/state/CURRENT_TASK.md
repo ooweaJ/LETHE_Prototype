@@ -45,6 +45,7 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 - M2 smoke reaches forgetting, result continuation, resonance, +5 echoes, and Blood Blade Storm.
 - Combat feel pass responds to jaewoo feedback: smaller Kalmuri echo, clearer dual-blade swing, hit feedback, XP bar, larger 3-card level-up UI.
 - DEC-2026-06-12-04 first implementation exists: no air swings, twin-blade nearest targeting, Kalmuri `MultiSmall` echo style.
+- DEC-2026-06-12-05 first implementation exists: target-local twin-blade slash VFX and delayed Kalmuri follow-up from hit origin.
 - Unity compile error 0.
 - Play Mode smoke creates player and enemies with no v1 runtime console exceptions.
 - v1 screenshot/capture confirms player/enemy sheets are not rendered as whole sheets.
@@ -83,12 +84,22 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - Play Mode targeted smoke: `noAirBefore=0 noAirAfter=0 slashAfterTarget=3 kalmuriSmall=3 launch=1 hitSpark=2`.
   - Unity console errors: `count=0`.
   - Evidence direct camera render: `LETHE/Assets/_dev/Evidence/v1_no_air_swing_kalmuri_multismall_20260612.png`.
+- Target-local slash / Kalmuri follow-up pass:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors. Warnings are old v0/debug deprecated API usage.
+  - `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`.
+  - Play Mode targeted smoke: `noAirAfter=0 targetLocalSlash=3 playerFanArc=0 kalmuriFollowup=6 hitSpark=6`.
+  - Evidence captures:
+    - `LETHE/Assets/_dev/Evidence/v1_target_local_slash_echo_followup_20260615.png`.
+    - `LETHE/Assets/_dev/Evidence/v1_target_local_slash_echo_followup_20260615_scene.png`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 1 unit heading ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `404 Not Found`, `project not found`.
 
 ## Next Implementation
 
-1. Replace current twin-blade player-origin/fan-like slash VFX with target-local iai/slash marks.
-2. Make Kalmuri `MultiSmall` read as a follow-up from the weapon hit origin, not as a character-origin pause effect.
-3. Then ask jaewoo to review no-air-swing + target-local slash + echo follow-up together.
+1. Ask jaewoo to review no-air-swing + target-local slash + echo follow-up together in Play Mode.
+2. If it feels readable, start the greatsword attack/echo rhythm prep without duplicating echo logic.
+3. If it still feels off, tune slash position/size, Kalmuri delay, and hitstop before expanding scope.
 
 ## Open Questions
 
