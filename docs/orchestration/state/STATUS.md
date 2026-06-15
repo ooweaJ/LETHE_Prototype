@@ -42,6 +42,33 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 weapon select / hit feedback pass:
+  - Added a run-start weapon selection overlay for `절단쌍검` and `장송대검`.
+  - The run now starts only after the player chooses a weapon with a card click or number key `1/2`.
+  - `F9` remains as debug/review weapon toggle after the run starts.
+  - Replaced the temporary greatsword box visual with a procedural blade silhouette.
+  - Twin-blade hit VFX now uses sharper target-local iai slash sprites instead of broad fan-like arcs.
+  - Greatsword hit VFX now uses a heavier target-local cleave and impact diamond.
+  - Weapon hit feedback was strengthened:
+    - dual blades: quicker multi-hit knockback/readability.
+    - greatsword: much stronger push, hitstop, shake, and heavy slash identity.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors. Warnings are legacy v0/debug deprecated API warnings.
+  - Unity compilation errors: `count=0`.
+  - Play Mode targeted smoke:
+    - `beforeOverlay=True`
+    - `afterOverlay=False`
+    - `dualSlash=5`
+    - `dualSpark=4`
+    - `dualKnock=1.78`
+    - `greatSlash=5`
+    - `greatShock=1`
+    - `greatKnock=5.53`
+    - snapshot: `scene=v1 weapon=장송대검 elapsed=0.0 hp=210.0/210.0 level=1 xp=0/5 kills=1 memories=[HungryBlades:1] echoes=[] enemies=7 storm=False result=False refill=False death=False`.
+  - Evidence capture saved: `LETHE/Assets/_dev/Evidence/v1_weapon_select_hit_feedback_20260615.png`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 4 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `404 Not Found`, `project not found`.
+
 - Unity v1 one-pass feedback batch:
   - Implemented the full next-work bundle requested for one-pass review.
   - Twin-blade target-local slashes were made more visible with larger primary/assist marks, stronger alpha, and slightly longer lifetimes.
@@ -310,11 +337,13 @@ Continue from `Dev_Prototype_v1`, not `Dev_Prototype_v0`.
 
 Next implementation step:
 
-1. Let jaewoo run `Dev_Prototype_v1` and give one combined feedback pass.
+1. Let jaewoo run `Dev_Prototype_v1`, choose a start weapon from the new overlay, and give one combined feedback pass.
 2. Review checklist:
+   - 시작 무기 선택이 런 시작 UX로 자연스럽게 읽히는가?
    - 쌍검 기본공격이 적 위치 발도선으로 읽히는가?
+   - 적이 맞을 때 넉백/피격/공간 반응이 충분한가?
    - 칼무리 잔향이 기본공격 뒤 후속타로 읽히는가?
-   - `F9` 대검이 느린 큰 한 방으로 읽히는가?
+   - 대검이 느린 큰 한 방으로 읽히는가?
    - 60~120초 안에 망각 -> 결손 -> 공명 -> +5 잔향 -> 피의 칼폭풍 흐름이 보이는가?
    - 쌍검/대검 피의 칼폭풍 차이가 보이는가?
 3. After feedback, choose a narrow next pass: attack readability, pacing/balance, UI clarity, or art replacement.

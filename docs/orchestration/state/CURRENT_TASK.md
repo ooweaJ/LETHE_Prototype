@@ -48,6 +48,7 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 - DEC-2026-06-12-05 first implementation exists: target-local twin-blade slash VFX and delayed Kalmuri follow-up from hit origin.
 - Weapon rhythm structure prep exists: `WeaponRuntimeSpec` supports current dual blades and debug greatsword paths without copying the weapon/echo loop.
 - One-pass review batch exists: twin-blade visibility, greatsword visual behavior, review M2 pacing, resonance VFX, awakened echo HUD, weapon-patterned Blood Blade Storm, and denser combat pressure.
+- Weapon selection / hit feedback pass exists: run-start weapon card selection, sharper target-local weapon VFX, stronger enemy knockback, and a non-box greatsword silhouette.
 - Unity compile error 0.
 - Play Mode smoke creates player and enemies with no v1 runtime console exceptions.
 - v1 screenshot/capture confirms player/enemy sheets are not rendered as whole sheets.
@@ -122,14 +123,31 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - `npm.cmd run report`: passed.
   - `npm.cmd run report:check`: passed, 3 unit headings ok.
   - `npm.cmd run report:orchestrator:unit:dry`: failed with `404 Not Found`, `project not found`.
+- Weapon selection / hit feedback pass:
+  - Start weapon selection overlay now appears before the run begins.
+  - `1` chooses `절단쌍검`, `2` chooses `장송대검`; card click also starts the run.
+  - `F9` remains as a debug/review toggle after start.
+  - Greatsword visual is now a procedural blade silhouette instead of a rectangular block.
+  - Twin-blade hit VFX uses sharper target-local iai slash sprites.
+  - Greatsword hit VFX uses a larger target-local heavy slash plus impact diamond.
+  - Weapon hit knockback was increased, with greatsword tuned much heavier than dual blades.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors. Warnings are old v0/debug deprecated API usage.
+  - Unity compile errors: `count=0`.
+  - Play Mode targeted smoke: `beforeOverlay=True afterOverlay=False dualSlash=5 dualSpark=4 dualKnock=1.78 greatSlash=5 greatShock=1 greatKnock=5.53`.
+  - Evidence capture: `LETHE/Assets/_dev/Evidence/v1_weapon_select_hit_feedback_20260615.png`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 4 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `404 Not Found`, `project not found`.
 
 ## Next Implementation
 
 1. Ask jaewoo to review the whole `Dev_Prototype_v1` batch in Play Mode.
 2. Collect one combined feedback pass for:
+   - 시작 무기 선택 화면.
    - 쌍검 기본공격.
+   - 적 피격 넉백/피격감.
    - 칼무리 후속타.
-   - `F9` 대검.
+   - 대검 시작 선택과 `F9` 비교.
    - 망각/공명/+5 잔향/피의 칼폭풍 흐름.
    - HUD readability and combat density.
 3. After feedback, pick exactly one next pass: attack readability, pacing/balance, UI clarity, or art replacement.

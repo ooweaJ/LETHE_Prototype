@@ -129,6 +129,8 @@ namespace Lethe.PrototypeV1
         bool reviewBloodBoosted;
         bool reviewThirdMemoryGranted;
         bool reviewEchoTopped;
+        bool weaponSelectOverlay = true;
+        bool runStarted;
         bool pausedForChoice;
         bool resultOverlay;
         bool refillOverlay;
@@ -155,11 +157,12 @@ namespace Lethe.PrototypeV1
             mainCamera.orthographicSize = 6.1f;
             mainCamera.backgroundColor = new Color(0.035f, 0.045f, 0.055f);
 
+            WeaponStat.AttackSpeed = 0f;
+            WeaponStat.DamageMul = 0f;
             LoadFont();
             CreateArena();
             CreatePlayer();
-            AddMemory(V1MemoryId.HungryBlades, 1, true);
-            Log("런 시작: 절단쌍검 + 굶주린 칼무리 Lv.1");
+            Log("런 준비: 시작 무기를 선택하세요");
         }
 
         void Update()
@@ -170,6 +173,13 @@ namespace Lethe.PrototypeV1
                 {
                     UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
                 }
+                return;
+            }
+
+            if (weaponSelectOverlay)
+            {
+                if (KeyDown(KeyCode.Alpha1)) BeginRun(V1WeaponId.DualBlades);
+                if (KeyDown(KeyCode.Alpha2)) BeginRun(V1WeaponId.Greatsword);
                 return;
             }
 
@@ -252,6 +262,7 @@ namespace Lethe.PrototypeV1
 
         public void DebugRunM1Smoke()
         {
+            EnsureRunStarted();
             pausedForChoice = false;
             resultOverlay = false;
             refillOverlay = false;
@@ -324,6 +335,7 @@ namespace Lethe.PrototypeV1
 
         public void DebugRunM2Smoke()
         {
+            EnsureRunStarted();
             pausedForChoice = false;
             resultOverlay = false;
             refillOverlay = false;
@@ -353,6 +365,12 @@ namespace Lethe.PrototypeV1
         void OnGUI()
         {
             EnsureStyles();
+            if (weaponSelectOverlay)
+            {
+                DrawWeaponSelectOverlay();
+                return;
+            }
+
             DrawHud();
 
             if (pausedForChoice)
@@ -397,9 +415,9 @@ namespace Lethe.PrototypeV1
             weaponAnchor.SetParent(player);
             weaponAnchor.localPosition = new Vector3(0.25f, -0.05f, 0f);
 
-            dualLeftWeaponSprite = LoadSprite("Assets/_dev/Art/Sprites/Weapons/spr_weapon_dual_blade_left_01.png") ?? MakeBoxSprite("dual-left", new Color(0.86f, 0.93f, 1f), 18, 72);
-            dualRightWeaponSprite = LoadSprite("Assets/_dev/Art/Sprites/Weapons/spr_weapon_dual_blade_right_01.png") ?? MakeBoxSprite("dual-right", new Color(0.86f, 0.93f, 1f), 18, 72);
-            greatswordWeaponSprite = MakeBoxSprite("greatsword-visual", new Color(0.78f, 0.93f, 1f), 26, 132);
+            dualLeftWeaponSprite = LoadSprite("Assets/_dev/Art/Sprites/Weapons/spr_weapon_dual_blade_left_01.png") ?? MakeBladeSprite("dual-left", new Color(0.80f, 0.96f, 1f), new Color(0.16f, 0.26f, 0.34f), 34, 112, false);
+            dualRightWeaponSprite = LoadSprite("Assets/_dev/Art/Sprites/Weapons/spr_weapon_dual_blade_right_01.png") ?? MakeBladeSprite("dual-right", new Color(0.88f, 0.98f, 1f), new Color(0.18f, 0.30f, 0.38f), 34, 112, false);
+            greatswordWeaponSprite = MakeBladeSprite("greatsword-visual", new Color(0.82f, 0.96f, 1f), new Color(0.10f, 0.18f, 0.24f), 58, 178, true);
             leftBladeSprite = CreateWeaponSprite("LeftBlade", dualLeftWeaponSprite, new Vector3(-0.22f, -0.05f, 0f));
             rightBladeSprite = CreateWeaponSprite("RightBlade", dualRightWeaponSprite, new Vector3(0.22f, -0.05f, 0f));
         }
@@ -471,10 +489,10 @@ namespace Lethe.PrototypeV1
                 leftBladeSprite.enabled = false;
                 rightBladeSprite.enabled = true;
                 rightBladeSprite.sprite = greatswordWeaponSprite;
-                rightBladeSprite.color = new Color(0.82f, 0.95f, 1f, 0.96f);
-                rightBladeSprite.transform.localScale = Vector3.one * (0.54f + 0.05f * swing);
-                rightBladeSprite.transform.localPosition = new Vector3(0.08f + 0.16f * swing, -0.08f + 0.11f * swing, 0f);
-                rightBladeSprite.transform.localRotation = Quaternion.Euler(0f, 0f, -34f + 116f * swing);
+                rightBladeSprite.color = new Color(0.88f, 0.98f, 1f, 0.98f);
+                rightBladeSprite.transform.localScale = Vector3.one * (0.44f + 0.07f * swing);
+                rightBladeSprite.transform.localPosition = new Vector3(0.02f + 0.21f * swing, -0.14f + 0.10f * swing, 0f);
+                rightBladeSprite.transform.localRotation = Quaternion.Euler(0f, 0f, -28f + 128f * swing);
                 return;
             }
 
@@ -484,8 +502,8 @@ namespace Lethe.PrototypeV1
             rightBladeSprite.sprite = dualRightWeaponSprite;
             leftBladeSprite.color = Color.white;
             rightBladeSprite.color = Color.white;
-            leftBladeSprite.transform.localScale = Vector3.one * 0.36f;
-            rightBladeSprite.transform.localScale = Vector3.one * 0.36f;
+            leftBladeSprite.transform.localScale = Vector3.one * (0.30f + 0.03f * swing);
+            rightBladeSprite.transform.localScale = Vector3.one * (0.30f + 0.03f * swing);
             var leadMul = leftBladeLead ? 1f : -1f;
             leftBladeSprite.transform.localPosition = new Vector3(-0.22f - 0.08f * swing * leadMul, -0.05f + 0.04f * swing, 0f);
             rightBladeSprite.transform.localPosition = new Vector3(0.22f + 0.08f * swing * leadMul, -0.05f + 0.04f * swing, 0f);
@@ -697,10 +715,11 @@ namespace Lethe.PrototypeV1
                 var offset = isHeavy ? Vector2.zero : side * ((i - (burstCount - 1) * 0.5f) * 0.18f);
                 var pos = origin + (Vector3)(f * (isHeavy ? 0.04f : 0.12f + i * 0.06f) + offset);
                 var rot = Quaternion.Euler(0f, 0f, baseAngle + (isHeavy ? 0f : (i - 1) * 18f + hitIndex * 7f));
-                var scale = isHeavy ? 0.42f + level * 0.035f : 0.18f + level * 0.014f;
+                var scale = isHeavy ? 0.58f + level * 0.045f : 0.24f + level * 0.018f;
                 var name = isHeavy ? "KalmuriFollowup_Heavy" : "KalmuriFollowup";
-                var color = isHeavy ? new Color(0.82f, 0.98f, 1f, level >= 5 ? 0.84f : 0.64f) : new Color(0.75f, 0.98f, 1f, level >= 5 ? 0.68f : 0.48f);
-                SpawnTransientSprite(name, MakeArcSprite(isHeavy ? "kalmuri-followup-heavy" : "kalmuri-followup", Color.white), pos, rot, scale, color, isHeavy ? 0.18f : 0.13f);
+                var color = isHeavy ? new Color(0.82f, 0.98f, 1f, level >= 5 ? 0.88f : 0.70f) : new Color(0.75f, 0.98f, 1f, level >= 5 ? 0.74f : 0.54f);
+                var slashSprite = isHeavy ? MakeHeavySlashSprite("kalmuri-followup-heavy", Color.white) : MakeIaiSlashSprite("kalmuri-followup", Color.white);
+                SpawnTransientSprite(name, slashSprite, pos, rot, scale, color, isHeavy ? 0.20f : 0.14f);
             }
 
             if (isHeavy)
@@ -740,7 +759,7 @@ namespace Lethe.PrototypeV1
                     {
                         var angle = baseAngle + i * 120f;
                         var pos = player.position + Quaternion.Euler(0f, 0f, angle) * Vector3.right * 1.75f;
-                        SpawnTransientSprite("피의 칼폭풍 대검참", MakeArcSprite("blood-storm-heavy", Color.white), pos, Quaternion.Euler(0f, 0f, angle + 90f), 1.05f, new Color(1f, 0.12f, 0.18f, 0.72f), 0.28f);
+                    SpawnTransientSprite("피의 칼폭풍 대검참", MakeHeavySlashSprite("blood-storm-heavy", Color.white), pos, Quaternion.Euler(0f, 0f, angle + 90f), 1.00f, new Color(1f, 0.12f, 0.18f, 0.76f), 0.30f);
                     }
                     hitstopTimer = Mathf.Max(hitstopTimer, 0.035f);
                     cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.14f);
@@ -1099,9 +1118,65 @@ namespace Lethe.PrototypeV1
             Log($"무기 전환: {weapon.DisplayName}");
         }
 
+        void BeginRun(V1WeaponId weaponId)
+        {
+            if (runStarted) return;
+            currentWeaponId = weaponId;
+            weaponSelectOverlay = false;
+            runStarted = true;
+            weaponTimer = 0.18f;
+            weaponAnimTimer = 0f;
+            AddMemory(V1MemoryId.HungryBlades, 1, true);
+            var weapon = CurrentWeaponSpec();
+            SpawnFloatingText(player.position + Vector3.up * 1.15f, weapon.DisplayName, new Color(0.78f, 0.96f, 1f));
+            Log($"런 시작: {weapon.DisplayName} + 굶주린 칼무리 Lv.1");
+        }
+
+        void EnsureRunStarted()
+        {
+            if (!runStarted)
+            {
+                BeginRun(currentWeaponId);
+            }
+        }
+
         void ToggleDebugWeapon()
         {
             SetDebugWeapon(currentWeaponId == V1WeaponId.DualBlades ? V1WeaponId.Greatsword : V1WeaponId.DualBlades);
+        }
+
+        void DrawWeaponSelectOverlay()
+        {
+            GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "", panelStyle);
+            var width = Mathf.Min(1040f, Screen.width - 80f);
+            var height = Mathf.Min(520f, Screen.height - 70f);
+            var origin = new Rect(Screen.width * 0.5f - width * 0.5f, Screen.height * 0.5f - height * 0.5f, width, height);
+            GUI.Box(origin, "", panelStyle);
+            GUI.Label(new Rect(origin.x + 30, origin.y + 28, origin.width - 60, 42), "시작 무기 선택", titleStyle);
+            GUI.Label(new Rect(origin.x + 54, origin.y + 78, origin.width - 108, 42), "무기는 자동으로 발동합니다. 잔향은 이 무기 타격 지점에 붙어 후속타가 됩니다.", smallStyle);
+
+            var gap = 28f;
+            var cardWidth = (origin.width - 108f - gap) * 0.5f;
+            var cardHeight = origin.height - 158f;
+            DrawWeaponCard(new Rect(origin.x + 54f, origin.y + 126f, cardWidth, cardHeight), V1WeaponId.DualBlades, "1", "빠른 2연 발도", "작은 칼자국이 여러 번 적 몸에 찍힙니다.\n\n칼무리 잔향: 작고 빠른 혈검 다수\n궁극: 연쇄형 피의 칼폭풍", new Color(0.32f, 0.88f, 1f));
+            DrawWeaponCard(new Rect(origin.x + 54f + cardWidth + gap, origin.y + 126f, cardWidth, cardHeight), V1WeaponId.Greatsword, "2", "느린 큰 참격", "적 무리 중심에 큰 검흔과 밀어내기가 생깁니다.\n\n칼무리 잔향: 큰 혈검 소수\n궁극: 강타형 피의 칼폭풍", new Color(0.86f, 0.96f, 1f));
+        }
+
+        void DrawWeaponCard(Rect card, V1WeaponId weaponId, string key, string subtitle, string body, Color accent)
+        {
+            if (GUI.Button(card, "", buttonStyle))
+            {
+                BeginRun(weaponId);
+            }
+
+            var name = weaponId == V1WeaponId.Greatsword ? "장송대검" : "절단쌍검";
+            GUI.color = accent;
+            GUI.DrawTexture(new Rect(card.x + 18, card.y + 18, card.width - 36, 4), Texture2D.whiteTexture);
+            GUI.color = Color.white;
+            GUI.Label(new Rect(card.x + 22, card.y + 38, card.width - 44, 36), $"{key}. {name}", titleStyle);
+            GUI.Label(new Rect(card.x + 28, card.y + 88, card.width - 56, 28), subtitle, smallStyle);
+            GUI.Label(new Rect(card.x + 28, card.y + 132, card.width - 56, 120), body, smallStyle);
+            GUI.Label(new Rect(card.x + 28, card.yMax - 46, card.width - 56, 26), "클릭 또는 숫자키로 선택", smallStyle);
         }
 
         void DrawHud()
@@ -1256,14 +1331,14 @@ namespace Lethe.PrototypeV1
                 var origin = hits[i].Enemy.transform.position;
                 if (i == 0)
                 {
-                    SpawnTransientSprite("TargetLocalSlash_Primary_A", MakeArcSprite("target-slash-a", Color.white), origin + (Vector3)(side * 0.12f * leadSide + f * 0.04f), Quaternion.Euler(0f, 0f, baseAngle - 19f * leadSide), 0.42f, new Color(0.75f, 0.96f, 1f, 0.90f), 0.095f);
-                    SpawnTransientSprite("TargetLocalSlash_Primary_B", MakeArcSprite("target-slash-b", Color.white), origin + (Vector3)(-side * 0.12f * leadSide + f * 0.14f), Quaternion.Euler(0f, 0f, baseAngle + 25f * leadSide), 0.34f, new Color(0.90f, 1f, 1f, 0.74f), 0.115f);
+                    SpawnTransientSprite("TargetLocalSlash_Primary_A", MakeIaiSlashSprite("target-slash-a", Color.white), origin + (Vector3)(side * 0.13f * leadSide + f * 0.05f), Quaternion.Euler(0f, 0f, baseAngle - 23f * leadSide), 0.54f, new Color(0.72f, 0.96f, 1f, 0.95f), 0.105f);
+                    SpawnTransientSprite("TargetLocalSlash_Primary_B", MakeIaiSlashSprite("target-slash-b", Color.white), origin + (Vector3)(-side * 0.14f * leadSide + f * 0.16f), Quaternion.Euler(0f, 0f, baseAngle + 26f * leadSide), 0.42f, new Color(0.94f, 1f, 1f, 0.80f), 0.12f);
                     SpawnTransientSprite("TargetLocalCutPoint", null, origin + (Vector3)(f * 0.08f), Quaternion.identity, 0.095f, new Color(0.90f, 1f, 1f, 0.82f), 0.09f);
                     continue;
                 }
 
                 var assistAngle = baseAngle + (i % 2 == 0 ? -14f : 14f);
-                SpawnTransientSprite("TargetLocalSlash_Assist", MakeArcSprite("target-slash-assist", Color.white), origin + (Vector3)(f * 0.04f), Quaternion.Euler(0f, 0f, assistAngle), 0.25f, new Color(0.62f, 0.88f, 1f, 0.54f), 0.08f);
+                SpawnTransientSprite("TargetLocalSlash_Assist", MakeIaiSlashSprite("target-slash-assist", Color.white), origin + (Vector3)(f * 0.04f), Quaternion.Euler(0f, 0f, assistAngle), 0.30f, new Color(0.62f, 0.88f, 1f, 0.58f), 0.085f);
             }
         }
 
@@ -1275,14 +1350,14 @@ namespace Lethe.PrototypeV1
             var side = new Vector2(-f.y, f.x);
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
             var center = (Vector3)hits.Aggregate(Vector2.zero, (sum, hit) => sum + (Vector2)hit.Enemy.transform.position) / hits.Count;
-            SpawnTransientSprite("GreatswordTargetSlash_Primary", MakeArcSprite("greatsword-target-slash", Color.white), center + (Vector3)(f * 0.09f), Quaternion.Euler(0f, 0f, baseAngle), 1.05f, new Color(0.86f, 0.96f, 1f, 0.90f), 0.20f);
-            SpawnTransientSprite("GreatswordTargetShock", null, center + (Vector3)(f * 0.11f), Quaternion.identity, 0.30f, new Color(0.80f, 0.95f, 1f, 0.42f), 0.18f);
+            SpawnTransientSprite("GreatswordTargetSlash_Primary", MakeHeavySlashSprite("greatsword-target-slash", Color.white), center + (Vector3)(f * 0.12f), Quaternion.Euler(0f, 0f, baseAngle), 0.92f, new Color(0.88f, 0.98f, 1f, 0.94f), 0.22f);
+            SpawnTransientSprite("GreatswordTargetShock", MakeImpactDiamondSprite("greatsword-impact", Color.white), center + (Vector3)(f * 0.11f), Quaternion.identity, 0.42f, new Color(0.80f, 0.95f, 1f, 0.50f), 0.18f);
             SpawnTransientSprite("GreatswordTargetCutPoint", null, center + (Vector3)(f * 0.10f), Quaternion.identity, 0.18f, new Color(0.95f, 1f, 1f, 0.86f), 0.13f);
 
             for (int i = 1; i < hits.Count; i++)
             {
                 var pos = hits[i].Enemy.transform.position + (Vector3)(side * (i % 2 == 0 ? 0.09f : -0.09f));
-                SpawnTransientSprite("GreatswordTargetSlash_Assist", MakeArcSprite("greatsword-target-assist", Color.white), pos, Quaternion.Euler(0f, 0f, baseAngle + (i % 2 == 0 ? -8f : 8f)), 0.48f, new Color(0.62f, 0.86f, 1f, 0.48f), 0.12f);
+                SpawnTransientSprite("GreatswordTargetSlash_Assist", MakeIaiSlashSprite("greatsword-target-assist", Color.white), pos, Quaternion.Euler(0f, 0f, baseAngle + (i % 2 == 0 ? -8f : 8f)), 0.42f, new Color(0.62f, 0.86f, 1f, 0.52f), 0.12f);
             }
         }
 
@@ -1290,7 +1365,7 @@ namespace Lethe.PrototypeV1
         {
             if (!weaponHit) return;
             var angle = dir.sqrMagnitude > 0.01f ? Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg : UnityEngine.Random.Range(0f, 360f);
-            SpawnTransientSprite("피격 섬광", MakeArcSprite("hit-spark", Color.white), pos + (Vector3)(dir.normalized * 0.16f), Quaternion.Euler(0f, 0f, angle), 0.28f, new Color(1f, 1f, 1f, 0.82f), 0.06f);
+            SpawnTransientSprite("피격 섬광", MakeIaiSlashSprite("hit-spark", Color.white), pos + (Vector3)(dir.normalized * 0.16f), Quaternion.Euler(0f, 0f, angle), 0.20f, new Color(1f, 1f, 1f, 0.86f), 0.06f);
         }
 
         void DrawBar(Rect rect, float value, Color fill, Color background)
@@ -1443,6 +1518,8 @@ namespace Lethe.PrototypeV1
                 {
                     KeyCode.R => keyboard.rKey.wasPressedThisFrame,
                     KeyCode.Space => keyboard.spaceKey.wasPressedThisFrame,
+                    KeyCode.Alpha1 => keyboard.digit1Key.wasPressedThisFrame,
+                    KeyCode.Alpha2 => keyboard.digit2Key.wasPressedThisFrame,
                     KeyCode.F1 => keyboard.f1Key.wasPressedThisFrame,
                     KeyCode.F2 => keyboard.f2Key.wasPressedThisFrame,
                     KeyCode.F3 => keyboard.f3Key.wasPressedThisFrame,
@@ -1489,6 +1566,116 @@ namespace Lethe.PrototypeV1
             }
             tex.Apply();
             return Sprite.Create(tex, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        static Sprite MakeBladeSprite(string name, Color blade, Color hilt, int width, int height, bool greatsword)
+        {
+            var tex = new Texture2D(width, height, TextureFormat.RGBA32, false) { name = name };
+            var center = width * 0.5f;
+            var guardY = Mathf.RoundToInt(height * 0.22f);
+            var pommelY = Mathf.RoundToInt(height * 0.07f);
+            for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
+            {
+                var px = Mathf.Abs(x - center);
+                var color = Color.clear;
+                if (y >= guardY)
+                {
+                    var t = Mathf.InverseLerp(guardY, height - 2, y);
+                    var half = Mathf.Lerp(greatsword ? width * 0.22f : width * 0.15f, 1.5f, t);
+                    if (px <= half)
+                    {
+                        var edge = Mathf.Clamp01((half - px) / Mathf.Max(1f, half * 0.25f));
+                        var shine = x < center ? 1.12f : 0.82f;
+                        color = new Color(blade.r * shine, blade.g * shine, blade.b * shine, Mathf.Lerp(0.55f, 1f, edge));
+                    }
+                }
+                else if (y >= guardY - 5 && y <= guardY + 4 && px <= (greatsword ? width * 0.44f : width * 0.36f))
+                {
+                    color = hilt;
+                }
+                else if (y < guardY && y >= pommelY && px <= (greatsword ? width * 0.09f : width * 0.08f))
+                {
+                    color = new Color(hilt.r * 1.25f, hilt.g * 1.25f, hilt.b * 1.25f, 1f);
+                }
+                else if (y < pommelY && Vector2.Distance(new Vector2(x, y), new Vector2(center, pommelY)) <= width * 0.10f)
+                {
+                    color = hilt;
+                }
+
+                tex.SetPixel(x, y, color);
+            }
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, width, height), new Vector2(0.5f, 0.18f), 100f);
+        }
+
+        static Sprite MakeIaiSlashSprite(string name, Color color)
+        {
+            const int width = 192;
+            const int height = 64;
+            var tex = new Texture2D(width, height, TextureFormat.RGBA32, false) { name = name };
+            var a = new Vector2(20f, height * 0.54f);
+            var b = new Vector2(width - 18f, height * 0.36f);
+            for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
+            {
+                var p = new Vector2(x, y);
+                var dist = DistanceToSegment(p, a, b);
+                var along = Mathf.Clamp01(Vector2.Dot(p - a, (b - a).normalized) / (b - a).magnitude);
+                var alpha = Mathf.Clamp01((6.5f - dist) / 6.5f) * Mathf.Sin(along * Mathf.PI);
+                var core = Mathf.Clamp01((2.2f - dist) / 2.2f);
+                tex.SetPixel(x, y, alpha <= 0f ? Color.clear : new Color(color.r, color.g, color.b, Mathf.Clamp01(alpha * 0.72f + core * 0.45f)));
+            }
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        static Sprite MakeHeavySlashSprite(string name, Color color)
+        {
+            const int width = 224;
+            const int height = 112;
+            var tex = new Texture2D(width, height, TextureFormat.RGBA32, false) { name = name };
+            var a = new Vector2(28f, height * 0.66f);
+            var b = new Vector2(width - 22f, height * 0.30f);
+            for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
+            {
+                var p = new Vector2(x, y);
+                var dist = DistanceToSegment(p, a, b);
+                var along = Mathf.Clamp01(Vector2.Dot(p - a, (b - a).normalized) / (b - a).magnitude);
+                var taper = Mathf.Sin(along * Mathf.PI);
+                var alpha = Mathf.Clamp01((16f - dist) / 16f) * taper;
+                var inner = Mathf.Clamp01((5f - dist) / 5f);
+                tex.SetPixel(x, y, alpha <= 0f ? Color.clear : new Color(color.r, color.g, color.b, Mathf.Clamp01(alpha * 0.55f + inner * 0.48f)));
+            }
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        static Sprite MakeImpactDiamondSprite(string name, Color color)
+        {
+            const int size = 96;
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { name = name };
+            var center = new Vector2(size * 0.5f, size * 0.5f);
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                var p = new Vector2(x, y) - center;
+                var d = Mathf.Abs(p.x) + Mathf.Abs(p.y);
+                var ring = Mathf.Clamp01(1f - Mathf.Abs(d - 28f) / 4f);
+                var core = Mathf.Clamp01(1f - d / 18f);
+                var alpha = Mathf.Max(ring * 0.70f, core * 0.38f);
+                tex.SetPixel(x, y, alpha <= 0f ? Color.clear : new Color(color.r, color.g, color.b, alpha));
+            }
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        static float DistanceToSegment(Vector2 p, Vector2 a, Vector2 b)
+        {
+            var ab = b - a;
+            var t = Mathf.Clamp01(Vector2.Dot(p - a, ab) / Mathf.Max(0.001f, ab.sqrMagnitude));
+            return Vector2.Distance(p, a + ab * t);
         }
 
         static Sprite MakeArcSprite(string name, Color color)
@@ -1661,10 +1848,10 @@ namespace Lethe.PrototypeV1
                 TwinBladeEngageMul,
                 6,
                 0.72f,
-                1.15f,
-                0.72f,
-                0.018f,
-                0.025f,
+                1.78f,
+                1.05f,
+                0.022f,
+                0.035f,
                 0.16f,
                 0.80f,
                 0.75f,
@@ -1684,10 +1871,10 @@ namespace Lethe.PrototypeV1
                 GreatswordEngageMul,
                 5,
                 0.58f,
-                2.25f,
-                1.35f,
-                0.052f,
-                0.060f,
+                3.75f,
+                2.10f,
+                0.066f,
+                0.088f,
                 0.34f,
                 1.80f,
                 1.60f,
@@ -1785,7 +1972,7 @@ namespace Lethe.PrototypeV1
             if (knockVelocity.sqrMagnitude > 0.001f)
             {
                 transform.position += (Vector3)(knockVelocity * dt);
-                knockVelocity = Vector2.Lerp(knockVelocity, Vector2.zero, dt * 9f);
+                knockVelocity = Vector2.Lerp(knockVelocity, Vector2.zero, dt * 6.5f);
             }
 
             if (hitSquashTimer > 0f)
@@ -1861,7 +2048,7 @@ namespace Lethe.PrototypeV1
 
         public void ApplyHitFeedback(Vector2 direction, float strength)
         {
-            knockVelocity += direction.normalized * Mathf.Clamp(strength, 0f, 2.4f);
+            knockVelocity += direction.normalized * Mathf.Clamp(strength, 0f, 4.6f);
         }
 
         void Heal(float amount)
