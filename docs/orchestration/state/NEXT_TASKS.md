@@ -4,25 +4,24 @@ Keep this file short. Detailed history belongs in `docs/orchestration/devlog/`, 
 
 Current source of truth: `docs/design/` (LETHE_DESIGN_00..07 + README). Build plan: `docs/design/LETHE_DESIGN_06_BUILD_PLAN.md`.
 
-## 1. Dev_Prototype_v1 플레이 리뷰 — 최우선
+## 1. Dev_Prototype_v1 통합 플레이 리뷰 — 최우선
 
 - Priority: highest
 - Source: `docs/design/LETHE_DESIGN_06_BUILD_PLAN.md` (M1), `LETHE_DESIGN_05_UI_UX.md`, `LETHE_DESIGN_01_RUN_LOOP.md`
-- Include: `Dev_Prototype_v1`을 Play Mode로 열고 쌍검이 허공에 베지 않는지, 기본공격 VFX가 적 위치 발도/절단선으로 보이는지, 칼무리 `MultiSmall`이 적중 위치 후속타로 읽히는지 확인한다. XP bar/3카드 UI도 같이 본다.
-- Done: jaewoo가 target-local basic attack + echo follow-up에 대해 `GO`, `ITERATE`, `NO-GO` 중 하나를 준다.
+- Include: `Dev_Prototype_v1`을 Play Mode로 열고 쌍검 발도선, 칼무리 후속타, `F9` 대검, 망각/공명/+5 잔향/피의 칼폭풍, HUD, 전투 밀도를 한 번에 확인한다.
+- Done: jaewoo가 통합 빌드에 대해 `GO`, `ITERATE`, `NO-GO` 중 하나와 가장 약한 지점 1~3개를 준다.
 
-## 2. 쌍검 target-local VFX 체감 보정
-
-- Priority: high
-- Source: `DEC-2026-06-12-05`, `LETHE_DESIGN_02_COMBAT.md`, `LETHE_DESIGN_03_MEMORY_ECHO.md`
-- Include: 플레이 리뷰에서 공격감이 약하면 발도선 크기/위치, 보조 slash 수, 칼무리 지연 시간, hitstop 값을 조정한다. 코드 구현은 완료됐으므로 수치와 화면 리듬 보정에 한정한다.
-- Done: jaewoo가 쌍검 기본공격과 칼무리 잔향 후속타를 구분해서 읽을 수 있다고 판단한다.
-
-## 3. 대검 시각/애니메이션 체감 패스
+## 2. 피드백 기반 1순위 보정
 
 - Priority: high
-- Include: 이미 준비된 `WeaponRuntimeSpec` 대검 경로에 실제 대검 무기 시각, 큰 발도선 위치, 공격 애니메이션, 강한 hitstop/shake를 붙인다. 현재 F9 디버그 경로는 구조 확인용이지 최종 체감 검증용이 아니다.
-- Done: F9 대검 상태가 "쌍검을 키운 것"이 아니라 느리고 큰 한 방 무기로 읽힌다.
+- Include: 통합 리뷰에서 나온 가장 약한 지점 하나를 먼저 고친다. 후보는 공격 판독성, 페이싱/밸런스, UI 가독성, 아트/스프라이트 교체다.
+- Done: 선택한 약점 하나가 스모크와 플레이 리뷰에서 개선된다.
+
+## 3. 대검 아트 교체 패스
+
+- Priority: high
+- Include: 현재 절차형 대검 visual을 임시 박스가 아니라 LETHE 톤의 대검 sprite/VFX로 교체한다.
+- Done: `F9` 대검이 시각적으로도 별도 무기처럼 보인다.
 
 ## 4. M2 실제 페이싱화
 

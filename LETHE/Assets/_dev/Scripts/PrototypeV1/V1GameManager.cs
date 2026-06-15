@@ -72,12 +72,14 @@ namespace Lethe.PrototypeV1
         const float GreatswordDamage = 42f;
         const float GreatswordArcDeg = 82f;
         const float GreatswordEngageMul = 1.08f;
+        const float ReviewFirstBossSeconds = 62f;
+        const float ReviewDeficitSeconds = 22f;
         const float HungryBladesRadius = 72f / PixelsPerUnit;
         const float HungryBladesDps = 28f;
         const int MaxMemoryLevel = 5;
         const int MaxEchoLevel = 5;
         const int MaxActiveMemories = 3;
-        const float FirstBossHp = 2050f;
+        const float FirstBossHp = 760f;
         const float RunSeconds = 600f;
 
         readonly List<V1Enemy> enemies = new();
@@ -95,6 +97,9 @@ namespace Lethe.PrototypeV1
         SpriteRenderer playerSprite;
         SpriteRenderer leftBladeSprite;
         SpriteRenderer rightBladeSprite;
+        Sprite dualLeftWeaponSprite;
+        Sprite dualRightWeaponSprite;
+        Sprite greatswordWeaponSprite;
         GUIStyle smallStyle;
         GUIStyle titleStyle;
         GUIStyle buttonStyle;
@@ -109,15 +114,21 @@ namespace Lethe.PrototypeV1
         bool leftBladeLead = true;
         Vector2 lastAim = Vector2.up;
         float spawnTimer;
-        float bossTimer = 180f;
+        float bossTimer = ReviewFirstBossSeconds;
         float refillTimer;
         float hitstopTimer;
         float cameraShakeTimer;
         float cameraShakeAmount;
+        float ultimatePulseTimer;
         int level = 1;
         int xp;
         int nextXp = 5;
         int kills;
+        bool reviewBloodGranted;
+        bool reviewHungryBoosted;
+        bool reviewBloodBoosted;
+        bool reviewThirdMemoryGranted;
+        bool reviewEchoTopped;
         bool pausedForChoice;
         bool resultOverlay;
         bool refillOverlay;
@@ -193,6 +204,7 @@ namespace Lethe.PrototypeV1
             }
 
             elapsed += dt;
+            UpdateReviewPacing();
             bossTimer -= dt;
             if (bossTimer <= 0f && !enemies.Any(e => e.Kind == V1EnemyKind.Gatekeeper))
             {
@@ -207,7 +219,7 @@ namespace Lethe.PrototypeV1
                 {
                     refillOverlay = true;
                     overlayTitle = "기억 보충";
-                    overlayBody = "결손 생존 종료. Space로 잃었던 기억을 공명 재획득합니다.";
+                    overlayBody = "결손 생존 종료.\nSpace로 잃었던 기억을 공명 재획득합니다.\n잔향은 사라지지 않고 무기에 남습니다.";
                 }
             }
 
@@ -256,6 +268,58 @@ namespace Lethe.PrototypeV1
                 SpawnEnemy(kind, player.position + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * 2.35f);
             }
             Log("디버그 M1: 전투 셸 압축 시작");
+        }
+
+        void UpdateReviewPacing()
+        {
+            if (!reviewBloodGranted && elapsed >= 14f)
+            {
+                reviewBloodGranted = true;
+                if (!HasMemory(V1MemoryId.BloodReflection))
+                {
+                    AddMemory(V1MemoryId.BloodReflection, 1, true);
+                    SpawnFloatingText(player.position + Vector3.up * 0.8f, "피의 반사", new Color(1f, 0.32f, 0.38f));
+                }
+            }
+
+            if (!reviewHungryBoosted && elapsed >= 28f)
+            {
+                reviewHungryBoosted = true;
+                AddMemory(V1MemoryId.HungryBlades, 3, true);
+                SpawnFloatingText(player.position + Vector3.up * 0.95f, "칼무리 성장", new Color(0.62f, 0.96f, 1f));
+            }
+
+            if (!reviewBloodBoosted && elapsed >= 42f)
+            {
+                reviewBloodBoosted = true;
+                AddMemory(V1MemoryId.BloodReflection, 3, true);
+                SpawnFloatingText(player.position + Vector3.up * 1.1f, "혈반 성장", new Color(1f, 0.26f, 0.36f));
+            }
+
+            if (!reviewThirdMemoryGranted && elapsed >= 50f)
+            {
+                reviewThirdMemoryGranted = true;
+                if (activeMemories.Count < MaxActiveMemories && !HasMemory(V1MemoryId.StoppedSecond))
+                {
+                    AddMemory(V1MemoryId.StoppedSecond, 1, true);
+                    SpawnFloatingText(player.position + Vector3.up * 1.15f, "멈춘 초침", new Color(0.82f, 0.86f, 1f));
+                }
+            }
+
+            var gatekeeper = enemies.FirstOrDefault(e => e != null && e.IsAlive && e.Kind == V1EnemyKind.Gatekeeper);
+            if (gatekeeper != null && elapsed >= 74f)
+            {
+                DealDamage(gatekeeper, 28f * Time.deltaTime, "문지기 균열", false);
+            }
+
+            if (!reviewEchoTopped && lastForgotten.HasValue && activeMemories.Count >= MaxActiveMemories && elapsed >= 86f)
+            {
+                reviewEchoTopped = true;
+                SetEcho(V1MemoryId.HungryBlades, 5);
+                SetEcho(V1MemoryId.BloodReflection, 5);
+                SpawnFloatingText(player.position + Vector3.up * 1.25f, "피의 칼폭풍", new Color(1f, 0.18f, 0.24f));
+                Log("리뷰 페이싱: 칼무리/혈반 잔향 +5 각성");
+            }
         }
 
         public void DebugRunM2Smoke()
@@ -333,18 +397,21 @@ namespace Lethe.PrototypeV1
             weaponAnchor.SetParent(player);
             weaponAnchor.localPosition = new Vector3(0.25f, -0.05f, 0f);
 
-            leftBladeSprite = CreateWeaponSprite("LeftBlade", "Assets/_dev/Art/Sprites/Weapons/spr_weapon_dual_blade_left_01.png", new Vector3(-0.22f, -0.05f, 0f));
-            rightBladeSprite = CreateWeaponSprite("RightBlade", "Assets/_dev/Art/Sprites/Weapons/spr_weapon_dual_blade_right_01.png", new Vector3(0.22f, -0.05f, 0f));
+            dualLeftWeaponSprite = LoadSprite("Assets/_dev/Art/Sprites/Weapons/spr_weapon_dual_blade_left_01.png") ?? MakeBoxSprite("dual-left", new Color(0.86f, 0.93f, 1f), 18, 72);
+            dualRightWeaponSprite = LoadSprite("Assets/_dev/Art/Sprites/Weapons/spr_weapon_dual_blade_right_01.png") ?? MakeBoxSprite("dual-right", new Color(0.86f, 0.93f, 1f), 18, 72);
+            greatswordWeaponSprite = MakeBoxSprite("greatsword-visual", new Color(0.78f, 0.93f, 1f), 26, 132);
+            leftBladeSprite = CreateWeaponSprite("LeftBlade", dualLeftWeaponSprite, new Vector3(-0.22f, -0.05f, 0f));
+            rightBladeSprite = CreateWeaponSprite("RightBlade", dualRightWeaponSprite, new Vector3(0.22f, -0.05f, 0f));
         }
 
-        SpriteRenderer CreateWeaponSprite(string name, string path, Vector3 localPos)
+        SpriteRenderer CreateWeaponSprite(string name, Sprite sprite, Vector3 localPos)
         {
             var go = new GameObject(name);
             go.transform.SetParent(weaponAnchor);
             go.transform.localPosition = localPos;
             go.transform.localScale = Vector3.one * 0.36f;
             var sr = go.AddComponent<SpriteRenderer>();
-            sr.sprite = LoadSprite(path) ?? MakeBoxSprite(name, new Color(0.86f, 0.93f, 1f), 18, 72);
+            sr.sprite = sprite;
             sr.sortingOrder = 30;
             sr.transform.localRotation = Quaternion.Euler(0f, 0f, name.Contains("Left") ? 12f : -12f);
             return sr;
@@ -396,13 +463,34 @@ namespace Lethe.PrototypeV1
                 weaponAnimTimer -= dt;
             }
 
-            var t = Mathf.Clamp01(weaponAnimTimer / 0.16f);
+            var weapon = CurrentWeaponSpec();
+            var t = Mathf.Clamp01(weaponAnimTimer / weapon.SwingAnimDuration);
             var swing = Mathf.Sin(t * Mathf.PI);
+            if (weapon.Id == V1WeaponId.Greatsword)
+            {
+                leftBladeSprite.enabled = false;
+                rightBladeSprite.enabled = true;
+                rightBladeSprite.sprite = greatswordWeaponSprite;
+                rightBladeSprite.color = new Color(0.82f, 0.95f, 1f, 0.96f);
+                rightBladeSprite.transform.localScale = Vector3.one * (0.54f + 0.05f * swing);
+                rightBladeSprite.transform.localPosition = new Vector3(0.08f + 0.16f * swing, -0.08f + 0.11f * swing, 0f);
+                rightBladeSprite.transform.localRotation = Quaternion.Euler(0f, 0f, -34f + 116f * swing);
+                return;
+            }
+
+            leftBladeSprite.enabled = true;
+            rightBladeSprite.enabled = true;
+            leftBladeSprite.sprite = dualLeftWeaponSprite;
+            rightBladeSprite.sprite = dualRightWeaponSprite;
+            leftBladeSprite.color = Color.white;
+            rightBladeSprite.color = Color.white;
+            leftBladeSprite.transform.localScale = Vector3.one * 0.36f;
+            rightBladeSprite.transform.localScale = Vector3.one * 0.36f;
             var leadMul = leftBladeLead ? 1f : -1f;
-            leftBladeSprite.transform.localPosition = new Vector3(-0.22f - 0.06f * swing * leadMul, -0.05f + 0.03f * swing, 0f);
-            rightBladeSprite.transform.localPosition = new Vector3(0.22f + 0.06f * swing * leadMul, -0.05f + 0.03f * swing, 0f);
-            leftBladeSprite.transform.localRotation = Quaternion.Euler(0f, 0f, 12f - 38f * swing * leadMul);
-            rightBladeSprite.transform.localRotation = Quaternion.Euler(0f, 0f, -12f - 38f * swing * leadMul);
+            leftBladeSprite.transform.localPosition = new Vector3(-0.22f - 0.08f * swing * leadMul, -0.05f + 0.04f * swing, 0f);
+            rightBladeSprite.transform.localPosition = new Vector3(0.22f + 0.08f * swing * leadMul, -0.05f + 0.04f * swing, 0f);
+            leftBladeSprite.transform.localRotation = Quaternion.Euler(0f, 0f, 12f - 48f * swing * leadMul);
+            rightBladeSprite.transform.localRotation = Quaternion.Euler(0f, 0f, -12f - 48f * swing * leadMul);
         }
 
         void UpdateWeapon(float dt)
@@ -424,7 +512,7 @@ namespace Lethe.PrototypeV1
             lastAim = forward;
             weaponAnchor.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg - 90f);
             weaponTimer = weapon.Interval * StatAttackIntervalMul();
-            weaponAnimTimer = 0.16f;
+            weaponAnimTimer = weapon.SwingAnimDuration;
             leftBladeLead = !leftBladeLead;
             var hits = CollectWeaponHits(weapon, forward);
             SpawnWeaponHitVfx(weapon, hits, forward);
@@ -639,18 +727,50 @@ namespace Lethe.PrototypeV1
         void UpdateEchoUltimate(float dt)
         {
             if (!BloodBladeStormReady) return;
-            var spin = elapsed * 180f;
-            for (int i = 0; i < 5; i++)
+
+            var weapon = CurrentWeaponSpec();
+            ultimatePulseTimer -= dt;
+            if (weapon.UltimatePattern == V1UltimatePattern.FewHeavy)
             {
-                var angle = spin + i * 72f;
-                var pos = player.position + Quaternion.Euler(0f, 0f, angle) * Vector3.right * 2.6f;
-                SpawnTransientSprite("피의 칼폭풍", LoadSprite("Assets/_dev/Art/Sprites/Ultimates/spr_blood_blade_storm_blade_01.png"), pos, Quaternion.Euler(0f, 0f, angle + 90f), 0.28f, new Color(1f, 0.28f, 0.34f, 0.55f), 0.08f);
+                if (ultimatePulseTimer <= 0f)
+                {
+                    ultimatePulseTimer = 0.72f;
+                    var baseAngle = elapsed * 120f;
+                    for (int i = 0; i < 3; i++)
+                    {
+                        var angle = baseAngle + i * 120f;
+                        var pos = player.position + Quaternion.Euler(0f, 0f, angle) * Vector3.right * 1.75f;
+                        SpawnTransientSprite("피의 칼폭풍 대검참", MakeArcSprite("blood-storm-heavy", Color.white), pos, Quaternion.Euler(0f, 0f, angle + 90f), 1.05f, new Color(1f, 0.12f, 0.18f, 0.72f), 0.28f);
+                    }
+                    hitstopTimer = Mathf.Max(hitstopTimer, 0.035f);
+                    cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.14f);
+                    cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.065f);
+                }
+
+                foreach (var enemy in enemies.Where(e => e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 3.75f).Take(10))
+                {
+                    enemy.BloodMarked = true;
+                    DealDamage(enemy, 42f * dt, "피의 칼폭풍", false);
+                }
+                return;
             }
 
-            foreach (var enemy in enemies.Where(e => e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 3.25f))
+            if (ultimatePulseTimer <= 0f)
+            {
+                ultimatePulseTimer = 0.09f;
+                var spin = elapsed * 240f;
+                for (int i = 0; i < 6; i++)
+                {
+                    var angle = spin + i * 60f;
+                    var pos = player.position + Quaternion.Euler(0f, 0f, angle) * Vector3.right * 2.35f;
+                    SpawnTransientSprite("피의 칼폭풍", LoadSprite("Assets/_dev/Art/Sprites/Ultimates/spr_blood_blade_storm_blade_01.png"), pos, Quaternion.Euler(0f, 0f, angle + 90f), 0.26f, new Color(1f, 0.28f, 0.34f, 0.60f), 0.10f);
+                }
+            }
+
+            foreach (var enemy in enemies.Where(e => e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 3.20f).Take(12))
             {
                 enemy.BloodMarked = true;
-                DealDamage(enemy, 16f * dt, "피의 칼폭풍", false);
+                DealDamage(enemy, 18f * dt, "피의 칼폭풍", false);
             }
         }
 
@@ -697,26 +817,26 @@ namespace Lethe.PrototypeV1
 
         SpawnWaveProfile SpawnProfile()
         {
-            var firstCycleProgress = Mathf.Clamp01(elapsed / 180f);
+            var firstCycleProgress = Mathf.Clamp01(elapsed / ReviewFirstBossSeconds);
             if (activeMemories.Count < MaxActiveMemories && elapsed > 30f)
             {
                 return firstCycleProgress < 0.3f
-                    ? new SpawnWaveProfile(0.72f, 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne)
-                    : new SpawnWaveProfile(0.50f, 3, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.VoidPriest);
+                    ? new SpawnWaveProfile(0.58f, 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne)
+                    : new SpawnWaveProfile(0.42f, 3, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.VoidPriest);
             }
 
-            if (firstCycleProgress < 0.24f) return new SpawnWaveProfile(0.72f, elapsed > 70f ? 3 : 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye);
-            if (firstCycleProgress < 0.70f) return new SpawnWaveProfile(elapsed >= 126f ? 0.54f : 1.05f, elapsed >= 126f ? 3 : 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.VoidPriest);
-            return new SpawnWaveProfile(firstCycleProgress >= 0.94f ? 1.30f : 1.08f, firstCycleProgress >= 0.94f ? 1 : 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne);
+            if (firstCycleProgress < 0.24f) return new SpawnWaveProfile(0.58f, elapsed > 38f ? 3 : 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye);
+            if (firstCycleProgress < 0.70f) return new SpawnWaveProfile(elapsed >= 42f ? 0.48f : 0.82f, elapsed >= 42f ? 3 : 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.VoidPriest);
+            return new SpawnWaveProfile(firstCycleProgress >= 0.94f ? 0.86f : 0.72f, firstCycleProgress >= 0.94f ? 1 : 3, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne);
         }
 
         int EnemyCap()
         {
-            if (activeMemories.Count < MaxActiveMemories && elapsed > 30f) return elapsed < 80f ? 16 : 14;
-            var progress = Mathf.Clamp01(elapsed / 180f);
+            if (activeMemories.Count < MaxActiveMemories && elapsed > 30f) return elapsed < 80f ? 18 : 16;
+            var progress = Mathf.Clamp01(elapsed / ReviewFirstBossSeconds);
             if (progress >= 0.94f) return 22;
-            if (progress >= 0.70f) return 32;
-            return 34;
+            if (progress >= 0.70f) return 30;
+            return 32;
         }
 
         void SpawnEnemy(V1EnemyKind kind, Vector3 pos)
@@ -742,7 +862,7 @@ namespace Lethe.PrototypeV1
         Vector3 RandomSpawnPosition()
         {
             var angle = UnityEngine.Random.value * Mathf.PI * 2f;
-            var radius = 7.8f + UnityEngine.Random.value * 2.2f;
+            var radius = 5.9f + UnityEngine.Random.value * 1.7f;
             return player.position + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * radius;
         }
 
@@ -908,7 +1028,7 @@ namespace Lethe.PrototypeV1
         void ContinueAfterForgetResult()
         {
             resultOverlay = false;
-            refillTimer = fastDebugRun ? 6f : 54f;
+            refillTimer = fastDebugRun ? 6f : ReviewDeficitSeconds;
             Log($"결손 생존 시작: {Mathf.CeilToInt(refillTimer)}초");
         }
 
@@ -930,17 +1050,37 @@ namespace Lethe.PrototypeV1
             if (lastForgotten.HasValue)
             {
                 AddMemory(lastForgotten.Value, 1, true);
+                SpawnResonanceVfx(lastForgotten.Value);
             }
             else
             {
                 AddMemory(V1MemoryId.BloodReflection, 1, true);
+                SpawnResonanceVfx(V1MemoryId.BloodReflection);
             }
             Log("공명 재획득 완료");
         }
 
+        void SpawnResonanceVfx(V1MemoryId id)
+        {
+            var color = id == V1MemoryId.BloodReflection ? new Color(1f, 0.16f, 0.24f, 0.92f) : new Color(0.62f, 0.96f, 1f, 0.92f);
+            SpawnFloatingText(player.position + Vector3.up * 1.35f, "공명", color);
+            for (int i = 0; i < 12; i++)
+            {
+                var angle = elapsed * 90f + i * 30f;
+                var pos = player.position + Quaternion.Euler(0f, 0f, angle) * Vector3.right * (0.85f + i * 0.025f);
+                SpawnTransientSprite("공명 표식", null, pos, Quaternion.Euler(0f, 0f, angle), 0.10f + i * 0.01f, color, 0.48f);
+            }
+        }
+
         void SetEcho(V1MemoryId id, int levelValue)
         {
+            var before = EchoLevel(id);
             echoLevels[id] = Mathf.Clamp(levelValue, 0, MaxEchoLevel);
+            if (before < MaxEchoLevel && EchoLevel(id) >= MaxEchoLevel)
+            {
+                SpawnFloatingText(player.position + Vector3.up * 1.2f, $"{EchoName(id)} 각성", id == V1MemoryId.BloodReflection ? new Color(1f, 0.22f, 0.28f) : new Color(0.62f, 0.96f, 1f));
+                SpawnEchoTransformVfx(id);
+            }
             Log($"{EchoName(id)} 디버그 +{EchoLevel(id)}");
         }
 
@@ -974,7 +1114,7 @@ namespace Lethe.PrototypeV1
             DrawBar(new Rect(24, 91, 396, 14), Mathf.Clamp01(nextXp <= 0 ? 0f : (float)xp / nextXp), new Color(0.32f, 0.88f, 1f), new Color(0.07f, 0.10f, 0.13f));
             GUI.Label(new Rect(24, 112, 380, 24), $"다음 망각 후보: {ForgetCandidateText()}", smallStyle);
             GUI.Label(new Rect(24, 140, 380, 24), $"잔향: {EchoText()}", smallStyle);
-            GUI.Label(new Rect(24, 166, 380, 24), BloodBladeStormReady ? "궁극: 피의 칼폭풍 활성" : "궁극: 칼무리+5 / 혈반+5 필요", smallStyle);
+            GUI.Label(new Rect(24, 166, 390, 24), BloodBladeStormReady ? $"궁극: 피의 칼폭풍 활성 / {UltimatePatternText(weapon)}" : $"궁극 준비: 칼무리 {EchoLevel(V1MemoryId.HungryBlades)}/5 + 혈반 {EchoLevel(V1MemoryId.BloodReflection)}/5", smallStyle);
 
             GUI.Box(new Rect(Screen.width - 372, 12, 360, 196), "", panelStyle);
             GUI.Label(new Rect(Screen.width - 358, 22, 340, 22), "F1 칼무리+5  F2 혈반+5  F3 망각", smallStyle);
@@ -1069,7 +1209,7 @@ namespace Lethe.PrototypeV1
         string PhaseName()
         {
             if (activeMemories.Count < MaxActiveMemories && elapsed > 30f) return "결손 생존";
-            var p = Mathf.Clamp01(elapsed / 180f);
+            var p = Mathf.Clamp01(elapsed / ReviewFirstBossSeconds);
             if (p < 0.24f) return "숨 고르기";
             if (p < 0.70f) return "압박 상승";
             if (p > 0.94f) return "문지기 호흡";
@@ -1085,10 +1225,12 @@ namespace Lethe.PrototypeV1
 
         string EchoText()
         {
-            var parts = echoLevels.Where(kv => kv.Value > 0).Select(kv => $"{EchoName(kv.Key)} +{kv.Value}");
+            var parts = echoLevels.Where(kv => kv.Value > 0).Select(kv => $"{EchoName(kv.Key)} +{kv.Value}{(kv.Value >= MaxEchoLevel ? " 각성" : "")}");
             var text = string.Join(" / ", parts);
             return string.IsNullOrEmpty(text) ? "없음" : text;
         }
+
+        static string UltimatePatternText(WeaponRuntimeSpec weapon) => weapon.UltimatePattern == V1UltimatePattern.FewHeavy ? "대검 강타형" : "쌍검 연쇄형";
 
         void SpawnWeaponHitVfx(WeaponRuntimeSpec weapon, List<WeaponHit> hits, Vector2 forward)
         {
@@ -1114,14 +1256,14 @@ namespace Lethe.PrototypeV1
                 var origin = hits[i].Enemy.transform.position;
                 if (i == 0)
                 {
-                    SpawnTransientSprite("TargetLocalSlash_Primary_A", MakeArcSprite("target-slash-a", Color.white), origin + (Vector3)(side * 0.10f * leadSide + f * 0.04f), Quaternion.Euler(0f, 0f, baseAngle - 17f * leadSide), 0.34f, new Color(0.75f, 0.96f, 1f, 0.82f), 0.08f);
-                    SpawnTransientSprite("TargetLocalSlash_Primary_B", MakeArcSprite("target-slash-b", Color.white), origin + (Vector3)(-side * 0.10f * leadSide + f * 0.13f), Quaternion.Euler(0f, 0f, baseAngle + 23f * leadSide), 0.28f, new Color(0.90f, 1f, 1f, 0.62f), 0.10f);
-                    SpawnTransientSprite("TargetLocalCutPoint", null, origin + (Vector3)(f * 0.08f), Quaternion.identity, 0.075f, new Color(0.90f, 1f, 1f, 0.74f), 0.08f);
+                    SpawnTransientSprite("TargetLocalSlash_Primary_A", MakeArcSprite("target-slash-a", Color.white), origin + (Vector3)(side * 0.12f * leadSide + f * 0.04f), Quaternion.Euler(0f, 0f, baseAngle - 19f * leadSide), 0.42f, new Color(0.75f, 0.96f, 1f, 0.90f), 0.095f);
+                    SpawnTransientSprite("TargetLocalSlash_Primary_B", MakeArcSprite("target-slash-b", Color.white), origin + (Vector3)(-side * 0.12f * leadSide + f * 0.14f), Quaternion.Euler(0f, 0f, baseAngle + 25f * leadSide), 0.34f, new Color(0.90f, 1f, 1f, 0.74f), 0.115f);
+                    SpawnTransientSprite("TargetLocalCutPoint", null, origin + (Vector3)(f * 0.08f), Quaternion.identity, 0.095f, new Color(0.90f, 1f, 1f, 0.82f), 0.09f);
                     continue;
                 }
 
                 var assistAngle = baseAngle + (i % 2 == 0 ? -14f : 14f);
-                SpawnTransientSprite("TargetLocalSlash_Assist", MakeArcSprite("target-slash-assist", Color.white), origin + (Vector3)(f * 0.04f), Quaternion.Euler(0f, 0f, assistAngle), 0.21f, new Color(0.62f, 0.88f, 1f, 0.45f), 0.07f);
+                SpawnTransientSprite("TargetLocalSlash_Assist", MakeArcSprite("target-slash-assist", Color.white), origin + (Vector3)(f * 0.04f), Quaternion.Euler(0f, 0f, assistAngle), 0.25f, new Color(0.62f, 0.88f, 1f, 0.54f), 0.08f);
             }
         }
 
@@ -1133,13 +1275,14 @@ namespace Lethe.PrototypeV1
             var side = new Vector2(-f.y, f.x);
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
             var center = (Vector3)hits.Aggregate(Vector2.zero, (sum, hit) => sum + (Vector2)hit.Enemy.transform.position) / hits.Count;
-            SpawnTransientSprite("GreatswordTargetSlash_Primary", MakeArcSprite("greatsword-target-slash", Color.white), center + (Vector3)(f * 0.07f), Quaternion.Euler(0f, 0f, baseAngle), 0.72f, new Color(0.86f, 0.96f, 1f, 0.82f), 0.15f);
-            SpawnTransientSprite("GreatswordTargetCutPoint", null, center + (Vector3)(f * 0.10f), Quaternion.identity, 0.16f, new Color(0.95f, 1f, 1f, 0.78f), 0.12f);
+            SpawnTransientSprite("GreatswordTargetSlash_Primary", MakeArcSprite("greatsword-target-slash", Color.white), center + (Vector3)(f * 0.09f), Quaternion.Euler(0f, 0f, baseAngle), 1.05f, new Color(0.86f, 0.96f, 1f, 0.90f), 0.20f);
+            SpawnTransientSprite("GreatswordTargetShock", null, center + (Vector3)(f * 0.11f), Quaternion.identity, 0.30f, new Color(0.80f, 0.95f, 1f, 0.42f), 0.18f);
+            SpawnTransientSprite("GreatswordTargetCutPoint", null, center + (Vector3)(f * 0.10f), Quaternion.identity, 0.18f, new Color(0.95f, 1f, 1f, 0.86f), 0.13f);
 
             for (int i = 1; i < hits.Count; i++)
             {
                 var pos = hits[i].Enemy.transform.position + (Vector3)(side * (i % 2 == 0 ? 0.09f : -0.09f));
-                SpawnTransientSprite("GreatswordTargetSlash_Assist", MakeArcSprite("greatsword-target-assist", Color.white), pos, Quaternion.Euler(0f, 0f, baseAngle + (i % 2 == 0 ? -8f : 8f)), 0.38f, new Color(0.62f, 0.86f, 1f, 0.42f), 0.10f);
+                SpawnTransientSprite("GreatswordTargetSlash_Assist", MakeArcSprite("greatsword-target-assist", Color.white), pos, Quaternion.Euler(0f, 0f, baseAngle + (i % 2 == 0 ? -8f : 8f)), 0.48f, new Color(0.62f, 0.86f, 1f, 0.48f), 0.12f);
             }
         }
 
@@ -1453,6 +1596,7 @@ namespace Lethe.PrototypeV1
             public readonly float SecondaryKnock;
             public readonly float Hitstop;
             public readonly float ShakeAmount;
+            public readonly float SwingAnimDuration;
             public readonly float EchoSizeScale;
             public readonly float EchoDamageScale;
             public readonly V1WeaponTargetingMode TargetingMode;
@@ -1475,6 +1619,7 @@ namespace Lethe.PrototypeV1
                 float secondaryKnock,
                 float hitstop,
                 float shakeAmount,
+                float swingAnimDuration,
                 float echoSizeScale,
                 float echoDamageScale,
                 V1WeaponTargetingMode targetingMode,
@@ -1496,6 +1641,7 @@ namespace Lethe.PrototypeV1
                 SecondaryKnock = secondaryKnock;
                 Hitstop = hitstop;
                 ShakeAmount = shakeAmount;
+                SwingAnimDuration = swingAnimDuration;
                 EchoSizeScale = echoSizeScale;
                 EchoDamageScale = echoDamageScale;
                 TargetingMode = targetingMode;
@@ -1519,6 +1665,7 @@ namespace Lethe.PrototypeV1
                 0.72f,
                 0.018f,
                 0.025f,
+                0.16f,
                 0.80f,
                 0.75f,
                 V1WeaponTargetingMode.Nearest,
@@ -1541,6 +1688,7 @@ namespace Lethe.PrototypeV1
                 1.35f,
                 0.052f,
                 0.060f,
+                0.34f,
                 1.80f,
                 1.60f,
                 V1WeaponTargetingMode.DensestArc,

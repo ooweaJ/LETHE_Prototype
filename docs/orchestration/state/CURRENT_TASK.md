@@ -47,6 +47,7 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 - DEC-2026-06-12-04 first implementation exists: no air swings, twin-blade nearest targeting, Kalmuri `MultiSmall` echo style.
 - DEC-2026-06-12-05 first implementation exists: target-local twin-blade slash VFX and delayed Kalmuri follow-up from hit origin.
 - Weapon rhythm structure prep exists: `WeaponRuntimeSpec` supports current dual blades and debug greatsword paths without copying the weapon/echo loop.
+- One-pass review batch exists: twin-blade visibility, greatsword visual behavior, review M2 pacing, resonance VFX, awakened echo HUD, weapon-patterned Blood Blade Storm, and denser combat pressure.
 - Unity compile error 0.
 - Play Mode smoke creates player and enemies with no v1 runtime console exceptions.
 - v1 screenshot/capture confirms player/enemy sheets are not rendered as whole sheets.
@@ -107,12 +108,31 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - `npm.cmd run report`: passed.
   - `npm.cmd run report:check`: passed, 2 unit headings ok.
   - `npm.cmd run report:orchestrator:unit:dry`: failed with `404 Not Found`, `project not found`.
+- One-pass feedback batch:
+  - Twin-blade target-local slash VFX was made larger and more readable.
+  - Greatsword debug path now shows a single larger weapon visual, slow swing, larger slash, and shock marker.
+  - Default review pacing now drives the run toward Blood Reflection, boosted Hungry/Blood memories, a third memory slot, first Gatekeeper at 62s, shorter 22s deficit survival, resonance VFX, +5 echoes, and Blood Blade Storm.
+  - HUD now shows echo awakening and ultimate readiness counts.
+  - Blood Blade Storm now branches by weapon pattern: dual-blade small fast storm vs greatsword heavy slashes.
+  - Enemy spawn radius/timing was tightened for denser review combat.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors. Warnings are old v0/debug deprecated API usage.
+  - `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`.
+  - Play Mode targeted smoke: `resultAfterGate=True activeMemories=3 dualSlash=3 greatSlash=4 multiFollow=6 heavyFollow=1 dualStorm=6 greatStorm=3 resonance=12`.
+  - Evidence capture: `LETHE/Assets/_dev/Evidence/v1_full_feedback_batch_20260615.png`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 3 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `404 Not Found`, `project not found`.
 
 ## Next Implementation
 
-1. Ask jaewoo to review no-air-swing + target-local slash + echo follow-up together in Play Mode.
-2. If it feels readable, choose between M2 real pacing or a focused greatsword visual/animation pass.
-3. If it still feels off, tune slash position/size, Kalmuri delay, and hitstop before expanding scope.
+1. Ask jaewoo to review the whole `Dev_Prototype_v1` batch in Play Mode.
+2. Collect one combined feedback pass for:
+   - 쌍검 기본공격.
+   - 칼무리 후속타.
+   - `F9` 대검.
+   - 망각/공명/+5 잔향/피의 칼폭풍 흐름.
+   - HUD readability and combat density.
+3. After feedback, pick exactly one next pass: attack readability, pacing/balance, UI clarity, or art replacement.
 
 ## Open Questions
 

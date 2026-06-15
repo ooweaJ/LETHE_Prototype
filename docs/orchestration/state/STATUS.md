@@ -42,6 +42,45 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 one-pass feedback batch:
+  - Implemented the full next-work bundle requested for one-pass review.
+  - Twin-blade target-local slashes were made more visible with larger primary/assist marks, stronger alpha, and slightly longer lifetimes.
+  - Greatsword debug path now has distinct weapon visual behavior:
+    - dual blades show two fast small blades.
+    - greatsword hides the left blade and shows one larger cyan blade with slower swing animation.
+    - greatsword hit VFX now includes a large primary slash plus shock marker.
+  - Review pacing now moves the default run toward an M2 loop without debug buttons:
+    - Blood Reflection appears around 14s.
+    - Hungry Blades grows around 28s.
+    - Blood Reflection grows around 42s.
+    - Stopped Second fills the third memory slot around 50s.
+    - first Gatekeeper appears at 62s.
+    - deficit survival lasts 22s.
+    - resonance reacquire has visible resonance VFX.
+    - after the loop is restored, Kalmuri/Blood echoes can top to +5 for Blood Blade Storm review.
+  - HUD now shows awakened +5 echoes and ultimate readiness as `칼무리 N/5 + 혈반 N/5`.
+  - Blood Blade Storm now follows weapon pattern:
+    - dual blades: frequent small rotating blood blades.
+    - greatsword: slower large heavy blood slashes with stronger hitstop/shake.
+  - Enemy spawn timing/radius was tightened for a denser review run.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors. Warnings are legacy v0/debug deprecated API warnings.
+  - `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`.
+  - Unity Play Mode targeted smoke:
+    - `resultAfterGate=True`
+    - `activeMemories=3`
+    - `dualSlash=3`
+    - `greatSlash=4`
+    - `multiFollow=6`
+    - `heavyFollow=1`
+    - `dualStorm=6`
+    - `greatStorm=3`
+    - `resonance=12`
+    - snapshot: `weapon=장송대검`, `elapsed=87.0`, `memories=[HungryBlades:3,StoppedSecond:1,BloodReflection:2]`, `echoes=[BloodReflection:5,HungryBlades:5]`, `storm=True`.
+  - Evidence capture saved: `LETHE/Assets/_dev/Evidence/v1_full_feedback_batch_20260615.png`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 3 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `404 Not Found`, `project not found`.
+
 - Unity v1 weapon spec / greatsword prep implementation:
   - Refactored `V1GameManager` weapon flow around `WeaponRuntimeSpec`, matching the design fields: range, damage, interval, arc, targeting mode, echo size/damage scale, echo proc style, and ultimate pattern.
   - Current default remains `절단쌍검`.
@@ -271,10 +310,14 @@ Continue from `Dev_Prototype_v1`, not `Dev_Prototype_v0`.
 
 Next implementation step:
 
-1. Let jaewoo review target-local twin-blade basic attacks + Kalmuri follow-up in `Dev_Prototype_v1` Play Mode.
-2. Optionally press `F9` to inspect the greatsword-prep path, but do not judge greatsword final feel yet because sprite/animation polish is not done.
-3. If twin-blade readability is accepted, choose between M2 real pacing or a focused greatsword visual/animation pass.
-4. If readability still fails, tune slash size, hit origin, Kalmuri delay, and hitstop before expanding scope.
+1. Let jaewoo run `Dev_Prototype_v1` and give one combined feedback pass.
+2. Review checklist:
+   - 쌍검 기본공격이 적 위치 발도선으로 읽히는가?
+   - 칼무리 잔향이 기본공격 뒤 후속타로 읽히는가?
+   - `F9` 대검이 느린 큰 한 방으로 읽히는가?
+   - 60~120초 안에 망각 -> 결손 -> 공명 -> +5 잔향 -> 피의 칼폭풍 흐름이 보이는가?
+   - 쌍검/대검 피의 칼폭풍 차이가 보이는가?
+3. After feedback, choose a narrow next pass: attack readability, pacing/balance, UI clarity, or art replacement.
 
 Do not promote `_dev` assets to `Assets/Lethe` until `Dev_Prototype_v1` receives explicit `GO`.
 

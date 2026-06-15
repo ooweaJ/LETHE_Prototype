@@ -162,6 +162,13 @@
           <p>Dev_Prototype_v1의 기본 무기는 계속 절단쌍검이다. 다만 내부 전투 루프는 이제 쌍검 전용 상수/메서드가 아니라 WeaponRuntimeSpec을 통해 돌아간다. F9로 구조 확인용 장송대검 경로를 켤 수 있다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-15-03</span>
+          <h2><a href="#unit-2026-06-15-03" data-unit-link="unit-2026-06-15-03">통합 피드백용 v1 묶음 구현</a></h2>
+          <p>Dev_Prototype_v1은 이제 한 번 플레이해서 쌍검, 대검, 망각, 공명, +5 잔향, 피의 칼폭풍, HUD, 전투 밀도를 함께 피드백할 수 있는 상태다. 기본 무기는 쌍검이고, F9로 대검을 켜서 비교할 수 있다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -284,6 +291,72 @@
 <li>방향: 무기 정의가 기본공격과 잔향 리듬을 결정하게 만들었다.</li>
 <li>행동: <code>WeaponRuntimeSpec</code>과 debug 대검 경로를 만들고 Unity Play Mode로 검증했다.</li>
 <li>결과: 쌍검은 작은 후속타 다수, 대검은 큰 후속타 1회로 분기되는 구조가 생겼다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-15-03" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-15-03 - 통합 피드백용 v1 묶음 구현</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 이제 한 번 플레이해서 쌍검, 대검, 망각, 공명, +5 잔향, 피의 칼폭풍, HUD, 전투 밀도를 함께 피드백할 수 있는 상태다. 기본 무기는 쌍검이고, <code>F9</code>로 대검을 켜서 비교할 수 있다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>쌍검 target-local 발도선을 더 크게, 더 오래, 더 선명하게 조정했다.</li>
+<li>대검 visual을 쌍검 두 자루가 아니라 큰 단일 검으로 보이게 바꿨다.</li>
+<li>대검 swing animation을 느리고 큰 움직임으로 분리했다.</li>
+<li>대검 기본공격 VFX에 큰 참격과 shock marker를 추가했다.</li>
+<li>리뷰용 M2 페이싱을 추가했다.</li>
+<li>14초: 피의 반사 획득.</li>
+<li>28초: 굶주린 칼무리 성장.</li>
+<li>42초: 피의 반사 성장.</li>
+<li>50초: 멈춘 초침으로 세 번째 기억 슬롯 채움.</li>
+<li>62초: 문지기 등장.</li>
+<li>망각 후 결손 생존 22초.</li>
+<li>공명 재획득 VFX 추가.</li>
+<li>복귀 후 칼무리/혈반 +5 각성으로 피의 칼폭풍 검증 가능.</li>
+<li>HUD에 +5 각성 표시와 궁극 준비 카운트를 추가했다.</li>
+<li>피의 칼폭풍을 무기별로 다르게 만들었다.</li>
+<li>쌍검: 작은 혈검 다수, 빠른 회전.</li>
+<li>대검: 큰 혈검 소수, 느린 강타형 참격.</li>
+<li>적 스폰 거리와 빈도를 조정해 전투가 덜 비어 보이게 했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, 7 warning / 0 error.</li>
+<li>Unity compile errors: <code>count=0</code>.</li>
+<li>Play Mode targeted smoke: <code>resultAfterGate=True activeMemories=3 dualSlash=3 greatSlash=4 multiFollow=6 heavyFollow=1 dualStorm=6 greatStorm=3 resonance=12</code>.</li>
+<li>스냅샷: <code>scene=v1 weapon=장송대검 elapsed=87.0 hp=210.0/210.0 level=1 xp=0/5 kills=5 memories=[HungryBlades:3,StoppedSecond:1,BloodReflection:2] echoes=[BloodReflection:5,HungryBlades:5] enemies=0 storm=True result=False refill=False death=False</code>.</li>
+<li><code>npm.cmd run report</code>: 통과.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 3 unit headings ok.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>404 Not Found</code>, <code>project not found</code>로 실패.</li>
+<li>증거: <code>LETHE/Assets/_dev/Evidence/v1_full_feedback_batch_20260615.png</code></li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>이번 빌드는 “완성”이 아니라 한 번에 피드백받기 위한 통합 리뷰 빌드다.</li>
+<li>M2 루프는 리뷰용 압축 페이싱으로 열어 둔다.</li>
+<li>다음 작업은 새 기능 추가가 아니라, 플레이 피드백에서 가장 약한 부분 하나를 고르는 방식으로 진행한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>대검 visual은 아직 절차형 임시 sprite다. 체감 방향은 확인 가능하지만 최종 아트는 아니다.</li>
+<li>리뷰 페이싱은 자동 보조가 들어간다. 최종 밸런스가 아니라 감정 루프 확인용이다.</li>
+<li>사운드가 없어서 hitstop/shake/VFX만으로 타격감을 판단해야 한다.</li>
+<li>Project Orchestrator Discord intake는 현재 <code>project not found</code>를 반환한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>v1은 이제 쌍검/대검, 망각/공명, +5 잔향, 피의 칼폭풍을 한 번에 볼 수 있는 통합 리뷰 빌드다. 다음은 jaewoo가 실제 플레이로 가장 약한 지점을 1~3개 골라주는 것이다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo 통합 플레이 리뷰를 받는다.</li>
+<li>다음 구현은 공격 판독성, 페이싱/밸런스, UI 가독성, 아트 교체 중 하나만 고른다.</li>
+<li>리뷰 없이 추가 확장은 하지 않는다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 여러 작은 개선이 흩어져 있어 매번 피드백하기 어려웠다.</li>
+<li>방향: 한 번에 플레이 가능한 통합 리뷰 빌드를 만들었다.</li>
+<li>행동: 무기 체감, M2 페이싱, 공명/각성/궁극 표시, 전투 밀도를 묶어 구현했다.</li>
+<li>결과: 87초 스모크에서 망각, 공명, +5 잔향, 무기별 피의 칼폭풍까지 도달했다.</li>
 </ul>
     </article>
       </div>

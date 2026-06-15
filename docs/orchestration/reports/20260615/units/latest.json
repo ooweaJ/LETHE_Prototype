@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260615\\index.md",
-  "generatedAt": "2026-06-15T08:57:26.726Z",
-  "unitCount": 2,
+  "generatedAt": "2026-06-15T09:16:19.252Z",
+  "unitCount": 3,
   "latest": {
-    "title": "2026-06-15-02 - 대검을 위한 무기 리듬 구조 준비",
-    "number": "02",
-    "markdownPath": "docs\\orchestration\\reports\\20260615\\units\\2026-06-15-02-대검을-위한-무기-리듬-구조-준비.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260615\\units\\2026-06-15-02-대검을-위한-무기-리듬-구조-준비.html"
+    "title": "2026-06-15-03 - 통합 피드백용 v1 묶음 구현",
+    "number": "03",
+    "markdownPath": "docs\\orchestration\\reports\\20260615\\units\\2026-06-15-03-통합-피드백용-v1-묶음-구현.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260615\\units\\2026-06-15-03-통합-피드백용-v1-묶음-구현.html"
   }
 }
