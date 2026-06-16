@@ -194,3 +194,70 @@
 - 방향: 쌍검은 가시성, 대검은 날카로움을 각각 보정했다.
 - 행동: scale, alpha, lifetime, procedural texture fill을 조정했다.
 - 결과: 스모크에서 커진 쌍검 반달과 줄어든 대검 반달 생성이 확인됐다.
+
+# 2026-06-16-04 - 대검 범위 참격과 피격 피드백 보정
+
+## 1. 현재 빌드 상태
+
+`Dev_Prototype_v1`은 이제 대검 반달 VFX가 실제 공격 범위만큼 크게 보이고, 적 피격 시 흰색 플래시와 데미지 숫자가 나온다. 원거리몹은 사거리 안에서 뒤로 빠지지 않고 제자리에서 투사체를 던진다.
+
+## 2. 오늘 바뀐 것
+
+- 대검 AoE 반달:
+  - scale `0.88 -> 1.24`.
+  - lifetime `0.24s -> 0.42s`.
+- 대검 주 베기 반달:
+  - scale `0.66 -> 1.02`.
+  - lifetime `0.20s -> 0.34s`.
+- 이전 패스에서 얇게 만든 반달 텍스처는 유지했다.
+  - 목표는 “작은 참격”이 아니라 “범위만큼 큰 얇은 참격”이다.
+- 적 피격 시 순백 플래시가 더 오래 보인다.
+- 데미지 숫자 UI가 떠서 실제로 맞았는지 읽기 쉬워졌다.
+- 원거리몹 `DriftingEye`는 사거리 밖이면 접근하고, 사거리 안이면 정지해서 `EyeShot`을 던진다.
+
+## 3. 테스트 결과와 근거
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: 통과, 7 warning / 0 error.
+- Unity compile errors: `count=0`.
+- Play Mode targeted smoke:
+  - `greatCrescent=6`
+  - `greatMaxScale=1.24`
+  - `damageNumbers=5`
+  - `whiteEnemies=5`
+  - `eyeMovedAtRange=0.0000`
+  - `eyeShots=1`
+- 증거: `LETHE/Assets/_dev/Evidence/v1_damage_feedback_ranged_cast_20260616.png`.
+- `npm.cmd run report`: 통과.
+- `npm.cmd run report:check`: 통과, 4 unit heading ok.
+- `npm.cmd run report:orchestrator:unit:dry`: `fetch failed`로 실패.
+
+## 4. 결정한 것
+
+- 대검은 범위가 큰 무기이므로 VFX도 범위만큼 커야 한다.
+- 부채꼴처럼 보이는 문제는 크기를 줄이는 게 아니라, 내부 채움과 두께를 줄이는 쪽으로 해결한다.
+- 피격 판독은 VFX만으로 해결하지 않고 흰색 플래시와 데미지 숫자를 같이 쓴다.
+- 원거리몹은 카이팅 몹이 아니라 정지 사격 몹으로 둔다.
+
+## 5. 문제 또는 리스크
+
+- 데미지 숫자는 현재 `OnGUI` 기반 프로토타입 구현이라 최종 UI 방식은 아니다.
+- 흰색 플래시와 데미지 숫자가 너무 많으면 화면이 지저분할 수 있다.
+- Project Orchestrator Discord intake는 최근 dry-run에서 `fetch failed`를 반환하고 있다.
+
+## 6. GPT/Claude 인계 요약
+
+대검 반달은 작게 줄이는 방향이 아니라 범위 판독을 위해 다시 크게 키웠다. 대신 절차형 반달 자체는 얇게 유지해 부채꼴 문제를 피한다. 이번 리뷰에서는 큰 대검 공격, 흰색 피격 플래시, 데미지 숫자, 원거리몹 정지 사격이 한 번에 체감되는지 보면 된다.
+
+## 7. 다음 Codex 작업
+
+- jaewoo가 대검으로 플레이하며 큰 반달이 공격 범위로 읽히는지 확인한다.
+- 피격 흰색 플래시와 데미지 숫자가 충분한지 확인한다.
+- 원거리몹이 사거리 안에서 후퇴하지 않고 정지 사격하는지 확인한다.
+- 여전히 타격감이 약하면 절차형 튜닝을 멈추고 전용 slash sprite와 임시 사운드 레이어로 넘어간다.
+
+## 8. 포트폴리오 메모
+
+- 문제: 대검 VFX를 줄이면 부채꼴 문제는 줄지만 대검 범위감도 같이 사라졌다.
+- 방향: 크기는 범위에 맞추고, 형태는 얇은 반달로 정리했다.
+- 행동: 대검 반달 scale/lifetime을 키우고, 적 흰색 플래시와 데미지 숫자, 원거리몹 정지 사격을 추가했다.
+- 결과: 스모크에서 대검 최대 scale `1.24`, 데미지 숫자 `5`, 흰색 피격 적 `5`, 원거리몹 이동량 `0.0000`, 탄환 `1`을 확인했다.

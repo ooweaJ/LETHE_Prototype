@@ -42,6 +42,33 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 greatsword range / damage feedback / ranged enemy pass:
+  - User review: greatsword crescent should be larger and match its damage range, not smaller; VFX lifetime was too short; hit feedback needed white flash and damage UI; ranged enemies should not kite backward.
+  - Greatsword crescent range read was increased again:
+    - AoE scale `0.88 -> 1.24`, lifetime `0.24 -> 0.42`.
+    - Primary scale `0.66 -> 1.02`, lifetime `0.20 -> 0.34`.
+    - The underlying crescent texture stays thin, so it should read as a large slash arc rather than a thick fan.
+  - Added damage number UI through `V1DamageNumber`.
+  - Enemy hit flash now turns pure white and lasts longer:
+    - weapon hit flash `0.105s`.
+    - non-weapon hit flash `0.075s`.
+  - `DriftingEye` ranged enemy no longer backs away at range:
+    - if outside stop range, it approaches.
+    - once in range, it stays still and casts `EyeShot`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors.
+  - Unity compilation errors: `count=0`.
+  - Play Mode targeted smoke:
+    - `greatCrescent=6`
+    - `greatMaxScale=1.24`
+    - `damageNumbers=5`
+    - `whiteEnemies=5`
+    - `eyeMovedAtRange=0.0000`
+    - `eyeShots=1`
+  - Evidence capture saved: `LETHE/Assets/_dev/Evidence/v1_damage_feedback_ranged_cast_20260616.png`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 4 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+
 - Unity v1 crescent slash size/timing tune:
   - User review: greatsword crescent was too thick and looked like a fan; dual-blade crescents were too small and disappeared too quickly.
   - Dual-blade primary crescents are now larger and last longer:

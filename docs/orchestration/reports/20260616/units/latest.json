@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260616\\index.md",
-  "generatedAt": "2026-06-16T01:53:27.770Z",
-  "unitCount": 3,
+  "generatedAt": "2026-06-16T04:58:05.283Z",
+  "unitCount": 4,
   "latest": {
-    "title": "2026-06-16-03 - 반달형 참격 크기와 지속시간 보정",
-    "number": "03",
-    "markdownPath": "docs\\orchestration\\reports\\20260616\\units\\2026-06-16-03-반달형-참격-크기와-지속시간-보정.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260616\\units\\2026-06-16-03-반달형-참격-크기와-지속시간-보정.html"
+    "title": "2026-06-16-04 - 대검 범위 참격과 피격 피드백 보정",
+    "number": "04",
+    "markdownPath": "docs\\orchestration\\reports\\20260616\\units\\2026-06-16-04-대검-범위-참격과-피격-피드백-보정.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260616\\units\\2026-06-16-04-대검-범위-참격과-피격-피드백-보정.html"
   }
 }

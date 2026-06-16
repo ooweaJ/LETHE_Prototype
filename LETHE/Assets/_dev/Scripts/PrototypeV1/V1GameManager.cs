@@ -954,6 +954,10 @@ namespace Lethe.PrototypeV1
             var finalAmount = weaponHit ? amount * (1f + WeaponStat.DamageMul) : amount;
             enemy.TakeDamage(finalAmount, source, weaponHit);
             SpawnHitSpark(enemy.transform.position, hitDir, weaponHit);
+            if (weaponHit || finalAmount >= 5f)
+            {
+                SpawnDamageNumber(enemy.transform.position, finalAmount, weaponHit);
+            }
             if (hitDir.sqrMagnitude > 0.01f && knockStrength > 0f)
             {
                 enemy.ApplyHitFeedback(hitDir.normalized, knockStrength);
@@ -1368,8 +1372,8 @@ namespace Lethe.PrototypeV1
             var side = new Vector2(-f.y, f.x);
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
             var center = (Vector3)hits.Aggregate(Vector2.zero, (sum, hit) => sum + (Vector2)hit.Enemy.transform.position) / hits.Count;
-            SpawnTransientSprite("GreatswordCrescent_Aoe", MakeWideCrescentSprite("greatsword-aoe-crescent", Color.white), center + (Vector3)(f * 0.18f), Quaternion.Euler(0f, 0f, baseAngle), 0.88f, new Color(0.76f, 0.94f, 1f, 0.32f), 0.24f);
-            SpawnTransientSprite("GreatswordCrescent_Primary", MakeWideCrescentSprite("greatsword-primary-crescent", Color.white), center + (Vector3)(f * 0.22f), Quaternion.Euler(0f, 0f, baseAngle), 0.66f, new Color(0.92f, 1f, 1f, 0.92f), 0.20f);
+            SpawnTransientSprite("GreatswordCrescent_Aoe", MakeWideCrescentSprite("greatsword-aoe-crescent", Color.white), center + (Vector3)(f * 0.24f), Quaternion.Euler(0f, 0f, baseAngle), 1.24f, new Color(0.76f, 0.94f, 1f, 0.30f), 0.42f);
+            SpawnTransientSprite("GreatswordCrescent_Primary", MakeWideCrescentSprite("greatsword-primary-crescent", Color.white), center + (Vector3)(f * 0.28f), Quaternion.Euler(0f, 0f, baseAngle), 1.02f, new Color(0.92f, 1f, 1f, 0.94f), 0.34f);
             SpawnTransientSprite("GreatswordTargetShock", MakeImpactDiamondSprite("greatsword-impact", Color.white), center + (Vector3)(f * 0.14f), Quaternion.identity, 0.52f, new Color(0.80f, 0.95f, 1f, 0.58f), 0.18f);
             SpawnTransientSprite("GreatswordTargetCutPoint", null, center + (Vector3)(f * 0.10f), Quaternion.identity, 0.20f, new Color(0.95f, 1f, 1f, 0.92f), 0.13f);
 
@@ -1401,6 +1405,15 @@ namespace Lethe.PrototypeV1
             var go = new GameObject("FloatText");
             go.transform.position = pos + Vector3.up * 0.35f;
             go.AddComponent<V1FloatingText>().Configure(text, color);
+        }
+
+        void SpawnDamageNumber(Vector3 pos, float amount, bool weaponHit)
+        {
+            var go = new GameObject("DamageNumber");
+            var jitter = UnityEngine.Random.insideUnitCircle * 0.16f;
+            go.transform.position = pos + new Vector3(jitter.x, 0.34f + jitter.y, 0f);
+            var color = weaponHit ? new Color(1f, 0.96f, 0.72f) : new Color(0.86f, 0.98f, 1f);
+            go.AddComponent<V1DamageNumber>().Configure(Mathf.CeilToInt(amount).ToString(), color, weaponHit ? 0.78f : 0.62f);
         }
 
         void SpawnTransientSprite(string name, Sprite sprite, Vector3 position, Quaternion rotation, float scale, Color color, float lifetime)
@@ -2058,16 +2071,24 @@ namespace Lethe.PrototypeV1
             var dist = toPlayer.magnitude;
             var dir = dist > 0.01f ? toPlayer / dist : Vector2.zero;
 
-            if (Kind == V1EnemyKind.DriftingEye && dist < 4f)
+            if (Kind == V1EnemyKind.DriftingEye)
             {
-                transform.position -= (Vector3)(dir * speed * 0.45f * dt);
-                shotTimer -= dt;
-                if (shotTimer <= 0f)
+                const float castRange = 4.2f;
+                const float stopRange = 3.55f;
+                if (dist > stopRange)
                 {
-                    shotTimer = 2.2f;
-                    var go = new GameObject("EyeShot");
-                    go.transform.position = transform.position;
-                    go.AddComponent<V1EnemyShot>().Configure(manager, player, 4.8f, TouchDamage * 2.1f);
+                    transform.position += (Vector3)(dir * speed * dt);
+                }
+                else if (dist <= castRange)
+                {
+                    shotTimer -= dt;
+                    if (shotTimer <= 0f)
+                    {
+                        shotTimer = 2.2f;
+                        var go = new GameObject("EyeShot");
+                        go.transform.position = transform.position;
+                        go.AddComponent<V1EnemyShot>().Configure(manager, player, 4.8f, TouchDamage * 2.1f);
+                    }
                 }
             }
             else
@@ -2104,9 +2125,9 @@ namespace Lethe.PrototypeV1
             hitSquashTimer = weaponHit ? 0.08f : 0.04f;
             if (sr != null)
             {
-                sr.color = BloodMarked ? new Color(1f, 0.35f, 0.38f) : Color.white;
+                sr.color = Color.white;
                 CancelInvoke(nameof(RestoreColor));
-                Invoke(nameof(RestoreColor), 0.045f);
+                Invoke(nameof(RestoreColor), weaponHit ? 0.105f : 0.075f);
             }
             if (Hp <= 0f)
             {
@@ -2290,6 +2311,49 @@ namespace Lethe.PrototypeV1
             var screen = Camera.main.WorldToScreenPoint(transform.position);
             GUI.color = color;
             GUI.Label(new Rect(screen.x, Screen.height - screen.y, 60, 24), text);
+            GUI.color = Color.white;
+        }
+    }
+
+    public sealed class V1DamageNumber : MonoBehaviour
+    {
+        string text;
+        Color color;
+        float lifetime;
+        float age;
+        Vector3 velocity;
+
+        public void Configure(string text, Color color, float lifetime)
+        {
+            this.text = text;
+            this.color = color;
+            this.lifetime = Mathf.Max(0.25f, lifetime);
+            velocity = new Vector3(UnityEngine.Random.Range(-0.12f, 0.12f), 0.72f, 0f);
+        }
+
+        void Update()
+        {
+            if (V1GameManager.GameplayPaused) return;
+            age += Time.deltaTime;
+            transform.position += velocity * Time.deltaTime;
+            velocity = Vector3.Lerp(velocity, Vector3.up * 0.28f, Time.deltaTime * 5f);
+            if (age >= lifetime) Destroy(gameObject);
+        }
+
+        void OnGUI()
+        {
+            if (Camera.main == null) return;
+            var screen = Camera.main.WorldToScreenPoint(transform.position);
+            var alpha = Mathf.Clamp01(1f - age / lifetime);
+            GUI.color = new Color(color.r, color.g, color.b, alpha);
+            var style = new GUIStyle(GUI.skin.label)
+            {
+                fontSize = 16,
+                fontStyle = FontStyle.Bold,
+                alignment = TextAnchor.MiddleCenter
+            };
+            style.normal.textColor = GUI.color;
+            GUI.Label(new Rect(screen.x - 28f, Screen.height - screen.y - 12f, 56f, 24f), text, style);
             GUI.color = Color.white;
         }
     }

@@ -52,6 +52,7 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 - Pause / hitstop movement fix exists: enemies/projectiles stop during card overlays, while hitstop no longer blocks player-side movement/visual updates.
 - Crescent slash feedback pass exists: dual blades use two target-local half-moon slashes, greatsword uses a large crescent AoE read, and Kalmuri follow-ups reuse crescent language.
 - Crescent size/timing tune exists: dual-blade crescents are bigger and last longer, while greatsword crescent is thinner and less fan-like.
+- Damage feedback / ranged enemy pass exists: greatsword slash is range-sized again, enemies flash white longer, damage numbers appear, and ranged enemies stand still to cast once in range.
 - Unity compile error 0.
 - Play Mode smoke creates player and enemies with no v1 runtime console exceptions.
 - v1 screenshot/capture confirms player/enemy sheets are not rendered as whole sheets.
@@ -177,6 +178,19 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - `npm.cmd run report`: passed.
   - `npm.cmd run report:check`: passed, 3 unit headings ok.
   - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+- Damage feedback / ranged enemy pass:
+  - Greatsword crescent AoE scale/lifetime increased to `1.24 / 0.42s`.
+  - Greatsword primary crescent scale/lifetime increased to `1.02 / 0.34s`.
+  - Added `V1DamageNumber` floating damage UI.
+  - Enemy hit flash now turns pure white for longer.
+  - DriftingEye ranged enemy no longer retreats; it approaches until in range, then stands still and casts.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors.
+  - Unity compile errors: `count=0`.
+  - Play Mode targeted smoke: `greatCrescent=6 greatMaxScale=1.24 damageNumbers=5 whiteEnemies=5 eyeMovedAtRange=0.0000 eyeShots=1`.
+  - Evidence capture: `LETHE/Assets/_dev/Evidence/v1_damage_feedback_ranged_cast_20260616.png`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 4 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
 
 ## Next Implementation
 
@@ -189,6 +203,8 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
    - 적 피격 넉백/피격감.
    - 칼무리 후속타.
    - 대검 큰 반달이 주변 범위 피해로 읽히는지.
+   - 적 피격 시 흰색 플래시와 데미지 숫자가 충분한지.
+   - 원거리몹이 사거리 안에서 후퇴하지 않고 정지 사격하는지.
    - 대검/칼무리 hitstop 중 캐릭터 이동감이 끊기지 않는지.
    - 대검 시작 선택과 `F9` 비교.
    - 망각/공명/+5 잔향/피의 칼폭풍 흐름.
