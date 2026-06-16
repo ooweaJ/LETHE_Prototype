@@ -15,6 +15,41 @@ namespace Lethe.Dev
         HeavyConditional
     }
 
+    public enum WeaponTargetingMode
+    {
+        Nearest,
+        DensestArc
+    }
+
+    public enum WeaponEchoProcStyle
+    {
+        MultiSmall,
+        SingleHeavy
+    }
+
+    public enum UltimatePattern
+    {
+        ManyFast,
+        FewHeavy
+    }
+
+    public enum SlashSpriteShape
+    {
+        Crescent,
+        WideCrescent,
+        ImpactDiamond,
+        Circle
+    }
+
+    public enum SlashAnchor
+    {
+        PrimaryTarget,
+        CleaveTarget,
+        HitCenter,
+        FollowupOrigin,
+        PlayerOrbit
+    }
+
     public enum TriggerFamily
     {
         OnWeaponHit,
@@ -65,6 +100,61 @@ namespace Lethe.Dev
         public EchoBehavior behaviors;
     }
 
+    [Serializable]
+    public sealed class SlashVfxEntry
+    {
+        public string id = "Slash";
+        public SlashSpriteShape spriteShape = SlashSpriteShape.Crescent;
+        public SlashAnchor anchor = SlashAnchor.PrimaryTarget;
+        public bool flip;
+        public bool primaryOnly;
+        public bool assistOnly;
+        public Vector2 localOffset;
+        public bool mirrorSideByLeadHand;
+        public float rotationOffsetDegrees;
+        public bool mirrorRotationByLeadHand;
+        public float scale = 1f;
+        public Color color = Color.white;
+        public float lifetime = 0.18f;
+
+        public bool Matches(bool primary)
+        {
+            if (primaryOnly && !primary) return false;
+            if (assistOnly && primary) return false;
+            return true;
+        }
+    }
+
+    [CreateAssetMenu(menuName = "LETHE/Weapon VFX Profile")]
+    public sealed class WeaponVfxProfile : ScriptableObject
+    {
+        public string id = "VFX_Weapon_DualBlades";
+        public SlashVfxEntry[] weaponHitSlashes = Array.Empty<SlashVfxEntry>();
+        public SlashVfxEntry[] kalmuriFollowupSlashes = Array.Empty<SlashVfxEntry>();
+        public SlashVfxEntry[] ultimateSlashes = Array.Empty<SlashVfxEntry>();
+        public Color weaponDamageNumberColor = new(1f, 0.96f, 0.72f);
+        public Color nonWeaponDamageNumberColor = new(0.86f, 0.98f, 1f);
+        public float weaponDamageNumberLifetime = 0.78f;
+        public float nonWeaponDamageNumberLifetime = 0.62f;
+        public Color enemyWeaponFlashColor = Color.white;
+        public Color enemyNonWeaponFlashColor = Color.white;
+        public float enemyWeaponFlashDuration = 0.105f;
+        public float enemyNonWeaponFlashDuration = 0.075f;
+        public bool showDamageNumbers = true;
+        public float damageNumberMinNonWeaponDamage = 5f;
+        public bool spawnHitSpark = true;
+        public SlashVfxEntry hitSpark = new()
+        {
+            id = "HitSpark",
+            spriteShape = SlashSpriteShape.ImpactDiamond,
+            anchor = SlashAnchor.PrimaryTarget,
+            localOffset = new Vector2(0f, 0.16f),
+            scale = 0.16f,
+            color = new Color(1f, 1f, 1f, 0.86f),
+            lifetime = 0.06f
+        };
+    }
+
     [CreateAssetMenu(menuName = "LETHE/Weapon Definition")]
     public sealed class WeaponDefinition : ScriptableObject
     {
@@ -80,6 +170,21 @@ namespace Lethe.Dev
         public float attackRange = 2f;
         public float attackArcDegrees = 100f;
         public int maxTargetsPerSwing = 3;
+        public float engageMultiplier = 1.1f;
+        public float secondaryDamageMultiplier = 0.7f;
+        public float primaryKnockback = 1.5f;
+        public float secondaryKnockback = 0.9f;
+        public float hitStopSeconds = 0.02f;
+        public float cameraShakeAmount = 0.03f;
+        public float swingAnimDuration = 0.16f;
+        public float echoSizeScale = 1f;
+        public float echoDamageScale = 1f;
+        public WeaponTargetingMode targetingMode = WeaponTargetingMode.Nearest;
+        public WeaponEchoProcStyle echoProcStyle = WeaponEchoProcStyle.MultiSmall;
+        public UltimatePattern ultimatePattern = UltimatePattern.ManyFast;
+        public float followupBaseDelay = 0.035f;
+        public float followupStagger = 0.012f;
+        public WeaponVfxProfile vfxProfile;
     }
 
     [CreateAssetMenu(menuName = "LETHE/Memory Definition")]

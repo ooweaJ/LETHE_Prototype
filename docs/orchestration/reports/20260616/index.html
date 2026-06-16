@@ -176,6 +176,13 @@
           <p>Dev_Prototype_v1은 이제 대검 반달 VFX가 실제 공격 범위만큼 크게 보이고, 적 피격 시 흰색 플래시와 데미지 숫자가 나온다. 원거리몹은 사거리 안에서 뒤로 빠지지 않고 제자리에서 투사체를 던진다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-16-05</span>
+          <h2><a href="#unit-2026-06-16-05" data-unit-link="unit-2026-06-16-05">무기/베기 VFX ScriptableObject 데이터화</a></h2>
+          <p>Dev_Prototype_v1은 이제 쌍검/대검 수치와 베기 VFX/피격 피드백 값을 코드가 아니라 _dev/Data/Weapons의 ScriptableObject 자산에서 읽는다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -438,6 +445,86 @@
 <li>방향: 크기는 범위에 맞추고, 형태는 얇은 반달로 정리했다.</li>
 <li>행동: 대검 반달 scale/lifetime을 키우고, 적 흰색 플래시와 데미지 숫자, 원거리몹 정지 사격을 추가했다.</li>
 <li>결과: 스모크에서 대검 최대 scale <code>1.24</code>, 데미지 숫자 <code>5</code>, 흰색 피격 적 <code>5</code>, 원거리몹 이동량 <code>0.0000</code>, 탄환 <code>1</code>을 확인했다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-16-05" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-16-05 - 무기/베기 VFX ScriptableObject 데이터화</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 이제 쌍검/대검 수치와 베기 VFX/피격 피드백 값을 코드가 아니라 <code>_dev/Data/Weapons</code>의 ScriptableObject 자산에서 읽는다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>WeaponDefinition</code>을 확장했다.</li>
+<li>공격 범위, 데미지, 공격 간격, 각도, 타겟 수.</li>
+<li>넉백, 히트스톱, 카메라 흔들림.</li>
+<li>잔향 크기/데미지 배율.</li>
+<li>타겟팅 방식, 잔향 proc 스타일, 궁극 패턴.</li>
+<li><code>WeaponVfxProfile</code>을 추가했다.</li>
+<li>기본공격 베기 VFX.</li>
+<li>칼무리 잔향 후속타 VFX.</li>
+<li>대검 피의 칼폭풍 참격 VFX.</li>
+<li>피격 섬광.</li>
+<li>적 흰색 플래시.</li>
+<li>데미지 숫자 색/수명.</li>
+<li><code>SlashVfxEntry</code>를 추가했다.</li>
+<li>반달/넓은 반달/impact/circle 형태.</li>
+<li>기준 위치, offset, 좌우/회전 mirror, scale, color, lifetime.</li>
+<li>새 자산을 만들고 씬에 연결했다.</li>
+<li><code>Weapon_DualBlades.asset</code></li>
+<li><code>Weapon_Greatsword.asset</code></li>
+<li><code>VFX_Weapon_DualBlades.asset</code></li>
+<li><code>VFX_Weapon_Greatsword.asset</code></li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, 7 warning / 0 error.</li>
+<li>Unity compile errors: <code>count=0</code>.</li>
+<li>Play Mode targeted smoke:</li>
+<li><code>dualSO=True</code></li>
+<li><code>dualVfx=True</code></li>
+<li><code>dualEntries=4</code></li>
+<li><code>dualSparkProfile=DualBladeHitSpark</code></li>
+<li><code>greatSO=True</code></li>
+<li><code>greatVfx=True</code></li>
+<li><code>greatEntries=5</code></li>
+<li><code>greatSparkProfile=GreatswordHitSpark</code></li>
+<li><code>dualA=3</code></li>
+<li><code>dualB=1</code></li>
+<li><code>great=1</code></li>
+<li><code>dualSpark=3</code></li>
+<li><code>greatSpark=1</code></li>
+<li><code>dmg=4</code></li>
+<li>증거: <code>LETHE/Assets/_dev/Evidence/v1_weapon_vfx_profile_data_20260616.png</code>.</li>
+<li><code>npm.cmd run report</code>: 통과.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 5 unit heading ok.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>404 Not Found</code>, <code>project not found</code>로 실패.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>앞으로 무기 수치와 베기/VFX 타격감은 <code>V1GameManager</code> 코드 숫자가 아니라 ScriptableObject 자산에서 조절한다.</li>
+<li><code>V1GameManager</code>는 임시 프로토타입 매니저여도, 정상 런타임 경로는 데이터 기반으로 둔다.</li>
+<li>다음 대형 데이터화는 기억/잔향/적/페이싱 쪽이다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>아직 절차형 slash sprite를 런타임에서 만들고 있다. 전용 sprite atlas로 교체할 수 있도록 profile 구조는 열어뒀다.</li>
+<li>현재 데이터화는 무기/VFX 중심이다. 기억/잔향/적 수치는 아직 <code>V1GameManager</code> 안에 남아 있다.</li>
+<li><code>dotnet build</code>의 7 warning은 기존 v0/debug deprecated API 경고다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>무기와 베기 VFX는 이제 <code>_dev/Data/Weapons</code> ScriptableObject 자산이 source of truth다. 쌍검/대검 베기 scale, lifetime, color, hit spark, enemy flash, damage number 설정은 코드 수정 없이 Unity Inspector에서 조절하는 방향으로 바뀌었다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo가 <code>Dev_Prototype_v1</code>을 플레이하며 쌍검/대검 타격감을 다시 확인한다.</li>
+<li>수치/VFX 보정이 필요하면 <code>_dev/Data/Weapons</code> 자산 값을 먼저 조정한다.</li>
+<li>구조 작업을 이어간다면 Memory/Echo/Enemy 데이터화를 다음 단위로 진행한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 베기 크기, 지속시간, 색, 피격 피드백을 매번 코드로 바꾸면 플레이 감각 튜닝 속도가 느리다.</li>
+<li>방향: 게임 완성 단계로 가기 위해 플레이어 체감값을 데이터 자산으로 옮겼다.</li>
+<li>행동: <code>WeaponDefinition</code>, <code>WeaponVfxProfile</code>, <code>SlashVfxEntry</code>를 추가하고 씬에 연결했다.</li>
+<li>결과: 스모크에서 쌍검/대검 SO와 VFX profile이 연결됐고, profile 기반 베기/피격섬광/데미지 숫자 생성이 확인됐다.</li>
 </ul>
     </article>
       </div>

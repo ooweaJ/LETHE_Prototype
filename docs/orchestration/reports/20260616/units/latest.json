@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260616\\index.md",
-  "generatedAt": "2026-06-16T04:58:05.283Z",
-  "unitCount": 4,
+  "generatedAt": "2026-06-16T07:21:54.321Z",
+  "unitCount": 5,
   "latest": {
-    "title": "2026-06-16-04 - 대검 범위 참격과 피격 피드백 보정",
-    "number": "04",
-    "markdownPath": "docs\\orchestration\\reports\\20260616\\units\\2026-06-16-04-대검-범위-참격과-피격-피드백-보정.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260616\\units\\2026-06-16-04-대검-범위-참격과-피격-피드백-보정.html"
+    "title": "2026-06-16-05 - 무기/베기 VFX ScriptableObject 데이터화",
+    "number": "05",
+    "markdownPath": "docs\\orchestration\\reports\\20260616\\units\\2026-06-16-05-무기-베기-vfx-scriptableobject-데이터화.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260616\\units\\2026-06-16-05-무기-베기-vfx-scriptableobject-데이터화.html"
   }
 }

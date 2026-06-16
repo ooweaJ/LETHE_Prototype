@@ -42,6 +42,50 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 weapon / slash VFX ScriptableObject data pass:
+  - User direction: stop hardcoding slash/VFX tuning values; LETHE is now being built as a game, so balance, numbers, VFX, and hit feel should be player-focused and data-driven.
+  - Extended `_dev` definition contracts:
+    - `WeaponDefinition` now owns runtime combat rhythm values: range, damage, cadence, arc, target count, engage multiplier, knockback, hitstop, camera shake, echo size/damage scale, targeting mode, echo proc style, ultimate pattern, and follow-up timing.
+    - Added `WeaponVfxProfile` for slash VFX, Kalmuri follow-up VFX, ultimate slash VFX, damage number colors/lifetimes, enemy flash colors/durations, and hit spark settings.
+    - Added `SlashVfxEntry` entries with shape, anchor, flip, local offset, hand-mirror, rotation, scale, color, and lifetime.
+  - `V1GameManager` now reads `dualBladesDefinition` and `greatswordDefinition` from scene references instead of relying on inline weapon/VFX literals for normal runtime.
+  - Created and linked `_dev/Data/Weapons` assets:
+    - `Weapon_DualBlades.asset`
+    - `Weapon_Greatsword.asset`
+    - `VFX_Weapon_DualBlades.asset`
+    - `VFX_Weapon_Greatsword.asset`
+  - Data-driven paths now cover:
+    - 쌍검 기본 반달 2연 베기.
+    - 쌍검 assist slash.
+    - 대검 AoE/primary/shock/cutpoint slash.
+    - 대검 assist slash.
+    - 칼무리 잔향 후속타.
+    - 대검 피의 칼폭풍 참격.
+    - 피격 섬광.
+    - 데미지 숫자 색/수명.
+    - 적 흰색 피격 플래시 색/수명.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors.
+  - Unity compilation errors: `count=0`.
+  - Unity Play Mode targeted smoke:
+    - `dualSO=True`
+    - `dualVfx=True`
+    - `dualEntries=4`
+    - `dualSparkProfile=DualBladeHitSpark`
+    - `greatSO=True`
+    - `greatVfx=True`
+    - `greatEntries=5`
+    - `greatSparkProfile=GreatswordHitSpark`
+    - `dualA=3`
+    - `dualB=1`
+    - `great=1`
+    - `dualSpark=3`
+    - `greatSpark=1`
+    - `dmg=4`
+  - Evidence capture saved: `LETHE/Assets/_dev/Evidence/v1_weapon_vfx_profile_data_20260616.png`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 5 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `404 Not Found`, `project not found`.
+
 - Unity v1 greatsword range / damage feedback / ranged enemy pass:
   - User review: greatsword crescent should be larger and match its damage range, not smaller; VFX lifetime was too short; hit feedback needed white flash and damage UI; ranged enemies should not kite backward.
   - Greatsword crescent range read was increased again:

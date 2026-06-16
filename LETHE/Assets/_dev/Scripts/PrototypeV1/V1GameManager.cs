@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lethe.Dev;
 using UnityEngine;
 
 #if ENABLE_INPUT_SYSTEM
@@ -81,6 +82,10 @@ namespace Lethe.PrototypeV1
         const int MaxActiveMemories = 3;
         const float FirstBossHp = 760f;
         const float RunSeconds = 600f;
+
+        [Header("Data")]
+        [SerializeField] WeaponDefinition dualBladesDefinition;
+        [SerializeField] WeaponDefinition greatswordDefinition;
 
         readonly List<V1Enemy> enemies = new();
         readonly List<V1XpOrb> xpOrbs = new();
@@ -630,7 +635,7 @@ namespace Lethe.PrototypeV1
             {
                 foreach (var enemy in enemies.Where(e => e.IsAlive && e.BloodMarked))
                 {
-                    enemy.TakeDamage((0.8f + blood.Level * 0.25f) * dt, "피의 반사", false);
+                    DealDamage(enemy, (0.8f + blood.Level * 0.25f) * dt, "피의 반사", false);
                 }
             }
         }
@@ -725,17 +730,18 @@ namespace Lethe.PrototypeV1
             var f = forward.sqrMagnitude > 0.01f ? forward.normalized : lastAim.normalized;
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
             var side = new Vector2(-f.y, f.x).normalized;
+            var entries = weapon.VfxProfile != null ? weapon.VfxProfile.kalmuriFollowupSlashes : Array.Empty<SlashVfxEntry>();
 
             for (int i = 0; i < burstCount; i++)
             {
                 var offset = isHeavy ? Vector2.zero : side * ((i - (burstCount - 1) * 0.5f) * 0.18f);
                 var pos = origin + (Vector3)(f * (isHeavy ? 0.04f : 0.12f + i * 0.06f) + offset);
-                var rot = Quaternion.Euler(0f, 0f, baseAngle + (isHeavy ? 0f : (i - 1) * 18f + hitIndex * 7f));
-                var scale = isHeavy ? 0.74f + level * 0.055f : 0.30f + level * 0.022f;
-                var name = isHeavy ? "KalmuriFollowup_Heavy" : "KalmuriFollowup";
-                var color = isHeavy ? new Color(0.82f, 0.98f, 1f, level >= 5 ? 0.90f : 0.74f) : new Color(0.75f, 0.98f, 1f, level >= 5 ? 0.78f : 0.60f);
-                var slashSprite = isHeavy ? MakeWideCrescentSprite("kalmuri-followup-heavy", Color.white) : MakeCrescentSlashSprite("kalmuri-followup", Color.white, i % 2 == 0);
-                SpawnTransientSprite(name, slashSprite, pos, rot, scale, color, isHeavy ? 0.22f : 0.15f);
+                foreach (var entry in entries)
+                {
+                    if (entry == null) continue;
+                    var angle = baseAngle + (isHeavy ? 0f : (i - 1) * 18f + hitIndex * 7f);
+                    SpawnSlashEntry(entry, pos, pos, f, angle, true, i);
+                }
             }
 
             if (isHeavy)
@@ -771,11 +777,17 @@ namespace Lethe.PrototypeV1
                 {
                     ultimatePulseTimer = 0.72f;
                     var baseAngle = elapsed * 120f;
+                    var ultimateEntries = weapon.VfxProfile != null ? weapon.VfxProfile.ultimateSlashes : Array.Empty<SlashVfxEntry>();
                     for (int i = 0; i < 3; i++)
                     {
                         var angle = baseAngle + i * 120f;
                         var pos = player.position + Quaternion.Euler(0f, 0f, angle) * Vector3.right * 1.75f;
-                    SpawnTransientSprite("피의 칼폭풍 대검참", MakeWideCrescentSprite("blood-storm-heavy", Color.white), pos, Quaternion.Euler(0f, 0f, angle + 90f), 1.05f, new Color(1f, 0.12f, 0.18f, 0.78f), 0.30f);
+                        var f = ((Vector2)(pos - player.position)).normalized;
+                        foreach (var entry in ultimateEntries)
+                        {
+                            if (entry == null) continue;
+                            SpawnSlashEntry(entry, pos, pos, f, angle + 90f, true, i);
+                        }
                     }
                     hitstopTimer = Mathf.Max(hitstopTimer, 0.035f);
                     cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.14f);
@@ -952,11 +964,20 @@ namespace Lethe.PrototypeV1
             if (enemy == null || !enemy.IsAlive) return;
             var before = enemy.Hp;
             var finalAmount = weaponHit ? amount * (1f + WeaponStat.DamageMul) : amount;
-            enemy.TakeDamage(finalAmount, source, weaponHit);
+            var feedback = CurrentWeaponSpec().VfxProfile;
+            var flashColor = feedback != null
+                ? weaponHit ? feedback.enemyWeaponFlashColor : feedback.enemyNonWeaponFlashColor
+                : Color.white;
+            var flashDuration = feedback != null
+                ? weaponHit ? feedback.enemyWeaponFlashDuration : feedback.enemyNonWeaponFlashDuration
+                : weaponHit ? 0.105f : 0.075f;
+            enemy.TakeDamage(finalAmount, source, weaponHit, flashColor, flashDuration);
             SpawnHitSpark(enemy.transform.position, hitDir, weaponHit);
-            if (weaponHit || finalAmount >= 5f)
+            var showDamageNumber = feedback == null || feedback.showDamageNumbers;
+            var minNonWeaponDamage = feedback != null ? feedback.damageNumberMinNonWeaponDamage : 5f;
+            if (showDamageNumber && (weaponHit || finalAmount >= minNonWeaponDamage))
             {
-                SpawnDamageNumber(enemy.transform.position, finalAmount, weaponHit);
+                SpawnDamageNumber(enemy.transform.position, finalAmount, weaponHit, feedback);
             }
             if (hitDir.sqrMagnitude > 0.01f && knockStrength > 0f)
             {
@@ -1126,8 +1147,8 @@ namespace Lethe.PrototypeV1
         int EchoLevel(V1MemoryId id) => echoLevels.TryGetValue(id, out var levelValue) ? levelValue : 0;
 
         WeaponRuntimeSpec CurrentWeaponSpec() => currentWeaponId == V1WeaponId.Greatsword
-            ? WeaponRuntimeSpec.Greatsword()
-            : WeaponRuntimeSpec.DualBlades();
+            ? WeaponRuntimeSpec.FromDefinition(V1WeaponId.Greatsword, greatswordDefinition, WeaponRuntimeSpec.Greatsword())
+            : WeaponRuntimeSpec.FromDefinition(V1WeaponId.DualBlades, dualBladesDefinition, WeaponRuntimeSpec.DualBlades());
 
         void SetDebugWeapon(V1WeaponId weaponId)
         {
@@ -1331,64 +1352,63 @@ namespace Lethe.PrototypeV1
 
         void SpawnWeaponHitVfx(WeaponRuntimeSpec weapon, List<WeaponHit> hits, Vector2 forward)
         {
-            if (weapon.Id == V1WeaponId.Greatsword)
-            {
-                SpawnGreatswordHitVfx(hits, forward);
-                return;
-            }
-
-            SpawnTwinBladeHitVfx(hits, forward);
-        }
-
-        void SpawnTwinBladeHitVfx(List<WeaponHit> hits, Vector2 forward)
-        {
             if (hits.Count == 0) return;
-
-            var f = forward.normalized;
-            var side = new Vector2(-f.y, f.x);
-            var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
-            var leadSide = leftBladeLead ? -1f : 1f;
-            for (int i = 0; i < hits.Count; i++)
-            {
-                var origin = hits[i].Enemy.transform.position;
-                if (i == 0)
-                {
-                    SpawnTransientSprite("DualBladeCrescent_A", MakeCrescentSlashSprite("dual-crescent-a", Color.white, false), origin + (Vector3)(side * 0.18f * leadSide + f * 0.08f), Quaternion.Euler(0f, 0f, baseAngle - 32f * leadSide), 0.78f, new Color(0.62f, 0.95f, 1f, 0.98f), 0.21f);
-                    SpawnTransientSprite("DualBladeCrescent_B", MakeCrescentSlashSprite("dual-crescent-b", Color.white, true), origin + (Vector3)(-side * 0.18f * leadSide + f * 0.22f), Quaternion.Euler(0f, 0f, baseAngle + 34f * leadSide), 0.68f, new Color(0.93f, 1f, 1f, 0.88f), 0.23f);
-                    SpawnTransientSprite("DualBladeCutFlash", MakeImpactDiamondSprite("dual-cut-flash", Color.white), origin + (Vector3)(f * 0.10f), Quaternion.identity, 0.15f, new Color(0.90f, 1f, 1f, 0.92f), 0.09f);
-                    continue;
-                }
-
-                var assistAngle = baseAngle + (i % 2 == 0 ? -14f : 14f);
-                SpawnTransientSprite("DualBladeCrescent_Assist", MakeCrescentSlashSprite("dual-crescent-assist", Color.white, i % 2 == 0), origin + (Vector3)(f * 0.06f), Quaternion.Euler(0f, 0f, assistAngle), 0.50f, new Color(0.62f, 0.88f, 1f, 0.68f), 0.15f);
-            }
-        }
-
-        void SpawnGreatswordHitVfx(List<WeaponHit> hits, Vector2 forward)
-        {
-            if (hits.Count == 0) return;
+            var entries = weapon.VfxProfile != null ? weapon.VfxProfile.weaponHitSlashes : Array.Empty<SlashVfxEntry>();
+            if (entries == null || entries.Length == 0) return;
 
             var f = forward.sqrMagnitude > 0.001f ? forward.normalized : lastAim.normalized;
-            var side = new Vector2(-f.y, f.x);
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
-            var center = (Vector3)hits.Aggregate(Vector2.zero, (sum, hit) => sum + (Vector2)hit.Enemy.transform.position) / hits.Count;
-            SpawnTransientSprite("GreatswordCrescent_Aoe", MakeWideCrescentSprite("greatsword-aoe-crescent", Color.white), center + (Vector3)(f * 0.24f), Quaternion.Euler(0f, 0f, baseAngle), 1.24f, new Color(0.76f, 0.94f, 1f, 0.30f), 0.42f);
-            SpawnTransientSprite("GreatswordCrescent_Primary", MakeWideCrescentSprite("greatsword-primary-crescent", Color.white), center + (Vector3)(f * 0.28f), Quaternion.Euler(0f, 0f, baseAngle), 1.02f, new Color(0.92f, 1f, 1f, 0.94f), 0.34f);
-            SpawnTransientSprite("GreatswordTargetShock", MakeImpactDiamondSprite("greatsword-impact", Color.white), center + (Vector3)(f * 0.14f), Quaternion.identity, 0.52f, new Color(0.80f, 0.95f, 1f, 0.58f), 0.18f);
-            SpawnTransientSprite("GreatswordTargetCutPoint", null, center + (Vector3)(f * 0.10f), Quaternion.identity, 0.20f, new Color(0.95f, 1f, 1f, 0.92f), 0.13f);
-
-            for (int i = 1; i < hits.Count; i++)
+            var hitCenter = (Vector3)hits.Aggregate(Vector2.zero, (sum, hit) => sum + (Vector2)hit.Enemy.transform.position) / hits.Count;
+            for (int i = 0; i < hits.Count; i++)
             {
-                var pos = hits[i].Enemy.transform.position + (Vector3)(side * (i % 2 == 0 ? 0.09f : -0.09f));
-                SpawnTransientSprite("GreatswordCrescent_Assist", MakeCrescentSlashSprite("greatsword-target-assist", Color.white, i % 2 == 0), pos, Quaternion.Euler(0f, 0f, baseAngle + (i % 2 == 0 ? -8f : 8f)), 0.44f, new Color(0.62f, 0.86f, 1f, 0.56f), 0.12f);
+                var primary = i == 0;
+                foreach (var entry in entries)
+                {
+                    if (entry == null || !entry.Matches(primary)) continue;
+                    SpawnSlashEntry(entry, hits[i].Enemy.transform.position, hitCenter, f, baseAngle, primary, i);
+                }
             }
+        }
+
+        void SpawnSlashEntry(SlashVfxEntry entry, Vector3 targetPosition, Vector3 hitCenter, Vector2 forward, float baseAngle, bool primary, int hitIndex)
+        {
+            var side = new Vector2(-forward.y, forward.x).normalized;
+            var sideSign = entry.mirrorSideByLeadHand ? (leftBladeLead ? -1f : 1f) : 1f;
+            var rotationSign = entry.mirrorRotationByLeadHand ? (leftBladeLead ? -1f : 1f) : 1f;
+            var anchor = entry.anchor switch
+            {
+                SlashAnchor.HitCenter => hitCenter,
+                SlashAnchor.CleaveTarget => targetPosition,
+                SlashAnchor.PrimaryTarget => targetPosition,
+                _ => targetPosition
+            };
+            var position = anchor + (Vector3)(side * entry.localOffset.x * sideSign + forward * entry.localOffset.y);
+            var sprite = MakeSlashSprite(entry);
+            var rotation = entry.spriteShape == SlashSpriteShape.ImpactDiamond || entry.spriteShape == SlashSpriteShape.Circle
+                ? Quaternion.identity
+                : Quaternion.Euler(0f, 0f, baseAngle + entry.rotationOffsetDegrees * rotationSign);
+            SpawnTransientSprite(entry.id, sprite, position, rotation, entry.scale, entry.color, entry.lifetime);
+        }
+
+        Sprite MakeSlashSprite(SlashVfxEntry entry)
+        {
+            return entry.spriteShape switch
+            {
+                SlashSpriteShape.WideCrescent => MakeWideCrescentSprite(entry.id, Color.white),
+                SlashSpriteShape.ImpactDiamond => MakeImpactDiamondSprite(entry.id, Color.white),
+                SlashSpriteShape.Circle => null,
+                _ => MakeCrescentSlashSprite(entry.id, Color.white, entry.flip)
+            };
         }
 
         void SpawnHitSpark(Vector3 pos, Vector2 dir, bool weaponHit)
         {
             if (!weaponHit) return;
-            var angle = dir.sqrMagnitude > 0.01f ? Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg : UnityEngine.Random.Range(0f, 360f);
-            SpawnTransientSprite("피격 섬광", MakeImpactDiamondSprite("hit-spark", Color.white), pos + (Vector3)(dir.normalized * 0.16f), Quaternion.Euler(0f, 0f, angle), 0.16f, new Color(1f, 1f, 1f, 0.86f), 0.06f);
+            var feedback = CurrentWeaponSpec().VfxProfile;
+            if (feedback == null || !feedback.spawnHitSpark || feedback.hitSpark == null) return;
+            var forward = dir.sqrMagnitude > 0.01f ? dir.normalized : lastAim.normalized;
+            var angle = Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg;
+            SpawnSlashEntry(feedback.hitSpark, pos, pos, forward, angle, true, 0);
         }
 
         void DrawBar(Rect rect, float value, Color fill, Color background)
@@ -1407,13 +1427,18 @@ namespace Lethe.PrototypeV1
             go.AddComponent<V1FloatingText>().Configure(text, color);
         }
 
-        void SpawnDamageNumber(Vector3 pos, float amount, bool weaponHit)
+        void SpawnDamageNumber(Vector3 pos, float amount, bool weaponHit, WeaponVfxProfile feedback)
         {
             var go = new GameObject("DamageNumber");
             var jitter = UnityEngine.Random.insideUnitCircle * 0.16f;
             go.transform.position = pos + new Vector3(jitter.x, 0.34f + jitter.y, 0f);
-            var color = weaponHit ? new Color(1f, 0.96f, 0.72f) : new Color(0.86f, 0.98f, 1f);
-            go.AddComponent<V1DamageNumber>().Configure(Mathf.CeilToInt(amount).ToString(), color, weaponHit ? 0.78f : 0.62f);
+            var color = feedback != null
+                ? weaponHit ? feedback.weaponDamageNumberColor : feedback.nonWeaponDamageNumberColor
+                : weaponHit ? new Color(1f, 0.96f, 0.72f) : new Color(0.86f, 0.98f, 1f);
+            var lifetime = feedback != null
+                ? weaponHit ? feedback.weaponDamageNumberLifetime : feedback.nonWeaponDamageNumberLifetime
+                : weaponHit ? 0.78f : 0.62f;
+            go.AddComponent<V1DamageNumber>().Configure(Mathf.CeilToInt(amount).ToString(), color, lifetime);
         }
 
         void SpawnTransientSprite(string name, Sprite sprite, Vector3 position, Quaternion rotation, float scale, Color color, float lifetime)
@@ -1870,6 +1895,7 @@ namespace Lethe.PrototypeV1
             public readonly V1WeaponTargetingMode TargetingMode;
             public readonly V1EchoProcStyle EchoProcStyle;
             public readonly V1UltimatePattern UltimatePattern;
+            public readonly WeaponVfxProfile VfxProfile;
             public readonly float FollowupBaseDelay;
             public readonly float FollowupStagger;
 
@@ -1893,6 +1919,7 @@ namespace Lethe.PrototypeV1
                 V1WeaponTargetingMode targetingMode,
                 V1EchoProcStyle echoProcStyle,
                 V1UltimatePattern ultimatePattern,
+                WeaponVfxProfile vfxProfile,
                 float followupBaseDelay,
                 float followupStagger)
             {
@@ -1915,8 +1942,37 @@ namespace Lethe.PrototypeV1
                 TargetingMode = targetingMode;
                 EchoProcStyle = echoProcStyle;
                 UltimatePattern = ultimatePattern;
+                VfxProfile = vfxProfile;
                 FollowupBaseDelay = followupBaseDelay;
                 FollowupStagger = followupStagger;
+            }
+
+            public static WeaponRuntimeSpec FromDefinition(V1WeaponId id, WeaponDefinition definition, WeaponRuntimeSpec fallback)
+            {
+                if (definition == null) return fallback;
+                return new WeaponRuntimeSpec(
+                    id,
+                    string.IsNullOrWhiteSpace(definition.displayName) ? fallback.DisplayName : definition.displayName,
+                    definition.attackRange,
+                    definition.baseDamage,
+                    definition.attackCadence,
+                    definition.attackArcDegrees,
+                    definition.engageMultiplier,
+                    definition.maxTargetsPerSwing,
+                    definition.secondaryDamageMultiplier,
+                    definition.primaryKnockback,
+                    definition.secondaryKnockback,
+                    definition.hitStopSeconds,
+                    definition.cameraShakeAmount,
+                    definition.swingAnimDuration,
+                    definition.echoSizeScale,
+                    definition.echoDamageScale,
+                    definition.targetingMode == WeaponTargetingMode.DensestArc ? V1WeaponTargetingMode.DensestArc : V1WeaponTargetingMode.Nearest,
+                    definition.echoProcStyle == WeaponEchoProcStyle.SingleHeavy ? V1EchoProcStyle.SingleHeavy : V1EchoProcStyle.MultiSmall,
+                    definition.ultimatePattern == Lethe.Dev.UltimatePattern.FewHeavy ? V1UltimatePattern.FewHeavy : V1UltimatePattern.ManyFast,
+                    definition.vfxProfile,
+                    definition.followupBaseDelay,
+                    definition.followupStagger);
             }
 
             public static WeaponRuntimeSpec DualBlades() => new(
@@ -1939,6 +1995,7 @@ namespace Lethe.PrototypeV1
                 V1WeaponTargetingMode.Nearest,
                 V1EchoProcStyle.MultiSmall,
                 V1UltimatePattern.ManyFast,
+                null,
                 0.035f,
                 0.012f);
 
@@ -1962,6 +2019,7 @@ namespace Lethe.PrototypeV1
                 V1WeaponTargetingMode.DensestArc,
                 V1EchoProcStyle.SingleHeavy,
                 V1UltimatePattern.FewHeavy,
+                null,
                 0.065f,
                 0.000f);
         }
@@ -2119,15 +2177,15 @@ namespace Lethe.PrototypeV1
             }
         }
 
-        public void TakeDamage(float amount, string source, bool weaponHit)
+        public void TakeDamage(float amount, string source, bool weaponHit, Color flashColor, float flashDuration)
         {
             Hp -= amount;
             hitSquashTimer = weaponHit ? 0.08f : 0.04f;
             if (sr != null)
             {
-                sr.color = Color.white;
+                sr.color = flashColor;
                 CancelInvoke(nameof(RestoreColor));
-                Invoke(nameof(RestoreColor), weaponHit ? 0.105f : 0.075f);
+                Invoke(nameof(RestoreColor), Mathf.Max(0.01f, flashDuration));
             }
             if (Hp <= 0f)
             {

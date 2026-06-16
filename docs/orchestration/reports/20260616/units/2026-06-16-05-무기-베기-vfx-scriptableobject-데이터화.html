@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-16-05 - 무기/베기 VFX ScriptableObject 데이터화</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-16-05 - 무기/베기 VFX ScriptableObject 데이터화</h1>
+      <p class="meta">Generated from 2026-06-16-05-무기-베기-vfx-scriptableobject-데이터화.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260616/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-16-05 - 무기/베기 VFX ScriptableObject 데이터화</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 이제 쌍검/대검 수치와 베기 VFX/피격 피드백 값을 코드가 아니라 <code>_dev/Data/Weapons</code>의 ScriptableObject 자산에서 읽는다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>WeaponDefinition</code>을 확장했다.</li>
+<li>공격 범위, 데미지, 공격 간격, 각도, 타겟 수.</li>
+<li>넉백, 히트스톱, 카메라 흔들림.</li>
+<li>잔향 크기/데미지 배율.</li>
+<li>타겟팅 방식, 잔향 proc 스타일, 궁극 패턴.</li>
+<li><code>WeaponVfxProfile</code>을 추가했다.</li>
+<li>기본공격 베기 VFX.</li>
+<li>칼무리 잔향 후속타 VFX.</li>
+<li>대검 피의 칼폭풍 참격 VFX.</li>
+<li>피격 섬광.</li>
+<li>적 흰색 플래시.</li>
+<li>데미지 숫자 색/수명.</li>
+<li><code>SlashVfxEntry</code>를 추가했다.</li>
+<li>반달/넓은 반달/impact/circle 형태.</li>
+<li>기준 위치, offset, 좌우/회전 mirror, scale, color, lifetime.</li>
+<li>새 자산을 만들고 씬에 연결했다.</li>
+<li><code>Weapon_DualBlades.asset</code></li>
+<li><code>Weapon_Greatsword.asset</code></li>
+<li><code>VFX_Weapon_DualBlades.asset</code></li>
+<li><code>VFX_Weapon_Greatsword.asset</code></li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, 7 warning / 0 error.</li>
+<li>Unity compile errors: <code>count=0</code>.</li>
+<li>Play Mode targeted smoke:</li>
+<li><code>dualSO=True</code></li>
+<li><code>dualVfx=True</code></li>
+<li><code>dualEntries=4</code></li>
+<li><code>dualSparkProfile=DualBladeHitSpark</code></li>
+<li><code>greatSO=True</code></li>
+<li><code>greatVfx=True</code></li>
+<li><code>greatEntries=5</code></li>
+<li><code>greatSparkProfile=GreatswordHitSpark</code></li>
+<li><code>dualA=3</code></li>
+<li><code>dualB=1</code></li>
+<li><code>great=1</code></li>
+<li><code>dualSpark=3</code></li>
+<li><code>greatSpark=1</code></li>
+<li><code>dmg=4</code></li>
+<li>증거: <code>LETHE/Assets/_dev/Evidence/v1_weapon_vfx_profile_data_20260616.png</code>.</li>
+<li><code>npm.cmd run report</code>: 통과.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 5 unit heading ok.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>404 Not Found</code>, <code>project not found</code>로 실패.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>앞으로 무기 수치와 베기/VFX 타격감은 <code>V1GameManager</code> 코드 숫자가 아니라 ScriptableObject 자산에서 조절한다.</li>
+<li><code>V1GameManager</code>는 임시 프로토타입 매니저여도, 정상 런타임 경로는 데이터 기반으로 둔다.</li>
+<li>다음 대형 데이터화는 기억/잔향/적/페이싱 쪽이다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>아직 절차형 slash sprite를 런타임에서 만들고 있다. 전용 sprite atlas로 교체할 수 있도록 profile 구조는 열어뒀다.</li>
+<li>현재 데이터화는 무기/VFX 중심이다. 기억/잔향/적 수치는 아직 <code>V1GameManager</code> 안에 남아 있다.</li>
+<li><code>dotnet build</code>의 7 warning은 기존 v0/debug deprecated API 경고다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>무기와 베기 VFX는 이제 <code>_dev/Data/Weapons</code> ScriptableObject 자산이 source of truth다. 쌍검/대검 베기 scale, lifetime, color, hit spark, enemy flash, damage number 설정은 코드 수정 없이 Unity Inspector에서 조절하는 방향으로 바뀌었다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo가 <code>Dev_Prototype_v1</code>을 플레이하며 쌍검/대검 타격감을 다시 확인한다.</li>
+<li>수치/VFX 보정이 필요하면 <code>_dev/Data/Weapons</code> 자산 값을 먼저 조정한다.</li>
+<li>구조 작업을 이어간다면 Memory/Echo/Enemy 데이터화를 다음 단위로 진행한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 베기 크기, 지속시간, 색, 피격 피드백을 매번 코드로 바꾸면 플레이 감각 튜닝 속도가 느리다.</li>
+<li>방향: 게임 완성 단계로 가기 위해 플레이어 체감값을 데이터 자산으로 옮겼다.</li>
+<li>행동: <code>WeaponDefinition</code>, <code>WeaponVfxProfile</code>, <code>SlashVfxEntry</code>를 추가하고 씬에 연결했다.</li>
+<li>결과: 스모크에서 쌍검/대검 SO와 VFX profile이 연결됐고, profile 기반 베기/피격섬광/데미지 숫자 생성이 확인됐다.</li>
+</ul>
+  </main>
+</body>
+</html>

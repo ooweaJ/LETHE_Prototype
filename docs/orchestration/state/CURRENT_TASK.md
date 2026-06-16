@@ -53,6 +53,7 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 - Crescent slash feedback pass exists: dual blades use two target-local half-moon slashes, greatsword uses a large crescent AoE read, and Kalmuri follow-ups reuse crescent language.
 - Crescent size/timing tune exists: dual-blade crescents are bigger and last longer, while greatsword crescent is thinner and less fan-like.
 - Damage feedback / ranged enemy pass exists: greatsword slash is range-sized again, enemies flash white longer, damage numbers appear, and ranged enemies stand still to cast once in range.
+- Weapon / slash VFX data pass exists: weapon rhythm, slash VFX, Kalmuri follow-up VFX, heavy ultimate slash VFX, hit spark, damage number, and enemy flash tuning for dual blades/greatsword are controlled by `_dev/Data/Weapons` ScriptableObject assets.
 - Unity compile error 0.
 - Play Mode smoke creates player and enemies with no v1 runtime console exceptions.
 - v1 screenshot/capture confirms player/enemy sheets are not rendered as whole sheets.
@@ -191,10 +192,27 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - `npm.cmd run report`: passed.
   - `npm.cmd run report:check`: passed, 4 unit headings ok.
   - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+- Weapon / slash VFX ScriptableObject data pass:
+  - Added `WeaponVfxProfile` and `SlashVfxEntry` to `_dev` definition contracts.
+  - Expanded `WeaponDefinition` so runtime weapon rhythm and feedback values can live in assets.
+  - Created/updated:
+    - `LETHE/Assets/_dev/Data/Weapons/Weapon_DualBlades.asset`
+    - `LETHE/Assets/_dev/Data/Weapons/Weapon_Greatsword.asset`
+    - `LETHE/Assets/_dev/Data/Weapons/VFX_Weapon_DualBlades.asset`
+    - `LETHE/Assets/_dev/Data/Weapons/VFX_Weapon_Greatsword.asset`
+  - `V1GameManager` now reads the weapon SO references from `Dev_Prototype_v1`.
+  - Data-driven runtime now covers basic slash VFX, Kalmuri follow-up slash VFX, greatsword Blood Blade Storm slash VFX, hit spark, enemy flash, and damage-number settings.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors.
+  - Unity compile errors: `count=0`.
+  - Play Mode targeted smoke: `dualSO=True dualVfx=True dualEntries=4 dualSparkProfile=DualBladeHitSpark greatSO=True greatVfx=True greatEntries=5 greatSparkProfile=GreatswordHitSpark dualA=3 dualB=1 great=1 dualSpark=3 greatSpark=1 dmg=4`.
+  - Evidence capture: `LETHE/Assets/_dev/Evidence/v1_weapon_vfx_profile_data_20260616.png`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 5 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `404 Not Found`, `project not found`.
 
 ## Next Implementation
 
-1. Ask jaewoo to review the whole `Dev_Prototype_v1` batch in Play Mode.
+1. Ask jaewoo to review the whole `Dev_Prototype_v1` batch in Play Mode, knowing weapon/VFX tuning now lives in `_dev/Data/Weapons`.
 2. Collect one combined feedback pass for:
    - 시작 무기 선택 화면.
    - 카드 선택 중 적/탄이 완전히 멈추는지.
