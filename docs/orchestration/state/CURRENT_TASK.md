@@ -50,6 +50,7 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 - One-pass review batch exists: twin-blade visibility, greatsword visual behavior, review M2 pacing, resonance VFX, awakened echo HUD, weapon-patterned Blood Blade Storm, and denser combat pressure.
 - Weapon selection / hit feedback pass exists: run-start weapon card selection, sharper target-local weapon VFX, stronger enemy knockback, and a non-box greatsword silhouette.
 - Pause / hitstop movement fix exists: enemies/projectiles stop during card overlays, while hitstop no longer blocks player-side movement/visual updates.
+- Crescent slash feedback pass exists: dual blades use two target-local half-moon slashes, greatsword uses a large crescent AoE read, and Kalmuri follow-ups reuse crescent language.
 - Unity compile error 0.
 - Play Mode smoke creates player and enemies with no v1 runtime console exceptions.
 - v1 screenshot/capture confirms player/enemy sheets are not rendered as whole sheets.
@@ -150,6 +151,19 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - `npm.cmd run report`: passed.
   - `npm.cmd run report:check`: passed, 1 unit heading ok.
   - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+- Crescent slash feedback pass:
+  - Replaced thin target-local slash lines with crescent-shaped runtime sprites.
+  - Dual blades now create two quick half-moon slashes per primary hit.
+  - Greatsword now creates a large crescent AoE read plus a bright primary crescent.
+  - Kalmuri follow-up and greatsword storm heavy slashes now use crescent sprites.
+  - Hit spark uses impact diamond feedback instead of another slash line.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors.
+  - Unity compile errors: `count=0`.
+  - Play Mode targeted smoke: `dualCrescent=6 kalmuriCrescent=10 greatCrescent=6 heavyKalmuri=1 shock=1`.
+  - Evidence capture: `LETHE/Assets/_dev/Evidence/v1_crescent_slash_feedback_20260616.png`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 2 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
 
 ## Next Implementation
 
@@ -158,8 +172,10 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
    - 시작 무기 선택 화면.
    - 카드 선택 중 적/탄이 완전히 멈추는지.
    - 쌍검 기본공격.
+   - 쌍검 반달 2연 베기가 슥슥 하는 느낌인지.
    - 적 피격 넉백/피격감.
    - 칼무리 후속타.
+   - 대검 큰 반달이 주변 범위 피해로 읽히는지.
    - 대검/칼무리 hitstop 중 캐릭터 이동감이 끊기지 않는지.
    - 대검 시작 선택과 `F9` 비교.
    - 망각/공명/+5 잔향/피의 칼폭풍 흐름.

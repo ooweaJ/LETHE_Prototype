@@ -42,6 +42,31 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 crescent slash feedback pass:
+  - User review: movement/pause fixes worked, but hit feel was still weak.
+  - Changed basic attack VFX language from thin iai lines to readable crescent slashes.
+  - Dual blades now spawn two crossed half-moon slash sprites on the target:
+    - `DualBladeCrescent_A`
+    - `DualBladeCrescent_B`
+  - Greatsword now spawns a large crescent AoE read plus a brighter primary crescent:
+    - `GreatswordCrescent_Aoe`
+    - `GreatswordCrescent_Primary`
+  - Kalmuri echo follow-ups now use crescent sprites too, so the echo inherits the weapon slash language.
+  - Greatsword Blood Blade Storm heavy slashes now use the wide crescent sprite.
+  - Hit spark now uses an impact diamond instead of another slash line, reducing visual noise.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors.
+  - Unity compilation errors: `count=0`.
+  - Play Mode targeted smoke:
+    - `dualCrescent=6`
+    - `kalmuriCrescent=10`
+    - `greatCrescent=6`
+    - `heavyKalmuri=1`
+    - `shock=1`
+  - Evidence capture saved: `LETHE/Assets/_dev/Evidence/v1_crescent_slash_feedback_20260616.png`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 2 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+
 - Unity v1 pause / hitstop movement fix:
   - Fixed the issue where enemies continued moving while choosing weapon/level-up/result cards.
   - Added `V1GameManager.GameplayPaused` for blocking overlays:

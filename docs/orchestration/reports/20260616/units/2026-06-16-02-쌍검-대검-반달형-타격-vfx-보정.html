@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-16-02 - 쌍검/대검 반달형 타격 VFX 보정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-16-02 - 쌍검/대검 반달형 타격 VFX 보정</h1>
+      <p class="meta">Generated from 2026-06-16-02-쌍검-대검-반달형-타격-vfx-보정.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260616/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-16-02 - 쌍검/대검 반달형 타격 VFX 보정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 기본공격 VFX가 얇은 선 중심에서 반달형 베기 중심으로 바뀌었다. 쌍검은 두 개의 작은 반달이 빠르게 겹쳐지고, 대검은 큰 반달이 주변 범위를 베었다고 읽히도록 했다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>쌍검 기본공격:</li>
+<li><code>DualBladeCrescent_A</code></li>
+<li><code>DualBladeCrescent_B</code></li>
+<li>두 개의 반달형 VFX가 타겟 위치에 엇갈려 생성된다.</li>
+<li>대검 기본공격:</li>
+<li><code>GreatswordCrescent_Aoe</code></li>
+<li><code>GreatswordCrescent_Primary</code></li>
+<li>큰 반달 잔광과 밝은 주 베기가 함께 뜬다.</li>
+<li>칼무리 잔향:</li>
+<li>후속타도 반달형 VFX를 사용하게 바꿨다.</li>
+<li>대검 칼무리 후속타는 큰 반달 1회로 읽히게 했다.</li>
+<li>피의 칼폭풍 대검참도 넓은 반달형 VFX를 사용한다.</li>
+<li>피격 섬광은 베기선과 겹치지 않도록 impact diamond로 바꿨다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, 7 warning / 0 error.</li>
+<li>Unity compile errors: <code>count=0</code>.</li>
+<li>Play Mode targeted smoke:</li>
+<li><code>dualCrescent=6</code></li>
+<li><code>kalmuriCrescent=10</code></li>
+<li><code>greatCrescent=6</code></li>
+<li><code>heavyKalmuri=1</code></li>
+<li><code>shock=1</code></li>
+<li>증거: <code>LETHE/Assets/_dev/Evidence/v1_crescent_slash_feedback_20260616.png</code>.</li>
+<li><code>npm.cmd run report</code>: 통과.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 2 unit headings ok.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>기본공격의 첫 판독은 데미지 숫자가 아니라 베기 형태로 만든다.</li>
+<li>쌍검은 작은 반달 2개, 대검은 큰 반달 1개라는 형태 규칙을 유지한다.</li>
+<li>잔향도 이 무기 형태 언어를 따라가야 한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>아직 절차형 런타임 VFX라 최종 아트는 아니다.</li>
+<li>타격감이 여전히 약하면 다음은 코드 수치보다 전용 스프라이트/사운드 placeholder가 필요하다.</li>
+<li>Project Orchestrator Discord intake는 현재 <code>fetch failed</code>를 반환한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>타격감 부족 피드백에 따라 쌍검/대검/칼무리 후속타의 VFX 언어를 반달형으로 통일했다. 다음 리뷰에서는 쌍검이 “슥슥”, 대검이 “큰 범위 베기”로 읽히는지 확인해야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo가 쌍검/대검을 각각 플레이하며 반달형 VFX를 확인한다.</li>
+<li>약하면 전용 sprite atlas 제작 또는 임시 사운드/화면 흔들림 레이어를 붙인다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 공격이 맞아도 화면에서 베었다는 감각이 약했다.</li>
+<li>방향: 무기별 타격 형태를 시각 규칙으로 고정했다.</li>
+<li>행동: 쌍검/대검/잔향 VFX를 반달형으로 재구성했다.</li>
+<li>결과: 스모크에서 쌍검, 대검, 칼무리 후속타 반달 VFX 생성이 확인됐다.</li>
+</ul>
+  </main>
+</body>
+</html>

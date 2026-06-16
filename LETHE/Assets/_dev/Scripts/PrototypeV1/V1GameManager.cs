@@ -731,11 +731,11 @@ namespace Lethe.PrototypeV1
                 var offset = isHeavy ? Vector2.zero : side * ((i - (burstCount - 1) * 0.5f) * 0.18f);
                 var pos = origin + (Vector3)(f * (isHeavy ? 0.04f : 0.12f + i * 0.06f) + offset);
                 var rot = Quaternion.Euler(0f, 0f, baseAngle + (isHeavy ? 0f : (i - 1) * 18f + hitIndex * 7f));
-                var scale = isHeavy ? 0.58f + level * 0.045f : 0.24f + level * 0.018f;
+                var scale = isHeavy ? 0.74f + level * 0.055f : 0.30f + level * 0.022f;
                 var name = isHeavy ? "KalmuriFollowup_Heavy" : "KalmuriFollowup";
-                var color = isHeavy ? new Color(0.82f, 0.98f, 1f, level >= 5 ? 0.88f : 0.70f) : new Color(0.75f, 0.98f, 1f, level >= 5 ? 0.74f : 0.54f);
-                var slashSprite = isHeavy ? MakeHeavySlashSprite("kalmuri-followup-heavy", Color.white) : MakeIaiSlashSprite("kalmuri-followup", Color.white);
-                SpawnTransientSprite(name, slashSprite, pos, rot, scale, color, isHeavy ? 0.20f : 0.14f);
+                var color = isHeavy ? new Color(0.82f, 0.98f, 1f, level >= 5 ? 0.90f : 0.74f) : new Color(0.75f, 0.98f, 1f, level >= 5 ? 0.78f : 0.60f);
+                var slashSprite = isHeavy ? MakeWideCrescentSprite("kalmuri-followup-heavy", Color.white) : MakeCrescentSlashSprite("kalmuri-followup", Color.white, i % 2 == 0);
+                SpawnTransientSprite(name, slashSprite, pos, rot, scale, color, isHeavy ? 0.22f : 0.15f);
             }
 
             if (isHeavy)
@@ -775,7 +775,7 @@ namespace Lethe.PrototypeV1
                     {
                         var angle = baseAngle + i * 120f;
                         var pos = player.position + Quaternion.Euler(0f, 0f, angle) * Vector3.right * 1.75f;
-                    SpawnTransientSprite("피의 칼폭풍 대검참", MakeHeavySlashSprite("blood-storm-heavy", Color.white), pos, Quaternion.Euler(0f, 0f, angle + 90f), 1.00f, new Color(1f, 0.12f, 0.18f, 0.76f), 0.30f);
+                    SpawnTransientSprite("피의 칼폭풍 대검참", MakeWideCrescentSprite("blood-storm-heavy", Color.white), pos, Quaternion.Euler(0f, 0f, angle + 90f), 1.05f, new Color(1f, 0.12f, 0.18f, 0.78f), 0.30f);
                     }
                     hitstopTimer = Mathf.Max(hitstopTimer, 0.035f);
                     cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.14f);
@@ -1349,14 +1349,14 @@ namespace Lethe.PrototypeV1
                 var origin = hits[i].Enemy.transform.position;
                 if (i == 0)
                 {
-                    SpawnTransientSprite("TargetLocalSlash_Primary_A", MakeIaiSlashSprite("target-slash-a", Color.white), origin + (Vector3)(side * 0.13f * leadSide + f * 0.05f), Quaternion.Euler(0f, 0f, baseAngle - 23f * leadSide), 0.54f, new Color(0.72f, 0.96f, 1f, 0.95f), 0.105f);
-                    SpawnTransientSprite("TargetLocalSlash_Primary_B", MakeIaiSlashSprite("target-slash-b", Color.white), origin + (Vector3)(-side * 0.14f * leadSide + f * 0.16f), Quaternion.Euler(0f, 0f, baseAngle + 26f * leadSide), 0.42f, new Color(0.94f, 1f, 1f, 0.80f), 0.12f);
-                    SpawnTransientSprite("TargetLocalCutPoint", null, origin + (Vector3)(f * 0.08f), Quaternion.identity, 0.095f, new Color(0.90f, 1f, 1f, 0.82f), 0.09f);
+                    SpawnTransientSprite("DualBladeCrescent_A", MakeCrescentSlashSprite("dual-crescent-a", Color.white, false), origin + (Vector3)(side * 0.16f * leadSide + f * 0.08f), Quaternion.Euler(0f, 0f, baseAngle - 32f * leadSide), 0.62f, new Color(0.62f, 0.95f, 1f, 0.96f), 0.13f);
+                    SpawnTransientSprite("DualBladeCrescent_B", MakeCrescentSlashSprite("dual-crescent-b", Color.white, true), origin + (Vector3)(-side * 0.16f * leadSide + f * 0.20f), Quaternion.Euler(0f, 0f, baseAngle + 34f * leadSide), 0.54f, new Color(0.93f, 1f, 1f, 0.84f), 0.15f);
+                    SpawnTransientSprite("DualBladeCutFlash", MakeImpactDiamondSprite("dual-cut-flash", Color.white), origin + (Vector3)(f * 0.10f), Quaternion.identity, 0.13f, new Color(0.90f, 1f, 1f, 0.92f), 0.075f);
                     continue;
                 }
 
                 var assistAngle = baseAngle + (i % 2 == 0 ? -14f : 14f);
-                SpawnTransientSprite("TargetLocalSlash_Assist", MakeIaiSlashSprite("target-slash-assist", Color.white), origin + (Vector3)(f * 0.04f), Quaternion.Euler(0f, 0f, assistAngle), 0.30f, new Color(0.62f, 0.88f, 1f, 0.58f), 0.085f);
+                SpawnTransientSprite("DualBladeCrescent_Assist", MakeCrescentSlashSprite("dual-crescent-assist", Color.white, i % 2 == 0), origin + (Vector3)(f * 0.06f), Quaternion.Euler(0f, 0f, assistAngle), 0.38f, new Color(0.62f, 0.88f, 1f, 0.62f), 0.10f);
             }
         }
 
@@ -1368,14 +1368,15 @@ namespace Lethe.PrototypeV1
             var side = new Vector2(-f.y, f.x);
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
             var center = (Vector3)hits.Aggregate(Vector2.zero, (sum, hit) => sum + (Vector2)hit.Enemy.transform.position) / hits.Count;
-            SpawnTransientSprite("GreatswordTargetSlash_Primary", MakeHeavySlashSprite("greatsword-target-slash", Color.white), center + (Vector3)(f * 0.12f), Quaternion.Euler(0f, 0f, baseAngle), 0.92f, new Color(0.88f, 0.98f, 1f, 0.94f), 0.22f);
-            SpawnTransientSprite("GreatswordTargetShock", MakeImpactDiamondSprite("greatsword-impact", Color.white), center + (Vector3)(f * 0.11f), Quaternion.identity, 0.42f, new Color(0.80f, 0.95f, 1f, 0.50f), 0.18f);
-            SpawnTransientSprite("GreatswordTargetCutPoint", null, center + (Vector3)(f * 0.10f), Quaternion.identity, 0.18f, new Color(0.95f, 1f, 1f, 0.86f), 0.13f);
+            SpawnTransientSprite("GreatswordCrescent_Aoe", MakeWideCrescentSprite("greatsword-aoe-crescent", Color.white), center + (Vector3)(f * 0.16f), Quaternion.Euler(0f, 0f, baseAngle), 1.02f, new Color(0.76f, 0.94f, 1f, 0.40f), 0.28f);
+            SpawnTransientSprite("GreatswordCrescent_Primary", MakeWideCrescentSprite("greatsword-primary-crescent", Color.white), center + (Vector3)(f * 0.20f), Quaternion.Euler(0f, 0f, baseAngle), 0.78f, new Color(0.92f, 1f, 1f, 0.95f), 0.21f);
+            SpawnTransientSprite("GreatswordTargetShock", MakeImpactDiamondSprite("greatsword-impact", Color.white), center + (Vector3)(f * 0.14f), Quaternion.identity, 0.52f, new Color(0.80f, 0.95f, 1f, 0.58f), 0.18f);
+            SpawnTransientSprite("GreatswordTargetCutPoint", null, center + (Vector3)(f * 0.10f), Quaternion.identity, 0.20f, new Color(0.95f, 1f, 1f, 0.92f), 0.13f);
 
             for (int i = 1; i < hits.Count; i++)
             {
                 var pos = hits[i].Enemy.transform.position + (Vector3)(side * (i % 2 == 0 ? 0.09f : -0.09f));
-                SpawnTransientSprite("GreatswordTargetSlash_Assist", MakeIaiSlashSprite("greatsword-target-assist", Color.white), pos, Quaternion.Euler(0f, 0f, baseAngle + (i % 2 == 0 ? -8f : 8f)), 0.42f, new Color(0.62f, 0.86f, 1f, 0.52f), 0.12f);
+                SpawnTransientSprite("GreatswordCrescent_Assist", MakeCrescentSlashSprite("greatsword-target-assist", Color.white, i % 2 == 0), pos, Quaternion.Euler(0f, 0f, baseAngle + (i % 2 == 0 ? -8f : 8f)), 0.44f, new Color(0.62f, 0.86f, 1f, 0.56f), 0.12f);
             }
         }
 
@@ -1383,7 +1384,7 @@ namespace Lethe.PrototypeV1
         {
             if (!weaponHit) return;
             var angle = dir.sqrMagnitude > 0.01f ? Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg : UnityEngine.Random.Range(0f, 360f);
-            SpawnTransientSprite("피격 섬광", MakeIaiSlashSprite("hit-spark", Color.white), pos + (Vector3)(dir.normalized * 0.16f), Quaternion.Euler(0f, 0f, angle), 0.20f, new Color(1f, 1f, 1f, 0.86f), 0.06f);
+            SpawnTransientSprite("피격 섬광", MakeImpactDiamondSprite("hit-spark", Color.white), pos + (Vector3)(dir.normalized * 0.16f), Quaternion.Euler(0f, 0f, angle), 0.16f, new Color(1f, 1f, 1f, 0.86f), 0.06f);
         }
 
         void DrawBar(Rect rect, float value, Color fill, Color background)
@@ -1625,6 +1626,54 @@ namespace Lethe.PrototypeV1
             }
             tex.Apply();
             return Sprite.Create(tex, new Rect(0, 0, width, height), new Vector2(0.5f, 0.18f), 100f);
+        }
+
+        static Sprite MakeCrescentSlashSprite(string name, Color color, bool flip)
+        {
+            const int width = 192;
+            const int height = 128;
+            var tex = new Texture2D(width, height, TextureFormat.RGBA32, false) { name = name };
+            var center = new Vector2(width * 0.33f, height * 0.50f);
+            for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
+            {
+                var py = flip ? height - 1 - y : y;
+                var p = new Vector2(x, py) - center;
+                var dist = p.magnitude;
+                var angle = Mathf.Atan2(p.y, p.x) * Mathf.Rad2Deg;
+                var arc = Mathf.InverseLerp(80f, 18f, Mathf.Abs(angle));
+                var outer = Mathf.Clamp01(1f - Mathf.Abs(dist - 74f) / 12f);
+                var inner = Mathf.Clamp01(1f - Mathf.Abs(dist - 55f) / 7f) * 0.45f;
+                var tipFade = Mathf.Clamp01((x - 12f) / 28f) * Mathf.Clamp01((width - 8f - x) / 22f);
+                var alpha = Mathf.Clamp01((outer + inner) * arc * tipFade);
+                tex.SetPixel(x, y, alpha <= 0f ? Color.clear : new Color(color.r, color.g, color.b, alpha));
+            }
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, width, height), new Vector2(0.34f, 0.5f), 100f);
+        }
+
+        static Sprite MakeWideCrescentSprite(string name, Color color)
+        {
+            const int width = 256;
+            const int height = 176;
+            var tex = new Texture2D(width, height, TextureFormat.RGBA32, false) { name = name };
+            var center = new Vector2(width * 0.29f, height * 0.50f);
+            for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
+            {
+                var p = new Vector2(x, y) - center;
+                var dist = p.magnitude;
+                var angle = Mathf.Atan2(p.y, p.x) * Mathf.Rad2Deg;
+                var arc = Mathf.InverseLerp(86f, 12f, Mathf.Abs(angle));
+                var outer = Mathf.Clamp01(1f - Mathf.Abs(dist - 104f) / 17f);
+                var core = Mathf.Clamp01(1f - Mathf.Abs(dist - 82f) / 8f) * 0.50f;
+                var glow = Mathf.Clamp01(1f - Mathf.Abs(dist - 66f) / 22f) * 0.18f;
+                var tipFade = Mathf.Clamp01((x - 10f) / 34f) * Mathf.Clamp01((width - 6f - x) / 24f);
+                var alpha = Mathf.Clamp01((outer + core + glow) * arc * tipFade);
+                tex.SetPixel(x, y, alpha <= 0f ? Color.clear : new Color(color.r, color.g, color.b, alpha));
+            }
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, width, height), new Vector2(0.30f, 0.5f), 100f);
         }
 
         static Sprite MakeIaiSlashSprite(string name, Color color)
