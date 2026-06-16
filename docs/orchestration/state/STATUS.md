@@ -1,6 +1,6 @@
 # Status
 
-Last updated: 2026-06-15
+Last updated: 2026-06-16
 
 ## Current Snapshot
 
@@ -41,6 +41,30 @@ The report/devlog/review migration is now applied physically: old `docs/reports/
 The current development-docs plugin baseline from `docs/orchestration/MIGRATION_PROMPT.md` has been applied. `AGENTS.md` now uses a `Development Docs Plugin` section, `docs/orchestration/templates/HTML_INTERFACE_TEMPLATE.md` exists, legacy review pointer READMEs are readable, `reports/index.html` is generated as a newest-first date archive, daily report pages are generated as unit-card pages, and Discord delivery is documented as Project Orchestrator first with local direct-send scripts as trusted fallback only.
 
 ## Latest Verified Result
+
+- Unity v1 pause / hitstop movement fix:
+  - Fixed the issue where enemies continued moving while choosing weapon/level-up/result cards.
+  - Added `V1GameManager.GameplayPaused` for blocking overlays:
+    - start weapon selection.
+    - level-up card selection.
+    - forgetting result.
+    - resonance refill.
+    - death overlay.
+  - `V1Enemy`, `V1Projectile`, and `V1EnemyShot` now respect the pause flag.
+  - Split combat hitstop into `V1GameManager.HitstopActive`, so enemies/projectiles can freeze briefly while the player-side manager loop still updates.
+  - Hitstop no longer returns before player/camera/weapon visual updates, so weapon/echo impacts should not make the character feel like movement input is interrupted.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors. Warnings are legacy v0/debug deprecated API warnings.
+  - Unity compilation errors: `count=0`.
+  - Play Mode targeted smoke:
+    - `pauseDistance=0.0000`
+    - `unpauseDistance=0.0240`
+    - `weaponAnimAfterHitstop=0.220`
+    - `hitstopAfterUpdate=0.060`
+    - `gameplayPaused=False`
+    - `hitstopActive=True`
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 1 unit heading ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
 
 - Unity v1 weapon select / hit feedback pass:
   - Added a run-start weapon selection overlay for `절단쌍검` and `장송대검`.

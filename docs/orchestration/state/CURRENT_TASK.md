@@ -49,6 +49,7 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 - Weapon rhythm structure prep exists: `WeaponRuntimeSpec` supports current dual blades and debug greatsword paths without copying the weapon/echo loop.
 - One-pass review batch exists: twin-blade visibility, greatsword visual behavior, review M2 pacing, resonance VFX, awakened echo HUD, weapon-patterned Blood Blade Storm, and denser combat pressure.
 - Weapon selection / hit feedback pass exists: run-start weapon card selection, sharper target-local weapon VFX, stronger enemy knockback, and a non-box greatsword silhouette.
+- Pause / hitstop movement fix exists: enemies/projectiles stop during card overlays, while hitstop no longer blocks player-side movement/visual updates.
 - Unity compile error 0.
 - Play Mode smoke creates player and enemies with no v1 runtime console exceptions.
 - v1 screenshot/capture confirms player/enemy sheets are not rendered as whole sheets.
@@ -138,15 +139,28 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - `npm.cmd run report`: passed.
   - `npm.cmd run report:check`: passed, 4 unit headings ok.
   - `npm.cmd run report:orchestrator:unit:dry`: failed with `404 Not Found`, `project not found`.
+- Pause / hitstop movement fix:
+  - Added `GameplayPaused` for blocking overlays.
+  - Added `HitstopActive` for combat impact freeze.
+  - `V1Enemy`, `V1Projectile`, and `V1EnemyShot` now respect pause/freeze flags.
+  - Hitstop now updates player, camera, and weapon visuals before returning, so character movement should not feel interrupted by weapon/greatsword/Kalmuri impact pauses.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors.
+  - Unity compile errors: `count=0`.
+  - Play Mode targeted smoke: `pauseDistance=0.0000 unpauseDistance=0.0240 weaponAnimAfterHitstop=0.220 hitstopAfterUpdate=0.060 gameplayPaused=False hitstopActive=True`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 1 unit heading ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
 
 ## Next Implementation
 
 1. Ask jaewoo to review the whole `Dev_Prototype_v1` batch in Play Mode.
 2. Collect one combined feedback pass for:
    - 시작 무기 선택 화면.
+   - 카드 선택 중 적/탄이 완전히 멈추는지.
    - 쌍검 기본공격.
    - 적 피격 넉백/피격감.
    - 칼무리 후속타.
+   - 대검/칼무리 hitstop 중 캐릭터 이동감이 끊기지 않는지.
    - 대검 시작 선택과 `F9` 비교.
    - 망각/공명/+5 잔향/피의 칼폭풍 흐름.
    - HUD readability and combat density.

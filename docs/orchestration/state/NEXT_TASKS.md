@@ -8,13 +8,13 @@ Current source of truth: `docs/design/` (LETHE_DESIGN_00..07 + README). Build pl
 
 - Priority: highest
 - Source: `docs/design/LETHE_DESIGN_06_BUILD_PLAN.md` (M1), `LETHE_DESIGN_05_UI_UX.md`, `LETHE_DESIGN_01_RUN_LOOP.md`
-- Include: `Dev_Prototype_v1`을 Play Mode로 열고 시작 무기 선택, 쌍검 발도선, 대검 큰 참격, 적 넉백/피격감, 칼무리 후속타, 망각/공명/+5 잔향/피의 칼폭풍, HUD, 전투 밀도를 한 번에 확인한다.
+- Include: `Dev_Prototype_v1`을 Play Mode로 열고 시작 무기 선택, 카드 선택 중 적 정지, 쌍검 발도선, 대검 큰 참격, hitstop 중 캐릭터 이동감, 적 넉백/피격감, 칼무리 후속타, 망각/공명/+5 잔향/피의 칼폭풍, HUD, 전투 밀도를 한 번에 확인한다.
 - Done: jaewoo가 통합 빌드에 대해 `GO`, `ITERATE`, `NO-GO` 중 하나와 가장 약한 지점 1~3개를 준다.
 
 ## 2. 피드백 기반 1순위 보정
 
 - Priority: high
-- Include: 통합 리뷰에서 나온 가장 약한 지점 하나를 먼저 고친다. 후보는 무기 선택 UX, 공격 판독성, 넉백/피격감, 페이싱/밸런스, UI 가독성, 아트/스프라이트 교체다.
+- Include: 통합 리뷰에서 나온 가장 약한 지점 하나를 먼저 고친다. 후보는 무기 선택 UX, pause/hitstop 감각, 공격 판독성, 넉백/피격감, 페이싱/밸런스, UI 가독성, 아트/스프라이트 교체다.
 - Done: 선택한 약점 하나가 스모크와 플레이 리뷰에서 개선된다.
 
 ## 3. 대검 아트 교체 패스

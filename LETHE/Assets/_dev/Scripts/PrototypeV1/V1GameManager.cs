@@ -141,10 +141,14 @@ namespace Lethe.PrototypeV1
         V1WeaponId currentWeaponId = V1WeaponId.DualBlades;
         V1MemoryId? lastForgotten;
 
+        public static bool GameplayPaused { get; private set; }
+        public static bool HitstopActive { get; private set; }
         public bool BloodBladeStormReady => EchoLevel(V1MemoryId.HungryBlades) >= 5 && EchoLevel(V1MemoryId.BloodReflection) >= 5;
 
         void Awake()
         {
+            GameplayPaused = true;
+            HitstopActive = false;
             mainCamera = Camera.main;
             if (mainCamera == null)
             {
@@ -169,6 +173,8 @@ namespace Lethe.PrototypeV1
         {
             if (deathOverlay)
             {
+                GameplayPaused = true;
+                HitstopActive = false;
                 if (KeyDown(KeyCode.R))
                 {
                     UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
@@ -178,6 +184,8 @@ namespace Lethe.PrototypeV1
 
             if (weaponSelectOverlay)
             {
+                GameplayPaused = true;
+                HitstopActive = false;
                 if (KeyDown(KeyCode.Alpha1)) BeginRun(V1WeaponId.DualBlades);
                 if (KeyDown(KeyCode.Alpha2)) BeginRun(V1WeaponId.Greatsword);
                 return;
@@ -203,15 +211,23 @@ namespace Lethe.PrototypeV1
 
             if (pausedForChoice || resultOverlay || refillOverlay)
             {
+                GameplayPaused = true;
+                HitstopActive = false;
                 return;
             }
 
+            GameplayPaused = false;
             var dt = Time.deltaTime;
             if (hitstopTimer > 0f)
             {
                 hitstopTimer -= dt;
+                HitstopActive = hitstopTimer > 0f;
+                UpdatePlayer(dt);
+                UpdateCamera();
+                UpdateWeaponVisuals(dt);
                 return;
             }
+            HitstopActive = false;
 
             elapsed += dt;
             UpdateReviewPacing();
@@ -1124,6 +1140,8 @@ namespace Lethe.PrototypeV1
             currentWeaponId = weaponId;
             weaponSelectOverlay = false;
             runStarted = true;
+            GameplayPaused = false;
+            HitstopActive = false;
             weaponTimer = 0.18f;
             weaponAnimTimer = 0f;
             AddMemory(V1MemoryId.HungryBlades, 1, true);
@@ -1967,7 +1985,7 @@ namespace Lethe.PrototypeV1
 
         void Update()
         {
-            if (!IsAlive || player == null) return;
+            if (!IsAlive || player == null || V1GameManager.GameplayPaused || V1GameManager.HitstopActive) return;
             var dt = Time.deltaTime;
             if (knockVelocity.sqrMagnitude > 0.001f)
             {
@@ -2081,6 +2099,7 @@ namespace Lethe.PrototypeV1
 
         void Update()
         {
+            if (V1GameManager.GameplayPaused || V1GameManager.HitstopActive) return;
             if (target == null)
             {
                 Destroy(gameObject);
@@ -2119,6 +2138,7 @@ namespace Lethe.PrototypeV1
 
         void Update()
         {
+            if (V1GameManager.GameplayPaused || V1GameManager.HitstopActive) return;
             life -= Time.deltaTime;
             transform.position += velocity * Time.deltaTime;
             if (target != null && Vector2.Distance(transform.position, target.position) < 0.28f)

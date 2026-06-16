@@ -1,0 +1,11 @@
+{
+  "source": "docs\\orchestration\\reports\\20260616\\index.md",
+  "generatedAt": "2026-06-16T00:03:57.800Z",
+  "unitCount": 1,
+  "latest": {
+    "title": "2026-06-16-01 - 카드 선택 정지와 히트스톱 이동감 수정",
+    "number": "01",
+    "markdownPath": "docs\\orchestration\\reports\\20260616\\units\\2026-06-16-01-카드-선택-정지와-히트스톱-이동감-수정.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260616\\units\\2026-06-16-01-카드-선택-정지와-히트스톱-이동감-수정.html"
+  }
+}
