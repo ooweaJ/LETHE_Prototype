@@ -42,6 +42,30 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 crescent slash size/timing tune:
+  - User review: greatsword crescent was too thick and looked like a fan; dual-blade crescents were too small and disappeared too quickly.
+  - Dual-blade primary crescents are now larger and last longer:
+    - A scale `0.62 -> 0.78`, lifetime `0.13 -> 0.21`.
+    - B scale `0.54 -> 0.68`, lifetime `0.15 -> 0.23`.
+    - assist scale `0.38 -> 0.50`, lifetime `0.10 -> 0.15`.
+  - Greatsword crescent scale/alpha was reduced:
+    - AoE scale `1.02 -> 0.88`, alpha `0.40 -> 0.32`, lifetime `0.28 -> 0.24`.
+    - primary scale `0.78 -> 0.66`.
+  - `MakeWideCrescentSprite` was reshaped from a filled fan into a thinner game-like slash arc by narrowing the blade edge and reducing inner fill/glow.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors.
+  - Unity compilation errors: `count=0`.
+  - Play Mode targeted smoke:
+    - `dualCrescent=6`
+    - `dualMaxScale=0.78`
+    - `kalmuriCrescent=10`
+    - `greatCrescent=6`
+    - `greatMaxScale=0.88`
+    - `shock=1`
+  - Evidence capture saved: `LETHE/Assets/_dev/Evidence/v1_crescent_slash_timing_size_20260616.png`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 3 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+
 - Unity v1 crescent slash feedback pass:
   - User review: movement/pause fixes worked, but hit feel was still weak.
   - Changed basic attack VFX language from thin iai lines to readable crescent slashes.

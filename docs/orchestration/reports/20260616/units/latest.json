@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260616\\index.md",
-  "generatedAt": "2026-06-16T01:36:11.260Z",
-  "unitCount": 2,
+  "generatedAt": "2026-06-16T01:53:27.770Z",
+  "unitCount": 3,
   "latest": {
-    "title": "2026-06-16-02 - 쌍검/대검 반달형 타격 VFX 보정",
-    "number": "02",
-    "markdownPath": "docs\\orchestration\\reports\\20260616\\units\\2026-06-16-02-쌍검-대검-반달형-타격-vfx-보정.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260616\\units\\2026-06-16-02-쌍검-대검-반달형-타격-vfx-보정.html"
+    "title": "2026-06-16-03 - 반달형 참격 크기와 지속시간 보정",
+    "number": "03",
+    "markdownPath": "docs\\orchestration\\reports\\20260616\\units\\2026-06-16-03-반달형-참격-크기와-지속시간-보정.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260616\\units\\2026-06-16-03-반달형-참격-크기와-지속시간-보정.html"
   }
 }

@@ -8,7 +8,7 @@ Current source of truth: `docs/design/` (LETHE_DESIGN_00..07 + README). Build pl
 
 - Priority: highest
 - Source: `docs/design/LETHE_DESIGN_06_BUILD_PLAN.md` (M1), `LETHE_DESIGN_05_UI_UX.md`, `LETHE_DESIGN_01_RUN_LOOP.md`
-- Include: `Dev_Prototype_v1`을 Play Mode로 열고 시작 무기 선택, 카드 선택 중 적 정지, 쌍검 반달 2연 베기, 대검 큰 반달 범위 베기, hitstop 중 캐릭터 이동감, 적 넉백/피격감, 칼무리 후속 반달타, 망각/공명/+5 잔향/피의 칼폭풍, HUD, 전투 밀도를 한 번에 확인한다.
+- Include: `Dev_Prototype_v1`을 Play Mode로 열고 시작 무기 선택, 카드 선택 중 적 정지, 커진 쌍검 반달 2연 베기, 얇아진 대검 반달 범위 베기, hitstop 중 캐릭터 이동감, 적 넉백/피격감, 칼무리 후속 반달타, 망각/공명/+5 잔향/피의 칼폭풍, HUD, 전투 밀도를 한 번에 확인한다.
 - Done: jaewoo가 통합 빌드에 대해 `GO`, `ITERATE`, `NO-GO` 중 하나와 가장 약한 지점 1~3개를 준다.
 
 ## 2. 피드백 기반 1순위 보정

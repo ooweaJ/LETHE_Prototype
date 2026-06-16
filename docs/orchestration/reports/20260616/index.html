@@ -162,6 +162,13 @@
           <p>Dev_Prototype_v1의 기본공격 VFX가 얇은 선 중심에서 반달형 베기 중심으로 바뀌었다. 쌍검은 두 개의 작은 반달이 빠르게 겹쳐지고, 대검은 큰 반달이 주변 범위를 베었다고 읽히도록 했다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-16-03</span>
+          <h2><a href="#unit-2026-06-16-03" data-unit-link="unit-2026-06-16-03">반달형 참격 크기와 지속시간 보정</a></h2>
+          <p>쌍검 반달 VFX는 더 커지고 오래 남는다. 대검 반달 VFX는 두께와 채움이 줄어 부채꼴보다 얇은 참격선에 가깝게 보이도록 조정됐다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -291,6 +298,74 @@
 <li>방향: 무기별 타격 형태를 시각 규칙으로 고정했다.</li>
 <li>행동: 쌍검/대검/잔향 VFX를 반달형으로 재구성했다.</li>
 <li>결과: 스모크에서 쌍검, 대검, 칼무리 후속타 반달 VFX 생성이 확인됐다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-16-03" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-16-03 - 반달형 참격 크기와 지속시간 보정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>쌍검 반달 VFX는 더 커지고 오래 남는다. 대검 반달 VFX는 두께와 채움이 줄어 부채꼴보다 얇은 참격선에 가깝게 보이도록 조정됐다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>쌍검 1타 반달:</li>
+<li>scale <code>0.62 -&gt; 0.78</code>.</li>
+<li>lifetime <code>0.13s -&gt; 0.21s</code>.</li>
+<li>쌍검 2타 반달:</li>
+<li>scale <code>0.54 -&gt; 0.68</code>.</li>
+<li>lifetime <code>0.15s -&gt; 0.23s</code>.</li>
+<li>쌍검 보조 타격:</li>
+<li>scale <code>0.38 -&gt; 0.50</code>.</li>
+<li>lifetime <code>0.10s -&gt; 0.15s</code>.</li>
+<li>대검 AoE 반달:</li>
+<li>scale <code>1.02 -&gt; 0.88</code>.</li>
+<li>alpha <code>0.40 -&gt; 0.32</code>.</li>
+<li>lifetime <code>0.28s -&gt; 0.24s</code>.</li>
+<li>대검 주 베기:</li>
+<li>scale <code>0.78 -&gt; 0.66</code>.</li>
+<li><code>MakeWideCrescentSprite</code> 내부 채움과 glow를 줄여 부채꼴 면적감을 낮췄다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, 7 warning / 0 error.</li>
+<li>Unity compile errors: <code>count=0</code>.</li>
+<li>Play Mode targeted smoke:</li>
+<li><code>dualCrescent=6</code></li>
+<li><code>dualMaxScale=0.78</code></li>
+<li><code>kalmuriCrescent=10</code></li>
+<li><code>greatCrescent=6</code></li>
+<li><code>greatMaxScale=0.88</code></li>
+<li><code>shock=1</code></li>
+<li>증거: <code>LETHE/Assets/_dev/Evidence/v1_crescent_slash_timing_size_20260616.png</code>.</li>
+<li><code>npm.cmd run report</code>: 통과.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 3 unit headings ok.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>쌍검은 작고 빠른 선보다, 조금 더 오래 보이는 2연 반달이 맞다.</li>
+<li>대검은 큰 면이 아니라 얇고 긴 궤적이어야 한다.</li>
+<li>절차형 VFX 튜닝은 여기서 더 과하게 끌지 않고, 다음에도 약하면 전용 스프라이트로 넘어간다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>아직 런타임 절차형 참격이라 전문 아트 느낌은 제한적이다.</li>
+<li>지속시간을 늘렸기 때문에 화면에 잔상이 조금 많아질 수 있다.</li>
+<li>Project Orchestrator Discord intake는 현재 <code>fetch failed</code>를 반환한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>쌍검은 보이지 않을 만큼 작고 짧았고, 대검은 너무 두꺼워 부채꼴처럼 보였다. 쌍검은 크기/지속시간을 올리고, 대검은 scale/alpha/내부 채움을 줄여 얇은 참격에 가깝게 보정했다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo가 쌍검 2연 반달이 보이는지 확인한다.</li>
+<li>대검이 부채꼴이 아니라 큰 참격선으로 읽히는지 확인한다.</li>
+<li>여전히 약하면 전용 slash sprite 제작으로 넘어간다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 같은 “반달형”이라도 크기와 두께가 다르면 전혀 다른 공격처럼 읽혔다.</li>
+<li>방향: 쌍검은 가시성, 대검은 날카로움을 각각 보정했다.</li>
+<li>행동: scale, alpha, lifetime, procedural texture fill을 조정했다.</li>
+<li>결과: 스모크에서 커진 쌍검 반달과 줄어든 대검 반달 생성이 확인됐다.</li>
 </ul>
     </article>
       </div>

@@ -51,6 +51,7 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 - Weapon selection / hit feedback pass exists: run-start weapon card selection, sharper target-local weapon VFX, stronger enemy knockback, and a non-box greatsword silhouette.
 - Pause / hitstop movement fix exists: enemies/projectiles stop during card overlays, while hitstop no longer blocks player-side movement/visual updates.
 - Crescent slash feedback pass exists: dual blades use two target-local half-moon slashes, greatsword uses a large crescent AoE read, and Kalmuri follow-ups reuse crescent language.
+- Crescent size/timing tune exists: dual-blade crescents are bigger and last longer, while greatsword crescent is thinner and less fan-like.
 - Unity compile error 0.
 - Play Mode smoke creates player and enemies with no v1 runtime console exceptions.
 - v1 screenshot/capture confirms player/enemy sheets are not rendered as whole sheets.
@@ -163,6 +164,18 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - Evidence capture: `LETHE/Assets/_dev/Evidence/v1_crescent_slash_feedback_20260616.png`.
   - `npm.cmd run report`: passed.
   - `npm.cmd run report:check`: passed, 2 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+- Crescent size/timing tune:
+  - Dual blade primary crescents were scaled up and made longer-lived.
+  - Dual blade assist crescents were also enlarged.
+  - Greatsword crescent scale/alpha was reduced.
+  - `MakeWideCrescentSprite` now draws a thinner slash arc with less inner fill, so it should read less like a fan.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors.
+  - Unity compile errors: `count=0`.
+  - Play Mode targeted smoke: `dualCrescent=6 dualMaxScale=0.78 kalmuriCrescent=10 greatCrescent=6 greatMaxScale=0.88 shock=1`.
+  - Evidence capture: `LETHE/Assets/_dev/Evidence/v1_crescent_slash_timing_size_20260616.png`.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 3 unit headings ok.
   - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
 
 ## Next Implementation
