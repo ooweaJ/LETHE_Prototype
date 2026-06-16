@@ -59,28 +59,28 @@
       <div class="grid">
         <article>
           <h2>Codex에게 지금 시킬 일</h2>
-          <p>Unity 첫 게임 slice를 _dev 기준으로 시작합니다.</p>
-          <textarea id="prompt-next" readonly>AGENTS.md와 docs/design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md, docs/design/LETHE_UNITY_ECHO_SYSTEM_PRD.md를 읽고 Unity 첫 _dev 게임 slice를 시작해줘. 먼저 AnkleBreaker Unity MCP(port 7890)로 Assets/_dev 인식을 확인하고 _dev/Art, Prefabs, Scripts, Data, Scenes 하위 구조를 만들어줘. 그 다음 기본 판독 리소스 5개(player silhouette, walker enemy, dark floor tile, left/right dual blades)를 imagegen으로 만들고 Assets/_dev/Art/Sprites에 import해줘. 이미지 생성은 리소스 단계일 뿐이고, 다음 단계에서 C# 런타임 기반과 Dev_EchoSlice 조립으로 이어질 수 있게 파일/프리팹/클래스 연결을 유지해줘.</textarea>
+          <p><code>Dev_Prototype_v1</code> 플레이 감각 리뷰와 데이터 기반 보정으로 이어갑니다.</p>
+          <textarea id="prompt-next" readonly>AGENTS.md와 docs/orchestration/state/CURRENT_TASK.md, docs/orchestration/state/STATUS.md, docs/orchestration/state/NEXT_TASKS.md를 읽고 Dev_Prototype_v1의 최신 상태를 기준으로 진행해줘. 현재 대상은 Dev_EchoSlice가 아니라 Dev_Prototype_v1이고, 쌍검/대검 수치와 베기 VFX/피격 피드백은 LETHE/Assets/_dev/Data/Weapons의 WeaponDefinition/WeaponVfxProfile ScriptableObject 자산에서 조절해야 해. 먼저 Play Mode로 시작 무기 선택, 쌍검 2연 반달, 대검 범위 반달, 칼무리 후속타, 흰색 피격 플래시, 데미지 숫자, 원거리몹 정지 사격을 확인하고, 약한 지점 하나를 고른 뒤 코드 하드코딩보다 SO 자산 값 조절을 우선해서 보정해줘.</textarea>
           <button type="button" data-copy-target="prompt-next">프롬프트 복사</button>
         </article>
 
         <article class="warning">
           <h2>지금 하지 말 것</h2>
           <ul>
-            <li>새 기억, 무기, 적, 슬롯 추가 금지</li>
-            <li>새 지역, 최종 보스, 장기 구조 확장 금지</li>
+            <li>무기/기억/잔향 신규 확장 금지</li>
+            <li>새 지역, 최종 보스, 상점, 메타 진행 추가 금지</li>
             <li><code>Assets/Lethe</code> 승격은 보류하고 <code>Assets/_dev</code>에서 먼저 검증</li>
-            <li>콘셉트 시트를 최종 runtime sprite atlas로 바로 사용하지 않기</li>
+            <li>베기 scale/lifetime/color를 다시 코드 상수로 박지 않기</li>
           </ul>
         </article>
 
         <article>
           <h2>완료 기준</h2>
           <ul>
-            <li><code>Assets/_dev</code> 하위 개발 폴더 생성</li>
-            <li>기본 리소스 5개 생성 및 import</li>
-            <li>AnkleBreaker MCP로 asset 인식 확인</li>
-            <li>C# 런타임 기반/프리팹 조립 다음 단계가 막히지 않게 연결 유지</li>
+            <li><code>Dev_Prototype_v1</code> Play Mode 리뷰 완료</li>
+            <li>쌍검/대검/칼무리/피격 피드백 중 약한 지점 1개 선택</li>
+            <li><code>_dev/Data/Weapons</code> SO 값 우선 보정</li>
+            <li>Unity compile 0 error와 Play Mode smoke 확인</li>
             <li>상태, devlog, reports 갱신</li>
           </ul>
         </article>
@@ -90,9 +90,10 @@
           <ul>
             <li><a href="../state/CURRENT_TASK.md">CURRENT_TASK.md</a></li>
             <li><a href="../state/NEXT_TASKS.md">NEXT_TASKS.md</a></li>
-            <li><a href="../../design/LETHE_GAME_DESIGN_OVERVIEW.md">LETHE_GAME_DESIGN_OVERVIEW.md</a></li>
-            <li><a href="../../design/LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md">LETHE_UNITY_SLICE_ASSET_PRODUCTION_PLAN.md</a></li>
-            <li><a href="../../design/LETHE_UNITY_VERTICAL_SLICE_SPEC.md">LETHE_UNITY_VERTICAL_SLICE_SPEC.md</a></li>
+            <li><a href="../../design/README.md">docs/design README</a></li>
+            <li><a href="../../design/LETHE_DESIGN_02_COMBAT.md">LETHE_DESIGN_02_COMBAT.md</a></li>
+            <li><a href="../../design/LETHE_DESIGN_03_MEMORY_ECHO.md">LETHE_DESIGN_03_MEMORY_ECHO.md</a></li>
+            <li><a href="../../design/LETHE_DESIGN_06_BUILD_PLAN.md">LETHE_DESIGN_06_BUILD_PLAN.md</a></li>
             <li><a href="../state/SCOPE_GUARD.md">SCOPE_GUARD.md</a></li>
           </ul>
         </article>

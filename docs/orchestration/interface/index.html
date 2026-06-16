@@ -68,39 +68,40 @@
           <p class="eyebrow">LETHE 프로젝트 대시보드</p>
           <h1>상태 요약</h1>
         </div>
-        <span class="badge">Unity game slice</span>
+        <span class="badge">Dev_Prototype_v1</span>
       </header>
 
       <section class="metrics" aria-label="핵심 상태 요약">
         <div class="metric green">
           <span>현재 단계</span>
-          <strong>Unity _dev Slice</strong>
-          <small>게임개발 규약 전환</small>
+          <strong>Unity v1 Prototype</strong>
+          <small>플레이어 체감 튜닝 단계</small>
         </div>
         <div class="metric blue">
-          <span>자동 검증</span>
-          <strong>GO_BALANCE_BASELINE</strong>
-          <small>qa/balance loop death 40%</small>
+          <span>최신 검증</span>
+          <strong>SO VFX smoke 통과</strong>
+          <small>Unity compile 0 error</small>
         </div>
         <div class="metric amber">
           <span>막힌 점</span>
-          <strong>dev slice setup</strong>
-          <small>폴더/리소스/런타임 순서</small>
+          <strong>Orchestrator intake</strong>
+          <small>Discord API project not found</small>
         </div>
         <div class="metric red">
           <span>다음 게이트</span>
-          <strong>MCP + resources</strong>
-          <small>이후 C# 기반 구현</small>
+          <strong>통합 플레이 리뷰</strong>
+          <small>무기/잔향 타격감 판단</small>
         </div>
       </section>
 
       <section class="heroPanel">
         <h2>현재 결론</h2>
         <p>
-          Unity 2D 프로젝트 skeleton과 <code>Assets/_dev</code> 작업 루트가 준비됐고,
-          AnkleBreaker Unity MCP bridge는 <code>7890</code>에서 <code>_dev</code> 폴더를 읽는 것까지 확인됐습니다.
-          다음 작업은 Unity 게임개발 규약에 따라 <code>_dev</code> 하위 구조를 만들고,
-          기본 리소스를 생성/import한 뒤 C# 런타임 기반과 <code>Dev_EchoSlice.unity</code> 조립으로 이어지는 것입니다.
+          현재 작업 대상은 <code>Dev_EchoSlice</code>가 아니라 <code>Dev_Prototype_v1</code>입니다.
+          쌍검/대검 수치와 베기 VFX, 피격 섬광, 데미지 숫자는
+          <code>_dev/Data/Weapons</code>의 ScriptableObject 자산으로 분리됐습니다.
+          다음 판단은 코드 구조 세팅이 아니라, 실제 플레이에서 쌍검/대검 기본공격과 칼무리 잔향,
+          피의 칼폭풍이 충분히 읽히고 손맛이 있는지 확인하는 것입니다.
         </p>
       </section>
 
@@ -110,15 +111,15 @@
           <div class="decision">
             <div>
               <span class="label">해야 할 일</span>
-              <span class="value">Unity 첫 _dev 게임 slice 세팅</span>
+              <span class="value">Dev_Prototype_v1 플레이 감각 리뷰</span>
             </div>
             <div>
               <span class="label">필요한 입력</span>
-              <span class="value">_dev 폴더, 기본 리소스, 런타임 기반</span>
+              <span class="value">쌍검/대검, 칼무리 잔향, 데미지 숫자, 피격 플래시 체감</span>
             </div>
             <div>
               <span class="label">완료 신호</span>
-              <span class="value"><code>Assets/_dev</code>에서 리소스/프리팹/씬 작업 가능</span>
+              <span class="value"><code>GO</code>, <code>ITERATE</code>, <code>NO-GO</code>와 약한 지점 1~3개 기록</span>
             </div>
           </div>
         </article>
@@ -126,11 +127,11 @@
         <article class="panel">
           <h2>다음 판단</h2>
           <ul>
-            <li><code>_dev</code> 개발 구조가 MCP에서 읽히는가?</li>
-            <li>기본 리소스가 게임 화면 판독에 충분한가?</li>
-            <li>C# 런타임 기반을 어떤 최소 단위로 만들까?</li>
-            <li><code>Dev_EchoSlice.unity</code>를 어떤 prefab 단위로 조립할까?</li>
-            <li><code>Assets/Lethe</code> 승격은 언제 할까?</li>
+            <li>쌍검 2연 반달이 빠른 연쇄감으로 읽히는가?</li>
+            <li>대검 반달이 실제 범위만큼 큰 한 방으로 읽히는가?</li>
+            <li>칼무리 잔향이 기본공격 후속타로 보이는가?</li>
+            <li>흰색 피격 플래시와 데미지 숫자가 충분한가?</li>
+            <li>다음 수정은 <code>_dev/Data/Weapons</code> 수치 조절로 해결되는가?</li>
           </ul>
         </article>
 
@@ -139,22 +140,22 @@
           <div class="decision">
             <div>
               <span class="label">완료 작업</span>
-              <span class="value">Unity skeleton, AnkleBreaker MCP, <code>Assets/_dev</code> 확인</span>
+              <span class="value">무기/베기 VFX ScriptableObject 데이터화</span>
             </div>
             <div>
               <span class="label">검증</span>
-              <span class="value"><code>unity_editor_ping</code>, <code>unity_asset_list Assets/_dev</code></span>
+              <span class="value"><code>dotnet build</code>, Unity compile 0 error, Play Mode SO smoke</span>
             </div>
             <div>
               <span class="label">주의</span>
-              <span class="value">실험은 <code>Assets/_dev</code>, 검증 후 <code>Assets/Lethe</code> 승격</span>
+              <span class="value">직접 Discord webhook은 정책 차단, Orchestrator intake는 <code>project not found</code></span>
             </div>
           </div>
         </article>
       </section>
 
       <footer>
-        기준: 2026-06-10 · <a href="../reports/index.html">보고서 목록</a>
+        기준: 2026-06-16 · <a href="../reports/index.html">보고서 목록</a>
       </footer>
     </main>
   </body>
