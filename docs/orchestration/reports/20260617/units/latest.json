@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260617\\index.md",
-  "generatedAt": "2026-06-17T03:12:06.262Z",
-  "unitCount": 3,
+  "generatedAt": "2026-06-17T03:47:57.702Z",
+  "unitCount": 4,
   "latest": {
-    "title": "2026-06-17-03 - M2 실제 루프 진행 HUD와 세 번째 기억 카드",
-    "number": "03",
-    "markdownPath": "docs\\orchestration\\reports\\20260617\\units\\2026-06-17-03-m2-실제-루프-진행-hud와-세-번째-기억-카드.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260617\\units\\2026-06-17-03-m2-실제-루프-진행-hud와-세-번째-기억-카드.html"
+    "title": "2026-06-17-04 - 8기억 8잔향 4궁극 1차 런타임 확장",
+    "number": "04",
+    "markdownPath": "docs\\orchestration\\reports\\20260617\\units\\2026-06-17-04-8기억-8잔향-4궁극-1차-런타임-확장.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260617\\units\\2026-06-17-04-8기억-8잔향-4궁극-1차-런타임-확장.html"
   }
 }

@@ -149,6 +149,10 @@ namespace Lethe.PrototypeV1
         public static bool GameplayPaused { get; private set; }
         public static bool HitstopActive { get; private set; }
         public bool BloodBladeStormReady => EchoLevel(V1MemoryId.HungryBlades) >= 5 && EchoLevel(V1MemoryId.BloodReflection) >= 5;
+        public bool FractureExecutionReady => EchoLevel(V1MemoryId.ShatterWave) >= 5 && EchoLevel(V1MemoryId.ExecutionFlash) >= 5;
+        public bool StasisHuntReady => EchoLevel(V1MemoryId.StoppedSecond) >= 5 && EchoLevel(V1MemoryId.HunterOath) >= 5;
+        public bool AshenOblivionReady => EchoLevel(V1MemoryId.AshenShield) >= 5 && EchoLevel(V1MemoryId.OblivionBrand) >= 5;
+        public bool AnyUltimateReady => BloodBladeStormReady || FractureExecutionReady || StasisHuntReady || AshenOblivionReady;
 
         void Awake()
         {
@@ -638,6 +642,124 @@ namespace Lethe.PrototypeV1
                     DealDamage(enemy, (0.8f + blood.Level * 0.25f) * dt, "피의 반사", false);
                 }
             }
+
+            var execution = activeMemories.FirstOrDefault(m => m.Id == V1MemoryId.ExecutionFlash);
+            if (execution != null) UpdateExecutionFlash(execution, dt);
+
+            var hunter = activeMemories.FirstOrDefault(m => m.Id == V1MemoryId.HunterOath);
+            if (hunter != null) UpdateHunterOath(hunter, dt);
+
+            var shatter = activeMemories.FirstOrDefault(m => m.Id == V1MemoryId.ShatterWave);
+            if (shatter != null) UpdateShatterWave(shatter, dt);
+
+            var stopped = activeMemories.FirstOrDefault(m => m.Id == V1MemoryId.StoppedSecond);
+            if (stopped != null) UpdateStoppedSecond(stopped, dt);
+
+            var ash = activeMemories.FirstOrDefault(m => m.Id == V1MemoryId.AshenShield);
+            if (ash != null) UpdateAshenShield(ash, dt);
+
+            var oblivion = activeMemories.FirstOrDefault(m => m.Id == V1MemoryId.OblivionBrand);
+            if (oblivion != null) UpdateOblivionBrand(oblivion, dt);
+        }
+
+        void UpdateExecutionFlash(MemoryState memory, float dt)
+        {
+            memory.TickTimer -= dt;
+            if (memory.TickTimer > 0f) return;
+            memory.TickTimer = Mathf.Max(0.28f, 0.78f - memory.Level * 0.06f);
+
+            var threshold = 0.24f + memory.Level * 0.025f;
+            var target = enemies
+                .Where(e => e != null && e.IsAlive && e.HealthRatio <= threshold)
+                .OrderBy(e => Vector2.Distance(player.position, e.transform.position))
+                .FirstOrDefault();
+            if (target == null) return;
+
+            SpawnTransientSprite("ExecutionFlash", MakeImpactDiamondSprite("ExecutionFlash", Color.white), target.transform.position, Quaternion.identity, 0.44f, new Color(1f, 0.95f, 0.62f, 0.82f), 0.13f);
+            DealDamage(target, 26f + memory.Level * 7f, "처형 섬광", false);
+        }
+
+        void UpdateHunterOath(MemoryState memory, float dt)
+        {
+            memory.TickTimer -= dt;
+            if (memory.TickTimer > 0f) return;
+            memory.TickTimer = Mathf.Max(0.48f, 1.35f - memory.Level * 0.10f);
+
+            var target = enemies
+                .Where(e => e != null && e.IsAlive)
+                .OrderBy(e => Vector2.Distance(player.position, e.transform.position))
+                .FirstOrDefault();
+            if (target == null) return;
+
+            var go = new GameObject("HunterOathShot");
+            go.transform.position = player.position;
+            go.transform.localScale = Vector3.one * 0.12f;
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = MakeCrescentSlashSprite("HunterOathShot", Color.white, false);
+            sr.color = new Color(0.90f, 1f, 0.62f, 0.74f);
+            sr.sortingOrder = 44;
+            go.AddComponent<V1Projectile>().Configure(this, target, 7.5f + memory.Level * 0.55f, 9f + memory.Level * 3.2f, "추적자의 맹세");
+        }
+
+        void UpdateShatterWave(MemoryState memory, float dt)
+        {
+            memory.TickTimer -= dt;
+            if (memory.TickTimer > 0f) return;
+            memory.TickTimer = Mathf.Max(0.70f, 2.20f - memory.Level * 0.17f);
+
+            var target = enemies
+                .Where(e => e != null && e.IsAlive)
+                .Select(e => new { Enemy = e, Count = enemies.Count(o => o != null && o.IsAlive && Vector2.Distance(e.transform.position, o.transform.position) < 1.55f) })
+                .OrderByDescending(x => x.Count)
+                .ThenBy(x => Vector2.Distance(player.position, x.Enemy.transform.position))
+                .Select(x => x.Enemy)
+                .FirstOrDefault();
+            if (target == null) return;
+
+            var radius = 1.05f + memory.Level * 0.14f;
+            SpawnTransientSprite("ShatterWave", MakeRingSprite("ShatterWave", Color.white, 128), target.transform.position, Quaternion.identity, radius * 0.62f, new Color(0.86f, 0.98f, 1f, 0.44f), 0.25f);
+            foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(target.transform.position, e.transform.position) <= radius + e.TouchRadius).Take(8))
+            {
+                var dir = (Vector2)(enemy.transform.position - target.transform.position);
+                DealDamage(enemy, 8f + memory.Level * 3.4f, "파쇄의 파문", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 0.45f);
+            }
+        }
+
+        void UpdateStoppedSecond(MemoryState memory, float dt)
+        {
+            memory.TickTimer -= dt;
+            if (memory.TickTimer > 0f) return;
+            memory.TickTimer = Mathf.Max(1.40f, 4.20f - memory.Level * 0.28f);
+
+            var radius = 1.55f + memory.Level * 0.16f;
+            SpawnTransientSprite("StoppedSecond", MakeRingSprite("StoppedSecond", Color.white, 144), player.position, Quaternion.identity, radius * 0.54f, new Color(0.62f, 0.72f, 1f, 0.35f), 0.34f);
+            foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) <= radius + e.TouchRadius).Take(10))
+            {
+                var dir = (Vector2)(enemy.transform.position - player.position);
+                DealDamage(enemy, 5f + memory.Level * 2.1f, "멈춘 1초", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 0.75f);
+                enemy.ApplyBriefFreeze(0.10f + memory.Level * 0.035f);
+            }
+        }
+
+        void UpdateAshenShield(MemoryState memory, float dt)
+        {
+            memory.VisualTimer -= dt;
+            if (memory.VisualTimer > 0f) return;
+            memory.VisualTimer = 1.15f;
+            SpawnTransientSprite("AshenShield", MakeRingSprite("AshenShield", Color.white, 128), player.position, Quaternion.identity, 0.48f + memory.Level * 0.035f, new Color(0.72f, 0.80f, 0.86f, 0.20f), 0.24f);
+        }
+
+        void UpdateOblivionBrand(MemoryState memory, float dt)
+        {
+            memory.TickTimer -= dt;
+            if (memory.TickTimer > 0f) return;
+            memory.TickTimer = Mathf.Max(0.85f, 2.60f - memory.Level * 0.18f);
+
+            foreach (var enemy in enemies.Where(e => e != null && e.IsAlive).OrderBy(_ => UnityEngine.Random.value).Take(1 + memory.Level / 2))
+            {
+                SpawnTransientSprite("OblivionBrand", MakeRingSprite("OblivionBrand", Color.white, 96), enemy.transform.position + Vector3.up * 0.10f, Quaternion.identity, 0.42f, new Color(0.70f, 0.42f, 1f, 0.45f), 0.30f);
+                DealDamage(enemy, 6f + memory.Level * 2.8f, "망각의 낙인", false);
+            }
         }
 
         void UpdateHungryBlades(MemoryState memory, float dt)
@@ -694,6 +816,68 @@ namespace Lethe.PrototypeV1
                 {
                     BloodBloom(enemy, bloodLevel);
                 }
+            }
+
+            TriggerUtilityEchoes(enemy, forward, hitIndex, weapon);
+        }
+
+        void TriggerUtilityEchoes(V1Enemy enemy, Vector2 forward, int hitIndex, WeaponRuntimeSpec weapon)
+        {
+            var shatterLevel = EchoLevel(V1MemoryId.ShatterWave);
+            if (shatterLevel > 0 && (shatterLevel >= 2 || hitIndex == 0) && UnityEngine.Random.value < 0.18f + shatterLevel * 0.08f)
+            {
+                var radius = 0.72f + shatterLevel * 0.08f;
+                SpawnTransientSprite("ShatterEcho", MakeRingSprite("ShatterEcho", Color.white, 104), enemy.transform.position, Quaternion.identity, radius * 0.62f, new Color(0.86f, 0.98f, 1f, 0.34f), 0.18f);
+                foreach (var target in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(enemy.transform.position, e.transform.position) <= radius + e.TouchRadius).Take(5))
+                {
+                    var dir = (Vector2)(target.transform.position - enemy.transform.position);
+                    DealDamage(target, weapon.Damage * (0.10f + shatterLevel * 0.025f), "파문 잔향", false, dir.sqrMagnitude > 0.01f ? dir.normalized : forward, 0.25f);
+                }
+            }
+
+            var executionLevel = EchoLevel(V1MemoryId.ExecutionFlash);
+            if (executionLevel > 0 && enemy.HealthRatio <= 0.22f + executionLevel * 0.025f)
+            {
+                SpawnTransientSprite("ExecutionEcho", MakeImpactDiamondSprite("ExecutionEcho", Color.white), enemy.transform.position, Quaternion.identity, 0.34f, new Color(1f, 0.90f, 0.55f, 0.74f), 0.10f);
+                DealDamage(enemy, weapon.Damage * (0.18f + executionLevel * 0.05f), "처형 잔향", false);
+            }
+
+            var hunterLevel = EchoLevel(V1MemoryId.HunterOath);
+            if (hunterLevel > 0 && hitIndex == 0 && UnityEngine.Random.value < 0.22f + hunterLevel * 0.06f)
+            {
+                var target = enemies.Where(e => e != null && e.IsAlive && e != enemy).OrderBy(e => Vector2.Distance(enemy.transform.position, e.transform.position)).FirstOrDefault();
+                if (target != null)
+                {
+                    var go = new GameObject("HunterEchoShot");
+                    go.transform.position = enemy.transform.position;
+                    go.transform.localScale = Vector3.one * 0.10f;
+                    var sr = go.AddComponent<SpriteRenderer>();
+                    sr.sprite = MakeCrescentSlashSprite("HunterEchoShot", Color.white, false);
+                    sr.color = new Color(0.92f, 1f, 0.58f, 0.70f);
+                    sr.sortingOrder = 44;
+                    go.AddComponent<V1Projectile>().Configure(this, target, 8f, weapon.Damage * (0.14f + hunterLevel * 0.04f), "추적 잔향");
+                }
+            }
+
+            var stoppedLevel = EchoLevel(V1MemoryId.StoppedSecond);
+            if (stoppedLevel > 0 && hitIndex == 0 && UnityEngine.Random.value < 0.16f + stoppedLevel * 0.05f)
+            {
+                enemy.ApplyBriefFreeze(0.08f + stoppedLevel * 0.025f);
+                SpawnTransientSprite("StoppedEcho", MakeRingSprite("StoppedEcho", Color.white, 96), enemy.transform.position, Quaternion.identity, 0.36f + stoppedLevel * 0.025f, new Color(0.62f, 0.72f, 1f, 0.30f), 0.16f);
+            }
+
+            var ashLevel = EchoLevel(V1MemoryId.AshenShield);
+            if (ashLevel > 0 && hitIndex == 0 && UnityEngine.Random.value < 0.12f + ashLevel * 0.04f)
+            {
+                HealPlayer(0.28f + ashLevel * 0.12f);
+                SpawnTransientSprite("AshenEcho", MakeRingSprite("AshenEcho", Color.white, 96), player.position, Quaternion.identity, 0.34f, new Color(0.74f, 0.82f, 0.88f, 0.24f), 0.16f);
+            }
+
+            var oblivionLevel = EchoLevel(V1MemoryId.OblivionBrand);
+            if (oblivionLevel > 0 && UnityEngine.Random.value < 0.18f + oblivionLevel * 0.05f)
+            {
+                SpawnTransientSprite("OblivionEcho", MakeRingSprite("OblivionEcho", Color.white, 96), enemy.transform.position, Quaternion.identity, 0.38f, new Color(0.70f, 0.42f, 1f, 0.34f), 0.18f);
+                DealDamage(enemy, weapon.Damage * (0.12f + oblivionLevel * 0.035f), "낙인 잔향", false);
             }
         }
 
@@ -770,10 +954,15 @@ namespace Lethe.PrototypeV1
 
         void UpdateEchoUltimate(float dt)
         {
-            if (!BloodBladeStormReady) return;
+            if (!AnyUltimateReady) return;
 
             var weapon = CurrentWeaponSpec();
             ultimatePulseTimer -= dt;
+            if (!BloodBladeStormReady)
+            {
+                UpdateUtilityUltimate(dt);
+                return;
+            }
             if (weapon.UltimatePattern == V1UltimatePattern.FewHeavy)
             {
                 if (ultimatePulseTimer <= 0f)
@@ -821,6 +1010,61 @@ namespace Lethe.PrototypeV1
             {
                 enemy.BloodMarked = true;
                 DealDamage(enemy, 18f * dt, "피의 칼폭풍", false);
+            }
+        }
+
+        void UpdateUtilityUltimate(float dt)
+        {
+            if (FractureExecutionReady)
+            {
+                if (ultimatePulseTimer <= 0f)
+                {
+                    ultimatePulseTimer = 0.58f;
+                    var target = enemies.Where(e => e != null && e.IsAlive).OrderBy(e => e.HealthRatio).FirstOrDefault();
+                    if (target != null)
+                    {
+                        SpawnTransientSprite("FractureExecution", MakeRingSprite("FractureExecution", Color.white, 160), target.transform.position, Quaternion.identity, 0.86f, new Color(1f, 0.94f, 0.62f, 0.48f), 0.28f);
+                        SpawnTransientSprite("FractureExecutionCore", MakeImpactDiamondSprite("FractureExecutionCore", Color.white), target.transform.position, Quaternion.identity, 0.62f, new Color(1f, 0.92f, 0.55f, 0.82f), 0.16f);
+                        foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(target.transform.position, e.transform.position) < 1.75f).Take(8))
+                        {
+                            DealDamage(enemy, enemy.HealthRatio < 0.32f ? 58f : 24f, "파쇄 처형", false);
+                        }
+                    }
+                }
+                return;
+            }
+
+            if (StasisHuntReady)
+            {
+                if (ultimatePulseTimer <= 0f)
+                {
+                    ultimatePulseTimer = 0.42f;
+                    SpawnTransientSprite("StasisHunt", MakeRingSprite("StasisHunt", Color.white, 160), player.position, Quaternion.identity, 0.88f, new Color(0.62f, 0.74f, 1f, 0.34f), 0.24f);
+                    foreach (var enemy in enemies.Where(e => e != null && e.IsAlive).OrderBy(e => Vector2.Distance(player.position, e.transform.position)).Take(6))
+                    {
+                        enemy.ApplyBriefFreeze(0.18f);
+                        var go = new GameObject("StasisHuntShot");
+                        go.transform.position = player.position;
+                        go.transform.localScale = Vector3.one * 0.11f;
+                        var sr = go.AddComponent<SpriteRenderer>();
+                        sr.sprite = MakeCrescentSlashSprite("StasisHuntShot", Color.white, false);
+                        sr.color = new Color(0.72f, 0.86f, 1f, 0.72f);
+                        sr.sortingOrder = 44;
+                        go.AddComponent<V1Projectile>().Configure(this, enemy, 9.2f, 18f, "정지 추적");
+                    }
+                }
+                return;
+            }
+
+            if (AshenOblivionReady && ultimatePulseTimer <= 0f)
+            {
+                ultimatePulseTimer = 0.72f;
+                HealPlayer(3.2f);
+                SpawnTransientSprite("AshenOblivion", MakeRingSprite("AshenOblivion", Color.white, 180), player.position, Quaternion.identity, 0.98f, new Color(0.78f, 0.68f, 1f, 0.32f), 0.34f);
+                foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 3.2f).Take(10))
+                {
+                    DealDamage(enemy, 22f, "잿빛 망각", false);
+                }
             }
         }
 
@@ -1261,7 +1505,7 @@ namespace Lethe.PrototypeV1
             DrawBar(new Rect(24, 91, 396, 14), Mathf.Clamp01(nextXp <= 0 ? 0f : (float)xp / nextXp), new Color(0.32f, 0.88f, 1f), new Color(0.07f, 0.10f, 0.13f));
             GUI.Label(new Rect(24, 112, 380, 24), $"다음 망각 후보: {ForgetCandidateText()}", smallStyle);
             GUI.Label(new Rect(24, 140, 380, 24), $"잔향: {EchoText()}", smallStyle);
-            GUI.Label(new Rect(24, 166, 390, 24), BloodBladeStormReady ? $"궁극: 피의 칼폭풍 활성 / {UltimatePatternText(weapon)}" : $"궁극 준비: 칼무리 {EchoLevel(V1MemoryId.HungryBlades)}/5 + 혈반 {EchoLevel(V1MemoryId.BloodReflection)}/5", smallStyle);
+            GUI.Label(new Rect(24, 166, 390, 24), BloodBladeStormReady ? $"{UltimateGoalText()} / {UltimatePatternText(weapon)}" : UltimateGoalText(), smallStyle);
 
             GUI.Label(new Rect(24, 192, 418, 26), M2LoopText(), smallStyle);
 
@@ -1338,6 +1582,12 @@ namespace Lethe.PrototypeV1
             {
                 choices.Add(new Choice("새 기억", "멈춘 1초", "짧은 정지 잔향 축을 여는 세 번째 기억입니다.\n\n지금은 M2 실제 루프에서 기억 3칸을 채워 첫 망각 후보를 명확히 만드는 역할입니다.", () => AddMemory(V1MemoryId.StoppedSecond, 1, true)));
             }
+            var rewardMemory = NextMissingRewardMemory();
+            if (rewardMemory.HasValue)
+            {
+                var id = rewardMemory.Value;
+                choices.Add(new Choice("새 기억", MemoryName(id), $"새 전투 축을 여는 기억입니다.\n\n망각되면 {EchoName(id)}으로 형태가 바뀌어 무기 타격에 남습니다.", () => AddMemory(id, 1, true)));
+            }
             var lowest = activeMemories.OrderBy(m => m.Level).FirstOrDefault(m => m.Level < MaxMemoryLevel);
             if (lowest != null)
             {
@@ -1351,6 +1601,29 @@ namespace Lethe.PrototypeV1
 
         bool HasMemory(V1MemoryId id) => activeMemories.Any(m => m.Id == id);
 
+        V1MemoryId? NextMissingRewardMemory()
+        {
+            if (activeMemories.Count >= MaxActiveMemories) return null;
+            var order = new[]
+            {
+                V1MemoryId.ExecutionFlash,
+                V1MemoryId.HunterOath,
+                V1MemoryId.ShatterWave,
+                V1MemoryId.StoppedSecond,
+                V1MemoryId.AshenShield,
+                V1MemoryId.OblivionBrand
+            };
+
+            var start = Mathf.Abs(level + kills) % order.Length;
+            for (int i = 0; i < order.Length; i++)
+            {
+                var id = order[(start + i) % order.Length];
+                if (id == V1MemoryId.StoppedSecond && HasMemory(V1MemoryId.BloodReflection) && !HasMemory(V1MemoryId.StoppedSecond)) continue;
+                if (!HasMemory(id)) return id;
+            }
+            return null;
+        }
+
         float EarlyDamageMul()
         {
             if (elapsed <= 12f) return 0.24f;
@@ -1361,12 +1634,27 @@ namespace Lethe.PrototypeV1
 
         string M2LoopText()
         {
-            if (BloodBladeStormReady) return "M2: 궁극 준비 완료 - 피의 칼폭풍 보상 확인";
+            if (AnyUltimateReady) return $"M2: 궁극 준비 완료 - {UltimateReadyName()} 보상 확인";
             if (refillOverlay) return "M2: 공명 재획득 대기 - 잃은 기억을 다시 가져오기";
             if (refillTimer > 0f) return $"M2: 결손 생존 {Mathf.CeilToInt(refillTimer)}초 - 잔향으로 버티기";
             if (lastForgotten.HasValue) return $"M2: {EchoName(lastForgotten.Value)} 남음 - 같은 기억 재획득 시 공명";
             if (activeMemories.Count >= MaxActiveMemories) return $"M2: 다음 망각 후보 {ForgetCandidateText()} - 첫 보스 처치";
             return "M2: 기억 3개 확보와 최고 레벨 강화가 목표";
+        }
+
+        string UltimateReadyName()
+        {
+            if (BloodBladeStormReady) return "피의 칼폭풍";
+            if (FractureExecutionReady) return "파쇄 처형";
+            if (StasisHuntReady) return "정지 추적";
+            if (AshenOblivionReady) return "잿빛 망각";
+            return "없음";
+        }
+
+        string UltimateGoalText()
+        {
+            if (AnyUltimateReady) return $"궁극: {UltimateReadyName()} 활성";
+            return $"궁극 준비: 칼무리 {EchoLevel(V1MemoryId.HungryBlades)}/5 + 혈반 {EchoLevel(V1MemoryId.BloodReflection)}/5";
         }
 
         string PhaseName()
@@ -1609,6 +1897,12 @@ namespace Lethe.PrototypeV1
         {
             if (deathOverlay || amount <= 0f) return;
             var finalDamage = amount * EarlyDamageMul();
+            var ash = activeMemories.FirstOrDefault(m => m.Id == V1MemoryId.AshenShield);
+            if (ash != null)
+            {
+                finalDamage *= Mathf.Clamp01(1f - (0.06f + ash.Level * 0.025f));
+                SpawnTransientSprite("AshenGuardHit", MakeRingSprite("AshenGuardHit", Color.white, 96), player.position, Quaternion.identity, 0.42f, new Color(0.78f, 0.84f, 0.90f, 0.32f), 0.16f);
+            }
             playerHp -= finalDamage;
             SpawnFloatingText(player.position + Vector3.up * 0.45f, $"-{Mathf.CeilToInt(finalDamage)}", new Color(1f, 0.45f, 0.55f));
             Log($"{source}: 피해 {finalDamage:0.0}");
@@ -2164,12 +2458,14 @@ namespace Lethe.PrototypeV1
         float shotTimer;
         float healTimer;
         float hitSquashTimer;
+        float freezeTimer;
 
         public V1EnemyKind Kind { get; private set; }
         public float Hp { get; private set; }
         public float TouchDamage { get; private set; }
         public float TouchRadius { get; private set; }
         public bool IsAlive => Hp > 0f;
+        public float HealthRatio => maxHp > 0f ? Mathf.Clamp01(Hp / maxHp) : 0f;
         public int Score => Kind == V1EnemyKind.VoidPriest ? 3 : Kind == V1EnemyKind.DriftingEye || Kind == V1EnemyKind.SplitOne ? 2 : 1;
         public bool BloodMarked { get; set; }
         public float MarkTimer { get; set; }
@@ -2213,6 +2509,11 @@ namespace Lethe.PrototypeV1
             var toPlayer = (Vector2)(player.position - transform.position);
             var dist = toPlayer.magnitude;
             var dir = dist > 0.01f ? toPlayer / dist : Vector2.zero;
+            if (freezeTimer > 0f)
+            {
+                freezeTimer -= dt;
+                return;
+            }
 
             if (Kind == V1EnemyKind.DriftingEye)
             {
@@ -2281,6 +2582,11 @@ namespace Lethe.PrototypeV1
         public void ApplyHitFeedback(Vector2 direction, float strength)
         {
             knockVelocity += direction.normalized * Mathf.Clamp(strength, 0f, 6.2f);
+        }
+
+        public void ApplyBriefFreeze(float seconds)
+        {
+            freezeTimer = Mathf.Max(freezeTimer, seconds);
         }
 
         void Heal(float amount)

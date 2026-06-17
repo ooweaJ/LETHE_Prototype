@@ -42,6 +42,27 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 E/F/G first content expansion pass:
+  - Added first-pass runtime effects for remaining active memories:
+    - Execution Flash.
+    - Hunter Oath.
+    - Shatter Wave.
+    - Stopped Second.
+    - Ashen Shield.
+    - Oblivion Brand.
+  - Added first-pass weapon-hit echo reactions for non-Kalmuri/Blood echoes.
+  - Added three additional minimal ultimate runtime branches:
+    - Shatter Wave + Execution Flash = Fracture Execution.
+    - Stopped Second + Hunter Oath = Stasis Hunt.
+    - Ashen Shield + Oblivion Brand = Ashen Oblivion.
+  - HUD now reports the currently ready ultimate through `UltimateReadyName()`/`UltimateGoalText()`.
+  - Reward cards can now surface a rotating missing memory candidate.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 0 warnings, 0 errors.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed, 4 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+  - Unity MCP tools were not exposed in the current tool list, so visual Play Mode confirmation is still pending.
+
 - Unity v1 C-step real M2 loop readability first pass:
   - Added an M2 objective/status line to the HUD.
   - The HUD now exposes whether the player is filling memory slots, approaching the next forget candidate, surviving the deficit window, waiting for resonance, or ready for Blood Blade Storm.

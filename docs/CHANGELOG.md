@@ -28,6 +28,11 @@
   - HUD now shows the current M2 loop objective/status.
   - Level-up cards can offer `멈춘 1초` as the third memory after Blood Reflection is acquired.
   - This reduces reliance on automatic review injection for filling the three memory slots.
+- Added the first E/F/G runtime expansion pass:
+  - Active runtime effects now exist for Execution Flash, Hunter Oath, Shatter Wave, Stopped Second, Ashen Shield, and Oblivion Brand.
+  - Weapon-hit echo reactions now exist for the non-Kalmuri/Blood echoes.
+  - Added minimal runtime ultimates for Fracture Execution, Stasis Hunt, and Ashen Oblivion in addition to Blood Blade Storm.
+  - Reward cards can surface a rotating missing memory candidate.
 
 ## 2026-06-16
 

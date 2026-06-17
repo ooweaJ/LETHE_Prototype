@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-17-04 - 8기억 8잔향 4궁극 1차 런타임 확장</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-17-04 - 8기억 8잔향 4궁극 1차 런타임 확장</h1>
+      <p class="meta">Generated from 2026-06-17-04-8기억-8잔향-4궁극-1차-런타임-확장.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260617/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-17-04 - 8기억 8잔향 4궁극 1차 런타임 확장</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 E/F/G 단계의 첫 런타임 확장까지 들어갔다. 아직 최종 밸런스나 전용 아트 교체가 아니라, 모든 기억·잔향·궁극이 최소한 서로 다른 전투 동작으로 존재하는지 확인하기 위한 1차 구현이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>남은 활성 기억 6종에 1차 전투 동작을 추가했다.</li>
+<li>처형 섬광: 체력이 낮은 적에게 밝은 처형 타격.</li>
+<li>사냥꾼의 맹세: 가장 가까운 적에게 추적탄.</li>
+<li>파쇄의 파문: 밀집 적 주변에 파동 피해.</li>
+<li>멈춘 1초: 시간 정지 링과 짧은 동결.</li>
+<li>잿빛 방패: 방어 링과 받는 피해 감소.</li>
+<li>망각의 낙인: 무작위 적에게 보라색 낙인 피해.</li>
+<li>칼무리/혈반 외 잔향 6종도 무기 타격 후속 반응을 갖게 했다.</li>
+<li>기존 피의 칼폭풍 외에 3개 궁극의 최소 런타임 분기를 추가했다.</li>
+<li>파쇄의 파문 + 처형 섬광 = 파쇄 처형.</li>
+<li>멈춘 1초 + 사냥꾼의 맹세 = 정지 추적.</li>
+<li>잿빛 방패 + 망각의 낙인 = 잿빛 망각.</li>
+<li>HUD가 현재 준비된 궁극 이름을 표시한다.</li>
+<li>레벨업 보상 카드가 아직 없는 기억 후보를 순환 노출할 수 있게 했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과.</li>
+<li>결과: 0 warning / 0 error.</li>
+<li><code>npm.cmd run report</code>: 통과.</li>
+<li><code>npm.cmd run report:check</code>: 통과, 4개 유닛 heading 정상.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패.</li>
+<li>현재 세션에서는 AnkleBreaker Unity MCP 도구가 노출되지 않아 Unity Play Mode 시각 검증은 아직 수행하지 못했다.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>8기억/8잔향/4궁극은 먼저 &quot;다른 효과처럼 느껴지는 최소 동작&quot;을 완성 기준으로 삼는다.</li>
+<li>전용 스프라이트와 세부 밸런스는 다음 패스에서 플레이 피드백을 보고 좁힌다.</li>
+<li>잔향은 약해진 복사본이 아니라 무기 타격 후속 반응으로 읽히게 유지한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>전용 VFX가 부족한 효과는 아직 임시 링/다이아몬드/펄스 표현에 의존한다.</li>
+<li>실제 플레이에서 효과 밀도가 과하거나, 반대로 눈에 안 띌 수 있다.</li>
+<li>데이터 asset화는 계약 구조만 준비되어 있고, 8기억/8잔향/4궁극 전체 asset 생성은 아직 남아 있다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>8기억/8잔향/4궁극의 1차 런타임이 모두 연결됐다. 다음 리뷰에서는 각 효과가 이름만 다른 것이 아니라 전투 행동과 화면 언어가 다르게 읽히는지 확인해야 한다. 특히 파쇄/정지/처형/망각 계열이 칼무리·혈반과 충분히 구분되는지가 핵심이다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>Unity Play Mode에서 8기억/8잔향/4궁극 발동을 실제 화면으로 확인한다.</li>
+<li>부족한 효과부터 전용 sprite/VFX로 교체한다.</li>
+<li>ScriptableObject asset을 8기억/8잔향/4궁극까지 확장한다.</li>
+<li>M2 실제 플레이 pacing을 자동 주입 없이 60~120초 안에 닿도록 조정한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 완성형 프로토타입 범위가 2기억/2잔향에 머물면 게임의 핵심인 조합 가능성을 평가할 수 없었다.</li>
+<li>방향: 모든 기억·잔향·궁극이 최소 동작을 갖게 만들어 리뷰 가능한 전체 구조를 먼저 세운다.</li>
+<li>행동: 활성 기억, 무기 타격 잔향, 궁극 조건과 HUD 표시를 한 번에 확장했다.</li>
+<li>결과: 다음 플레이 피드백은 &quot;존재 여부&quot;가 아니라 &quot;가독성, 타격감, 밸런스&quot;에 집중할 수 있게 되었다.</li>
+</ul>
+  </main>
+</body>
+</html>

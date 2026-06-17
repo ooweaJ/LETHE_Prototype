@@ -22,9 +22,9 @@
 - B. 공격/잔향 타격감 보정: working
 - C. M2 실제 플레이 루프 연결: working
 - D. 주요 스프라이트/VFX 교체: pending
-- E. 기억 8종 확장: pending
-- F. 잔향 8종 확장: pending
-- G. 궁극 4종 구현: pending
+- E. 기억 8종 확장: first runtime pass
+- F. 잔향 8종 확장: first runtime pass
+- G. 궁극 4종 구현: first runtime pass
 - H. 전체 플레이 리뷰: pending
 - I. 밸런스/가독성 1차 튜닝: pending
 
@@ -78,7 +78,7 @@ Done criteria:
 Done criteria:
 
 - [ ] 8개 `MemoryDefinition` asset이 존재한다.
-- [ ] 8개 활성 기억이 서로 다른 플레이 감각을 가진다.
+- [x] 8개 활성 기억이 서로 다른 최소 플레이 감각을 가진다.
 - [ ] 카드 설명과 실제 효과가 일치한다.
 
 ## F. 잔향 8종 확장
@@ -86,6 +86,7 @@ Done criteria:
 Done criteria:
 
 - [ ] 8개 `EchoDefinition` asset이 존재한다.
+- [x] 8개 잔향의 최소 무기 타격 반응이 런타임에 존재한다.
 - [ ] 잔향은 약한 복사본이 아니라 형태가 바뀐 효과로 보인다.
 - [ ] +1~+5 성장과 +5 각성 표시가 있다.
 - [ ] 무기별 잔향 표현 차이가 있다.
@@ -95,9 +96,10 @@ Done criteria:
 Done criteria:
 
 - [ ] 4개 궁극 definition이 존재한다.
-- [ ] 피의 칼폭풍은 칼무리 +5 + 혈반 +5로 발동한다.
+- [x] 피의 칼폭풍은 칼무리 +5 + 혈반 +5로 발동한다.
+- [x] 파쇄 처형, 정지 추적, 잿빛 망각의 최소 궁극 런타임이 존재한다.
 - [ ] 궁극은 무기별로 다른 패턴을 가진다.
-- [ ] HUD에 궁극 준비/발동 상태가 보인다.
+- [x] HUD에 궁극 준비/발동 상태가 보인다.
 
 ## H. 전체 플레이 리뷰
 

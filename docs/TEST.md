@@ -55,6 +55,11 @@ jaewoo 리뷰 질문:
 - +5/궁극이 후반 보상처럼 느껴지나?
 - 다음에 고칠 가장 큰 문제 1~3개는 무엇인가?
 
+### E/F/G. Content Expansion
+
+- Current technical check: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 0 warnings and 0 errors after adding first-pass active effects for the remaining memories, utility echo reactions, and three additional ultimate runtime branches.
+- Human review still needs to confirm whether these effects read as distinct enough, because Unity MCP visual verification was not available in this session.
+
 ## Known Non-Blocking Warnings
 
 현재 `dotnet build`에는 legacy v0/debug 코드의 `Object.FindObjectOfType<T>()` deprecation warning 7개가 남아 있다. `Dev_Prototype_v1` compile error가 아니므로 현재 EPIC 진행을 막지 않는다.
