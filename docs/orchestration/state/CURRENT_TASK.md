@@ -68,6 +68,13 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- A-I EPIC / data contract pass:
+  - Added root entry docs: `docs/PRD.md`, `docs/TECH.md`, `docs/TASK.md`, `docs/TEST.md`, `docs/CHANGELOG.md`.
+  - Updated `AGENTS.md` read order to use these docs before orchestration state files.
+  - Cleaned `docs/orchestration/state/NEXT_TASKS.md` around A-I work.
+  - Expanded `DefinitionTypes.cs` with memory/echo/ultimate/enemy/encounter data contracts.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors.
+  - Unity MCP editor verification not run because Unity MCP tools were not exposed in the current tool list.
 - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 0 warnings, 0 errors.
 - latest `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 0 warnings, 0 errors.
 - `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`.

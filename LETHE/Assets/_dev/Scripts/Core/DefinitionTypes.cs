@@ -66,6 +66,56 @@ namespace Lethe.Dev
         UltimateHit
     }
 
+    public enum MemoryEffectKind
+    {
+        HungryBlades,
+        BloodReflection,
+        ExecutionFlash,
+        HunterOath,
+        ShatterWave,
+        StoppedSecond,
+        AshenShield,
+        OblivionBrand
+    }
+
+    public enum EchoFormKind
+    {
+        WeaponHabitSlash,
+        BloodMarkThread,
+        ExecutionCrack,
+        PursuitAfterimage,
+        ImpactRipple,
+        TimeAfterimage,
+        AshenGuard,
+        OblivionBrandPulse
+    }
+
+    public enum EnemyRole
+    {
+        MeleeChaser,
+        RangedCaster,
+        Splitter,
+        SupportPriest,
+        BossGatekeeper
+    }
+
+    public enum EncounterSpawnMode
+    {
+        TimedPressure,
+        KillMilestone,
+        BossGate,
+        DebugOnly
+    }
+
+    public enum UltimateTriggerMode
+    {
+        PassiveWhileReady,
+        OnWeaponHit,
+        OnKillChain,
+        TimedBurst,
+        ManualDebug
+    }
+
     [Flags]
     public enum EchoBehavior
     {
@@ -98,6 +148,21 @@ namespace Lethe.Dev
         public float radius = 1f;
         public float cooldown = 0.1f;
         public EchoBehavior behaviors;
+    }
+
+    [Serializable]
+    public sealed class EncounterWaveData
+    {
+        public string id = "Wave_Opening";
+        public EncounterSpawnMode spawnMode = EncounterSpawnMode.TimedPressure;
+        public EnemyDefinition enemy;
+        public float startTimeSeconds;
+        public float endTimeSeconds = 30f;
+        public float spawnInterval = 1.2f;
+        public int spawnCount = 1;
+        public int maxAlive = 24;
+        public float spawnRadius = 8f;
+        public string note;
     }
 
     [Serializable]
@@ -192,10 +257,19 @@ namespace Lethe.Dev
     {
         public string id;
         public string displayName;
+        [TextArea] public string shortDescription;
+        [TextArea] public string cardDescription;
         public string matchingEchoId;
+        public MemoryEffectKind effectKind = MemoryEffectKind.HungryBlades;
+        public TriggerFamily triggerFamily = TriggerFamily.Periodic;
         public GameObject activeAbilityPrefab;
         [Range(1, 5)] public int maxLevel = 5;
         public EchoLevelData[] levelData = Array.Empty<EchoLevelData>();
+        public float baseCooldown = 1f;
+        public float baseDamage = 10f;
+        public float targetingRadius = 2.5f;
+        public FeedbackProfile feedbackProfile;
+        [TextArea] public string activeFormNote;
         public string resonanceRiderId;
     }
 
@@ -205,12 +279,20 @@ namespace Lethe.Dev
         public string id;
         public string sourceMemoryId;
         public string displayName;
+        [TextArea] public string shortDescription;
+        [TextArea] public string cardDescription;
+        public EchoFormKind formKind = EchoFormKind.WeaponHabitSlash;
         public TriggerFamily triggerFamily = TriggerFamily.OnWeaponHit;
         [Range(1, 5)] public int maxLevel = 5;
         public EchoLevelData[] levelData = Array.Empty<EchoLevelData>();
         public string awakenedName;
+        [TextArea] public string awakenedDescription;
         public GameObject runtimePrefab;
         public FeedbackProfile feedbackProfile;
+        public WeaponEchoProcStyle defaultWeaponProcStyle = WeaponEchoProcStyle.MultiSmall;
+        public string[] preferredWeaponIds = Array.Empty<string>();
+        [TextArea] public string weaponInteractionNote;
+        [TextArea] public string overflowNote = "+5 cap overflow triggers one immediate echo burst.";
         public bool blockRecursiveEchoHits = true;
 
         public EchoLevelData GetLevelData(int level)
@@ -233,6 +315,28 @@ namespace Lethe.Dev
         }
     }
 
+    [CreateAssetMenu(menuName = "LETHE/Ultimate Echo Definition")]
+    public sealed class UltimateEchoDefinition : ScriptableObject
+    {
+        public string id = "Ultimate_BloodBladeStorm";
+        public string displayName = "Blood Blade Storm";
+        [TextArea] public string shortDescription;
+        public string[] requiredEchoIds = Array.Empty<string>();
+        [Range(1, 5)] public int requiredLevel = 5;
+        public UltimateTriggerMode triggerMode = UltimateTriggerMode.OnWeaponHit;
+        public UltimatePattern dualBladesPattern = UltimatePattern.ManyFast;
+        public UltimatePattern greatswordPattern = UltimatePattern.FewHeavy;
+        public float cooldown = 0.2f;
+        public float duration = 3f;
+        public float damageMultiplier = 1f;
+        public GameObject runtimePrefab;
+        public string hudGoalText;
+        public FeedbackProfile feedbackProfile;
+        public SlashVfxEntry[] fallbackSlashes = Array.Empty<SlashVfxEntry>();
+        [TextArea] public string dualBladesNote = "Many small blood blades, fast rotation, chain-hit feel.";
+        [TextArea] public string greatswordNote = "Few large blood blades, slower heavy slashes, stronger hitstop.";
+    }
+
     [CreateAssetMenu(menuName = "LETHE/Echo Synergy Definition")]
     public sealed class EchoSynergyDefinition : ScriptableObject
     {
@@ -240,9 +344,18 @@ namespace Lethe.Dev
         public string displayName = "피의 칼폭풍";
         public string[] requiredEchoIds = Array.Empty<string>();
         [Range(1, 5)] public int requiredLevel = 5;
+        public UltimateTriggerMode triggerMode = UltimateTriggerMode.OnWeaponHit;
+        public UltimatePattern dualBladesPattern = UltimatePattern.ManyFast;
+        public UltimatePattern greatswordPattern = UltimatePattern.FewHeavy;
+        public float cooldown = 0.2f;
+        public float duration = 3f;
+        public float damageMultiplier = 1f;
         public GameObject runtimePrefab;
         public string hudGoalText;
         public FeedbackProfile feedbackProfile;
+        public SlashVfxEntry[] fallbackSlashes = Array.Empty<SlashVfxEntry>();
+        [TextArea] public string dualBladesNote = "Many small blood blades, fast rotation, chain-hit feel.";
+        [TextArea] public string greatswordNote = "Few large blood blades, slower heavy slashes, stronger hitstop.";
     }
 
     [CreateAssetMenu(menuName = "LETHE/Feedback Profile")]
@@ -262,12 +375,35 @@ namespace Lethe.Dev
     public sealed class EnemyDefinition : ScriptableObject
     {
         public string id = "Enemy_MeleeChaser";
+        public EnemyRole role = EnemyRole.MeleeChaser;
+        [TextArea] public string shortDescription;
         public string displayName = "침식자";
         public float maxHealth = 28f;
         public float moveSpeed = 1.35f;
         public float contactDamage = 3.5f;
         public float stopDistance = 0.45f;
+        public float attackRange = 0.45f;
+        public float attackCooldown = 1.2f;
+        public float projectileSpeed = 4f;
+        public float projectileDamage = 4f;
+        public int splitCount;
+        public int xpValue = 1;
+        public float spawnCost = 1f;
+        public GameObject runtimePrefab;
+        public FeedbackProfile feedbackProfile;
         public string roleNote = "기본 압박";
+    }
+
+    [CreateAssetMenu(menuName = "LETHE/Encounter Definition")]
+    public sealed class EncounterDefinition : ScriptableObject
+    {
+        public string id = "Encounter_M2_PrototypeLoop";
+        public string displayName = "M2 Prototype Loop";
+        public float targetLoopSeconds = 120f;
+        public float firstBossSeconds = 62f;
+        public float deficitSurvivalSeconds = 22f;
+        public EncounterWaveData[] waves = Array.Empty<EncounterWaveData>();
+        [TextArea] public string pacingNote = "Reach forget -> echo -> resonance -> +5 -> first ultimate inside the review window.";
     }
 
     [CreateAssetMenu(menuName = "LETHE/Reward Pool Definition")]
@@ -278,6 +414,8 @@ namespace Lethe.Dev
         public MemoryDefinition[] memories = Array.Empty<MemoryDefinition>();
         public EchoDefinition[] echoes = Array.Empty<EchoDefinition>();
         public EchoSynergyDefinition[] synergies = Array.Empty<EchoSynergyDefinition>();
+        public UltimateEchoDefinition[] ultimates = Array.Empty<UltimateEchoDefinition>();
         public EnemyDefinition[] enemies = Array.Empty<EnemyDefinition>();
+        public EncounterDefinition[] encounters = Array.Empty<EncounterDefinition>();
     }
 }

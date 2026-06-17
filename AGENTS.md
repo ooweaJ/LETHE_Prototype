@@ -41,13 +41,18 @@ This project uses `docs/orchestration/` as the shared personal development-docs 
 
 Before meaningful work, read:
 
-1. `docs/orchestration/README.md`
-2. `docs/orchestration/state/STATUS.md`
-3. `docs/orchestration/state/CURRENT_TASK.md`
-4. `docs/orchestration/state/NEXT_TASKS.md`
-5. `docs/orchestration/state/PROMPT_CONTEXT.md`
-6. `docs/orchestration/state/RUNBOOK.md`
-7. `docs/orchestration/state/SCOPE_GUARD.md`
+1. `docs/PRD.md`
+2. `docs/TECH.md`
+3. `docs/TASK.md`
+4. `docs/TEST.md`
+5. `docs/CHANGELOG.md`
+6. `docs/orchestration/README.md`
+7. `docs/orchestration/state/STATUS.md`
+8. `docs/orchestration/state/CURRENT_TASK.md`
+9. `docs/orchestration/state/NEXT_TASKS.md`
+10. `docs/orchestration/state/PROMPT_CONTEXT.md`
+11. `docs/orchestration/state/RUNBOOK.md`
+12. `docs/orchestration/state/SCOPE_GUARD.md`
 
 Use orchestration files as follows:
 

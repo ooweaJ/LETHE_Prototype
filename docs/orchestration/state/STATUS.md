@@ -1,6 +1,6 @@
 # Status
 
-Last updated: 2026-06-16
+Last updated: 2026-06-17
 
 ## Current Snapshot
 
@@ -41,6 +41,29 @@ The report/devlog/review migration is now applied physically: old `docs/reports/
 The current development-docs plugin baseline from `docs/orchestration/MIGRATION_PROMPT.md` has been applied. `AGENTS.md` now uses a `Development Docs Plugin` section, `docs/orchestration/templates/HTML_INTERFACE_TEMPLATE.md` exists, legacy review pointer READMEs are readable, `reports/index.html` is generated as a newest-first date archive, daily report pages are generated as unit-card pages, and Discord delivery is documented as Project Orchestrator first with local direct-send scripts as trusted fallback only.
 
 ## Latest Verified Result
+
+- Unity v1 core prototype EPIC / data contract pass:
+  - Started `Dev_Prototype_v1 Core Prototype Complete` as the active A-I work package.
+  - Added root development-doc entry files so the project has a clean AI/project-management front door:
+    - `docs/PRD.md`
+    - `docs/TECH.md`
+    - `docs/TASK.md`
+    - `docs/TEST.md`
+    - `docs/CHANGELOG.md`
+  - Updated `AGENTS.md` meaningful-work read order so these root docs are read before orchestration state files.
+  - Rewrote `docs/orchestration/state/NEXT_TASKS.md` to remove broken Korean text and align it with A-I work.
+  - Expanded `_dev` definition contracts in `LETHE/Assets/_dev/Scripts/Core/DefinitionTypes.cs`:
+    - `MemoryEffectKind`
+    - `EchoFormKind`
+    - `EnemyRole`
+    - `EncounterSpawnMode`
+    - `UltimateTriggerMode`
+    - `EncounterWaveData`
+    - `UltimateEchoDefinition`
+    - `EncounterDefinition`
+    - richer `MemoryDefinition`, `EchoDefinition`, `EchoSynergyDefinition`, `EnemyDefinition`, and `RewardPoolDefinition` fields.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors.
+  - Unity MCP tools were not exposed in the current tool list, so Unity Editor compile/play-mode verification still needs to be run once MCP is visible again.
 
 - Unity v1 weapon / slash VFX ScriptableObject data pass:
   - User direction: stop hardcoding slash/VFX tuning values; LETHE is now being built as a game, so balance, numbers, VFX, and hit feel should be player-focused and data-driven.
