@@ -183,6 +183,13 @@
           <p>Dev_Prototype_v1은 런타임 1차 구현에 이어 _dev/Data 쪽에도 완성형 프로토타입의 데이터 골격을 갖췄다. 이제 2기억/2잔향만 asset으로 보이는 상태가 아니라, 8기억/8잔향/4궁극이 프로젝트 파일 구조에서도 확인된다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-17-06</span>
+          <h2><a href="#unit-2026-06-17-06" data-unit-link="unit-2026-06-17-06">BloodBloom 런타임 예외 QA와 수정</a></h2>
+          <p>Dev_Prototype_v1에서 플레이 중 발생한 런타임 예외를 확인하고 수정했다. C# 빌드와 Unity 컴파일은 통과했고, 수정 후 짧은 Play Mode smoke에서는 같은 예외가 다시 나오지 않았다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -460,6 +467,55 @@
 <li>방향: Unity 프로젝트를 열었을 때도 완성형 프로토타입의 콘텐츠 범위가 바로 읽히게 만든다.</li>
 <li>행동: 누락된 Memory/Echo/Ultimate asset과 meta 파일을 추가했다.</li>
 <li>결과: 다음 작업자는 코드만 보지 않아도 전체 콘텐츠 축을 <code>_dev/Data</code>에서 파악할 수 있다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-17-06" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-17-06 - BloodBloom 런타임 예외 QA와 수정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에서 플레이 중 발생한 런타임 예외를 확인하고 수정했다. C# 빌드와 Unity 컴파일은 통과했고, 수정 후 짧은 Play Mode smoke에서는 같은 예외가 다시 나오지 않았다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>Unity 콘솔에서 <code>InvalidOperationException: Collection was modified; enumeration operation may not execute.</code>를 확인했다.</li>
+<li>stack trace는 <code>V1GameManager.BloodBloom -&gt; TriggerWeaponEchoes -&gt; UpdateWeapon -&gt; Update</code>로 이어졌다.</li>
+<li>원인은 <code>BloodBloom</code>이 <code>enemies.Where(...)</code>를 직접 순회하는 동안 <code>DealDamage</code>가 적을 죽이며 <code>enemies</code> 리스트를 수정할 수 있었던 것이다.</li>
+<li><code>enemies</code>를 순회하며 피해를 주는 광역/궁극/잔향 루프를 <code>.ToList()</code> snapshot 기반으로 바꿨다.</li>
+<li>null guard가 약한 enemy query도 함께 보강했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과.</li>
+<li>결과: 기존 v0/debug deprecated API warning 7개 / error 0개.</li>
+<li>Unity <code>Assets/Refresh</code>: 성공.</li>
+<li><code>unity_get_compilation_errors</code>: count <code>0</code>.</li>
+<li>Unity console clear 후 Play Mode 8초 smoke: runtime exception 없음.</li>
+<li>Play Mode 진입 MCP 호출은 여전히 <code>fetch failed</code>를 반환했지만, <code>unity_editor_state</code> 기준 실제로는 Play Mode에 들어간 것을 확인했다.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li><code>DealDamage</code>가 호출되는 enemy area loop는 직접 <code>enemies</code>를 열거하지 않고 snapshot을 사용한다.</li>
+<li>이번 패치는 밸런스 변경이 아니라 런타임 안정성 보정이다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>8초 smoke는 시작 구간 안정성 확인이다. 혈반 +5/궁극이 실제 플레이에서 길게 반복되는 상황은 추가 장시간 smoke가 필요하다.</li>
+<li>Play Mode MCP 호출의 <code>fetch failed</code>는 게임 예외가 아니라 MCP polling 응답 문제로 보인다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>혈반 각성/광역 피해 계열에서 enemy list를 순회하며 동시에 enemy 제거가 발생할 수 있던 구조를 snapshot 순회로 고쳤다. 다음 QA는 debug 상태 주입이나 장시간 Play Mode로 혈반 +5, 피의 칼폭풍, 파쇄 처형 같은 광역 효과를 강제로 반복시키는 쪽이 좋다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>장시간 또는 강제 상태 주입 smoke로 광역/궁극 효과를 반복 검증한다.</li>
+<li><code>DealDamage</code>와 enemy removal 책임을 더 명확히 분리할지 검토한다.</li>
+<li>이후 VFX/타격감 QA로 돌아간다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 새 잔향/궁극 확장 후 광역 효과가 enemy list를 수정하며 런타임 예외를 만들었다.</li>
+<li>방향: 기능 추가 후 즉시 콘솔 기반 QA를 돌려 안정성 문제를 먼저 제거한다.</li>
+<li>행동: stack trace를 따라 원인을 좁히고 snapshot 순회 패턴으로 수정했다.</li>
+<li>결과: 같은 예외가 짧은 Play Mode smoke에서 재발하지 않았다.</li>
 </ul>
     </article>
       </div>

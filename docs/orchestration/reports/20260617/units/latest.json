@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260617\\index.md",
-  "generatedAt": "2026-06-17T03:59:11.575Z",
-  "unitCount": 5,
+  "generatedAt": "2026-06-17T05:53:09.480Z",
+  "unitCount": 6,
   "latest": {
-    "title": "2026-06-17-05 - 8기억 8잔향 4궁극 데이터 asset 골격",
-    "number": "05",
-    "markdownPath": "docs\\orchestration\\reports\\20260617\\units\\2026-06-17-05-8기억-8잔향-4궁극-데이터-asset-골격.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260617\\units\\2026-06-17-05-8기억-8잔향-4궁극-데이터-asset-골격.html"
+    "title": "2026-06-17-06 - BloodBloom 런타임 예외 QA와 수정",
+    "number": "06",
+    "markdownPath": "docs\\orchestration\\reports\\20260617\\units\\2026-06-17-06-bloodbloom-런타임-예외-qa와-수정.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260617\\units\\2026-06-17-06-bloodbloom-런타임-예외-qa와-수정.html"
   }
 }

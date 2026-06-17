@@ -37,6 +37,7 @@
   - 8 `MemoryDefinition` assets.
   - 8 `EchoDefinition` assets.
   - 4 `UltimateEchoDefinition` assets.
+- Fixed a `Dev_Prototype_v1` runtime exception where Blood Bloom and other area effects could modify the `enemies` list while it was being enumerated.
 
 ## 2026-06-16
 

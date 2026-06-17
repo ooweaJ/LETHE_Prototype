@@ -475,9 +475,9 @@ namespace Lethe.PrototypeV1
                 playerSprite.flipX = move.x < -0.1f;
             }
 
-            foreach (var enemy in enemies)
+            foreach (var enemy in enemies.ToList())
             {
-                if (!enemy.IsAlive) continue;
+                if (enemy == null || !enemy.IsAlive) continue;
                 var dist = Vector2.Distance(player.position, enemy.transform.position);
                 if (dist < enemy.TouchRadius + 0.35f)
                 {
@@ -637,7 +637,7 @@ namespace Lethe.PrototypeV1
             var blood = activeMemories.FirstOrDefault(m => m.Id == V1MemoryId.BloodReflection);
             if (blood != null)
             {
-                foreach (var enemy in enemies.Where(e => e.IsAlive && e.BloodMarked))
+                foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && e.BloodMarked).ToList())
                 {
                     DealDamage(enemy, (0.8f + blood.Level * 0.25f) * dt, "피의 반사", false);
                 }
@@ -718,7 +718,7 @@ namespace Lethe.PrototypeV1
 
             var radius = 1.05f + memory.Level * 0.14f;
             SpawnTransientSprite("ShatterWave", MakeRingSprite("ShatterWave", Color.white, 128), target.transform.position, Quaternion.identity, radius * 0.62f, new Color(0.86f, 0.98f, 1f, 0.44f), 0.25f);
-            foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(target.transform.position, e.transform.position) <= radius + e.TouchRadius).Take(8))
+            foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(target.transform.position, e.transform.position) <= radius + e.TouchRadius).Take(8).ToList())
             {
                 var dir = (Vector2)(enemy.transform.position - target.transform.position);
                 DealDamage(enemy, 8f + memory.Level * 3.4f, "파쇄의 파문", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 0.45f);
@@ -733,7 +733,7 @@ namespace Lethe.PrototypeV1
 
             var radius = 1.55f + memory.Level * 0.16f;
             SpawnTransientSprite("StoppedSecond", MakeRingSprite("StoppedSecond", Color.white, 144), player.position, Quaternion.identity, radius * 0.54f, new Color(0.62f, 0.72f, 1f, 0.35f), 0.34f);
-            foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) <= radius + e.TouchRadius).Take(10))
+            foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) <= radius + e.TouchRadius).Take(10).ToList())
             {
                 var dir = (Vector2)(enemy.transform.position - player.position);
                 DealDamage(enemy, 5f + memory.Level * 2.1f, "멈춘 1초", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 0.75f);
@@ -755,7 +755,7 @@ namespace Lethe.PrototypeV1
             if (memory.TickTimer > 0f) return;
             memory.TickTimer = Mathf.Max(0.85f, 2.60f - memory.Level * 0.18f);
 
-            foreach (var enemy in enemies.Where(e => e != null && e.IsAlive).OrderBy(_ => UnityEngine.Random.value).Take(1 + memory.Level / 2))
+            foreach (var enemy in enemies.Where(e => e != null && e.IsAlive).OrderBy(_ => UnityEngine.Random.value).Take(1 + memory.Level / 2).ToList())
             {
                 SpawnTransientSprite("OblivionBrand", MakeRingSprite("OblivionBrand", Color.white, 96), enemy.transform.position + Vector3.up * 0.10f, Quaternion.identity, 0.42f, new Color(0.70f, 0.42f, 1f, 0.45f), 0.30f);
                 DealDamage(enemy, 6f + memory.Level * 2.8f, "망각의 낙인", false);
@@ -828,7 +828,7 @@ namespace Lethe.PrototypeV1
             {
                 var radius = 0.72f + shatterLevel * 0.08f;
                 SpawnTransientSprite("ShatterEcho", MakeRingSprite("ShatterEcho", Color.white, 104), enemy.transform.position, Quaternion.identity, radius * 0.62f, new Color(0.86f, 0.98f, 1f, 0.34f), 0.18f);
-                foreach (var target in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(enemy.transform.position, e.transform.position) <= radius + e.TouchRadius).Take(5))
+                foreach (var target in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(enemy.transform.position, e.transform.position) <= radius + e.TouchRadius).Take(5).ToList())
                 {
                     var dir = (Vector2)(target.transform.position - enemy.transform.position);
                     DealDamage(target, weapon.Damage * (0.10f + shatterLevel * 0.025f), "파문 잔향", false, dir.sqrMagnitude > 0.01f ? dir.normalized : forward, 0.25f);
@@ -986,7 +986,7 @@ namespace Lethe.PrototypeV1
                     cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.065f);
                 }
 
-                foreach (var enemy in enemies.Where(e => e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 3.75f).Take(10))
+                foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 3.75f).Take(10).ToList())
                 {
                     enemy.BloodMarked = true;
                     DealDamage(enemy, 42f * dt, "피의 칼폭풍", false);
@@ -1006,7 +1006,7 @@ namespace Lethe.PrototypeV1
                 }
             }
 
-            foreach (var enemy in enemies.Where(e => e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 3.20f).Take(12))
+            foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 3.20f).Take(12).ToList())
             {
                 enemy.BloodMarked = true;
                 DealDamage(enemy, 18f * dt, "피의 칼폭풍", false);
@@ -1025,7 +1025,7 @@ namespace Lethe.PrototypeV1
                     {
                         SpawnTransientSprite("FractureExecution", MakeRingSprite("FractureExecution", Color.white, 160), target.transform.position, Quaternion.identity, 0.86f, new Color(1f, 0.94f, 0.62f, 0.48f), 0.28f);
                         SpawnTransientSprite("FractureExecutionCore", MakeImpactDiamondSprite("FractureExecutionCore", Color.white), target.transform.position, Quaternion.identity, 0.62f, new Color(1f, 0.92f, 0.55f, 0.82f), 0.16f);
-                        foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(target.transform.position, e.transform.position) < 1.75f).Take(8))
+                        foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(target.transform.position, e.transform.position) < 1.75f).Take(8).ToList())
                         {
                             DealDamage(enemy, enemy.HealthRatio < 0.32f ? 58f : 24f, "파쇄 처형", false);
                         }
@@ -1040,7 +1040,7 @@ namespace Lethe.PrototypeV1
                 {
                     ultimatePulseTimer = 0.42f;
                     SpawnTransientSprite("StasisHunt", MakeRingSprite("StasisHunt", Color.white, 160), player.position, Quaternion.identity, 0.88f, new Color(0.62f, 0.74f, 1f, 0.34f), 0.24f);
-                    foreach (var enemy in enemies.Where(e => e != null && e.IsAlive).OrderBy(e => Vector2.Distance(player.position, e.transform.position)).Take(6))
+                    foreach (var enemy in enemies.Where(e => e != null && e.IsAlive).OrderBy(e => Vector2.Distance(player.position, e.transform.position)).Take(6).ToList())
                     {
                         enemy.ApplyBriefFreeze(0.18f);
                         var go = new GameObject("StasisHuntShot");
@@ -1061,7 +1061,7 @@ namespace Lethe.PrototypeV1
                 ultimatePulseTimer = 0.72f;
                 HealPlayer(3.2f);
                 SpawnTransientSprite("AshenOblivion", MakeRingSprite("AshenOblivion", Color.white, 180), player.position, Quaternion.identity, 0.98f, new Color(0.78f, 0.68f, 1f, 0.32f), 0.34f);
-                foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 3.2f).Take(10))
+                foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 3.2f).Take(10).ToList())
                 {
                     DealDamage(enemy, 22f, "잿빛 망각", false);
                 }
@@ -1070,7 +1070,7 @@ namespace Lethe.PrototypeV1
 
         void LaunchKalmuriBlade(V1Enemy first)
         {
-            var target = enemies.Where(e => e.IsAlive && e != first).OrderBy(e => Vector2.Distance(first.transform.position, e.transform.position)).FirstOrDefault();
+            var target = enemies.Where(e => e != null && e.IsAlive && e != first).OrderBy(e => Vector2.Distance(first.transform.position, e.transform.position)).FirstOrDefault();
             if (target == null) return;
             var go = new GameObject("KalmuriLaunchBlade");
             go.transform.position = player.position;
@@ -1085,7 +1085,7 @@ namespace Lethe.PrototypeV1
         {
             SpawnTransientSprite("피꽃", LoadSprite("Assets/_dev/Art/Sprites/Echoes/Blood/spr_blood_bloom_01.png"), center.transform.position, Quaternion.identity, 0.72f, new Color(1f, 0.12f, 0.18f, 0.85f), 0.36f);
             SpawnBloodThread(center.transform.position, 0.8f + level * 0.16f, level);
-            foreach (var enemy in enemies.Where(e => e.IsAlive && Vector2.Distance(center.transform.position, e.transform.position) < 1.65f))
+            foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(center.transform.position, e.transform.position) < 1.65f).ToList())
             {
                 enemy.BloodMarked = true;
                 enemy.MarkTimer = 2.4f;

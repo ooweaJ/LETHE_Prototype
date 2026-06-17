@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-17-06 - BloodBloom 런타임 예외 QA와 수정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-17-06 - BloodBloom 런타임 예외 QA와 수정</h1>
+      <p class="meta">Generated from 2026-06-17-06-bloodbloom-런타임-예외-qa와-수정.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260617/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-17-06 - BloodBloom 런타임 예외 QA와 수정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에서 플레이 중 발생한 런타임 예외를 확인하고 수정했다. C# 빌드와 Unity 컴파일은 통과했고, 수정 후 짧은 Play Mode smoke에서는 같은 예외가 다시 나오지 않았다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>Unity 콘솔에서 <code>InvalidOperationException: Collection was modified; enumeration operation may not execute.</code>를 확인했다.</li>
+<li>stack trace는 <code>V1GameManager.BloodBloom -&gt; TriggerWeaponEchoes -&gt; UpdateWeapon -&gt; Update</code>로 이어졌다.</li>
+<li>원인은 <code>BloodBloom</code>이 <code>enemies.Where(...)</code>를 직접 순회하는 동안 <code>DealDamage</code>가 적을 죽이며 <code>enemies</code> 리스트를 수정할 수 있었던 것이다.</li>
+<li><code>enemies</code>를 순회하며 피해를 주는 광역/궁극/잔향 루프를 <code>.ToList()</code> snapshot 기반으로 바꿨다.</li>
+<li>null guard가 약한 enemy query도 함께 보강했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과.</li>
+<li>결과: 기존 v0/debug deprecated API warning 7개 / error 0개.</li>
+<li>Unity <code>Assets/Refresh</code>: 성공.</li>
+<li><code>unity_get_compilation_errors</code>: count <code>0</code>.</li>
+<li>Unity console clear 후 Play Mode 8초 smoke: runtime exception 없음.</li>
+<li>Play Mode 진입 MCP 호출은 여전히 <code>fetch failed</code>를 반환했지만, <code>unity_editor_state</code> 기준 실제로는 Play Mode에 들어간 것을 확인했다.</li>
+<li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li><code>DealDamage</code>가 호출되는 enemy area loop는 직접 <code>enemies</code>를 열거하지 않고 snapshot을 사용한다.</li>
+<li>이번 패치는 밸런스 변경이 아니라 런타임 안정성 보정이다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>8초 smoke는 시작 구간 안정성 확인이다. 혈반 +5/궁극이 실제 플레이에서 길게 반복되는 상황은 추가 장시간 smoke가 필요하다.</li>
+<li>Play Mode MCP 호출의 <code>fetch failed</code>는 게임 예외가 아니라 MCP polling 응답 문제로 보인다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>혈반 각성/광역 피해 계열에서 enemy list를 순회하며 동시에 enemy 제거가 발생할 수 있던 구조를 snapshot 순회로 고쳤다. 다음 QA는 debug 상태 주입이나 장시간 Play Mode로 혈반 +5, 피의 칼폭풍, 파쇄 처형 같은 광역 효과를 강제로 반복시키는 쪽이 좋다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>장시간 또는 강제 상태 주입 smoke로 광역/궁극 효과를 반복 검증한다.</li>
+<li><code>DealDamage</code>와 enemy removal 책임을 더 명확히 분리할지 검토한다.</li>
+<li>이후 VFX/타격감 QA로 돌아간다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 새 잔향/궁극 확장 후 광역 효과가 enemy list를 수정하며 런타임 예외를 만들었다.</li>
+<li>방향: 기능 추가 후 즉시 콘솔 기반 QA를 돌려 안정성 문제를 먼저 제거한다.</li>
+<li>행동: stack trace를 따라 원인을 좁히고 snapshot 순회 패턴으로 수정했다.</li>
+<li>결과: 같은 예외가 짧은 Play Mode smoke에서 재발하지 않았다.</li>
+</ul>
+  </main>
+</body>
+</html>

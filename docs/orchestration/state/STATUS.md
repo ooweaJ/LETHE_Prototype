@@ -84,6 +84,15 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
     - `Dev_Prototype_v1` short Play Mode smoke: no console errors.
     - evidence: `LETHE/Assets/_dev/Evidence/v1_content_data_asset_play_smoke_20260617.png`.
 
+- Unity v1 runtime exception QA:
+  - Found console exception: `InvalidOperationException: Collection was modified; enumeration operation may not execute.`
+  - Stack trace pointed to `V1GameManager.BloodBloom` while `DealDamage` could remove enemies during `foreach`.
+  - Fixed `enemies` area-effect loops to enumerate snapshot lists with `.ToList()` and added null guards to unsafe enemy queries.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 legacy v0/debug deprecation warnings, 0 errors.
+  - Unity MCP `Assets/Refresh`: success.
+  - `unity_get_compilation_errors`: count `0`.
+  - Short Play Mode smoke after clearing console: no runtime exceptions; only AB-MCP startup logs appeared.
+
 - Unity v1 C-step real M2 loop readability first pass:
   - Added an M2 objective/status line to the HUD.
   - The HUD now exposes whether the player is filling memory slots, approaching the next forget candidate, surviving the deficit window, waiting for resonance, or ready for Blood Blade Storm.
