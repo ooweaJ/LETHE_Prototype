@@ -36,6 +36,7 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 - 적은 피격 시 흰색 플래시와 데미지 숫자를 보여준다.
 - 칼무리 잔향은 캐릭터 주변 잡선이 아니라 타격 지점 후속타로 보인다.
 - 혈반 잔향은 표식/실/피꽃으로 보인다.
+- Current B-step technical check: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed after Kalmuri range ring, Blood heal thread, Blood bloom thread, and knockback cap changes.
 
 ### C. Real M2 Loop
 

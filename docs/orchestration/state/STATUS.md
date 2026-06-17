@@ -42,6 +42,14 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 B-step hit feel / echo readability first pass:
+  - Kalmuri echo follow-up now spawns a target-local `KalmuriEchoRange` ring before damage resolution.
+  - Blood echo now rewards hitting already marked enemies with a visible red heal thread back to the player and a small heal.
+  - Blood Bloom also emits a heal thread, making the +5 blood effect read less like a plain damage burst.
+  - Enemy knockback cap increased from `4.6` to `6.2` so greatsword feedback is not compressed as hard.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors.
+  - Unity MCP tools were not exposed in the current tool list, so visual Play Mode confirmation is still pending.
+
 - Unity v1 core prototype EPIC / data contract pass:
   - Started `Dev_Prototype_v1 Core Prototype Complete` as the active A-I work package.
   - Added root development-doc entry files so the project has a clean AI/project-management front door:

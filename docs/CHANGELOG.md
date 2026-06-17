@@ -19,6 +19,11 @@
   - G 4 ultimates
   - H whole-play review
   - I first tuning pass
+- Added the first B-step hit-feel/readability pass:
+  - Kalmuri echo follow-up now spawns a target-local range ring.
+  - Blood echo now creates a red heal thread back to the player when marked enemies are hit again.
+  - Blood bloom also emits a heal thread.
+  - Enemy knockback cap was raised so greatsword feedback is less compressed.
 
 ## 2026-06-16
 

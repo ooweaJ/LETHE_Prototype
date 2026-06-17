@@ -75,6 +75,12 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - Expanded `DefinitionTypes.cs` with memory/echo/ultimate/enemy/encounter data contracts.
   - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors.
   - Unity MCP editor verification not run because Unity MCP tools were not exposed in the current tool list.
+- B-step hit feel / echo readability first pass:
+  - Kalmuri follow-up now has a target-local range ring.
+  - Blood-marked weapon hits now produce a red heal thread and small heal.
+  - Blood Bloom now emits a heal thread.
+  - Enemy knockback cap increased to `6.2`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors.
 - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 0 warnings, 0 errors.
 - latest `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 0 warnings, 0 errors.
 - `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`.

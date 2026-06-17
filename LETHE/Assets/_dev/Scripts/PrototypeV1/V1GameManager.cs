@@ -731,6 +731,9 @@ namespace Lethe.PrototypeV1
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
             var side = new Vector2(-f.y, f.x).normalized;
             var entries = weapon.VfxProfile != null ? weapon.VfxProfile.kalmuriFollowupSlashes : Array.Empty<SlashVfxEntry>();
+            var ringScale = Mathf.Clamp(radius * 0.92f, 0.38f, isHeavy ? 0.92f : 0.72f);
+            var ringColor = isHeavy ? new Color(0.92f, 0.98f, 1f, 0.50f) : new Color(0.58f, 0.96f, 1f, 0.40f);
+            SpawnTransientSprite("KalmuriEchoRange", MakeRingSprite("KalmuriEchoRange", Color.white, 112), origin, Quaternion.identity, ringScale, ringColor, isHeavy ? 0.22f : 0.16f);
 
             for (int i = 0; i < burstCount; i++)
             {
@@ -837,6 +840,7 @@ namespace Lethe.PrototypeV1
         void BloodBloom(V1Enemy center, int level)
         {
             SpawnTransientSprite("피꽃", LoadSprite("Assets/_dev/Art/Sprites/Echoes/Blood/spr_blood_bloom_01.png"), center.transform.position, Quaternion.identity, 0.72f, new Color(1f, 0.12f, 0.18f, 0.85f), 0.36f);
+            SpawnBloodThread(center.transform.position, 0.8f + level * 0.16f, level);
             foreach (var enemy in enemies.Where(e => e.IsAlive && Vector2.Distance(center.transform.position, e.transform.position) < 1.65f))
             {
                 enemy.BloodMarked = true;
@@ -965,6 +969,20 @@ namespace Lethe.PrototypeV1
             var before = enemy.Hp;
             var finalAmount = weaponHit ? amount * (1f + WeaponStat.DamageMul) : amount;
             var feedback = CurrentWeaponSpec().VfxProfile;
+            if (weaponHit && enemy.BloodMarked)
+            {
+                var bloodLevel = EchoLevel(V1MemoryId.BloodReflection);
+                if (bloodLevel > 0)
+                {
+                    var heal = 0.55f + bloodLevel * 0.18f;
+                    HealPlayer(heal);
+                    SpawnBloodThread(enemy.transform.position, heal, bloodLevel);
+                    if (bloodLevel >= 5 && UnityEngine.Random.value < 0.16f)
+                    {
+                        BloodBloom(enemy, bloodLevel);
+                    }
+                }
+            }
             var flashColor = feedback != null
                 ? weaponHit ? feedback.enemyWeaponFlashColor : feedback.enemyNonWeaponFlashColor
                 : Color.white;
@@ -986,6 +1004,17 @@ namespace Lethe.PrototypeV1
             if (before > 0f && !enemy.IsAlive)
             {
                 OnEnemyKilled(enemy);
+            }
+        }
+
+        void HealPlayer(float amount)
+        {
+            if (amount <= 0f || deathOverlay) return;
+            var before = playerHp;
+            playerHp = Mathf.Min(playerMaxHp, playerHp + amount);
+            if (playerHp > before + 0.01f)
+            {
+                SpawnFloatingText(player.position + Vector3.up * 0.55f, $"+{playerHp - before:0}", new Color(1f, 0.24f, 0.32f));
             }
         }
 
@@ -1441,12 +1470,34 @@ namespace Lethe.PrototypeV1
             go.AddComponent<V1DamageNumber>().Configure(Mathf.CeilToInt(amount).ToString(), color, lifetime);
         }
 
+        void SpawnBloodThread(Vector3 from, float healAmount, int level)
+        {
+            if (player == null) return;
+            var to = player.position + Vector3.up * 0.18f;
+            var delta = to - from;
+            var length = Mathf.Max(0.18f, delta.magnitude);
+            var mid = from + delta * 0.5f;
+            var angle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg - 90f;
+            var color = new Color(1f, 0.10f, 0.16f, Mathf.Clamp01(0.42f + level * 0.08f));
+            var sprite = MakeBoxSprite("BloodThread", Color.white, 7, 128);
+            SpawnTransientSpriteScaled("BloodHealThread", sprite, mid, Quaternion.Euler(0f, 0f, angle), new Vector3(0.030f + level * 0.004f, length * 0.78f, 1f), color, 0.18f);
+            if (healAmount >= 1.1f)
+            {
+                SpawnTransientSprite("BloodHealPulse", MakeRingSprite("BloodHealPulse", Color.white, 96), player.position + Vector3.up * 0.2f, Quaternion.identity, 0.40f, new Color(1f, 0.14f, 0.20f, 0.42f), 0.20f);
+            }
+        }
+
         void SpawnTransientSprite(string name, Sprite sprite, Vector3 position, Quaternion rotation, float scale, Color color, float lifetime)
+        {
+            SpawnTransientSpriteScaled(name, sprite, position, rotation, Vector3.one * scale, color, lifetime);
+        }
+
+        void SpawnTransientSpriteScaled(string name, Sprite sprite, Vector3 position, Quaternion rotation, Vector3 scale, Color color, float lifetime)
         {
             var go = new GameObject(name);
             go.transform.position = new Vector3(position.x, position.y, -0.05f);
             go.transform.rotation = rotation;
-            go.transform.localScale = Vector3.one * scale;
+            go.transform.localScale = scale;
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = sprite ?? MakeCircleSprite(name, Color.white, 48);
             sr.color = color;
@@ -1608,6 +1659,24 @@ namespace Lethe.PrototypeV1
                 var d = Vector2.Distance(new Vector2(x, y), center);
                 var a = Mathf.Clamp01((radius - d) / 4f);
                 tex.SetPixel(x, y, new Color(color.r, color.g, color.b, a));
+            }
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        static Sprite MakeRingSprite(string name, Color color, int size)
+        {
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { name = name };
+            var center = new Vector2(size * 0.5f, size * 0.5f);
+            var radius = size * 0.39f;
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                var d = Vector2.Distance(new Vector2(x, y), center);
+                var ring = Mathf.Clamp01(1f - Mathf.Abs(d - radius) / 3.6f);
+                var glow = Mathf.Clamp01(1f - Mathf.Abs(d - radius) / 11f) * 0.20f;
+                var alpha = Mathf.Max(ring * 0.78f, glow);
+                tex.SetPixel(x, y, alpha <= 0f ? Color.clear : new Color(color.r, color.g, color.b, alpha));
             }
             tex.Apply();
             return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
@@ -2195,7 +2264,7 @@ namespace Lethe.PrototypeV1
 
         public void ApplyHitFeedback(Vector2 direction, float strength)
         {
-            knockVelocity += direction.normalized * Mathf.Clamp(strength, 0f, 4.6f);
+            knockVelocity += direction.normalized * Mathf.Clamp(strength, 0f, 6.2f);
         }
 
         void Heal(float amount)

@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-17-02 - 칼무리 후속타와 혈반 회복 실 1차 보정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-17-02 - 칼무리 후속타와 혈반 회복 실 1차 보정</h1>
+      <p class="meta">Generated from 2026-06-17-02-칼무리-후속타와-혈반-회복-실-1차-보정.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260617/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-17-02 - 칼무리 후속타와 혈반 회복 실 1차 보정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 A-I EPIC의 B단계로 들어갔다. 오늘 두 번째 단위는 전체 공격 시스템을 갈아엎는 작업이 아니라, 잔향이 화면에서 더 잘 읽히도록 칼무리/혈반의 후속 표현을 보강한 작업이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>칼무리 잔향 후속타가 적 위치에서 짧은 범위 링을 먼저 보여준다.</li>
+<li>혈반이 묻은 적을 다시 무기로 때리면 붉은 실이 플레이어에게 돌아오고 소량 회복한다.</li>
+<li>혈반 +5 피꽃 폭발도 회복 실을 함께 보여준다.</li>
+<li>적 넉백 상한을 <code>4.6 -&gt; 6.2</code>로 올려 대검 손맛이 덜 눌리게 했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과.</li>
+<li>결과: 7 warning / 0 error.</li>
+<li>warning 7개는 기존 v0/debug 코드의 deprecation warning이다.</li>
+<li>Unity MCP가 현재 도구 목록에 없어 Play Mode 시각 검증은 아직 남았다.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>칼무리 잔향은 캐릭터 주변 장식이 아니라 타격 지점에서 후속타가 터지는 언어로 유지한다.</li>
+<li>혈반 잔향은 단순 표식이 아니라 다시 때렸을 때 플레이어에게 돌아오는 실과 회복으로 읽히게 한다.</li>
+<li>대검 피드백은 데이터값이 있어도 런타임 상한에 눌리면 체감이 죽으므로 넉백 상한을 높였다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>링/실 VFX가 실제 화면에서 너무 많거나 방해될 수 있다. Unity Play Mode 리뷰가 필요하다.</li>
+<li>혈반 회복량은 아직 1차 감각값이다. 밸런스는 I단계에서 조정해야 한다.</li>
+<li>Unity MCP가 안 보이는 동안은 에디터 screenshot/evidence를 남기지 못한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>칼무리와 혈반 잔향이 &quot;잔향!&quot; 텍스트나 모호한 선이 아니라, 적 위치 후속타와 플레이어로 돌아오는 회복 실로 읽히도록 첫 보정을 넣었다. 다음 리뷰에서는 VFX가 잘 보이는지, 너무 복잡하지 않은지, 혈반 회복이 플레이 감각에 도움 되는지 확인하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>Unity MCP가 보이면 Play Mode에서 칼무리 링/혈반 실을 시각 확인한다.</li>
+<li>이어서 B단계 남은 부분인 쌍검/대검 기본공격 타격감과 피격 피드백을 더 보정한다.</li>
+<li>이후 C단계 M2 실제 플레이 루프 연결로 넘어간다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 잔향이 수치상 발동해도 화면에서는 어떤 효과인지 읽히기 어려웠다.</li>
+<li>방향: 잔향을 &quot;약한 같은 효과&quot;가 아니라 &quot;타격 지점 후속 현상&quot;과 &quot;회복 실&quot;처럼 형태가 바뀐 효과로 보여준다.</li>
+<li>행동: 칼무리 range ring, 혈반 heal thread, 피꽃 thread, 넉백 cap 보정을 구현했다.</li>
+<li>결과: 다음 플레이 리뷰에서 잔향 가독성을 검증할 수 있는 구체적 화면 변화가 생겼다.</li>
+</ul>
+  </main>
+</body>
+</html>
