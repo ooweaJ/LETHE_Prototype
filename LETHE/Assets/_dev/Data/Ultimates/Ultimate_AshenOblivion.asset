@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Ultimate_AshenOblivion
+  m_EditorClassIdentifier: Assembly-CSharp:Lethe.Dev:UltimateEchoDefinition
+  id: Ultimate_AshenOblivion
+  displayName: Ashen Oblivion
+  shortDescription: Ash + Oblivion turns survival into a purple guard pulse.
+  requiredEchoIds:
+  - Echo_AshenShield
+  - Echo_OblivionBrand
+  requiredLevel: 5
+  triggerMode: 3
+  dualBladesPattern: 0
+  greatswordPattern: 1
+  cooldown: 0.72
+  duration: 2.5
+  damageMultiplier: 1
+  runtimePrefab: {fileID: 0}
+  hudGoalText: Ashen +5 / Oblivion +5
+  feedbackProfile: {fileID: 0}
+  fallbackSlashes: []
+  dualBladesNote: Frequent small purple guard pulses reward aggressive survival.
+  greatswordNote: Slow heavy oblivion pulses reward committed swings.

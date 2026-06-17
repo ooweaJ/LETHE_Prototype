@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Echo_AshenShield
+  m_EditorClassIdentifier: Assembly-CSharp:Lethe.Dev:EchoDefinition
+  id: Echo_AshenShield
+  sourceMemoryId: Memory_AshenShield
+  displayName: Ashen Echo
+  shortDescription: Weapon rhythm leaves guard traces.
+  cardDescription: The weapon gives back a small guard/heal pulse after committed hits.
+  formKind: 6
+  triggerFamily: 0
+  maxLevel: 5
+  levelData: []
+  awakenedName: Awakened Ashen Echo
+  awakenedDescription: Guard traces thicken and prepare the oblivion pairing.
+  runtimePrefab: {fileID: 0}
+  feedbackProfile: {fileID: 0}
+  defaultWeaponProcStyle: 0
+  preferredWeaponIds: []
+  weaponInteractionNote: Dual blades refresh guard traces often; greatsword creates a bigger defensive beat.
+  overflowNote: +5 cap overflow triggers one immediate echo burst.
+  blockRecursiveEchoHits: 1

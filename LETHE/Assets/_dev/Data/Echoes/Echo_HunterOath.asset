@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Echo_HunterOath
+  m_EditorClassIdentifier: Assembly-CSharp:Lethe.Dev:EchoDefinition
+  id: Echo_HunterOath
+  sourceMemoryId: Memory_HunterOath
+  displayName: Hunter Echo
+  shortDescription: Weapon hits release pursuit afterimages.
+  cardDescription: The weapon remembers how to hunt and throws a follow-up shot.
+  formKind: 3
+  triggerFamily: 0
+  maxLevel: 5
+  levelData: []
+  awakenedName: Awakened Hunter Echo
+  awakenedDescription: Follow-up shots multiply and seek frozen targets.
+  runtimePrefab: {fileID: 0}
+  feedbackProfile: {fileID: 0}
+  defaultWeaponProcStyle: 0
+  preferredWeaponIds: []
+  weaponInteractionNote: Dual blades chain many small shots; greatsword launches fewer forceful shots.
+  overflowNote: +5 cap overflow triggers one immediate echo burst.
+  blockRecursiveEchoHits: 1

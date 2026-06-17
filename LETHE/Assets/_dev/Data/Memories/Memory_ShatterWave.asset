@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Memory_ShatterWave
+  m_EditorClassIdentifier: Assembly-CSharp:Lethe.Dev:MemoryDefinition
+  id: Memory_ShatterWave
+  displayName: Shatter Wave
+  shortDescription: Enemy-centered shockwaves.
+  cardDescription: Creates ripples around dense enemy groups, making area control visible.
+  matchingEchoId: Echo_ShatterWave
+  effectKind: 4
+  triggerFamily: 4
+  activeAbilityPrefab: {fileID: 0}
+  maxLevel: 5
+  levelData: []
+  baseCooldown: 2.2
+  baseDamage: 8
+  targetingRadius: 5
+  feedbackProfile: {fileID: 0}
+  activeFormNote: Shockwaves appear around enemies, never as a player orbit.
+  resonanceRiderId:

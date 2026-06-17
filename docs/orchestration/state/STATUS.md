@@ -63,6 +63,21 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
   - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
   - Unity MCP tools were not exposed in the current tool list, so visual Play Mode confirmation is still pending.
 
+- Unity v1 data asset expansion pass:
+  - Added `_dev/Data` ScriptableObject skeleton assets for the complete prototype content set:
+    - 8 `MemoryDefinition` assets.
+    - 8 `EchoDefinition` assets.
+    - 4 `UltimateEchoDefinition` assets under `_dev/Data/Ultimates`.
+  - Asset count check:
+    - `Memory_*.asset`: 8.
+    - `Echo_*.asset`: 8.
+    - `Ultimate_*.asset`: 4.
+  - Latest `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 0 warnings, 0 errors.
+  - `npm.cmd run report`: passed, 5 unit reports generated.
+  - `npm.cmd run report:check`: passed, 5 unit headings ok.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+  - Unity MCP import/inspector verification is still pending because AnkleBreaker Unity MCP tools were not exposed in the current tool list.
+
 - Unity v1 C-step real M2 loop readability first pass:
   - Added an M2 objective/status line to the HUD.
   - The HUD now exposes whether the player is filling memory slots, approaching the next forget candidate, surviving the deficit window, waiting for resonance, or ready for Blood Blade Storm.

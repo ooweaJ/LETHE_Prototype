@@ -33,6 +33,10 @@
   - Weapon-hit echo reactions now exist for the non-Kalmuri/Blood echoes.
   - Added minimal runtime ultimates for Fracture Execution, Stasis Hunt, and Ashen Oblivion in addition to Blood Blade Storm.
   - Reward cards can surface a rotating missing memory candidate.
+- Added `_dev/Data` asset skeletons for the complete prototype content set:
+  - 8 `MemoryDefinition` assets.
+  - 8 `EchoDefinition` assets.
+  - 4 `UltimateEchoDefinition` assets.
 
 ## 2026-06-16
 

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Echo_OblivionBrand
+  m_EditorClassIdentifier: Assembly-CSharp:Lethe.Dev:EchoDefinition
+  id: Echo_OblivionBrand
+  sourceMemoryId: Memory_OblivionBrand
+  displayName: Oblivion Echo
+  shortDescription: Weapon hits pulse with brand damage.
+  cardDescription: The forgotten brand remains as a purple after-pulse on hit enemies.
+  formKind: 7
+  triggerFamily: 0
+  maxLevel: 5
+  levelData: []
+  awakenedName: Awakened Oblivion Echo
+  awakenedDescription: Brand pulses widen and combine with ash guard.
+  runtimePrefab: {fileID: 0}
+  feedbackProfile: {fileID: 0}
+  defaultWeaponProcStyle: 0
+  preferredWeaponIds: []
+  weaponInteractionNote: Dual blades stack small pulses; greatsword stamps a larger brand.
+  overflowNote: +5 cap overflow triggers one immediate echo burst.
+  blockRecursiveEchoHits: 1

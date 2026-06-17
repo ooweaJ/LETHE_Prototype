@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260617\\index.md",
-  "generatedAt": "2026-06-17T03:47:57.702Z",
-  "unitCount": 4,
+  "generatedAt": "2026-06-17T03:55:06.226Z",
+  "unitCount": 5,
   "latest": {
-    "title": "2026-06-17-04 - 8기억 8잔향 4궁극 1차 런타임 확장",
-    "number": "04",
-    "markdownPath": "docs\\orchestration\\reports\\20260617\\units\\2026-06-17-04-8기억-8잔향-4궁극-1차-런타임-확장.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260617\\units\\2026-06-17-04-8기억-8잔향-4궁극-1차-런타임-확장.html"
+    "title": "2026-06-17-05 - 8기억 8잔향 4궁극 데이터 asset 골격",
+    "number": "05",
+    "markdownPath": "docs\\orchestration\\reports\\20260617\\units\\2026-06-17-05-8기억-8잔향-4궁극-데이터-asset-골격.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260617\\units\\2026-06-17-05-8기억-8잔향-4궁극-데이터-asset-골격.html"
   }
 }

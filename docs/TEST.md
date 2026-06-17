@@ -58,6 +58,7 @@ jaewoo 리뷰 질문:
 ### E/F/G. Content Expansion
 
 - Current technical check: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 0 warnings and 0 errors after adding first-pass active effects for the remaining memories, utility echo reactions, and three additional ultimate runtime branches.
+- Current data asset check: `_dev/Data` now contains 8 `MemoryDefinition` assets, 8 `EchoDefinition` assets, and 4 `UltimateEchoDefinition` assets. Latest `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 0 warnings and 0 errors.
 - Human review still needs to confirm whether these effects read as distinct enough, because Unity MCP visual verification was not available in this session.
 
 ## Known Non-Blocking Warnings
