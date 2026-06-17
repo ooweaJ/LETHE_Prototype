@@ -421,11 +421,17 @@
 <ul>
 <li>asset count: Memory 8 / Echo 8 / Ultimate 4.</li>
 <li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과.</li>
-<li>결과: 최신 빌드 기준 0 warning / 0 error.</li>
+<li>결과: 최신 빌드 기준 legacy v0/debug warning 7개 / error 0개.</li>
 <li><code>npm.cmd run report</code>: 통과.</li>
 <li><code>npm.cmd run report:check</code>: 통과, 5개 유닛 heading 정상.</li>
 <li><code>npm.cmd run report:orchestrator:unit:dry</code>: <code>fetch failed</code>로 실패.</li>
-<li>Unity MCP import/inspector 검증은 현재 세션에 AnkleBreaker Unity MCP 도구가 없어 아직 수행하지 못했다.</li>
+<li>Unity MCP 검증:</li>
+<li>LETHE 인스턴스 port <code>7890</code> 선택.</li>
+<li><code>Assets/Refresh</code> 성공.</li>
+<li>Unity compile errors count <code>0</code>.</li>
+<li>AssetDatabase에서 MemoryDefinition 8개, EchoDefinition 8개, UltimateEchoDefinition 4개 확인.</li>
+<li><code>Dev_Prototype_v1</code> 짧은 Play Mode smoke에서 console error 없음.</li>
+<li>증거 스크린샷: <code>LETHE/Assets/_dev/Evidence/v1_content_data_asset_play_smoke_20260617.png</code>.</li>
 </ul>
 <h2>4. 결정한 것</h2>
 <ul>
@@ -435,7 +441,7 @@
 </ul>
 <h2>5. 문제 또는 리스크</h2>
 <ul>
-<li>Unity Editor import가 아직 확인되지 않았다.</li>
+<li>Unity Editor import는 확인됐고, 다음에는 Inspector 저장/런타임 catalog 연결 검증이 필요하다.</li>
 <li>기존 2기억/2잔향 asset은 더 오래된 필드 구성을 갖고 있어, 다음 Unity import 후 Inspector 정리/저장이 필요할 수 있다.</li>
 <li>런타임은 아직 이 asset 전체를 직접 소비하지 않는다. 다음 구조화 패스에서 catalog 연결이 필요하다.</li>
 </ul>

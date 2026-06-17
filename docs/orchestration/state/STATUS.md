@@ -72,11 +72,17 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
     - `Memory_*.asset`: 8.
     - `Echo_*.asset`: 8.
     - `Ultimate_*.asset`: 4.
-  - Latest `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 0 warnings, 0 errors.
+  - Latest `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 legacy v0/debug deprecation warnings, 0 errors.
   - `npm.cmd run report`: passed, 5 unit reports generated.
   - `npm.cmd run report:check`: passed, 5 unit headings ok.
   - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
-  - Unity MCP import/inspector verification is still pending because AnkleBreaker Unity MCP tools were not exposed in the current tool list.
+  - Unity MCP verification:
+    - selected single LETHE instance on port `7890`.
+    - `Assets/Refresh`: success.
+    - `unity_get_compilation_errors`: count `0`.
+    - `unity_asset_list(Assets/_dev/Data)`: confirms 8 `MemoryDefinition`, 8 `EchoDefinition`, 4 `UltimateEchoDefinition`.
+    - `Dev_Prototype_v1` short Play Mode smoke: no console errors.
+    - evidence: `LETHE/Assets/_dev/Evidence/v1_content_data_asset_play_smoke_20260617.png`.
 
 - Unity v1 C-step real M2 loop readability first pass:
   - Added an M2 objective/status line to the HUD.
