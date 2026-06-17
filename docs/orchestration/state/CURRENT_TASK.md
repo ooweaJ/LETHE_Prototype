@@ -81,6 +81,10 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - Blood Bloom now emits a heal thread.
   - Enemy knockback cap increased to `6.2`.
   - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors.
+- C-step real M2 loop readability first pass:
+  - HUD now shows the current M2 loop objective/status.
+  - Level-up cards can offer `멈춘 1초` as the third active memory after Blood Reflection is acquired.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors.
 - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 0 warnings, 0 errors.
 - latest `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 0 warnings, 0 errors.
 - `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`.

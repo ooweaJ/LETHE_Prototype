@@ -24,6 +24,10 @@
   - Blood echo now creates a red heal thread back to the player when marked enemies are hit again.
   - Blood bloom also emits a heal thread.
   - Enemy knockback cap was raised so greatsword feedback is less compressed.
+- Added the first C-step real-loop readability pass:
+  - HUD now shows the current M2 loop objective/status.
+  - Level-up cards can offer `멈춘 1초` as the third memory after Blood Reflection is acquired.
+  - This reduces reliance on automatic review injection for filling the three memory slots.
 
 ## 2026-06-16
 

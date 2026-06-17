@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260617\\index.md",
-  "generatedAt": "2026-06-17T01:45:43.491Z",
-  "unitCount": 2,
+  "generatedAt": "2026-06-17T03:12:06.262Z",
+  "unitCount": 3,
   "latest": {
-    "title": "2026-06-17-02 - 칼무리 후속타와 혈반 회복 실 1차 보정",
-    "number": "02",
-    "markdownPath": "docs\\orchestration\\reports\\20260617\\units\\2026-06-17-02-칼무리-후속타와-혈반-회복-실-1차-보정.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260617\\units\\2026-06-17-02-칼무리-후속타와-혈반-회복-실-1차-보정.html"
+    "title": "2026-06-17-03 - M2 실제 루프 진행 HUD와 세 번째 기억 카드",
+    "number": "03",
+    "markdownPath": "docs\\orchestration\\reports\\20260617\\units\\2026-06-17-03-m2-실제-루프-진행-hud와-세-번째-기억-카드.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260617\\units\\2026-06-17-03-m2-실제-루프-진행-hud와-세-번째-기억-카드.html"
   }
 }

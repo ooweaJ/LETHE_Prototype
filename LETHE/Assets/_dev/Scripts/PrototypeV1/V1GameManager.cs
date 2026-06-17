@@ -1254,7 +1254,7 @@ namespace Lethe.PrototypeV1
         void DrawHud()
         {
             var weapon = CurrentWeaponSpec();
-            GUI.Box(new Rect(12, 12, 432, 190), "", panelStyle);
+            GUI.Box(new Rect(12, 12, 452, 218), "", panelStyle);
             GUI.Label(new Rect(24, 20, 380, 28), $"LETHE v1 / {PhaseName()} / {Mathf.FloorToInt(elapsed)}s / HP {Mathf.CeilToInt(playerHp)}/{Mathf.CeilToInt(playerMaxHp)}", smallStyle);
             DrawBar(new Rect(24, 47, 396, 12), Mathf.Clamp01(playerHp / playerMaxHp), new Color(0.18f, 0.95f, 0.62f), new Color(0.08f, 0.12f, 0.13f));
             GUI.Label(new Rect(24, 64, 380, 24), $"Lv.{level} XP {xp}/{nextXp} / 처치 {kills} / 무기 {weapon.DisplayName}", smallStyle);
@@ -1262,6 +1262,8 @@ namespace Lethe.PrototypeV1
             GUI.Label(new Rect(24, 112, 380, 24), $"다음 망각 후보: {ForgetCandidateText()}", smallStyle);
             GUI.Label(new Rect(24, 140, 380, 24), $"잔향: {EchoText()}", smallStyle);
             GUI.Label(new Rect(24, 166, 390, 24), BloodBladeStormReady ? $"궁극: 피의 칼폭풍 활성 / {UltimatePatternText(weapon)}" : $"궁극 준비: 칼무리 {EchoLevel(V1MemoryId.HungryBlades)}/5 + 혈반 {EchoLevel(V1MemoryId.BloodReflection)}/5", smallStyle);
+
+            GUI.Label(new Rect(24, 192, 418, 26), M2LoopText(), smallStyle);
 
             GUI.Box(new Rect(Screen.width - 372, 12, 360, 196), "", panelStyle);
             GUI.Label(new Rect(Screen.width - 358, 22, 340, 22), "F1 칼무리+5  F2 혈반+5  F3 망각", smallStyle);
@@ -1332,6 +1334,10 @@ namespace Lethe.PrototypeV1
             {
                 choices.Add(new Choice("새 기억", "피의 반사", "타격한 적에게 혈반을 남깁니다.\n\n후반에 혈반 잔향과 피의 칼폭풍으로 이어지는 회복/출혈 축입니다.", () => AddMemory(V1MemoryId.BloodReflection, 1, true)));
             }
+            if (activeMemories.Count < MaxActiveMemories && HasMemory(V1MemoryId.BloodReflection) && !HasMemory(V1MemoryId.StoppedSecond))
+            {
+                choices.Add(new Choice("새 기억", "멈춘 1초", "짧은 정지 잔향 축을 여는 세 번째 기억입니다.\n\n지금은 M2 실제 루프에서 기억 3칸을 채워 첫 망각 후보를 명확히 만드는 역할입니다.", () => AddMemory(V1MemoryId.StoppedSecond, 1, true)));
+            }
             var lowest = activeMemories.OrderBy(m => m.Level).FirstOrDefault(m => m.Level < MaxMemoryLevel);
             if (lowest != null)
             {
@@ -1352,6 +1358,16 @@ namespace Lethe.PrototypeV1
         }
 
         float StatAttackIntervalMul() => 1f / (1f + WeaponStat.AttackSpeed);
+
+        string M2LoopText()
+        {
+            if (BloodBladeStormReady) return "M2: 궁극 준비 완료 - 피의 칼폭풍 보상 확인";
+            if (refillOverlay) return "M2: 공명 재획득 대기 - 잃은 기억을 다시 가져오기";
+            if (refillTimer > 0f) return $"M2: 결손 생존 {Mathf.CeilToInt(refillTimer)}초 - 잔향으로 버티기";
+            if (lastForgotten.HasValue) return $"M2: {EchoName(lastForgotten.Value)} 남음 - 같은 기억 재획득 시 공명";
+            if (activeMemories.Count >= MaxActiveMemories) return $"M2: 다음 망각 후보 {ForgetCandidateText()} - 첫 보스 처치";
+            return "M2: 기억 3개 확보와 최고 레벨 강화가 목표";
+        }
 
         string PhaseName()
         {

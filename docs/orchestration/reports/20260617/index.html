@@ -162,6 +162,13 @@
           <p>Dev_Prototype_v1은 A-I EPIC의 B단계로 들어갔다. 오늘 두 번째 단위는 전체 공격 시스템을 갈아엎는 작업이 아니라, 잔향이 화면에서 더 잘 읽히도록 칼무리/혈반의 후속 표현을 보강한 작업이다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-17-03</span>
+          <h2><a href="#unit-2026-06-17-03" data-unit-link="unit-2026-06-17-03">M2 실제 루프 진행 HUD와 세 번째 기억 카드</a></h2>
+          <p>Dev_Prototype_v1은 C단계 첫 패스로 들어갔다. 이번 단위는 M2 루프를 완전히 밸런싱한 것은 아니고, 플레이어가 현재 루프의 어느 지점에 있는지 알 수 있게 HUD와 카드 선택 흐름을 보강한 작업이다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -276,6 +283,52 @@
 <li>방향: 잔향을 &quot;약한 같은 효과&quot;가 아니라 &quot;타격 지점 후속 현상&quot;과 &quot;회복 실&quot;처럼 형태가 바뀐 효과로 보여준다.</li>
 <li>행동: 칼무리 range ring, 혈반 heal thread, 피꽃 thread, 넉백 cap 보정을 구현했다.</li>
 <li>결과: 다음 플레이 리뷰에서 잔향 가독성을 검증할 수 있는 구체적 화면 변화가 생겼다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-17-03" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-17-03 - M2 실제 루프 진행 HUD와 세 번째 기억 카드</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 C단계 첫 패스로 들어갔다. 이번 단위는 M2 루프를 완전히 밸런싱한 것은 아니고, 플레이어가 현재 루프의 어느 지점에 있는지 알 수 있게 HUD와 카드 선택 흐름을 보강한 작업이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>HUD에 M2 현재 목표/상태 문구를 추가했다.</li>
+<li>레벨업 카드에서 혈반 기억을 얻은 뒤 빈 슬롯이 있으면 <code>멈춘 1초</code>를 세 번째 기억으로 고를 수 있게 했다.</li>
+<li>이로써 기억 3칸 확보가 자동 리뷰 보정에만 의존하지 않게 되었다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과.</li>
+<li>결과: 7 warning / 0 error.</li>
+<li>warning 7개는 기존 v0/debug 코드의 deprecation warning이다.</li>
+<li>Unity MCP가 현재 도구 목록에 없어 Play Mode 시각 검증은 아직 남았다.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>C단계는 먼저 &quot;플레이어가 루프 상태를 이해하는가&quot;부터 해결한다.</li>
+<li>기억 3칸 확보는 카드 선택으로 열어두고, 자동 리뷰 보정은 이후 실제 pacing이 안정되면 줄인다.</li>
+<li>+5/궁극까지의 실제 pacing 완성은 다음 C단계 작업으로 남긴다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li><code>멈춘 1초</code>의 실제 전투 효과는 아직 충분히 구현되지 않았다.</li>
+<li>HUD 문구가 실제 화면에서 너무 길 수 있어 Unity Play Mode 확인이 필요하다.</li>
+<li>자동 리뷰 보정이 아직 남아 있으므로 C단계는 완료가 아니라 첫 연결 패스다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>M2 루프가 디버그 버튼 없이 읽히도록 HUD 상태 문구와 세 번째 기억 카드 경로를 추가했다. 다음에는 자동 보정 없이도 망각, 공명, +5, 궁극까지 닿는 실제 pacing을 조정해야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>Unity Play Mode에서 HUD 문구가 화면을 가리지 않는지 확인한다.</li>
+<li><code>멈춘 1초</code>가 세 번째 기억 카드로 정상 노출되는지 확인한다.</li>
+<li>다음 C단계로 실제 +5/궁극 pacing을 디버그 주입이 아니라 플레이 루프로 연결한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: M2 핵심 루프는 기능상 존재하지만 플레이어가 현재 목표를 놓치기 쉬웠다.</li>
+<li>방향: 루프 상태를 HUD에 직접 노출하고, 기억 3칸 확보를 카드 선택으로 가능하게 만든다.</li>
+<li>행동: <code>M2LoopText()</code>와 세 번째 기억 카드 경로를 추가했다.</li>
+<li>결과: 다음 리뷰에서 루프 이해도와 진행감 자체를 검증할 수 있게 되었다.</li>
 </ul>
     </article>
       </div>

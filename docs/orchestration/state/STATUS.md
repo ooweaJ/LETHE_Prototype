@@ -42,6 +42,14 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 C-step real M2 loop readability first pass:
+  - Added an M2 objective/status line to the HUD.
+  - The HUD now exposes whether the player is filling memory slots, approaching the next forget candidate, surviving the deficit window, waiting for resonance, or ready for Blood Blade Storm.
+  - Level-up choices can now offer `멈춘 1초` as the third active memory after Blood Reflection is acquired.
+  - This reduces reliance on automatic review injection for reaching three active memory slots.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 warnings, 0 errors.
+  - Unity MCP tools were not exposed in the current tool list, so visual Play Mode confirmation is still pending.
+
 - Unity v1 B-step hit feel / echo readability first pass:
   - Kalmuri echo follow-up now spawns a target-local `KalmuriEchoRange` ring before damage resolution.
   - Blood echo now rewards hitting already marked enemies with a visible red heal thread back to the player and a small heal.
