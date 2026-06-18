@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260618\\index.md",
-  "generatedAt": "2026-06-18T02:35:31.172Z",
-  "unitCount": 1,
+  "generatedAt": "2026-06-18T05:39:50.371Z",
+  "unitCount": 2,
   "latest": {
-    "title": "2026-06-18-01 - Dev_Prototype_v1 런타임 안정성 30분 점검",
-    "number": "01",
-    "markdownPath": "docs\\orchestration\\reports\\20260618\\units\\2026-06-18-01-dev-prototype-v1-런타임-안정성-30분-점검.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260618\\units\\2026-06-18-01-dev-prototype-v1-런타임-안정성-30분-점검.html"
+    "title": "2026-06-18-02 - 굶주린 칼무리 판독성 1차 재작업",
+    "number": "02",
+    "markdownPath": "docs\\orchestration\\reports\\20260618\\units\\2026-06-18-02-굶주린-칼무리-판독성-1차-재작업.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260618\\units\\2026-06-18-02-굶주린-칼무리-판독성-1차-재작업.html"
   }
 }

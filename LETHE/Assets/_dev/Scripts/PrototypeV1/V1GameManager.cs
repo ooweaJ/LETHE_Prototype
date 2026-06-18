@@ -764,18 +764,22 @@ namespace Lethe.PrototypeV1
 
         void UpdateHungryBlades(MemoryState memory, float dt)
         {
-            memory.VisualTimer += dt * (1.3f + memory.Level * 0.18f);
-            var bladeCount = Mathf.Clamp(1 + memory.Level, 2, 6);
+            memory.VisualTimer += dt * (2.15f + memory.Level * 0.26f);
+            var bladeCount = Mathf.Clamp(4 + memory.Level * 2, 6, 14);
+            var innerRadius = HungryBladesRadius * 0.62f + memory.Level * 0.045f;
+            var outerRadius = HungryBladesRadius + memory.Level * 0.13f;
             for (int i = 0; i < bladeCount; i++)
             {
-                var angle = memory.VisualTimer * 160f + i * 360f / bladeCount;
-                var pos = player.position + Quaternion.Euler(0f, 0f, angle) * Vector3.right * (HungryBladesRadius + memory.Level * 0.12f);
-                SpawnTransientSprite("칼무리", LoadSprite("Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_orbit_blade_01.png"), pos, Quaternion.Euler(0f, 0f, angle + 30f), 0.16f, new Color(0.65f, 0.95f, 1f, 0.44f), 0.045f);
+                var ring = i % 2 == 0 ? outerRadius : innerRadius;
+                var angle = memory.VisualTimer * 210f + i * 360f / bladeCount + (i % 2) * 13f;
+                var pos = player.position + Quaternion.Euler(0f, 0f, angle) * Vector3.right * ring;
+                var scale = 0.13f + memory.Level * 0.012f + (i % 3) * 0.008f;
+                SpawnKalmuriBlade("KalmuriSwarmOrbit", pos, angle + 58f, scale, new Color(0.70f, 0.98f, 1f, 0.62f), 0.09f);
             }
 
             memory.TickTimer -= dt;
             if (memory.TickTimer > 0f) return;
-            memory.TickTimer = 0.18f;
+            memory.TickTimer = 0.16f;
 
             var targetLimit = 4;
             var hits = enemies
@@ -786,7 +790,26 @@ namespace Lethe.PrototypeV1
             for (int i = 0; i < hits.Count; i++)
             {
                 var mul = i < targetLimit ? 1f : 0.55f;
+                SpawnHungryBladeBite(hits[i].transform.position, memory.Level, i);
                 DealDamage(hits[i], HungryBladesDps * 0.18f * (1f + (memory.Level - 1) * 0.16f) * mul, "굶주린 칼무리", false);
+            }
+        }
+
+        void SpawnHungryBladeBite(Vector3 center, int levelValue, int targetIndex)
+        {
+            var toTarget = ((Vector2)(center - player.position)).normalized;
+            if (toTarget.sqrMagnitude < 0.01f) toTarget = lastAim.sqrMagnitude > 0.01f ? lastAim.normalized : Vector2.up;
+            var side = new Vector2(-toTarget.y, toTarget.x);
+            var baseAngle = Mathf.Atan2(toTarget.y, toTarget.x) * Mathf.Rad2Deg;
+            var bladeCount = Mathf.Clamp(3 + levelValue / 2, 3, 6);
+            var scale = 0.13f + levelValue * 0.014f;
+            SpawnTransientSprite("KalmuriBiteHalo", MakeRingSprite("KalmuriBiteHalo", Color.white, 104), center, Quaternion.identity, 0.26f + levelValue * 0.022f, new Color(0.58f, 0.96f, 1f, 0.32f), 0.14f);
+            for (int i = 0; i < bladeCount; i++)
+            {
+                var spread = (i - (bladeCount - 1) * 0.5f) * 0.13f;
+                var stagger = (i % 2 == 0 ? 0.16f : -0.08f) + targetIndex * 0.015f;
+                var pos = center - (Vector3)(toTarget * stagger) + (Vector3)(side * spread);
+                SpawnKalmuriBlade("KalmuriBiteBlade", pos, baseAngle + 90f + spread * 60f, scale, new Color(0.78f, 1f, 1f, 0.76f), 0.16f);
             }
         }
 
@@ -918,6 +941,7 @@ namespace Lethe.PrototypeV1
             var ringScale = Mathf.Clamp(radius * 0.92f, 0.38f, isHeavy ? 0.92f : 0.72f);
             var ringColor = isHeavy ? new Color(0.92f, 0.98f, 1f, 0.50f) : new Color(0.58f, 0.96f, 1f, 0.40f);
             SpawnTransientSprite("KalmuriEchoRange", MakeRingSprite("KalmuriEchoRange", Color.white, 112), origin, Quaternion.identity, ringScale, ringColor, isHeavy ? 0.22f : 0.16f);
+            SpawnKalmuriEchoBarrage(origin, f, side, baseAngle, level, isHeavy);
 
             for (int i = 0; i < burstCount; i++)
             {
@@ -949,6 +973,21 @@ namespace Lethe.PrototypeV1
                 var toTarget = (Vector2)(targets[i].transform.position - origin);
                 var mul = i == 0 ? 1f : 0.55f;
                 DealDamage(targets[i], damage * mul, "칼무리 잔향", true, toTarget.sqrMagnitude > 0.01f ? toTarget.normalized : f, 0.28f);
+            }
+        }
+
+        void SpawnKalmuriEchoBarrage(Vector3 origin, Vector2 forward, Vector2 side, float baseAngle, int levelValue, bool isHeavy)
+        {
+            var bladeCount = isHeavy ? Mathf.Clamp(5 + levelValue, 6, 10) : Mathf.Clamp(3 + levelValue, 4, 8);
+            var scale = isHeavy ? 0.18f : 0.135f + levelValue * 0.011f;
+            var lifetime = isHeavy ? 0.24f : 0.18f;
+            var color = isHeavy ? new Color(0.96f, 1f, 1f, 0.82f) : new Color(0.74f, 0.98f, 1f, 0.74f);
+            for (int i = 0; i < bladeCount; i++)
+            {
+                var spread = (i - (bladeCount - 1) * 0.5f) * (isHeavy ? 0.16f : 0.11f);
+                var depth = isHeavy ? Mathf.Sin(i * 1.7f) * 0.12f : (i % 3 - 1) * 0.07f;
+                var pos = origin + (Vector3)(forward * depth + side * spread);
+                SpawnKalmuriBlade("KalmuriEchoBarrage", pos, baseAngle + 92f + spread * 70f, scale, color, lifetime);
             }
         }
 
@@ -1794,6 +1833,17 @@ namespace Lethe.PrototypeV1
         void SpawnTransientSprite(string name, Sprite sprite, Vector3 position, Quaternion rotation, float scale, Color color, float lifetime)
         {
             SpawnTransientSpriteScaled(name, sprite, position, rotation, Vector3.one * scale, color, lifetime);
+        }
+
+        void SpawnKalmuriBlade(string name, Vector3 position, float angle, float scale, Color color, float lifetime)
+        {
+            SpawnTransientSprite(name, KalmuriBladeSprite(), position, Quaternion.Euler(0f, 0f, angle), scale, color, lifetime);
+        }
+
+        Sprite KalmuriBladeSprite()
+        {
+            return LoadSprite("Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_orbit_blade_01.png")
+                ?? MakeBladeSprite("kalmuri-fallback", new Color(0.75f, 1f, 1f), new Color(0.10f, 0.22f, 0.28f), 22, 82, false);
         }
 
         void SpawnTransientSpriteScaled(string name, Sprite sprite, Vector3 position, Quaternion rotation, Vector3 scale, Color color, float lifetime)

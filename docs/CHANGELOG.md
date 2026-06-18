@@ -8,6 +8,11 @@
 - Recorded a 30-minute runtime stability pass:
   - Final `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 0 warnings and 0 errors.
   - Unity MCP post-patch recheck was blocked by `Transport closed`.
+- Reworked first-pass Hungry Blades/Kalmuri readability:
+  - Active Hungry Blades now shows a denser two-ring blade swarm instead of a faint short orbit.
+  - Each Hungry Blades damage tick now spawns target-local bite blades.
+  - Kalmuri echo follow-ups now add an explicit blade barrage on top of the existing ring/slash read.
+  - Verification: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed; Unity compile error count was 0; short Play Mode entry produced 0 console errors.
 
 ## 2026-06-17
 

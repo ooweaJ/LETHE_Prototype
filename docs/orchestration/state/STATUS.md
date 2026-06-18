@@ -42,6 +42,23 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 Hungry Blades / Kalmuri readability follow-up:
+  - User review: `굶주린 칼무리` did not read as a blade swarm, and the user asked whether the other memory VFX actually exist.
+  - Inventory check:
+    - `_dev/Data` has 8 `MemoryDefinition`, 8 `EchoDefinition`, and 4 `UltimateEchoDefinition` assets.
+    - Dedicated sprite VFX is still concentrated on Kalmuri, Blood, and Blood Blade Storm.
+    - The remaining memory/echo/ultimate families currently use procedural runtime VFX such as rings, diamonds, crescent shots, and generated shapes, not final dedicated sprite art.
+  - Reworked active Hungry Blades into a denser two-ring orbit with 6-14 blade sprites.
+  - Added target-local bite blades on Hungry Blades damage ticks.
+  - Added explicit Kalmuri echo blade barrages before the existing ring/slash follow-up.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 legacy v0/debug deprecation warnings, 0 errors.
+  - Unity MCP:
+    - active scene `Dev_Prototype_v1`.
+    - compile error count `0`.
+    - short Play Mode entry reached `isPlaying=true`.
+    - console error log count `0`.
+  - Human visual review is still needed because the run starts behind the weapon-select overlay.
+
 - Unity v1 30-minute runtime stability pass:
   - Scanned `V1GameManager` for remaining enemy-list enumeration hazards after the Blood Bloom collection-modified fix.
   - Added two defensive null guards:

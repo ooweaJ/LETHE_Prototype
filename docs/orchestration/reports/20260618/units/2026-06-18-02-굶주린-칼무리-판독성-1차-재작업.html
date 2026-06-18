@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-18-02 - 굶주린 칼무리 판독성 1차 재작업</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-18-02 - 굶주린 칼무리 판독성 1차 재작업</h1>
+      <p class="meta">Generated from 2026-06-18-02-굶주린-칼무리-판독성-1차-재작업.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260618/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-18-02 - 굶주린 칼무리 판독성 1차 재작업</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 계속 <code>_dev</code> 평가 빌드입니다. 이번 작업은 <code>굶주린 칼무리</code>가 이름처럼 칼무리로 읽히지 않는다는 플레이 피드백을 받아, 활성 기억과 칼무리 잔향의 시각 언어를 칼날 군집 쪽으로 보정한 작은 패스입니다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>활성 <code>굶주린 칼무리</code>의 주변 VFX를 2~6개의 희미한 짧은 궤도에서 6~14개의 이중 궤도 칼날 군집으로 바꿨습니다.</li>
+<li>칼무리 데미지 틱마다 적 위치에 작은 칼날 다발과 물어뜯기 halo가 생기게 했습니다.</li>
+<li>칼무리 잔향 후속타에도 기존 링/참격 위에 칼날 barrage를 추가했습니다.</li>
+<li>칼무리 칼날 sprite 로딩을 <code>SpawnKalmuriBlade</code>, <code>KalmuriBladeSprite</code> helper로 모았습니다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과.</li>
+<li>결과: legacy v0/debug deprecated API warning 7개, error 0개.</li>
+<li>Unity MCP 확인:</li>
+<li>active scene: <code>Dev_Prototype_v1</code>.</li>
+<li>Unity compile error count: 0.</li>
+<li>짧은 Play Mode 진입 성공.</li>
+<li>Unity console error log count: 0.</li>
+<li>Play Mode stop 성공.</li>
+<li>제한: 시작 무기 선택 overlay 때문에 자동 확인은 런타임 예외 확인 수준입니다. 실제 칼무리 판독성은 jaewoo가 무기 선택 후 직접 봐야 합니다.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>다른 기억들의 전용 sprite VFX가 모두 존재한다고 보지 않습니다.</li>
+<li>현재 <code>_dev/Data</code>에는 8기억, 8잔향, 4궁극 definition이 있지만, 전용 PNG VFX는 칼무리/혈반/피의 칼폭풍에 집중되어 있습니다.</li>
+<li>나머지 기억/잔향/궁극은 일단 절차형 링, 다이아, 초승달, 투사체 형태로 보이게 해둔 상태입니다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>칼무리 VFX 밀도가 올라갔기 때문에 실제 전투에서 너무 바쁘거나 캐릭터/적을 가릴 수 있습니다.</li>
+<li>전용 sprite art가 없는 기억들은 여전히 최종 게임 아트라기보다 판독용 임시 VFX입니다.</li>
+<li>칼무리 자체도 아직 “최종 아트”가 아니라 기존 칼날 PNG를 더 명확하게 쓰는 1차 보정입니다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>사용자 피드백은 <code>굶주린 칼무리</code>가 칼무리처럼 보이지 않는다는 것이었다. 전용 VFX 재고를 확인한 결과 모든 기억에 dedicated sprite VFX가 있는 상태는 아니고, 일부는 procedural placeholder다. Codex는 칼무리 활성 기억을 이중 궤도 칼날 군집과 적 위치 bite blades로 바꾸고, 칼무리 잔향 후속타에 칼날 barrage를 추가했다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo가 <code>Dev_Prototype_v1</code>에서 무기 선택 후 칼무리 활성 기억과 칼무리 잔향을 직접 확인한다.</li>
+<li>칼무리가 여전히 약하면 다음 패스는 새 칼무리 전용 sprite/VFX asset 제작으로 간다.</li>
+<li>다른 6개 기억/잔향은 “절차형 placeholder 유지”인지 “전용 sprite 제작 착수”인지 우선순위를 정한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 이름과 화면 효과가 맞지 않아 핵심 기억의 정체성이 전달되지 않았다.</li>
+<li>방향: 수치보다 먼저 전투 중 읽히는 형태 언어를 고친다.</li>
+<li>행동: 칼무리의 오라/틱/잔향 후속타를 모두 칼날 군집 표현으로 재구성했다.</li>
+<li>결과: 기술 검증은 통과했고, 이제 사람 플레이에서 “칼무리처럼 보이는가”를 다시 판단할 수 있다.</li>
+</ul>
+  </main>
+</body>
+</html>

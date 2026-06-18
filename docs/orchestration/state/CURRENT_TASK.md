@@ -226,10 +226,20 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - `npm.cmd run report`: passed.
   - `npm.cmd run report:check`: passed, 5 unit headings ok.
   - `npm.cmd run report:orchestrator:unit:dry`: failed with `404 Not Found`, `project not found`.
+- Hungry Blades / Kalmuri readability follow-up:
+  - Confirmed the current asset inventory: all 8 memory/echo data assets exist, but dedicated sprite VFX does not exist for every memory family yet.
+  - Dedicated PNG VFX is currently concentrated on Kalmuri, Blood, and Blood Blade Storm; the other memory/echo families use procedural runtime shapes.
+  - Reworked active Hungry Blades from a faint short orbit into a denser 6-14 blade two-ring swarm.
+  - Hungry Blades damage ticks now spawn target-local bite blades so the damage reads as blades chewing through enemies.
+  - Kalmuri echo follow-ups now add an explicit blade barrage on top of the existing range ring and weapon slash.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 7 legacy warnings, 0 errors.
+  - Unity compile errors: `count=0`.
+  - Short Play Mode entry reached `isPlaying=true`; Unity console error log count `0`.
+  - Human visual review is still needed because the weapon-select overlay prevents a full no-input Kalmuri visual smoke.
 
 ## Next Implementation
 
-1. Ask jaewoo to review the whole `Dev_Prototype_v1` batch in Play Mode, knowing weapon/VFX tuning now lives in `_dev/Data/Weapons`.
+1. Ask jaewoo to review the whole `Dev_Prototype_v1` batch in Play Mode, knowing weapon/VFX tuning now lives in `_dev/Data/Weapons` and Hungry Blades/Kalmuri has a new blade-swarm readability pass.
 2. Collect one combined feedback pass for:
    - 시작 무기 선택 화면.
    - 카드 선택 중 적/탄이 완전히 멈추는지.

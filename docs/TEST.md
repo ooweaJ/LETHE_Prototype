@@ -34,9 +34,11 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 - 쌍검 기본공격이 빠른 2연 반달 베기로 보인다.
 - 대검 기본공격이 범위만큼 큰 반달 참격으로 보인다.
 - 적은 피격 시 흰색 플래시와 데미지 숫자를 보여준다.
+- 굶주린 칼무리는 작은 장식 오라가 아니라 여러 칼이 주변을 점유하고 타깃을 물어뜯는 군집으로 보인다.
 - 칼무리 잔향은 캐릭터 주변 잡선이 아니라 타격 지점 후속타로 보인다.
 - 혈반 잔향은 표식/실/피꽃으로 보인다.
 - Current B-step technical check: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed after Kalmuri range ring, Blood heal thread, Blood bloom thread, and knockback cap changes.
+- Kalmuri readability follow-up, 2026-06-18: active Hungry Blades now uses a denser two-ring blade swarm and target-local bite blades. Kalmuri echo follow-ups now add blade barrage sprites. `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 7 legacy warnings and 0 errors. Unity compile error count was 0, and short Play Mode entry produced 0 console errors; human visual review is still required because the run starts behind the weapon-select overlay.
 
 ### C. Real M2 Loop
 
