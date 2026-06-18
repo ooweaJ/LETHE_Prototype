@@ -103,6 +103,7 @@ namespace Lethe.PrototypeV1
         readonly Stack<GameObject> floatingTextPool = new();
         readonly Stack<GameObject> damageNumberPool = new();
         readonly Stack<GameObject> xpOrbPool = new();
+        readonly List<Choice> currentLevelUpChoices = new();
         readonly System.Random rng = new(120612);
 
         Camera mainCamera;
@@ -1421,6 +1422,8 @@ namespace Lethe.PrototypeV1
                 xp -= nextXp;
                 level++;
                 nextXp = Mathf.RoundToInt(nextXp * (level < 10 ? 1.24f : 1.42f) + (level < 10 ? 3f : 4f));
+                currentLevelUpChoices.Clear();
+                currentLevelUpChoices.AddRange(BuildChoices());
                 pausedForChoice = true;
                 Log($"레벨업 Lv.{level}");
                 break;
@@ -1675,7 +1678,11 @@ namespace Lethe.PrototypeV1
             GUI.Box(origin, "", panelStyle);
             GUI.Label(new Rect(origin.x + 32, origin.y + 24, origin.width - 64, 38), $"레벨업 Lv.{level}", titleStyle);
             GUI.Label(new Rect(origin.x + 42, origin.y + 66, origin.width - 84, 28), "하나의 기억 또는 전투 성향을 선택합니다.", smallStyle);
-            var choices = BuildChoices();
+            if (currentLevelUpChoices.Count == 0)
+            {
+                currentLevelUpChoices.AddRange(BuildChoices());
+            }
+            var choices = currentLevelUpChoices;
             var cardGap = 18f;
             var cardWidth = (origin.width - 84f - cardGap * 2f) / 3f;
             var cardHeight = origin.height - 138f;
@@ -1686,6 +1693,7 @@ namespace Lethe.PrototypeV1
                 if (GUI.Button(card, "", buttonStyle))
                 {
                     choice.Apply();
+                    currentLevelUpChoices.Clear();
                     pausedForChoice = false;
                 }
                 GUI.Label(new Rect(card.x + 18, card.y + 18, card.width - 36, 26), choice.Tag, smallStyle);

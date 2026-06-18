@@ -24,6 +24,8 @@
   - `KalmuriSwarmOrbit` could throw `MissingComponentException` because pooled Unity components were fetched with `?? AddComponent`.
   - Replaced Unity component fallback checks with explicit `if (component == null)` checks for SpriteRenderer, fading sprites, floating text, damage numbers, and XP orbs.
   - Verification: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed; Unity compile error count was 0; short Play Mode entry produced 0 console errors.
+- Fixed level-up reward cards rapidly changing every frame:
+  - Reward choices are now generated once when level-up starts and cached until the player selects a card.
 
 ## 2026-06-17
 
