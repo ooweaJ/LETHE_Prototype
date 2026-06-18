@@ -42,6 +42,18 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 30-minute runtime stability pass:
+  - Scanned `V1GameManager` for remaining enemy-list enumeration hazards after the Blood Bloom collection-modified fix.
+  - Added two defensive null guards:
+    - Hungry Blades target selection now ignores null enemy entries.
+    - Enemy-cap counting now ignores null enemy entries.
+  - Final `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 0 warnings, 0 errors.
+  - `npm.cmd run report`: passed.
+  - `npm.cmd run report:check`: passed after rerun.
+  - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
+  - Pre-patch short Unity Play Mode smoke during this pass showed no runtime exceptions after clearing console.
+  - Post-patch Unity MCP recheck was blocked because AnkleBreaker MCP tool calls returned `Transport closed`; Unity Editor itself was still listening on port `7890`.
+
 - Unity v1 E/F/G first content expansion pass:
   - Added first-pass runtime effects for remaining active memories:
     - Execution Flash.

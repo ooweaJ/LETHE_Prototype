@@ -779,7 +779,7 @@ namespace Lethe.PrototypeV1
 
             var targetLimit = 4;
             var hits = enemies
-                .Where(e => e.IsAlive && Vector2.Distance(player.position, e.transform.position) <= HungryBladesRadius + memory.Level * 0.22f)
+                .Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) <= HungryBladesRadius + memory.Level * 0.22f)
                 .OrderBy(e => Vector2.Distance(player.position, e.transform.position))
                 .Take(8)
                 .ToList();
@@ -1097,7 +1097,7 @@ namespace Lethe.PrototypeV1
         void UpdateSpawning(float dt)
         {
             var cap = EnemyCap();
-            if (enemies.Count(e => e.IsAlive && e.Kind != V1EnemyKind.Gatekeeper) >= cap) return;
+            if (enemies.Count(e => e != null && e.IsAlive && e.Kind != V1EnemyKind.Gatekeeper) >= cap) return;
 
             spawnTimer -= dt;
             if (spawnTimer > 0f) return;

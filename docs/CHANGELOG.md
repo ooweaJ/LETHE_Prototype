@@ -1,5 +1,14 @@
 # LETHE CHANGELOG
 
+## 2026-06-18
+
+- Hardened `Dev_Prototype_v1` runtime enemy-list queries:
+  - Hungry Blades target selection now skips null enemy entries.
+  - Enemy-cap counting now skips null enemy entries.
+- Recorded a 30-minute runtime stability pass:
+  - Final `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 0 warnings and 0 errors.
+  - Unity MCP post-patch recheck was blocked by `Transport closed`.
+
 ## 2026-06-17
 
 - Started `Dev_Prototype_v1 Core Prototype Complete` EPIC.
