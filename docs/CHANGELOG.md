@@ -13,6 +13,13 @@
   - Each Hungry Blades damage tick now spawns target-local bite blades.
   - Kalmuri echo follow-ups now add an explicit blade barrage on top of the existing ring/slash read.
   - Verification: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed; Unity compile error count was 0; short Play Mode entry produced 0 console errors.
+- Moved `Dev_Prototype_v1` toward the documented full-run game loop:
+  - Normal runs now use the documented 600s run, 180/340/490/600s Gatekeeper schedule, 54s deficit survival window, first boss HP 2050, and pressure phase spawn table.
+  - Fast/debug paths keep compressed timing for smoke review.
+  - Review-only automatic memory/+5 injection now runs only in fast debug mode.
+  - Level-up choices now include the six documented run stats: attack speed, damage, area, survival, magnet, and echo amp.
+  - Procedural transient VFX, floating text, damage numbers, and XP orbs now use internal object pools instead of constant create/destroy.
+  - Verification: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed; Unity compile error count was 0 after `Assets/Refresh`; short Play Mode entry produced 0 console errors.
 
 ## 2026-06-17
 

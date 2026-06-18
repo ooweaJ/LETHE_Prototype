@@ -236,10 +236,20 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - Unity compile errors: `count=0`.
   - Short Play Mode entry reached `isPlaying=true`; Unity console error log count `0`.
   - Human visual review is still needed because the weapon-select overlay prevents a full no-input Kalmuri visual smoke.
+- Stage/balance shell and object-pool pass:
+  - Confirmed the current runtime has first-pass behavior for all 8 active memories, all 8 echoes, and all 4 ultimate branches.
+  - Normal runs now use the documented 600s duration, 180/340/490/600s Gatekeeper schedule, first boss HP 2050, and 54s deficit survival.
+  - Spawn pressure now follows the documented phase table for lull/rising/gate breath/climax and deficit breath/trial, including caps and pack sizes.
+  - Review-only automatic memory/+5 injection now runs only during `fastDebugRun`; normal play must reach growth through XP/cards.
+  - Level-up choices now include the six documented run stats: attack speed, damage, area, survival, magnet, echo amp.
+  - Transient procedural VFX, floating text, damage numbers, and XP orbs are pooled/reused.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 0 warnings, 0 errors.
+  - Unity `Assets/Refresh`: success; compile error count `0`; short Play Mode entry console error count `0`.
+  - Remaining technical debt: enemies, player/enemy projectiles, and enemy shots still use create/destroy and should be pooled in a later optimization pass.
 
 ## Next Implementation
 
-1. Ask jaewoo to review the whole `Dev_Prototype_v1` batch in Play Mode, knowing weapon/VFX tuning now lives in `_dev/Data/Weapons` and Hungry Blades/Kalmuri has a new blade-swarm readability pass.
+1. Ask jaewoo to review `Dev_Prototype_v1` as a gameplay shell, not a VFX/art pass. Focus on whether the 600s run pacing, first boss timing, XP/card growth, forgetting, deficit survival, and resonance loop feel right.
 2. Collect one combined feedback pass for:
    - 시작 무기 선택 화면.
    - 카드 선택 중 적/탄이 완전히 멈추는지.

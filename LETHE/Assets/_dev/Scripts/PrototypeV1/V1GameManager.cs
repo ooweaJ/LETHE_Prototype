@@ -73,15 +73,20 @@ namespace Lethe.PrototypeV1
         const float GreatswordDamage = 42f;
         const float GreatswordArcDeg = 82f;
         const float GreatswordEngageMul = 1.08f;
-        const float ReviewFirstBossSeconds = 62f;
-        const float ReviewDeficitSeconds = 22f;
+        const float FirstBossSeconds = 180f;
+        const float FastFirstBossSeconds = 62f;
+        const float DeficitSurvivalSeconds = 54f;
+        const float FastDeficitSeconds = 6f;
         const float HungryBladesRadius = 72f / PixelsPerUnit;
         const float HungryBladesDps = 28f;
         const int MaxMemoryLevel = 5;
         const int MaxEchoLevel = 5;
         const int MaxActiveMemories = 3;
-        const float FirstBossHp = 760f;
+        const float FirstBossHp = 2050f;
+        const float FastBossHp = 180f;
         const float RunSeconds = 600f;
+        static readonly float[] BossScheduleSeconds = { 180f, 340f, 490f, 600f };
+        static readonly float[] FastBossScheduleSeconds = { 18f, 38f, 62f, 88f };
 
         [Header("Data")]
         [SerializeField] WeaponDefinition dualBladesDefinition;
@@ -94,6 +99,10 @@ namespace Lethe.PrototypeV1
         readonly List<PendingKalmuriFollowup> pendingKalmuriFollowups = new();
         readonly Dictionary<V1MemoryId, int> echoLevels = new();
         readonly Dictionary<string, Sprite> spriteCache = new();
+        readonly Stack<GameObject> transientSpritePool = new();
+        readonly Stack<GameObject> floatingTextPool = new();
+        readonly Stack<GameObject> damageNumberPool = new();
+        readonly Stack<GameObject> xpOrbPool = new();
         readonly System.Random rng = new(120612);
 
         Camera mainCamera;
@@ -119,7 +128,7 @@ namespace Lethe.PrototypeV1
         bool leftBladeLead = true;
         Vector2 lastAim = Vector2.up;
         float spawnTimer;
-        float bossTimer = ReviewFirstBossSeconds;
+        float bossTimer = FirstBossSeconds;
         float refillTimer;
         float hitstopTimer;
         float cameraShakeTimer;
@@ -129,6 +138,7 @@ namespace Lethe.PrototypeV1
         int xp;
         int nextXp = 5;
         int kills;
+        int bossSpawnIndex;
         bool reviewBloodGranted;
         bool reviewHungryBoosted;
         bool reviewBloodBoosted;
@@ -239,9 +249,12 @@ namespace Lethe.PrototypeV1
             HitstopActive = false;
 
             elapsed += dt;
-            UpdateReviewPacing();
+            if (fastDebugRun)
+            {
+                UpdateReviewPacing();
+            }
             bossTimer -= dt;
-            if (bossTimer <= 0f && !enemies.Any(e => e.Kind == V1EnemyKind.Gatekeeper))
+            if (bossTimer <= 0f && !enemies.Any(e => e != null && e.Kind == V1EnemyKind.Gatekeeper))
             {
                 SpawnGatekeeper();
                 bossTimer = 9999f;
@@ -275,6 +288,13 @@ namespace Lethe.PrototypeV1
                 overlayTitle = "사망";
                 overlayBody = $"생존 {Mathf.FloorToInt(elapsed)}초 / 처치 {kills} / Lv.{level}\nR 키로 재시작";
             }
+
+            if (elapsed >= RunSeconds && !deathOverlay)
+            {
+                deathOverlay = true;
+                overlayTitle = "런 종료";
+                overlayBody = $"600초 생존 완료 / 처치 {kills} / Lv.{level}\nR 키로 다시 시작";
+            }
         }
 
         public string DebugSnapshot()
@@ -293,6 +313,7 @@ namespace Lethe.PrototypeV1
             refillOverlay = false;
             deathOverlay = false;
             fastDebugRun = true;
+            bossSpawnIndex = 0;
             bossTimer = 42f;
             playerHp = Mathf.Max(playerHp, playerMaxHp * 0.65f);
             AddMemory(V1MemoryId.HungryBlades, 3, true);
@@ -366,6 +387,8 @@ namespace Lethe.PrototypeV1
             refillOverlay = false;
             deathOverlay = false;
             fastDebugRun = true;
+            bossSpawnIndex = 0;
+            bossTimer = 18f;
             playerHp = Mathf.Max(playerHp, playerMaxHp * 0.75f);
             AddMemory(V1MemoryId.HungryBlades, 5, true);
             AddMemory(V1MemoryId.BloodReflection, 3, true);
@@ -583,7 +606,8 @@ namespace Lethe.PrototypeV1
 
         V1Enemy FindWeaponTarget(WeaponRuntimeSpec weapon)
         {
-            var engageRadius = weapon.Range * weapon.EngageMul;
+            var range = weapon.Range * (1f + WeaponStat.AreaMul);
+            var engageRadius = range * weapon.EngageMul;
             var candidates = enemies
                 .Where(e => e != null && e.IsAlive)
                 .Select(e => new { Enemy = e, Dir = (Vector2)(e.transform.position - player.position) })
@@ -616,10 +640,11 @@ namespace Lethe.PrototypeV1
         List<WeaponHit> CollectWeaponHits(WeaponRuntimeSpec weapon, Vector2 forward)
         {
             var f = forward.sqrMagnitude > 0.001f ? forward.normalized : lastAim.normalized;
+            var range = weapon.Range * (1f + WeaponStat.AreaMul);
             return enemies
                 .Where(e => e != null && e.IsAlive)
                 .Select(e => new WeaponHit(e, (Vector2)(e.transform.position - player.position)))
-                .Where(x => x.Distance <= weapon.Range + x.Enemy.TouchRadius)
+                .Where(x => x.Distance <= range + x.Enemy.TouchRadius)
                 .Where(x => x.Distance <= 0.001f || Vector2.Angle(f, x.Dir.normalized) <= weapon.ArcDegrees * 0.5f)
                 .OrderBy(x => x.Distance)
                 .Take(weapon.MaxTargets)
@@ -932,8 +957,8 @@ namespace Lethe.PrototypeV1
         {
             var isHeavy = weapon.EchoProcStyle == V1EchoProcStyle.SingleHeavy;
             var burstCount = isHeavy ? 1 : Mathf.Clamp(1 + level / 2, 1, 3);
-            var radius = (0.44f + level * 0.045f) * weapon.EchoSizeScale;
-            var damage = weapon.Damage * (0.22f + level * 0.045f) * weapon.EchoDamageScale;
+            var radius = (0.44f + level * 0.045f) * weapon.EchoSizeScale * (1f + WeaponStat.AreaMul * 0.55f);
+            var damage = weapon.Damage * (0.22f + level * 0.045f) * weapon.EchoDamageScale * (1f + WeaponStat.EchoAmp);
             var f = forward.sqrMagnitude > 0.01f ? forward.normalized : lastAim.normalized;
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
             var side = new Vector2(-f.y, f.x).normalized;
@@ -1136,12 +1161,17 @@ namespace Lethe.PrototypeV1
         void UpdateSpawning(float dt)
         {
             var cap = EnemyCap();
-            if (enemies.Count(e => e != null && e.IsAlive && e.Kind != V1EnemyKind.Gatekeeper) >= cap) return;
+            var liveNonBoss = enemies.Count(e => e != null && e.IsAlive && e.Kind != V1EnemyKind.Gatekeeper);
+            if (liveNonBoss >= cap)
+            {
+                spawnTimer = Mathf.Max(spawnTimer, SpawnProfile().Interval * 0.75f);
+                return;
+            }
 
             spawnTimer -= dt;
             if (spawnTimer > 0f) return;
             var profile = SpawnProfile();
-            spawnTimer = profile.Interval;
+            spawnTimer = Mathf.Max(0.34f, profile.Interval);
 
             for (int i = 0; i < profile.PackSize; i++)
             {
@@ -1151,26 +1181,49 @@ namespace Lethe.PrototypeV1
 
         SpawnWaveProfile SpawnProfile()
         {
-            var firstCycleProgress = Mathf.Clamp01(elapsed / ReviewFirstBossSeconds);
-            if (activeMemories.Count < MaxActiveMemories && elapsed > 30f)
+            var pressure = CurrentPressure();
+            if (pressure.Deficit)
             {
-                return firstCycleProgress < 0.3f
-                    ? new SpawnWaveProfile(0.58f, 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne)
-                    : new SpawnWaveProfile(0.42f, 3, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.VoidPriest);
+                return pressure.Progress < 0.30f
+                    ? new SpawnWaveProfile(0.72f, 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne)
+                    : new SpawnWaveProfile(pressure.Progress > 0.72f ? 0.44f : 0.50f, pressure.Progress > 0.72f ? 4 : 3, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.DriftingEye, V1EnemyKind.VoidPriest);
             }
 
-            if (firstCycleProgress < 0.24f) return new SpawnWaveProfile(0.58f, elapsed > 38f ? 3 : 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye);
-            if (firstCycleProgress < 0.70f) return new SpawnWaveProfile(elapsed >= 42f ? 0.48f : 0.82f, elapsed >= 42f ? 3 : 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.VoidPriest);
-            return new SpawnWaveProfile(firstCycleProgress >= 0.94f ? 0.86f : 0.72f, firstCycleProgress >= 0.94f ? 1 : 3, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne);
+            if (pressure.Progress < 0.24f)
+            {
+                return elapsed < 70f
+                    ? new SpawnWaveProfile(0.72f, 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye)
+                    : new SpawnWaveProfile(0.72f, 3, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne);
+            }
+
+            if (pressure.Progress < 0.70f)
+            {
+                return elapsed >= 126f
+                    ? new SpawnWaveProfile(0.54f, 3, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.VoidPriest)
+                    : elapsed > 95f
+                        ? new SpawnWaveProfile(1.05f, 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.VoidPriest)
+                        : new SpawnWaveProfile(1.05f, 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne);
+            }
+
+            if (pressure.FirstCycle && pressure.Progress >= 0.94f)
+            {
+                return new SpawnWaveProfile(1.30f, 1, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye);
+            }
+
+            return pressure.FirstCycle
+                ? new SpawnWaveProfile(1.08f, 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne)
+                : new SpawnWaveProfile(0.43f, 4, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.VoidPriest);
         }
 
         int EnemyCap()
         {
-            if (activeMemories.Count < MaxActiveMemories && elapsed > 30f) return elapsed < 80f ? 18 : 16;
-            var progress = Mathf.Clamp01(elapsed / ReviewFirstBossSeconds);
-            if (progress >= 0.94f) return 22;
-            if (progress >= 0.70f) return 30;
-            return 32;
+            var pressure = CurrentPressure();
+            if (pressure.Deficit) return pressure.Progress < 0.30f ? 16 : 14;
+            if (pressure.FirstCycle && pressure.Progress >= 0.94f) return 22;
+            if (pressure.FirstCycle && pressure.Progress >= 0.70f) return 32;
+            if (pressure.FirstCycle) return 34;
+            if (pressure.Progress >= 0.70f) return 46;
+            return 46;
         }
 
         void SpawnEnemy(V1EnemyKind kind, Vector3 pos)
@@ -1188,9 +1241,31 @@ namespace Lethe.PrototypeV1
 
         void SpawnGatekeeper()
         {
-            if (enemies.Any(e => e.Kind == V1EnemyKind.Gatekeeper)) return;
+            if (enemies.Any(e => e != null && e.Kind == V1EnemyKind.Gatekeeper)) return;
             SpawnEnemy(V1EnemyKind.Gatekeeper, player.position + Vector3.up * 4.8f);
-            Log("문지기 등장: 첫 망각 관문");
+            Log($"문지기 등장 {bossSpawnIndex + 1}/{BossSchedule().Length}: 망각 관문");
+        }
+
+        float[] BossSchedule() => fastDebugRun ? FastBossScheduleSeconds : BossScheduleSeconds;
+
+        float CurrentDeficitDuration() => fastDebugRun ? FastDeficitSeconds : DeficitSurvivalSeconds;
+
+        PressureState CurrentPressure()
+        {
+            var schedule = BossSchedule();
+            var previousBossTime = bossSpawnIndex <= 0 ? 0f : schedule[Mathf.Clamp(bossSpawnIndex - 1, 0, schedule.Length - 1)];
+            var nextBossTime = bossSpawnIndex < schedule.Length ? schedule[bossSpawnIndex] : RunSeconds;
+            var span = Mathf.Max(1f, nextBossTime - previousBossTime);
+            var progress = Mathf.Clamp01((elapsed - previousBossTime) / span);
+
+            if (refillTimer > 0f || (lastForgotten.HasValue && activeMemories.Count < MaxActiveMemories))
+            {
+                var deficitDuration = CurrentDeficitDuration();
+                var deficitProgress = refillTimer > 0f ? Mathf.Clamp01(1f - refillTimer / Mathf.Max(1f, deficitDuration)) : progress;
+                return new PressureState(deficitProgress, bossSpawnIndex == 0, true);
+            }
+
+            return new PressureState(progress, bossSpawnIndex == 0, false);
         }
 
         Vector3 RandomSpawnPosition()
@@ -1202,17 +1277,24 @@ namespace Lethe.PrototypeV1
 
         float EnemyHp(V1EnemyKind kind)
         {
+            if (kind == V1EnemyKind.Gatekeeper) return GatekeeperHp();
             var baseHp = kind switch
             {
                 V1EnemyKind.Eroder => 48f,
                 V1EnemyKind.DriftingEye => 36f,
                 V1EnemyKind.SplitOne => 58f,
                 V1EnemyKind.VoidPriest => 74f,
-                V1EnemyKind.Gatekeeper => FirstBossHp,
                 _ => 48f
             };
             var minutes = elapsed / 60f;
             return baseHp * (1f + minutes * 0.12f) * (1f + (level - 1) * 0.03f);
+        }
+
+        float GatekeeperHp()
+        {
+            if (fastDebugRun) return FastBossHp;
+            if (bossSpawnIndex <= 0) return FirstBossHp;
+            return Mathf.Round(560f * (1f + 0.18f * Mathf.Max(0, bossSpawnIndex - 1)));
         }
 
         float EnemySpeed(V1EnemyKind kind) => (kind switch
@@ -1318,8 +1400,17 @@ namespace Lethe.PrototypeV1
             if (enemy.Kind == V1EnemyKind.Gatekeeper)
             {
                 Log("문지기 처치: 망각 발생");
+                bossSpawnIndex = Mathf.Min(bossSpawnIndex + 1, BossSchedule().Length);
+                bossTimer = NextBossDelay();
                 ForgetHighestMemory();
             }
+        }
+
+        float NextBossDelay()
+        {
+            var schedule = BossSchedule();
+            if (bossSpawnIndex >= schedule.Length) return Mathf.Max(20f, RunSeconds - elapsed);
+            return Mathf.Max(12f, schedule[bossSpawnIndex] - elapsed);
         }
 
         void GrantXp(int amount)
@@ -1347,12 +1438,12 @@ namespace Lethe.PrototypeV1
 
         void SpawnXpOrb(Vector3 position, int amount)
         {
-            var go = new GameObject("XP_Orb");
+            var go = RentPooled(xpOrbPool, "XP_Orb");
             go.transform.position = position;
-            var sr = go.AddComponent<SpriteRenderer>();
+            var sr = go.GetComponent<SpriteRenderer>() ?? go.AddComponent<SpriteRenderer>();
             sr.sprite = MakeCircleSprite("xp", new Color(0.25f, 0.95f, 1f), 24);
             sr.sortingOrder = 32;
-            var orb = go.AddComponent<V1XpOrb>();
+            var orb = go.GetComponent<V1XpOrb>() ?? go.AddComponent<V1XpOrb>();
             orb.Configure(this, amount);
             xpOrbs.Add(orb);
         }
@@ -1361,6 +1452,7 @@ namespace Lethe.PrototypeV1
         {
             xpOrbs.Remove(orb);
             GrantXp(amount);
+            ReleaseXpOrb(orb);
         }
 
         void AddMemory(V1MemoryId id, int targetLevel, bool allowUpgrade)
@@ -1400,7 +1492,7 @@ namespace Lethe.PrototypeV1
         void ContinueAfterForgetResult()
         {
             resultOverlay = false;
-            refillTimer = fastDebugRun ? 6f : ReviewDeficitSeconds;
+            refillTimer = CurrentDeficitDuration();
             Log($"결손 생존 시작: {Mathf.CeilToInt(refillTimer)}초");
         }
 
@@ -1477,6 +1569,12 @@ namespace Lethe.PrototypeV1
             currentWeaponId = weaponId;
             weaponSelectOverlay = false;
             runStarted = true;
+            fastDebugRun = false;
+            bossSpawnIndex = 0;
+            bossTimer = BossSchedule()[0];
+            refillTimer = 0f;
+            spawnTimer = 0.35f;
+            WeaponStat.Reset();
             GameplayPaused = false;
             HitstopActive = false;
             weaponTimer = 0.18f;
@@ -1632,10 +1730,29 @@ namespace Lethe.PrototypeV1
             {
                 choices.Add(new Choice("기억 강화", MemoryName(lowest.Id), $"현재 Lv.{lowest.Level} -> Lv.{lowest.Level + 1}\n\n효과의 빈도, 개수, 화면 존재감이 함께 올라갑니다.", () => AddMemory(lowest.Id, lowest.Level + 1, true)));
             }
-            choices.Add(new Choice("무기 성향", "칼날 가속", "장착 무기 공격 간격 -11%.\n\n잔향 발동 기회도 늘어나 무기 리듬이 더 선명해집니다.", () => { WeaponStat.AttackSpeed += 0.11f; Log("스탯: 칼날 가속"); }));
+            if (activeMemories.Count >= MaxActiveMemories)
+            {
+                var secondLowest = activeMemories.Where(m => m.Level < MaxMemoryLevel).OrderBy(m => m.Level).Skip(1).FirstOrDefault();
+                if (secondLowest != null)
+                {
+                    choices.Add(new Choice("기억 강화", MemoryName(secondLowest.Id), $"현재 Lv.{secondLowest.Level} -> Lv.{secondLowest.Level + 1}\n\n슬롯이 찼을 때는 낮은 레벨 기억을 한 번 더 밀어줍니다.", () => AddMemory(secondLowest.Id, secondLowest.Level + 1, true)));
+                }
+            }
+
+            var survivalChoice = new Choice("생존", "가라앉지 않는 숨", "최대 HP +16, 즉시 회복 +28, 받는 피해 -5%.\n\n망각 뒤 결손 생존 구간을 버틸 여유를 만듭니다.", () => { playerMaxHp += 16f; playerHp = Mathf.Min(playerMaxHp, playerHp + 28f); WeaponStat.DamageReduction += 0.05f; Log("스탯: 생존"); });
+            choices.Add(new Choice("무기 성향", "칼날 가속", "장착 무기 공격 간격 -11%, 기억 쿨다운 체감 증가.\n\n잔향 발동 기회도 늘어나 무기 리듬이 더 선명해집니다.", () => { WeaponStat.AttackSpeed += 0.11f; Log("스탯: 칼날 가속"); }));
             choices.Add(new Choice("무기 성향", "검은 물의 힘", "기본공격과 무기 기반 잔향 피해 +14%.\n\n한 번의 베기가 더 선명해집니다.", () => { WeaponStat.DamageMul += 0.14f; Log("스탯: 피해 증가"); }));
-            choices.Add(new Choice("생존", "가라앉지 않는 숨", "최대 HP +16, 즉시 회복 +28.\n\n망각 뒤 결손 생존 구간을 버틸 여유를 만듭니다.", () => { playerMaxHp += 16f; playerHp = Mathf.Min(playerMaxHp, playerHp + 28f); Log("스탯: 생존"); }));
-            return choices.Take(3).ToList();
+            choices.Add(new Choice("범위", "파문 확장", "무기 사거리와 주요 잔향 반경 +12%, 넉백 체감 +8%.\n\n무리 처리 안정성이 올라갑니다.", () => { WeaponStat.AreaMul += 0.12f; Log("스탯: 파문 확장"); }));
+            choices.Add(survivalChoice);
+            choices.Add(new Choice("성장", "기억 흡입", "경험치 흡입 반경 +16%.\n\n전투 중 성장 흐름이 끊기지 않게 합니다.", () => { WeaponStat.MagnetMul += 0.16f; Log("스탯: 기억 흡입"); }));
+            choices.Add(new Choice("잔향", "잔향 증폭", "잔향 효과 +20%.\n\n망각 뒤 남은 힘이 더 확실하게 전투를 바꿉니다.", () => { WeaponStat.EchoAmp += 0.20f; Log("스탯: 잔향 증폭"); }));
+
+            var picked = choices.OrderBy(_ => rng.Next()).Take(3).ToList();
+            if (playerHp / playerMaxHp < 0.72f && !picked.Any(c => c.Title == survivalChoice.Title))
+            {
+                picked[picked.Count - 1] = survivalChoice;
+            }
+            return picked;
         }
 
         bool HasMemory(V1MemoryId id) => activeMemories.Any(m => m.Id == id);
@@ -1677,8 +1794,8 @@ namespace Lethe.PrototypeV1
             if (refillOverlay) return "M2: 공명 재획득 대기 - 잃은 기억을 다시 가져오기";
             if (refillTimer > 0f) return $"M2: 결손 생존 {Mathf.CeilToInt(refillTimer)}초 - 잔향으로 버티기";
             if (lastForgotten.HasValue) return $"M2: {EchoName(lastForgotten.Value)} 남음 - 같은 기억 재획득 시 공명";
-            if (activeMemories.Count >= MaxActiveMemories) return $"M2: 다음 망각 후보 {ForgetCandidateText()} - 첫 보스 처치";
-            return "M2: 기억 3개 확보와 최고 레벨 강화가 목표";
+            if (activeMemories.Count >= MaxActiveMemories) return $"런: 다음 망각 후보 {ForgetCandidateText()} - 문지기까지 {Mathf.CeilToInt(Mathf.Max(0f, bossTimer))}초";
+            return "런: 기억 3개 확보와 최고 레벨 강화가 목표";
         }
 
         string UltimateReadyName()
@@ -1698,11 +1815,11 @@ namespace Lethe.PrototypeV1
 
         string PhaseName()
         {
-            if (activeMemories.Count < MaxActiveMemories && elapsed > 30f) return "결손 생존";
-            var p = Mathf.Clamp01(elapsed / ReviewFirstBossSeconds);
-            if (p < 0.24f) return "숨 고르기";
-            if (p < 0.70f) return "압박 상승";
-            if (p > 0.94f) return "문지기 호흡";
+            var pressure = CurrentPressure();
+            if (pressure.Deficit) return pressure.Progress < 0.30f ? "결손 정비" : "결손 압박";
+            if (pressure.Progress < 0.24f) return "숨 고르기";
+            if (pressure.Progress < 0.70f) return "압박 상승";
+            if (pressure.FirstCycle && pressure.Progress >= 0.94f) return "문지기 호흡";
             return "망각 전조";
         }
 
@@ -1794,14 +1911,15 @@ namespace Lethe.PrototypeV1
 
         void SpawnFloatingText(Vector3 pos, string text, Color color)
         {
-            var go = new GameObject("FloatText");
+            var go = RentPooled(floatingTextPool, "FloatText");
             go.transform.position = pos + Vector3.up * 0.35f;
-            go.AddComponent<V1FloatingText>().Configure(text, color);
+            var floating = go.GetComponent<V1FloatingText>() ?? go.AddComponent<V1FloatingText>();
+            floating.Configure(this, text, color);
         }
 
         void SpawnDamageNumber(Vector3 pos, float amount, bool weaponHit, WeaponVfxProfile feedback)
         {
-            var go = new GameObject("DamageNumber");
+            var go = RentPooled(damageNumberPool, "DamageNumber");
             var jitter = UnityEngine.Random.insideUnitCircle * 0.16f;
             go.transform.position = pos + new Vector3(jitter.x, 0.34f + jitter.y, 0f);
             var color = feedback != null
@@ -1810,7 +1928,8 @@ namespace Lethe.PrototypeV1
             var lifetime = feedback != null
                 ? weaponHit ? feedback.weaponDamageNumberLifetime : feedback.nonWeaponDamageNumberLifetime
                 : weaponHit ? 0.78f : 0.62f;
-            go.AddComponent<V1DamageNumber>().Configure(Mathf.CeilToInt(amount).ToString(), color, lifetime);
+            var damageNumber = go.GetComponent<V1DamageNumber>() ?? go.AddComponent<V1DamageNumber>();
+            damageNumber.Configure(this, Mathf.CeilToInt(amount).ToString(), color, lifetime);
         }
 
         void SpawnBloodThread(Vector3 from, float healAmount, int level)
@@ -1848,15 +1967,64 @@ namespace Lethe.PrototypeV1
 
         void SpawnTransientSpriteScaled(string name, Sprite sprite, Vector3 position, Quaternion rotation, Vector3 scale, Color color, float lifetime)
         {
-            var go = new GameObject(name);
+            var go = RentPooled(transientSpritePool, name);
             go.transform.position = new Vector3(position.x, position.y, -0.05f);
             go.transform.rotation = rotation;
             go.transform.localScale = scale;
-            var sr = go.AddComponent<SpriteRenderer>();
+            var sr = go.GetComponent<SpriteRenderer>() ?? go.AddComponent<SpriteRenderer>();
             sr.sprite = sprite ?? MakeCircleSprite(name, Color.white, 48);
             sr.color = color;
             sr.sortingOrder = 40;
-            go.AddComponent<V1FadingSprite>().Configure(lifetime);
+            var fading = go.GetComponent<V1FadingSprite>() ?? go.AddComponent<V1FadingSprite>();
+            fading.Configure(this, lifetime);
+        }
+
+        GameObject RentPooled(Stack<GameObject> pool, string name)
+        {
+            GameObject go = null;
+            while (pool.Count > 0 && go == null)
+            {
+                go = pool.Pop();
+            }
+            if (go == null)
+            {
+                go = new GameObject(name);
+            }
+            go.name = name;
+            go.SetActive(true);
+            return go;
+        }
+
+        public void ReleaseTransientSprite(V1FadingSprite fading)
+        {
+            if (fading == null) return;
+            var go = fading.gameObject;
+            go.SetActive(false);
+            transientSpritePool.Push(go);
+        }
+
+        public void ReleaseFloatingText(V1FloatingText floating)
+        {
+            if (floating == null) return;
+            var go = floating.gameObject;
+            go.SetActive(false);
+            floatingTextPool.Push(go);
+        }
+
+        public void ReleaseDamageNumber(V1DamageNumber damageNumber)
+        {
+            if (damageNumber == null) return;
+            var go = damageNumber.gameObject;
+            go.SetActive(false);
+            damageNumberPool.Push(go);
+        }
+
+        public void ReleaseXpOrb(V1XpOrb orb)
+        {
+            if (orb == null) return;
+            var go = orb.gameObject;
+            go.SetActive(false);
+            xpOrbPool.Push(go);
         }
 
         Sprite EnemySprite(V1EnemyKind kind)
@@ -1946,7 +2114,7 @@ namespace Lethe.PrototypeV1
         public void DamagePlayer(float amount, string source)
         {
             if (deathOverlay || amount <= 0f) return;
-            var finalDamage = amount * EarlyDamageMul();
+            var finalDamage = amount * EarlyDamageMul() * Mathf.Clamp01(1f - WeaponStat.DamageReduction);
             var ash = activeMemories.FirstOrDefault(m => m.Id == V1MemoryId.AshenShield);
             if (ash != null)
             {
@@ -1957,6 +2125,8 @@ namespace Lethe.PrototypeV1
             SpawnFloatingText(player.position + Vector3.up * 0.45f, $"-{Mathf.CeilToInt(finalDamage)}", new Color(1f, 0.45f, 0.55f));
             Log($"{source}: 피해 {finalDamage:0.0}");
         }
+
+        public float XpMagnetRadius => 2.4f * (1f + WeaponStat.MagnetMul);
 
         static Vector2 MoveInput()
         {
@@ -2489,10 +2659,38 @@ namespace Lethe.PrototypeV1
             public V1EnemyKind Pick(System.Random random) => pool[random.Next(pool.Length)];
         }
 
+        readonly struct PressureState
+        {
+            public readonly float Progress;
+            public readonly bool FirstCycle;
+            public readonly bool Deficit;
+
+            public PressureState(float progress, bool firstCycle, bool deficit)
+            {
+                Progress = progress;
+                FirstCycle = firstCycle;
+                Deficit = deficit;
+            }
+        }
+
         static class WeaponStat
         {
             public static float AttackSpeed;
             public static float DamageMul;
+            public static float AreaMul;
+            public static float DamageReduction;
+            public static float MagnetMul;
+            public static float EchoAmp;
+
+            public static void Reset()
+            {
+                AttackSpeed = 0f;
+                DamageMul = 0f;
+                AreaMul = 0f;
+                DamageReduction = 0f;
+                MagnetMul = 0f;
+                EchoAmp = 0f;
+            }
         }
     }
 
@@ -2748,27 +2946,30 @@ namespace Lethe.PrototypeV1
         {
             if (player == null) return;
             var dist = Vector2.Distance(transform.position, player.position);
-            if (dist < 2.4f)
+            var magnetRadius = manager != null ? manager.XpMagnetRadius : 2.4f;
+            if (dist < magnetRadius)
             {
                 transform.position = Vector3.MoveTowards(transform.position, player.position, 5f * dt);
             }
             if (dist < 0.28f)
             {
                 manager?.CollectXpOrb(this, amount);
-                Destroy(gameObject);
             }
         }
     }
 
     public sealed class V1FadingSprite : MonoBehaviour
     {
+        V1GameManager manager;
         SpriteRenderer sr;
         float lifetime;
         float age;
 
-        public void Configure(float lifetime)
+        public void Configure(V1GameManager manager, float lifetime)
         {
+            this.manager = manager;
             this.lifetime = Mathf.Max(0.02f, lifetime);
+            age = 0f;
             sr = GetComponent<SpriteRenderer>();
         }
 
@@ -2781,27 +2982,30 @@ namespace Lethe.PrototypeV1
                 c.a = Mathf.Lerp(c.a, 0f, age / lifetime);
                 sr.color = c;
             }
-            if (age >= lifetime) Destroy(gameObject);
+            if (age >= lifetime) manager?.ReleaseTransientSprite(this);
         }
     }
 
     public sealed class V1FloatingText : MonoBehaviour
     {
+        V1GameManager manager;
         string text;
         Color color;
         float age;
 
-        public void Configure(string text, Color color)
+        public void Configure(V1GameManager manager, string text, Color color)
         {
+            this.manager = manager;
             this.text = text;
             this.color = color;
+            age = 0f;
         }
 
         void Update()
         {
             age += Time.deltaTime;
             transform.position += Vector3.up * Time.deltaTime * 0.45f;
-            if (age > 0.65f) Destroy(gameObject);
+            if (age > 0.65f) manager?.ReleaseFloatingText(this);
         }
 
         void OnGUI()
@@ -2816,17 +3020,20 @@ namespace Lethe.PrototypeV1
 
     public sealed class V1DamageNumber : MonoBehaviour
     {
+        V1GameManager manager;
         string text;
         Color color;
         float lifetime;
         float age;
         Vector3 velocity;
 
-        public void Configure(string text, Color color, float lifetime)
+        public void Configure(V1GameManager manager, string text, Color color, float lifetime)
         {
+            this.manager = manager;
             this.text = text;
             this.color = color;
             this.lifetime = Mathf.Max(0.25f, lifetime);
+            age = 0f;
             velocity = new Vector3(UnityEngine.Random.Range(-0.12f, 0.12f), 0.72f, 0f);
         }
 
@@ -2836,7 +3043,7 @@ namespace Lethe.PrototypeV1
             age += Time.deltaTime;
             transform.position += velocity * Time.deltaTime;
             velocity = Vector3.Lerp(velocity, Vector3.up * 0.28f, Time.deltaTime * 5f);
-            if (age >= lifetime) Destroy(gameObject);
+            if (age >= lifetime) manager?.ReleaseDamageNumber(this);
         }
 
         void OnGUI()

@@ -42,6 +42,32 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 stage/balance shell and object-pool pass:
+  - User direction: pause VFX/art feedback for now; make sure every memory works, implement the stage/balance shell from the design docs, and optimize VFX/objects with pooling.
+  - Audit result:
+    - All 8 active memories have first-pass runtime behavior in `V1GameManager`.
+    - All 8 matching echoes have first-pass weapon-hit or event reactions.
+    - All 4 ultimate branches have first-pass runtime paths.
+    - Dedicated visual art is not complete for all of them, but visual polish is intentionally deferred.
+  - Normal run timing now follows `LETHE_DESIGN_01_RUN_LOOP.md`:
+    - 600s run duration.
+    - Gatekeeper schedule 180/340/490/600s.
+    - first boss HP 2050.
+    - deficit survival 54s.
+    - pressure phase spawn interval/pack/cap table.
+  - Fast/debug paths retain compressed timing for smoke review.
+  - Review-only automatic memory/+5 injection now runs only in fast debug mode, not normal play.
+  - Level-up choices now include all six documented run stats: attack speed, damage, area, survival, magnet, echo amp.
+  - Internal pools now reuse transient procedural VFX, floating text, damage numbers, and XP orbs.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 0 warnings, 0 errors.
+  - Unity MCP:
+    - `Assets/Refresh`: success.
+    - compile error count `0`.
+    - short Play Mode entry reached `isPlaying=true`.
+    - console error log count `0`.
+    - Play Mode stopped successfully.
+  - Remaining work: full manual balance review is still required; enemies/projectiles are not yet pooled.
+
 - Unity v1 Hungry Blades / Kalmuri readability follow-up:
   - User review: `굶주린 칼무리` did not read as a blade swarm, and the user asked whether the other memory VFX actually exist.
   - Inventory check:

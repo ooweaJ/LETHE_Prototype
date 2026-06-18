@@ -45,6 +45,15 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 - 디버그 버튼 없이 60~120초 안에 망각/잔향/공명/+5/궁극 중 핵심 흐름이 보인다.
 - 플레이어가 "이 기억을 키우면 다음에 잃는다"를 의식할 수 있다.
 - Current C-step technical check: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed after adding the M2 HUD objective text and the third-memory level-up card path.
+- Stage/balance shell follow-up, 2026-06-18:
+  - Normal runs now use 600s run duration, Gatekeepers at 180/340/490/600s, first boss HP 2050, 54s deficit survival, documented pressure phase spawn profiles, documented spawn caps, and all six run stat choices.
+  - Fast/debug paths retain compressed timing for smoke tests.
+  - Review-only automatic memory/+5 injection is no longer part of normal runs.
+  - Transient VFX, floating text, damage numbers, and XP orbs now use internal object pools.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 0 warnings, 0 errors.
+  - Unity `Assets/Refresh` then compile error count: 0.
+  - Short Unity Play Mode entry: console error count 0.
+  - Remaining risk: this confirms technical wiring, not final player-facing balance. A full manual run or compressed smoke still needs jaewoo review.
 
 ### H. Human Review Gate
 
