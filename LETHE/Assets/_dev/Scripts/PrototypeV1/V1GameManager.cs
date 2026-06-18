@@ -1440,10 +1440,12 @@ namespace Lethe.PrototypeV1
         {
             var go = RentPooled(xpOrbPool, "XP_Orb");
             go.transform.position = position;
-            var sr = go.GetComponent<SpriteRenderer>() ?? go.AddComponent<SpriteRenderer>();
+            var sr = go.GetComponent<SpriteRenderer>();
+            if (sr == null) sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = MakeCircleSprite("xp", new Color(0.25f, 0.95f, 1f), 24);
             sr.sortingOrder = 32;
-            var orb = go.GetComponent<V1XpOrb>() ?? go.AddComponent<V1XpOrb>();
+            var orb = go.GetComponent<V1XpOrb>();
+            if (orb == null) orb = go.AddComponent<V1XpOrb>();
             orb.Configure(this, amount);
             xpOrbs.Add(orb);
         }
@@ -1913,7 +1915,8 @@ namespace Lethe.PrototypeV1
         {
             var go = RentPooled(floatingTextPool, "FloatText");
             go.transform.position = pos + Vector3.up * 0.35f;
-            var floating = go.GetComponent<V1FloatingText>() ?? go.AddComponent<V1FloatingText>();
+            var floating = go.GetComponent<V1FloatingText>();
+            if (floating == null) floating = go.AddComponent<V1FloatingText>();
             floating.Configure(this, text, color);
         }
 
@@ -1928,7 +1931,8 @@ namespace Lethe.PrototypeV1
             var lifetime = feedback != null
                 ? weaponHit ? feedback.weaponDamageNumberLifetime : feedback.nonWeaponDamageNumberLifetime
                 : weaponHit ? 0.78f : 0.62f;
-            var damageNumber = go.GetComponent<V1DamageNumber>() ?? go.AddComponent<V1DamageNumber>();
+            var damageNumber = go.GetComponent<V1DamageNumber>();
+            if (damageNumber == null) damageNumber = go.AddComponent<V1DamageNumber>();
             damageNumber.Configure(this, Mathf.CeilToInt(amount).ToString(), color, lifetime);
         }
 
@@ -1971,11 +1975,13 @@ namespace Lethe.PrototypeV1
             go.transform.position = new Vector3(position.x, position.y, -0.05f);
             go.transform.rotation = rotation;
             go.transform.localScale = scale;
-            var sr = go.GetComponent<SpriteRenderer>() ?? go.AddComponent<SpriteRenderer>();
+            var sr = go.GetComponent<SpriteRenderer>();
+            if (sr == null) sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = sprite ?? MakeCircleSprite(name, Color.white, 48);
             sr.color = color;
             sr.sortingOrder = 40;
-            var fading = go.GetComponent<V1FadingSprite>() ?? go.AddComponent<V1FadingSprite>();
+            var fading = go.GetComponent<V1FadingSprite>();
+            if (fading == null) fading = go.AddComponent<V1FadingSprite>();
             fading.Configure(this, lifetime);
         }
 

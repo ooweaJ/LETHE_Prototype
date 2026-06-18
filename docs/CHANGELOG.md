@@ -20,6 +20,10 @@
   - Level-up choices now include the six documented run stats: attack speed, damage, area, survival, magnet, and echo amp.
   - Procedural transient VFX, floating text, damage numbers, and XP orbs now use internal object pools instead of constant create/destroy.
   - Verification: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed; Unity compile error count was 0 after `Assets/Refresh`; short Play Mode entry produced 0 console errors.
+- Fixed a pooled VFX regression:
+  - `KalmuriSwarmOrbit` could throw `MissingComponentException` because pooled Unity components were fetched with `?? AddComponent`.
+  - Replaced Unity component fallback checks with explicit `if (component == null)` checks for SpriteRenderer, fading sprites, floating text, damage numbers, and XP orbs.
+  - Verification: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed; Unity compile error count was 0; short Play Mode entry produced 0 console errors.
 
 ## 2026-06-17
 
