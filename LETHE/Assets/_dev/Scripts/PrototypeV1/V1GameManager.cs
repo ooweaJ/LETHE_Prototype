@@ -85,6 +85,7 @@ namespace Lethe.PrototypeV1
         const float FirstBossHp = 2050f;
         const float FastBossHp = 180f;
         const float RunSeconds = 600f;
+        const string PlayerSheetPath = "Assets/_dev/Art/Sprites/Characters/Player/sheet_player_4dir.png";
         static readonly float[] BossScheduleSeconds = { 180f, 340f, 490f, 600f };
         static readonly float[] FastBossScheduleSeconds = { 18f, 38f, 62f, 88f };
 
@@ -124,10 +125,13 @@ namespace Lethe.PrototypeV1
         float playerHp = 210f;
         float playerMaxHp = 210f;
         float elapsed;
+        float playerAnimTimer;
         float weaponTimer;
         float weaponAnimTimer;
         bool leftBladeLead = true;
         Vector2 lastAim = Vector2.up;
+        int playerAnimFrame;
+        int playerFacingRow;
         float spawnTimer;
         float bossTimer = FirstBossSeconds;
         float refillTimer;
@@ -441,11 +445,13 @@ namespace Lethe.PrototypeV1
                 {
                     var tile = new GameObject($"Floor_{x}_{y}");
                     tile.transform.position = new Vector3(x * 2.5f, y * 2.5f, 1f);
+                    tile.transform.rotation = Quaternion.Euler(0f, 0f, ((x * 17 + y * 31) & 3) * 90f);
                     var sr = tile.AddComponent<SpriteRenderer>();
                     sr.sprite = floorSprite;
-                    sr.color = new Color(0.18f, 0.20f, 0.24f, 1f);
+                    var v = Mathf.PerlinNoise(x * 0.37f + 12.1f, y * 0.41f + 4.7f);
+                    sr.color = Color.Lerp(new Color(0.105f, 0.125f, 0.145f, 1f), new Color(0.18f, 0.205f, 0.235f, 1f), v);
                     sr.sortingOrder = -100;
-                    tile.transform.localScale = Vector3.one * 2.6f;
+                    tile.transform.localScale = Vector3.one * (2.54f + v * 0.08f);
                 }
             }
         }
@@ -455,18 +461,23 @@ namespace Lethe.PrototypeV1
             var go = new GameObject("Player_V1");
             player = go.transform;
             player.position = Vector3.zero;
-            playerSprite = go.AddComponent<SpriteRenderer>();
-            playerSprite.sprite = LoadSheetFrame("Assets/_dev/Art/Sprites/Characters/Player/sheet_player_4dir.png", 4, 8, 0, 0) ?? MakeCircleSprite("player", new Color(0.78f, 0.88f, 1f), 96);
+
+            var visual = new GameObject("PlayerVisual").transform;
+            visual.SetParent(player);
+            visual.localPosition = Vector3.zero;
+            visual.localRotation = Quaternion.identity;
+            visual.localScale = Vector3.one;
+            playerSprite = visual.gameObject.AddComponent<SpriteRenderer>();
+            playerSprite.sprite = LoadSheetFrame(PlayerSheetPath, 4, 8, 0, 0) ?? MakeCircleSprite("player", new Color(0.78f, 0.88f, 1f), 96);
             playerSprite.sortingOrder = 20;
-            go.AddComponent<V1BillboardPulse>().Configure(0.03f, 2.2f);
 
             weaponAnchor = new GameObject("WeaponAnchor").transform;
             weaponAnchor.SetParent(player);
-            weaponAnchor.localPosition = new Vector3(0.25f, -0.05f, 0f);
+            weaponAnchor.localPosition = new Vector3(0f, -0.06f, 0f);
 
             dualLeftWeaponSprite = LoadSprite("Assets/_dev/Art/Sprites/Weapons/spr_weapon_dual_blade_left_01.png") ?? MakeBladeSprite("dual-left", new Color(0.80f, 0.96f, 1f), new Color(0.16f, 0.26f, 0.34f), 34, 112, false);
             dualRightWeaponSprite = LoadSprite("Assets/_dev/Art/Sprites/Weapons/spr_weapon_dual_blade_right_01.png") ?? MakeBladeSprite("dual-right", new Color(0.88f, 0.98f, 1f), new Color(0.18f, 0.30f, 0.38f), 34, 112, false);
-            greatswordWeaponSprite = MakeBladeSprite("greatsword-visual", new Color(0.82f, 0.96f, 1f), new Color(0.10f, 0.18f, 0.24f), 58, 178, true);
+            greatswordWeaponSprite = LoadSprite("Assets/_dev/Art/Sprites/Weapons/spr_weapon_greatsword_01.png") ?? MakeBladeSprite("greatsword-visual", new Color(0.82f, 0.96f, 1f), new Color(0.10f, 0.18f, 0.24f), 58, 178, true);
             leftBladeSprite = CreateWeaponSprite("LeftBlade", dualLeftWeaponSprite, new Vector3(-0.22f, -0.05f, 0f));
             rightBladeSprite = CreateWeaponSprite("RightBlade", dualRightWeaponSprite, new Vector3(0.22f, -0.05f, 0f));
         }
@@ -496,8 +507,8 @@ namespace Lethe.PrototypeV1
                 var angle = Mathf.Atan2(move.y, move.x) * Mathf.Rad2Deg;
                 weaponAnchor.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
                 lastAim = move.normalized;
-                playerSprite.flipX = move.x < -0.1f;
             }
+            UpdatePlayerSprite(move, dt);
 
             foreach (var enemy in enemies.ToList())
             {
@@ -1425,6 +1436,41 @@ namespace Lethe.PrototypeV1
             }
         }
 
+        void UpdatePlayerSprite(Vector2 move, float dt)
+        {
+            var moving = move.sqrMagnitude > 0.01f;
+            var facing = moving ? move.normalized : lastAim;
+            if (Mathf.Abs(facing.x) > Mathf.Abs(facing.y) * 0.85f)
+            {
+                playerFacingRow = facing.x < 0f ? 2 : 3;
+            }
+            else
+            {
+                playerFacingRow = facing.y > 0f ? 1 : 0;
+            }
+
+            if (moving)
+            {
+                playerAnimTimer += dt;
+                if (playerAnimTimer >= 0.11f)
+                {
+                    playerAnimTimer = 0f;
+                    playerAnimFrame = (playerAnimFrame + 1) % 4;
+                }
+            }
+            else
+            {
+                playerAnimTimer = 0f;
+                playerAnimFrame = 0;
+            }
+
+            var row = (moving ? 4 : 0) + playerFacingRow;
+            playerSprite.flipX = false;
+            playerSprite.sprite = LoadSheetFrame(PlayerSheetPath, 4, 8, playerAnimFrame, row)
+                ?? LoadSheetFrame(PlayerSheetPath, 4, 8, 0, 0)
+                ?? playerSprite.sprite;
+        }
+
         int KillXpAmount(V1Enemy enemy)
         {
             if (enemy == null) return 1;
@@ -1673,33 +1719,50 @@ namespace Lethe.PrototypeV1
         void DrawHud()
         {
             var weapon = CurrentWeaponSpec();
-            GUI.Box(new Rect(12, 12, 452, 218), "", panelStyle);
-            GUI.Label(new Rect(24, 20, 380, 28), $"LETHE v1 / {PhaseName()} / {Mathf.FloorToInt(elapsed)}s / HP {Mathf.CeilToInt(playerHp)}/{Mathf.CeilToInt(playerMaxHp)}", smallStyle);
-            DrawBar(new Rect(24, 47, 396, 12), Mathf.Clamp01(playerHp / playerMaxHp), new Color(0.18f, 0.95f, 0.62f), new Color(0.08f, 0.12f, 0.13f));
-            GUI.Label(new Rect(24, 64, 380, 24), $"Lv.{level} XP {xp}/{nextXp} / 처치 {kills} / 무기 {weapon.DisplayName}", smallStyle);
-            DrawBar(new Rect(24, 91, 396, 14), Mathf.Clamp01(nextXp <= 0 ? 0f : (float)xp / nextXp), new Color(0.32f, 0.88f, 1f), new Color(0.07f, 0.10f, 0.13f));
-            GUI.Label(new Rect(24, 112, 380, 24), $"다음 망각 후보: {ForgetCandidateText()}", smallStyle);
-            GUI.Label(new Rect(24, 140, 380, 24), $"잔향: {EchoText()}", smallStyle);
-            GUI.Label(new Rect(24, 166, 390, 24), BloodBladeStormReady ? $"{UltimateGoalText()} / {UltimatePatternText(weapon)}" : UltimateGoalText(), smallStyle);
+            GUI.Box(new Rect(12, 12, 430, 184), "", panelStyle);
+            GUI.Label(new Rect(24, 20, 224, 24), $"LETHE  {Mathf.FloorToInt(elapsed)}s  {PhaseName()}", smallStyle);
+            GUI.Label(new Rect(260, 20, 166, 24), $"{weapon.DisplayName}  Lv.{level}", smallStyle);
+            GUI.Label(new Rect(24, 47, 70, 20), $"HP {Mathf.CeilToInt(playerHp)}/{Mathf.CeilToInt(playerMaxHp)}", smallStyle);
+            DrawBar(new Rect(98, 52, 318, 10), Mathf.Clamp01(playerHp / playerMaxHp), new Color(0.18f, 0.95f, 0.62f), new Color(0.08f, 0.12f, 0.13f));
+            GUI.Label(new Rect(24, 69, 70, 20), $"XP {xp}/{nextXp}", smallStyle);
+            DrawBar(new Rect(98, 74, 318, 10), Mathf.Clamp01(nextXp <= 0 ? 0f : (float)xp / nextXp), new Color(0.32f, 0.88f, 1f), new Color(0.07f, 0.10f, 0.13f));
+            GUI.Label(new Rect(24, 92, 180, 22), $"처치 {kills}", smallStyle);
+            GUI.Label(new Rect(210, 92, 206, 22), $"망각 후보 {ForgetCandidateText()}", smallStyle);
+            DrawMemoryStrip(new Rect(24, 119, 392, 30));
+            GUI.Label(new Rect(24, 151, 392, 20), BloodBladeStormReady ? $"{UltimateGoalText()} / {UltimatePatternText(weapon)}" : UltimateGoalText(), smallStyle);
+            GUI.Label(new Rect(24, 170, 392, 20), M2LoopText(), smallStyle);
 
-            GUI.Label(new Rect(24, 192, 418, 26), M2LoopText(), smallStyle);
-
-            GUI.Box(new Rect(Screen.width - 372, 12, 360, 196), "", panelStyle);
-            GUI.Label(new Rect(Screen.width - 358, 22, 340, 22), "F1 칼무리+5  F2 혈반+5  F3 망각", smallStyle);
-            GUI.Label(new Rect(Screen.width - 358, 46, 340, 22), "F4 칼무리잔향+5  F5 혈반잔향+5", smallStyle);
-            GUI.Label(new Rect(Screen.width - 358, 70, 340, 22), "F6 문지기  F7 레벨업  F8 M2압축  F9 무기", smallStyle);
-            if (GUI.Button(new Rect(Screen.width - 358, 96, 106, 28), "M1 Smoke", buttonStyle)) DebugRunM1Smoke();
-            if (GUI.Button(new Rect(Screen.width - 246, 96, 106, 28), "M2 Loop", buttonStyle)) DebugRunM2Smoke();
-            if (GUI.Button(new Rect(Screen.width - 134, 96, 106, 28), "Continue", buttonStyle))
+            GUI.Box(new Rect(Screen.width - 326, 12, 314, 136), "", panelStyle);
+            GUI.Label(new Rect(Screen.width - 314, 22, 292, 20), "Debug  F1/F2 기억  F4/F5 잔향  F8 M2", smallStyle);
+            if (GUI.Button(new Rect(Screen.width - 314, 48, 92, 28), "M1", buttonStyle)) DebugRunM1Smoke();
+            if (GUI.Button(new Rect(Screen.width - 216, 48, 92, 28), "M2", buttonStyle)) DebugRunM2Smoke();
+            if (GUI.Button(new Rect(Screen.width - 118, 48, 92, 28), "계속", buttonStyle))
             {
                 if (resultOverlay) ContinueAfterForgetResult();
                 else if (refillOverlay) ReacquireLastForgotten();
             }
-            var y = 130;
+            var y = 82;
             foreach (var line in combatLog.TakeLast(3))
             {
-                GUI.Label(new Rect(Screen.width - 358, y, 340, 22), line, smallStyle);
-                y += 22;
+                GUI.Label(new Rect(Screen.width - 314, y, 292, 20), line, smallStyle);
+                y += 19;
+            }
+        }
+
+        void DrawMemoryStrip(Rect rect)
+        {
+            var gap = 8f;
+            var width = (rect.width - gap * 2f) / 3f;
+            for (int i = 0; i < MaxActiveMemories; i++)
+            {
+                var slot = new Rect(rect.x + i * (width + gap), rect.y, width, rect.height);
+                GUI.color = new Color(0.05f, 0.08f, 0.10f, 0.92f);
+                GUI.DrawTexture(slot, Texture2D.whiteTexture);
+                GUI.color = activeMemories.Count > i ? new Color(0.32f, 0.88f, 1f, 0.78f) : new Color(0.28f, 0.34f, 0.38f, 0.55f);
+                GUI.DrawTexture(new Rect(slot.x, slot.y, slot.width, 3f), Texture2D.whiteTexture);
+                GUI.color = Color.white;
+                var text = activeMemories.Count > i ? $"{MemoryName(activeMemories[i].Id)} +{activeMemories[i].Level}" : "빈 기억";
+                GUI.Label(new Rect(slot.x + 8f, slot.y + 6f, slot.width - 16f, slot.height - 8f), text, smallStyle);
             }
         }
 
