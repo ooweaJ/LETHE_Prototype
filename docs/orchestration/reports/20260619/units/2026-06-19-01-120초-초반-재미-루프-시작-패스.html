@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-19-01 - 120초 초반 재미 루프 시작 패스</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-19-01 - 120초 초반 재미 루프 시작 패스</h1>
+      <p class="meta">Generated from 2026-06-19-01-120초-초반-재미-루프-시작-패스.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260619/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-19-01 - 120초 초반 재미 루프 시작 패스</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 계속 <code>_dev</code> 평가 빌드입니다. 이번 작업은 “뱀서처럼 초반부터 재미있는가”를 보기 위한 첫 구현 패스입니다. 전체 콘텐츠 추가가 아니라, 첫 120초 안에 시작 선택과 보상 방향이 읽히도록 바꿨습니다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>docs/TASK.md</code>에 <code>J. 120초 초반 재미 루프</code> 체크리스트를 추가했습니다.</li>
+<li>시작 화면을 무기 2개 선택에서 시작 빌드 4개 선택으로 바꿨습니다.</li>
+<li>절단쌍검 + 굶주린 칼무리.</li>
+<li>절단쌍검 + 피의 반사.</li>
+<li>장송대검 + 굶주린 칼무리.</li>
+<li>장송대검 + 피의 반사.</li>
+<li><code>BeginRun</code>이 시작 기억을 받을 수 있게 바뀌었습니다.</li>
+<li>혈반으로 시작하면 칼무리 카드가, 칼무리로 시작하면 혈반 카드가 빠르게 보상 후보로 나오도록 레벨업 선택 우선순위를 보정했습니다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과.</li>
+<li>결과: legacy v0/debug warning 7개, error 0개.</li>
+<li>Unity MCP:</li>
+<li>active scene: <code>Dev_Prototype_v1</code>.</li>
+<li>compile error count: 0.</li>
+<li>Play Mode 진입 성공.</li>
+<li>console error log count: 0.</li>
+<li>Play Mode stop 성공.</li>
+<li>제한: 카메라 기반 Game View screenshot은 OnGUI 시작 카드를 캡처하지 못하고 카메라 배경만 저장했습니다. 검은 임시 캡처 파일은 제거했고, UI 시각 검증은 직접 Play Mode에서 봐야 합니다.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>당장은 8기억/8잔향 확장을 더 밀지 않습니다.</li>
+<li>먼저 첫 120초에서 시작 빌드 선택, 첫 레벨업, 코어 기억 2개 확보, 다음 망각 후보가 순환하는지 확인합니다.</li>
+<li>사람 리뷰 전에는 <code>완전한 재미</code>가 아니라 <code>재미를 판단할 수 있는 초반 구조</code>를 목표로 봅니다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>시작 카드가 실제 화면에서 충분히 읽히는지는 아직 jaewoo 직접 확인이 필요합니다.</li>
+<li>첫 20~30초 보상 속도와 60~90초 기억 2~3개 도달성은 아직 수치 튜닝 전입니다.</li>
+<li>screenshot evidence는 OnGUI 오버레이를 담지 못해 남기지 않았습니다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>LETHE의 다음 방향은 콘텐츠 추가가 아니라 120초 초반 재미 루프 검증이다. Codex는 시작 화면을 4개 시작 빌드 카드로 바꾸고, 어떤 시작 기억을 골라도 칼무리/혈반 코어 조합으로 빠르게 이어지도록 레벨업 보상 우선순위를 조정했다. 다음 리뷰는 직접 플레이로 시작 카드, 첫 보상 리듬, 다음 망각 후보 인지를 확인하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo 직접 플레이 피드백을 받는다.</li>
+<li>피드백에 따라 다음 패스를 하나만 고른다:</li>
+<li>보상 속도.</li>
+<li>공격 손맛.</li>
+<li>망각 UX.</li>
+<li>스폰 압박.</li>
+<li>아트/VFX 교체.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 기술적으로 기능은 많아졌지만, 초반 120초가 뱀서류처럼 바로 재미있는지 판단할 구조가 부족했다.</li>
+<li>방향: 콘텐츠 양보다 시작 선택과 첫 보상 루프를 먼저 선명하게 만든다.</li>
+<li>행동: 시작 빌드 카드 4개와 코어 기억 보상 우선순위를 구현했다.</li>
+<li>결과: 기술 검증은 통과했고, 이제 사람 플레이로 초반 재미 밀도를 판단할 수 있다.</li>
+</ul>
+  </main>
+</body>
+</html>

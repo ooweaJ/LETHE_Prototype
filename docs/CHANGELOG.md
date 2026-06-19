@@ -1,5 +1,22 @@
 # LETHE CHANGELOG
 
+## 2026-06-19
+
+- Added the `J. 120초 초반 재미 루프` implementation checklist to `docs/TASK.md`.
+- Changed the `Dev_Prototype_v1` start overlay from weapon-only selection to four start build cards:
+  - `절단쌍검 + 굶주린 칼무리`
+  - `절단쌍검 + 피의 반사`
+  - `장송대검 + 굶주린 칼무리`
+  - `장송대검 + 피의 반사`
+- `BeginRun` now accepts a starting memory while preserving the old weapon-only debug path as Hungry Blades default.
+- Level-up choices now prioritize missing core memories (`굶주린 칼무리`, `피의 반사`) so either start route can reach the Kalmuri/Blood core loop quickly.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console error log count: 0.
+  - Note: camera-based Game View screenshots do not capture the OnGUI start overlay, so UI review still needs direct play inspection.
+
 ## 2026-06-18
 
 - Hardened `Dev_Prototype_v1` runtime enemy-list queries:

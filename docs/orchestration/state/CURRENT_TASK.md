@@ -246,12 +246,28 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 0 warnings, 0 errors.
   - Unity `Assets/Refresh`: success; compile error count `0`; short Play Mode entry console error count `0`.
   - Remaining technical debt: enemies, player/enemy projectiles, and enemy shots still use create/destroy and should be pooled in a later optimization pass.
+- 120-second early fun-loop start pass:
+  - Added `J. 120초 초반 재미 루프` to `docs/TASK.md` as the active implementation checklist for the next player-facing gate.
+  - Start overlay now presents four build cards instead of weapon-only selection:
+    - `절단쌍검 + 굶주린 칼무리`.
+    - `절단쌍검 + 피의 반사`.
+    - `장송대검 + 굶주린 칼무리`.
+    - `장송대검 + 피의 반사`.
+  - `BeginRun` now accepts a starting memory while preserving the old weapon-only debug path as Hungry Blades default.
+  - Level-up choices prioritize missing core memories so either Kalmuri or Blood starts can quickly fill the Kalmuri/Blood loop.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings, 0 errors.
+  - Unity compile error count: `0`.
+  - Play Mode entry reached `isPlaying=true`; console error log count `0`.
+  - Limitation: camera-based Game View screenshots do not capture OnGUI start cards, so direct play inspection is still required.
 
 ## Next Implementation
 
-1. Ask jaewoo to review `Dev_Prototype_v1` as a gameplay shell, not a VFX/art pass. Focus on whether the 600s run pacing, first boss timing, XP/card growth, forgetting, deficit survival, and resonance loop feel right.
+1. Ask jaewoo to review `Dev_Prototype_v1` as a 120-second early fun loop first, not as a full 600-second balance run.
 2. Collect one combined feedback pass for:
-   - 시작 무기 선택 화면.
+   - 시작 빌드 카드 4개가 이번 판 방향으로 읽히는지.
+   - 혈반 시작 후 칼무리 카드, 칼무리 시작 후 혈반 카드가 자연스럽게 보이는지.
+   - 첫 20~30초 안에 첫 레벨업/보상 리듬이 오는지.
+   - 60~90초 안에 활성 기억 2~3개와 다음 망각 후보가 보이는지.
    - 카드 선택 중 적/탄이 완전히 멈추는지.
    - 쌍검 기본공격.
    - 쌍검 반달 2연 베기가 슥슥 하는 느낌인지.
@@ -262,9 +278,9 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
    - 원거리몹이 사거리 안에서 후퇴하지 않고 정지 사격하는지.
    - 대검/칼무리 hitstop 중 캐릭터 이동감이 끊기지 않는지.
    - 대검 시작 선택과 `F9` 비교.
-   - 망각/공명/+5 잔향/피의 칼폭풍 흐름.
+   - 망각 예고/공명/+5 잔향/피의 칼폭풍 목표가 너무 늦거나 복잡하지 않은지.
    - HUD readability and combat density.
-3. After feedback, pick exactly one next pass: attack readability, pacing/balance, UI clarity, or art replacement.
+3. After feedback, pick exactly one next pass: reward cadence, attack readability, forgetting UX, spawn pressure, or art replacement.
 
 ## Open Questions
 

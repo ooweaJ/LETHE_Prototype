@@ -206,8 +206,10 @@ namespace Lethe.PrototypeV1
             {
                 GameplayPaused = true;
                 HitstopActive = false;
-                if (KeyDown(KeyCode.Alpha1)) BeginRun(V1WeaponId.DualBlades);
-                if (KeyDown(KeyCode.Alpha2)) BeginRun(V1WeaponId.Greatsword);
+                if (KeyDown(KeyCode.Alpha1)) BeginRun(V1WeaponId.DualBlades, V1MemoryId.HungryBlades);
+                if (KeyDown(KeyCode.Alpha2)) BeginRun(V1WeaponId.DualBlades, V1MemoryId.BloodReflection);
+                if (KeyDown(KeyCode.Alpha3)) BeginRun(V1WeaponId.Greatsword, V1MemoryId.HungryBlades);
+                if (KeyDown(KeyCode.Alpha4)) BeginRun(V1WeaponId.Greatsword, V1MemoryId.BloodReflection);
                 return;
             }
 
@@ -1570,6 +1572,11 @@ namespace Lethe.PrototypeV1
 
         void BeginRun(V1WeaponId weaponId)
         {
+            BeginRun(weaponId, V1MemoryId.HungryBlades);
+        }
+
+        void BeginRun(V1WeaponId weaponId, V1MemoryId startMemoryId)
+        {
             if (runStarted) return;
             currentWeaponId = weaponId;
             weaponSelectOverlay = false;
@@ -1584,10 +1591,10 @@ namespace Lethe.PrototypeV1
             HitstopActive = false;
             weaponTimer = 0.18f;
             weaponAnimTimer = 0f;
-            AddMemory(V1MemoryId.HungryBlades, 1, true);
+            AddMemory(startMemoryId, 1, true);
             var weapon = CurrentWeaponSpec();
-            SpawnFloatingText(player.position + Vector3.up * 1.15f, weapon.DisplayName, new Color(0.78f, 0.96f, 1f));
-            Log($"런 시작: {weapon.DisplayName} + 굶주린 칼무리 Lv.1");
+            SpawnFloatingText(player.position + Vector3.up * 1.15f, $"{weapon.DisplayName} + {MemoryName(startMemoryId)}", new Color(0.78f, 0.96f, 1f));
+            Log($"런 시작: {weapon.DisplayName} + {MemoryName(startMemoryId)} Lv.1");
         }
 
         void EnsureRunStarted()
@@ -1607,33 +1614,40 @@ namespace Lethe.PrototypeV1
         {
             GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "", panelStyle);
             var width = Mathf.Min(1040f, Screen.width - 80f);
-            var height = Mathf.Min(520f, Screen.height - 70f);
+            var height = Mathf.Min(640f, Screen.height - 70f);
             var origin = new Rect(Screen.width * 0.5f - width * 0.5f, Screen.height * 0.5f - height * 0.5f, width, height);
             GUI.Box(origin, "", panelStyle);
-            GUI.Label(new Rect(origin.x + 30, origin.y + 28, origin.width - 60, 42), "시작 무기 선택", titleStyle);
-            GUI.Label(new Rect(origin.x + 54, origin.y + 78, origin.width - 108, 42), "무기는 자동으로 발동합니다. 잔향은 이 무기 타격 지점에 붙어 후속타가 됩니다.", smallStyle);
+            GUI.Label(new Rect(origin.x + 30, origin.y + 26, origin.width - 60, 42), "시작 빌드 선택", titleStyle);
+            GUI.Label(new Rect(origin.x + 54, origin.y + 74, origin.width - 108, 42), "첫 판 방향을 먼저 고릅니다. 빠른 칼자국/큰 참격과 칼무리/혈반 기억이 초반 재미의 기준입니다.", smallStyle);
 
-            var gap = 28f;
+            var gap = 18f;
             var cardWidth = (origin.width - 108f - gap) * 0.5f;
-            var cardHeight = origin.height - 158f;
-            DrawWeaponCard(new Rect(origin.x + 54f, origin.y + 126f, cardWidth, cardHeight), V1WeaponId.DualBlades, "1", "빠른 2연 발도", "작은 칼자국이 여러 번 적 몸에 찍힙니다.\n\n칼무리 잔향: 작고 빠른 혈검 다수\n궁극: 연쇄형 피의 칼폭풍", new Color(0.32f, 0.88f, 1f));
-            DrawWeaponCard(new Rect(origin.x + 54f + cardWidth + gap, origin.y + 126f, cardWidth, cardHeight), V1WeaponId.Greatsword, "2", "느린 큰 참격", "적 무리 중심에 큰 검흔과 밀어내기가 생깁니다.\n\n칼무리 잔향: 큰 혈검 소수\n궁극: 강타형 피의 칼폭풍", new Color(0.86f, 0.96f, 1f));
+            var cardHeight = (origin.height - 154f - gap) * 0.5f;
+            var x0 = origin.x + 54f;
+            var x1 = x0 + cardWidth + gap;
+            var y0 = origin.y + 122f;
+            var y1 = y0 + cardHeight + gap;
+            DrawStartBuildCard(new Rect(x0, y0, cardWidth, cardHeight), V1WeaponId.DualBlades, V1MemoryId.HungryBlades, "1", "빠른 칼무리", "쌍검의 잦은 타격 위에 칼날 군집을 얹습니다.\n초반 손맛과 잔향 후속타 확인용.", new Color(0.32f, 0.88f, 1f));
+            DrawStartBuildCard(new Rect(x1, y0, cardWidth, cardHeight), V1WeaponId.DualBlades, V1MemoryId.BloodReflection, "2", "빠른 혈반", "쌍검 타격마다 표식/회복 실을 준비합니다.\n다음 카드에서 칼무리를 채우면 피의 칼폭풍 축.", new Color(1f, 0.36f, 0.42f));
+            DrawStartBuildCard(new Rect(x0, y1, cardWidth, cardHeight), V1WeaponId.Greatsword, V1MemoryId.HungryBlades, "3", "큰 칼무리", "대검의 느린 큰 참격 뒤에 무거운 칼무리 후속타가 붙습니다.\n한 방 판독 확인용.", new Color(0.80f, 0.96f, 1f));
+            DrawStartBuildCard(new Rect(x1, y1, cardWidth, cardHeight), V1WeaponId.Greatsword, V1MemoryId.BloodReflection, "4", "큰 혈반", "대검으로 표식을 새기고 큰 후속 피해/회복을 노립니다.\n다음 카드에서 칼무리를 채웁니다.", new Color(1f, 0.52f, 0.58f));
         }
 
-        void DrawWeaponCard(Rect card, V1WeaponId weaponId, string key, string subtitle, string body, Color accent)
+        void DrawStartBuildCard(Rect card, V1WeaponId weaponId, V1MemoryId memoryId, string key, string subtitle, string body, Color accent)
         {
             if (GUI.Button(card, "", buttonStyle))
             {
-                BeginRun(weaponId);
+                BeginRun(weaponId, memoryId);
             }
 
             var name = weaponId == V1WeaponId.Greatsword ? "장송대검" : "절단쌍검";
+            var memoryName = MemoryName(memoryId);
             GUI.color = accent;
             GUI.DrawTexture(new Rect(card.x + 18, card.y + 18, card.width - 36, 4), Texture2D.whiteTexture);
             GUI.color = Color.white;
-            GUI.Label(new Rect(card.x + 22, card.y + 38, card.width - 44, 36), $"{key}. {name}", titleStyle);
-            GUI.Label(new Rect(card.x + 28, card.y + 88, card.width - 56, 28), subtitle, smallStyle);
-            GUI.Label(new Rect(card.x + 28, card.y + 132, card.width - 56, 120), body, smallStyle);
+            GUI.Label(new Rect(card.x + 22, card.y + 34, card.width - 44, 34), $"{key}. {name} + {memoryName}", titleStyle);
+            GUI.Label(new Rect(card.x + 28, card.y + 78, card.width - 56, 24), subtitle, smallStyle);
+            GUI.Label(new Rect(card.x + 28, card.y + 112, card.width - 56, card.height - 156), body, smallStyle);
             GUI.Label(new Rect(card.x + 28, card.yMax - 46, card.width - 56, 26), "클릭 또는 숫자키로 선택", smallStyle);
         }
 
@@ -1721,9 +1735,18 @@ namespace Lethe.PrototypeV1
         List<Choice> BuildChoices()
         {
             var choices = new List<Choice>();
+            var priorityTitles = new List<string>();
+            if (activeMemories.Count < MaxActiveMemories && !HasMemory(V1MemoryId.HungryBlades))
+            {
+                var kalmuriChoice = new Choice("새 기억", "굶주린 칼무리", "주변을 도는 칼날 군집이 적을 물어뜯습니다.\n\n혈반과 함께 키우면 첫 궁극 목표인 피의 칼폭풍으로 이어집니다.", () => AddMemory(V1MemoryId.HungryBlades, 1, true));
+                choices.Add(kalmuriChoice);
+                priorityTitles.Add(kalmuriChoice.Title);
+            }
             if (activeMemories.Count < MaxActiveMemories && !HasMemory(V1MemoryId.BloodReflection))
             {
-                choices.Add(new Choice("새 기억", "피의 반사", "타격한 적에게 혈반을 남깁니다.\n\n후반에 혈반 잔향과 피의 칼폭풍으로 이어지는 회복/출혈 축입니다.", () => AddMemory(V1MemoryId.BloodReflection, 1, true)));
+                var bloodChoice = new Choice("새 기억", "피의 반사", "타격한 적에게 혈반을 남깁니다.\n\n칼무리와 함께 키우면 회복/출혈 축과 피의 칼폭풍 목표가 열립니다.", () => AddMemory(V1MemoryId.BloodReflection, 1, true));
+                choices.Add(bloodChoice);
+                priorityTitles.Add(bloodChoice.Title);
             }
             if (activeMemories.Count < MaxActiveMemories && HasMemory(V1MemoryId.BloodReflection) && !HasMemory(V1MemoryId.StoppedSecond))
             {
@@ -1758,6 +1781,23 @@ namespace Lethe.PrototypeV1
             choices.Add(new Choice("잔향", "잔향 증폭", "잔향 효과 +20%.\n\n망각 뒤 남은 힘이 더 확실하게 전투를 바꿉니다.", () => { WeaponStat.EchoAmp += 0.20f; Log("스탯: 잔향 증폭"); }));
 
             var picked = choices.OrderBy(_ => rng.Next()).Take(3).ToList();
+            foreach (var title in priorityTitles)
+            {
+                if (picked.Any(c => c.Title == title)) continue;
+                var priority = choices.FirstOrDefault(c => c.Title == title);
+                if (string.IsNullOrEmpty(priority.Title)) continue;
+                if (picked.Count < 3)
+                {
+                    picked.Add(priority);
+                    continue;
+                }
+
+                var replaceIndex = picked.FindIndex(c => !priorityTitles.Contains(c.Title));
+                if (replaceIndex >= 0)
+                {
+                    picked[replaceIndex] = priority;
+                }
+            }
             if (playerHp / playerMaxHp < 0.72f && !picked.Any(c => c.Title == survivalChoice.Title))
             {
                 picked[picked.Count - 1] = survivalChoice;
@@ -1772,6 +1812,8 @@ namespace Lethe.PrototypeV1
             if (activeMemories.Count >= MaxActiveMemories) return null;
             var order = new[]
             {
+                V1MemoryId.HungryBlades,
+                V1MemoryId.BloodReflection,
                 V1MemoryId.ExecutionFlash,
                 V1MemoryId.HunterOath,
                 V1MemoryId.ShatterWave,
@@ -2172,6 +2214,8 @@ namespace Lethe.PrototypeV1
                     KeyCode.Space => keyboard.spaceKey.wasPressedThisFrame,
                     KeyCode.Alpha1 => keyboard.digit1Key.wasPressedThisFrame,
                     KeyCode.Alpha2 => keyboard.digit2Key.wasPressedThisFrame,
+                    KeyCode.Alpha3 => keyboard.digit3Key.wasPressedThisFrame,
+                    KeyCode.Alpha4 => keyboard.digit4Key.wasPressedThisFrame,
                     KeyCode.F1 => keyboard.f1Key.wasPressedThisFrame,
                     KeyCode.F2 => keyboard.f2Key.wasPressedThisFrame,
                     KeyCode.F3 => keyboard.f3Key.wasPressedThisFrame,

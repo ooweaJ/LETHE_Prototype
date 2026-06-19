@@ -1,6 +1,6 @@
 # Status
 
-Last updated: 2026-06-17
+Last updated: 2026-06-19
 
 ## Current Snapshot
 
@@ -41,6 +41,23 @@ The report/devlog/review migration is now applied physically: old `docs/reports/
 The current development-docs plugin baseline from `docs/orchestration/MIGRATION_PROMPT.md` has been applied. `AGENTS.md` now uses a `Development Docs Plugin` section, `docs/orchestration/templates/HTML_INTERFACE_TEMPLATE.md` exists, legacy review pointer READMEs are readable, `reports/index.html` is generated as a newest-first date archive, daily report pages are generated as unit-card pages, and Discord delivery is documented as Project Orchestrator first with local direct-send scripts as trusted fallback only.
 
 ## Latest Verified Result
+
+- Unity v1 120-second early fun-loop start pass:
+  - Added `J. 120초 초반 재미 루프` to `docs/TASK.md` as the current player-facing implementation checklist.
+  - Replaced the weapon-only start overlay with four start build cards:
+    - `절단쌍검 + 굶주린 칼무리`.
+    - `절단쌍검 + 피의 반사`.
+    - `장송대검 + 굶주린 칼무리`.
+    - `장송대검 + 피의 반사`.
+  - `BeginRun` now accepts a starting memory, while old debug callers still default to Hungry Blades.
+  - Level-up rewards now preserve missing Kalmuri/Blood core-memory choices so either start route can quickly reach the Kalmuri/Blood loop.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity MCP:
+    - compile error count `0`.
+    - Play Mode reached `isPlaying=true`.
+    - console error log count `0`.
+    - Play Mode stopped successfully.
+  - Limitation: camera-based Game View screenshots do not capture OnGUI start cards, so direct human visual review remains required.
 
 - Unity v1 stage/balance shell and object-pool pass:
   - User direction: pause VFX/art feedback for now; make sure every memory works, implement the stage/balance shell from the design docs, and optimize VFX/objects with pooling.
@@ -626,16 +643,19 @@ Continue from `Dev_Prototype_v1`, not `Dev_Prototype_v0`.
 
 Next implementation step:
 
-1. Let jaewoo run `Dev_Prototype_v1`, choose a start weapon from the new overlay, and give one combined feedback pass.
+1. Let jaewoo run `Dev_Prototype_v1`, choose one of the four start build cards, and review the first 120 seconds before judging the full 600-second run.
 2. Review checklist:
-   - 시작 무기 선택이 런 시작 UX로 자연스럽게 읽히는가?
+   - 시작 빌드 카드 4개가 런 방향으로 자연스럽게 읽히는가?
+   - 혈반 시작 후 칼무리 카드, 칼무리 시작 후 혈반 카드가 빠르게 보이는가?
+   - 첫 20~30초 안에 XP/카드 보상 리듬이 오는가?
+   - 60~90초 안에 기억 2~3개와 다음 망각 후보가 보이는가?
    - 쌍검 기본공격이 적 위치 발도선으로 읽히는가?
    - 적이 맞을 때 넉백/피격/공간 반응이 충분한가?
    - 칼무리 잔향이 기본공격 뒤 후속타로 읽히는가?
    - 대검이 느린 큰 한 방으로 읽히는가?
    - 60~120초 안에 망각 -> 결손 -> 공명 -> +5 잔향 -> 피의 칼폭풍 흐름이 보이는가?
    - 쌍검/대검 피의 칼폭풍 차이가 보이는가?
-3. After feedback, choose a narrow next pass: attack readability, pacing/balance, UI clarity, or art replacement.
+3. After feedback, choose one narrow next pass: reward cadence, attack readability, forgetting UX, spawn pressure, or art replacement.
 
 Do not promote `_dev` assets to `Assets/Lethe` until `Dev_Prototype_v1` receives explicit `GO`.
 

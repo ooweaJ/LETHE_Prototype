@@ -55,6 +55,23 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Short Unity Play Mode entry: console error count 0.
   - Remaining risk: this confirms technical wiring, not final player-facing balance. A full manual run or compressed smoke still needs jaewoo review.
 
+### J. 120초 초반 재미 루프
+
+- 시작 화면은 무기+기억 조합 4개를 보여준다.
+- 1~4 숫자키 또는 카드 클릭으로 아래 빌드가 시작된다:
+  - 절단쌍검 + 굶주린 칼무리.
+  - 절단쌍검 + 피의 반사.
+  - 장송대검 + 굶주린 칼무리.
+  - 장송대검 + 피의 반사.
+- 혈반으로 시작해도 레벨업 카드에서 굶주린 칼무리가 우선 후보로 나온다.
+- 칼무리로 시작해도 레벨업 카드에서 피의 반사가 우선 후보로 나온다.
+- Current technical check, 2026-06-19:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console error log count: 0.
+  - Camera-based Game View screenshot did not capture OnGUI start cards; direct human visual review is still required.
+
 ### H. Human Review Gate
 
 jaewoo 리뷰 질문:
