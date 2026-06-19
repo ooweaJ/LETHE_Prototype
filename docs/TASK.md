@@ -145,6 +145,33 @@ Done criteria:
 - [ ] 망각 전 기억 상실이 최소한 “뭘 잃는지 알겠다” 수준까지 도달한다.
 - [ ] 120초 리뷰 결과에 따라 다음 패스를 `공격 손맛`, `보상 카드`, `망각 UX`, `스폰 압박` 중 하나로 좁힌다.
 
+## K. Visual/UI/game-feel refresh
+
+Goal: make `Dev_Prototype_v1` read more like an actual survivor game shell before deeper balance review.
+
+Implementation list:
+
+- [x] Stop player body wobble caused by runtime scale pulse.
+- [x] Keep player root movement stable and move animation onto a child `PlayerVisual`.
+- [x] Use the existing 8x4 player sheet as real idle/walk 4-direction animation instead of a single static frame.
+- [x] Center the weapon anchor so movement does not make the body feel offset by the weapon.
+- [x] Add a dedicated transparent greatsword sprite asset and load it before procedural fallback.
+- [x] Add per-tile rotation, color variation, and tiny scale variation to the arena floor.
+- [x] Compact the HUD into a cleaner survivor-style status panel with HP, XP, memory slots, ultimate status, and smaller debug controls.
+- [ ] Replace or slice/import the full player sheet through Unity Sprite Editor instead of runtime cropping.
+- [ ] Capture a reliable visual screenshot path that includes camera objects and relevant UI overlays.
+
+Verification:
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- Unity MCP `Assets/Refresh`: success.
+- Unity compile error count: 0.
+- Unity console error count after smoke: 0.
+- Unity missing references: scene 0, assets 0.
+- Greatsword sprite asset loaded as `spr_weapon_greatsword_01`.
+- Play Mode Greatsword smoke snapshot reached `scene=v1`, `weapon=장송대검`, `elapsed=1.8`, `hp=210/210`, `enemies=6`, `death=False`.
+- Camera screenshot attempt saved a solid-color image and was discarded; it is not visual evidence.
+
 ## Current Next
 
 1. jaewoo가 `Dev_Prototype_v1`에서 2개 시작 무기를 각각 짧게 확인한다.

@@ -35,6 +35,17 @@
   - `LETHE/V1 Smoke/*` start menus now match the weapon-only model: `Start Dual Blades`, `Start Greatsword`, and `M2 Loop`.
   - Verification: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 7 legacy warnings and 0 errors; Unity compile errors 0; Unity console errors 0.
 
+- Refreshed v1 visual/UI/game-feel basics:
+  - Removed player body pulse wobble and moved sprite rendering under a stable `PlayerVisual` child.
+  - Reused the 8x4 player sheet as actual idle/walk 4-direction animation.
+  - Centered the weapon anchor to reduce perceived body drift while moving.
+  - Added imported greatsword sprite assets:
+    - `LETHE/Assets/_dev/Art/Source/spr_weapon_greatsword_01_chroma.png`
+    - `LETHE/Assets/_dev/Art/Sprites/Weapons/spr_weapon_greatsword_01.png`
+  - Added arena floor tile rotation/color/scale variation.
+  - Compact HUD now emphasizes HP, XP, memory slots, ultimate/M2 status, and smaller debug controls.
+  - Verification: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 7 legacy warnings and 0 errors; Unity compile errors 0; Unity console errors 0; missing references scene 0/assets 0.
+
 ## 2026-06-18
 
 - Hardened `Dev_Prototype_v1` runtime enemy-list queries:

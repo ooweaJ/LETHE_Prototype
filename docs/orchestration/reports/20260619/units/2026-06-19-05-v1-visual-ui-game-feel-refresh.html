@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-19-05 - v1 Visual/UI/game-feel refresh</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-19-05 - v1 Visual/UI/game-feel refresh</h1>
+      <p class="meta">Generated from 2026-06-19-05-v1-visual-ui-game-feel-refresh.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260619/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-19-05 - v1 Visual/UI/game-feel refresh</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 여전히 <code>_dev</code> 검증 빌드다. 이번 작업은 새 시스템 추가가 아니라, 첫 화면/이동/무기/지형/HUD가 더 게임답게 읽히도록 하는 시각 정리 패스다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>플레이어 본체의 <code>V1BillboardPulse</code>를 제거해 이동할 때 몸이 좌우로 흔들리는 느낌을 줄였다.</li>
+<li>플레이어 스프라이트를 <code>PlayerVisual</code> 자식 오브젝트로 분리해 루트 이동과 시각 애니메이션을 분리했다.</li>
+<li>기존 8x4 플레이어 시트를 실제 4방향 idle/walk 애니메이션으로 사용한다.</li>
+<li>무기 앵커를 중앙 하단으로 옮겨 무기 움직임 때문에 캐릭터 위치가 밀려 보이는 문제를 줄였다.</li>
+<li>새 대검 스프라이트를 생성/임포트하고 런타임에서 우선 로드한다.</li>
+<li>지형 타일에 회전, 색, 크기 변화를 줘 평평한 반복 격자 느낌을 줄였다.</li>
+<li>HUD를 HP/XP/기억 슬롯/궁극 상태 중심의 작은 패널로 정리했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy warning 7개, error 0개.</li>
+<li>Unity <code>Assets/Refresh</code>: 성공.</li>
+<li>Unity compile error count: 0.</li>
+<li>Unity console error count: 0.</li>
+<li>Unity missing references: scene 0, assets 0.</li>
+<li>대검 스프라이트 에셋 로드 확인: <code>spr_weapon_greatsword_01</code>.</li>
+<li>Play Mode 대검 스모크: <code>scene=v1 weapon=장송대검 elapsed=1.8 hp=210.0/210.0 enemies=6 death=False</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>뱀서류의 핵심 참고점은 특정 UI/아트를 복제하는 것이 아니라, 안정적인 캐릭터 위치, 즉시 읽히는 방향 애니메이션, 반복 플레이에 부담 없는 HUD 밀도, 전장 바닥의 판독성으로 잡았다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>자동 카메라 스크린샷은 단색 이미지로 저장되어 증거에서 제외했다. 실제 시각 만족도는 Unity Play Mode에서 직접 봐야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Codex가 v1의 기본 시각 셸을 정리했다. 플레이어 본체 흔들림을 제거하고 4방향 애니메이션, 대검 스프라이트, 지형 변화, 컴팩트 HUD를 적용했다. 기술 검증은 통과했지만, 최종 판정은 jaewoo 직접 플레이 리뷰가 필요하다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>직접 플레이 후 가장 거슬리는 축 하나만 고른다: 캐릭터 애니메이션 프레임/방향, 시작 HUD, 전투 VFX 밀도, 지형 밝기, 또는 보상 카드 UI.</p>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 기능은 늘었지만 화면 첫인상과 이동감이 아직 프로토타입처럼 보였다.</li>
+<li>방향: 생존 액션 게임의 기본 판독성부터 안정화한다.</li>
+<li>행동: 캐릭터 루트/비주얼 분리, 4방향 애니메이션, 대검 스프라이트, 지형 변주, HUD 압축을 적용했다.</li>
+<li>결과: 기술 검증은 통과했고, 이제 사람 눈으로 시각 품질을 판단할 수 있는 상태가 됐다.</li>
+</ul>
+  </main>
+</body>
+</html>

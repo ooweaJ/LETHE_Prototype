@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260619\\index.md",
-  "generatedAt": "2026-06-19T13:59:20.164Z",
-  "unitCount": 4,
+  "generatedAt": "2026-06-19T14:42:27.373Z",
+  "unitCount": 5,
   "latest": {
-    "title": "2026-06-19-04 - 시작 UI 무기 선택 정정",
-    "number": "04",
-    "markdownPath": "docs\\orchestration\\reports\\20260619\\units\\2026-06-19-04-시작-ui-무기-선택-정정.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260619\\units\\2026-06-19-04-시작-ui-무기-선택-정정.html"
+    "title": "2026-06-19-05 - v1 Visual/UI/game-feel refresh",
+    "number": "05",
+    "markdownPath": "docs\\orchestration\\reports\\20260619\\units\\2026-06-19-05-v1-visual-ui-game-feel-refresh.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260619\\units\\2026-06-19-05-v1-visual-ui-game-feel-refresh.html"
   }
 }

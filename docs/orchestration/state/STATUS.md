@@ -42,6 +42,26 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 visual/UI/game-feel refresh:
+  - Player body no longer uses `V1BillboardPulse`, so movement should not read as side-to-side body wobble.
+  - Player rendering is now on a stable child `PlayerVisual`, with the root reserved for actual movement.
+  - The existing 8x4 player sheet is now used as 4-direction idle/walk animation instead of a single static frame.
+  - Weapon anchor is centered below the player to reduce silhouette drift while moving.
+  - Added and imported a dedicated transparent greatsword sprite:
+    - `LETHE/Assets/_dev/Art/Source/spr_weapon_greatsword_01_chroma.png`
+    - `LETHE/Assets/_dev/Art/Sprites/Weapons/spr_weapon_greatsword_01.png`
+  - Arena floor tiles now have rotation, color, and subtle scale variation so the field reads less like a flat repeated grid.
+  - HUD was compacted into clearer HP/XP/memory/ultimate panels with smaller debug controls.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+    - Unity `Assets/Refresh`: success.
+    - Unity compile error count: `0`.
+    - Unity console error count: `0`.
+    - Unity missing references: scene `0`, assets `0`.
+    - Greatsword sprite asset loaded as `spr_weapon_greatsword_01`.
+    - Play Mode Greatsword smoke snapshot: `scene=v1 weapon=장송대검 elapsed=1.8 hp=210.0/210.0 enemies=6 death=False`.
+  - Limitation: camera screenshot capture produced a solid-color image and was discarded; direct visual review is still needed.
+
 - Unity v1 start-selection UX correction:
   - The first overlay now selects only the starting weapon: `절단쌍검` or `장송대검`.
   - `굶주린 칼무리` and `피의 반사` are no longer attached to the weapon cards.
