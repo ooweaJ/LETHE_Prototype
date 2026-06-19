@@ -1394,8 +1394,9 @@ namespace Lethe.PrototypeV1
         void OnEnemyKilled(V1Enemy enemy)
         {
             kills++;
-            SpawnXpOrb(enemy.transform.position, enemy.Kind == V1EnemyKind.Gatekeeper ? 18 : enemy.Score);
-            SpawnFloatingText(enemy.transform.position, $"+{enemy.Score}", Color.white);
+            var xpAmount = KillXpAmount(enemy);
+            SpawnXpOrb(enemy.transform.position, xpAmount);
+            SpawnFloatingText(enemy.transform.position, $"+{xpAmount}", elapsed < 120f ? new Color(0.48f, 1f, 1f) : Color.white);
             if (enemy.Kind == V1EnemyKind.SplitOne)
             {
                 for (int i = 0; i < 2; i++) SpawnEnemy(V1EnemyKind.Eroder, enemy.transform.position + (Vector3)(UnityEngine.Random.insideUnitCircle.normalized * 0.45f));
@@ -1407,6 +1408,14 @@ namespace Lethe.PrototypeV1
                 bossTimer = NextBossDelay();
                 ForgetHighestMemory();
             }
+        }
+
+        int KillXpAmount(V1Enemy enemy)
+        {
+            if (enemy == null) return 1;
+            if (enemy.Kind == V1EnemyKind.Gatekeeper) return 18;
+            var earlyTempoBonus = elapsed < 120f ? 1 : 0;
+            return Mathf.Max(1, enemy.Score + earlyTempoBonus);
         }
 
         float NextBossDelay()
