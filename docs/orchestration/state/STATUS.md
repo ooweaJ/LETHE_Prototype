@@ -42,6 +42,20 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 direct Codex smoke-test follow-up:
+  - Added `LETHE/V1 Smoke/*` editor menus for four start build routes and the M2 loop.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Start-build smoke snapshots confirmed the expected weapon and starting memory for:
+    - DualBlades + HungryBlades.
+    - DualBlades + BloodReflection.
+    - Greatsword + HungryBlades.
+    - Greatsword + BloodReflection.
+  - M2 loop smoke confirmed Hungry/Blood echoes at +5, enemies `10`, `storm=True`, result overlay active, and death false.
+  - Unity console error log count: `0`.
+  - Unity missing references: scene `0`, assets `0`.
+  - Remaining work: this is technical smoke coverage, not a human feel verdict.
+
 - Unity v1 120-second early fun-loop start pass:
   - Added `J. 120초 초반 재미 루프` to `docs/TASK.md` as the current player-facing implementation checklist.
   - Replaced the weapon-only start overlay with four start build cards:

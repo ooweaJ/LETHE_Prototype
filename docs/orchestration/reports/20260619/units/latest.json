@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260619\\index.md",
-  "generatedAt": "2026-06-19T12:11:54.253Z",
-  "unitCount": 2,
+  "generatedAt": "2026-06-19T12:48:03.222Z",
+  "unitCount": 3,
   "latest": {
-    "title": "2026-06-19-02 - 120초 루프 5개 패스 연속 적용",
-    "number": "02",
-    "markdownPath": "docs\\orchestration\\reports\\20260619\\units\\2026-06-19-02-120초-루프-5개-패스-연속-적용.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260619\\units\\2026-06-19-02-120초-루프-5개-패스-연속-적용.html"
+    "title": "2026-06-19-03 - 120초 루프 5개 패스 연속 적용",
+    "number": "03",
+    "markdownPath": "docs\\orchestration\\reports\\20260619\\units\\2026-06-19-03-120초-루프-5개-패스-연속-적용.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260619\\units\\2026-06-19-03-120초-루프-5개-패스-연속-적용.html"
   }
 }

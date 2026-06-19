@@ -24,6 +24,10 @@
   - Non-eroder enemy roles now use distinct procedural silhouettes for eye, splitter, priest, and gatekeeper instead of plain colored circles.
   - Verification after each pass: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 7 legacy warnings and 0 errors.
   - Final Unity MCP check: compile error count 0, Play Mode entered, console error count 0, Play Mode stopped.
+- Added direct Codex smoke menus under `LETHE/V1 Smoke/*`:
+  - Four start build routes can be initialized from Unity Editor menus and logged through `DebugSnapshot()`.
+  - The M2 loop can be initialized from an editor menu and verifies Hungry/Blood echoes at +5 with Blood Blade Storm ready.
+  - Verification: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 0 warnings and 0 errors; Unity compile errors 0; Unity console errors 0; scene/assets missing references 0.
 
 ## 2026-06-18
 

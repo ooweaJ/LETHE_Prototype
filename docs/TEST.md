@@ -80,6 +80,19 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed after each pass with 7 legacy warnings and 0 errors.
   - Final Unity MCP check: compile error count 0, Play Mode entered, console error count 0, Play Mode stopped.
   - Human review still needs to judge whether the first 120 seconds now feel busy, readable, and worth replaying.
+- Direct Codex smoke follow-up, 2026-06-19:
+  - Added `LETHE/V1 Smoke/*` editor menu items to run the four start builds and the M2 loop without manual keyboard/click input.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors for the smoke menu code.
+  - Unity compile error count: 0.
+  - Start build smoke snapshots:
+    - `DualBlades + HungryBlades`: weapon `절단쌍검`, memories `[HungryBlades:1]`, result/refill/death all false.
+    - `DualBlades + BloodReflection`: weapon `절단쌍검`, memories `[BloodReflection:1]`, result/refill/death all false.
+    - `Greatsword + HungryBlades`: weapon `장송대검`, memories `[HungryBlades:1]`, result/refill/death all false.
+    - `Greatsword + BloodReflection`: weapon `장송대검`, memories `[BloodReflection:1]`, result/refill/death all false.
+  - M2 loop smoke snapshot: memories `[BloodReflection:3,HungryBlades:3]`, echoes `[HungryBlades:5,BloodReflection:5]`, enemies `10`, storm `True`, result overlay `True`, death `False`.
+  - Unity console error log count after M2 smoke: 0.
+  - Unity missing references: scene 0, assets 0.
+  - Remaining risk: this is a technical smoke test, not a feel review. It proves the routes can initialize and the debug M2 loop wires up, but jaewoo still needs to play the first 120 seconds.
 
 ### H. Human Review Gate
 

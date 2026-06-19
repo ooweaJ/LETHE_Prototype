@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-19-02 - Codex 직접 스모크 테스트</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-19-02 - Codex 직접 스모크 테스트</h1>
+      <p class="meta">Generated from 2026-06-19-02-codex-직접-스모크-테스트.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260619/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-19-02 - Codex 직접 스모크 테스트</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 120초 초반 루프 5패스가 적용된 상태이며, 이번에는 Codex가 Unity Editor 메뉴 기반 스모크 테스트를 직접 추가하고 실행했습니다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>LETHE/V1 Smoke/*</code> 에디터 메뉴를 추가했습니다.</li>
+<li>메뉴에서 네 가지 시작 빌드와 M2 루프를 자동으로 Play Mode에서 실행하고 <code>DebugSnapshot()</code> 결과를 콘솔에 남기게 했습니다.</li>
+<li>Unity 도메인 리로드 후에도 테스트 요청이 사라지지 않도록 <code>SessionState</code>를 사용했습니다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, warning 0, error 0.</li>
+<li>Unity compile error count: 0.</li>
+<li>시작 빌드 4종 스모크: 모두 지정한 무기와 시작 기억으로 초기화됨.</li>
+<li>M2 스모크: <code>HungryBlades:5</code>, <code>BloodReflection:5</code>, <code>storm=True</code>, enemies <code>10</code>, death <code>False</code>.</li>
+<li>Unity console error count: 0.</li>
+<li>Unity missing references: scene 0, assets 0.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>수동 클릭이 어려운 Unity MCP 환경에서는 에디터 메뉴 기반 스모크 테스트를 유지합니다. 앞으로 시작 빌드나 M2 루프를 건드릴 때 이 메뉴로 최소 기술 검증을 빠르게 반복합니다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>이번 테스트는 기술 연결 검증입니다. 실제로 뱀파이어 서바이벌처럼 초반이 재미있는지, 타격/보상/망각이 기분 좋게 읽히는지는 jaewoo 직접 플레이 리뷰가 필요합니다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Codex가 네 가지 시작 빌드와 M2 루프를 직접 실행하는 Unity 에디터 스모크 메뉴를 추가했습니다. 모든 시작 경로는 지정한 무기와 기억으로 초기화됐고, M2 루프는 Hungry/Blood 잔향 +5와 Blood Blade Storm 준비 상태까지 확인됐습니다. 기술 오류는 없으며 남은 판단은 플레이 감각 리뷰입니다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo 직접 플레이 피드백을 받습니다.</li>
+<li>피드백에서 가장 큰 한 축을 고릅니다: 보상 속도, 공격 판독, 망각 UX, 스폰 압박, 아트/VFX.</li>
+<li>선택된 한 축만 다음 구현 패스로 진행합니다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 구현은 되었지만 직접 입력 없이 시작 경로와 M2 루프를 반복 검증하기 어려웠습니다.</li>
+<li>방향: Unity Editor 메뉴를 테스트 진입점으로 만들어 MCP에서도 재현 가능한 검증 루프를 만듭니다.</li>
+<li>행동: 시작 빌드 4종과 M2 루프 스모크 메뉴를 추가하고 직접 실행했습니다.</li>
+<li>결과: 기술적 안정성은 통과했고, 이제 남은 것은 실제 재미 판단입니다.</li>
+</ul>
+  </main>
+</body>
+</html>

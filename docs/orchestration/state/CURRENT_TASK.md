@@ -268,6 +268,14 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed after each pass with 7 legacy warnings and 0 errors.
   - Final Unity MCP check: compile error count `0`, Play Mode entered, console error count `0`, Play Mode stopped.
 
+- Direct Codex smoke-test follow-up:
+  - Added `LETHE/V1 Smoke/*` editor menu tests for the four start builds and the M2 loop.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings, 0 errors.
+  - Unity compile error count: `0`.
+  - Four start-build smoke snapshots initialized the expected weapon and starting memory.
+  - M2 smoke reached Hungry/Blood echoes at +5 and `storm=True`.
+  - Unity console error count: `0`; scene/assets missing references: `0`.
+
 ## Next Implementation
 
 1. Ask jaewoo to review `Dev_Prototype_v1` as a 120-second early fun loop first, not as a full 600-second balance run.
