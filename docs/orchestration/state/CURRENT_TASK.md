@@ -259,6 +259,14 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - Unity compile error count: `0`.
   - Play Mode entry reached `isPlaying=true`; console error log count `0`.
   - Limitation: camera-based Game View screenshots do not capture OnGUI start cards, so direct play inspection is still required.
+- Five-pass 120-second loop follow-up:
+  - `695771f feat: 초반 보상 속도 보정`: first-120-second non-boss kills grant +1 XP.
+  - `fbf0f0f feat: 무기 타격 확인 피드백 추가`: weapon hits spawn confirm ring/core pulses.
+  - `111cdab feat: 망각 결과 UX 강화`: forgetting result now explains loss, echo, overcharge/awakening, deficit survival, and resonance next action.
+  - `b19a1b6 feat: 초반 스폰 압박 보정`: first-cycle first-120-second spawn profile and closer spawn radius.
+  - `081e13b feat: 적 역할 실루엣 보정`: Drifting Eye, Split One, Void Priest, and Gatekeeper use distinct procedural silhouettes.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed after each pass with 7 legacy warnings and 0 errors.
+  - Final Unity MCP check: compile error count `0`, Play Mode entered, console error count `0`, Play Mode stopped.
 
 ## Next Implementation
 

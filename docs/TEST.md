@@ -71,6 +71,15 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Unity Play Mode entry reached `isPlaying=true`.
   - Unity console error log count: 0.
   - Camera-based Game View screenshot did not capture OnGUI start cards; direct human visual review is still required.
+- Five-pass follow-up, 2026-06-19:
+  - First-120-second kills grant +1 extra XP before the normal pre-boss multiplier.
+  - Weapon hits spawn a confirm ring/core pulse for clearer hit reading.
+  - Forgetting result text now includes loss, echo, overcharge/awakening, deficit survival, and resonance next action.
+  - First-cycle spawn pressure has an early 120-second profile and closer spawn radius.
+  - Drifting Eye, Split One, Void Priest, and Gatekeeper now have distinct procedural silhouettes.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed after each pass with 7 legacy warnings and 0 errors.
+  - Final Unity MCP check: compile error count 0, Play Mode entered, console error count 0, Play Mode stopped.
+  - Human review still needs to judge whether the first 120 seconds now feel busy, readable, and worth replaying.
 
 ### H. Human Review Gate
 

@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260619\\index.md",
-  "generatedAt": "2026-06-19T11:57:20.711Z",
-  "unitCount": 1,
+  "generatedAt": "2026-06-19T12:11:54.253Z",
+  "unitCount": 2,
   "latest": {
-    "title": "2026-06-19-01 - 120초 초반 재미 루프 시작 패스",
-    "number": "01",
-    "markdownPath": "docs\\orchestration\\reports\\20260619\\units\\2026-06-19-01-120초-초반-재미-루프-시작-패스.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260619\\units\\2026-06-19-01-120초-초반-재미-루프-시작-패스.html"
+    "title": "2026-06-19-02 - 120초 루프 5개 패스 연속 적용",
+    "number": "02",
+    "markdownPath": "docs\\orchestration\\reports\\20260619\\units\\2026-06-19-02-120초-루프-5개-패스-연속-적용.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260619\\units\\2026-06-19-02-120초-루프-5개-패스-연속-적용.html"
   }
 }

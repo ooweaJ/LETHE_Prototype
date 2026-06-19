@@ -16,6 +16,14 @@
   - Unity Play Mode entry reached `isPlaying=true`.
   - Unity console error log count: 0.
   - Note: camera-based Game View screenshots do not capture the OnGUI start overlay, so UI review still needs direct play inspection.
+- Continued the 120-second loop through five separate implementation commits:
+  - Early kills now grant +1 XP during the first 120 seconds, reducing the wait to the first reward.
+  - Weapon hits now add a small confirm ring/core pulse in addition to hit spark and damage numbers.
+  - Forgetting result copy now states the lost memory, remaining echo, awakening/overload status, deficit survival, and resonance next action.
+  - First-cycle spawn pressure now has a tighter first-120-second profile with closer spawn radius and a capped enemy count.
+  - Non-eroder enemy roles now use distinct procedural silhouettes for eye, splitter, priest, and gatekeeper instead of plain colored circles.
+  - Verification after each pass: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 7 legacy warnings and 0 errors.
+  - Final Unity MCP check: compile error count 0, Play Mode entered, console error count 0, Play Mode stopped.
 
 ## 2026-06-18
 

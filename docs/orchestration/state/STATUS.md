@@ -59,6 +59,22 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
     - Play Mode stopped successfully.
   - Limitation: camera-based Game View screenshots do not capture OnGUI start cards, so direct human visual review remains required.
 
+- Unity v1 120-second early fun-loop five-pass follow-up:
+  - Completed five small implementation passes as separate commits:
+    - `695771f feat: 초반 보상 속도 보정`.
+    - `fbf0f0f feat: 무기 타격 확인 피드백 추가`.
+    - `111cdab feat: 망각 결과 UX 강화`.
+    - `b19a1b6 feat: 초반 스폰 압박 보정`.
+    - `081e13b feat: 적 역할 실루엣 보정`.
+  - Early non-boss kills grant +1 XP during the first 120 seconds.
+  - Weapon hits now add a confirm ring/core pulse.
+  - Forgetting result copy now names the loss, echo, awakening/overload, deficit survival, and resonance next action.
+  - First-cycle early spawn pressure now uses a first-120-second profile with closer spawn radius.
+  - Drifting Eye, Split One, Void Priest, and Gatekeeper have distinct procedural silhouettes instead of plain colored circles.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed after each pass with 7 legacy warnings and 0 errors.
+  - Final Unity MCP check: compile error count `0`, Play Mode entered, console error count `0`, Play Mode stopped.
+  - Remaining work: human review must judge whether the first 120 seconds are actually more fun and readable.
+
 - Unity v1 stage/balance shell and object-pool pass:
   - User direction: pause VFX/art feedback for now; make sure every memory works, implement the stage/balance shell from the design docs, and optimize VFX/objects with pooling.
   - Audit result:
