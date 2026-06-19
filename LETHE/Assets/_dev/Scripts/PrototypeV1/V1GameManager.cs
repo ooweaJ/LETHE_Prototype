@@ -2131,7 +2131,14 @@ namespace Lethe.PrototypeV1
         Sprite EnemySprite(V1EnemyKind kind)
         {
             if (kind == V1EnemyKind.Eroder) return LoadSheetFrame("Assets/_dev/Art/Sprites/Enemies/Chaser/sheet_enemy_chaser_4dir.png", 4, 8, 0, 0) ?? MakeCircleSprite("eroder", EnemyColor(kind), 80);
-            return MakeCircleSprite(kind.ToString(), EnemyColor(kind), kind == V1EnemyKind.Gatekeeper ? 128 : 72);
+            return kind switch
+            {
+                V1EnemyKind.DriftingEye => MakeEyeSprite("drifting_eye", EnemyColor(kind), 88),
+                V1EnemyKind.SplitOne => MakeSplitterSprite("split_one", EnemyColor(kind), 88),
+                V1EnemyKind.VoidPriest => MakePriestSprite("void_priest", EnemyColor(kind), 88),
+                V1EnemyKind.Gatekeeper => MakeGatekeeperSprite("gatekeeper", EnemyColor(kind), 144),
+                _ => MakeCircleSprite(kind.ToString(), EnemyColor(kind), 72)
+            };
         }
 
         Color EnemyColor(V1EnemyKind kind) => kind switch
@@ -2143,6 +2150,84 @@ namespace Lethe.PrototypeV1
             V1EnemyKind.Gatekeeper => new Color(1f, 0.28f, 0.2f),
             _ => Color.white
         };
+
+        static Sprite MakeEyeSprite(string name, Color color, int size)
+        {
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { name = name };
+            var center = new Vector2(size * 0.5f, size * 0.5f);
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                var p = new Vector2(x, y) - center;
+                var eye = Mathf.Clamp01(1f - Mathf.Abs(p.x) / (size * 0.43f)) * Mathf.Clamp01(1f - Mathf.Abs(p.y) / (size * 0.22f));
+                var iris = Mathf.Clamp01(1f - p.magnitude / (size * 0.16f));
+                var pupil = p.magnitude < size * 0.065f ? 1f : 0f;
+                var alpha = Mathf.Max(eye * 0.86f, iris);
+                var c = alpha <= 0f ? Color.clear : Color.Lerp(new Color(color.r, color.g, color.b, alpha), new Color(0.95f, 1f, 1f, alpha), iris * 0.45f);
+                if (pupil > 0f) c = new Color(0.04f, 0.03f, 0.05f, 1f);
+                tex.SetPixel(x, y, c);
+            }
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        static Sprite MakeSplitterSprite(string name, Color color, int size)
+        {
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { name = name };
+            var center = new Vector2(size * 0.5f, size * 0.5f);
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                var p = new Vector2(x, y) - center;
+                var diamond = Mathf.Clamp01(1f - (Mathf.Abs(p.x) + Mathf.Abs(p.y)) / (size * 0.43f));
+                var crack = Mathf.Abs(p.x * 0.45f + Mathf.Sin(p.y * 0.13f) * size * 0.045f) < 1.9f && Mathf.Abs(p.y) < size * 0.34f ? 1f : 0f;
+                var alpha = diamond;
+                var c = alpha <= 0f ? Color.clear : new Color(color.r, color.g, color.b, Mathf.Clamp01(alpha * 1.15f));
+                if (crack > 0f && diamond > 0.12f) c = new Color(0.09f, 0.06f, 0.03f, 0.95f);
+                tex.SetPixel(x, y, c);
+            }
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        static Sprite MakePriestSprite(string name, Color color, int size)
+        {
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { name = name };
+            var center = new Vector2(size * 0.5f, size * 0.48f);
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                var p = new Vector2(x, y) - center;
+                var hood = Mathf.Clamp01(1f - p.magnitude / (size * 0.36f));
+                var lower = Mathf.Clamp01(1f - (Mathf.Abs(p.x) / (size * 0.28f) + Mathf.Abs(p.y - size * 0.18f) / (size * 0.34f)));
+                var core = Mathf.Abs(p.x) < size * 0.045f && p.y > -size * 0.16f && p.y < size * 0.30f ? 1f : 0f;
+                var alpha = Mathf.Max(hood, lower);
+                var c = alpha <= 0f ? Color.clear : new Color(color.r, color.g, color.b, Mathf.Clamp01(alpha * 0.95f));
+                if (core > 0f && alpha > 0.1f) c = new Color(0.88f, 1f, 0.78f, 0.90f);
+                tex.SetPixel(x, y, c);
+            }
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        static Sprite MakeGatekeeperSprite(string name, Color color, int size)
+        {
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { name = name };
+            var center = new Vector2(size * 0.5f, size * 0.5f);
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                var p = new Vector2(x, y) - center;
+                var arch = Mathf.Clamp01(1f - Mathf.Abs(p.x) / (size * 0.34f)) * Mathf.Clamp01(1f - Mathf.Abs(p.y) / (size * 0.42f));
+                var hollow = Mathf.Clamp01(1f - Mathf.Abs(p.x) / (size * 0.18f)) * Mathf.Clamp01(1f - Mathf.Abs(p.y + size * 0.02f) / (size * 0.28f));
+                var horns = Mathf.Abs(p.y - size * 0.24f) < size * 0.05f && Mathf.Abs(p.x) > size * 0.22f && Mathf.Abs(p.x) < size * 0.42f ? 1f : 0f;
+                var alpha = Mathf.Clamp01(arch - hollow * 0.75f + horns);
+                var c = alpha <= 0f ? Color.clear : new Color(color.r, color.g, color.b, Mathf.Clamp01(alpha));
+                tex.SetPixel(x, y, c);
+            }
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+        }
 
         Sprite LoadSprite(string path)
         {
