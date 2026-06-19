@@ -42,6 +42,14 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 start-selection UX correction:
+  - The first overlay now selects only the starting weapon: `절단쌍검` or `장송대검`.
+  - `굶주린 칼무리` and `피의 반사` are no longer attached to the weapon cards.
+  - `BeginRun(V1WeaponId)` no longer grants a starting memory.
+  - First level-up after weapon-only start verified choices: `굶주린 칼무리 | 피의 반사 | 칼날 가속`.
+  - `LETHE/V1 Smoke/*` start menus now match weapon-only start routes.
+  - Verification: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 7 legacy warnings and 0 errors; Unity compile errors `0`; Unity console errors `0`.
+
 - Unity v1 direct Codex smoke-test follow-up:
   - Added `LETHE/V1 Smoke/*` editor menus for four start build routes and the M2 loop.
   - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
@@ -673,10 +681,10 @@ Continue from `Dev_Prototype_v1`, not `Dev_Prototype_v0`.
 
 Next implementation step:
 
-1. Let jaewoo run `Dev_Prototype_v1`, choose one of the four start build cards, and review the first 120 seconds before judging the full 600-second run.
+1. Let jaewoo run `Dev_Prototype_v1`, choose one of the two weapon cards, and review the first 120 seconds before judging the full 600-second run.
 2. Review checklist:
-   - 시작 빌드 카드 4개가 런 방향으로 자연스럽게 읽히는가?
-   - 혈반 시작 후 칼무리 카드, 칼무리 시작 후 혈반 카드가 빠르게 보이는가?
+   - 시작 무기 카드 2개가 명확하게 읽히는가?
+   - 첫 보상에서 칼무리/혈반 기억 선택이 빠르고 자연스럽게 보이는가?
    - 첫 20~30초 안에 XP/카드 보상 리듬이 오는가?
    - 60~90초 안에 기억 2~3개와 다음 망각 후보가 보이는가?
    - 쌍검 기본공격이 적 위치 발도선으로 읽히는가?

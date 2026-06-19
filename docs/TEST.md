@@ -81,7 +81,7 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Final Unity MCP check: compile error count 0, Play Mode entered, console error count 0, Play Mode stopped.
   - Human review still needs to judge whether the first 120 seconds now feel busy, readable, and worth replaying.
 - Direct Codex smoke follow-up, 2026-06-19:
-  - Added `LETHE/V1 Smoke/*` editor menu items to run the four start builds and the M2 loop without manual keyboard/click input.
+  - Added `LETHE/V1 Smoke/*` editor menu items to run start routes and the M2 loop without manual keyboard/click input.
   - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors for the smoke menu code.
   - Unity compile error count: 0.
   - Start build smoke snapshots:
@@ -93,6 +93,14 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Unity console error log count after M2 smoke: 0.
   - Unity missing references: scene 0, assets 0.
   - Remaining risk: this is a technical smoke test, not a feel review. It proves the routes can initialize and the debug M2 loop wires up, but jaewoo still needs to play the first 120 seconds.
+- Start-selection UX correction, 2026-06-19:
+  - Start overlay now presents only two weapon choices: `절단쌍검` and `장송대검`.
+  - `BeginRun(V1WeaponId)` no longer grants a starting memory.
+  - `LETHE/V1 Smoke/Start Dual Blades` snapshot: weapon `절단쌍검`, memories `[]`, result/refill/death all false.
+  - Forced first level-up after weapon start produced choices: `굶주린 칼무리 | 피의 반사 | 칼날 가속`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity console error count: 0.
 
 ### H. Human Review Gate
 

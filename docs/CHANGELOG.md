@@ -28,6 +28,12 @@
   - Four start build routes can be initialized from Unity Editor menus and logged through `DebugSnapshot()`.
   - The M2 loop can be initialized from an editor menu and verifies Hungry/Blood echoes at +5 with Blood Blade Storm ready.
   - Verification: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 0 warnings and 0 errors; Unity compile errors 0; Unity console errors 0; scene/assets missing references 0.
+- Corrected the start-selection UX after review:
+  - The first overlay now selects only the starting weapon: `절단쌍검` or `장송대검`.
+  - `굶주린 칼무리` and `피의 반사` are no longer attached to the weapon card.
+  - First level-up rewards now carry the memory choice; verified first choices as `굶주린 칼무리 | 피의 반사 | 칼날 가속`.
+  - `LETHE/V1 Smoke/*` start menus now match the weapon-only model: `Start Dual Blades`, `Start Greatsword`, and `M2 Loop`.
+  - Verification: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 7 legacy warnings and 0 errors; Unity compile errors 0; Unity console errors 0.
 
 ## 2026-06-18
 

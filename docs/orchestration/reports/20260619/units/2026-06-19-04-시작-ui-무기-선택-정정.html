@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-19-04 - 시작 UI 무기 선택 정정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-19-04 - 시작 UI 무기 선택 정정</h1>
+      <p class="meta">Generated from 2026-06-19-04-시작-ui-무기-선택-정정.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260619/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-19-04 - 시작 UI 무기 선택 정정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 시작 화면은 다시 무기 2종 선택 구조가 되었습니다. 첫 화면에서는 <code>절단쌍검</code> 또는 <code>장송대검</code>만 고르고, <code>굶주린 칼무리</code>와 <code>피의 반사</code>는 첫 레벨업 보상에서 선택합니다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>시작 화면의 4개 <code>무기 + 기억</code> 빌드 카드를 제거했습니다.</li>
+<li>시작 화면을 2개 무기 카드로 줄였습니다.</li>
+<li><code>BeginRun(V1WeaponId)</code>가 더 이상 시작 기억을 자동 지급하지 않습니다.</li>
+<li>Unity 스모크 메뉴도 <code>Start Dual Blades</code>, <code>Start Greatsword</code>, <code>M2 Loop</code> 기준으로 정리했습니다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy warning 7개, error 0개.</li>
+<li>Unity compile error count: 0.</li>
+<li><code>Start Dual Blades</code> 스모크: weapon <code>절단쌍검</code>, memories <code>[]</code>, death <code>False</code>.</li>
+<li>강제 첫 레벨업 선택지: <code>굶주린 칼무리 | 피의 반사 | 칼날 가속</code>.</li>
+<li>Unity console error count: 0.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>첫 화면은 빌드 선택이 아니라 무기 선택으로 둡니다. 기억 선택은 첫 보상 카드가 담당하게 해서, 플레이어가 “왜 혈반이 무기에 붙어 있지?”라고 느끼지 않게 합니다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>시작 직후 기억이 없으므로 첫 보상이 너무 늦게 느껴지면 다시 보상 속도를 봐야 합니다. 현재 XP 보정상 첫 보상은 빠르게 뜨는 편입니다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Codex가 시작 UI를 4개 빌드 카드에서 2개 무기 카드로 되돌렸다. 칼무리/혈반은 첫 보상에서 선택되며, 첫 레벨업 카드에 두 기억이 정상 노출되는 것을 확인했다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>직접 플레이로 첫 보상까지의 시간이 자연스러운지 확인합니다.</li>
+<li>너무 밋밋하면 시작 적/XP 리듬만 미세 조정합니다.</li>
+<li>무기 카드의 시각 디자인은 이후 아트/VFX 패스에서 정리합니다.</li>
+</ul>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 초반 재미를 빨리 보여주려다 첫 선택이 과도한 빌드 선택처럼 보였다.</li>
+<li>방향: 첫 선택은 단순하게, 빌드 정체성은 보상 루프에서 열리게 한다.</li>
+<li>행동: 시작 UI를 무기 2장으로 정리하고 기억 지급을 첫 레벨업으로 이동했다.</li>
+<li>결과: 시작 선택의 의미가 명확해지고, 첫 보상이 자연스럽게 빌드 방향을 정하게 됐다.</li>
+</ul>
+  </main>
+</body>
+</html>

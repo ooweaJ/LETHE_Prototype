@@ -275,13 +275,19 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - Four start-build smoke snapshots initialized the expected weapon and starting memory.
   - M2 smoke reached Hungry/Blood echoes at +5 and `storm=True`.
   - Unity console error count: `0`; scene/assets missing references: `0`.
+- Start-selection UX correction:
+  - Start overlay now presents only `절단쌍검` and `장송대검`.
+  - Starting memories are no longer attached to weapon selection.
+  - First forced level-up after weapon start produced `굶주린 칼무리 | 피의 반사 | 칼날 가속`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 7 legacy warnings, 0 errors.
+  - Unity compile error count `0`; Unity console error count `0`.
 
 ## Next Implementation
 
 1. Ask jaewoo to review `Dev_Prototype_v1` as a 120-second early fun loop first, not as a full 600-second balance run.
 2. Collect one combined feedback pass for:
-   - 시작 빌드 카드 4개가 이번 판 방향으로 읽히는지.
-   - 혈반 시작 후 칼무리 카드, 칼무리 시작 후 혈반 카드가 자연스럽게 보이는지.
+   - 시작 무기 카드 2개가 명확하게 읽히는지.
+   - 첫 보상에서 칼무리/혈반 기억 선택이 자연스럽게 보이는지.
    - 첫 20~30초 안에 첫 레벨업/보상 리듬이 오는지.
    - 60~90초 안에 활성 기억 2~3개와 다음 망각 후보가 보이는지.
    - 카드 선택 중 적/탄이 완전히 멈추는지.
