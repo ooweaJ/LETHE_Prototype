@@ -1192,6 +1192,18 @@ namespace Lethe.PrototypeV1
                     : new SpawnWaveProfile(pressure.Progress > 0.72f ? 0.44f : 0.50f, pressure.Progress > 0.72f ? 4 : 3, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.DriftingEye, V1EnemyKind.VoidPriest);
             }
 
+            if (pressure.FirstCycle && elapsed < 120f)
+            {
+                if (elapsed < 35f)
+                {
+                    return new SpawnWaveProfile(0.52f, 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye);
+                }
+
+                return elapsed < 80f
+                    ? new SpawnWaveProfile(0.58f, 3, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne)
+                    : new SpawnWaveProfile(0.50f, 3, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.VoidPriest);
+            }
+
             if (pressure.Progress < 0.24f)
             {
                 return elapsed < 70f
@@ -1222,6 +1234,7 @@ namespace Lethe.PrototypeV1
         {
             var pressure = CurrentPressure();
             if (pressure.Deficit) return pressure.Progress < 0.30f ? 16 : 14;
+            if (pressure.FirstCycle && elapsed < 120f) return 28;
             if (pressure.FirstCycle && pressure.Progress >= 0.94f) return 22;
             if (pressure.FirstCycle && pressure.Progress >= 0.70f) return 32;
             if (pressure.FirstCycle) return 34;
@@ -1274,7 +1287,7 @@ namespace Lethe.PrototypeV1
         Vector3 RandomSpawnPosition()
         {
             var angle = UnityEngine.Random.value * Mathf.PI * 2f;
-            var radius = 5.9f + UnityEngine.Random.value * 1.7f;
+            var radius = elapsed < 120f ? 4.9f + UnityEngine.Random.value * 1.35f : 5.9f + UnityEngine.Random.value * 1.7f;
             return player.position + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * radius;
         }
 
