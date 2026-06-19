@@ -37,7 +37,10 @@
 
 - Refreshed v1 visual/UI/game-feel basics:
   - Removed player body pulse wobble and moved sprite rendering under a stable `PlayerVisual` child.
-  - Reused the 8x4 player sheet as actual idle/walk 4-direction animation.
+  - Added/imported a new player body sheet:
+    - `LETHE/Assets/_dev/Art/Source/sheet_player_v1_4dir_chroma.png`
+    - `LETHE/Assets/_dev/Art/Sprites/Characters/Player/sheet_player_v1_4dir.png`
+  - Reused the new 8x4 player sheet as actual idle/walk 4-direction animation.
   - Centered the weapon anchor to reduce perceived body drift while moving.
   - Added imported greatsword sprite assets:
     - `LETHE/Assets/_dev/Art/Source/spr_weapon_greatsword_01_chroma.png`

@@ -153,7 +153,8 @@ Implementation list:
 
 - [x] Stop player body wobble caused by runtime scale pulse.
 - [x] Keep player root movement stable and move animation onto a child `PlayerVisual`.
-- [x] Use the existing 8x4 player sheet as real idle/walk 4-direction animation instead of a single static frame.
+- [x] Generate/import a new `sheet_player_v1_4dir.png` player body sheet.
+- [x] Use the new 8x4 player sheet as real idle/walk 4-direction animation instead of a single static frame.
 - [x] Center the weapon anchor so movement does not make the body feel offset by the weapon.
 - [x] Add a dedicated transparent greatsword sprite asset and load it before procedural fallback.
 - [x] Add per-tile rotation, color variation, and tiny scale variation to the arena floor.
@@ -166,6 +167,7 @@ Verification:
 - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
 - Unity MCP `Assets/Refresh`: success.
 - Unity compile error count: 0.
+- Short Unity Play Mode entry after the new player sheet: success.
 - Unity console error count after smoke: 0.
 - Unity missing references: scene 0, assets 0.
 - Greatsword sprite asset loaded as `spr_weapon_greatsword_01`.

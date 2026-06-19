@@ -105,7 +105,8 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 - Visual/UI/game-feel refresh, 2026-06-19:
   - Player root movement is stable; the visual sprite is now on `PlayerVisual`.
   - Player body scale pulse was removed to avoid side-to-side wobble perception.
-  - The 8x4 player sheet now drives 4-direction idle/walk animation.
+  - New player body sheet `sheet_player_v1_4dir.png` was generated/imported.
+  - The new 8x4 player sheet now drives 4-direction idle/walk animation.
   - Greatsword uses the imported `spr_weapon_greatsword_01.png` sprite.
   - Arena floor has tile rotation, color variation, and small scale variation.
   - HUD was compacted into HP/XP/memory/ultimate/debug panels.
@@ -113,6 +114,7 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Unity `Assets/Refresh`: success.
   - Unity compile error count: 0.
   - Unity console error count: 0.
+  - Short Unity Play Mode entry after the new player sheet: success, console error count 0.
   - Unity missing references: scene 0, assets 0.
   - Greatsword Play Mode smoke snapshot: `scene=v1 weapon=장송대검 elapsed=1.8 hp=210.0/210.0 enemies=6 death=False`.
   - Remaining risk: automated screenshot capture was discarded as solid color, so direct visual review is still required.

@@ -45,7 +45,10 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 - Unity v1 visual/UI/game-feel refresh:
   - Player body no longer uses `V1BillboardPulse`, so movement should not read as side-to-side body wobble.
   - Player rendering is now on a stable child `PlayerVisual`, with the root reserved for actual movement.
-  - The existing 8x4 player sheet is now used as 4-direction idle/walk animation instead of a single static frame.
+  - Added and imported a new player body sheet:
+    - `LETHE/Assets/_dev/Art/Source/sheet_player_v1_4dir_chroma.png`
+    - `LETHE/Assets/_dev/Art/Sprites/Characters/Player/sheet_player_v1_4dir.png`
+  - The new 8x4 player sheet is now used as 4-direction idle/walk animation instead of a single static frame.
   - Weapon anchor is centered below the player to reduce silhouette drift while moving.
   - Added and imported a dedicated transparent greatsword sprite:
     - `LETHE/Assets/_dev/Art/Source/spr_weapon_greatsword_01_chroma.png`
@@ -57,6 +60,7 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
     - Unity `Assets/Refresh`: success.
     - Unity compile error count: `0`.
     - Unity console error count: `0`.
+    - Short Unity Play Mode entry after the new player sheet: success, console errors `0`.
     - Unity missing references: scene `0`, assets `0`.
     - Greatsword sprite asset loaded as `spr_weapon_greatsword_01`.
     - Play Mode Greatsword smoke snapshot: `scene=v1 weapon=장송대검 elapsed=1.8 hp=210.0/210.0 enemies=6 death=False`.

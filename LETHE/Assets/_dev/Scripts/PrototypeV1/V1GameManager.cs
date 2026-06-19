@@ -85,7 +85,7 @@ namespace Lethe.PrototypeV1
         const float FirstBossHp = 2050f;
         const float FastBossHp = 180f;
         const float RunSeconds = 600f;
-        const string PlayerSheetPath = "Assets/_dev/Art/Sprites/Characters/Player/sheet_player_4dir.png";
+        const string PlayerSheetPath = "Assets/_dev/Art/Sprites/Characters/Player/sheet_player_v1_4dir.png";
         static readonly float[] BossScheduleSeconds = { 180f, 340f, 490f, 600f };
         static readonly float[] FastBossScheduleSeconds = { 18f, 38f, 62f, 88f };
 

@@ -284,7 +284,8 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 - Visual/UI/game-feel refresh:
   - Player body scale pulse was removed, and the sprite now lives under a stable `PlayerVisual` child.
-  - The 8x4 player sheet now drives idle/walk 4-direction animation.
+  - Added/imported `sheet_player_v1_4dir.png` as the new player body sheet.
+  - The new 8x4 player sheet now drives idle/walk 4-direction animation.
   - Weapon anchor was centered to reduce perceived body drift while moving.
   - Added/imported `spr_weapon_greatsword_01.png` as the dedicated greatsword runtime sprite.
   - Arena floor tiles now have rotation/color/scale variation.
@@ -292,6 +293,7 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 7 legacy warnings, 0 errors.
   - Unity `Assets/Refresh` succeeded.
   - Unity compile error count `0`; Unity console error count `0`.
+  - Short Unity Play Mode entry after the new player sheet succeeded with console error count `0`.
   - Unity missing references: scene `0`, assets `0`.
   - Play Mode Greatsword smoke snapshot: `scene=v1 weapon=장송대검 elapsed=1.8 hp=210.0/210.0 enemies=6 death=False`.
   - Screenshot capture produced a solid-color image and was discarded, so direct visual review is still required.
