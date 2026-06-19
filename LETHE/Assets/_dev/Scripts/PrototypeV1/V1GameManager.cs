@@ -1359,6 +1359,10 @@ namespace Lethe.PrototypeV1
                 : weaponHit ? 0.105f : 0.075f;
             enemy.TakeDamage(finalAmount, source, weaponHit, flashColor, flashDuration);
             SpawnHitSpark(enemy.transform.position, hitDir, weaponHit);
+            if (weaponHit)
+            {
+                SpawnWeaponHitConfirm(enemy.transform.position, hitDir);
+            }
             var showDamageNumber = feedback == null || feedback.showDamageNumbers;
             var minNonWeaponDamage = feedback != null ? feedback.damageNumberMinNonWeaponDamage : 5f;
             if (showDamageNumber && (weaponHit || finalAmount >= minNonWeaponDamage))
@@ -1959,6 +1963,18 @@ namespace Lethe.PrototypeV1
             var forward = dir.sqrMagnitude > 0.01f ? dir.normalized : lastAim.normalized;
             var angle = Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg;
             SpawnSlashEntry(feedback.hitSpark, pos, pos, forward, angle, true, 0);
+        }
+
+        void SpawnWeaponHitConfirm(Vector3 pos, Vector2 dir)
+        {
+            var weapon = CurrentWeaponSpec();
+            var heavy = weapon.Id == V1WeaponId.Greatsword;
+            var forward = dir.sqrMagnitude > 0.01f ? dir.normalized : lastAim.normalized;
+            var angle = Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg;
+            var ringColor = heavy ? new Color(0.92f, 0.98f, 1f, 0.36f) : new Color(0.55f, 0.96f, 1f, 0.30f);
+            var diamondColor = heavy ? new Color(1f, 0.93f, 0.72f, 0.72f) : new Color(0.96f, 1f, 1f, 0.58f);
+            SpawnTransientSprite("WeaponHitConfirmRing", MakeRingSprite("WeaponHitConfirmRing", Color.white, heavy ? 112 : 88), pos, Quaternion.identity, heavy ? 0.38f : 0.26f, ringColor, heavy ? 0.16f : 0.11f);
+            SpawnTransientSprite("WeaponHitConfirmCore", MakeImpactDiamondSprite("WeaponHitConfirmCore", Color.white), pos + (Vector3)(forward * 0.05f), Quaternion.Euler(0f, 0f, angle), heavy ? 0.24f : 0.16f, diamondColor, heavy ? 0.12f : 0.08f);
         }
 
         void DrawBar(Rect rect, float value, Color fill, Color background)
