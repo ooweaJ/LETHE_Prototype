@@ -1503,9 +1503,16 @@ namespace Lethe.PrototypeV1
             lastForgotten = forgotten.Id;
 
             overlayTitle = "망각 결과";
-            overlayBody = $"사라진 기억: {MemoryName(forgotten.Id)} +{forgotten.Level}\n남은 잔향: {EchoName(forgotten.Id)} +{after}" + (raw > MaxEchoLevel ? $"\n과부하: +{raw - MaxEchoLevel} 폭발" : "") + "\nSpace로 결손 생존에 진입";
+            overlayBody =
+                $"사라진 기억: {MemoryName(forgotten.Id)} +{forgotten.Level}\n" +
+                $"남은 잔향: {EchoName(forgotten.Id)} +{after}{(after >= MaxEchoLevel ? " 각성" : "")}\n" +
+                (raw > MaxEchoLevel ? $"과부하: +{raw - MaxEchoLevel} 즉시 폭발/궁극 기대\n" : "") +
+                $"다음: {Mathf.CeilToInt(CurrentDeficitDuration())}초를 잔향으로 버틴 뒤 같은 기억을 다시 얻으면 공명합니다.\n" +
+                "Space로 결손 생존에 진입";
             resultOverlay = true;
             SpawnEchoTransformVfx(forgotten.Id);
+            SpawnFloatingText(player.position + Vector3.up * 1.35f, $"{MemoryName(forgotten.Id)} 상실", new Color(1f, 0.82f, 0.74f));
+            SpawnFloatingText(player.position + Vector3.up * 1.05f, $"{EchoName(forgotten.Id)} +{after}", forgotten.Id == V1MemoryId.BloodReflection ? new Color(1f, 0.22f, 0.28f) : new Color(0.62f, 0.96f, 1f));
             Log($"{MemoryName(forgotten.Id)} 망각 -> {EchoName(forgotten.Id)} +{after}");
         }
 
