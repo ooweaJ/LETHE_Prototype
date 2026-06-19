@@ -206,10 +206,8 @@ namespace Lethe.PrototypeV1
             {
                 GameplayPaused = true;
                 HitstopActive = false;
-                if (KeyDown(KeyCode.Alpha1)) BeginRun(V1WeaponId.DualBlades, V1MemoryId.HungryBlades);
-                if (KeyDown(KeyCode.Alpha2)) BeginRun(V1WeaponId.DualBlades, V1MemoryId.BloodReflection);
-                if (KeyDown(KeyCode.Alpha3)) BeginRun(V1WeaponId.Greatsword, V1MemoryId.HungryBlades);
-                if (KeyDown(KeyCode.Alpha4)) BeginRun(V1WeaponId.Greatsword, V1MemoryId.BloodReflection);
+                if (KeyDown(KeyCode.Alpha1)) BeginRun(V1WeaponId.DualBlades);
+                if (KeyDown(KeyCode.Alpha2)) BeginRun(V1WeaponId.Greatsword);
                 return;
             }
 
@@ -1605,11 +1603,6 @@ namespace Lethe.PrototypeV1
 
         void BeginRun(V1WeaponId weaponId)
         {
-            BeginRun(weaponId, V1MemoryId.HungryBlades);
-        }
-
-        void BeginRun(V1WeaponId weaponId, V1MemoryId startMemoryId)
-        {
             if (runStarted) return;
             currentWeaponId = weaponId;
             weaponSelectOverlay = false;
@@ -1624,10 +1617,9 @@ namespace Lethe.PrototypeV1
             HitstopActive = false;
             weaponTimer = 0.18f;
             weaponAnimTimer = 0f;
-            AddMemory(startMemoryId, 1, true);
             var weapon = CurrentWeaponSpec();
-            SpawnFloatingText(player.position + Vector3.up * 1.15f, $"{weapon.DisplayName} + {MemoryName(startMemoryId)}", new Color(0.78f, 0.96f, 1f));
-            Log($"런 시작: {weapon.DisplayName} + {MemoryName(startMemoryId)} Lv.1");
+            SpawnFloatingText(player.position + Vector3.up * 1.15f, weapon.DisplayName, new Color(0.78f, 0.96f, 1f));
+            Log($"런 시작: {weapon.DisplayName}");
         }
 
         void EnsureRunStarted()
@@ -1646,42 +1638,36 @@ namespace Lethe.PrototypeV1
         void DrawWeaponSelectOverlay()
         {
             GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "", panelStyle);
-            var width = Mathf.Min(1040f, Screen.width - 80f);
-            var height = Mathf.Min(640f, Screen.height - 70f);
+            var width = Mathf.Min(900f, Screen.width - 80f);
+            var height = Mathf.Min(460f, Screen.height - 70f);
             var origin = new Rect(Screen.width * 0.5f - width * 0.5f, Screen.height * 0.5f - height * 0.5f, width, height);
             GUI.Box(origin, "", panelStyle);
-            GUI.Label(new Rect(origin.x + 30, origin.y + 26, origin.width - 60, 42), "시작 빌드 선택", titleStyle);
-            GUI.Label(new Rect(origin.x + 54, origin.y + 74, origin.width - 108, 42), "첫 판 방향을 먼저 고릅니다. 빠른 칼자국/큰 참격과 칼무리/혈반 기억이 초반 재미의 기준입니다.", smallStyle);
+            GUI.Label(new Rect(origin.x + 30, origin.y + 26, origin.width - 60, 42), "시작 무기 선택", titleStyle);
+            GUI.Label(new Rect(origin.x + 54, origin.y + 74, origin.width - 108, 42), "먼저 무기만 고릅니다. 칼무리와 혈반 같은 기억은 첫 보상 카드에서 선택합니다.", smallStyle);
 
             var gap = 18f;
             var cardWidth = (origin.width - 108f - gap) * 0.5f;
-            var cardHeight = (origin.height - 154f - gap) * 0.5f;
+            var cardHeight = origin.height - 154f;
             var x0 = origin.x + 54f;
             var x1 = x0 + cardWidth + gap;
             var y0 = origin.y + 122f;
-            var y1 = y0 + cardHeight + gap;
-            DrawStartBuildCard(new Rect(x0, y0, cardWidth, cardHeight), V1WeaponId.DualBlades, V1MemoryId.HungryBlades, "1", "빠른 칼무리", "쌍검의 잦은 타격 위에 칼날 군집을 얹습니다.\n초반 손맛과 잔향 후속타 확인용.", new Color(0.32f, 0.88f, 1f));
-            DrawStartBuildCard(new Rect(x1, y0, cardWidth, cardHeight), V1WeaponId.DualBlades, V1MemoryId.BloodReflection, "2", "빠른 혈반", "쌍검 타격마다 표식/회복 실을 준비합니다.\n다음 카드에서 칼무리를 채우면 피의 칼폭풍 축.", new Color(1f, 0.36f, 0.42f));
-            DrawStartBuildCard(new Rect(x0, y1, cardWidth, cardHeight), V1WeaponId.Greatsword, V1MemoryId.HungryBlades, "3", "큰 칼무리", "대검의 느린 큰 참격 뒤에 무거운 칼무리 후속타가 붙습니다.\n한 방 판독 확인용.", new Color(0.80f, 0.96f, 1f));
-            DrawStartBuildCard(new Rect(x1, y1, cardWidth, cardHeight), V1WeaponId.Greatsword, V1MemoryId.BloodReflection, "4", "큰 혈반", "대검으로 표식을 새기고 큰 후속 피해/회복을 노립니다.\n다음 카드에서 칼무리를 채웁니다.", new Color(1f, 0.52f, 0.58f));
+            DrawWeaponCard(new Rect(x0, y0, cardWidth, cardHeight), V1WeaponId.DualBlades, "1", "절단쌍검", "빠른 2연 베기로 가까운 적을 깎는 시작 무기입니다.\n\n첫 보상에서 칼무리나 혈반 기억을 골라 빌드 방향을 정합니다.", new Color(0.32f, 0.88f, 1f));
+            DrawWeaponCard(new Rect(x1, y0, cardWidth, cardHeight), V1WeaponId.Greatsword, "2", "장송대검", "느린 큰 참격으로 무리를 가르는 시작 무기입니다.\n\n첫 보상에서 기억을 붙여 한 방의 잔향 방향을 정합니다.", new Color(0.92f, 0.86f, 0.70f));
         }
 
-        void DrawStartBuildCard(Rect card, V1WeaponId weaponId, V1MemoryId memoryId, string key, string subtitle, string body, Color accent)
+        void DrawWeaponCard(Rect card, V1WeaponId weaponId, string key, string title, string body, Color accent)
         {
             if (GUI.Button(card, "", buttonStyle))
             {
-                BeginRun(weaponId, memoryId);
+                BeginRun(weaponId);
             }
 
-            var name = weaponId == V1WeaponId.Greatsword ? "장송대검" : "절단쌍검";
-            var memoryName = MemoryName(memoryId);
             GUI.color = accent;
             GUI.DrawTexture(new Rect(card.x + 18, card.y + 18, card.width - 36, 4), Texture2D.whiteTexture);
             GUI.color = Color.white;
-            GUI.Label(new Rect(card.x + 22, card.y + 34, card.width - 44, 34), $"{key}. {name} + {memoryName}", titleStyle);
-            GUI.Label(new Rect(card.x + 28, card.y + 78, card.width - 56, 24), subtitle, smallStyle);
-            GUI.Label(new Rect(card.x + 28, card.y + 112, card.width - 56, card.height - 156), body, smallStyle);
-            GUI.Label(new Rect(card.x + 28, card.yMax - 46, card.width - 56, 26), "클릭 또는 숫자키로 선택", smallStyle);
+            GUI.Label(new Rect(card.x + 22, card.y + 34, card.width - 44, 34), $"{key}. {title}", titleStyle);
+            GUI.Label(new Rect(card.x + 28, card.y + 88, card.width - 56, card.height - 144), body, smallStyle);
+            GUI.Label(new Rect(card.x + 28, card.yMax - 46, card.width - 56, 26), "클릭 또는 숫자키로 무기 선택", smallStyle);
         }
 
         void DrawHud()

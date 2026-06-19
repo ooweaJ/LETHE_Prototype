@@ -11,7 +11,6 @@ namespace Lethe.PrototypeV1.Editor
         const string ActiveKey = "Lethe.V1Smoke.Active";
         const string ModeKey = "Lethe.V1Smoke.Mode";
         const string WeaponKey = "Lethe.V1Smoke.Weapon";
-        const string MemoryKey = "Lethe.V1Smoke.Memory";
 
         static bool invoked;
         static double invokedAt;
@@ -23,40 +22,28 @@ namespace Lethe.PrototypeV1.Editor
             EditorApplication.update += Tick;
         }
 
-        [MenuItem("LETHE/V1 Smoke/Start Dual Kalmuri")]
-        public static void StartDualKalmuri()
+        [MenuItem("LETHE/V1 Smoke/Start Dual Blades")]
+        public static void StartDualBlades()
         {
-            BeginStartBuildSmoke(V1WeaponId.DualBlades, V1MemoryId.HungryBlades);
+            BeginStartWeaponSmoke(V1WeaponId.DualBlades);
         }
 
-        [MenuItem("LETHE/V1 Smoke/Start Dual Blood")]
-        public static void StartDualBlood()
+        [MenuItem("LETHE/V1 Smoke/Start Greatsword")]
+        public static void StartGreatsword()
         {
-            BeginStartBuildSmoke(V1WeaponId.DualBlades, V1MemoryId.BloodReflection);
-        }
-
-        [MenuItem("LETHE/V1 Smoke/Start Great Kalmuri")]
-        public static void StartGreatKalmuri()
-        {
-            BeginStartBuildSmoke(V1WeaponId.Greatsword, V1MemoryId.HungryBlades);
-        }
-
-        [MenuItem("LETHE/V1 Smoke/Start Great Blood")]
-        public static void StartGreatBlood()
-        {
-            BeginStartBuildSmoke(V1WeaponId.Greatsword, V1MemoryId.BloodReflection);
+            BeginStartWeaponSmoke(V1WeaponId.Greatsword);
         }
 
         [MenuItem("LETHE/V1 Smoke/M2 Loop")]
         public static void StartM2Loop()
         {
-            SavePending(new PendingSmoke(SmokeMode.M2Loop, V1WeaponId.DualBlades, V1MemoryId.HungryBlades));
+            SavePending(new PendingSmoke(SmokeMode.M2Loop, V1WeaponId.DualBlades));
             StartRunner();
         }
 
-        static void BeginStartBuildSmoke(V1WeaponId weaponId, V1MemoryId memoryId)
+        static void BeginStartWeaponSmoke(V1WeaponId weaponId)
         {
-            SavePending(new PendingSmoke(SmokeMode.StartBuild, weaponId, memoryId));
+            SavePending(new PendingSmoke(SmokeMode.StartWeapon, weaponId));
             StartRunner();
         }
 
@@ -122,15 +109,15 @@ namespace Lethe.PrototypeV1.Editor
                 "BeginRun",
                 BindingFlags.Instance | BindingFlags.NonPublic,
                 null,
-                new[] { typeof(V1WeaponId), typeof(V1MemoryId) },
+                new[] { typeof(V1WeaponId) },
                 null);
 
             if (method == null)
             {
-                throw new MissingMethodException(nameof(V1GameManager), "BeginRun(V1WeaponId,V1MemoryId)");
+                throw new MissingMethodException(nameof(V1GameManager), "BeginRun(V1WeaponId)");
             }
 
-            method.Invoke(manager, new object[] { smoke.WeaponId, smoke.MemoryId });
+            method.Invoke(manager, new object[] { smoke.WeaponId });
         }
 
         static void Finish()
@@ -146,39 +133,35 @@ namespace Lethe.PrototypeV1.Editor
             SessionState.SetBool(ActiveKey, true);
             SessionState.SetInt(ModeKey, (int)smoke.Mode);
             SessionState.SetInt(WeaponKey, (int)smoke.WeaponId);
-            SessionState.SetInt(MemoryKey, (int)smoke.MemoryId);
         }
 
         static PendingSmoke LoadPending()
         {
             return new PendingSmoke(
-                (SmokeMode)SessionState.GetInt(ModeKey, (int)SmokeMode.StartBuild),
-                (V1WeaponId)SessionState.GetInt(WeaponKey, (int)V1WeaponId.DualBlades),
-                (V1MemoryId)SessionState.GetInt(MemoryKey, (int)V1MemoryId.HungryBlades));
+                (SmokeMode)SessionState.GetInt(ModeKey, (int)SmokeMode.StartWeapon),
+                (V1WeaponId)SessionState.GetInt(WeaponKey, (int)V1WeaponId.DualBlades));
         }
 
         enum SmokeMode
         {
-            StartBuild,
+            StartWeapon,
             M2Loop
         }
 
         readonly struct PendingSmoke
         {
-            public PendingSmoke(SmokeMode mode, V1WeaponId weaponId, V1MemoryId memoryId)
+            public PendingSmoke(SmokeMode mode, V1WeaponId weaponId)
             {
                 Mode = mode;
                 WeaponId = weaponId;
-                MemoryId = memoryId;
             }
 
             public SmokeMode Mode { get; }
             public V1WeaponId WeaponId { get; }
-            public V1MemoryId MemoryId { get; }
 
             public string Label => Mode == SmokeMode.M2Loop
                 ? "M2 Loop"
-                : $"{WeaponId} + {MemoryId}";
+                : $"{WeaponId}";
         }
     }
 }
