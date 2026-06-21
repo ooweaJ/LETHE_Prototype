@@ -46,27 +46,27 @@ Runtime export rule:
 | Group | Exists now | Replace with this sheet? | Notes |
 | --- | --- | --- | --- |
 | Player | `sheet_player_v1_4dir.png` | Later polish | Usable for v1 review. |
-| Dual blades | `spr_weapon_dual_blade_left_01.png`, `spr_weapon_dual_blade_right_01.png` | Later polish | Functional, but attack arcs are missing. |
+| Dual blades | `spr_weapon_dual_blade_left_01.png`, `spr_weapon_dual_blade_right_01.png` | Later polish | Functional; dedicated swing arcs were generated on 2026-06-21. |
 | Greatsword | `spr_weapon_greatsword_01.png` | Later polish | Newly generated, usable. |
 | Chaser enemy | `sheet_enemy_chaser_4dir.png` | Later polish | Existing prototype asset. |
 | Floor | `tile_dev_floor_dark_01.png` | Add variants | Needs less repetition. |
 | Kalmuri VFX | orbit/echo/launch sprites exist | Replace now | Core identity must match final style. |
 | Blood VFX | mark/bloom/heal thread exist | Replace now | Core identity must match final style. |
 | Blood Blade Storm | ring/blade sprites exist | Replace now | First ultimate payoff. |
-| Other 6 memories | mostly procedural | Generate new | Needs dedicated sprites. |
-| Other 6 echoes | mostly procedural | Generate new | Needs dedicated sprites. |
-| Other 3 ultimates | procedural/minimal | Generate new | Needs dedicated sprites. |
+| Other 6 memories | generated sprites exist | Generated 2026-06-21 | Runtime wiring/scale pass still needed. |
+| Other 6 echoes | generated sprites exist | Generated 2026-06-21 | Runtime wiring/scale pass still needed. |
+| Other 3 ultimates | generated sprites exist | Generated 2026-06-21 | Runtime wiring/scale pass still needed. |
 | UI icons | missing | Generate after VFX | Needs card/HUD pass. |
 
 ## 4. Weapon / Hit VFX Prompts
 
 | File | Status | Prompt |
 | --- | --- | --- |
-| `spr_dual_blade_swing_arc_01.png` | Needed | thin fast single crescent slash arc, dual-blade razor edge, cyan-white, slight motion blur |
-| `spr_dual_blade_swing_arc_02.png` | Needed | crossing mirrored crescent slash, second hit of a fast combo, sharper cyan-white twin arc |
-| `spr_greatsword_cleave_arc_01.png` | Needed | heavy wide crescent cleave arc, thick weighty sweep, cyan-white core with crimson impact tint |
-| `spr_hit_spark_cyan_01.png` | Needed | small sharp radial impact spark burst, cyan star shards, crisp |
-| `spr_hit_spark_red_01.png` | Needed | jagged radial impact spark, crimson shards, slightly violent burst |
+| `spr_dual_blade_swing_arc_01.png` | Generated 2026-06-21 | thin fast single crescent slash arc, dual-blade razor edge, cyan-white, slight motion blur |
+| `spr_dual_blade_swing_arc_02.png` | Generated 2026-06-21 | crossing mirrored crescent slash, second hit of a fast combo, sharper cyan-white twin arc |
+| `spr_greatsword_cleave_arc_01.png` | Generated 2026-06-21 | heavy wide crescent cleave arc, thick weighty sweep, cyan-white core with crimson impact tint |
+| `spr_hit_spark_cyan_01.png` | Generated 2026-06-21 | small sharp radial impact spark burst, cyan star shards, crisp |
+| `spr_hit_spark_red_01.png` | Generated 2026-06-21 | jagged radial impact spark, crimson shards, slightly violent burst |
 
 ## 5. Enemy / Boss Prompts
 
@@ -85,12 +85,12 @@ For enemies, first generate a strong front-facing reference. Then use that as a 
 | --- | --- | --- | --- |
 | Hungry Blades | `spr_kalmuri_orbit_blade_01.png` | Replace now | spectral cyan memory blade shard, short curved dagger silhouette, orbit-ready, sharp luminous edge, melancholic glass-metal texture |
 | Blood Reflection | `spr_blood_mark_01.png` | Replace now | crimson blood reflection mark, small circular blood glyph, liquid mirror glint, sharp red rim, readable as a mark |
-| Execution Flash | `spr_execution_flash_01.png` | Needed | blinding white-gold execution flash, vertical light slash with a cross-shaped crack of radiance, holy judgment, sharp luminous shards |
-| Hunter Oath | `spr_homing_shot_01.png` | Needed | glowing cyan arrowhead projectile, comet tail, lock-on targeting glow, slight seeking curve trail |
-| Shatter Wave | `spr_shockwave_ring_01.png` | Needed | expanding concentric shockwave ring, cracked-glass fracture texture on the edge, cyan impact distortion |
-| Stopped Second | `spr_timestop_field_01.png` | Needed | translucent pale-blue dome field, faint clock numerals and a frozen clock-hand, ticking-mark ring, suspended frozen motes |
-| Ashen Shield | `spr_ashen_shield_01.png` | Needed | hexagonal runic barrier ring, ash-grey brittle energy, drifting ash particles |
-| Oblivion Brand | `spr_brand_mark_01.png` | Needed | dark violet-black circular sigil glyph, smoldering edges, a forgetting rune, ghostly fade at the rim |
+| Execution Flash | `spr_execution_flash_01.png` | Generated 2026-06-21 | blinding white-gold execution flash, vertical light slash with a cross-shaped crack of radiance, holy judgment, sharp luminous shards |
+| Hunter Oath | `spr_homing_shot_01.png` | Generated 2026-06-21 | glowing cyan arrowhead projectile, comet tail, lock-on targeting glow, slight seeking curve trail |
+| Shatter Wave | `spr_shockwave_ring_01.png` | Generated 2026-06-21 | expanding concentric shockwave ring, cracked-glass fracture texture on the edge, cyan impact distortion |
+| Stopped Second | `spr_timestop_field_01.png` | Generated 2026-06-21 | translucent pale-blue dome field, faint clock numerals and a frozen clock-hand, ticking-mark ring, suspended frozen motes |
+| Ashen Shield | `spr_ashen_shield_01.png` | Generated 2026-06-21 | hexagonal runic barrier ring, ash-grey brittle energy, drifting ash particles |
+| Oblivion Brand | `spr_brand_mark_01.png` | Generated 2026-06-21 | dark violet-black circular sigil glyph, smoldering edges, a forgetting rune, ghostly fade at the rim |
 
 ## 7. Echo VFX Prompts
 
@@ -100,12 +100,12 @@ For enemies, first generate a strong front-facing reference. Then use that as a 
 | Kalmuri Launch | `spr_kalmuri_launch_blade_01.png` | Replace now | launched spectral cyan blade shard, longer dagger projectile, ghosted trailing afterimage, crisp cutting point |
 | Blood Echo | `spr_blood_bloom_01.png` | Replace now | crimson blood bloom burst, circular liquid flower explosion, ghosted droplets, dark red inner void |
 | Blood Heal Thread | `spr_heal_thread_tip_01.png` | Replace now | tiny crimson healing thread tip, blood filament droplet, glowing red bead, readable at small scale |
-| Execution Echo | `spr_execution_burst_01.png` | Needed | white cross-crack burst exploding outward, fractured light shards, desaturated ghosted echo trail |
-| Homing Echo | `spr_homing_echo_01.png` | Needed | ghosted duplicate cyan darts with afterimage trails, faded shadow-bullets |
-| Shockwave Echo | `spr_shockwave_echo_01.png` | Needed | faint secondary smaller ripple at impact point, translucent desaturated ring |
-| TimeStop Echo | `spr_timestop_echo_01.png` | Needed | brief frozen time-fracture crack, pale-blue shards dissolving into motes |
-| Ashen Echo | `spr_ashen_echo_01.png` | Needed | grey counter-pulse shockwave of ash, dissolving ash particles |
-| Brand Echo | `spr_brand_echo_01.png` | Needed | violet-black sigil shattering into dark fragments and dim sparks |
+| Execution Echo | `spr_execution_burst_01.png` | Generated 2026-06-21 | white cross-crack burst exploding outward, fractured light shards, desaturated ghosted echo trail |
+| Homing Echo | `spr_homing_echo_01.png` | Generated 2026-06-21 | ghosted duplicate cyan darts with afterimage trails, faded shadow-bullets |
+| Shockwave Echo | `spr_shockwave_echo_01.png` | Generated 2026-06-21 | faint secondary smaller ripple at impact point, translucent desaturated ring |
+| TimeStop Echo | `spr_timestop_echo_01.png` | Generated 2026-06-21 | brief frozen time-fracture crack, pale-blue shards dissolving into motes |
+| Ashen Echo | `spr_ashen_echo_01.png` | Generated 2026-06-21 | grey counter-pulse shockwave of ash, dissolving ash particles |
+| Brand Echo | `spr_brand_echo_01.png` | Generated 2026-06-21 | violet-black sigil shattering into dark fragments and dim sparks |
 
 ## 8. Ultimate VFX Prompts
 
@@ -113,9 +113,9 @@ For enemies, first generate a strong front-facing reference. Then use that as a 
 | --- | --- | --- | --- |
 | Blood Blade Storm Ring | `spr_blood_blade_storm_ring_01.png` | Replace now | circular vortex ring of crimson blood and cyan spectral blades, storm orbit, strong center opening, dramatic ultimate payoff |
 | Blood Blade Storm Blade | `spr_blood_blade_storm_blade_01.png` | Replace now | large blood-stained spectral blade shard, cyan edge with crimson core, ultimate orbit projectile, sharp silhouette |
-| Fracture Execution | `spr_fracture_execution_01.png` | Needed | massive screen-cracking white-gold fracture lines fused with a crimson execution burst, huge dramatic radiant shatter |
-| Stasis Hunt | `spr_stasis_hunt_01.png` | Needed | frozen pale-blue homing bullets suspended and splitting mid-air, ice shards, stasis field |
-| Ashen Oblivion | `spr_ashen_oblivion_01.png` | Needed | grey ashen barrier overlaid with an expanding dark violet oblivion pulse wave, ash and void fused, large scale |
+| Fracture Execution | `spr_fracture_execution_01.png` | Generated 2026-06-21 | massive screen-cracking white-gold fracture lines fused with a crimson execution burst, huge dramatic radiant shatter |
+| Stasis Hunt | `spr_stasis_hunt_01.png` | Generated 2026-06-21 | frozen pale-blue homing bullets suspended and splitting mid-air, ice shards, stasis field |
+| Ashen Oblivion | `spr_ashen_oblivion_01.png` | Generated 2026-06-21 | grey ashen barrier overlaid with an expanding dark violet oblivion pulse wave, ash and void fused, large scale |
 
 ## 9. UI Icon Prompt Base
 
@@ -143,13 +143,14 @@ Icon groups:
    - Kalmuri 3.
    - Blood 3.
    - Blood Blade Storm 2.
-2. Generate missing weapon/hit VFX:
+2. Generate missing weapon/hit VFX: done 2026-06-21.
    - dual arcs, greatsword arc, cyan/red hit sparks.
-3. Generate the missing 6 active memory VFX.
-4. Generate the missing 6 echo VFX.
-5. Generate the missing 3 ultimate VFX.
-6. Generate enemies/boss.
-7. Generate UI icon set.
+3. Generate the missing 6 active memory VFX: done 2026-06-21.
+4. Generate the missing 6 echo VFX: done 2026-06-21.
+5. Generate the missing 3 ultimate VFX: done 2026-06-21.
+6. Wire generated sprites into runtime VFX profiles and tune scale/timing.
+7. Generate enemies/boss.
+8. Generate UI icon set.
 
 ## 11. Verification
 

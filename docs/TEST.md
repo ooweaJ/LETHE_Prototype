@@ -47,6 +47,14 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Unity compile error count: 0.
   - Unity AssetDatabase lists Kalmuri 3, Blood 3, and Ultimate 2 replacement textures.
   - Remaining risk: this verifies asset import and visual direction, not final in-run scale/timing.
+- Remaining VFX prompt-sheet generation, 2026-06-21:
+  - Generated weapon/hit VFX 5, active memory VFX 6, echo VFX 6, and ultimate VFX 3.
+  - Evidence: `LETHE/Assets/_dev/Evidence/remaining_vfx_prompt_sheet_20260621.png`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity AssetDatabase found 20/20 generated VFX textures.
+  - Unity import settings confirmed 20/20 final PNGs as Sprite textures.
+  - Remaining risk: these assets are generated/imported, but runtime VFX profiles still need sprite wiring, scale, alpha, and timing review.
 
 ### C. Real M2 Loop
 

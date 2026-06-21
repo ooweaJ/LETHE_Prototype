@@ -1,0 +1,988 @@
+fileFormatVersion: 2
+guid: c616f9a5adf97c94eb2f69cc0973f653
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1011899292379666573
+    second: spr_homing_echo_01_0
+  - first:
+      213: -1185106984603682579
+    second: spr_homing_echo_01_1
+  - first:
+      213: -7868992398670563919
+    second: spr_homing_echo_01_2
+  - first:
+      213: 4919886069413062256
+    second: spr_homing_echo_01_3
+  - first:
+      213: 554481806153256106
+    second: spr_homing_echo_01_4
+  - first:
+      213: 8959231671086927827
+    second: spr_homing_echo_01_5
+  - first:
+      213: -6005022729155764626
+    second: spr_homing_echo_01_6
+  - first:
+      213: -2477524354616457594
+    second: spr_homing_echo_01_7
+  - first:
+      213: -5084230341042075092
+    second: spr_homing_echo_01_8
+  - first:
+      213: 5854680080159493247
+    second: spr_homing_echo_01_9
+  - first:
+      213: 7351359905615873323
+    second: spr_homing_echo_01_10
+  - first:
+      213: -6664332158494526853
+    second: spr_homing_echo_01_11
+  - first:
+      213: 3927253309032573449
+    second: spr_homing_echo_01_12
+  - first:
+      213: -1633884005940057182
+    second: spr_homing_echo_01_13
+  - first:
+      213: -3415906522632426993
+    second: spr_homing_echo_01_14
+  - first:
+      213: 986264643890305015
+    second: spr_homing_echo_01_15
+  - first:
+      213: 5494595926169286610
+    second: spr_homing_echo_01_16
+  - first:
+      213: 3922476429338797860
+    second: spr_homing_echo_01_17
+  - first:
+      213: -8741856759107389265
+    second: spr_homing_echo_01_18
+  - first:
+      213: -3653515544118993284
+    second: spr_homing_echo_01_19
+  - first:
+      213: 3474136583168352546
+    second: spr_homing_echo_01_20
+  - first:
+      213: -4121204880447550354
+    second: spr_homing_echo_01_21
+  - first:
+      213: 4549216785200999148
+    second: spr_homing_echo_01_22
+  - first:
+      213: -5645642657904696869
+    second: spr_homing_echo_01_23
+  - first:
+      213: 6455349163785069700
+    second: spr_homing_echo_01_24
+  - first:
+      213: 1631790207393165833
+    second: spr_homing_echo_01_25
+  - first:
+      213: -9040795953481453562
+    second: spr_homing_echo_01_26
+  - first:
+      213: 7140186223835500266
+    second: spr_homing_echo_01_27
+  - first:
+      213: 4795709116301926169
+    second: spr_homing_echo_01_28
+  - first:
+      213: 2099647420386815516
+    second: spr_homing_echo_01_29
+  - first:
+      213: 6514695479306381493
+    second: spr_homing_echo_01_30
+  - first:
+      213: 5491504708879419448
+    second: spr_homing_echo_01_31
+  - first:
+      213: 7482913287991126285
+    second: spr_homing_echo_01_32
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: spr_homing_echo_01_0
+      rect:
+        serializedVersion: 2
+        x: 601
+        y: 1033
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d8852ce8b0dfa0e00800000000000000
+      internalID: 1011899292379666573
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_1
+      rect:
+        serializedVersion: 2
+        x: 328
+        y: 990
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de8fcd9f977ad8fe0800000000000000
+      internalID: -1185106984603682579
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_2
+      rect:
+        serializedVersion: 2
+        x: 703
+        y: 988
+        width: 17
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b5fdf8ea19bbc290800000000000000
+      internalID: -7868992398670563919
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_3
+      rect:
+        serializedVersion: 2
+        x: 331
+        y: 303
+        width: 841
+        height: 680
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07622ce3052f64440800000000000000
+      internalID: 4919886069413062256
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_4
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 957
+        width: 12
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aac8e22d34ae1b700800000000000000
+      internalID: 554481806153256106
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_5
+      rect:
+        serializedVersion: 2
+        x: 741
+        y: 921
+        width: 29
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3dfc09f9cb5955c70800000000000000
+      internalID: 8959231671086927827
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_6
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 945
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6e1680d4afd9aca0800000000000000
+      internalID: -6005022729155764626
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_7
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 944
+        width: 15
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68605b8d9b01e9dd0800000000000000
+      internalID: -2477524354616457594
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_8
+      rect:
+        serializedVersion: 2
+        x: 253
+        y: 905
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2a8ce5317f2179b0800000000000000
+      internalID: -5084230341042075092
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_9
+      rect:
+        serializedVersion: 2
+        x: 255
+        y: 902
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7c46737380004150800000000000000
+      internalID: 5854680080159493247
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_10
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 875
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b25884e82e6450660800000000000000
+      internalID: 7351359905615873323
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_11
+      rect:
+        serializedVersion: 2
+        x: 359
+        y: 879
+        width: 11
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b72b8b306398383a0800000000000000
+      internalID: -6664332158494526853
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_12
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 855
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90a2ddbb318608630800000000000000
+      internalID: 3927253309032573449
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_13
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 859
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ab20cd37274359e0800000000000000
+      internalID: -1633884005940057182
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_14
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 806
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f0aed8cad134890d0800000000000000
+      internalID: -3415906522632426993
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_15
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 807
+        width: 16
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f7db99d77aefad00800000000000000
+      internalID: 986264643890305015
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_16
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 809
+        width: 16
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d7f0ab12e9b04c40800000000000000
+      internalID: 5494595926169286610
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_17
+      rect:
+        serializedVersion: 2
+        x: 188
+        y: 739
+        width: 49
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 427e492c78f6f6630800000000000000
+      internalID: 3922476429338797860
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_18
+      rect:
+        serializedVersion: 2
+        x: 319
+        y: 752
+        width: 26
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa87e0c089faea680800000000000000
+      internalID: -8741856759107389265
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_19
+      rect:
+        serializedVersion: 2
+        x: 339
+        y: 741
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7e5b6348fa1c4dc0800000000000000
+      internalID: -3653515544118993284
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_20
+      rect:
+        serializedVersion: 2
+        x: 181
+        y: 267
+        width: 389
+        height: 473
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22160fcc0dc963030800000000000000
+      internalID: 3474136583168352546
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_21
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 738
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6c415e0ff98ec6c0800000000000000
+      internalID: -4121204880447550354
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_22
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 731
+        width: 13
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cea66283090122f30800000000000000
+      internalID: 4549216785200999148
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_23
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 549
+        width: 72
+        height: 129
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd16cce1ae5a6a1b0800000000000000
+      internalID: -5645642657904696869
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_24
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 677
+        width: 32
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4842680dcd1069950800000000000000
+      internalID: 6455349163785069700
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_25
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 555
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90271ab4c8845a610800000000000000
+      internalID: 1631790207393165833
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_26
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 491
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 600f2f10bf3a88280800000000000000
+      internalID: -9040795953481453562
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_27
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 480
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aee4add4a89071360800000000000000
+      internalID: 7140186223835500266
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_28
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 422
+        width: 22
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 91f57435808cd8240800000000000000
+      internalID: 4795709116301926169
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_29
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 441
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1ea8b55432732d10800000000000000
+      internalID: 2099647420386815516
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_30
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 418
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b866e7a509d86a50800000000000000
+      internalID: 6514695479306381493
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_31
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 371
+        width: 18
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 838842fff6eb53c40800000000000000
+      internalID: 5491504708879419448
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_homing_echo_01_32
+      rect:
+        serializedVersion: 2
+        x: 564
+        y: 278
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d09e2cf3df5a8d760800000000000000
+      internalID: 7482913287991126285
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    outline: []
+    customData:
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices:
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      spr_homing_echo_01_0: 1011899292379666573
+      spr_homing_echo_01_1: -1185106984603682579
+      spr_homing_echo_01_10: 7351359905615873323
+      spr_homing_echo_01_11: -6664332158494526853
+      spr_homing_echo_01_12: 3927253309032573449
+      spr_homing_echo_01_13: -1633884005940057182
+      spr_homing_echo_01_14: -3415906522632426993
+      spr_homing_echo_01_15: 986264643890305015
+      spr_homing_echo_01_16: 5494595926169286610
+      spr_homing_echo_01_17: 3922476429338797860
+      spr_homing_echo_01_18: -8741856759107389265
+      spr_homing_echo_01_19: -3653515544118993284
+      spr_homing_echo_01_2: -7868992398670563919
+      spr_homing_echo_01_20: 3474136583168352546
+      spr_homing_echo_01_21: -4121204880447550354
+      spr_homing_echo_01_22: 4549216785200999148
+      spr_homing_echo_01_23: -5645642657904696869
+      spr_homing_echo_01_24: 6455349163785069700
+      spr_homing_echo_01_25: 1631790207393165833
+      spr_homing_echo_01_26: -9040795953481453562
+      spr_homing_echo_01_27: 7140186223835500266
+      spr_homing_echo_01_28: 4795709116301926169
+      spr_homing_echo_01_29: 2099647420386815516
+      spr_homing_echo_01_3: 4919886069413062256
+      spr_homing_echo_01_30: 6514695479306381493
+      spr_homing_echo_01_31: 5491504708879419448
+      spr_homing_echo_01_32: 7482913287991126285
+      spr_homing_echo_01_4: 554481806153256106
+      spr_homing_echo_01_5: 8959231671086927827
+      spr_homing_echo_01_6: -6005022729155764626
+      spr_homing_echo_01_7: -2477524354616457594
+      spr_homing_echo_01_8: -5084230341042075092
+      spr_homing_echo_01_9: 5854680080159493247
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

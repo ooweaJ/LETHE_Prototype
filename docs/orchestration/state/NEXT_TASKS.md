@@ -10,29 +10,25 @@ Current source of truth:
 - Test gate: `docs/TEST.md`
 - Detailed design: `docs/design/README.md` and `docs/design/LETHE_DESIGN_00..07`
 
-## 1. Direct v1 visual review
+## 1. Wire generated VFX sprites into runtime
 
 - Priority: highest
+- Include: connect the 20 generated weapon/hit, memory, echo, and ultimate sprites to the V1 runtime VFX spawn paths/profiles.
+- Check: sprite scale, alpha, sorting order, duration, pooling behavior, and whether generated VFX replaces procedural placeholders where intended.
+- Done: Play Mode smoke shows the new sprites during attacks/memories/echoes without console errors.
+
+## 2. Direct v1 visual review
+
+- Priority: high
 - Include: run `Dev_Prototype_v1`, choose both starting weapons, and judge the first 120 seconds.
-- Check: player body stability, 4-direction movement frames, terrain readability, HUD density, greatsword silhouette, refreshed Kalmuri/Blood/Blood Blade Storm VFX, and whether the build feels like a real survivor-game shell.
+- Check: player body stability, 4-direction movement frames, terrain readability, HUD density, greatsword silhouette, refreshed VFX, and whether the build feels like a real survivor-game shell.
 - Done: jaewoo can name the weakest visual/game-feel axis in one sentence.
 
-## 2. Generate weapon arcs and hit sparks
+## 3. Generate enemies and boss sprites
 
 - Priority: high
-- Include:
-  - `spr_dual_blade_swing_arc_01.png`
-  - `spr_dual_blade_swing_arc_02.png`
-  - `spr_greatsword_cleave_arc_01.png`
-  - `spr_hit_spark_cyan_01.png`
-  - `spr_hit_spark_red_01.png`
-- Done: assets exist, import as Sprites, and v1 smoke has compile/console error count 0.
-
-## 3. Generate missing six memory/echo VFX
-
-- Priority: high
-- Include: Execution, Homing, Shockwave, TimeStop, Ashen, and Brand active-memory sprites plus matching echo sprites from `docs/design/LETHE_SPRITE_PRODUCTION_PROMPTS.md`.
-- Done: each missing memory/echo family has a dedicated sprite instead of only procedural runtime shapes.
+- Include: `sheet_enemy_eye_4dir.png`, `sheet_enemy_splitter_4dir.png`, `sheet_enemy_voidpriest_4dir.png`, and `spr_boss_gatekeeper_01.png`.
+- Done: enemy roles have dedicated sprites instead of only procedural silhouettes.
 
 ## 4. Reliable visual evidence path
 

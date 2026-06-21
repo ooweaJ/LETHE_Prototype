@@ -1,0 +1,364 @@
+fileFormatVersion: 2
+guid: 8f305dd57498d7c4790b4b35879c7f94
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2052308786744982007
+    second: spr_dual_blade_swing_arc_02_0
+  - first:
+      213: -7013427825053674986
+    second: spr_dual_blade_swing_arc_02_1
+  - first:
+      213: -4750615954736653180
+    second: spr_dual_blade_swing_arc_02_2
+  - first:
+      213: 3233466766613271137
+    second: spr_dual_blade_swing_arc_02_3
+  - first:
+      213: -7865748960297985212
+    second: spr_dual_blade_swing_arc_02_4
+  - first:
+      213: -238425221395418109
+    second: spr_dual_blade_swing_arc_02_5
+  - first:
+      213: 6334996405797927945
+    second: spr_dual_blade_swing_arc_02_6
+  - first:
+      213: -2801478225469226589
+    second: spr_dual_blade_swing_arc_02_7
+  - first:
+      213: 1256364159302198025
+    second: spr_dual_blade_swing_arc_02_8
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: spr_dual_blade_swing_arc_02_0
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 1109
+        width: 21
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90607a4380cb483e0800000000000000
+      internalID: -2052308786744982007
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_dual_blade_swing_arc_02_1
+      rect:
+        serializedVersion: 2
+        x: 174
+        y: 1135
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 612d5d54d8c4bae90800000000000000
+      internalID: -7013427825053674986
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_dual_blade_swing_arc_02_2
+      rect:
+        serializedVersion: 2
+        x: 890
+        y: 1114
+        width: 13
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48c5e9185fb621eb0800000000000000
+      internalID: -4750615954736653180
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_dual_blade_swing_arc_02_3
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 112
+        width: 1037
+        height: 982
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 162d30184e49fdc20800000000000000
+      internalID: 3233466766613271137
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_dual_blade_swing_arc_02_4
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 1091
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44b5a01cefe37d290800000000000000
+      internalID: -7865748960297985212
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_dual_blade_swing_arc_02_5
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 1036
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3047b3d3681f0bcf0800000000000000
+      internalID: -238425221395418109
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_dual_blade_swing_arc_02_6
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 969
+        width: 37
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90c36f4baad6ae750800000000000000
+      internalID: 6334996405797927945
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_dual_blade_swing_arc_02_7
+      rect:
+        serializedVersion: 2
+        x: 113
+        y: 238
+        width: 13
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a14ae495662f19d0800000000000000
+      internalID: -2801478225469226589
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_dual_blade_swing_arc_02_8
+      rect:
+        serializedVersion: 2
+        x: 1154
+        y: 226
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9036dbfdb808f6110800000000000000
+      internalID: 1256364159302198025
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    outline: []
+    customData:
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices:
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      spr_dual_blade_swing_arc_02_0: -2052308786744982007
+      spr_dual_blade_swing_arc_02_1: -7013427825053674986
+      spr_dual_blade_swing_arc_02_2: -4750615954736653180
+      spr_dual_blade_swing_arc_02_3: 3233466766613271137
+      spr_dual_blade_swing_arc_02_4: -7865748960297985212
+      spr_dual_blade_swing_arc_02_5: -238425221395418109
+      spr_dual_blade_swing_arc_02_6: 6334996405797927945
+      spr_dual_blade_swing_arc_02_7: -2801478225469226589
+      spr_dual_blade_swing_arc_02_8: 1256364159302198025
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

@@ -42,6 +42,23 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 remaining VFX prompt-sheet generation:
+  - Generated the remaining prompt-sheet sprite set under `LETHE/Assets/_dev/Art/Sprites/`:
+    - weapon/hit VFX: `5`.
+    - active memory VFX: `6`.
+    - echo VFX: `6`.
+    - ultimate VFX: `3`.
+  - Matching chroma source PNGs were preserved under `LETHE/Assets/_dev/Art/Source/`.
+  - Evidence contact sheet:
+    - `LETHE/Assets/_dev/Evidence/remaining_vfx_prompt_sheet_20260621.png`.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
+    - Unity active scene: `Dev_Prototype_v1`.
+    - Unity compile error count: `0`.
+    - Unity AssetDatabase found generated VFX textures: `20/20`.
+    - Unity import settings confirmed Sprite texture type: `20/20`.
+  - Remaining work: wire these dedicated sprites into the runtime VFX profile/spawn paths and tune scale, alpha, sort order, and duration during Play Mode.
+
 - Unity v1 sprite prompt sheet and core VFX replacement:
   - Added a clean sprite-generation source document:
     - `docs/design/LETHE_SPRITE_PRODUCTION_PROMPTS.md`.

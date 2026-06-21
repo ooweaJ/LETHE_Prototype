@@ -1,0 +1,676 @@
+fileFormatVersion: 2
+guid: 16fcbebe3e42d714598157b1b270520f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2090412794382437383
+    second: spr_timestop_echo_01_0
+  - first:
+      213: -4005264399243631983
+    second: spr_timestop_echo_01_1
+  - first:
+      213: 8950812174646582908
+    second: spr_timestop_echo_01_2
+  - first:
+      213: -860470176391659305
+    second: spr_timestop_echo_01_3
+  - first:
+      213: 3164944092751546681
+    second: spr_timestop_echo_01_4
+  - first:
+      213: 6302963455528090498
+    second: spr_timestop_echo_01_5
+  - first:
+      213: -8794824346874836524
+    second: spr_timestop_echo_01_6
+  - first:
+      213: 8522642178378091354
+    second: spr_timestop_echo_01_7
+  - first:
+      213: -2693167348496533924
+    second: spr_timestop_echo_01_8
+  - first:
+      213: -897341754563348792
+    second: spr_timestop_echo_01_9
+  - first:
+      213: -4174138864639510653
+    second: spr_timestop_echo_01_10
+  - first:
+      213: 443493336128107402
+    second: spr_timestop_echo_01_11
+  - first:
+      213: 4767170311950166209
+    second: spr_timestop_echo_01_12
+  - first:
+      213: 2260258893238284913
+    second: spr_timestop_echo_01_13
+  - first:
+      213: 1705382954856861894
+    second: spr_timestop_echo_01_14
+  - first:
+      213: 5840545527983706911
+    second: spr_timestop_echo_01_15
+  - first:
+      213: -5769336207907040709
+    second: spr_timestop_echo_01_16
+  - first:
+      213: -5900966245579437422
+    second: spr_timestop_echo_01_17
+  - first:
+      213: 6741974453163015008
+    second: spr_timestop_echo_01_18
+  - first:
+      213: -1270795312533625449
+    second: spr_timestop_echo_01_19
+  - first:
+      213: 7784090213487665980
+    second: spr_timestop_echo_01_20
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_0
+      rect:
+        serializedVersion: 2
+        x: 494
+        y: 1101
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f337e493ac5df2e0800000000000000
+      internalID: -2090412794382437383
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_1
+      rect:
+        serializedVersion: 2
+        x: 685
+        y: 1039
+        width: 32
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 192a09bef317a68c0800000000000000
+      internalID: -4005264399243631983
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_2
+      rect:
+        serializedVersion: 2
+        x: 713
+        y: 1104
+        width: 7
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7e1d09df3ca73c70800000000000000
+      internalID: 8950812174646582908
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_3
+      rect:
+        serializedVersion: 2
+        x: 559
+        y: 1079
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d08b5cfeeefe04f0800000000000000
+      internalID: -860470176391659305
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_4
+      rect:
+        serializedVersion: 2
+        x: 849
+        y: 1079
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9394d6e32e32ceb20800000000000000
+      internalID: 3164944092751546681
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_5
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 171
+        width: 833
+        height: 888
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28b35074edf987750800000000000000
+      internalID: 6302963455528090498
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_6
+      rect:
+        serializedVersion: 2
+        x: 358
+        y: 1022
+        width: 24
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d9819e7ad182f580800000000000000
+      internalID: -8794824346874836524
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_7
+      rect:
+        serializedVersion: 2
+        x: 798
+        y: 1050
+        width: 44
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5bccf508e1864670800000000000000
+      internalID: 8522642178378091354
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_8
+      rect:
+        serializedVersion: 2
+        x: 891
+        y: 1016
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c56fe28c092ff9ad0800000000000000
+      internalID: -2693167348496533924
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_9
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 789
+        width: 38
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c63025bd600c83f0800000000000000
+      internalID: -897341754563348792
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_10
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 776
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 387720271da7216c0800000000000000
+      internalID: -4174138864639510653
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_11
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 716
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a833b28e6da972600800000000000000
+      internalID: 443493336128107402
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_12
+      rect:
+        serializedVersion: 2
+        x: 1044
+        y: 692
+        width: 89
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c8e3932424682240800000000000000
+      internalID: 4767170311950166209
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_13
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 594
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 172b2efec7d0e5f10800000000000000
+      internalID: 2260258893238284913
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_14
+      rect:
+        serializedVersion: 2
+        x: 1063
+        y: 524
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c0df3e03ccbaa710800000000000000
+      internalID: 1705382954856861894
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_15
+      rect:
+        serializedVersion: 2
+        x: 1042
+        y: 378
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1317f19639cd0150800000000000000
+      internalID: 5840545527983706911
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_16
+      rect:
+        serializedVersion: 2
+        x: 452
+        y: 166
+        width: 18
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b32d6e149433fefa0800000000000000
+      internalID: -5769336207907040709
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_17
+      rect:
+        serializedVersion: 2
+        x: 714
+        y: 188
+        width: 25
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29acaacd67e8b1ea0800000000000000
+      internalID: -5900966245579437422
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_18
+      rect:
+        serializedVersion: 2
+        x: 610
+        y: 155
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06b3a8d6b0e409d50800000000000000
+      internalID: 6741974453163015008
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_19
+      rect:
+        serializedVersion: 2
+        x: 793
+        y: 149
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 795a33e656a3d5ee0800000000000000
+      internalID: -1270795312533625449
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_timestop_echo_01_20
+      rect:
+        serializedVersion: 2
+        x: 422
+        y: 137
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c33e68aaec4a60c60800000000000000
+      internalID: 7784090213487665980
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    outline: []
+    customData:
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices:
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      spr_timestop_echo_01_0: -2090412794382437383
+      spr_timestop_echo_01_1: -4005264399243631983
+      spr_timestop_echo_01_10: -4174138864639510653
+      spr_timestop_echo_01_11: 443493336128107402
+      spr_timestop_echo_01_12: 4767170311950166209
+      spr_timestop_echo_01_13: 2260258893238284913
+      spr_timestop_echo_01_14: 1705382954856861894
+      spr_timestop_echo_01_15: 5840545527983706911
+      spr_timestop_echo_01_16: -5769336207907040709
+      spr_timestop_echo_01_17: -5900966245579437422
+      spr_timestop_echo_01_18: 6741974453163015008
+      spr_timestop_echo_01_19: -1270795312533625449
+      spr_timestop_echo_01_2: 8950812174646582908
+      spr_timestop_echo_01_20: 7784090213487665980
+      spr_timestop_echo_01_3: -860470176391659305
+      spr_timestop_echo_01_4: 3164944092751546681
+      spr_timestop_echo_01_5: 6302963455528090498
+      spr_timestop_echo_01_6: -8794824346874836524
+      spr_timestop_echo_01_7: 8522642178378091354
+      spr_timestop_echo_01_8: -2693167348496533924
+      spr_timestop_echo_01_9: -897341754563348792
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

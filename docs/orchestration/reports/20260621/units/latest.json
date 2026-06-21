@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260621\\index.md",
-  "generatedAt": "2026-06-21T07:40:10.101Z",
-  "unitCount": 1,
+  "generatedAt": "2026-06-21T16:21:46.630Z",
+  "unitCount": 2,
   "latest": {
-    "title": "2026-06-21-01 - 스프라이트 프롬프트 시트 정리와 핵심 VFX 교체",
-    "number": "01",
-    "markdownPath": "docs\\orchestration\\reports\\20260621\\units\\2026-06-21-01-스프라이트-프롬프트-시트-정리와-핵심-vfx-교체.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260621\\units\\2026-06-21-01-스프라이트-프롬프트-시트-정리와-핵심-vfx-교체.html"
+    "title": "2026-06-21-02 - 남은 VFX 20종 생성 및 Unity 임포트",
+    "number": "02",
+    "markdownPath": "docs\\orchestration\\reports\\20260621\\units\\2026-06-21-02-남은-vfx-20종-생성-및-unity-임포트.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260621\\units\\2026-06-21-02-남은-vfx-20종-생성-및-unity-임포트.html"
   }
 }

@@ -2,6 +2,19 @@
 
 ## 2026-06-21
 
+- Generated the remaining prompt-sheet VFX sprites:
+  - weapon/hit VFX: dual blade arcs, greatsword cleave arc, cyan/red hit sparks.
+  - active memory VFX: Execution Flash, Hunter Oath, Shatter Wave, Stopped Second, Ashen Shield, Oblivion Brand.
+  - echo VFX: Execution, Homing, Shockwave, TimeStop, Ashen, Brand.
+  - ultimate VFX: Fracture Execution, Stasis Hunt, Ashen Oblivion.
+- Preserved matching chroma-key sources under `LETHE/Assets/_dev/Art/Source/`.
+- Added visual evidence contact sheet:
+  - `LETHE/Assets/_dev/Evidence/remaining_vfx_prompt_sheet_20260621.png`.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity AssetDatabase found 20/20 generated VFX textures.
+  - Unity import settings confirmed 20/20 final PNGs as Sprite textures.
 - Added `docs/design/LETHE_SPRITE_PRODUCTION_PROMPTS.md` as the clean sprite-generation source sheet.
 - Replaced the existing core Kalmuri/Blood/Blood Blade Storm VFX sprites using that prompt sheet:
   - `spr_kalmuri_orbit_blade_01.png`

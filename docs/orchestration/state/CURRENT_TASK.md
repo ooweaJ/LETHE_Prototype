@@ -68,6 +68,13 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Remaining VFX prompt-sheet generation:
+  - Generated/imported 20 VFX sprites for weapon hits, six active memories, six echoes, and three ultimates.
+  - Evidence contact sheet: `LETHE/Assets/_dev/Evidence/remaining_vfx_prompt_sheet_20260621.png`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed, 0 warnings, 0 errors.
+  - `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`.
+  - Unity AssetDatabase found generated VFX textures: `20/20`.
+  - Unity Sprite import setting confirmed: `20/20`.
 - A-I EPIC / data contract pass:
   - Added root entry docs: `docs/PRD.md`, `docs/TECH.md`, `docs/TASK.md`, `docs/TEST.md`, `docs/CHANGELOG.md`.
   - Updated `AGENTS.md` read order to use these docs before orchestration state files.
