@@ -1,5 +1,25 @@
 # LETHE CHANGELOG
 
+## 2026-06-21
+
+- Added `docs/design/LETHE_SPRITE_PRODUCTION_PROMPTS.md` as the clean sprite-generation source sheet.
+- Replaced the existing core Kalmuri/Blood/Blood Blade Storm VFX sprites using that prompt sheet:
+  - `spr_kalmuri_orbit_blade_01.png`
+  - `spr_kalmuri_echo_slash_01.png`
+  - `spr_kalmuri_launch_blade_01.png`
+  - `spr_blood_mark_01.png`
+  - `spr_blood_bloom_01.png`
+  - `spr_heal_thread_tip_01.png`
+  - `spr_blood_blade_storm_ring_01.png`
+  - `spr_blood_blade_storm_blade_01.png`
+- Preserved matching chroma-key source PNGs under `LETHE/Assets/_dev/Art/Source/`.
+- Added visual evidence contact sheet:
+  - `LETHE/Assets/_dev/Evidence/core_vfx_prompt_sheet_refresh_20260621.png`.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity AssetDatabase lists Kalmuri 3, Blood 3, and Ultimate 2 replacement textures.
+
 ## 2026-06-19
 
 - Added the `J. 120초 초반 재미 루프` implementation checklist to `docs/TASK.md`.

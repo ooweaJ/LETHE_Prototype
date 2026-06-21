@@ -1,6 +1,6 @@
 # Status
 
-Last updated: 2026-06-19
+Last updated: 2026-06-21
 
 ## Current Snapshot
 
@@ -41,6 +41,28 @@ The report/devlog/review migration is now applied physically: old `docs/reports/
 The current development-docs plugin baseline from `docs/orchestration/MIGRATION_PROMPT.md` has been applied. `AGENTS.md` now uses a `Development Docs Plugin` section, `docs/orchestration/templates/HTML_INTERFACE_TEMPLATE.md` exists, legacy review pointer READMEs are readable, `reports/index.html` is generated as a newest-first date archive, daily report pages are generated as unit-card pages, and Discord delivery is documented as Project Orchestrator first with local direct-send scripts as trusted fallback only.
 
 ## Latest Verified Result
+
+- Unity v1 sprite prompt sheet and core VFX replacement:
+  - Added a clean sprite-generation source document:
+    - `docs/design/LETHE_SPRITE_PRODUCTION_PROMPTS.md`.
+  - Replaced the existing core Kalmuri/Blood/Blood Blade Storm runtime sprites using the new prompt sheet:
+    - `spr_kalmuri_orbit_blade_01.png`
+    - `spr_kalmuri_echo_slash_01.png`
+    - `spr_kalmuri_launch_blade_01.png`
+    - `spr_blood_mark_01.png`
+    - `spr_blood_bloom_01.png`
+    - `spr_heal_thread_tip_01.png`
+    - `spr_blood_blade_storm_ring_01.png`
+    - `spr_blood_blade_storm_blade_01.png`
+  - Source chroma images were preserved under `LETHE/Assets/_dev/Art/Source/`.
+  - Evidence contact sheet:
+    - `LETHE/Assets/_dev/Evidence/core_vfx_prompt_sheet_refresh_20260621.png`.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
+    - Unity active scene: `Dev_Prototype_v1`.
+    - Unity compile error count: `0`.
+    - Unity AssetDatabase lists Kalmuri `3`, Blood `3`, and Ultimate `2` replacement textures.
+  - Remaining work: generate missing weapon arcs/hit sparks, six non-Kalmuri/Blood memory VFX, six matching echo VFX, three remaining ultimate VFX, enemies/boss, and UI icons.
 
 - Unity v1 visual/UI/game-feel refresh:
   - Player body no longer uses `V1BillboardPulse`, so movement should not read as side-to-side body wobble.

@@ -39,6 +39,14 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 - 혈반 잔향은 표식/실/피꽃으로 보인다.
 - Current B-step technical check: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed after Kalmuri range ring, Blood heal thread, Blood bloom thread, and knockback cap changes.
 - Kalmuri readability follow-up, 2026-06-18: active Hungry Blades now uses a denser two-ring blade swarm and target-local bite blades. Kalmuri echo follow-ups now add blade barrage sprites. `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 7 legacy warnings and 0 errors. Unity compile error count was 0, and short Play Mode entry produced 0 console errors; human visual review is still required because the run starts behind the weapon-select overlay.
+- Core VFX prompt-sheet replacement, 2026-06-21:
+  - Added `docs/design/LETHE_SPRITE_PRODUCTION_PROMPTS.md`.
+  - Replaced Kalmuri 3, Blood 3, and Blood Blade Storm 2 sprites with prompt-sheet generated PNGs.
+  - Evidence: `LETHE/Assets/_dev/Evidence/core_vfx_prompt_sheet_refresh_20260621.png`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity AssetDatabase lists Kalmuri 3, Blood 3, and Ultimate 2 replacement textures.
+  - Remaining risk: this verifies asset import and visual direction, not final in-run scale/timing.
 
 ### C. Real M2 Loop
 

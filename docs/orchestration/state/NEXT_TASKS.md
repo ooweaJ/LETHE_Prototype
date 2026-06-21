@@ -14,26 +14,31 @@ Current source of truth:
 
 - Priority: highest
 - Include: run `Dev_Prototype_v1`, choose both starting weapons, and judge the first 120 seconds.
-- Check: player body stability, 4-direction movement frames, terrain readability, HUD density, greatsword silhouette, and whether the build feels like a real survivor-game shell.
+- Check: player body stability, 4-direction movement frames, terrain readability, HUD density, greatsword silhouette, refreshed Kalmuri/Blood/Blood Blade Storm VFX, and whether the build feels like a real survivor-game shell.
 - Done: jaewoo can name the weakest visual/game-feel axis in one sentence.
 
-## 2. One focused follow-up pass
+## 2. Generate weapon arcs and hit sparks
 
 - Priority: high
-- Include exactly one axis from review: character animation, start/HUD UI, combat VFX density, terrain brightness, reward card UI, or weapon feel.
-- Done: the chosen issue is improved and verified with build + Unity smoke.
+- Include:
+  - `spr_dual_blade_swing_arc_01.png`
+  - `spr_dual_blade_swing_arc_02.png`
+  - `spr_greatsword_cleave_arc_01.png`
+  - `spr_hit_spark_cyan_01.png`
+  - `spr_hit_spark_red_01.png`
+- Done: assets exist, import as Sprites, and v1 smoke has compile/console error count 0.
 
-## 3. Reliable visual evidence path
+## 3. Generate missing six memory/echo VFX
 
 - Priority: high
-- Include: replace the current camera screenshot path that sometimes captures a solid-color image.
-- Done: saved evidence can show player, terrain, weapon, enemies, and relevant UI without manual interpretation.
+- Include: Execution, Homing, Shockwave, TimeStop, Ashen, and Brand active-memory sprites plus matching echo sprites from `docs/design/LETHE_SPRITE_PRODUCTION_PROMPTS.md`.
+- Done: each missing memory/echo family has a dedicated sprite instead of only procedural runtime shapes.
 
-## 4. Sprite import cleanup
+## 4. Reliable visual evidence path
 
 - Priority: medium
-- Include: decide whether to keep runtime sheet cropping or move player/enemy sheets to proper Unity slicing/import settings.
-- Done: player/enemy sprites are easy to inspect and tune without changing `V1GameManager`.
+- Include: replace the current camera screenshot path that sometimes captures a solid-color image.
+- Done: saved evidence can show player, terrain, weapon, enemies, and relevant UI without manual interpretation.
 
 ## 5. Continue M2 loop review
 
