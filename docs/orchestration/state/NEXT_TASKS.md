@@ -13,15 +13,15 @@ Current source of truth:
 ## 1. Direct v1 visual review
 
 - Priority: highest
-- Include: run `Dev_Prototype_v1`, choose both starting weapons, and judge the first 120 seconds with the newly wired generated VFX.
-- Check: player body stability, 4-direction movement frames, walking/stop/start naturalness, dual-blade/greatsword held-weapon size, terrain readability, HUD density, greatsword silhouette, VFX scale/timing, hit readability, Blood Blade Storm payoff, and whether the build feels like a real survivor-game shell.
+- Include: run `Dev_Prototype_v1`, choose both starting weapons, and judge the first 120 seconds with the newly wired generated VFX and hit-point phantom weapons.
+- Check: player body stability, 4-direction movement frames, walking/stop/start naturalness, whether hit-point phantom dual blades/greatsword feel better than body-held weapons, terrain readability, HUD density, VFX scale/timing, hit readability, Blood Blade Storm payoff, and whether the build feels like a real survivor-game shell.
 - Done: jaewoo can name the weakest visual/game-feel axis in one sentence.
 
 ## 2. VFX scale/timing follow-up
 
 - Priority: high
-- Include: after direct play, tune generated sprite scale, alpha, sorting order, duration, and spawn frequency for weapon hits, memories, echoes, and ultimates.
-- Check: dual blades stay quick and visible, greatsword stays heavy without being oversized, utility memories do not hide enemies, and Blood Blade Storm feels meaningfully stronger than Kalmuri rather than only visually different.
+- Include: after direct play, tune generated sprite scale, alpha, sorting order, duration, and spawn frequency for weapon hits, phantom weapons, memories, echoes, and ultimates.
+- Check: dual blades stay quick and visible, greatsword stays heavy without being oversized, phantom weapons align with slash VFX, utility memories do not hide enemies, and Blood Blade Storm feels meaningfully stronger than Kalmuri rather than only visually different.
 - Done: direct review no longer calls out VFX size/timing as the weakest axis.
 
 ## 3. Generate enemies and boss sprites

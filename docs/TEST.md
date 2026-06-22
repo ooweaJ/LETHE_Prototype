@@ -86,6 +86,17 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Unity console error count after direct M2/ultimate reflection smoke: 0.
   - Direct M2 state injection confirmed `storm=True`; manual `UpdateEchoUltimate(0.12f)` reflection ticks created `bloodStormObjects=124` and cleared nearby spawned enemies with `kills=14`.
   - Remaining risk: MCP Play Mode time did not advance normally in this session, so the storm loop was verified by reflection ticks rather than natural timed play.
+- Hit-point phantom weapon pass, 2026-06-22:
+  - Player-attached `LeftBlade` / `RightBlade` renderers now stay disabled during normal play.
+  - Dual-blade weapon identity is shown by two short-lived blade sprites spawned at the hit target.
+  - Greatsword identity is shown by a heavy strike sprite plus a faint afterimage spawned at the cleave center.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity `Assets/Refresh`: success.
+  - Unity compile error count: 0.
+  - Dual-blade Play Mode reflection check: held renderers disabled, phantom count `2`, max bounds `(1.151, 1.151)`.
+  - Greatsword Play Mode reflection check: held renderers disabled, phantom count `2`, max bounds `(1.586, 1.689)`.
+  - Unity console error count: 0.
+  - Remaining risk: this verifies technical behavior and rough bounds. Jaewoo direct play review still needs to judge whether the magical auto-blade look feels better than body-held weapons.
 
 ### C. Real M2 Loop
 

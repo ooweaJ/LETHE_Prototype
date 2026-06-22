@@ -108,6 +108,16 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - Greatsword cleave PNG scale factor was reduced from `0.182` to `0.150`.
   - Post-fix Play Mode check showed sword bounds `(2.327, 2.944)`, ratioY `1.33`, and forced attack VFX max bounds `(2.332, 2.332)`.
   - Unity console error count: `0`.
+- Hit-point phantom weapon pass:
+  - Player-attached held weapon renderers now stay disabled during normal play.
+  - Dual blades appear as two short hit-point phantom blade sprites aligned with the target-local slash VFX.
+  - Greatsword appears as a heavy hit-point phantom strike plus a faint afterimage at the cleave center.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity `Assets/Refresh`: success.
+  - Unity compile error count: `0`.
+  - Dual-blade Play Mode reflection check: held renderers disabled, phantom count `2`, max bounds `(1.151, 1.151)`.
+  - Greatsword Play Mode reflection check: held renderers disabled, phantom count `2`, max bounds `(1.586, 1.689)`.
+  - Unity console error count: `0`.
 - A-I EPIC / data contract pass:
   - Added root entry docs: `docs/PRD.md`, `docs/TECH.md`, `docs/TASK.md`, `docs/TEST.md`, `docs/CHANGELOG.md`.
   - Updated `AGENTS.md` read order to use these docs before orchestration state files.

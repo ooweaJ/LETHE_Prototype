@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-22-05 - 타격 지점 팬텀 무기 연출 적용</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-22-05 - 타격 지점 팬텀 무기 연출 적용</h1>
+      <p class="meta">Generated from 2026-06-22-05-타격-지점-팬텀-무기-연출-적용.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260622/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-22-05 - 타격 지점 팬텀 무기 연출 적용</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 무기 표현을 캐릭터 몸에 붙은 실루엣에서, 실제 공격 순간 타격 위치에 잠깐 나타나는 팬텀 무기 방식으로 바꿨다. 이제 평소에는 쌍검/대검이 플레이어 몸에 붙어 보이지 않고, 히트가 발생할 때 베기 VFX 위치에 무기 스프라이트가 짧게 나온다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>LeftBlade</code> / <code>RightBlade</code> 렌더러를 일반 플레이 중에는 항상 비활성으로 유지한다.</li>
+<li>쌍검 공격은 타겟 양옆에 <code>DualBladePhantomLeft</code>, <code>DualBladePhantomRight</code> 두 칼날이 짧게 교차해서 나타난다.</li>
+<li>대검 공격은 cleave 중심에 <code>GreatswordPhantomStrike</code>와 옅은 <code>GreatswordPhantomAfterimage</code>가 나타난다.</li>
+<li>무기 스프라이트는 원본 이미지 크기가 아니라 목표 월드 높이 기준으로 스케일링한다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy warning 7개, error 0개.</li>
+<li>Unity <code>Assets/Refresh</code>: 성공.</li>
+<li>Unity compile error count: 0.</li>
+<li>쌍검 Play Mode reflection check:</li>
+<li>몸에 붙은 렌더러 비활성.</li>
+<li>팬텀 무기 2개 생성.</li>
+<li>최대 bounds <code>(1.151, 1.151)</code>.</li>
+<li>대검 Play Mode reflection check:</li>
+<li>몸에 붙은 렌더러 비활성.</li>
+<li>팬텀 무기 2개 생성.</li>
+<li>최대 bounds <code>(1.586, 1.689)</code>.</li>
+<li>Unity console error count: 0.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>몸에 상시 붙어 있는 무기 실루엣은 이번 방향에서는 제거한다. 현실적인 착용감보다, 공격 위치에 자동으로 칼이 스윽 나타나 베는 마법사형 연출을 우선한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>Codex는 컴파일, 콘솔 에러, 런타임 오브젝트 생성, 대략적인 bounds까지 검증할 수 있다. 하지만 “보는 맛”, “너무 마법 같아서 가벼운지”, “베기 VFX와 위치가 자연스러운지”는 jaewoo가 직접 플레이해서 판단해야 한다. 현재 스크린샷 경로도 계속 불안정해서 최종 시각 판단에는 적합하지 않다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>무기 표현은 held weapon에서 hit-point phantom weapon으로 바뀌었다. 다음 리뷰는 무기 크기 자체보다, 팬텀 무기가 slash VFX와 잘 맞아 보이는지, 쌍검은 빠르고 선명한지, 대검은 묵직하지만 플레이어를 가리지 않는지에 집중하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo 직접 리뷰 후 하나만 고른다: 팬텀 무기 위치/크기/알파, 베기 VFX 타이밍, 걷기 애니메이션, 피의 칼폭풍 payoff, 보상 속도, 망각 UX.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 캐릭터 몸에 붙은 무기가 오류처럼 보이고, 대검은 시야를 가렸다.</li>
+<li>방향: 무기를 상시 장착물이 아니라 타격 순간의 마법적 칼날 연출로 바꿨다.</li>
+<li>행동: held weapon 렌더링을 끄고, 히트 위치에 쌍검/대검 팬텀 스프라이트를 생성했다.</li>
+<li>결과: 기술 검증상 오류 없이 쌍검/대검 팬텀이 생성되며, 크기는 이전 대검 가림 문제보다 작게 제한됐다. 최종 감각은 직접 플레이 리뷰가 필요하다.</li>
+</ul>
+  </main>
+</body>
+</html>

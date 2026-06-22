@@ -2,6 +2,19 @@
 
 ## 2026-06-22
 
+- Changed weapon visuals from player-attached silhouettes to hit-point phantom strikes:
+  - player-held `LeftBlade` / `RightBlade` renderers now stay disabled during normal play.
+  - dual blades now briefly spawn two blade sprites at the hit target, crossing around the slash VFX.
+  - greatsword now briefly spawns a heavy blade strike plus a faint afterimage at the cleave center.
+  - phantom weapon sprites are scaled by target world height so the generated weapon PNGs do not cover the player.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity `Assets/Refresh`: success.
+  - Unity compile error count: 0.
+  - Dual-blade Play Mode reflection check: held renderers disabled, `DualBladePhantom*` count `2`, max bounds `(1.151, 1.151)`.
+  - Greatsword Play Mode reflection check: held renderers disabled, `GreatswordPhantom*` count `2`, max bounds `(1.586, 1.689)`.
+  - Unity console error count: 0.
+
 - Re-tuned greatsword after direct Play Mode check:
   - greatsword held sprite reduced again from `0.34~0.375` to `0.21~0.235`.
   - greatsword moved behind the player (`sortingOrder 18` vs player `20`) so it no longer covers the character body.

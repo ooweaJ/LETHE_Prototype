@@ -42,6 +42,22 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 hit-point phantom weapon pass:
+  - Responded to jaewoo review that weapons attached to the character body looked like a mistake, and that weapons should instead appear at the slash / hit VFX when attacking.
+  - Player-attached `LeftBlade` / `RightBlade` renderers now stay disabled during normal play.
+  - Dual blades now spawn two short-lived phantom blade sprites around the target-local slash.
+  - Greatsword now spawns a heavy phantom blade strike plus a faint afterimage at the cleave center.
+  - Phantom weapon sprites use world-height scaling so generated weapon PNGs do not inherit oversized source image dimensions.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity `Assets/Refresh`: success.
+    - Unity compile error count: `0`.
+    - Dual-blade Play Mode reflection check: held renderers disabled, `DualBladePhantom*` count `2`, max bounds `(1.151, 1.151)`.
+    - Greatsword Play Mode reflection check: held renderers disabled, `GreatswordPhantom*` count `2`, max bounds `(1.586, 1.689)`.
+    - Unity console error count: `0`.
+  - Limitation:
+    - This verifies technical behavior and rough bounds. Final judgment of readability, fantasy, and whether the attack feels natural still needs jaewoo direct play review because screenshot capture remains unreliable.
+
 - Unity v1 direct greatsword cover fix:
   - Direct Play Mode check confirmed the greatsword was covering the player:
     - player bounds: `(2.210, 2.210)`.

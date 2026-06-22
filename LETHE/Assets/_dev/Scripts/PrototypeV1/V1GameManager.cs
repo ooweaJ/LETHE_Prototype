@@ -89,6 +89,8 @@ namespace Lethe.PrototypeV1
         const float PlayerMoveDeceleration = 28f;
         const float DualBladeVisualScale = 0.43f;
         const float GreatswordVisualScale = 0.21f;
+        const float DualBladePhantomHeight = 0.82f;
+        const float GreatswordPhantomHeight = 1.72f;
         const string PlayerSheetPath = "Assets/_dev/Art/Sprites/Characters/Player/sheet_player_v1_4dir.png";
         const string DualBladeSwingArcAPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_01.png";
         const string DualBladeSwingArcBPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_02.png";
@@ -523,6 +525,7 @@ namespace Lethe.PrototypeV1
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = sprite;
             sr.sortingOrder = 30;
+            sr.enabled = false;
             sr.transform.localRotation = Quaternion.Euler(0f, 0f, name.Contains("Left") ? 12f : -12f);
             return sr;
         }
@@ -583,37 +586,8 @@ namespace Lethe.PrototypeV1
                 weaponAnimTimer -= dt;
             }
 
-            var weapon = CurrentWeaponSpec();
-            var t = Mathf.Clamp01(weaponAnimTimer / weapon.SwingAnimDuration);
-            var swing = Mathf.Sin(t * Mathf.PI);
-            if (weapon.Id == V1WeaponId.Greatsword)
-            {
-                leftBladeSprite.enabled = false;
-                rightBladeSprite.enabled = true;
-                rightBladeSprite.sprite = greatswordWeaponSprite;
-                rightBladeSprite.sortingOrder = 18;
-                rightBladeSprite.color = new Color(0.88f, 0.98f, 1f, 0.96f);
-                rightBladeSprite.transform.localScale = Vector3.one * (GreatswordVisualScale + 0.025f * swing);
-                rightBladeSprite.transform.localPosition = new Vector3(0.18f + 0.07f * swing, -0.08f + 0.035f * swing, 0f);
-                rightBladeSprite.transform.localRotation = Quaternion.Euler(0f, 0f, -34f + 76f * swing);
-                return;
-            }
-
-            leftBladeSprite.enabled = true;
-            rightBladeSprite.enabled = true;
-            leftBladeSprite.sortingOrder = 30;
-            rightBladeSprite.sortingOrder = 30;
-            leftBladeSprite.sprite = dualLeftWeaponSprite;
-            rightBladeSprite.sprite = dualRightWeaponSprite;
-            leftBladeSprite.color = Color.white;
-            rightBladeSprite.color = Color.white;
-            leftBladeSprite.transform.localScale = Vector3.one * (DualBladeVisualScale + 0.045f * swing);
-            rightBladeSprite.transform.localScale = Vector3.one * (DualBladeVisualScale + 0.045f * swing);
-            var leadMul = leftBladeLead ? 1f : -1f;
-            leftBladeSprite.transform.localPosition = new Vector3(-0.19f - 0.10f * swing * leadMul, -0.035f + 0.045f * swing, 0f);
-            rightBladeSprite.transform.localPosition = new Vector3(0.19f + 0.10f * swing * leadMul, -0.035f + 0.045f * swing, 0f);
-            leftBladeSprite.transform.localRotation = Quaternion.Euler(0f, 0f, 16f - 54f * swing * leadMul);
-            rightBladeSprite.transform.localRotation = Quaternion.Euler(0f, 0f, -16f - 54f * swing * leadMul);
+            if (leftBladeSprite != null) leftBladeSprite.enabled = false;
+            if (rightBladeSprite != null) rightBladeSprite.enabled = false;
         }
 
         void UpdateWeapon(float dt)
@@ -2124,12 +2098,14 @@ namespace Lethe.PrototypeV1
         void SpawnWeaponHitVfx(WeaponRuntimeSpec weapon, List<WeaponHit> hits, Vector2 forward)
         {
             if (hits.Count == 0) return;
-            var entries = weapon.VfxProfile != null ? weapon.VfxProfile.weaponHitSlashes : Array.Empty<SlashVfxEntry>();
-            if (entries == null || entries.Length == 0) return;
-
             var f = forward.sqrMagnitude > 0.001f ? forward.normalized : lastAim.normalized;
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
             var hitCenter = (Vector3)hits.Aggregate(Vector2.zero, (sum, hit) => sum + (Vector2)hit.Enemy.transform.position) / hits.Count;
+            SpawnPhantomWeaponAttack(weapon, hits, f, baseAngle, hitCenter);
+
+            var entries = weapon.VfxProfile != null ? weapon.VfxProfile.weaponHitSlashes : Array.Empty<SlashVfxEntry>();
+            if (entries == null || entries.Length == 0) return;
+
             for (int i = 0; i < hits.Count; i++)
             {
                 var primary = i == 0;
@@ -2139,6 +2115,30 @@ namespace Lethe.PrototypeV1
                     SpawnSlashEntry(entry, hits[i].Enemy.transform.position, hitCenter, f, baseAngle, primary, i);
                 }
             }
+        }
+
+        void SpawnPhantomWeaponAttack(WeaponRuntimeSpec weapon, List<WeaponHit> hits, Vector2 forward, float baseAngle, Vector3 hitCenter)
+        {
+            var side = new Vector2(-forward.y, forward.x).normalized;
+            if (weapon.Id == V1WeaponId.Greatsword)
+            {
+                var primary = hits[0].Enemy.transform.position;
+                var position = Vector3.Lerp(primary, hitCenter, 0.42f) + (Vector3)(forward * 0.10f);
+                var scale = ScaleSpriteToWorldHeight(greatswordWeaponSprite, GreatswordPhantomHeight);
+                var rotation = Quaternion.Euler(0f, 0f, baseAngle - 42f);
+                SpawnTransientSprite("GreatswordPhantomStrike", greatswordWeaponSprite, position, rotation, scale, new Color(0.90f, 0.98f, 1f, 0.88f), 0.16f);
+                SpawnTransientSprite("GreatswordPhantomAfterimage", greatswordWeaponSprite, position - (Vector3)(forward * 0.12f), rotation, scale * 1.08f, new Color(0.55f, 0.82f, 1f, 0.22f), 0.20f);
+                return;
+            }
+
+            var target = hits[0].Enemy.transform.position;
+            var lead = leftBladeLead ? -1f : 1f;
+            var leftPos = target + (Vector3)(side * 0.18f * lead - forward * 0.04f);
+            var rightPos = target + (Vector3)(side * -0.18f * lead + forward * 0.12f);
+            var leftScale = ScaleSpriteToWorldHeight(dualLeftWeaponSprite, DualBladePhantomHeight);
+            var rightScale = ScaleSpriteToWorldHeight(dualRightWeaponSprite, DualBladePhantomHeight);
+            SpawnTransientSprite("DualBladePhantomLeft", dualLeftWeaponSprite, leftPos, Quaternion.Euler(0f, 0f, baseAngle + 52f * lead), leftScale, new Color(0.80f, 0.98f, 1f, 0.88f), 0.12f);
+            SpawnTransientSprite("DualBladePhantomRight", dualRightWeaponSprite, rightPos, Quaternion.Euler(0f, 0f, baseAngle - 54f * lead), rightScale, new Color(0.95f, 1f, 1f, 0.82f), 0.14f);
         }
 
         void SpawnSlashEntry(SlashVfxEntry entry, Vector3 targetPosition, Vector3 hitCenter, Vector2 forward, float baseAngle, bool primary, int hitIndex)
@@ -2304,6 +2304,12 @@ namespace Lethe.PrototypeV1
         {
             if (sprite == null || sprite.bounds.size.x <= 0.001f) return 1f;
             return targetWorldWidth / sprite.bounds.size.x;
+        }
+
+        float ScaleSpriteToWorldHeight(Sprite sprite, float targetWorldHeight)
+        {
+            if (sprite == null || sprite.bounds.size.y <= 0.001f) return 1f;
+            return targetWorldHeight / sprite.bounds.size.y;
         }
 
         Sprite MemoryVfxSprite(V1MemoryId id) => id switch
