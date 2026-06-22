@@ -86,6 +86,26 @@ namespace Lethe.PrototypeV1
         const float FastBossHp = 180f;
         const float RunSeconds = 600f;
         const string PlayerSheetPath = "Assets/_dev/Art/Sprites/Characters/Player/sheet_player_v1_4dir.png";
+        const string DualBladeSwingArcAPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_01.png";
+        const string DualBladeSwingArcBPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_02.png";
+        const string GreatswordCleaveArcPath = "Assets/_dev/Art/Sprites/Weapons/spr_greatsword_cleave_arc_01.png";
+        const string HitSparkCyanPath = "Assets/_dev/Art/Sprites/Feedback/spr_hit_spark_cyan_01.png";
+        const string HitSparkRedPath = "Assets/_dev/Art/Sprites/Feedback/spr_hit_spark_red_01.png";
+        const string MemoryExecutionPath = "Assets/_dev/Art/Sprites/Memories/Execution/spr_execution_flash_01.png";
+        const string MemoryHunterPath = "Assets/_dev/Art/Sprites/Memories/Homing/spr_homing_shot_01.png";
+        const string MemoryShatterPath = "Assets/_dev/Art/Sprites/Memories/Shockwave/spr_shockwave_ring_01.png";
+        const string MemoryStoppedPath = "Assets/_dev/Art/Sprites/Memories/TimeStop/spr_timestop_field_01.png";
+        const string MemoryAshenPath = "Assets/_dev/Art/Sprites/Memories/Ashen/spr_ashen_shield_01.png";
+        const string MemoryBrandPath = "Assets/_dev/Art/Sprites/Memories/Brand/spr_brand_mark_01.png";
+        const string EchoExecutionPath = "Assets/_dev/Art/Sprites/Echoes/Execution/spr_execution_burst_01.png";
+        const string EchoHunterPath = "Assets/_dev/Art/Sprites/Echoes/Homing/spr_homing_echo_01.png";
+        const string EchoShatterPath = "Assets/_dev/Art/Sprites/Echoes/Shockwave/spr_shockwave_echo_01.png";
+        const string EchoStoppedPath = "Assets/_dev/Art/Sprites/Echoes/TimeStop/spr_timestop_echo_01.png";
+        const string EchoAshenPath = "Assets/_dev/Art/Sprites/Echoes/Ashen/spr_ashen_echo_01.png";
+        const string EchoBrandPath = "Assets/_dev/Art/Sprites/Echoes/Brand/spr_brand_echo_01.png";
+        const string UltimateFracturePath = "Assets/_dev/Art/Sprites/Ultimates/spr_fracture_execution_01.png";
+        const string UltimateStasisPath = "Assets/_dev/Art/Sprites/Ultimates/spr_stasis_hunt_01.png";
+        const string UltimateAshenOblivionPath = "Assets/_dev/Art/Sprites/Ultimates/spr_ashen_oblivion_01.png";
         static readonly float[] BossScheduleSeconds = { 180f, 340f, 490f, 600f };
         static readonly float[] FastBossScheduleSeconds = { 18f, 38f, 62f, 88f };
 
@@ -712,7 +732,7 @@ namespace Lethe.PrototypeV1
                 .FirstOrDefault();
             if (target == null) return;
 
-            SpawnTransientSprite("ExecutionFlash", MakeImpactDiamondSprite("ExecutionFlash", Color.white), target.transform.position, Quaternion.identity, 0.44f, new Color(1f, 0.95f, 0.62f, 0.82f), 0.13f);
+            SpawnPromptSprite("ExecutionFlash", MemoryVfxSprite(V1MemoryId.ExecutionFlash), () => MakeImpactDiamondSprite("ExecutionFlash", Color.white), target.transform.position, Quaternion.identity, 1.04f, 0.44f, new Color(1f, 0.95f, 0.62f, 0.82f), 0.16f);
             DealDamage(target, 26f + memory.Level * 7f, "처형 섬광", false);
         }
 
@@ -730,9 +750,9 @@ namespace Lethe.PrototypeV1
 
             var go = new GameObject("HunterOathShot");
             go.transform.position = player.position;
-            go.transform.localScale = Vector3.one * 0.12f;
             var sr = go.AddComponent<SpriteRenderer>();
-            sr.sprite = MakeCrescentSlashSprite("HunterOathShot", Color.white, false);
+            sr.sprite = MemoryVfxSprite(V1MemoryId.HunterOath) ?? MakeCrescentSlashSprite("HunterOathShot", Color.white, false);
+            go.transform.localScale = Vector3.one * (sr.sprite != null && sr.sprite.bounds.size.x > 2f ? ScaleSpriteToWorldWidth(sr.sprite, 0.62f) : 0.12f);
             sr.color = new Color(0.90f, 1f, 0.62f, 0.74f);
             sr.sortingOrder = 44;
             go.AddComponent<V1Projectile>().Configure(this, target, 7.5f + memory.Level * 0.55f, 9f + memory.Level * 3.2f, "추적자의 맹세");
@@ -754,7 +774,7 @@ namespace Lethe.PrototypeV1
             if (target == null) return;
 
             var radius = 1.05f + memory.Level * 0.14f;
-            SpawnTransientSprite("ShatterWave", MakeRingSprite("ShatterWave", Color.white, 128), target.transform.position, Quaternion.identity, radius * 0.62f, new Color(0.86f, 0.98f, 1f, 0.44f), 0.25f);
+            SpawnPromptSprite("ShatterWave", MemoryVfxSprite(V1MemoryId.ShatterWave), () => MakeRingSprite("ShatterWave", Color.white, 128), target.transform.position, Quaternion.identity, radius * 1.35f, radius * 0.62f, new Color(0.86f, 0.98f, 1f, 0.46f), 0.30f);
             foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(target.transform.position, e.transform.position) <= radius + e.TouchRadius).Take(8).ToList())
             {
                 var dir = (Vector2)(enemy.transform.position - target.transform.position);
@@ -769,7 +789,7 @@ namespace Lethe.PrototypeV1
             memory.TickTimer = Mathf.Max(1.40f, 4.20f - memory.Level * 0.28f);
 
             var radius = 1.55f + memory.Level * 0.16f;
-            SpawnTransientSprite("StoppedSecond", MakeRingSprite("StoppedSecond", Color.white, 144), player.position, Quaternion.identity, radius * 0.54f, new Color(0.62f, 0.72f, 1f, 0.35f), 0.34f);
+            SpawnPromptSprite("StoppedSecond", MemoryVfxSprite(V1MemoryId.StoppedSecond), () => MakeRingSprite("StoppedSecond", Color.white, 144), player.position, Quaternion.identity, radius * 1.40f, radius * 0.54f, new Color(0.62f, 0.72f, 1f, 0.36f), 0.40f);
             foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) <= radius + e.TouchRadius).Take(10).ToList())
             {
                 var dir = (Vector2)(enemy.transform.position - player.position);
@@ -783,7 +803,7 @@ namespace Lethe.PrototypeV1
             memory.VisualTimer -= dt;
             if (memory.VisualTimer > 0f) return;
             memory.VisualTimer = 1.15f;
-            SpawnTransientSprite("AshenShield", MakeRingSprite("AshenShield", Color.white, 128), player.position, Quaternion.identity, 0.48f + memory.Level * 0.035f, new Color(0.72f, 0.80f, 0.86f, 0.20f), 0.24f);
+            SpawnPromptSprite("AshenShield", MemoryVfxSprite(V1MemoryId.AshenShield), () => MakeRingSprite("AshenShield", Color.white, 128), player.position, Quaternion.identity, 1.18f + memory.Level * 0.07f, 0.48f + memory.Level * 0.035f, new Color(0.72f, 0.80f, 0.86f, 0.25f), 0.30f);
         }
 
         void UpdateOblivionBrand(MemoryState memory, float dt)
@@ -794,7 +814,7 @@ namespace Lethe.PrototypeV1
 
             foreach (var enemy in enemies.Where(e => e != null && e.IsAlive).OrderBy(_ => UnityEngine.Random.value).Take(1 + memory.Level / 2).ToList())
             {
-                SpawnTransientSprite("OblivionBrand", MakeRingSprite("OblivionBrand", Color.white, 96), enemy.transform.position + Vector3.up * 0.10f, Quaternion.identity, 0.42f, new Color(0.70f, 0.42f, 1f, 0.45f), 0.30f);
+                SpawnPromptSprite("OblivionBrand", MemoryVfxSprite(V1MemoryId.OblivionBrand), () => MakeRingSprite("OblivionBrand", Color.white, 96), enemy.transform.position + Vector3.up * 0.10f, Quaternion.identity, 0.92f, 0.42f, new Color(0.70f, 0.42f, 1f, 0.50f), 0.34f);
                 DealDamage(enemy, 6f + memory.Level * 2.8f, "망각의 낙인", false);
             }
         }
@@ -887,7 +907,7 @@ namespace Lethe.PrototypeV1
             if (shatterLevel > 0 && (shatterLevel >= 2 || hitIndex == 0) && UnityEngine.Random.value < 0.18f + shatterLevel * 0.08f)
             {
                 var radius = 0.72f + shatterLevel * 0.08f;
-                SpawnTransientSprite("ShatterEcho", MakeRingSprite("ShatterEcho", Color.white, 104), enemy.transform.position, Quaternion.identity, radius * 0.62f, new Color(0.86f, 0.98f, 1f, 0.34f), 0.18f);
+                SpawnPromptSprite("ShatterEcho", EchoVfxSprite(V1MemoryId.ShatterWave), () => MakeRingSprite("ShatterEcho", Color.white, 104), enemy.transform.position, Quaternion.identity, radius * 1.20f, radius * 0.62f, new Color(0.86f, 0.98f, 1f, 0.38f), 0.22f);
                 foreach (var target in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(enemy.transform.position, e.transform.position) <= radius + e.TouchRadius).Take(5).ToList())
                 {
                     var dir = (Vector2)(target.transform.position - enemy.transform.position);
@@ -898,7 +918,7 @@ namespace Lethe.PrototypeV1
             var executionLevel = EchoLevel(V1MemoryId.ExecutionFlash);
             if (executionLevel > 0 && enemy.HealthRatio <= 0.22f + executionLevel * 0.025f)
             {
-                SpawnTransientSprite("ExecutionEcho", MakeImpactDiamondSprite("ExecutionEcho", Color.white), enemy.transform.position, Quaternion.identity, 0.34f, new Color(1f, 0.90f, 0.55f, 0.74f), 0.10f);
+                SpawnPromptSprite("ExecutionEcho", EchoVfxSprite(V1MemoryId.ExecutionFlash), () => MakeImpactDiamondSprite("ExecutionEcho", Color.white), enemy.transform.position, Quaternion.identity, 0.86f, 0.34f, new Color(1f, 0.90f, 0.55f, 0.76f), 0.13f);
                 DealDamage(enemy, weapon.Damage * (0.18f + executionLevel * 0.05f), "처형 잔향", false);
             }
 
@@ -910,9 +930,9 @@ namespace Lethe.PrototypeV1
                 {
                     var go = new GameObject("HunterEchoShot");
                     go.transform.position = enemy.transform.position;
-                    go.transform.localScale = Vector3.one * 0.10f;
                     var sr = go.AddComponent<SpriteRenderer>();
-                    sr.sprite = MakeCrescentSlashSprite("HunterEchoShot", Color.white, false);
+                    sr.sprite = EchoVfxSprite(V1MemoryId.HunterOath) ?? MakeCrescentSlashSprite("HunterEchoShot", Color.white, false);
+                    go.transform.localScale = Vector3.one * (sr.sprite != null && sr.sprite.bounds.size.x > 2f ? ScaleSpriteToWorldWidth(sr.sprite, 0.58f) : 0.10f);
                     sr.color = new Color(0.92f, 1f, 0.58f, 0.70f);
                     sr.sortingOrder = 44;
                     go.AddComponent<V1Projectile>().Configure(this, target, 8f, weapon.Damage * (0.14f + hunterLevel * 0.04f), "추적 잔향");
@@ -923,20 +943,20 @@ namespace Lethe.PrototypeV1
             if (stoppedLevel > 0 && hitIndex == 0 && UnityEngine.Random.value < 0.16f + stoppedLevel * 0.05f)
             {
                 enemy.ApplyBriefFreeze(0.08f + stoppedLevel * 0.025f);
-                SpawnTransientSprite("StoppedEcho", MakeRingSprite("StoppedEcho", Color.white, 96), enemy.transform.position, Quaternion.identity, 0.36f + stoppedLevel * 0.025f, new Color(0.62f, 0.72f, 1f, 0.30f), 0.16f);
+                SpawnPromptSprite("StoppedEcho", EchoVfxSprite(V1MemoryId.StoppedSecond), () => MakeRingSprite("StoppedEcho", Color.white, 96), enemy.transform.position, Quaternion.identity, 0.92f + stoppedLevel * 0.04f, 0.36f + stoppedLevel * 0.025f, new Color(0.62f, 0.72f, 1f, 0.32f), 0.20f);
             }
 
             var ashLevel = EchoLevel(V1MemoryId.AshenShield);
             if (ashLevel > 0 && hitIndex == 0 && UnityEngine.Random.value < 0.12f + ashLevel * 0.04f)
             {
                 HealPlayer(0.28f + ashLevel * 0.12f);
-                SpawnTransientSprite("AshenEcho", MakeRingSprite("AshenEcho", Color.white, 96), player.position, Quaternion.identity, 0.34f, new Color(0.74f, 0.82f, 0.88f, 0.24f), 0.16f);
+                SpawnPromptSprite("AshenEcho", EchoVfxSprite(V1MemoryId.AshenShield), () => MakeRingSprite("AshenEcho", Color.white, 96), player.position, Quaternion.identity, 0.95f, 0.34f, new Color(0.74f, 0.82f, 0.88f, 0.28f), 0.22f);
             }
 
             var oblivionLevel = EchoLevel(V1MemoryId.OblivionBrand);
             if (oblivionLevel > 0 && UnityEngine.Random.value < 0.18f + oblivionLevel * 0.05f)
             {
-                SpawnTransientSprite("OblivionEcho", MakeRingSprite("OblivionEcho", Color.white, 96), enemy.transform.position, Quaternion.identity, 0.38f, new Color(0.70f, 0.42f, 1f, 0.34f), 0.18f);
+                SpawnPromptSprite("OblivionEcho", EchoVfxSprite(V1MemoryId.OblivionBrand), () => MakeRingSprite("OblivionEcho", Color.white, 96), enemy.transform.position, Quaternion.identity, 0.94f, 0.38f, new Color(0.70f, 0.42f, 1f, 0.38f), 0.22f);
                 DealDamage(enemy, weapon.Damage * (0.12f + oblivionLevel * 0.035f), "낙인 잔향", false);
             }
         }
@@ -1099,8 +1119,8 @@ namespace Lethe.PrototypeV1
                     var target = enemies.Where(e => e != null && e.IsAlive).OrderBy(e => e.HealthRatio).FirstOrDefault();
                     if (target != null)
                     {
-                        SpawnTransientSprite("FractureExecution", MakeRingSprite("FractureExecution", Color.white, 160), target.transform.position, Quaternion.identity, 0.86f, new Color(1f, 0.94f, 0.62f, 0.48f), 0.28f);
-                        SpawnTransientSprite("FractureExecutionCore", MakeImpactDiamondSprite("FractureExecutionCore", Color.white), target.transform.position, Quaternion.identity, 0.62f, new Color(1f, 0.92f, 0.55f, 0.82f), 0.16f);
+                        SpawnPromptSprite("FractureExecution", LoadSprite(UltimateFracturePath), () => MakeRingSprite("FractureExecution", Color.white, 160), target.transform.position, Quaternion.identity, 2.10f, 0.86f, new Color(1f, 0.94f, 0.62f, 0.54f), 0.34f);
+                        SpawnPromptSprite("FractureExecutionCore", EchoVfxSprite(V1MemoryId.ExecutionFlash), () => MakeImpactDiamondSprite("FractureExecutionCore", Color.white), target.transform.position, Quaternion.identity, 1.12f, 0.62f, new Color(1f, 0.92f, 0.55f, 0.84f), 0.18f);
                         foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(target.transform.position, e.transform.position) < 1.75f).Take(8).ToList())
                         {
                             DealDamage(enemy, enemy.HealthRatio < 0.32f ? 58f : 24f, "파쇄 처형", false);
@@ -1115,15 +1135,15 @@ namespace Lethe.PrototypeV1
                 if (ultimatePulseTimer <= 0f)
                 {
                     ultimatePulseTimer = 0.42f;
-                    SpawnTransientSprite("StasisHunt", MakeRingSprite("StasisHunt", Color.white, 160), player.position, Quaternion.identity, 0.88f, new Color(0.62f, 0.74f, 1f, 0.34f), 0.24f);
+                    SpawnPromptSprite("StasisHunt", LoadSprite(UltimateStasisPath), () => MakeRingSprite("StasisHunt", Color.white, 160), player.position, Quaternion.identity, 2.24f, 0.88f, new Color(0.62f, 0.74f, 1f, 0.36f), 0.30f);
                     foreach (var enemy in enemies.Where(e => e != null && e.IsAlive).OrderBy(e => Vector2.Distance(player.position, e.transform.position)).Take(6).ToList())
                     {
                         enemy.ApplyBriefFreeze(0.18f);
                         var go = new GameObject("StasisHuntShot");
                         go.transform.position = player.position;
-                        go.transform.localScale = Vector3.one * 0.11f;
                         var sr = go.AddComponent<SpriteRenderer>();
-                        sr.sprite = MakeCrescentSlashSprite("StasisHuntShot", Color.white, false);
+                        sr.sprite = EchoVfxSprite(V1MemoryId.HunterOath) ?? MakeCrescentSlashSprite("StasisHuntShot", Color.white, false);
+                        go.transform.localScale = Vector3.one * (sr.sprite != null && sr.sprite.bounds.size.x > 2f ? ScaleSpriteToWorldWidth(sr.sprite, 0.58f) : 0.11f);
                         sr.color = new Color(0.72f, 0.86f, 1f, 0.72f);
                         sr.sortingOrder = 44;
                         go.AddComponent<V1Projectile>().Configure(this, enemy, 9.2f, 18f, "정지 추적");
@@ -1136,7 +1156,7 @@ namespace Lethe.PrototypeV1
             {
                 ultimatePulseTimer = 0.72f;
                 HealPlayer(3.2f);
-                SpawnTransientSprite("AshenOblivion", MakeRingSprite("AshenOblivion", Color.white, 180), player.position, Quaternion.identity, 0.98f, new Color(0.78f, 0.68f, 1f, 0.32f), 0.34f);
+                SpawnPromptSprite("AshenOblivion", LoadSprite(UltimateAshenOblivionPath), () => MakeRingSprite("AshenOblivion", Color.white, 180), player.position, Quaternion.identity, 2.45f, 0.98f, new Color(0.78f, 0.68f, 1f, 0.36f), 0.42f);
                 foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 3.2f).Take(10).ToList())
                 {
                     DealDamage(enemy, 22f, "잿빛 망각", false);
@@ -2006,15 +2026,23 @@ namespace Lethe.PrototypeV1
                 _ => targetPosition
             };
             var position = anchor + (Vector3)(side * entry.localOffset.x * sideSign + forward * entry.localOffset.y);
-            var sprite = MakeSlashSprite(entry);
+            var sprite = MakeSlashSprite(entry, out var spriteScaleFactor);
             var rotation = entry.spriteShape == SlashSpriteShape.ImpactDiamond || entry.spriteShape == SlashSpriteShape.Circle
                 ? Quaternion.identity
                 : Quaternion.Euler(0f, 0f, baseAngle + entry.rotationOffsetDegrees * rotationSign);
-            SpawnTransientSprite(entry.id, sprite, position, rotation, entry.scale, entry.color, entry.lifetime);
+            SpawnTransientSprite(entry.id, sprite, position, rotation, entry.scale * spriteScaleFactor, entry.color, entry.lifetime);
         }
 
-        Sprite MakeSlashSprite(SlashVfxEntry entry)
+        Sprite MakeSlashSprite(SlashVfxEntry entry, out float spriteScaleFactor)
         {
+            spriteScaleFactor = 1f;
+            var promptSprite = PromptSlashSprite(entry, out var promptScaleFactor);
+            if (promptSprite != null)
+            {
+                spriteScaleFactor = promptScaleFactor;
+                return promptSprite;
+            }
+
             return entry.spriteShape switch
             {
                 SlashSpriteShape.WideCrescent => MakeWideCrescentSprite(entry.id, Color.white),
@@ -2022,6 +2050,37 @@ namespace Lethe.PrototypeV1
                 SlashSpriteShape.Circle => null,
                 _ => MakeCrescentSlashSprite(entry.id, Color.white, entry.flip)
             };
+        }
+
+        Sprite PromptSlashSprite(SlashVfxEntry entry, out float spriteScaleFactor)
+        {
+            spriteScaleFactor = 1f;
+            if (entry == null) return null;
+
+            var id = entry.id ?? "";
+            switch (entry.spriteShape)
+            {
+                case SlashSpriteShape.WideCrescent:
+                    spriteScaleFactor = 0.225f;
+                    return LoadSprite(GreatswordCleaveArcPath);
+                case SlashSpriteShape.ImpactDiamond:
+                    spriteScaleFactor = id.Contains("Greatsword", StringComparison.OrdinalIgnoreCase) || id.Contains("Blood", StringComparison.OrdinalIgnoreCase)
+                        ? 0.055f
+                        : 0.048f;
+                    return LoadSprite(spriteScaleFactor > 0.05f ? HitSparkRedPath : HitSparkCyanPath);
+                case SlashSpriteShape.Crescent:
+                    if (id.Contains("Kalmuri", StringComparison.OrdinalIgnoreCase))
+                    {
+                        spriteScaleFactor = 0.13f;
+                        return LoadSprite("Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_echo_slash_01.png");
+                    }
+                    spriteScaleFactor = 0.153f;
+                    return LoadSprite(id.Contains("_B", StringComparison.OrdinalIgnoreCase) || id.Contains("Assist", StringComparison.OrdinalIgnoreCase)
+                        ? DualBladeSwingArcBPath
+                        : DualBladeSwingArcAPath);
+                default:
+                    return null;
+            }
         }
 
         void SpawnHitSpark(Vector3 pos, Vector2 dir, bool weaponHit)
@@ -2096,6 +2155,57 @@ namespace Lethe.PrototypeV1
                 SpawnTransientSprite("BloodHealPulse", MakeRingSprite("BloodHealPulse", Color.white, 96), player.position + Vector3.up * 0.2f, Quaternion.identity, 0.40f, new Color(1f, 0.14f, 0.20f, 0.42f), 0.20f);
             }
         }
+
+        void SpawnPromptSprite(string name, Sprite promptSprite, Func<Sprite> fallbackSprite, Vector3 position, Quaternion rotation, float targetWorldWidth, float fallbackScale, Color color, float lifetime)
+        {
+            var sprite = promptSprite;
+            var scale = fallbackScale;
+            if (sprite != null)
+            {
+                scale = ScaleSpriteToWorldWidth(sprite, targetWorldWidth);
+            }
+            else if (fallbackSprite != null)
+            {
+                sprite = fallbackSprite();
+            }
+
+            SpawnTransientSprite(name, sprite, position, rotation, scale, color, lifetime);
+        }
+
+        float ScaleSpriteToWorldWidth(Sprite sprite, float targetWorldWidth)
+        {
+            if (sprite == null || sprite.bounds.size.x <= 0.001f) return 1f;
+            return targetWorldWidth / sprite.bounds.size.x;
+        }
+
+        Sprite MemoryVfxSprite(V1MemoryId id) => id switch
+        {
+            V1MemoryId.ExecutionFlash => LoadSprite(MemoryExecutionPath),
+            V1MemoryId.HunterOath => LoadSprite(MemoryHunterPath),
+            V1MemoryId.ShatterWave => LoadSprite(MemoryShatterPath),
+            V1MemoryId.StoppedSecond => LoadSprite(MemoryStoppedPath),
+            V1MemoryId.AshenShield => LoadSprite(MemoryAshenPath),
+            V1MemoryId.OblivionBrand => LoadSprite(MemoryBrandPath),
+            _ => null
+        };
+
+        Sprite EchoVfxSprite(V1MemoryId id) => id switch
+        {
+            V1MemoryId.ExecutionFlash => LoadSprite(EchoExecutionPath),
+            V1MemoryId.HunterOath => LoadSprite(EchoHunterPath),
+            V1MemoryId.ShatterWave => LoadSprite(EchoShatterPath),
+            V1MemoryId.StoppedSecond => LoadSprite(EchoStoppedPath),
+            V1MemoryId.AshenShield => LoadSprite(EchoAshenPath),
+            V1MemoryId.OblivionBrand => LoadSprite(EchoBrandPath),
+            _ => null
+        };
+
+        Sprite EchoTransformSprite(V1MemoryId id) => id switch
+        {
+            V1MemoryId.HungryBlades => LoadSprite("Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_echo_slash_01.png"),
+            V1MemoryId.BloodReflection => LoadSprite("Assets/_dev/Art/Sprites/Echoes/Blood/spr_blood_bloom_01.png"),
+            _ => EchoVfxSprite(id)
+        };
 
         void SpawnTransientSprite(string name, Sprite sprite, Vector3 position, Quaternion rotation, float scale, Color color, float lifetime)
         {

@@ -1,6 +1,6 @@
 # Status
 
-Last updated: 2026-06-21
+Last updated: 2026-06-22
 
 ## Current Snapshot
 
@@ -41,6 +41,24 @@ The report/devlog/review migration is now applied physically: old `docs/reports/
 The current development-docs plugin baseline from `docs/orchestration/MIGRATION_PROMPT.md` has been applied. `AGENTS.md` now uses a `Development Docs Plugin` section, `docs/orchestration/templates/HTML_INTERFACE_TEMPLATE.md` exists, legacy review pointer READMEs are readable, `reports/index.html` is generated as a newest-first date archive, daily report pages are generated as unit-card pages, and Discord delivery is documented as Project Orchestrator first with local direct-send scripts as trusted fallback only.
 
 ## Latest Verified Result
+
+- Unity v1 generated VFX runtime wiring and scale pass:
+  - Wired the generated prompt-sheet PNGs into `V1GameManager` runtime spawn paths:
+    - weapon/hit VFX: dual blade arcs, greatsword cleave arc, cyan/red hit sparks.
+    - active memory VFX: Execution Flash, Hunter Oath, Shatter Wave, Stopped Second, Ashen Shield, Oblivion Brand.
+    - echo VFX: Execution, Homing, Shockwave, TimeStop, Ashen, Brand.
+    - ultimate VFX: Fracture Execution, Stasis Hunt, Ashen Oblivion.
+  - Added sprite world-size normalization so the 1254px generated sprites do not cover the combat field at Unity default PPU.
+  - Kept procedural sprite generation as fallback when an imported PNG is unavailable.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity active scene: `Dev_Prototype_v1`.
+    - Unity compile error count: `0`.
+    - Unity console error count after Play Mode smoke attempts: `0`.
+    - Unity `Assets/Refresh`: success.
+  - Limitation:
+    - Unity Game/Scene capture still returned a solid-color image, so direct visual review remains required for final scale/feel judgment.
+    - Manual smoke invocation confirmed no runtime errors, but transient VFX timing was not visually capturable through the current MCP screenshot path.
 
 - Unity v1 remaining VFX prompt-sheet generation:
   - Generated the remaining prompt-sheet sprite set under `LETHE/Assets/_dev/Art/Sprites/`:
@@ -744,7 +762,7 @@ Continue from `Dev_Prototype_v1`, not `Dev_Prototype_v0`.
 
 Next implementation step:
 
-1. Let jaewoo run `Dev_Prototype_v1`, choose one of the two weapon cards, and review the first 120 seconds before judging the full 600-second run.
+1. Let jaewoo run `Dev_Prototype_v1`, choose each of the two weapon cards, and review the first 120 seconds before judging the full 600-second run.
 2. Review checklist:
    - 시작 무기 카드 2개가 명확하게 읽히는가?
    - 첫 보상에서 칼무리/혈반 기억 선택이 빠르고 자연스럽게 보이는가?
@@ -756,7 +774,12 @@ Next implementation step:
    - 대검이 느린 큰 한 방으로 읽히는가?
    - 60~120초 안에 망각 -> 결손 -> 공명 -> +5 잔향 -> 피의 칼폭풍 흐름이 보이는가?
    - 쌍검/대검 피의 칼폭풍 차이가 보이는가?
-3. After feedback, choose one narrow next pass: reward cadence, attack readability, forgetting UX, spawn pressure, or art replacement.
+3. Pay special attention to the newly wired generated VFX:
+   - Are dual-blade arcs readable as fast paired cuts instead of screen noise?
+   - Is the greatsword cleave large enough to feel heavy without hiding enemies?
+   - Do Execution/Hunter/Shatter/Stopped/Ashen/Brand memories and echoes appear at natural target/player positions?
+   - Are Fracture Execution, Stasis Hunt, and Ashen Oblivion distinct enough from normal echo bursts?
+4. After feedback, choose one narrow next pass: reward cadence, attack readability, forgetting UX, spawn pressure, VFX scale/timing, or enemy art replacement.
 
 Do not promote `_dev` assets to `Assets/Lethe` until `Dev_Prototype_v1` receives explicit `GO`.
 

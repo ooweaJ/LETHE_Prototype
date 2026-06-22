@@ -55,6 +55,15 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Unity AssetDatabase found 20/20 generated VFX textures.
   - Unity import settings confirmed 20/20 final PNGs as Sprite textures.
   - Remaining risk: these assets are generated/imported, but runtime VFX profiles still need sprite wiring, scale, alpha, and timing review.
+- Generated VFX runtime wiring, 2026-06-22:
+  - Connected generated weapon/hit, six active memory, six echo, and three utility ultimate sprites to `V1GameManager`.
+  - Weapon slash profile entries now prefer generated dual-blade arcs, greatsword cleave, Kalmuri slash, and cyan/red hit sparks before procedural fallback.
+  - Added generated-sprite world-size scaling because the prompt-sheet PNGs are 1254px square and would otherwise render too large.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity `Assets/Refresh`: success.
+  - Unity compile error count: 0.
+  - Unity Play Mode smoke attempts produced console error count 0.
+  - Remaining risk: Game/Scene capture still returned solid-color images, so jaewoo direct visual review must judge final scale, alpha, timing, and natural combat readability.
 
 ### C. Real M2 Loop
 

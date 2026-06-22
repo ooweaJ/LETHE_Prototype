@@ -75,6 +75,15 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - `unity_get_compilation_errors(port=7890, severity="all")`: `count=0`.
   - Unity AssetDatabase found generated VFX textures: `20/20`.
   - Unity Sprite import setting confirmed: `20/20`.
+- Generated VFX runtime wiring and scale pass:
+  - Connected generated weapon/hit VFX, six active memory VFX, six echo VFX, and three utility ultimate VFX to `V1GameManager` spawn paths.
+  - `WeaponVfxProfile` slash entries now resolve to generated dual-blade, greatsword, Kalmuri, and hit-spark PNGs before falling back to procedural sprites.
+  - Added world-size normalization for 1254px generated sprites so they fit existing combat scale instead of covering the play field.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity `Assets/Refresh`: success.
+  - Unity compile error count: `0`.
+  - Unity Play Mode smoke attempts produced console error count `0`.
+  - Limitation: Unity Game/Scene capture still returned solid-color images, so final VFX size/timing needs jaewoo direct visual review.
 - A-I EPIC / data contract pass:
   - Added root entry docs: `docs/PRD.md`, `docs/TECH.md`, `docs/TASK.md`, `docs/TEST.md`, `docs/CHANGELOG.md`.
   - Updated `AGENTS.md` read order to use these docs before orchestration state files.
@@ -325,7 +334,8 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
    - 대검 시작 선택과 `F9` 비교.
    - 망각 예고/공명/+5 잔향/피의 칼폭풍 목표가 너무 늦거나 복잡하지 않은지.
    - HUD readability and combat density.
-3. After feedback, pick exactly one next pass: reward cadence, attack readability, forgetting UX, spawn pressure, or art replacement.
+3. During review, specifically judge the newly wired generated VFX scale/timing for weapon hits, six utility memories, six utility echoes, and three non-blood ultimates.
+4. After feedback, pick exactly one next pass: reward cadence, attack readability, forgetting UX, spawn pressure, VFX scale/timing, or art replacement.
 
 ## Open Questions
 

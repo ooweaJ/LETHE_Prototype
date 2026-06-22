@@ -179,3 +179,15 @@ Verification:
 1. jaewoo가 `Dev_Prototype_v1`에서 2개 시작 무기를 각각 짧게 확인한다.
 2. 첫 120초 기준으로 가장 약한 문제를 하나만 고른다: 보상 속도, 공격 손맛, 망각 UX, 스폰 압박, 적/기억 판독성.
 3. 피드백 후 해당 한 축만 추가 튜닝한다.
+
+## 2026-06-22 Update
+
+- [x] Generated weapon/hit, six utility memory, six utility echo, and three utility ultimate PNG sprites are wired into `V1GameManager` runtime spawn paths with procedural fallback.
+- [x] 1254px generated VFX sprites are normalized to existing combat world-size targets so they should not cover the whole field.
+- [ ] Direct Play Mode review confirms generated VFX scale, alpha, duration, and spawn frequency feel natural during the first 120 seconds.
+
+Current next:
+
+1. jaewoo reviews both starting weapons in `Dev_Prototype_v1`.
+2. Check whether generated VFX lands at the correct hit position and whether size/brightness/duration feel natural.
+3. Pick one weak axis for the next pass: reward cadence, attack feel, forgetting UX, spawn pressure, enemy/memory readability, or VFX scale/timing.

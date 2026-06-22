@@ -10,19 +10,19 @@ Current source of truth:
 - Test gate: `docs/TEST.md`
 - Detailed design: `docs/design/README.md` and `docs/design/LETHE_DESIGN_00..07`
 
-## 1. Wire generated VFX sprites into runtime
+## 1. Direct v1 visual review
 
 - Priority: highest
-- Include: connect the 20 generated weapon/hit, memory, echo, and ultimate sprites to the V1 runtime VFX spawn paths/profiles.
-- Check: sprite scale, alpha, sorting order, duration, pooling behavior, and whether generated VFX replaces procedural placeholders where intended.
-- Done: Play Mode smoke shows the new sprites during attacks/memories/echoes without console errors.
+- Include: run `Dev_Prototype_v1`, choose both starting weapons, and judge the first 120 seconds with the newly wired generated VFX.
+- Check: player body stability, 4-direction movement frames, terrain readability, HUD density, greatsword silhouette, VFX scale/timing, hit readability, and whether the build feels like a real survivor-game shell.
+- Done: jaewoo can name the weakest visual/game-feel axis in one sentence.
 
-## 2. Direct v1 visual review
+## 2. VFX scale/timing follow-up
 
 - Priority: high
-- Include: run `Dev_Prototype_v1`, choose both starting weapons, and judge the first 120 seconds.
-- Check: player body stability, 4-direction movement frames, terrain readability, HUD density, greatsword silhouette, refreshed VFX, and whether the build feels like a real survivor-game shell.
-- Done: jaewoo can name the weakest visual/game-feel axis in one sentence.
+- Include: after direct play, tune generated sprite scale, alpha, sorting order, duration, and spawn frequency for weapon hits, memories, echoes, and ultimates.
+- Check: dual blades stay quick, greatsword stays heavy, utility memories do not hide enemies, and ultimates feel like payoff.
+- Done: direct review no longer calls out VFX size/timing as the weakest axis.
 
 ## 3. Generate enemies and boss sprites
 

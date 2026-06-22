@@ -1,5 +1,22 @@
 # LETHE CHANGELOG
 
+## 2026-06-22
+
+- Wired generated VFX sprites into the `Dev_Prototype_v1` runtime:
+  - weapon/hit VFX: dual blade arcs, greatsword cleave arc, cyan/red hit sparks.
+  - active memory VFX: Execution Flash, Hunter Oath, Shatter Wave, Stopped Second, Ashen Shield, Oblivion Brand.
+  - echo VFX: Execution, Homing, Shockwave, TimeStop, Ashen, Brand.
+  - ultimate VFX: Fracture Execution, Stasis Hunt, Ashen Oblivion.
+- Updated weapon slash profile resolution so `SlashVfxEntry` values use generated PNG sprites first and procedural sprites only as fallback.
+- Added generated-sprite scale normalization for the 1254px prompt-sheet images so VFX fit the existing combat field.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity `Assets/Refresh`: success.
+  - Unity compile error count: 0.
+  - Unity Play Mode smoke attempts produced console error count 0.
+- Remaining review need:
+  - Unity screenshot/capture still produced solid-color output, so direct play review must judge final VFX size, timing, brightness, and hit-position readability.
+
 ## 2026-06-21
 
 - Generated the remaining prompt-sheet VFX sprites:
