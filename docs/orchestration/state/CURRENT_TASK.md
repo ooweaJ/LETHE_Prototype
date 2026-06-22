@@ -84,6 +84,16 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - Unity compile error count: `0`.
   - Unity Play Mode smoke attempts produced console error count `0`.
   - Limitation: Unity Game/Scene capture still returned solid-color images, so final VFX size/timing needs jaewoo direct visual review.
+- Blood Blade Storm payoff / movement pass:
+  - Blood Blade Storm now uses an opening cue, continuous storm pressure, and periodic burst pulses so it should no longer read as only Kalmuri with different coloring.
+  - Dual-blade storm uses fast orbit/burst cadence; greatsword storm uses slower heavy rings/slashes, stronger damage, hitstop, camera shake, knockback, healing, and blood-heal threads.
+  - Player movement now smooths raw input through short acceleration/deceleration, smooths movement-facing weapon rotation, and gives `PlayerVisual` subtle bob/tilt.
+  - `BeginRun` now defensively creates the player if a debug/smoke call reaches it before the cached player reference exists.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity console error count after direct M2/ultimate reflection smoke: `0`.
+  - Manual reflection ticks through `UpdateEchoUltimate(0.12f)` created `bloodStormObjects=124`, cleared nearby spawned enemies, and reached `kills=14`.
+  - Limitation: MCP Play Mode time did not advance normally, so this is a runtime method smoke rather than full natural-timing visual proof.
 - A-I EPIC / data contract pass:
   - Added root entry docs: `docs/PRD.md`, `docs/TECH.md`, `docs/TASK.md`, `docs/TEST.md`, `docs/CHANGELOG.md`.
   - Updated `AGENTS.md` read order to use these docs before orchestration state files.

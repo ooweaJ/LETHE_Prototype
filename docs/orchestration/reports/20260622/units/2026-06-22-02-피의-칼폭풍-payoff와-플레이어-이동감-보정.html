@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-22-02 - 피의 칼폭풍 payoff와 플레이어 이동감 보정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-22-02 - 피의 칼폭풍 payoff와 플레이어 이동감 보정</h1>
+      <p class="meta">Generated from 2026-06-22-02-피의-칼폭풍-payoff와-플레이어-이동감-보정.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260622/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-22-02 - 피의 칼폭풍 payoff와 플레이어 이동감 보정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 계속 <code>_dev</code> 검증 빌드다. 이번 작업은 새 시스템 추가가 아니라, jaewoo 리뷰에서 나온 두 가지 문제를 바로 좁혀 고친 패스다.</p>
+<ul>
+<li>피의 칼폭풍이 칼무리와 다른 강한 보상으로 읽히지 않음.</li>
+<li>캐릭터 걷기/방향 전환이 아직 부자연스러움.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>플레이어 이동:</li>
+<li>입력값을 바로 위치에 더하지 않고 짧은 가속/감속을 거치게 했다.</li>
+<li><code>PlayerVisual</code>에 아주 작은 보행 bob/tilt를 넣었다.</li>
+<li>이동 중 무기 앵커 회전이 즉시 튀지 않도록 부드럽게 보간했다.</li>
+<li>피의 칼폭풍:</li>
+<li>기존 단순 회전칼 구조를 <code>등장 신호 -&gt; 지속 폭풍 압박 -&gt; 주기적 폭발 박동</code>으로 나눴다.</li>
+<li>쌍검은 빠른 8방향 칼날 회전과 12칼날 burst로 바꿨다.</li>
+<li>대검은 느리지만 큰 링, 4방향 강타, 더 큰 burst damage/knockback/hitstop/camera shake를 쓴다.</li>
+<li>폭풍 중 적에게 혈반을 묻히고, 안쪽으로 끌어당기고, burst 때 바깥으로 튕기며 회복 실을 돌려준다.</li>
+<li><code>BeginRun</code>이 디버그/스모크에서 너무 이른 타이밍에 불려도 플레이어를 먼저 보장하도록 방어 코드를 넣었다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy v0/debug warning 7개, error 0개.</li>
+<li>Unity compile error count: 0.</li>
+<li>Unity console error count: 0.</li>
+<li>Direct M2 state injection:</li>
+<li><code>memories=[BloodReflection:3,HungryBlades:3]</code></li>
+<li><code>echoes=[HungryBlades:5,BloodReflection:5]</code></li>
+<li><code>storm=True</code></li>
+<li><code>UpdateEchoUltimate(0.12f)</code>를 12틱 수동 호출:</li>
+<li><code>bloodStormObjects=124</code></li>
+<li>주변 적 정리 후 <code>kills=14</code></li>
+<li>console error 0.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>피의 칼폭풍은 칼무리보다 단순히 크거나 빨라지는 이펙트가 아니라, 혈반/회복/끌어당김/폭발 박동이 함께 읽히는 궁극 상태로 간다. 쌍검은 빠른 연쇄형, 대검은 큰 강타형 차이를 유지한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>MCP Play Mode 시간이 이번 세션에서 정상적으로 흐르지 않아 <code>elapsed=0.0</code>에 머물렀다. 그래서 궁극 루프는 자연 시간 재생 대신 reflection tick으로 검증했다. 최종 걷기 느낌과 폭풍 크기/밝기/밀도는 여전히 jaewoo 직접 플레이로 봐야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Codex가 피의 칼폭풍을 opening/pressure/burst 구조로 강화했고, 이동을 입력 직접 반영에서 짧은 가속/감속 기반으로 바꿨다. 다음 리뷰는 “궁극이 정말 좋아 보이는가”와 “걷기가 덜 뻣뻣한가”를 먼저 판단하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo가 직접 플레이한 뒤 하나만 고른다:</p>
+<ul>
+<li>피의 칼폭풍이 아직 약하면 burst 주기/화면 흔들림/회복 실/피해량을 더 조정한다.</li>
+<li>걷기가 아직 어색하면 sprite frame timing, bob/tilt 크기, 방향 전환 hysteresis를 조정한다.</li>
+<li>둘 다 괜찮으면 보상 속도, 망각 UX, spawn pressure 중 하나로 넘어간다.</li>
+</ul>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 핵심 궁극이 상위 보상처럼 느껴지지 않고, 이동감이 프로토타입 티를 냈다.</li>
+<li>방향: 새 기능을 늘리지 않고 기존 M2 코어 감각을 직접 강화한다.</li>
+<li>행동: 피의 칼폭풍을 궁극 전용 리듬으로 분리하고, 플레이어 이동/보행 표현을 부드럽게 했다.</li>
+<li>결과: 기술 검증상 궁극 루프가 오브젝트를 생성하고 적을 정리하며 에러 없이 동작한다. 다음은 체감 리뷰다.</li>
+</ul>
+  </main>
+</body>
+</html>

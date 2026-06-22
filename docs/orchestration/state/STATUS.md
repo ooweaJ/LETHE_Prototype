@@ -42,6 +42,26 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 Blood Blade Storm payoff / player movement pass:
+  - Responded to jaewoo review that Kalmuri and Blood Blade Storm were acceptable, but Blood Blade Storm did not yet feel like a superior payoff and player walking still felt unnatural.
+  - Player movement now smooths raw input into short acceleration/deceleration instead of direct per-frame movement.
+  - `PlayerVisual` now has subtle walk bob/tilt, and movement-facing weapon-anchor rotation is smoothed to reduce snapping.
+  - Blood Blade Storm now has:
+    - an opening cue.
+    - continuous storm pressure that marks and tugs nearby enemies.
+    - periodic burst pulses with stronger damage, healing, blood-heal threads, knockback, hitstop, and camera shake.
+    - dual-blade fast orbit/burst cadence and greatsword slower heavy slash cadence.
+  - Added a defensive `BeginRun` guard for debug/smoke calls before the cached player reference exists.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity compile error count: `0`.
+    - Unity console error count after direct M2/ultimate reflection smoke: `0`.
+    - Direct M2 state injection reached `storm=True`.
+    - Manual reflection ticks through `UpdateEchoUltimate(0.12f)` created `bloodStormObjects=124`, cleared nearby spawned enemies, and reached `kills=14`.
+  - Limitation:
+    - MCP Play Mode time did not advance normally in this session (`elapsed=0.0` stayed fixed), so the storm loop was verified through direct reflection ticks rather than natural timed gameplay.
+    - Final visual/feel judgment still needs jaewoo direct play review.
+
 - Unity v1 generated VFX runtime wiring and scale pass:
   - Wired the generated prompt-sheet PNGs into `V1GameManager` runtime spawn paths:
     - weapon/hit VFX: dual blade arcs, greatsword cleave arc, cyan/red hit sparks.

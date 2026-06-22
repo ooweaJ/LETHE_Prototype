@@ -85,6 +85,8 @@ namespace Lethe.PrototypeV1
         const float FirstBossHp = 2050f;
         const float FastBossHp = 180f;
         const float RunSeconds = 600f;
+        const float PlayerMoveAcceleration = 18f;
+        const float PlayerMoveDeceleration = 28f;
         const string PlayerSheetPath = "Assets/_dev/Art/Sprites/Characters/Player/sheet_player_v1_4dir.png";
         const string DualBladeSwingArcAPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_01.png";
         const string DualBladeSwingArcBPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_02.png";
@@ -103,6 +105,8 @@ namespace Lethe.PrototypeV1
         const string EchoStoppedPath = "Assets/_dev/Art/Sprites/Echoes/TimeStop/spr_timestop_echo_01.png";
         const string EchoAshenPath = "Assets/_dev/Art/Sprites/Echoes/Ashen/spr_ashen_echo_01.png";
         const string EchoBrandPath = "Assets/_dev/Art/Sprites/Echoes/Brand/spr_brand_echo_01.png";
+        const string BloodBladeStormRingPath = "Assets/_dev/Art/Sprites/Ultimates/spr_blood_blade_storm_ring_01.png";
+        const string BloodBladeStormBladePath = "Assets/_dev/Art/Sprites/Ultimates/spr_blood_blade_storm_blade_01.png";
         const string UltimateFracturePath = "Assets/_dev/Art/Sprites/Ultimates/spr_fracture_execution_01.png";
         const string UltimateStasisPath = "Assets/_dev/Art/Sprites/Ultimates/spr_stasis_hunt_01.png";
         const string UltimateAshenOblivionPath = "Assets/_dev/Art/Sprites/Ultimates/spr_ashen_oblivion_01.png";
@@ -129,6 +133,7 @@ namespace Lethe.PrototypeV1
 
         Camera mainCamera;
         Transform player;
+        Transform playerVisual;
         Transform weaponAnchor;
         SpriteRenderer playerSprite;
         SpriteRenderer leftBladeSprite;
@@ -146,10 +151,12 @@ namespace Lethe.PrototypeV1
         float playerMaxHp = 210f;
         float elapsed;
         float playerAnimTimer;
+        float playerWalkCycle;
         float weaponTimer;
         float weaponAnimTimer;
         bool leftBladeLead = true;
         Vector2 lastAim = Vector2.up;
+        Vector2 playerMoveVelocity;
         int playerAnimFrame;
         int playerFacingRow;
         float spawnTimer;
@@ -159,6 +166,7 @@ namespace Lethe.PrototypeV1
         float cameraShakeTimer;
         float cameraShakeAmount;
         float ultimatePulseTimer;
+        float bloodStormBurstTimer;
         int level = 1;
         int xp;
         int nextXp = 5;
@@ -176,6 +184,7 @@ namespace Lethe.PrototypeV1
         bool refillOverlay;
         bool deathOverlay;
         bool fastDebugRun;
+        bool bloodStormWasReady;
         string overlayTitle = "";
         string overlayBody = "";
         V1WeaponId currentWeaponId = V1WeaponId.DualBlades;
@@ -487,6 +496,7 @@ namespace Lethe.PrototypeV1
             visual.localPosition = Vector3.zero;
             visual.localRotation = Quaternion.identity;
             visual.localScale = Vector3.one;
+            playerVisual = visual;
             playerSprite = visual.gameObject.AddComponent<SpriteRenderer>();
             playerSprite.sprite = LoadSheetFrame(PlayerSheetPath, 4, 8, 0, 0) ?? MakeCircleSprite("player", new Color(0.78f, 0.88f, 1f), 96);
             playerSprite.sortingOrder = 20;
@@ -519,16 +529,26 @@ namespace Lethe.PrototypeV1
         {
             var move = MoveInput();
             if (move.sqrMagnitude > 1f) move.Normalize();
-            player.position += (Vector3)(move * PlayerSpeed * dt);
+            var targetVelocity = move * PlayerSpeed;
+            var response = move.sqrMagnitude > 0.01f ? PlayerMoveAcceleration : PlayerMoveDeceleration;
+            playerMoveVelocity = Vector2.Lerp(playerMoveVelocity, targetVelocity, 1f - Mathf.Exp(-response * dt));
+            if (move.sqrMagnitude <= 0.01f && playerMoveVelocity.sqrMagnitude < 0.0005f)
+            {
+                playerMoveVelocity = Vector2.zero;
+            }
+
+            player.position += (Vector3)(playerMoveVelocity * dt);
             player.position = new Vector3(Mathf.Clamp(player.position.x, -12f, 12f), Mathf.Clamp(player.position.y, -8.5f, 8.5f), 0f);
 
-            if (move.sqrMagnitude > 0.01f)
+            var visualMove = playerMoveVelocity.sqrMagnitude > 0.003f ? playerMoveVelocity.normalized : move;
+            if (visualMove.sqrMagnitude > 0.01f)
             {
-                var angle = Mathf.Atan2(move.y, move.x) * Mathf.Rad2Deg;
-                weaponAnchor.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
-                lastAim = move.normalized;
+                var angle = Mathf.Atan2(visualMove.y, visualMove.x) * Mathf.Rad2Deg;
+                var current = weaponAnchor.eulerAngles.z;
+                weaponAnchor.rotation = Quaternion.Euler(0f, 0f, Mathf.LerpAngle(current, angle - 90f, 1f - Mathf.Exp(-16f * dt)));
+                lastAim = visualMove.normalized;
             }
-            UpdatePlayerSprite(move, dt);
+            UpdatePlayerSprite(visualMove, dt);
 
             foreach (var enemy in enemies.ToList())
             {
@@ -1056,59 +1076,146 @@ namespace Lethe.PrototypeV1
             ultimatePulseTimer -= dt;
             if (!BloodBladeStormReady)
             {
+                bloodStormWasReady = false;
+                bloodStormBurstTimer = 0f;
                 UpdateUtilityUltimate(dt);
                 return;
             }
-            if (weapon.UltimatePattern == V1UltimatePattern.FewHeavy)
+
+            UpdateBloodBladeStorm(dt, weapon);
+        }
+
+        void UpdateBloodBladeStorm(float dt, WeaponRuntimeSpec weapon)
+        {
+            var heavy = weapon.UltimatePattern == V1UltimatePattern.FewHeavy;
+            if (!bloodStormWasReady)
+            {
+                bloodStormWasReady = true;
+                bloodStormBurstTimer = 0f;
+                SpawnBloodStormOpening(heavy);
+            }
+
+            bloodStormBurstTimer -= dt;
+            if (heavy)
             {
                 if (ultimatePulseTimer <= 0f)
                 {
-                    ultimatePulseTimer = 0.72f;
+                    ultimatePulseTimer = 0.48f;
                     var baseAngle = elapsed * 120f;
                     var ultimateEntries = weapon.VfxProfile != null ? weapon.VfxProfile.ultimateSlashes : Array.Empty<SlashVfxEntry>();
-                    for (int i = 0; i < 3; i++)
+                    SpawnPromptSprite("BloodBladeStormHeavyRing", LoadSprite(BloodBladeStormRingPath), () => MakeRingSprite("BloodBladeStormHeavyRing", Color.white, 180), player.position, Quaternion.Euler(0f, 0f, baseAngle), 5.10f, 1.55f, new Color(1f, 0.10f, 0.16f, 0.28f), 0.24f);
+                    for (int i = 0; i < 4; i++)
                     {
-                        var angle = baseAngle + i * 120f;
-                        var pos = player.position + Quaternion.Euler(0f, 0f, angle) * Vector3.right * 1.75f;
+                        var angle = baseAngle + i * 90f;
+                        var pos = player.position + Quaternion.Euler(0f, 0f, angle) * Vector3.right * 1.95f;
                         var f = ((Vector2)(pos - player.position)).normalized;
                         foreach (var entry in ultimateEntries)
                         {
                             if (entry == null) continue;
                             SpawnSlashEntry(entry, pos, pos, f, angle + 90f, true, i);
                         }
+                        SpawnPromptSprite("BloodBladeStormHeavyBlade", LoadSprite(BloodBladeStormBladePath), () => KalmuriBladeSprite(), pos, Quaternion.Euler(0f, 0f, angle + 90f), 0.96f, 0.36f, new Color(1f, 0.24f, 0.30f, 0.80f), 0.22f);
                     }
-                    hitstopTimer = Mathf.Max(hitstopTimer, 0.035f);
-                    cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.14f);
-                    cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.065f);
+                    hitstopTimer = Mathf.Max(hitstopTimer, 0.045f);
+                    cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.18f);
+                    cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.085f);
                 }
 
-                foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 3.75f).Take(10).ToList())
+                ApplyBloodStormPressure(3.95f, 12, 54f * dt, 1.35f, dt);
+                if (bloodStormBurstTimer <= 0f)
                 {
-                    enemy.BloodMarked = true;
-                    DealDamage(enemy, 42f * dt, "피의 칼폭풍", false);
+                    bloodStormBurstTimer = 1.05f;
+                    BloodStormBurst(true);
                 }
                 return;
             }
 
             if (ultimatePulseTimer <= 0f)
             {
-                ultimatePulseTimer = 0.09f;
-                var spin = elapsed * 240f;
-                for (int i = 0; i < 6; i++)
+                ultimatePulseTimer = 0.075f;
+                var spin = elapsed * 310f;
+                for (int i = 0; i < 8; i++)
                 {
-                    var angle = spin + i * 60f;
-                    var pos = player.position + Quaternion.Euler(0f, 0f, angle) * Vector3.right * 2.35f;
-                    SpawnTransientSprite("피의 칼폭풍", LoadSprite("Assets/_dev/Art/Sprites/Ultimates/spr_blood_blade_storm_blade_01.png"), pos, Quaternion.Euler(0f, 0f, angle + 90f), 0.26f, new Color(1f, 0.28f, 0.34f, 0.60f), 0.10f);
+                    var angle = spin + i * 45f;
+                    var radius = 2.05f + (i & 1) * 0.34f;
+                    var pos = player.position + Quaternion.Euler(0f, 0f, angle) * Vector3.right * radius;
+                    SpawnPromptSprite("BloodBladeStormFastBlade", LoadSprite(BloodBladeStormBladePath), () => KalmuriBladeSprite(), pos, Quaternion.Euler(0f, 0f, angle + 90f), 0.66f, 0.26f, new Color(1f, 0.24f, 0.34f, 0.72f), 0.12f);
                 }
             }
 
-            foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 3.20f).Take(12).ToList())
+            ApplyBloodStormPressure(3.45f, 14, 26f * dt, 0.85f, dt);
+            if (bloodStormBurstTimer <= 0f)
             {
-                enemy.BloodMarked = true;
-                DealDamage(enemy, 18f * dt, "피의 칼폭풍", false);
+                bloodStormBurstTimer = 0.72f;
+                BloodStormBurst(false);
             }
         }
 
+        void SpawnBloodStormOpening(bool heavy)
+        {
+            SpawnPromptSprite("BloodBladeStormOpen", LoadSprite(BloodBladeStormRingPath), () => MakeRingSprite("BloodBladeStormOpen", Color.white, 180), player.position, Quaternion.identity, heavy ? 5.55f : 4.70f, heavy ? 1.72f : 1.44f, new Color(1f, 0.08f, 0.16f, 0.46f), 0.44f);
+            SpawnTransientSprite("BloodBladeStormWarning", MakeRingSprite("BloodBladeStormWarning", Color.white, 156), player.position, Quaternion.identity, heavy ? 1.66f : 1.38f, new Color(0.72f, 0.98f, 1f, 0.32f), 0.30f);
+            SpawnFloatingText(player.position + Vector3.up * 1.05f, "피의 칼폭풍", new Color(1f, 0.18f, 0.24f));
+            cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.18f);
+            cameraShakeAmount = Mathf.Max(cameraShakeAmount, heavy ? 0.09f : 0.07f);
+        }
+
+        void BloodStormBurst(bool heavy)
+        {
+            var center = player.position;
+            var radius = heavy ? 4.35f : 3.70f;
+            var burstDamage = heavy ? 72f : 44f;
+            SpawnPromptSprite("BloodBladeStormBurst", LoadSprite(BloodBladeStormRingPath), () => MakeRingSprite("BloodBladeStormBurst", Color.white, 180), center, Quaternion.Euler(0f, 0f, elapsed * (heavy ? -72f : 160f)), heavy ? 5.85f : 4.95f, heavy ? 1.88f : 1.58f, new Color(1f, 0.08f, 0.13f, heavy ? 0.58f : 0.48f), heavy ? 0.36f : 0.26f);
+            var bladeCount = heavy ? 6 : 12;
+            for (int i = 0; i < bladeCount; i++)
+            {
+                var angle = elapsed * (heavy ? 84f : 220f) + i * (360f / bladeCount);
+                var pos = center + Quaternion.Euler(0f, 0f, angle) * Vector3.right * (heavy ? 2.28f : 2.12f);
+                SpawnPromptSprite("BloodBladeStormBurstBlade", LoadSprite(BloodBladeStormBladePath), () => KalmuriBladeSprite(), pos, Quaternion.Euler(0f, 0f, angle + 90f), heavy ? 1.06f : 0.72f, heavy ? 0.40f : 0.28f, new Color(1f, 0.22f, 0.28f, 0.86f), heavy ? 0.28f : 0.18f);
+            }
+
+            var victims = enemies
+                .Where(e => e != null && e.IsAlive && Vector2.Distance(center, e.transform.position) <= radius)
+                .OrderBy(e => Vector2.Distance(center, e.transform.position))
+                .Take(heavy ? 18 : 16)
+                .ToList();
+
+            foreach (var enemy in victims)
+            {
+                var dir = (Vector2)(enemy.transform.position - center);
+                if (dir.sqrMagnitude < 0.001f) dir = UnityEngine.Random.insideUnitCircle.normalized;
+                enemy.BloodMarked = true;
+                enemy.ApplyBriefFreeze(heavy ? 0.055f : 0.035f);
+                enemy.ApplyHitFeedback(dir.normalized, heavy ? 3.3f : 2.2f);
+                DealDamage(enemy, burstDamage, "BloodBladeStorm", false, dir.normalized, 0f);
+            }
+
+            foreach (var enemy in victims.Take(heavy ? 5 : 4))
+            {
+                if (enemy != null)
+                {
+                    SpawnBloodThread(enemy.transform.position, heavy ? 2.0f : 1.35f, MaxEchoLevel);
+                }
+            }
+
+            HealPlayer(heavy ? 4.2f : 2.8f);
+            hitstopTimer = Mathf.Max(hitstopTimer, heavy ? 0.055f : 0.032f);
+            cameraShakeTimer = Mathf.Max(cameraShakeTimer, heavy ? 0.22f : 0.14f);
+            cameraShakeAmount = Mathf.Max(cameraShakeAmount, heavy ? 0.105f : 0.074f);
+        }
+
+        void ApplyBloodStormPressure(float radius, int cap, float damage, float pullStrength, float dt)
+        {
+            var center = player.position;
+            foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(center, e.transform.position) < radius).Take(cap).ToList())
+            {
+                var outward = (Vector2)(enemy.transform.position - center);
+                if (outward.sqrMagnitude < 0.001f) outward = UnityEngine.Random.insideUnitCircle.normalized;
+                enemy.BloodMarked = true;
+                enemy.ApplyHitFeedback(-outward.normalized, pullStrength * dt);
+                DealDamage(enemy, damage, "BloodBladeStorm", false, outward.normalized, 0f);
+            }
+        }
         void UpdateUtilityUltimate(float dt)
         {
             if (FractureExecutionReady)
@@ -1458,7 +1565,8 @@ namespace Lethe.PrototypeV1
 
         void UpdatePlayerSprite(Vector2 move, float dt)
         {
-            var moving = move.sqrMagnitude > 0.01f;
+            var moveSpeed = playerMoveVelocity.magnitude;
+            var moving = moveSpeed > 0.08f;
             var facing = moving ? move.normalized : lastAim;
             if (Mathf.Abs(facing.x) > Mathf.Abs(facing.y) * 0.85f)
             {
@@ -1471,8 +1579,10 @@ namespace Lethe.PrototypeV1
 
             if (moving)
             {
-                playerAnimTimer += dt;
-                if (playerAnimTimer >= 0.11f)
+                var speedFactor = Mathf.Clamp(moveSpeed / PlayerSpeed, 0.35f, 1.15f);
+                playerAnimTimer += dt * speedFactor;
+                playerWalkCycle += dt * (7.4f + speedFactor * 1.8f);
+                if (playerAnimTimer >= 0.13f)
                 {
                     playerAnimTimer = 0f;
                     playerAnimFrame = (playerAnimFrame + 1) % 4;
@@ -1481,6 +1591,7 @@ namespace Lethe.PrototypeV1
             else
             {
                 playerAnimTimer = 0f;
+                playerWalkCycle = Mathf.Lerp(playerWalkCycle, 0f, 1f - Mathf.Exp(-10f * dt));
                 playerAnimFrame = 0;
             }
 
@@ -1489,6 +1600,14 @@ namespace Lethe.PrototypeV1
             playerSprite.sprite = LoadSheetFrame(PlayerSheetPath, 4, 8, playerAnimFrame, row)
                 ?? LoadSheetFrame(PlayerSheetPath, 4, 8, 0, 0)
                 ?? playerSprite.sprite;
+
+            if (playerVisual != null)
+            {
+                var bob = moving ? Mathf.Abs(Mathf.Sin(playerWalkCycle)) * 0.025f : 0f;
+                var tilt = moving ? Mathf.Clamp(-move.x * 3.2f, -3.2f, 3.2f) : 0f;
+                playerVisual.localPosition = Vector3.Lerp(playerVisual.localPosition, new Vector3(0f, bob, 0f), 1f - Mathf.Exp(-18f * dt));
+                playerVisual.localRotation = Quaternion.Euler(0f, 0f, Mathf.LerpAngle(playerVisual.localEulerAngles.z, tilt, 1f - Mathf.Exp(-16f * dt)));
+            }
         }
 
         int KillXpAmount(V1Enemy enemy)
@@ -1670,6 +1789,10 @@ namespace Lethe.PrototypeV1
         void BeginRun(V1WeaponId weaponId)
         {
             if (runStarted) return;
+            if (player == null)
+            {
+                CreatePlayer();
+            }
             currentWeaponId = weaponId;
             weaponSelectOverlay = false;
             runStarted = true;

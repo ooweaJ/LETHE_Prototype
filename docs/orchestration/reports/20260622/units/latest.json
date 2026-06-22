@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260622\\index.md",
-  "generatedAt": "2026-06-22T02:43:28.815Z",
-  "unitCount": 1,
+  "generatedAt": "2026-06-22T03:44:55.938Z",
+  "unitCount": 2,
   "latest": {
-    "title": "2026-06-22-01 - Generated VFX runtime wiring and scale pass",
-    "number": "01",
-    "markdownPath": "docs\\orchestration\\reports\\20260622\\units\\2026-06-22-01-generated-vfx-runtime-wiring-and-scale-pass.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260622\\units\\2026-06-22-01-generated-vfx-runtime-wiring-and-scale-pass.html"
+    "title": "2026-06-22-02 - 피의 칼폭풍 payoff와 플레이어 이동감 보정",
+    "number": "02",
+    "markdownPath": "docs\\orchestration\\reports\\20260622\\units\\2026-06-22-02-피의-칼폭풍-payoff와-플레이어-이동감-보정.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260622\\units\\2026-06-22-02-피의-칼폭풍-payoff와-플레이어-이동감-보정.html"
   }
 }

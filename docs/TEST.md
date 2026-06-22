@@ -64,6 +64,15 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Unity compile error count: 0.
   - Unity Play Mode smoke attempts produced console error count 0.
   - Remaining risk: Game/Scene capture still returned solid-color images, so jaewoo direct visual review must judge final scale, alpha, timing, and natural combat readability.
+- Blood Blade Storm payoff / movement pass, 2026-06-22:
+  - Blood Blade Storm now has opening cue, continuous pressure, and periodic burst pulses instead of only Kalmuri-like rotating blades.
+  - Dual-blade storm uses faster blade orbit and more frequent bursts; greatsword storm uses slower/heavier slashes and burst impact.
+  - Player movement now uses acceleration/deceleration smoothing, smoothed movement-facing weapon rotation, and subtle `PlayerVisual` walk bob/tilt.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity console error count after direct M2/ultimate reflection smoke: 0.
+  - Direct M2 state injection confirmed `storm=True`; manual `UpdateEchoUltimate(0.12f)` reflection ticks created `bloodStormObjects=124` and cleared nearby spawned enemies with `kills=14`.
+  - Remaining risk: MCP Play Mode time did not advance normally in this session, so the storm loop was verified by reflection ticks rather than natural timed play.
 
 ### C. Real M2 Loop
 

@@ -2,6 +2,22 @@
 
 ## 2026-06-22
 
+- Strengthened Blood Blade Storm payoff in `Dev_Prototype_v1`:
+  - added an opening cue, continuous storm pressure, and periodic burst pulses.
+  - dual-blade storm now uses faster 8-blade orbit ticks and 12-blade bursts.
+  - greatsword storm now uses heavier rings/slashes, stronger burst damage, hitstop, camera shake, knockback, healing, and blood-heal threads.
+  - storm damage now marks enemies and uses ASCII `BloodBladeStorm` source strings to avoid mojibake-string fragility.
+- Improved player walking feel:
+  - raw input is smoothed into short acceleration/deceleration.
+  - `PlayerVisual` now gets subtle walk bob/tilt.
+  - movement-driven weapon-anchor rotation is smoothed to reduce direction snapping.
+- Added a defensive `BeginRun` guard so debug/smoke calls can create the player if invoked before the cached player reference exists.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity console error count: 0 after direct M2/ultimate reflection smoke.
+  - Direct `UpdateEchoUltimate(0.12f)` reflection ticks created `bloodStormObjects=124` and cleared nearby enemies with `kills=14`.
+
 - Wired generated VFX sprites into the `Dev_Prototype_v1` runtime:
   - weapon/hit VFX: dual blade arcs, greatsword cleave arc, cyan/red hit sparks.
   - active memory VFX: Execution Flash, Hunter Oath, Shatter Wave, Stopped Second, Ashen Shield, Oblivion Brand.
