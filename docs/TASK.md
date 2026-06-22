@@ -186,11 +186,13 @@ Verification:
 - [x] 1254px generated VFX sprites are normalized to existing combat world-size targets so they should not cover the whole field.
 - [x] Blood Blade Storm has been separated from Kalmuri feel with opening cue, continuous storm pressure, periodic burst pulses, heal threads, stronger knockback, and weapon-specific dual/greatsword cadence.
 - [x] Player walking now uses short acceleration/deceleration smoothing, smoothed movement-facing weapon rotation, and subtle `PlayerVisual` bob/tilt.
+- [x] Held weapon size pass: dual blades are larger/closer to the body, greatsword is smaller/less screen-dominant, and generated attack slash scale was rebalanced.
 - [ ] Direct Play Mode review confirms generated VFX scale, alpha, duration, and spawn frequency feel natural during the first 120 seconds.
 
 Current next:
 
 1. jaewoo reviews both starting weapons in `Dev_Prototype_v1`.
 2. Check whether Blood Blade Storm now feels like a true +5/+5 payoff instead of only a Kalmuri color swap.
-3. Check whether player walking now feels less stiff during diagonal movement, stop/start, and direction changes.
-4. Pick one weak axis for the next pass: reward cadence, attack feel, forgetting UX, spawn pressure, enemy/memory readability, or VFX scale/timing.
+3. Check whether dual blades and greatsword now sit at believable character-relative size/position.
+4. Check whether player walking now feels less stiff during diagonal movement, stop/start, and direction changes.
+5. Pick one weak axis for the next pass: reward cadence, attack feel, forgetting UX, spawn pressure, enemy/memory readability, or VFX scale/timing.

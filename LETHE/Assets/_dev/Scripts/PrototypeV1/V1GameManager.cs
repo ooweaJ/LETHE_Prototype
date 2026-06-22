@@ -87,6 +87,8 @@ namespace Lethe.PrototypeV1
         const float RunSeconds = 600f;
         const float PlayerMoveAcceleration = 18f;
         const float PlayerMoveDeceleration = 28f;
+        const float DualBladeVisualScale = 0.43f;
+        const float GreatswordVisualScale = 0.34f;
         const string PlayerSheetPath = "Assets/_dev/Art/Sprites/Characters/Player/sheet_player_v1_4dir.png";
         const string DualBladeSwingArcAPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_01.png";
         const string DualBladeSwingArcBPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_02.png";
@@ -508,8 +510,8 @@ namespace Lethe.PrototypeV1
             dualLeftWeaponSprite = LoadSprite("Assets/_dev/Art/Sprites/Weapons/spr_weapon_dual_blade_left_01.png") ?? MakeBladeSprite("dual-left", new Color(0.80f, 0.96f, 1f), new Color(0.16f, 0.26f, 0.34f), 34, 112, false);
             dualRightWeaponSprite = LoadSprite("Assets/_dev/Art/Sprites/Weapons/spr_weapon_dual_blade_right_01.png") ?? MakeBladeSprite("dual-right", new Color(0.88f, 0.98f, 1f), new Color(0.18f, 0.30f, 0.38f), 34, 112, false);
             greatswordWeaponSprite = LoadSprite("Assets/_dev/Art/Sprites/Weapons/spr_weapon_greatsword_01.png") ?? MakeBladeSprite("greatsword-visual", new Color(0.82f, 0.96f, 1f), new Color(0.10f, 0.18f, 0.24f), 58, 178, true);
-            leftBladeSprite = CreateWeaponSprite("LeftBlade", dualLeftWeaponSprite, new Vector3(-0.22f, -0.05f, 0f));
-            rightBladeSprite = CreateWeaponSprite("RightBlade", dualRightWeaponSprite, new Vector3(0.22f, -0.05f, 0f));
+            leftBladeSprite = CreateWeaponSprite("LeftBlade", dualLeftWeaponSprite, new Vector3(-0.19f, -0.04f, 0f));
+            rightBladeSprite = CreateWeaponSprite("RightBlade", dualRightWeaponSprite, new Vector3(0.19f, -0.04f, 0f));
         }
 
         SpriteRenderer CreateWeaponSprite(string name, Sprite sprite, Vector3 localPos)
@@ -517,7 +519,7 @@ namespace Lethe.PrototypeV1
             var go = new GameObject(name);
             go.transform.SetParent(weaponAnchor);
             go.transform.localPosition = localPos;
-            go.transform.localScale = Vector3.one * 0.36f;
+            go.transform.localScale = Vector3.one * DualBladeVisualScale;
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = sprite;
             sr.sortingOrder = 30;
@@ -590,9 +592,9 @@ namespace Lethe.PrototypeV1
                 rightBladeSprite.enabled = true;
                 rightBladeSprite.sprite = greatswordWeaponSprite;
                 rightBladeSprite.color = new Color(0.88f, 0.98f, 1f, 0.98f);
-                rightBladeSprite.transform.localScale = Vector3.one * (0.44f + 0.07f * swing);
-                rightBladeSprite.transform.localPosition = new Vector3(0.02f + 0.21f * swing, -0.14f + 0.10f * swing, 0f);
-                rightBladeSprite.transform.localRotation = Quaternion.Euler(0f, 0f, -28f + 128f * swing);
+                rightBladeSprite.transform.localScale = Vector3.one * (GreatswordVisualScale + 0.035f * swing);
+                rightBladeSprite.transform.localPosition = new Vector3(0.03f + 0.13f * swing, -0.09f + 0.055f * swing, 0f);
+                rightBladeSprite.transform.localRotation = Quaternion.Euler(0f, 0f, -24f + 104f * swing);
                 return;
             }
 
@@ -602,13 +604,13 @@ namespace Lethe.PrototypeV1
             rightBladeSprite.sprite = dualRightWeaponSprite;
             leftBladeSprite.color = Color.white;
             rightBladeSprite.color = Color.white;
-            leftBladeSprite.transform.localScale = Vector3.one * (0.30f + 0.03f * swing);
-            rightBladeSprite.transform.localScale = Vector3.one * (0.30f + 0.03f * swing);
+            leftBladeSprite.transform.localScale = Vector3.one * (DualBladeVisualScale + 0.045f * swing);
+            rightBladeSprite.transform.localScale = Vector3.one * (DualBladeVisualScale + 0.045f * swing);
             var leadMul = leftBladeLead ? 1f : -1f;
-            leftBladeSprite.transform.localPosition = new Vector3(-0.22f - 0.08f * swing * leadMul, -0.05f + 0.04f * swing, 0f);
-            rightBladeSprite.transform.localPosition = new Vector3(0.22f + 0.08f * swing * leadMul, -0.05f + 0.04f * swing, 0f);
-            leftBladeSprite.transform.localRotation = Quaternion.Euler(0f, 0f, 12f - 48f * swing * leadMul);
-            rightBladeSprite.transform.localRotation = Quaternion.Euler(0f, 0f, -12f - 48f * swing * leadMul);
+            leftBladeSprite.transform.localPosition = new Vector3(-0.19f - 0.10f * swing * leadMul, -0.035f + 0.045f * swing, 0f);
+            rightBladeSprite.transform.localPosition = new Vector3(0.19f + 0.10f * swing * leadMul, -0.035f + 0.045f * swing, 0f);
+            leftBladeSprite.transform.localRotation = Quaternion.Euler(0f, 0f, 16f - 54f * swing * leadMul);
+            rightBladeSprite.transform.localRotation = Quaternion.Euler(0f, 0f, -16f - 54f * swing * leadMul);
         }
 
         void UpdateWeapon(float dt)
@@ -2184,7 +2186,7 @@ namespace Lethe.PrototypeV1
             switch (entry.spriteShape)
             {
                 case SlashSpriteShape.WideCrescent:
-                    spriteScaleFactor = 0.225f;
+                    spriteScaleFactor = 0.182f;
                     return LoadSprite(GreatswordCleaveArcPath);
                 case SlashSpriteShape.ImpactDiamond:
                     spriteScaleFactor = id.Contains("Greatsword", StringComparison.OrdinalIgnoreCase) || id.Contains("Blood", StringComparison.OrdinalIgnoreCase)
@@ -2197,7 +2199,7 @@ namespace Lethe.PrototypeV1
                         spriteScaleFactor = 0.13f;
                         return LoadSprite("Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_echo_slash_01.png");
                     }
-                    spriteScaleFactor = 0.153f;
+                    spriteScaleFactor = 0.192f;
                     return LoadSprite(id.Contains("_B", StringComparison.OrdinalIgnoreCase) || id.Contains("Assist", StringComparison.OrdinalIgnoreCase)
                         ? DualBladeSwingArcBPath
                         : DualBladeSwingArcAPath);

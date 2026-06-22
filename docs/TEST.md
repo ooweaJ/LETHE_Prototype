@@ -55,6 +55,14 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Unity AssetDatabase found 20/20 generated VFX textures.
   - Unity import settings confirmed 20/20 final PNGs as Sprite textures.
   - Remaining risk: these assets are generated/imported, but runtime VFX profiles still need sprite wiring, scale, alpha, and timing review.
+- Weapon silhouette / attack VFX scale tune, 2026-06-22:
+  - Dual blade held-weapon runtime scale increased to `0.43~0.475` and pulled closer to the body.
+  - Greatsword held-weapon runtime scale reduced to `0.34~0.375` with shorter swing travel.
+  - Generated dual-blade slash PNG scale factor increased from `0.153` to `0.192`.
+  - Generated greatsword cleave PNG scale factor reduced from `0.225` to `0.182`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Play Mode runtime transform check confirmed dual blade scale `0.430`, greatsword scale `0.340`, console error count 0.
 - Generated VFX runtime wiring, 2026-06-22:
   - Connected generated weapon/hit, six active memory, six echo, and three utility ultimate sprites to `V1GameManager`.
   - Weapon slash profile entries now prefer generated dual-blade arcs, greatsword cleave, Kalmuri slash, and cyan/red hit sparks before procedural fallback.

@@ -2,6 +2,18 @@
 
 ## 2026-06-22
 
+- Tuned player-held weapon silhouettes and attack VFX scale:
+  - dual blade hand sprites increased from the too-small `0.30~0.33` runtime scale to `0.43~0.475`.
+  - dual blade local positions moved closer to the player body at `x=±0.19`, `y=-0.035~-0.04`.
+  - greatsword hand sprite reduced from `0.44~0.51` to `0.34~0.375`.
+  - greatsword local position/swing travel tightened so it no longer dominates the character silhouette.
+  - dual-blade attack PNG scale factor increased; greatsword cleave PNG scale factor reduced.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Play Mode runtime transform check: dual blades `0.43`, greatsword `0.34`.
+  - Unity console error count: 0.
+
 - Strengthened Blood Blade Storm payoff in `Dev_Prototype_v1`:
   - added an opening cue, continuous storm pressure, and periodic burst pulses.
   - dual-blade storm now uses faster 8-blade orbit ticks and 12-blade bursts.

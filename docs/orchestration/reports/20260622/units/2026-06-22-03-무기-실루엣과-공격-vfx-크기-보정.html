@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-22-03 - 무기 실루엣과 공격 VFX 크기 보정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-22-03 - 무기 실루엣과 공격 VFX 크기 보정</h1>
+      <p class="meta">Generated from 2026-06-22-03-무기-실루엣과-공격-vfx-크기-보정.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260622/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-22-03 - 무기 실루엣과 공격 VFX 크기 보정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에서 손에 든 무기 크기와 공격 자국 크기를 다시 맞췄다. 이번 조정은 jaewoo가 바로 짚은 “대검은 너무 크고, 쌍검은 너무 작다”는 체감 피드백에 대한 보정이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>쌍검:</li>
+<li>손 무기 runtime scale을 <code>0.30~0.33</code>에서 <code>0.43~0.475</code>로 키웠다.</li>
+<li>위치를 캐릭터 몸 가까이 <code>x=±0.19</code>, <code>y=-0.035~-0.04</code> 쪽으로 조정했다.</li>
+<li>쌍검 slash PNG 보정값을 <code>0.153 -&gt; 0.192</code>로 키웠다.</li>
+<li>대검:</li>
+<li>손 무기 runtime scale을 <code>0.44~0.51</code>에서 <code>0.34~0.375</code>로 줄였다.</li>
+<li>위치와 스윙 이동폭을 줄여 캐릭터 실루엣을 덜 잡아먹게 했다.</li>
+<li>대검 cleave PNG 보정값을 <code>0.225 -&gt; 0.182</code>로 줄였다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy warning 7개, error 0개.</li>
+<li>Unity compile error count: 0.</li>
+<li>Play Mode transform check:</li>
+<li>dual blade scale <code>0.430</code>, positions <code>(-0.19, -0.04)</code>, <code>(0.19, -0.04)</code>.</li>
+<li>greatsword scale <code>0.340</code>, position <code>(0.03, -0.09)</code>.</li>
+<li>Unity console error count: 0.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>공격 스프라이트는 “없어도 게임 로직은 돌아가지만, 이 게임에는 있는 편이 맞다”고 판단한다. 쌍검/대검의 차이는 데미지 숫자보다 화면에서 먼저 읽혀야 하므로, 최종적으로는 전용 공격 스프라이트 또는 최소한 전용 slash VFX가 필요하다. 단, fallback procedural VFX는 에셋 누락 대비용으로 유지한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>자동 스크린샷 경로가 여전히 믿기 어려워서 실제 화면 크기 체감은 jaewoo 직접 플레이 확인이 필요하다. 특히 쌍검은 이제 보일 가능성이 커졌지만 너무 장난감처럼 보이지 않는지, 대검은 줄였어도 무거운지 봐야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Codex가 held weapon visual scale과 generated attack VFX scale을 동시에 조정했다. 다음 리뷰에서는 “쌍검이 이제 보이는가”, “대검이 캐릭터보다 과하게 커 보이지 않는가”, “공격 스프라이트가 무기 정체성을 살리는가”를 보면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>직접 플레이 후 무기 크기가 아직 어긋나면 수치만 1회 더 보정한다. 크기가 괜찮으면 공격 스프라이트를 제거하지 말고, 오히려 전용 slash의 밝기/수명/위치만 더 다듬는 쪽이 낫다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 무기 실루엣 크기 차이가 과해서 쌍검은 안 보이고 대검은 화면을 먹었다.</li>
+<li>방향: 무기 손잡이 실루엣과 공격 자국 스케일을 동시에 맞춘다.</li>
+<li>행동: 쌍검은 키우고 대검은 줄였으며, 공격 PNG 보정값도 반대로 조정했다.</li>
+<li>결과: 런타임 transform 기준으로 쌍검 <code>0.430</code>, 대검 <code>0.340</code>이 확인됐고 에러 없이 동작했다.</li>
+</ul>
+  </main>
+</body>
+</html>

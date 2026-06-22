@@ -42,6 +42,21 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 held weapon silhouette / attack VFX scale tune:
+  - Responded to jaewoo review that the greatsword was too large and dual blades were too small.
+  - Dual blade held sprites now use runtime scale `0.43~0.475` instead of the previous `0.30~0.33`, and sit closer to the player at `x=±0.19`.
+  - Greatsword held sprite now uses runtime scale `0.34~0.375` instead of the previous `0.44~0.51`, with shorter swing travel and a tighter player-relative position.
+  - Generated attack VFX scale was rebalanced:
+    - dual-blade slash PNG scale factor `0.153 -> 0.192`.
+    - greatsword cleave PNG scale factor `0.225 -> 0.182`.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity compile error count: `0`.
+    - Play Mode runtime transform check: dual blades scale `0.430`, greatsword scale `0.340`.
+    - Unity console error count: `0`.
+  - Note:
+    - Dedicated weapon attack sprites already exist and are wired. Procedural fallback is acceptable for resilience, but final review should keep weapon-specific attack sprites because they carry most of the hit-readability.
+
 - Unity v1 Blood Blade Storm payoff / player movement pass:
   - Responded to jaewoo review that Kalmuri and Blood Blade Storm were acceptable, but Blood Blade Storm did not yet feel like a superior payoff and player walking still felt unnatural.
   - Player movement now smooths raw input into short acceleration/deceleration instead of direct per-frame movement.

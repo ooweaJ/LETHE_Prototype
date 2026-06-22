@@ -94,6 +94,14 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - Unity console error count after direct M2/ultimate reflection smoke: `0`.
   - Manual reflection ticks through `UpdateEchoUltimate(0.12f)` created `bloodStormObjects=124`, cleared nearby spawned enemies, and reached `kills=14`.
   - Limitation: MCP Play Mode time did not advance normally, so this is a runtime method smoke rather than full natural-timing visual proof.
+- Held weapon silhouette / attack VFX scale tune:
+  - Dual blade hand sprites were increased to runtime scale `0.43~0.475` and pulled closer to the player body.
+  - Greatsword hand sprite was reduced to runtime scale `0.34~0.375`, with less swing travel and tighter player-relative position.
+  - Generated dual-blade slash PNG scale factor increased from `0.153` to `0.192`.
+  - Generated greatsword cleave PNG scale factor reduced from `0.225` to `0.182`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Play Mode transform check confirmed dual blade scale `0.430`, greatsword scale `0.340`, console error count `0`.
 - A-I EPIC / data contract pass:
   - Added root entry docs: `docs/PRD.md`, `docs/TECH.md`, `docs/TASK.md`, `docs/TEST.md`, `docs/CHANGELOG.md`.
   - Updated `AGENTS.md` read order to use these docs before orchestration state files.
