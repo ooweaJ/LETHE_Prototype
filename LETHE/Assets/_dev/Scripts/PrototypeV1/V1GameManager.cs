@@ -88,7 +88,7 @@ namespace Lethe.PrototypeV1
         const float PlayerMoveAcceleration = 18f;
         const float PlayerMoveDeceleration = 28f;
         const float DualBladeVisualScale = 0.43f;
-        const float GreatswordVisualScale = 0.34f;
+        const float GreatswordVisualScale = 0.21f;
         const string PlayerSheetPath = "Assets/_dev/Art/Sprites/Characters/Player/sheet_player_v1_4dir.png";
         const string DualBladeSwingArcAPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_01.png";
         const string DualBladeSwingArcBPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_02.png";
@@ -591,15 +591,18 @@ namespace Lethe.PrototypeV1
                 leftBladeSprite.enabled = false;
                 rightBladeSprite.enabled = true;
                 rightBladeSprite.sprite = greatswordWeaponSprite;
-                rightBladeSprite.color = new Color(0.88f, 0.98f, 1f, 0.98f);
-                rightBladeSprite.transform.localScale = Vector3.one * (GreatswordVisualScale + 0.035f * swing);
-                rightBladeSprite.transform.localPosition = new Vector3(0.03f + 0.13f * swing, -0.09f + 0.055f * swing, 0f);
-                rightBladeSprite.transform.localRotation = Quaternion.Euler(0f, 0f, -24f + 104f * swing);
+                rightBladeSprite.sortingOrder = 18;
+                rightBladeSprite.color = new Color(0.88f, 0.98f, 1f, 0.96f);
+                rightBladeSprite.transform.localScale = Vector3.one * (GreatswordVisualScale + 0.025f * swing);
+                rightBladeSprite.transform.localPosition = new Vector3(0.18f + 0.07f * swing, -0.08f + 0.035f * swing, 0f);
+                rightBladeSprite.transform.localRotation = Quaternion.Euler(0f, 0f, -34f + 76f * swing);
                 return;
             }
 
             leftBladeSprite.enabled = true;
             rightBladeSprite.enabled = true;
+            leftBladeSprite.sortingOrder = 30;
+            rightBladeSprite.sortingOrder = 30;
             leftBladeSprite.sprite = dualLeftWeaponSprite;
             rightBladeSprite.sprite = dualRightWeaponSprite;
             leftBladeSprite.color = Color.white;
@@ -2186,7 +2189,7 @@ namespace Lethe.PrototypeV1
             switch (entry.spriteShape)
             {
                 case SlashSpriteShape.WideCrescent:
-                    spriteScaleFactor = 0.182f;
+                    spriteScaleFactor = 0.150f;
                     return LoadSprite(GreatswordCleaveArcPath);
                 case SlashSpriteShape.ImpactDiamond:
                     spriteScaleFactor = id.Contains("Greatsword", StringComparison.OrdinalIgnoreCase) || id.Contains("Blood", StringComparison.OrdinalIgnoreCase)

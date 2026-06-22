@@ -165,3 +165,60 @@ Codex가 held weapon visual scale과 generated attack VFX scale을 동시에 조
 - 방향: 무기 손잡이 실루엣과 공격 자국 스케일을 동시에 맞춘다.
 - 행동: 쌍검은 키우고 대검은 줄였으며, 공격 PNG 보정값도 반대로 조정했다.
 - 결과: 런타임 transform 기준으로 쌍검 `0.430`, 대검 `0.340`이 확인됐고 에러 없이 동작했다.
+# 2026-06-22-04 - 대검 직접 플레이 커버 문제 수정
+
+## 1. 현재 빌드 상태
+
+대검으로 직접 Play Mode 상태를 확인했고, jaewoo가 말한 것처럼 대검이 캐릭터를 가리는 문제가 수치로도 확인됐다. 이번 작업은 대검을 더 줄이고, 플레이어 뒤 레이어로 보내는 보정이다.
+
+## 2. 오늘 바뀐 것
+
+- 대검 손 무기 scale을 `0.34~0.375`에서 `0.21~0.235`로 다시 줄였다.
+- 대검을 플레이어 앞 레이어가 아니라 뒤 레이어로 보냈다:
+  - 대검 sorting order `30 -> 18`.
+  - 플레이어 sorting order는 `20`.
+- 대검 위치를 몸 중앙에서 옆으로 이동했다:
+  - local position `x=0.18`, `y=-0.08`.
+- 대검 swing 이동폭과 회전폭을 줄였다.
+- 대검 공격 cleave PNG 보정값도 `0.182 -> 0.150`으로 줄였다.
+
+## 3. 테스트 결과와 근거
+
+수정 전 직접 확인:
+
+- player bounds `(2.210, 2.210)`.
+- sword bounds `(3.121, 4.995)`.
+- sword/player height ratio `2.26`.
+- sword sorting order `30`, player sorting order `20`.
+
+수정 후 확인:
+
+- sword bounds `(2.327, 2.944)`.
+- sword/player height ratio `1.33`.
+- sword sorting order `18`, player sorting order `20`.
+- forced greatsword attack VFX `5`개, max bounds `(2.332, 2.332)`.
+- Unity console error count `0`.
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: 통과, error 0.
+
+## 4. 결정한 것
+
+대검은 “크다”보다 “플레이어 앞에서 몸을 덮는다”가 더 큰 문제였다. 그래서 크기를 줄이는 것과 동시에 플레이어 뒤로 보내는 방식으로 해결했다. 공격 VFX는 전용 sprite를 유지하되, 화면을 덮지 않게 더 작게 쓴다.
+
+## 5. 문제 또는 리스크
+
+이제 대검이 너무 작아 보일 가능성이 생겼다. 하지만 현재 수치는 플레이어보다 살짝 큰 정도이고 뒤에 깔리므로, 직접 리뷰에서 “무겁지만 안 가린다”가 되는지 확인하면 된다.
+
+## 6. GPT/Claude 인계 요약
+
+Codex가 대검 플레이 상태를 수치로 확인했고, sword bounds ratio를 `2.26 -> 1.33`으로 낮췄다. 정렬도 플레이어 앞에서 뒤로 옮겼다. 다음 리뷰는 대검이 여전히 무거운지, 아니면 너무 뒤로 숨어 약해졌는지를 보면 된다.
+
+## 7. 다음 Codex 작업
+
+직접 플레이에서 대검이 너무 약해 보이면 크기를 다시 키우지 말고, 공격 순간의 slash/impact만 살리는 쪽으로 조정한다. 몸을 덮는 held sprite를 다시 키우는 방향은 피한다.
+
+## 8. 포트폴리오 메모: 문제, 방향, 행동, 결과
+
+- 문제: 대검이 캐릭터보다 2배 이상 크게 렌더되고 앞 레이어에서 몸을 가렸다.
+- 방향: held weapon은 캐릭터 실루엣을 보조하고, 공격감은 slash VFX가 담당하게 분리한다.
+- 행동: 대검 scale, 위치, 레이어, cleave VFX scale을 함께 줄였다.
+- 결과: 대검 bounds ratio가 `2.26`에서 `1.33`으로 내려갔고 console error 없이 동작했다.

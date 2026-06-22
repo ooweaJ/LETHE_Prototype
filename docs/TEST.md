@@ -55,6 +55,11 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Unity AssetDatabase found 20/20 generated VFX textures.
   - Unity import settings confirmed 20/20 final PNGs as Sprite textures.
   - Remaining risk: these assets are generated/imported, but runtime VFX profiles still need sprite wiring, scale, alpha, and timing review.
+- Greatsword direct Play Mode cover fix, 2026-06-22:
+  - Direct Greatsword run showed player bounds `(2.210, 2.210)` and sword bounds `(3.121, 4.995)`, ratioY `2.26`, with sword sorting order `30` in front of player sorting order `20`.
+  - Greatsword held sprite was reduced to runtime scale `0.21~0.235`, shifted to the side, and moved behind the player at sorting order `18`.
+  - Post-fix Play Mode check showed sword bounds `(2.327, 2.944)`, ratioY `1.33`, sword sorting order `18`, player sorting order `20`.
+  - Forced greatsword attack produced `greatswordVfx=5` with max VFX bounds `(2.332, 2.332)` and Unity console error count 0.
 - Weapon silhouette / attack VFX scale tune, 2026-06-22:
   - Dual blade held-weapon runtime scale increased to `0.43~0.475` and pulled closer to the body.
   - Greatsword held-weapon runtime scale reduced to `0.34~0.375` with shorter swing travel.

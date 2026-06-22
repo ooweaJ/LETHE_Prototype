@@ -102,6 +102,12 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
   - Unity compile error count: `0`.
   - Play Mode transform check confirmed dual blade scale `0.430`, greatsword scale `0.340`, console error count `0`.
+- Direct greatsword cover fix:
+  - Direct Play Mode check showed the greatsword was still too dominant: sword bounds `(3.121, 4.995)`, player bounds `(2.210, 2.210)`, ratioY `2.26`, and sword sorting order `30` in front of player sorting order `20`.
+  - Greatsword held sprite was reduced to runtime scale `0.21~0.235`, shifted to the side, and moved behind the player at sorting order `18`.
+  - Greatsword cleave PNG scale factor was reduced from `0.182` to `0.150`.
+  - Post-fix Play Mode check showed sword bounds `(2.327, 2.944)`, ratioY `1.33`, and forced attack VFX max bounds `(2.332, 2.332)`.
+  - Unity console error count: `0`.
 - A-I EPIC / data contract pass:
   - Added root entry docs: `docs/PRD.md`, `docs/TECH.md`, `docs/TASK.md`, `docs/TEST.md`, `docs/CHANGELOG.md`.
   - Updated `AGENTS.md` read order to use these docs before orchestration state files.

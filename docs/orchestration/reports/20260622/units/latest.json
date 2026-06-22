@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260622\\index.md",
-  "generatedAt": "2026-06-22T04:30:50.523Z",
-  "unitCount": 3,
+  "generatedAt": "2026-06-22T07:00:24.028Z",
+  "unitCount": 4,
   "latest": {
-    "title": "2026-06-22-03 - 무기 실루엣과 공격 VFX 크기 보정",
-    "number": "03",
-    "markdownPath": "docs\\orchestration\\reports\\20260622\\units\\2026-06-22-03-무기-실루엣과-공격-vfx-크기-보정.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260622\\units\\2026-06-22-03-무기-실루엣과-공격-vfx-크기-보정.html"
+    "title": "2026-06-22-04 - 대검 직접 플레이 커버 문제 수정",
+    "number": "04",
+    "markdownPath": "docs\\orchestration\\reports\\20260622\\units\\2026-06-22-04-대검-직접-플레이-커버-문제-수정.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260622\\units\\2026-06-22-04-대검-직접-플레이-커버-문제-수정.html"
   }
 }

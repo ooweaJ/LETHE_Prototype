@@ -2,6 +2,17 @@
 
 ## 2026-06-22
 
+- Re-tuned greatsword after direct Play Mode check:
+  - greatsword held sprite reduced again from `0.34~0.375` to `0.21~0.235`.
+  - greatsword moved behind the player (`sortingOrder 18` vs player `20`) so it no longer covers the character body.
+  - greatsword held position shifted to the side at `x=0.18`, `y=-0.08` with shorter swing travel.
+  - greatsword cleave PNG scale factor reduced again from `0.182` to `0.150`.
+- Verification:
+  - Before fix: greatsword bounds `4.995` high, `2.26x` player height, in front of player.
+  - After fix: greatsword bounds `2.944` high, `1.33x` player height, behind player.
+  - Forced greatsword attack VFX max bounds: `2.332 x 2.332`.
+  - Unity console error count: 0.
+
 - Tuned player-held weapon silhouettes and attack VFX scale:
   - dual blade hand sprites increased from the too-small `0.30~0.33` runtime scale to `0.43~0.475`.
   - dual blade local positions moved closer to the player body at `x=±0.19`, `y=-0.035~-0.04`.

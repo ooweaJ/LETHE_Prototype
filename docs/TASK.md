@@ -187,6 +187,7 @@ Verification:
 - [x] Blood Blade Storm has been separated from Kalmuri feel with opening cue, continuous storm pressure, periodic burst pulses, heal threads, stronger knockback, and weapon-specific dual/greatsword cadence.
 - [x] Player walking now uses short acceleration/deceleration smoothing, smoothed movement-facing weapon rotation, and subtle `PlayerVisual` bob/tilt.
 - [x] Held weapon size pass: dual blades are larger/closer to the body, greatsword is smaller/less screen-dominant, and generated attack slash scale was rebalanced.
+- [x] Direct greatsword play check found the sword covering the player; greatsword is now smaller, behind the player, side-shifted, and its cleave VFX is reduced.
 - [ ] Direct Play Mode review confirms generated VFX scale, alpha, duration, and spawn frequency feel natural during the first 120 seconds.
 
 Current next:

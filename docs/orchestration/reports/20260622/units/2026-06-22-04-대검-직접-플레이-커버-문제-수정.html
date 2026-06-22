@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-22-04 - 대검 직접 플레이 커버 문제 수정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-22-04 - 대검 직접 플레이 커버 문제 수정</h1>
+      <p class="meta">Generated from 2026-06-22-04-대검-직접-플레이-커버-문제-수정.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260622/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-22-04 - 대검 직접 플레이 커버 문제 수정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>대검으로 직접 Play Mode 상태를 확인했고, jaewoo가 말한 것처럼 대검이 캐릭터를 가리는 문제가 수치로도 확인됐다. 이번 작업은 대검을 더 줄이고, 플레이어 뒤 레이어로 보내는 보정이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>대검 손 무기 scale을 <code>0.34~0.375</code>에서 <code>0.21~0.235</code>로 다시 줄였다.</li>
+<li>대검을 플레이어 앞 레이어가 아니라 뒤 레이어로 보냈다:</li>
+<li>대검 sorting order <code>30 -&gt; 18</code>.</li>
+<li>플레이어 sorting order는 <code>20</code>.</li>
+<li>대검 위치를 몸 중앙에서 옆으로 이동했다:</li>
+<li>local position <code>x=0.18</code>, <code>y=-0.08</code>.</li>
+<li>대검 swing 이동폭과 회전폭을 줄였다.</li>
+<li>대검 공격 cleave PNG 보정값도 <code>0.182 -&gt; 0.150</code>으로 줄였다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<p>수정 전 직접 확인:</p>
+<ul>
+<li>player bounds <code>(2.210, 2.210)</code>.</li>
+<li>sword bounds <code>(3.121, 4.995)</code>.</li>
+<li>sword/player height ratio <code>2.26</code>.</li>
+<li>sword sorting order <code>30</code>, player sorting order <code>20</code>.</li>
+</ul>
+<p>수정 후 확인:</p>
+<ul>
+<li>sword bounds <code>(2.327, 2.944)</code>.</li>
+<li>sword/player height ratio <code>1.33</code>.</li>
+<li>sword sorting order <code>18</code>, player sorting order <code>20</code>.</li>
+<li>forced greatsword attack VFX <code>5</code>개, max bounds <code>(2.332, 2.332)</code>.</li>
+<li>Unity console error count <code>0</code>.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, error 0.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>대검은 “크다”보다 “플레이어 앞에서 몸을 덮는다”가 더 큰 문제였다. 그래서 크기를 줄이는 것과 동시에 플레이어 뒤로 보내는 방식으로 해결했다. 공격 VFX는 전용 sprite를 유지하되, 화면을 덮지 않게 더 작게 쓴다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>이제 대검이 너무 작아 보일 가능성이 생겼다. 하지만 현재 수치는 플레이어보다 살짝 큰 정도이고 뒤에 깔리므로, 직접 리뷰에서 “무겁지만 안 가린다”가 되는지 확인하면 된다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Codex가 대검 플레이 상태를 수치로 확인했고, sword bounds ratio를 <code>2.26 -&gt; 1.33</code>으로 낮췄다. 정렬도 플레이어 앞에서 뒤로 옮겼다. 다음 리뷰는 대검이 여전히 무거운지, 아니면 너무 뒤로 숨어 약해졌는지를 보면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>직접 플레이에서 대검이 너무 약해 보이면 크기를 다시 키우지 말고, 공격 순간의 slash/impact만 살리는 쪽으로 조정한다. 몸을 덮는 held sprite를 다시 키우는 방향은 피한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 대검이 캐릭터보다 2배 이상 크게 렌더되고 앞 레이어에서 몸을 가렸다.</li>
+<li>방향: held weapon은 캐릭터 실루엣을 보조하고, 공격감은 slash VFX가 담당하게 분리한다.</li>
+<li>행동: 대검 scale, 위치, 레이어, cleave VFX scale을 함께 줄였다.</li>
+<li>결과: 대검 bounds ratio가 <code>2.26</code>에서 <code>1.33</code>으로 내려갔고 console error 없이 동작했다.</li>
+</ul>
+  </main>
+</body>
+</html>

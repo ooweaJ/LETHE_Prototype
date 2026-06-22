@@ -42,6 +42,24 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 direct greatsword cover fix:
+  - Direct Play Mode check confirmed the greatsword was covering the player:
+    - player bounds: `(2.210, 2.210)`.
+    - sword bounds: `(3.121, 4.995)`, ratioY `2.26`.
+    - sword sorting order `30`, player sorting order `20`.
+  - Greatsword held sprite was reduced again:
+    - runtime scale `0.34~0.375 -> 0.21~0.235`.
+    - moved behind the player with sorting order `18`.
+    - shifted to the side with tighter swing travel.
+  - Greatsword cleave PNG scale factor was reduced again:
+    - `0.182 -> 0.150`.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity compile error count: `0`.
+    - post-fix sword bounds: `(2.327, 2.944)`, ratioY `1.33`.
+    - forced greatsword attack VFX count `5`, max VFX bounds `(2.332, 2.332)`.
+    - Unity console error count: `0`.
+
 - Unity v1 held weapon silhouette / attack VFX scale tune:
   - Responded to jaewoo review that the greatsword was too large and dual blades were too small.
   - Dual blade held sprites now use runtime scale `0.43~0.475` instead of the previous `0.30~0.33`, and sit closer to the player at `x=±0.19`.
