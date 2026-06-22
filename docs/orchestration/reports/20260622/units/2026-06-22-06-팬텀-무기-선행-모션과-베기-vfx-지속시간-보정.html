@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-22-06 - 팬텀 무기 선행 모션과 베기 VFX 지속시간 보정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-22-06 - 팬텀 무기 선행 모션과 베기 VFX 지속시간 보정</h1>
+      <p class="meta">Generated from 2026-06-22-06-팬텀-무기-선행-모션과-베기-vfx-지속시간-보정.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260622/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-22-06 - 팬텀 무기 선행 모션과 베기 VFX 지속시간 보정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 무기 타격 연출은 이제 “무기 팬텀 스윽 → 베기 VFX / 스파크 / 히트 확인” 순서로 바뀌었다. 이전에는 타격 순간 모든 것이 거의 동시에 짧게 튀어나와서, 유저가 어느 적을 공격했는지와 어떤 무기인지 읽기 어려웠다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>팬텀 무기가 먼저 나타나 타격 지점을 가로지르며 회전한다.</li>
+<li>쌍검은 약 <code>0.13~0.14s</code> 동안 빠르게 교차하고, 전체 표시 시간은 <code>0.24~0.26s</code>로 늘렸다.</li>
+<li>대검은 약 <code>0.20~0.22s</code> 동안 더 묵직하게 쓸고, 전체 표시 시간은 <code>0.34~0.38s</code>로 늘렸다.</li>
+<li>slash VFX는 무기 모션보다 약간 늦게 나온다:</li>
+<li>쌍검: <code>0.055s</code> 뒤.</li>
+<li>대검: <code>0.075s</code> 뒤.</li>
+<li>무기 slash VFX 지속시간은 <code>1.45x</code>로 늘렸고, 최소 지속시간을 넣었다:</li>
+<li>쌍검 최소 <code>0.34s</code>.</li>
+<li>대검 최소 <code>0.48s</code>.</li>
+<li>히트 스파크와 히트 확인 링/코어도 slash VFX와 같은 딜레이 뒤에 나오게 바꿨다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy warning 7개, error 0개.</li>
+<li>Unity <code>Assets/Refresh</code>: 성공.</li>
+<li>Unity compile error count: 0.</li>
+<li>대검 즉시 Play Mode check:</li>
+<li>phantom <code>2</code>.</li>
+<li>active sweep <code>2</code>.</li>
+<li>slash <code>0</code>.</li>
+<li>spark <code>0</code>.</li>
+<li>confirm <code>0</code>.</li>
+<li>지연 enumerator check:</li>
+<li>slash <code>1</code>.</li>
+<li>spark <code>1</code>.</li>
+<li>confirm <code>2</code>.</li>
+<li>대검 slash 최소 수명 <code>0.48s</code> 경로 확인.</li>
+<li>Unity console error count: 0.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>타격 연출은 동시에 번쩍이는 방식이 아니라, 무기 모션이 먼저 읽히고 그 다음 베기 자국과 히트 피드백이 남는 순서로 간다. 현실적인 손동작보다 “마법 칼날이 적을 베고 지나가는” 판독성을 우선한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>Unity MCP Play Mode 시간이 이번 세션에서도 안정적으로 흐르지 않았다. 그래서 실제 코루틴 시간 경과는 즉시 상태 확인과 enumerator 직접 진행으로 검증했다. 최종적으로 <code>0.055~0.075s</code> 딜레이가 너무 늦거나 빠른지는 jaewoo가 직접 플레이해서 봐야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>무기 타격 연출은 이제 팬텀 무기 sweep이 먼저 나오고, slash/spark/confirm VFX가 짧게 뒤따른다. 다음 리뷰는 “적절한 45도 베기 모션처럼 보이는지”, “공격 대상이 읽히는지”, “VFX가 너무 늦게 터지는 느낌은 없는지”를 중심으로 보면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo 직접 리뷰 후, 필요하면 다음 중 하나만 조정한다: sweep 각도, slash 지연 시간, VFX 지속시간, 무기 팬텀 알파/크기, 또는 쌍검/대검별 타격 위치 보정.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 무기 종류와 공격 대상이 너무 짧은 VFX 때문에 읽히지 않았다.</li>
+<li>방향: 무기 모션을 먼저 보여주고, 베기 VFX를 뒤에 남겨 판독 시간을 늘린다.</li>
+<li>행동: 팬텀 무기에 sweep 컴포넌트를 추가하고, slash/spark/confirm VFX를 지연 및 수명 연장했다.</li>
+<li>결과: 기술 검증상 무기 팬텀이 먼저 생성되고, VFX는 뒤따르는 순서로 정렬됐다. 최종 감각은 직접 플레이 리뷰가 필요하다.</li>
+</ul>
+  </main>
+</body>
+</html>

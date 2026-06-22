@@ -97,6 +97,18 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Greatsword Play Mode reflection check: held renderers disabled, phantom count `2`, max bounds `(1.586, 1.689)`.
   - Unity console error count: 0.
   - Remaining risk: this verifies technical behavior and rough bounds. Jaewoo direct play review still needs to judge whether the magical auto-blade look feels better than body-held weapons.
+- Phantom weapon timing/readability pass, 2026-06-22:
+  - Phantom weapons now sweep before weapon slash VFX appears.
+  - Dual blades use a short `0.055s` slash / hit feedback delay after the weapon sweep starts.
+  - Greatsword uses a slightly heavier `0.075s` slash / hit feedback delay after the weapon sweep starts.
+  - Weapon slash lifetime is extended by `1.45x`, with minimum lifetimes of `0.34s` for dual blades and `0.48s` for greatsword.
+  - Weapon hit spark and hit-confirm ring/core now use the same delayed timing as slash VFX.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Greatsword immediate Play Mode check: phantom `2`, active sweep `2`, slash `0`, spark `0`, confirm `0`.
+  - Delayed enumerator check: greatsword slash `1`, spark `1`, confirm `2`, expected slash minimum lifetime `0.48s`.
+  - Unity console error count: 0.
+  - Remaining risk: Unity MCP time did not reliably advance coroutine time in this session, so delayed timing was verified through immediate state plus direct enumerator advancement. Final motion readability still requires jaewoo direct play review.
 
 ### C. Real M2 Loop
 

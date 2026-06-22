@@ -189,12 +189,13 @@ Verification:
 - [x] Held weapon size pass: dual blades are larger/closer to the body, greatsword is smaller/less screen-dominant, and generated attack slash scale was rebalanced.
 - [x] Direct greatsword play check found the sword covering the player; greatsword is now smaller, behind the player, side-shifted, and its cleave VFX is reduced.
 - [x] Player-attached weapon sprites are now hidden during normal play; dual blades and greatsword appear as short hit-point phantom strikes aligned with slash VFX.
+- [x] Phantom weapon timing pass: weapon sweep appears before slash/spark/confirm VFX, and weapon slash VFX now lasts longer for readability.
 - [ ] Direct Play Mode review confirms generated VFX scale, alpha, duration, and spawn frequency feel natural during the first 120 seconds.
 
 Current next:
 
 1. jaewoo reviews both starting weapons in `Dev_Prototype_v1`.
 2. Check whether Blood Blade Storm now feels like a true +5/+5 payoff instead of only a Kalmuri color swap.
-3. Check whether hit-point phantom weapons feel better than body-held weapons for dual blades and greatsword.
+3. Check whether hit-point phantom weapons now visibly sweep before slash VFX and clearly show which enemy was attacked.
 4. Check whether player walking now feels less stiff during diagonal movement, stop/start, and direction changes.
 5. Pick one weak axis for the next pass: reward cadence, attack feel, forgetting UX, spawn pressure, enemy/memory readability, or VFX scale/timing.

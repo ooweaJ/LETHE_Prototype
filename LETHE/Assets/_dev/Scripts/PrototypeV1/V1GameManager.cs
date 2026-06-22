@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Lethe.Dev;
@@ -91,6 +92,13 @@ namespace Lethe.PrototypeV1
         const float GreatswordVisualScale = 0.21f;
         const float DualBladePhantomHeight = 0.82f;
         const float GreatswordPhantomHeight = 1.72f;
+        const float DualBladePhantomLifetime = 0.24f;
+        const float GreatswordPhantomLifetime = 0.34f;
+        const float DualBladeSlashDelay = 0.055f;
+        const float GreatswordSlashDelay = 0.075f;
+        const float WeaponSlashLifetimeMultiplier = 1.45f;
+        const float DualBladeSlashMinLifetime = 0.34f;
+        const float GreatswordSlashMinLifetime = 0.48f;
         const string PlayerSheetPath = "Assets/_dev/Art/Sprites/Characters/Player/sheet_player_v1_4dir.png";
         const string DualBladeSwingArcAPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_01.png";
         const string DualBladeSwingArcBPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_02.png";
@@ -1486,10 +1494,14 @@ namespace Lethe.PrototypeV1
                 ? weaponHit ? feedback.enemyWeaponFlashDuration : feedback.enemyNonWeaponFlashDuration
                 : weaponHit ? 0.105f : 0.075f;
             enemy.TakeDamage(finalAmount, source, weaponHit, flashColor, flashDuration);
-            SpawnHitSpark(enemy.transform.position, hitDir, weaponHit);
             if (weaponHit)
             {
-                SpawnWeaponHitConfirm(enemy.transform.position, hitDir);
+                var impactDelay = CurrentWeaponSpec().Id == V1WeaponId.Greatsword ? GreatswordSlashDelay : DualBladeSlashDelay;
+                StartCoroutine(SpawnWeaponImpactFeedbackDelayed(enemy.transform.position, hitDir, impactDelay));
+            }
+            else
+            {
+                SpawnHitSpark(enemy.transform.position, hitDir, false);
             }
             var showDamageNumber = feedback == null || feedback.showDamageNumbers;
             var minNonWeaponDamage = feedback != null ? feedback.damageNumberMinNonWeaponDamage : 5f;
@@ -2112,7 +2124,9 @@ namespace Lethe.PrototypeV1
                 foreach (var entry in entries)
                 {
                     if (entry == null || !entry.Matches(primary)) continue;
-                    SpawnSlashEntry(entry, hits[i].Enemy.transform.position, hitCenter, f, baseAngle, primary, i);
+                    var slashDelay = weapon.Id == V1WeaponId.Greatsword ? GreatswordSlashDelay : DualBladeSlashDelay;
+                    var minLifetime = weapon.Id == V1WeaponId.Greatsword ? GreatswordSlashMinLifetime : DualBladeSlashMinLifetime;
+                    StartCoroutine(SpawnSlashEntryDelayed(entry, hits[i].Enemy.transform.position, hitCenter, f, baseAngle, primary, i, slashDelay, WeaponSlashLifetimeMultiplier, minLifetime));
                 }
             }
         }
@@ -2125,9 +2139,10 @@ namespace Lethe.PrototypeV1
                 var primary = hits[0].Enemy.transform.position;
                 var position = Vector3.Lerp(primary, hitCenter, 0.42f) + (Vector3)(forward * 0.10f);
                 var scale = ScaleSpriteToWorldHeight(greatswordWeaponSprite, GreatswordPhantomHeight);
-                var rotation = Quaternion.Euler(0f, 0f, baseAngle - 42f);
-                SpawnTransientSprite("GreatswordPhantomStrike", greatswordWeaponSprite, position, rotation, scale, new Color(0.90f, 0.98f, 1f, 0.88f), 0.16f);
-                SpawnTransientSprite("GreatswordPhantomAfterimage", greatswordWeaponSprite, position - (Vector3)(forward * 0.12f), rotation, scale * 1.08f, new Color(0.55f, 0.82f, 1f, 0.22f), 0.20f);
+                var startPos = position - (Vector3)(side * 0.22f) - (Vector3)(forward * 0.12f);
+                var endPos = position + (Vector3)(side * 0.22f) + (Vector3)(forward * 0.08f);
+                SpawnSweepingTransientSprite("GreatswordPhantomStrike", greatswordWeaponSprite, startPos, endPos, baseAngle - 66f, baseAngle - 18f, scale, scale * 1.04f, new Color(0.90f, 0.98f, 1f, 0.90f), GreatswordPhantomLifetime, 0.20f);
+                SpawnSweepingTransientSprite("GreatswordPhantomAfterimage", greatswordWeaponSprite, startPos - (Vector3)(forward * 0.10f), endPos - (Vector3)(forward * 0.08f), baseAngle - 72f, baseAngle - 22f, scale * 1.10f, scale * 1.14f, new Color(0.55f, 0.82f, 1f, 0.28f), GreatswordPhantomLifetime + 0.04f, 0.22f);
                 return;
             }
 
@@ -2137,11 +2152,17 @@ namespace Lethe.PrototypeV1
             var rightPos = target + (Vector3)(side * -0.18f * lead + forward * 0.12f);
             var leftScale = ScaleSpriteToWorldHeight(dualLeftWeaponSprite, DualBladePhantomHeight);
             var rightScale = ScaleSpriteToWorldHeight(dualRightWeaponSprite, DualBladePhantomHeight);
-            SpawnTransientSprite("DualBladePhantomLeft", dualLeftWeaponSprite, leftPos, Quaternion.Euler(0f, 0f, baseAngle + 52f * lead), leftScale, new Color(0.80f, 0.98f, 1f, 0.88f), 0.12f);
-            SpawnTransientSprite("DualBladePhantomRight", dualRightWeaponSprite, rightPos, Quaternion.Euler(0f, 0f, baseAngle - 54f * lead), rightScale, new Color(0.95f, 1f, 1f, 0.82f), 0.14f);
+            SpawnSweepingTransientSprite("DualBladePhantomLeft", dualLeftWeaponSprite, leftPos - (Vector3)(side * 0.12f * lead), leftPos + (Vector3)(side * 0.12f * lead) + (Vector3)(forward * 0.06f), baseAngle + 30f * lead, baseAngle + 76f * lead, leftScale, leftScale * 1.04f, new Color(0.80f, 0.98f, 1f, 0.92f), DualBladePhantomLifetime, 0.13f);
+            SpawnSweepingTransientSprite("DualBladePhantomRight", dualRightWeaponSprite, rightPos + (Vector3)(side * 0.12f * lead), rightPos - (Vector3)(side * 0.12f * lead) + (Vector3)(forward * 0.08f), baseAngle - 32f * lead, baseAngle - 78f * lead, rightScale, rightScale * 1.04f, new Color(0.95f, 1f, 1f, 0.88f), DualBladePhantomLifetime + 0.02f, 0.14f);
         }
 
-        void SpawnSlashEntry(SlashVfxEntry entry, Vector3 targetPosition, Vector3 hitCenter, Vector2 forward, float baseAngle, bool primary, int hitIndex)
+        IEnumerator SpawnSlashEntryDelayed(SlashVfxEntry entry, Vector3 targetPosition, Vector3 hitCenter, Vector2 forward, float baseAngle, bool primary, int hitIndex, float delay, float lifetimeMultiplier, float minLifetime)
+        {
+            if (delay > 0f) yield return new WaitForSeconds(delay);
+            SpawnSlashEntry(entry, targetPosition, hitCenter, forward, baseAngle, primary, hitIndex, lifetimeMultiplier, minLifetime);
+        }
+
+        void SpawnSlashEntry(SlashVfxEntry entry, Vector3 targetPosition, Vector3 hitCenter, Vector2 forward, float baseAngle, bool primary, int hitIndex, float lifetimeMultiplier = 1f, float minLifetime = 0f)
         {
             var side = new Vector2(-forward.y, forward.x).normalized;
             var sideSign = entry.mirrorSideByLeadHand ? (leftBladeLead ? -1f : 1f) : 1f;
@@ -2158,7 +2179,8 @@ namespace Lethe.PrototypeV1
             var rotation = entry.spriteShape == SlashSpriteShape.ImpactDiamond || entry.spriteShape == SlashSpriteShape.Circle
                 ? Quaternion.identity
                 : Quaternion.Euler(0f, 0f, baseAngle + entry.rotationOffsetDegrees * rotationSign);
-            SpawnTransientSprite(entry.id, sprite, position, rotation, entry.scale * spriteScaleFactor, entry.color, entry.lifetime);
+            var lifetime = Mathf.Max(entry.lifetime * lifetimeMultiplier, minLifetime);
+            SpawnTransientSprite(entry.id, sprite, position, rotation, entry.scale * spriteScaleFactor, entry.color, lifetime);
         }
 
         Sprite MakeSlashSprite(SlashVfxEntry entry, out float spriteScaleFactor)
@@ -2219,6 +2241,13 @@ namespace Lethe.PrototypeV1
             var forward = dir.sqrMagnitude > 0.01f ? dir.normalized : lastAim.normalized;
             var angle = Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg;
             SpawnSlashEntry(feedback.hitSpark, pos, pos, forward, angle, true, 0);
+        }
+
+        IEnumerator SpawnWeaponImpactFeedbackDelayed(Vector3 pos, Vector2 dir, float delay)
+        {
+            if (delay > 0f) yield return new WaitForSeconds(delay);
+            SpawnHitSpark(pos, dir, true);
+            SpawnWeaponHitConfirm(pos, dir);
         }
 
         void SpawnWeaponHitConfirm(Vector3 pos, Vector2 dir)
@@ -2341,9 +2370,18 @@ namespace Lethe.PrototypeV1
             _ => EchoVfxSprite(id)
         };
 
-        void SpawnTransientSprite(string name, Sprite sprite, Vector3 position, Quaternion rotation, float scale, Color color, float lifetime)
+        GameObject SpawnTransientSprite(string name, Sprite sprite, Vector3 position, Quaternion rotation, float scale, Color color, float lifetime)
         {
-            SpawnTransientSpriteScaled(name, sprite, position, rotation, Vector3.one * scale, color, lifetime);
+            return SpawnTransientSpriteScaled(name, sprite, position, rotation, Vector3.one * scale, color, lifetime);
+        }
+
+        GameObject SpawnSweepingTransientSprite(string name, Sprite sprite, Vector3 startPosition, Vector3 endPosition, float startAngle, float endAngle, float startScale, float endScale, Color color, float lifetime, float sweepDuration)
+        {
+            var go = SpawnTransientSprite(name, sprite, startPosition, Quaternion.Euler(0f, 0f, startAngle), startScale, color, lifetime);
+            var sweep = go.GetComponent<V1WeaponPhantomSweep>();
+            if (sweep == null) sweep = go.AddComponent<V1WeaponPhantomSweep>();
+            sweep.Configure(startPosition, endPosition, startAngle, endAngle, Vector3.one * startScale, Vector3.one * endScale, sweepDuration);
+            return go;
         }
 
         void SpawnKalmuriBlade(string name, Vector3 position, float angle, float scale, Color color, float lifetime)
@@ -2357,12 +2395,14 @@ namespace Lethe.PrototypeV1
                 ?? MakeBladeSprite("kalmuri-fallback", new Color(0.75f, 1f, 1f), new Color(0.10f, 0.22f, 0.28f), 22, 82, false);
         }
 
-        void SpawnTransientSpriteScaled(string name, Sprite sprite, Vector3 position, Quaternion rotation, Vector3 scale, Color color, float lifetime)
+        GameObject SpawnTransientSpriteScaled(string name, Sprite sprite, Vector3 position, Quaternion rotation, Vector3 scale, Color color, float lifetime)
         {
             var go = RentPooled(transientSpritePool, name);
             go.transform.position = new Vector3(position.x, position.y, -0.05f);
             go.transform.rotation = rotation;
             go.transform.localScale = scale;
+            var sweep = go.GetComponent<V1WeaponPhantomSweep>();
+            if (sweep != null) sweep.enabled = false;
             var sr = go.GetComponent<SpriteRenderer>();
             if (sr == null) sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = sprite ?? MakeCircleSprite(name, Color.white, 48);
@@ -2371,6 +2411,7 @@ namespace Lethe.PrototypeV1
             var fading = go.GetComponent<V1FadingSprite>();
             if (fading == null) fading = go.AddComponent<V1FadingSprite>();
             fading.Configure(this, lifetime);
+            return go;
         }
 
         GameObject RentPooled(Stack<GameObject> pool, string name)
@@ -3436,6 +3477,47 @@ namespace Lethe.PrototypeV1
             {
                 manager?.CollectXpOrb(this, amount);
             }
+        }
+    }
+
+    public sealed class V1WeaponPhantomSweep : MonoBehaviour
+    {
+        Vector3 startPosition;
+        Vector3 endPosition;
+        Vector3 startScale;
+        Vector3 endScale;
+        float startAngle;
+        float endAngle;
+        float duration;
+        float age;
+
+        public void Configure(Vector3 startPosition, Vector3 endPosition, float startAngle, float endAngle, Vector3 startScale, Vector3 endScale, float duration)
+        {
+            this.startPosition = new Vector3(startPosition.x, startPosition.y, -0.05f);
+            this.endPosition = new Vector3(endPosition.x, endPosition.y, -0.05f);
+            this.startAngle = startAngle;
+            this.endAngle = endAngle;
+            this.startScale = startScale;
+            this.endScale = endScale;
+            this.duration = Mathf.Max(0.02f, duration);
+            age = 0f;
+            enabled = true;
+            Apply(0f);
+        }
+
+        void Update()
+        {
+            age += Time.deltaTime;
+            Apply(Mathf.Clamp01(age / duration));
+            if (age >= duration) enabled = false;
+        }
+
+        void Apply(float t)
+        {
+            var eased = 1f - Mathf.Pow(1f - t, 3f);
+            transform.position = Vector3.LerpUnclamped(startPosition, endPosition, eased);
+            transform.rotation = Quaternion.Euler(0f, 0f, Mathf.LerpAngle(startAngle, endAngle, eased));
+            transform.localScale = Vector3.LerpUnclamped(startScale, endScale, eased);
         }
     }
 

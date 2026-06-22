@@ -42,6 +42,34 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 phantom weapon timing/readability pass:
+  - Responded to jaewoo review that hit VFX duration was too short, the attacked target was hard to read, and the weapon type was not visible enough.
+  - Phantom weapon sprites now sweep across the hit point before slash / spark / hit-confirm VFX appears.
+  - Dual-blade sweep:
+    - starts immediately at the hit point.
+    - rotates roughly `46` degrees over `0.13~0.14s`.
+    - remains visible for `0.24~0.26s`.
+    - delays slash / hit feedback by `0.055s`.
+  - Greatsword sweep:
+    - starts immediately at the cleave center.
+    - rotates roughly `48~50` degrees over `0.20~0.22s`.
+    - remains visible for `0.34~0.38s`.
+    - delays slash / hit feedback by `0.075s`.
+  - Weapon slash VFX lifetime now uses `1.45x` runtime extension with minimum lifetimes:
+    - dual blades: `0.34s`.
+    - greatsword: `0.48s`.
+  - Weapon hit spark and hit-confirm ring/core now use the same short delay as slash VFX.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity `Assets/Refresh`: success.
+    - Unity compile error count: `0`.
+    - Greatsword immediate Play Mode check: phantom `2`, active sweep `2`, slash `0`, spark `0`, confirm `0`.
+    - Delayed enumerator check: greatsword slash `1`, spark `1`, confirm `2`, expected slash minimum lifetime `0.48s`.
+    - Unity console error count: `0`.
+  - Limitation:
+    - Unity MCP Play Mode time did not reliably advance coroutine time in this session, so delayed timing was verified through immediate-state checks plus direct enumerator advancement.
+    - Final readability of the sweep timing still needs jaewoo direct play review.
+
 - Unity v1 hit-point phantom weapon pass:
   - Responded to jaewoo review that weapons attached to the character body looked like a mistake, and that weapons should instead appear at the slash / hit VFX when attacking.
   - Player-attached `LeftBlade` / `RightBlade` renderers now stay disabled during normal play.

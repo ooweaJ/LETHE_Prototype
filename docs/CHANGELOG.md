@@ -2,6 +2,21 @@
 
 ## 2026-06-22
 
+- Improved hit readability timing for phantom weapon attacks:
+  - phantom weapon sprites now sweep across the hit point before the slash / hit VFX appears.
+  - dual-blade phantom weapons sweep roughly `46` degrees over `0.13~0.14s` and remain visible for `0.24~0.26s`.
+  - greatsword phantom weapons sweep roughly `48~50` degrees over `0.20~0.22s` and remain visible for `0.34~0.38s`.
+  - weapon slash VFX now spawns after a short delay: dual blades `0.055s`, greatsword `0.075s`.
+  - weapon slash VFX lifetime is multiplied by `1.45`, with minimum lifetimes of `0.34s` for dual blades and `0.48s` for greatsword.
+  - weapon hit spark and hit-confirm ring/core now use the same short delay as the slash VFX, so the weapon motion reads first.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity `Assets/Refresh`: success.
+  - Unity compile error count: 0.
+  - Greatsword immediate Play Mode check: phantom `2`, active sweep `2`, slash `0`, spark `0`, confirm `0`.
+  - Delayed enumerator check: greatsword slash `1`, spark `1`, confirm `2`, expected slash minimum lifetime `0.48s`.
+  - Unity console error count: 0.
+
 - Changed weapon visuals from player-attached silhouettes to hit-point phantom strikes:
   - player-held `LeftBlade` / `RightBlade` renderers now stay disabled during normal play.
   - dual blades now briefly spawn two blade sprites at the hit target, crossing around the slash VFX.

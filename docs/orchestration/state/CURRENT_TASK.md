@@ -118,6 +118,13 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
   - Dual-blade Play Mode reflection check: held renderers disabled, phantom count `2`, max bounds `(1.151, 1.151)`.
   - Greatsword Play Mode reflection check: held renderers disabled, phantom count `2`, max bounds `(1.586, 1.689)`.
   - Unity console error count: `0`.
+- Phantom weapon timing/readability pass:
+  - Phantom weapons now sweep before slash / spark / hit-confirm VFX appears.
+  - Dual-blade slash / hit feedback is delayed by `0.055s`; greatsword by `0.075s`.
+  - Weapon slash VFX lifetime is extended by `1.45x`, with minimum lifetimes of `0.34s` for dual blades and `0.48s` for greatsword.
+  - Greatsword immediate Play Mode check: phantom `2`, active sweep `2`, slash `0`, spark `0`, confirm `0`.
+  - Delayed enumerator check: greatsword slash `1`, spark `1`, confirm `2`, expected slash minimum lifetime `0.48s`.
+  - Unity console error count: `0`.
 - A-I EPIC / data contract pass:
   - Added root entry docs: `docs/PRD.md`, `docs/TECH.md`, `docs/TASK.md`, `docs/TEST.md`, `docs/CHANGELOG.md`.
   - Updated `AGENTS.md` read order to use these docs before orchestration state files.
