@@ -2,6 +2,18 @@
 
 ## 2026-06-23
 
+- Strengthened Stopped Second as a gold clock-field VFX:
+  - Kept Hunter Oath in the yellow-green/green projectile family, and separated Stopped Second into a clear yellow/gold time-field language.
+  - Stopped Second active VFX now uses gold clock colors instead of the prior blue/cyan read.
+  - Active Stopped Second freeze now lasts up to `1.0s`, while the field VFX stays visible for `1.50s`.
+  - Stopped Echo field lifetime increased to `0.90s`; Stasis Hunt field lifetime increased to `1.20s~1.50s`.
+  - Clock-field readability was amplified with a larger face, stronger alpha, thicker hands, brighter core, larger ticks, and a rotating pulse ring.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity Play Mode smoke: `clockFaces=2`, `totalClockFaces=3`, `clockTicks=24`, `totalClockTicks=36`, `clockPulses=2`, `clockHands=6`, `goldFaces=2`, `frozenNear1s=5`.
+  - Unity console error count: 0.
+
 - Refined Execution Flash and Stopped Second readability:
   - Execution Flash active VFX target width increased from `1.30` to `1.95`, with a longer `0.38s` lifetime.
   - Execution Flash now spawns explicit vertical/horizontal/diagonal crack lines around the target so it reads as a large execution burst instead of a tiny diamond.

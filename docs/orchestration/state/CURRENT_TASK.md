@@ -68,6 +68,15 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Stopped Second gold clock-field follow-up:
+  - Hunter Oath remains yellow-green/green, while Stopped Second is now the yellow/gold time-stop VFX language.
+  - Active Stopped Second now freezes enemies for up to `1.0s` and keeps the clock-field VFX visible for `1.50s`.
+  - The field now has a larger/brighter clock face, stronger rings, larger ticks, thicker hands, brighter core, and a rotating pulse ring.
+  - Stopped Echo and Stasis Hunt reuse the gold field language with shorter support lifetimes.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity Play Mode smoke: `clockFaces=2`, `totalClockFaces=3`, `clockTicks=24`, `totalClockTicks=36`, `clockPulses=2`, `clockHands=6`, `goldFaces=2`, `frozenNear1s=5`.
+  - Unity console error count: `0`.
 - Execution Flash / Stopped Second readability follow-up:
   - Execution Flash active VFX target width increased to `1.95`, lifetime to `0.38s`, and now adds cross/diagonal crack lines.
   - Execution Echo target width increased to `1.48` and uses the same crack helper.

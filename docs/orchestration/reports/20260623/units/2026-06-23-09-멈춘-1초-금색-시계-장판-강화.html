@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-23-09 - 멈춘 1초 금색 시계 장판 강화</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-23-09 - 멈춘 1초 금색 시계 장판 강화</h1>
+      <p class="meta">Generated from 2026-06-23-09-멈춘-1초-금색-시계-장판-강화.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260623/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-23-09 - 멈춘 1초 금색 시계 장판 강화</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 계속 <code>_dev</code> 검증 빌드다. 이번 작업은 추적자의 맹세와 멈춘 1초의 색/역할이 겹쳐 보이는 문제를 분리하고, 멈춘 1초를 노란 시계 장판으로 더 시원하게 읽히게 만든 패스다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>추적자의 맹세는 현재 초록/연두 계열 투사체 VFX로 유지했다.</li>
+<li>멈춘 1초는 파란 정지 느낌에서 금색/노란색 시간 장판 느낌으로 바꿨다.</li>
+<li>멈춘 1초 active freeze는 최대 <code>1.0s</code>까지 적용되게 했다.</li>
+<li>멈춘 1초 active VFX는 <code>1.50s</code> 동안 유지되게 해서 정지 중에도 장판이 보이게 했다.</li>
+<li>시계 장판의 face, ring, 12 tick, hand, core를 더 크고 밝게 조정했다.</li>
+<li>회전하는 pulse ring을 추가해서 단순 원형 장판보다 시간장이 살아 있는 느낌을 더했다.</li>
+<li>정지 잔향과 정지 추적 궁극 미리보기/발동도 같은 금색 시계 장판 언어를 쓰게 맞췄다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy warning 7개, error 0개.</li>
+<li>Unity compile error count: 0.</li>
+<li>Unity Play Mode smoke:</li>
+<li><code>clockFaces=2</code></li>
+<li><code>totalClockFaces=3</code></li>
+<li><code>clockTicks=24</code></li>
+<li><code>totalClockTicks=36</code></li>
+<li><code>clockPulses=2</code></li>
+<li><code>clockHands=6</code></li>
+<li><code>goldFaces=2</code></li>
+<li><code>frozenNear1s=5</code></li>
+<li>Unity console error count: 0.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>추적자의 맹세는 사냥/추적 투사체라 초록/연두 계열로 남기고, 멈춘 1초는 시간 정지 기억이므로 금색 시계 장판으로 확실히 분리한다. 보는 재미는 텍스트보다 VFX로 먼저 전달하는 쪽을 우선한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>금색 장판이 너무 밝으면 적, 무기 베기, 피의 칼폭풍을 덮을 수 있다. 직접 플레이에서 과하면 alpha나 tick 두께부터 낮춘다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>멈춘 1초는 이제 <code>1.0s</code> 정지와 <code>1.50s</code> 금색 시계 장판으로 읽히게 보강됐다. 다음 리뷰는 <code>Mem A</code> 또는 <code>VFX</code> 디버그 버튼으로 확인하고, 장판이 충분히 뽕맛 있는지와 전투 가독성을 덮지 않는지를 같이 판단하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>직접 리뷰 후 멈춘 1초가 아직 약하면 pulse/ring 크기와 시계 바늘 대비를 더 올린다. 반대로 과하면 alpha/lifetime을 줄인다. 그다음 추적자의 맹세 초록 투사체가 기억 정체성으로 충분한지 확인한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 추적자의 맹세와 멈춘 1초의 색감/역할이 헷갈리고, 멈춘 1초가 정지 시간 동안 충분히 보이지 않았다.</li>
+<li>방향: 시간 정지는 금색 시계 장판으로 강하게 읽히게 하고, 추적 투사체와 색 언어를 분리한다.</li>
+<li>행동: 멈춘 1초 색, 지속시간, 정지시간, 링/눈금/바늘/core/pulse를 강화했다.</li>
+<li>결과: Unity smoke에서 금색 clock face, tick, hand, pulse, 1초 근처 freeze가 정상 확인됐다.</li>
+</ul>
+  </main>
+</body>
+</html>

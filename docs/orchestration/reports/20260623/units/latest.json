@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260623\\index.md",
-  "generatedAt": "2026-06-23T07:08:40.750Z",
-  "unitCount": 8,
+  "generatedAt": "2026-06-23T07:36:57.584Z",
+  "unitCount": 9,
   "latest": {
-    "title": "2026-06-23-08 - 처형섬광과 멈춘 1초 판독 보정",
-    "number": "08",
-    "markdownPath": "docs\\orchestration\\reports\\20260623\\units\\2026-06-23-08-처형섬광과-멈춘-1초-판독-보정.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260623\\units\\2026-06-23-08-처형섬광과-멈춘-1초-판독-보정.html"
+    "title": "2026-06-23-09 - 멈춘 1초 금색 시계 장판 강화",
+    "number": "09",
+    "markdownPath": "docs\\orchestration\\reports\\20260623\\units\\2026-06-23-09-멈춘-1초-금색-시계-장판-강화.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260623\\units\\2026-06-23-09-멈춘-1초-금색-시계-장판-강화.html"
   }
 }

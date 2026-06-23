@@ -98,6 +98,15 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Unity compile error count: 0.
   - Unity Play Mode smoke: `executionCracks=16`, `executionVfx=24`, `clockFaces=5`, `clockTicks=60`, `clockHands=15`, `stoppedVfx=79`.
   - Unity console error count: 0.
+- Stopped Second gold clock-field follow-up, 2026-06-23:
+  - Hunter Oath remains in the yellow-green/green projectile family.
+  - Stopped Second now uses yellow/gold time-stop colors, a larger clock face, brighter rings, thicker hands, larger ticks, a stronger core, and a rotating pulse ring.
+  - Active Stopped Second freezes nearby enemies for up to `1.0s` while keeping the field visible for `1.50s`.
+  - Stopped Echo and Stasis Hunt reuse the gold clock-field language with shorter supporting lifetimes.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity Play Mode smoke: `clockFaces=2`, `totalClockFaces=3`, `clockTicks=24`, `totalClockTicks=36`, `clockPulses=2`, `clockHands=6`, `goldFaces=2`, `frozenNear1s=5`.
+  - Unity console error count: 0.
 - Blood Blade Storm payoff / movement pass, 2026-06-22:
   - Blood Blade Storm now has opening cue, continuous pressure, and periodic burst pulses instead of only Kalmuri-like rotating blades.
   - Dual-blade storm uses faster blade orbit and more frequent bursts; greatsword storm uses slower/heavier slashes and burst impact.

@@ -42,6 +42,28 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 Stopped Second gold clock-field follow-up:
+  - Responded to jaewoo review that Stopped Second should be yellow like a time/clock field, remain visible during the 1-second stop, and deliver more spectacle.
+  - External reference check:
+    - Eternal Return Henry's Chrono Field describes a time field around Henry that persists for a period, slows enemies/projectiles, then explodes. The LETHE change borrows the readable "persistent time field" idea, not the full skill behavior.
+  - Color language:
+    - Hunter Oath remains a yellow-green/green projectile VFX.
+    - Stopped Second is now the yellow/gold clock-field memory.
+  - Stopped Second:
+    - Active freeze window now reaches up to `1.0s`.
+    - Active clock field lifetime is `1.50s`, so the VFX remains visible through and slightly after the stop.
+    - Clock face, rings, 12 ticks, hands, core, and pulse ring were enlarged/brightened for stronger readability.
+  - Echo / ultimate:
+    - Stopped Echo uses a shorter `0.90s` gold field.
+    - Stasis Hunt preview/ultimate uses the same gold field language at `1.20s~1.50s`.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity compile error count: `0`.
+    - Unity Play Mode smoke: `clockFaces=2`, `totalClockFaces=3`, `clockTicks=24`, `totalClockTicks=36`, `clockPulses=2`, `clockHands=6`, `goldFaces=2`, `frozenNear1s=5`.
+    - Unity console error count: `0`.
+  - Next review:
+    - Use `Mem A` / `VFX` debug buttons and judge whether Stopped Second now reads as a gold time-stop floor field without hiding enemies or weapon hits.
+
 - Unity v1 Execution Flash / Stopped Second readability follow-up:
   - Responded to jaewoo review that Execution Flash still felt too small and Stopped Second needed an obvious clock-floor telegraph.
   - Execution Flash:

@@ -871,13 +871,14 @@ namespace Lethe.PrototypeV1
                 .OrderBy(e => Vector2.Distance(player.position, e.transform.position))
                 .FirstOrDefault();
             var center = focus != null ? focus.transform.position : player.position;
-            var radius = 1.65f + memory.Level * 0.18f;
-            SpawnStoppedSecondField(center, radius, new Color(0.62f, 0.76f, 1f, 0.58f), 0.72f, true);
+            var radius = 1.85f + memory.Level * 0.22f;
+            var freezeDuration = Mathf.Min(1.0f, 0.55f + memory.Level * 0.10f);
+            SpawnStoppedSecondField(center, radius, TimeStopGold(true), 1.50f, true);
             foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(center, e.transform.position) <= radius + e.TouchRadius).Take(10).ToList())
             {
                 var dir = (Vector2)(enemy.transform.position - center);
                 DealDamage(enemy, 5f + memory.Level * 2.1f, "멈춘 1초", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 0.75f);
-                enemy.ApplyBriefFreeze(0.16f + memory.Level * 0.045f);
+                enemy.ApplyBriefFreeze(freezeDuration);
             }
         }
 
@@ -1028,8 +1029,8 @@ namespace Lethe.PrototypeV1
             var stoppedLevel = EchoLevel(V1MemoryId.StoppedSecond);
             if (stoppedLevel > 0 && hitIndex == 0 && UnityEngine.Random.value < 0.16f + stoppedLevel * 0.05f)
             {
-                enemy.ApplyBriefFreeze(0.08f + stoppedLevel * 0.025f);
-                SpawnStoppedSecondField(enemy.transform.position, 0.78f + stoppedLevel * 0.08f, new Color(0.62f, 0.76f, 1f, 0.48f), 0.40f, false);
+                enemy.ApplyBriefFreeze(0.18f + stoppedLevel * 0.045f);
+                SpawnStoppedSecondField(enemy.transform.position, 0.92f + stoppedLevel * 0.11f, TimeStopGold(false), 0.90f, false);
             }
 
             var ashLevel = EchoLevel(V1MemoryId.AshenShield);
@@ -1309,7 +1310,7 @@ namespace Lethe.PrototypeV1
                 {
                     ultimatePulseTimer = 0.42f;
                     SpawnPromptSprite("StasisHunt", LoadSprite(UltimateStasisPath), () => MakeRingSprite("StasisHunt", Color.white, 160), player.position, Quaternion.identity, 2.72f, 1.05f, new Color(0.62f, 0.74f, 1f, 0.50f), 0.44f);
-                    SpawnStoppedSecondField(player.position, 1.45f, new Color(0.82f, 0.92f, 1f, 0.52f), 0.46f, true);
+                    SpawnStoppedSecondField(player.position, 1.65f, TimeStopGold(true), 1.20f, true);
                     foreach (var enemy in enemies.Where(e => e != null && e.IsAlive).OrderBy(e => Vector2.Distance(player.position, e.transform.position)).Take(6).ToList())
                     {
                         enemy.ApplyBriefFreeze(0.30f);
@@ -2017,7 +2018,7 @@ namespace Lethe.PrototypeV1
             }
             if (id == V1MemoryId.StoppedSecond)
             {
-                SpawnStoppedSecondField(pos, echo ? 0.92f : 1.24f, new Color(0.82f, 0.92f, 1f, echo ? 0.54f : 0.68f), echo ? 0.58f : 0.78f, !echo);
+                SpawnStoppedSecondField(pos, echo ? 1.08f : 1.42f, TimeStopGold(!echo), echo ? 0.95f : 1.50f, !echo);
             }
         }
 
@@ -2028,8 +2029,8 @@ namespace Lethe.PrototypeV1
             var stasis = center;
             var ashen = center + Vector3.right * 2.65f;
             SpawnPromptSprite("Preview_FractureExecution", LoadSprite(UltimateFracturePath), () => MakeRingSprite("Preview_FractureExecution", Color.white, 160), fracture, Quaternion.identity, 2.55f, 1.05f, new Color(1f, 0.94f, 0.62f, 0.66f), 0.70f);
-            SpawnPromptSprite("Preview_StasisHunt", LoadSprite(UltimateStasisPath), () => MakeRingSprite("Preview_StasisHunt", Color.white, 160), stasis, Quaternion.identity, 2.72f, 1.05f, new Color(0.62f, 0.74f, 1f, 0.50f), 0.70f);
-            SpawnStoppedSecondField(stasis, 1.45f, new Color(0.82f, 0.92f, 1f, 0.52f), 0.70f, true);
+            SpawnPromptSprite("Preview_StasisHunt", LoadSprite(UltimateStasisPath), () => MakeRingSprite("Preview_StasisHunt", Color.white, 160), stasis, Quaternion.identity, 2.72f, 1.05f, new Color(1f, 0.74f, 0.28f, 0.56f), 1.10f);
+            SpawnStoppedSecondField(stasis, 1.65f, TimeStopGold(true), 1.50f, true);
             SpawnPromptSprite("Preview_AshenOblivion", LoadSprite(UltimateAshenOblivionPath), () => MakeRingSprite("Preview_AshenOblivion", Color.white, 180), ashen, Quaternion.identity, 2.95f, 1.18f, new Color(0.78f, 0.68f, 1f, 0.52f), 0.70f);
         }
 
@@ -2041,7 +2042,7 @@ namespace Lethe.PrototypeV1
                 V1MemoryId.ExecutionFlash => new Color(1f, 0.94f, 0.62f, alpha),
                 V1MemoryId.HunterOath => new Color(0.86f, 1f, 0.58f, alpha),
                 V1MemoryId.ShatterWave => new Color(0.60f, 0.92f, 1f, alpha),
-                V1MemoryId.StoppedSecond => new Color(0.62f, 0.76f, 1f, alpha),
+                V1MemoryId.StoppedSecond => new Color(1f, 0.72f, 0.20f, Mathf.Min(0.86f, alpha + 0.10f)),
                 V1MemoryId.AshenShield => new Color(0.82f, 0.88f, 0.94f, alpha),
                 V1MemoryId.OblivionBrand => new Color(0.78f, 0.48f, 1f, alpha),
                 _ => new Color(0.70f, 0.96f, 1f, alpha)
@@ -2748,25 +2749,31 @@ namespace Lethe.PrototypeV1
 
         void SpawnStoppedSecondField(Vector3 center, float radius, Color color, float lifetime, bool strong)
         {
-            var fieldAlpha = strong ? Mathf.Min(0.46f, color.a) : Mathf.Min(0.34f, color.a);
-            var ringAlpha = strong ? Mathf.Min(0.72f, color.a + 0.14f) : Mathf.Min(0.56f, color.a + 0.08f);
-            SpawnPromptSprite("StoppedSecondClockFace", MemoryVfxSprite(V1MemoryId.StoppedSecond), () => MakeRingSprite("StoppedSecondClockFace", Color.white, 168), center, Quaternion.identity, radius * 2.28f, radius * 0.96f, new Color(color.r, color.g, color.b, fieldAlpha), lifetime);
-            SpawnTransientSprite("StoppedSecondClockOuter", MakeRingSprite("StoppedSecondClockOuter", Color.white, 168), center, Quaternion.identity, radius * 0.86f, new Color(color.r, color.g, color.b, ringAlpha), lifetime);
-            SpawnTransientSprite("StoppedSecondClockInner", MakeRingSprite("StoppedSecondClockInner", Color.white, 128), center, Quaternion.identity, radius * 0.48f, new Color(color.r, color.g, color.b, fieldAlpha * 0.72f), lifetime * 0.88f);
+            var fieldAlpha = strong ? Mathf.Min(0.62f, color.a) : Mathf.Min(0.46f, color.a);
+            var ringAlpha = strong ? Mathf.Min(0.86f, color.a + 0.18f) : Mathf.Min(0.70f, color.a + 0.12f);
+            SpawnPromptSprite("StoppedSecondClockFace", MemoryVfxSprite(V1MemoryId.StoppedSecond), () => MakeRingSprite("StoppedSecondClockFace", Color.white, 180), center, Quaternion.identity, radius * 2.56f, radius * 1.08f, new Color(color.r, color.g, color.b, fieldAlpha), lifetime);
+            SpawnTransientSprite("StoppedSecondClockPulse", MakeRingSprite("StoppedSecondClockPulse", Color.white, 180), center, Quaternion.Euler(0f, 0f, elapsed * -70f), radius * 1.04f, new Color(1f, 0.88f, 0.36f, ringAlpha * 0.68f), lifetime * 0.92f);
+            SpawnTransientSprite("StoppedSecondClockOuter", MakeRingSprite("StoppedSecondClockOuter", Color.white, 180), center, Quaternion.identity, radius * 0.96f, new Color(color.r, color.g, color.b, ringAlpha), lifetime);
+            SpawnTransientSprite("StoppedSecondClockInner", MakeRingSprite("StoppedSecondClockInner", Color.white, 144), center, Quaternion.identity, radius * 0.56f, new Color(color.r, color.g, color.b, fieldAlpha * 0.82f), lifetime * 0.92f);
 
-            var tick = MakeBoxSprite("StoppedSecondTick", Color.white, 7, 48);
+            var tick = MakeBoxSprite("StoppedSecondTick", Color.white, 9, 62);
             for (int i = 0; i < 12; i++)
             {
                 var angle = i * 30f;
                 var dir = Quaternion.Euler(0f, 0f, angle) * Vector3.up;
-                var pos = center + dir * radius * 0.72f;
+                var pos = center + dir * radius * 0.80f;
                 var tickScale = strong && i % 3 == 0
-                    ? new Vector3(0.024f, 0.28f, 1f)
-                    : new Vector3(0.018f, 0.18f, 1f);
+                    ? new Vector3(0.042f, 0.42f, 1f)
+                    : new Vector3(0.030f, 0.28f, 1f);
                 SpawnTransientSpriteScaled("StoppedSecondClockTick", tick, pos, Quaternion.Euler(0f, 0f, angle), tickScale, new Color(color.r, color.g, color.b, ringAlpha), lifetime);
             }
 
             SpawnClockHands(center, radius, new Color(color.r, color.g, color.b, Mathf.Min(0.86f, color.a + 0.18f)), lifetime * 0.88f);
+        }
+
+        static Color TimeStopGold(bool strong)
+        {
+            return strong ? new Color(1f, 0.76f, 0.20f, 0.82f) : new Color(1f, 0.70f, 0.18f, 0.66f);
         }
 
         void SpawnClockHands(Vector3 center, float radius, Color color, float lifetime)
@@ -2774,9 +2781,9 @@ namespace Lethe.PrototypeV1
             var longHand = MakeBoxSprite("clock_hand_long", Color.white, 8, 92);
             var shortHand = MakeBoxSprite("clock_hand_short", Color.white, 8, 64);
             var baseAngle = elapsed * 90f;
-            SpawnTransientSpriteScaled("ClockHand_Long", longHand, center, Quaternion.Euler(0f, 0f, baseAngle), new Vector3(0.026f, radius * 0.54f, 1f), color, lifetime);
-            SpawnTransientSpriteScaled("ClockHand_Short", shortHand, center, Quaternion.Euler(0f, 0f, baseAngle + 86f), new Vector3(0.024f, radius * 0.38f, 1f), new Color(color.r, color.g, color.b, color.a * 0.82f), lifetime);
-            SpawnTransientSprite("ClockHand_Core", MakeImpactDiamondSprite("ClockHand_Core", Color.white), center, Quaternion.Euler(0f, 0f, baseAngle + 45f), 0.14f, new Color(color.r, color.g, color.b, Mathf.Min(0.86f, color.a + 0.12f)), lifetime);
+            SpawnTransientSpriteScaled("ClockHand_Long", longHand, center, Quaternion.Euler(0f, 0f, baseAngle), new Vector3(0.046f, radius * 0.64f, 1f), color, lifetime);
+            SpawnTransientSpriteScaled("ClockHand_Short", shortHand, center, Quaternion.Euler(0f, 0f, baseAngle + 86f), new Vector3(0.040f, radius * 0.46f, 1f), new Color(color.r, color.g, color.b, color.a * 0.86f), lifetime);
+            SpawnTransientSprite("ClockHand_Core", MakeImpactDiamondSprite("ClockHand_Core", Color.white), center, Quaternion.Euler(0f, 0f, baseAngle + 45f), 0.22f, new Color(color.r, color.g, color.b, Mathf.Min(0.92f, color.a + 0.12f)), lifetime);
         }
 
         Sprite KalmuriBladeSprite()
