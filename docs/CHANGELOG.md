@@ -2,6 +2,21 @@
 
 ## 2026-06-23
 
+- Improved lingering VFX readability for Shatter Wave, Stopped Second, and utility echoes:
+  - Shatter Wave active VFX now uses a lingering field helper instead of a short one-frame-feeling ring.
+  - Shatter Wave active field lifetime increased to `1.05s`.
+  - Shatter Echo now uses the same field language at `0.90s`, with outer/inner rings and radial fracture spokes.
+  - Stopped Second active clock-field lifetime increased from `1.50s` to `1.75s`.
+  - Stopped Echo field radius/lifetime increased from `0.92 + level*0.11 / 0.90s` to `1.02 + level*0.13 / 1.25s`.
+  - Stasis Hunt pulse was realigned to the gold clock-field language and extended to `0.82s` prompt / `1.45s` field.
+  - Execution, Hunter, Ashen, and Oblivion echo VFX lifetimes/alpha/scale were increased so echoes are visibly present instead of feeling absent.
+  - First boss timing stays at `180s` for now; this pass focuses on making the first 3 minutes readable enough to judge before changing pacing.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console error count: 0.
+
 - Rebalanced Hunter Oath so it is no longer weaker than basic attacks:
   - Active Hunter Oath now fires a volley instead of one weak projectile: level 1 = 2 shots, level 3 = 3 shots, level 5 = 4 shots.
   - Active cooldown changed from `max(0.48, 1.35 - level*0.10)` to `max(0.62, 1.25 - level*0.11)`.

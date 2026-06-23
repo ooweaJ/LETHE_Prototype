@@ -42,6 +42,28 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 lingering VFX / echo readability follow-up:
+  - Responded to jaewoo review that Shatter Wave and Stopped Second should persist on screen instead of disappearing immediately, and that echo VFX may feel absent.
+  - Shatter Wave:
+    - Active VFX now uses a lingering field helper with main ring, outer/inner hold rings, and radial fracture spokes.
+    - Active field lifetime is now `1.05s`.
+    - Shatter Echo now uses the same field language at `0.90s`.
+  - Stopped Second:
+    - Active clock-field lifetime increased from `1.50s` to `1.75s`.
+    - Stopped Echo field increased from `0.92 + level*0.11 / 0.90s` to `1.02 + level*0.13 / 1.25s`.
+    - Stasis Hunt pulse was moved fully into the gold clock-field language with longer prompt/field lifetimes.
+  - Echo readability:
+    - Execution, Hunter, Ashen, and Oblivion echo VFX received longer lifetimes, stronger alpha, and slightly larger scale.
+  - Pacing:
+    - First boss remains at `180s` for now; the first three minutes should be judged after this readability pass before changing boss timing.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity compile error count: `0`.
+    - Unity Play Mode entry reached `isPlaying=true`.
+    - Unity console error count: `0`.
+  - Next review:
+    - Use `Mem B`, `Echo B`, and `VFX` debug buttons to check Shatter Wave / Shatter Echo / Stopped Second persistence before deciding whether boss timing should move earlier.
+
 - Unity v1 Hunter Oath value follow-up:
   - Responded to jaewoo review that Hunter Oath felt weaker than basic attacks and had no meaningful reason to pick.
   - Active Hunter Oath:

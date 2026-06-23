@@ -68,6 +68,16 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Lingering VFX / echo readability follow-up:
+  - Shatter Wave active VFX now persists for `1.05s` as a field with hold rings and fracture spokes.
+  - Shatter Echo now persists for `0.90s` with the same field language.
+  - Stopped Second active clock field now lasts `1.75s`.
+  - Stopped Echo now uses a larger field for `1.25s`.
+  - Execution, Hunter, Ashen, and Oblivion echo VFX were lengthened/brightened/slightly enlarged.
+  - First boss timing remains `180s` until direct play confirms whether first-three-minute pacing still feels loose.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`; Unity console error count: `0`.
 - Hunter Oath value follow-up:
   - Active Hunter Oath now fires 2/3/4 projectiles at levels 1/3/5.
   - Active cooldown, projectile speed, projectile damage, target-lock VFX, and hit burst were strengthened.

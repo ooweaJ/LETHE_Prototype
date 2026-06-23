@@ -115,6 +115,16 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
   - Unity compile error count: 0.
   - Unity Play Mode entry reached `isPlaying=true`; Unity console error count: 0.
+- Lingering VFX / echo readability follow-up, 2026-06-23:
+  - Shatter Wave active field now lasts `1.05s` and includes lingering rings/spokes.
+  - Shatter Echo now lasts `0.90s` with the same field language.
+  - Stopped Second active clock field now lasts `1.75s`.
+  - Stopped Echo now uses a larger `1.02 + level*0.13` field for `1.25s`.
+  - Execution, Hunter, Ashen, and Oblivion echo VFX were made longer/brighter/larger enough to read as echoes.
+  - First boss timing remains `180s` until direct play confirms whether the first three minutes are still loose after VFX/readability improvements.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity Play Mode entry reached `isPlaying=true`; Unity console error count: 0.
 - Blood Blade Storm payoff / movement pass, 2026-06-22:
   - Blood Blade Storm now has opening cue, continuous pressure, and periodic burst pulses instead of only Kalmuri-like rotating blades.
   - Dual-blade storm uses faster blade orbit and more frequent bursts; greatsword storm uses slower/heavier slashes and burst impact.
