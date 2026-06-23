@@ -42,6 +42,30 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 dual blades / Blood Blade Storm / first-120 tempo pass:
+  - Completed the three next work items after greatsword reached a reviewable state.
+  - Dual blades:
+    - Kept the greatsword readability principle but scaled it down for a fast weapon.
+    - A slash appears at `0.045s`, cut flash at `0.067s`, B slash at `0.085s`.
+    - Slash/spark profile scales and lifetimes were increased slightly.
+  - Blood Blade Storm:
+    - Opening cue, ring/blade scale, burst cadence, pressure damage, heal, hitstop, and camera shake were increased.
+    - Heavy storm now has larger slower bursts; dual-blade storm has denser faster rotating blades.
+  - First 120 seconds:
+    - Opening spawn cadence increased from `0.52 -> 0.46`.
+    - 35-80s spawn cadence increased from `0.58 -> 0.52`.
+    - 80-120s profile increased from `0.50 x3` to `0.46 x4`.
+    - Early enemy cap increased `28 -> 32`.
+    - Early XP multiplier increased `1.95 -> 2.15` before 120s.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity compile error count: `0`.
+    - Runtime check: dual delays A `0.045`, flash `0.067`, B `0.085`, assist `0.045`; opening spawn interval `0.46`, pack `2`; early `GrantXp(1)` produced `2/5` XP.
+    - Blood Blade Storm smoke: `stormReady=True`, `stormObjects=187`, `burstObjects=45`, `bladeObjects=187`, `kills=21`.
+    - Unity console error count: `0`.
+  - Next review:
+    - Jaewoo should directly play both weapons and check whether the first 120 seconds now reaches card choices/combat pressure quickly enough without becoming noisy.
+
 - Unity v1 greatsword slash timing tighten:
   - Responded to jaewoo review that the greatsword slash VFX felt slightly slow.
   - Greatsword slash delay reduced from `0.22s` to `0.20s`.

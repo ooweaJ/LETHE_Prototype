@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-23-06 - 쌍검, 피의 칼폭풍, 첫 120초 흐름 보강</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-23-06 - 쌍검, 피의 칼폭풍, 첫 120초 흐름 보강</h1>
+      <p class="meta">Generated from 2026-06-23-06-쌍검-피의-칼폭풍-첫-120초-흐름-보강.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260623/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-23-06 - 쌍검, 피의 칼폭풍, 첫 120초 흐름 보강</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 계속 <code>_dev</code> 검증 빌드다. 이번 작업은 다음 후보였던 세 가지, 즉 쌍검 연출 정교화, 피의 칼폭풍 payoff 재점검, 첫 120초 진행감 리뷰를 한 번에 반영한 패스다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>쌍검은 첫 베기, cut flash, 두 번째 베기가 한 번에 겹치지 않도록 VFX 타이밍을 엇박으로 나눴다.</li>
+<li>첫 crescent: <code>0.045s</code></li>
+<li>cut flash: <code>0.067s</code></li>
+<li>두 번째 crescent: <code>0.085s</code></li>
+<li>쌍검 crescent, flash, spark의 scale/lifetime을 조금 키워 무기 종류가 더 읽히게 했다.</li>
+<li>피의 칼폭풍은 “굶주린 칼무리와 이펙트만 다른 느낌”을 줄이기 위해 opening, pulse, burst를 모두 강화했다.</li>
+<li>opening ring, burst ring, 회전 blade 수, hitstop, shake, pressure, heal을 상향했다.</li>
+<li>heavy/fast 상태 모두 반복 타격과 마무리 폭발의 존재감을 키웠다.</li>
+<li>첫 120초는 더 빨리 전투가 살아나도록 spawn 간격, enemy cap, 초반 XP 배율을 조정했다.</li>
+<li>0-35초 spawn interval: <code>0.52s</code> -&gt; <code>0.46s</code></li>
+<li>35-80초 spawn interval: <code>0.58s</code> -&gt; <code>0.52s</code></li>
+<li>80-120초 spawn profile: <code>0.50s / pack 3</code> -&gt; <code>0.46s / pack 4</code></li>
+<li>0-120초 enemy cap: <code>28</code> -&gt; <code>32</code></li>
+<li>0-120초 XP multiplier: <code>2.15x</code></li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy warning 7개, error 0개.</li>
+<li>Unity compile error count: 0.</li>
+<li>Unity runtime 확인:</li>
+<li>쌍검 delay: <code>A=0.045</code>, <code>flash=0.067</code>, <code>B=0.085</code>, <code>assist=0.045</code></li>
+<li>초반 spawn profile: <code>interval=0.46</code>, <code>pack=2</code></li>
+<li><code>GrantXp(1)</code>: <code>xp=2/5</code></li>
+<li>피의 칼폭풍 smoke 확인:</li>
+<li>storm ready: true</li>
+<li>storm objects: 187</li>
+<li>burst objects: 45</li>
+<li>blade objects: 187</li>
+<li>ring objects: 1</li>
+<li>kills: 21</li>
+<li>Unity console error count: 0.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>쌍검도 대검과 같은 큰 원칙을 따른다. 무기가 먼저 베고, VFX가 그 궤적을 읽히게 따라붙는다. 대신 쌍검은 대검처럼 큰 부채꼴 한 방이 아니라 짧은 교차 베기 두 번과 flash 엇박으로 차이를 둔다.</p>
+<p>피의 칼폭풍은 이제 기본 잔향이 아니라 궁극급 보상으로 읽혀야 한다. 단순히 칼무리보다 많은 이펙트가 아니라, 화면 압박, 히트스톱, 흔들림, 회복, 폭발 타이밍까지 같이 강하게 묶는다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>피의 칼폭풍 smoke에서 생성 오브젝트가 187개까지 올라간다. 지금은 궁극 payoff를 우선한 값이지만, 직접 플레이에서 화면이 너무 지저분하거나 프레임 부담이 느껴지면 blade 수나 lifetime을 줄이는 쪽으로 조정해야 한다.</p>
+<p>첫 120초도 이전보다 빨라졌다. 체감상 초반이 더 재밌어질 수 있지만, 무기/VFX 리뷰를 방해할 만큼 적이 많아지면 spawn cap이나 pack size를 다시 내린다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>이번 패스는 “쌍검도 무기와 VFX가 분리되어 읽히는가”, “피의 칼폭풍이 굶주린 칼무리보다 확실히 궁극답게 느껴지는가”, “첫 120초가 비어 보이지 않는가”를 한 번에 조정했다. 다음 리뷰는 두 무기를 각각 첫 120초 이상 플레이하면서 가장 약한 축 하나를 골라 ITERATE 여부를 판단하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>직접 플레이 피드백 기준으로 다음 중 하나를 고른다.</p>
+<ul>
+<li>쌍검이 약하면 교차 베기 각도/간격/VFX 크기를 추가 조정한다.</li>
+<li>피의 칼폭풍이 과하면 오브젝트 수와 lifetime을 줄이고 hitstop/shake만 남긴다.</li>
+<li>첫 120초가 과밀하면 spawn profile을 80초 이후만 완화한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 쌍검은 읽힘이 약했고, 피의 칼폭풍은 궁극 보상감이 부족했으며, 초반 진행은 조금 비어 보일 위험이 있었다.</li>
+<li>방향: 무기별 공격 실루엣을 다르게 만들고, 궁극은 화면/타격/회복까지 한 번에 강하게 느끼게 한다.</li>
+<li>행동: 쌍검 VFX 엇박, 칼폭풍 opening/pulse/burst 강화, 초반 spawn/XP 템포 상향을 적용했다.</li>
+<li>결과: 빌드와 Unity runtime smoke가 통과했고, 다음 직접 플레이 리뷰 대상으로 묶을 수 있는 상태가 됐다.</li>
+</ul>
+  </main>
+</body>
+</html>

@@ -68,6 +68,15 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Dual blades / Blood Blade Storm / first-120 tempo pass:
+  - Dual-blade VFX stagger: A `0.045s`, cut flash `0.067s`, B `0.085s`, assist `0.045s`.
+  - Blood Blade Storm opening, pressure, burst cadence, burst damage, heal, hitstop, and camera shake increased.
+  - First-120 opening cadence and XP tempo increased.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Runtime check: opening spawn interval `0.46`, pack `2`; early `GrantXp(1)` produced `2/5` XP.
+  - Blood Blade Storm smoke: `stormReady=True`, `stormObjects=187`, `burstObjects=45`, `bladeObjects=187`, `kills=21`.
+  - Unity console error count: `0`.
 - Greatsword slash timing tighten:
   - Greatsword slash delay reduced from `0.22s` to `0.20s`, so VFX appears at roughly `71.4%` of the `0.28s` weapon sweep.
   - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.

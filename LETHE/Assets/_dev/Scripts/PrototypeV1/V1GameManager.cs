@@ -94,7 +94,8 @@ namespace Lethe.PrototypeV1
         const float GreatswordPhantomHeight = 1.72f;
         const float DualBladePhantomLifetime = 0.24f;
         const float GreatswordPhantomLifetime = 0.42f;
-        const float DualBladeSlashDelay = 0.055f;
+        const float DualBladeSlashDelay = 0.045f;
+        const float DualBladeSecondSlashExtraDelay = 0.040f;
         const float GreatswordSlashDelay = 0.20f;
         const float WeaponSlashLifetimeMultiplier = 1.45f;
         const float DualBladeSlashMinLifetime = 0.34f;
@@ -1096,10 +1097,10 @@ namespace Lethe.PrototypeV1
             {
                 if (ultimatePulseTimer <= 0f)
                 {
-                    ultimatePulseTimer = 0.48f;
+                    ultimatePulseTimer = 0.42f;
                     var baseAngle = elapsed * 120f;
                     var ultimateEntries = weapon.VfxProfile != null ? weapon.VfxProfile.ultimateSlashes : Array.Empty<SlashVfxEntry>();
-                    SpawnPromptSprite("BloodBladeStormHeavyRing", LoadSprite(BloodBladeStormRingPath), () => MakeRingSprite("BloodBladeStormHeavyRing", Color.white, 180), player.position, Quaternion.Euler(0f, 0f, baseAngle), 5.10f, 1.55f, new Color(1f, 0.10f, 0.16f, 0.28f), 0.24f);
+                    SpawnPromptSprite("BloodBladeStormHeavyRing", LoadSprite(BloodBladeStormRingPath), () => MakeRingSprite("BloodBladeStormHeavyRing", Color.white, 180), player.position, Quaternion.Euler(0f, 0f, baseAngle), 5.45f, 1.70f, new Color(1f, 0.10f, 0.16f, 0.34f), 0.28f);
                     for (int i = 0; i < 4; i++)
                     {
                         var angle = baseAngle + i * 90f;
@@ -1110,17 +1111,17 @@ namespace Lethe.PrototypeV1
                             if (entry == null) continue;
                             SpawnSlashEntry(entry, pos, pos, f, angle + 90f, true, i);
                         }
-                        SpawnPromptSprite("BloodBladeStormHeavyBlade", LoadSprite(BloodBladeStormBladePath), () => KalmuriBladeSprite(), pos, Quaternion.Euler(0f, 0f, angle + 90f), 0.96f, 0.36f, new Color(1f, 0.24f, 0.30f, 0.80f), 0.22f);
+                        SpawnPromptSprite("BloodBladeStormHeavyBlade", LoadSprite(BloodBladeStormBladePath), () => KalmuriBladeSprite(), pos, Quaternion.Euler(0f, 0f, angle + 90f), 1.10f, 0.42f, new Color(1f, 0.24f, 0.30f, 0.86f), 0.26f);
                     }
-                    hitstopTimer = Mathf.Max(hitstopTimer, 0.045f);
-                    cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.18f);
-                    cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.085f);
+                    hitstopTimer = Mathf.Max(hitstopTimer, 0.052f);
+                    cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.20f);
+                    cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.10f);
                 }
 
-                ApplyBloodStormPressure(3.95f, 12, 54f * dt, 1.35f, dt);
+                ApplyBloodStormPressure(4.25f, 16, 66f * dt, 1.55f, dt);
                 if (bloodStormBurstTimer <= 0f)
                 {
-                    bloodStormBurstTimer = 1.05f;
+                    bloodStormBurstTimer = 0.92f;
                     BloodStormBurst(true);
                 }
                 return;
@@ -1128,46 +1129,46 @@ namespace Lethe.PrototypeV1
 
             if (ultimatePulseTimer <= 0f)
             {
-                ultimatePulseTimer = 0.075f;
+                ultimatePulseTimer = 0.065f;
                 var spin = elapsed * 310f;
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < 10; i++)
                 {
-                    var angle = spin + i * 45f;
+                    var angle = spin + i * 36f;
                     var radius = 2.05f + (i & 1) * 0.34f;
                     var pos = player.position + Quaternion.Euler(0f, 0f, angle) * Vector3.right * radius;
-                    SpawnPromptSprite("BloodBladeStormFastBlade", LoadSprite(BloodBladeStormBladePath), () => KalmuriBladeSprite(), pos, Quaternion.Euler(0f, 0f, angle + 90f), 0.66f, 0.26f, new Color(1f, 0.24f, 0.34f, 0.72f), 0.12f);
+                    SpawnPromptSprite("BloodBladeStormFastBlade", LoadSprite(BloodBladeStormBladePath), () => KalmuriBladeSprite(), pos, Quaternion.Euler(0f, 0f, angle + 90f), 0.72f, 0.30f, new Color(1f, 0.24f, 0.34f, 0.78f), 0.14f);
                 }
             }
 
-            ApplyBloodStormPressure(3.45f, 14, 26f * dt, 0.85f, dt);
+            ApplyBloodStormPressure(3.75f, 16, 32f * dt, 1.00f, dt);
             if (bloodStormBurstTimer <= 0f)
             {
-                bloodStormBurstTimer = 0.72f;
+                bloodStormBurstTimer = 0.62f;
                 BloodStormBurst(false);
             }
         }
 
         void SpawnBloodStormOpening(bool heavy)
         {
-            SpawnPromptSprite("BloodBladeStormOpen", LoadSprite(BloodBladeStormRingPath), () => MakeRingSprite("BloodBladeStormOpen", Color.white, 180), player.position, Quaternion.identity, heavy ? 5.55f : 4.70f, heavy ? 1.72f : 1.44f, new Color(1f, 0.08f, 0.16f, 0.46f), 0.44f);
-            SpawnTransientSprite("BloodBladeStormWarning", MakeRingSprite("BloodBladeStormWarning", Color.white, 156), player.position, Quaternion.identity, heavy ? 1.66f : 1.38f, new Color(0.72f, 0.98f, 1f, 0.32f), 0.30f);
+            SpawnPromptSprite("BloodBladeStormOpen", LoadSprite(BloodBladeStormRingPath), () => MakeRingSprite("BloodBladeStormOpen", Color.white, 180), player.position, Quaternion.identity, heavy ? 6.20f : 5.20f, heavy ? 1.96f : 1.62f, new Color(1f, 0.08f, 0.16f, 0.54f), 0.56f);
+            SpawnTransientSprite("BloodBladeStormWarning", MakeRingSprite("BloodBladeStormWarning", Color.white, 156), player.position, Quaternion.identity, heavy ? 1.92f : 1.56f, new Color(0.72f, 0.98f, 1f, 0.36f), 0.38f);
             SpawnFloatingText(player.position + Vector3.up * 1.05f, "피의 칼폭풍", new Color(1f, 0.18f, 0.24f));
-            cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.18f);
-            cameraShakeAmount = Mathf.Max(cameraShakeAmount, heavy ? 0.09f : 0.07f);
+            cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.24f);
+            cameraShakeAmount = Mathf.Max(cameraShakeAmount, heavy ? 0.13f : 0.095f);
         }
 
         void BloodStormBurst(bool heavy)
         {
             var center = player.position;
-            var radius = heavy ? 4.35f : 3.70f;
-            var burstDamage = heavy ? 72f : 44f;
-            SpawnPromptSprite("BloodBladeStormBurst", LoadSprite(BloodBladeStormRingPath), () => MakeRingSprite("BloodBladeStormBurst", Color.white, 180), center, Quaternion.Euler(0f, 0f, elapsed * (heavy ? -72f : 160f)), heavy ? 5.85f : 4.95f, heavy ? 1.88f : 1.58f, new Color(1f, 0.08f, 0.13f, heavy ? 0.58f : 0.48f), heavy ? 0.36f : 0.26f);
-            var bladeCount = heavy ? 6 : 12;
+            var radius = heavy ? 4.75f : 4.05f;
+            var burstDamage = heavy ? 84f : 52f;
+            SpawnPromptSprite("BloodBladeStormBurst", LoadSprite(BloodBladeStormRingPath), () => MakeRingSprite("BloodBladeStormBurst", Color.white, 180), center, Quaternion.Euler(0f, 0f, elapsed * (heavy ? -72f : 160f)), heavy ? 6.35f : 5.40f, heavy ? 2.05f : 1.72f, new Color(1f, 0.08f, 0.13f, heavy ? 0.66f : 0.56f), heavy ? 0.44f : 0.32f);
+            var bladeCount = heavy ? 8 : 14;
             for (int i = 0; i < bladeCount; i++)
             {
                 var angle = elapsed * (heavy ? 84f : 220f) + i * (360f / bladeCount);
-                var pos = center + Quaternion.Euler(0f, 0f, angle) * Vector3.right * (heavy ? 2.28f : 2.12f);
-                SpawnPromptSprite("BloodBladeStormBurstBlade", LoadSprite(BloodBladeStormBladePath), () => KalmuriBladeSprite(), pos, Quaternion.Euler(0f, 0f, angle + 90f), heavy ? 1.06f : 0.72f, heavy ? 0.40f : 0.28f, new Color(1f, 0.22f, 0.28f, 0.86f), heavy ? 0.28f : 0.18f);
+                var pos = center + Quaternion.Euler(0f, 0f, angle) * Vector3.right * (heavy ? 2.48f : 2.22f);
+                SpawnPromptSprite("BloodBladeStormBurstBlade", LoadSprite(BloodBladeStormBladePath), () => KalmuriBladeSprite(), pos, Quaternion.Euler(0f, 0f, angle + 90f), heavy ? 1.18f : 0.82f, heavy ? 0.46f : 0.32f, new Color(1f, 0.22f, 0.28f, 0.90f), heavy ? 0.34f : 0.22f);
             }
 
             var victims = enemies
@@ -1194,10 +1195,10 @@ namespace Lethe.PrototypeV1
                 }
             }
 
-            HealPlayer(heavy ? 4.2f : 2.8f);
-            hitstopTimer = Mathf.Max(hitstopTimer, heavy ? 0.055f : 0.032f);
-            cameraShakeTimer = Mathf.Max(cameraShakeTimer, heavy ? 0.22f : 0.14f);
-            cameraShakeAmount = Mathf.Max(cameraShakeAmount, heavy ? 0.105f : 0.074f);
+            HealPlayer(heavy ? 5.2f : 3.6f);
+            hitstopTimer = Mathf.Max(hitstopTimer, heavy ? 0.065f : 0.040f);
+            cameraShakeTimer = Mathf.Max(cameraShakeTimer, heavy ? 0.26f : 0.17f);
+            cameraShakeAmount = Mathf.Max(cameraShakeAmount, heavy ? 0.125f : 0.088f);
         }
 
         void ApplyBloodStormPressure(float radius, int cap, float damage, float pullStrength, float dt)
@@ -1328,12 +1329,12 @@ namespace Lethe.PrototypeV1
             {
                 if (elapsed < 35f)
                 {
-                    return new SpawnWaveProfile(0.52f, 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye);
+                    return new SpawnWaveProfile(0.46f, 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye);
                 }
 
                 return elapsed < 80f
-                    ? new SpawnWaveProfile(0.58f, 3, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne)
-                    : new SpawnWaveProfile(0.50f, 3, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.VoidPriest);
+                    ? new SpawnWaveProfile(0.52f, 3, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne)
+                    : new SpawnWaveProfile(0.46f, 4, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.VoidPriest);
             }
 
             if (pressure.Progress < 0.24f)
@@ -1366,7 +1367,7 @@ namespace Lethe.PrototypeV1
         {
             var pressure = CurrentPressure();
             if (pressure.Deficit) return pressure.Progress < 0.30f ? 16 : 14;
-            if (pressure.FirstCycle && elapsed < 120f) return 28;
+            if (pressure.FirstCycle && elapsed < 120f) return 32;
             if (pressure.FirstCycle && pressure.Progress >= 0.94f) return 22;
             if (pressure.FirstCycle && pressure.Progress >= 0.70f) return 32;
             if (pressure.FirstCycle) return 34;
@@ -1627,7 +1628,8 @@ namespace Lethe.PrototypeV1
 
         void GrantXp(int amount)
         {
-            xp += Mathf.RoundToInt(amount * (elapsed < 180f ? 1.95f : 1f));
+            var earlyMultiplier = elapsed < 120f ? 2.15f : (elapsed < 180f ? 1.95f : 1f);
+            xp += Mathf.RoundToInt(amount * earlyMultiplier);
             while (xp >= nextXp)
             {
                 xp -= nextXp;
@@ -2146,11 +2148,26 @@ namespace Lethe.PrototypeV1
                         slashTarget = GreatswordSlashAnchorForTip(entry, GreatswordSlashTipForEntry(entry, targetSwing), slashForward);
                         slashCenter = GreatswordSlashAnchorForTip(entry, GreatswordSlashTipForEntry(entry, centerSwing), centerSwing.EndDirection);
                     }
-                    var slashDelay = weapon.Id == V1WeaponId.Greatsword ? GreatswordSlashDelay : DualBladeSlashDelay;
+                    var slashDelay = SlashDelayForEntry(weapon.Id, entry);
                     var minLifetime = weapon.Id == V1WeaponId.Greatsword ? GreatswordSlashMinLifetime : DualBladeSlashMinLifetime;
                     StartCoroutine(SpawnSlashEntryDelayed(entry, slashTarget, slashCenter, slashForward, slashBaseAngle, primary, i, slashDelay, WeaponSlashLifetimeMultiplier, minLifetime));
                 }
             }
+        }
+
+        float SlashDelayForEntry(V1WeaponId weaponId, SlashVfxEntry entry)
+        {
+            if (weaponId == V1WeaponId.Greatsword) return GreatswordSlashDelay;
+            var id = entry != null ? entry.id ?? "" : "";
+            if (id.Contains("Crescent_B", StringComparison.OrdinalIgnoreCase))
+            {
+                return DualBladeSlashDelay + DualBladeSecondSlashExtraDelay;
+            }
+            if (id.Contains("CutFlash", StringComparison.OrdinalIgnoreCase))
+            {
+                return DualBladeSlashDelay + DualBladeSecondSlashExtraDelay * 0.55f;
+            }
+            return DualBladeSlashDelay;
         }
 
         void SpawnPhantomWeaponAttack(WeaponRuntimeSpec weapon, List<WeaponHit> hits, Vector2 forward, float baseAngle, Vector3 hitCenter)

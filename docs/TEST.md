@@ -155,6 +155,16 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Unity compile error count: 0.
   - Runtime value check: delay `0.20s`, sweep `0.28s`, slash appears at `71.4%`.
   - Unity console error count: 0.
+- Dual blades / Blood Blade Storm / first-120 tempo pass, 2026-06-23:
+  - Dual blades now use staggered VFX timing: A slash `0.045s`, cut flash `0.067s`, B slash `0.085s`, assist `0.045s`.
+  - Dual-blade slash/spark profile scales and lifetimes were increased slightly.
+  - Blood Blade Storm opening, continuous pressure, burst cadence, burst damage, heal, hitstop, and camera shake were increased.
+  - First 120 seconds now have faster opening spawn intervals, a higher early enemy cap, and XP multiplier `2.15` before 120s.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Runtime check: opening spawn interval `0.46`, pack `2`; early `GrantXp(1)` produced `2/5` XP.
+  - Blood Blade Storm smoke: `stormReady=True`, `stormObjects=187`, `burstObjects=45`, `bladeObjects=187`, `kills=21`.
+  - Unity console error count: 0.
 
 ### C. Real M2 Loop
 

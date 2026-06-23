@@ -13,15 +13,15 @@ Current source of truth:
 ## 1. Direct v1 visual review
 
 - Priority: highest
-- Include: run `Dev_Prototype_v1`, choose both starting weapons, and judge the first 120 seconds with the newly wired generated VFX and hit-point phantom weapon sweep timing.
-- Check: player body stability, 4-direction movement frames, walking/stop/start naturalness, whether phantom dual blades/greatsword visibly sweep before slash VFX, whether greatsword rotates around the handle instead of sliding, whether the 90-degree greatsword cut feels hot and readable, whether greatsword handle direction points back toward the player body, whether greatsword fan/crescent VFX faces with the blade and sits on the blade tip, whether the attacked enemy is readable, terrain readability, HUD density, VFX scale/timing, hit readability, Blood Blade Storm payoff, and whether the build feels like a real survivor-game shell.
+- Include: run `Dev_Prototype_v1`, choose both starting weapons, and judge the first 120 seconds with the newly tuned dual-blade stagger, greatsword 90-degree sweep, Blood Blade Storm payoff, and faster first-120 tempo.
+- Check: player body stability, 4-direction movement frames, walking/stop/start naturalness, whether phantom dual blades/greatsword visibly sweep before slash VFX, whether greatsword rotates around the handle instead of sliding, whether the 90-degree greatsword cut feels hot and readable, whether dual blades feel quick but still readable, whether the attacked enemy is readable, terrain readability, HUD density, VFX scale/timing, hit readability, Blood Blade Storm payoff, and whether the first 120 seconds reaches choices/combat pressure quickly enough.
 - Done: jaewoo can name the weakest visual/game-feel axis in one sentence.
 
 ## 2. VFX scale/timing follow-up
 
 - Priority: high
 - Include: after direct play, tune generated sprite scale, alpha, sorting order, duration, and spawn frequency for weapon hits, phantom weapons, memories, echoes, and ultimates.
-- Check: dual blades stay quick and visible, and should get a smaller staggered cross-slash version of the "weapon first, VFX after" rule; greatsword stays heavy without being oversized; greatsword handle/tip orientation stays readable; phantom weapons align with slash VFX; slash/spark timing does not feel late; utility memories do not hide enemies; and Blood Blade Storm feels meaningfully stronger than Kalmuri rather than only visually different.
+- Check: dual blades stay quick and visible after the new stagger; greatsword stays heavy without being oversized; greatsword handle/tip orientation stays readable; phantom weapons align with slash VFX; slash/spark timing does not feel late; utility memories do not hide enemies; and Blood Blade Storm feels meaningfully stronger than Kalmuri rather than only visually different.
 - Done: direct review no longer calls out VFX size/timing as the weakest axis.
 
 ## 3. Generate enemies and boss sprites

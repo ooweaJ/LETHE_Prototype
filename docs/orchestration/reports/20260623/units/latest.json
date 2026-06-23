@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260623\\index.md",
-  "generatedAt": "2026-06-23T03:03:23.608Z",
-  "unitCount": 5,
+  "generatedAt": "2026-06-23T05:57:51.448Z",
+  "unitCount": 6,
   "latest": {
-    "title": "2026-06-23-05 - 대검 베기 VFX 타이밍 소폭 당김",
-    "number": "05",
-    "markdownPath": "docs\\orchestration\\reports\\20260623\\units\\2026-06-23-05-대검-베기-vfx-타이밍-소폭-당김.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260623\\units\\2026-06-23-05-대검-베기-vfx-타이밍-소폭-당김.html"
+    "title": "2026-06-23-06 - 쌍검, 피의 칼폭풍, 첫 120초 흐름 보강",
+    "number": "06",
+    "markdownPath": "docs\\orchestration\\reports\\20260623\\units\\2026-06-23-06-쌍검-피의-칼폭풍-첫-120초-흐름-보강.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260623\\units\\2026-06-23-06-쌍검-피의-칼폭풍-첫-120초-흐름-보강.html"
   }
 }

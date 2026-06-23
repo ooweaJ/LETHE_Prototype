@@ -24,9 +24,9 @@ MonoBehaviour:
     mirrorSideByLeadHand: 1
     rotationOffsetDegrees: 32
     mirrorRotationByLeadHand: 1
-    scale: 0.78
+    scale: 0.84
     color: {r: 0.62, g: 0.95, b: 1, a: 0.98}
-    lifetime: 0.21
+    lifetime: 0.23
   - id: DualBladeCrescent_B
     spriteShape: 0
     anchor: 0
@@ -37,9 +37,9 @@ MonoBehaviour:
     mirrorSideByLeadHand: 1
     rotationOffsetDegrees: -34
     mirrorRotationByLeadHand: 1
-    scale: 0.68
+    scale: 0.78
     color: {r: 0.93, g: 1, b: 1, a: 0.88}
-    lifetime: 0.23
+    lifetime: 0.25
   - id: DualBladeCutFlash
     spriteShape: 2
     anchor: 0
@@ -50,9 +50,9 @@ MonoBehaviour:
     mirrorSideByLeadHand: 0
     rotationOffsetDegrees: 0
     mirrorRotationByLeadHand: 0
-    scale: 0.15
+    scale: 0.18
     color: {r: 0.9, g: 1, b: 1, a: 0.92}
-    lifetime: 0.09
+    lifetime: 0.1
   - id: DualBladeCrescent_Assist
     spriteShape: 0
     anchor: 1
@@ -63,9 +63,9 @@ MonoBehaviour:
     mirrorSideByLeadHand: 0
     rotationOffsetDegrees: -14
     mirrorRotationByLeadHand: 0
-    scale: 0.5
+    scale: 0.56
     color: {r: 0.62, g: 0.88, b: 1, a: 0.68}
-    lifetime: 0.15
+    lifetime: 0.17
   kalmuriFollowupSlashes:
   - id: KalmuriFollowup
     spriteShape: 0
@@ -103,6 +103,6 @@ MonoBehaviour:
     mirrorSideByLeadHand: 0
     rotationOffsetDegrees: 0
     mirrorRotationByLeadHand: 0
-    scale: 0.15
+    scale: 0.17
     color: {r: 0.92, g: 1, b: 1, a: 0.84}
-    lifetime: 0.055
+    lifetime: 0.065

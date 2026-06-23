@@ -2,6 +2,18 @@
 
 ## 2026-06-23
 
+- Completed a three-part weapon/combat flow follow-up:
+  - Dual blades now use staggered slash VFX timing: A slash `0.045s`, cut flash `0.067s`, B slash `0.085s`.
+  - Dual-blade slash/spark profile scales and lifetimes were increased slightly so the quick cross-cut reads without becoming a greatsword fan.
+  - Blood Blade Storm payoff increased: stronger opening cue, heavier/faster burst cadence, larger rings/blades, more pressure damage, stronger heal, hitstop, and camera shake.
+  - First-120-second tempo increased: opening spawn interval `0.52 -> 0.46`, mid opening `0.58 -> 0.52`, late opening `0.50 x3 -> 0.46 x4`, early cap `28 -> 32`, early XP multiplier `1.95 -> 2.15`.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Runtime check: dual delays A `0.045`, flash `0.067`, B `0.085`, assist `0.045`; opening spawn interval `0.46`, pack `2`; early `GrantXp(1)` produced `2/5` XP.
+  - Blood Blade Storm smoke: `stormReady=True`, `stormObjects=187`, `burstObjects=45`, `bladeObjects=187`, `kills=21`.
+  - Unity console error count: 0.
+
 - Tightened greatsword slash VFX timing:
   - greatsword slash delay reduced from `0.22s` to `0.20s` after jaewoo review that the slash VFX felt slightly late.
   - with the `0.28s` weapon sweep, slash VFX now appears at roughly `71.4%` of the motion instead of `78.6%`.
