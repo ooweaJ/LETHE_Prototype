@@ -192,6 +192,13 @@ Verification:
 - [x] Phantom weapon timing pass: weapon sweep appears before slash/spark/confirm VFX, and weapon slash VFX now lasts longer for readability.
 - [ ] Direct Play Mode review confirms generated VFX scale, alpha, duration, and spawn frequency feel natural during the first 120 seconds.
 
+## 2026-06-23 Update
+
+- [x] Greatsword phantom attack now uses a blade-tip-first calculation: the tip travels through the hit/VFX point, and the handle stays closer to the player body.
+- [x] Greatsword slash VFX now uses a tip-aligned anchor so the crescent appears at the sword tip rather than the weapon center.
+- [x] Unity Play Mode geometry check confirmed `handleCloser=True` and slash-tip alignment distance `0.000`.
+- [ ] Jaewoo direct review confirms the greatsword sweep angle, tip VFX placement, and hit readability feel natural in real play.
+
 Current next:
 
 1. jaewoo reviews both starting weapons in `Dev_Prototype_v1`.

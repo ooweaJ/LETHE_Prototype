@@ -1,5 +1,19 @@
 # LETHE CHANGELOG
 
+## 2026-06-23
+
+- Aligned greatsword phantom weapon and slash VFX around the blade tip:
+  - greatsword phantom now calculates the blade tip first, then derives the sprite center and rotation from player-to-tip direction.
+  - the handle side now points back toward the player body while the blade tip points through the target.
+  - greatsword slash VFX anchors are corrected so final slash position lands at the calculated blade tip, including compensation for each `SlashVfxEntry.localOffset`.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity `Assets/Refresh`: success.
+  - Unity compile error count: 0.
+  - Greatsword Play Mode check: `handleCloser=True`, tip distance from player `1.67`, handle distance `0.16`.
+  - Greatsword slash alignment check: desired tip and `GreatswordCrescent_Primary` position matched with distance `0.000`.
+  - Unity console error count: 0.
+
 ## 2026-06-22
 
 - Improved hit readability timing for phantom weapon attacks:

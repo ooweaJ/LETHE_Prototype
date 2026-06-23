@@ -109,6 +109,15 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Delayed enumerator check: greatsword slash `1`, spark `1`, confirm `2`, expected slash minimum lifetime `0.48s`.
   - Unity console error count: 0.
   - Remaining risk: Unity MCP time did not reliably advance coroutine time in this session, so delayed timing was verified through immediate state plus direct enumerator advancement. Final motion readability still requires jaewoo direct play review.
+- Greatsword blade-tip alignment pass, 2026-06-23:
+  - Greatsword phantom weapon now calculates the intended blade tip first, then places the weapon center so the handle points back toward the player body.
+  - Greatsword slash VFX now anchors from the calculated blade-tip position, so `GreatswordCrescent_Primary` appears on the sword tip instead of drifting around the sword center.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Play Mode forced greatsword attack check: `handleCloser=True`, tip distance from player `1.67`, handle distance from player `0.16`.
+  - Slash alignment check: desired tip and `GreatswordCrescent_Primary` position matched with distance `0.000`.
+  - Unity console error count: 0.
+  - Remaining risk: this confirms geometry and runtime errors, not final feel. Jaewoo direct play review should confirm the 45-degree sweep reads naturally.
 
 ### C. Real M2 Loop
 

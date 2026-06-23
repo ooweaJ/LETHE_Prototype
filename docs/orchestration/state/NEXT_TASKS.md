@@ -14,14 +14,14 @@ Current source of truth:
 
 - Priority: highest
 - Include: run `Dev_Prototype_v1`, choose both starting weapons, and judge the first 120 seconds with the newly wired generated VFX and hit-point phantom weapon sweep timing.
-- Check: player body stability, 4-direction movement frames, walking/stop/start naturalness, whether phantom dual blades/greatsword visibly sweep before slash VFX, whether the attacked enemy is readable, terrain readability, HUD density, VFX scale/timing, hit readability, Blood Blade Storm payoff, and whether the build feels like a real survivor-game shell.
+- Check: player body stability, 4-direction movement frames, walking/stop/start naturalness, whether phantom dual blades/greatsword visibly sweep before slash VFX, whether greatsword handle direction points back toward the player body, whether greatsword slash VFX sits on the blade tip, whether the attacked enemy is readable, terrain readability, HUD density, VFX scale/timing, hit readability, Blood Blade Storm payoff, and whether the build feels like a real survivor-game shell.
 - Done: jaewoo can name the weakest visual/game-feel axis in one sentence.
 
 ## 2. VFX scale/timing follow-up
 
 - Priority: high
 - Include: after direct play, tune generated sprite scale, alpha, sorting order, duration, and spawn frequency for weapon hits, phantom weapons, memories, echoes, and ultimates.
-- Check: dual blades stay quick and visible, greatsword stays heavy without being oversized, phantom weapons align with slash VFX, slash/spark timing does not feel late, utility memories do not hide enemies, and Blood Blade Storm feels meaningfully stronger than Kalmuri rather than only visually different.
+- Check: dual blades stay quick and visible, greatsword stays heavy without being oversized, greatsword handle/tip orientation stays readable, phantom weapons align with slash VFX, slash/spark timing does not feel late, utility memories do not hide enemies, and Blood Blade Storm feels meaningfully stronger than Kalmuri rather than only visually different.
 - Done: direct review no longer calls out VFX size/timing as the weakest axis.
 
 ## 3. Generate enemies and boss sprites

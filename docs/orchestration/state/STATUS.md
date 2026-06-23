@@ -1,6 +1,6 @@
 # Status
 
-Last updated: 2026-06-22
+Last updated: 2026-06-23
 
 ## Current Snapshot
 
@@ -41,6 +41,21 @@ The report/devlog/review migration is now applied physically: old `docs/reports/
 The current development-docs plugin baseline from `docs/orchestration/MIGRATION_PROMPT.md` has been applied. `AGENTS.md` now uses a `Development Docs Plugin` section, `docs/orchestration/templates/HTML_INTERFACE_TEMPLATE.md` exists, legacy review pointer READMEs are readable, `reports/index.html` is generated as a newest-first date archive, daily report pages are generated as unit-card pages, and Discord delivery is documented as Project Orchestrator first with local direct-send scripts as trusted fallback only.
 
 ## Latest Verified Result
+
+- Unity v1 greatsword blade-tip alignment pass:
+  - Responded to jaewoo review that the greatsword handle should face the player body and the slash VFX should be calculated from the sword tip.
+  - Greatsword phantom attack now calculates the intended blade-tip path first.
+  - The weapon sprite center is placed backward from that tip so the local handle side stays closer to the player.
+  - Greatsword slash VFX now applies the sprite profile offset in reverse, anchoring `GreatswordCrescent_Primary` to the calculated blade-tip position.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity `Assets/Refresh`: success.
+    - Unity compile error count: `0`.
+    - Forced greatsword attack Play Mode check: `handleCloser=True`, tip distance from player `1.67`, handle distance from player `0.16`.
+    - Slash alignment check: desired tip and `GreatswordCrescent_Primary` position matched with distance `0.000`.
+    - Unity console error count: `0`.
+  - Limitation:
+    - This validates geometry and runtime health. Final motion readability still needs jaewoo direct play review because screenshot capture remains unreliable.
 
 - Unity v1 phantom weapon timing/readability pass:
   - Responded to jaewoo review that hit VFX duration was too short, the attacked target was hard to read, and the weapon type was not visible enough.

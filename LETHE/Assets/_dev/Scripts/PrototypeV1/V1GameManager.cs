@@ -99,6 +99,9 @@ namespace Lethe.PrototypeV1
         const float WeaponSlashLifetimeMultiplier = 1.45f;
         const float DualBladeSlashMinLifetime = 0.34f;
         const float GreatswordSlashMinLifetime = 0.48f;
+        const float GreatswordCenterToTipRatio = 0.44f;
+        const float GreatswordTipForwardOffset = 0.30f;
+        const float GreatswordTipSweepSideOffset = 0.28f;
         const string PlayerSheetPath = "Assets/_dev/Art/Sprites/Characters/Player/sheet_player_v1_4dir.png";
         const string DualBladeSwingArcAPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_01.png";
         const string DualBladeSwingArcBPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_02.png";
@@ -2124,9 +2127,21 @@ namespace Lethe.PrototypeV1
                 foreach (var entry in entries)
                 {
                     if (entry == null || !entry.Matches(primary)) continue;
+                    var desiredSlashTip = weapon.Id == V1WeaponId.Greatsword
+                        ? GreatswordSlashTipPosition(hits[i].Enemy.transform.position, hitCenter, f, i)
+                        : hits[i].Enemy.transform.position;
+                    var slashTarget = weapon.Id == V1WeaponId.Greatsword
+                        ? GreatswordSlashAnchorForTip(entry, desiredSlashTip, f)
+                        : desiredSlashTip;
+                    var desiredCenterTip = weapon.Id == V1WeaponId.Greatsword
+                        ? GreatswordSlashTipPosition(hitCenter, hitCenter, f, 0)
+                        : hitCenter;
+                    var slashCenter = weapon.Id == V1WeaponId.Greatsword
+                        ? GreatswordSlashAnchorForTip(entry, desiredCenterTip, f)
+                        : desiredCenterTip;
                     var slashDelay = weapon.Id == V1WeaponId.Greatsword ? GreatswordSlashDelay : DualBladeSlashDelay;
                     var minLifetime = weapon.Id == V1WeaponId.Greatsword ? GreatswordSlashMinLifetime : DualBladeSlashMinLifetime;
-                    StartCoroutine(SpawnSlashEntryDelayed(entry, hits[i].Enemy.transform.position, hitCenter, f, baseAngle, primary, i, slashDelay, WeaponSlashLifetimeMultiplier, minLifetime));
+                    StartCoroutine(SpawnSlashEntryDelayed(entry, slashTarget, slashCenter, f, baseAngle, primary, i, slashDelay, WeaponSlashLifetimeMultiplier, minLifetime));
                 }
             }
         }
@@ -2137,12 +2152,18 @@ namespace Lethe.PrototypeV1
             if (weapon.Id == V1WeaponId.Greatsword)
             {
                 var primary = hits[0].Enemy.transform.position;
-                var position = Vector3.Lerp(primary, hitCenter, 0.42f) + (Vector3)(forward * 0.10f);
+                var tipBase = Vector3.Lerp(primary, hitCenter, 0.42f) + (Vector3)(forward * GreatswordTipForwardOffset);
+                var tipStart = tipBase - (Vector3)(side * GreatswordTipSweepSideOffset) - (Vector3)(forward * 0.05f);
+                var tipEnd = tipBase + (Vector3)(side * GreatswordTipSweepSideOffset) + (Vector3)(forward * 0.05f);
                 var scale = ScaleSpriteToWorldHeight(greatswordWeaponSprite, GreatswordPhantomHeight);
-                var startPos = position - (Vector3)(side * 0.22f) - (Vector3)(forward * 0.12f);
-                var endPos = position + (Vector3)(side * 0.22f) + (Vector3)(forward * 0.08f);
-                SpawnSweepingTransientSprite("GreatswordPhantomStrike", greatswordWeaponSprite, startPos, endPos, baseAngle - 66f, baseAngle - 18f, scale, scale * 1.04f, new Color(0.90f, 0.98f, 1f, 0.90f), GreatswordPhantomLifetime, 0.20f);
-                SpawnSweepingTransientSprite("GreatswordPhantomAfterimage", greatswordWeaponSprite, startPos - (Vector3)(forward * 0.10f), endPos - (Vector3)(forward * 0.08f), baseAngle - 72f, baseAngle - 22f, scale * 1.10f, scale * 1.14f, new Color(0.55f, 0.82f, 1f, 0.28f), GreatswordPhantomLifetime + 0.04f, 0.22f);
+                var startBladeDir = GreatswordBladeDirectionToTip(tipStart, forward);
+                var endBladeDir = GreatswordBladeDirectionToTip(tipEnd, forward);
+                var startPos = GreatswordSpriteCenterFromTip(tipStart, startBladeDir, GreatswordPhantomHeight);
+                var endPos = GreatswordSpriteCenterFromTip(tipEnd, endBladeDir, GreatswordPhantomHeight);
+                var startAngle = SpriteRotationForTipDirection(startBladeDir);
+                var endAngle = SpriteRotationForTipDirection(endBladeDir);
+                SpawnSweepingTransientSprite("GreatswordPhantomStrike", greatswordWeaponSprite, startPos, endPos, startAngle, endAngle, scale, scale * 1.04f, new Color(0.90f, 0.98f, 1f, 0.90f), GreatswordPhantomLifetime, 0.20f);
+                SpawnSweepingTransientSprite("GreatswordPhantomAfterimage", greatswordWeaponSprite, startPos - (Vector3)(forward * 0.08f), endPos - (Vector3)(forward * 0.08f), startAngle - 5f, endAngle - 5f, scale * 1.10f, scale * 1.14f, new Color(0.55f, 0.82f, 1f, 0.28f), GreatswordPhantomLifetime + 0.04f, 0.22f);
                 return;
             }
 
@@ -2154,6 +2175,42 @@ namespace Lethe.PrototypeV1
             var rightScale = ScaleSpriteToWorldHeight(dualRightWeaponSprite, DualBladePhantomHeight);
             SpawnSweepingTransientSprite("DualBladePhantomLeft", dualLeftWeaponSprite, leftPos - (Vector3)(side * 0.12f * lead), leftPos + (Vector3)(side * 0.12f * lead) + (Vector3)(forward * 0.06f), baseAngle + 30f * lead, baseAngle + 76f * lead, leftScale, leftScale * 1.04f, new Color(0.80f, 0.98f, 1f, 0.92f), DualBladePhantomLifetime, 0.13f);
             SpawnSweepingTransientSprite("DualBladePhantomRight", dualRightWeaponSprite, rightPos + (Vector3)(side * 0.12f * lead), rightPos - (Vector3)(side * 0.12f * lead) + (Vector3)(forward * 0.08f), baseAngle - 32f * lead, baseAngle - 78f * lead, rightScale, rightScale * 1.04f, new Color(0.95f, 1f, 1f, 0.88f), DualBladePhantomLifetime + 0.02f, 0.14f);
+        }
+
+        Vector2 GreatswordBladeDirectionToTip(Vector3 tipPosition, Vector2 fallbackForward)
+        {
+            if (player == null) return fallbackForward.sqrMagnitude > 0.001f ? fallbackForward.normalized : Vector2.right;
+            var dir = (Vector2)(tipPosition - player.position);
+            return dir.sqrMagnitude > 0.001f ? dir.normalized : fallbackForward.normalized;
+        }
+
+        Vector3 GreatswordSpriteCenterFromTip(Vector3 tipPosition, Vector2 bladeDirection, float targetWorldHeight)
+        {
+            var dir = bladeDirection.sqrMagnitude > 0.001f ? bladeDirection.normalized : Vector2.right;
+            return tipPosition - (Vector3)(dir * targetWorldHeight * GreatswordCenterToTipRatio);
+        }
+
+        Vector3 GreatswordSlashTipPosition(Vector3 targetPosition, Vector3 hitCenter, Vector2 forward, int hitIndex)
+        {
+            var f = forward.sqrMagnitude > 0.001f ? forward.normalized : lastAim.normalized;
+            var side = new Vector2(-f.y, f.x).normalized;
+            var sideOffset = hitIndex == 0 ? 0f : (hitIndex % 2 == 0 ? -0.16f : 0.16f);
+            return Vector3.Lerp(targetPosition, hitCenter, 0.35f) + (Vector3)(f * GreatswordTipForwardOffset + side * sideOffset);
+        }
+
+        Vector3 GreatswordSlashAnchorForTip(SlashVfxEntry entry, Vector3 desiredTipPosition, Vector2 forward)
+        {
+            var f = forward.sqrMagnitude > 0.001f ? forward.normalized : lastAim.normalized;
+            var side = new Vector2(-f.y, f.x).normalized;
+            var sideSign = entry != null && entry.mirrorSideByLeadHand ? (leftBladeLead ? -1f : 1f) : 1f;
+            var localOffset = entry != null ? entry.localOffset : Vector2.zero;
+            return desiredTipPosition - (Vector3)(side * localOffset.x * sideSign + f * localOffset.y);
+        }
+
+        float SpriteRotationForTipDirection(Vector2 tipDirection)
+        {
+            var dir = tipDirection.sqrMagnitude > 0.001f ? tipDirection.normalized : Vector2.right;
+            return Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
         }
 
         IEnumerator SpawnSlashEntryDelayed(SlashVfxEntry entry, Vector3 targetPosition, Vector3 hitCenter, Vector2 forward, float baseAngle, bool primary, int hitIndex, float delay, float lifetimeMultiplier, float minLifetime)

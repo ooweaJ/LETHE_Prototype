@@ -68,6 +68,14 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Greatsword blade-tip alignment pass:
+  - Greatsword phantom weapon now uses blade-tip-first placement so the handle faces back toward the player body.
+  - Greatsword slash VFX now anchors to the calculated blade tip by compensating for the slash profile offset.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Forced greatsword attack Play Mode check: `handleCloser=True`, tip distance from player `1.67`, handle distance from player `0.16`.
+  - Slash alignment check: desired tip and `GreatswordCrescent_Primary` position matched with distance `0.000`.
+  - Unity console error count: `0`.
 - Remaining VFX prompt-sheet generation:
   - Generated/imported 20 VFX sprites for weapon hits, six active memories, six echoes, and three ultimates.
   - Evidence contact sheet: `LETHE/Assets/_dev/Evidence/remaining_vfx_prompt_sheet_20260621.png`.
