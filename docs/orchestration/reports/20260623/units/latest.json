@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260623\\index.md",
-  "generatedAt": "2026-06-23T05:57:51.448Z",
-  "unitCount": 6,
+  "generatedAt": "2026-06-23T07:00:38.865Z",
+  "unitCount": 7,
   "latest": {
-    "title": "2026-06-23-06 - 쌍검, 피의 칼폭풍, 첫 120초 흐름 보강",
-    "number": "06",
-    "markdownPath": "docs\\orchestration\\reports\\20260623\\units\\2026-06-23-06-쌍검-피의-칼폭풍-첫-120초-흐름-보강.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260623\\units\\2026-06-23-06-쌍검-피의-칼폭풍-첫-120초-흐름-보강.html"
+    "title": "2026-06-23-07 - 유틸 기억 VFX, 배경, 이동감 보강",
+    "number": "07",
+    "markdownPath": "docs\\orchestration\\reports\\20260623\\units\\2026-06-23-07-유틸-기억-vfx-배경-이동감-보강.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260623\\units\\2026-06-23-07-유틸-기억-vfx-배경-이동감-보강.html"
   }
 }

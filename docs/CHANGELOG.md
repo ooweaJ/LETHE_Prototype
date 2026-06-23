@@ -2,6 +2,20 @@
 
 ## 2026-06-23
 
+- Completed the utility VFX / background / movement follow-up:
+  - Greatsword slash VFX delay reduced again from `0.20s` to `0.18s`, so the slash appears at roughly `64.3%` of the `0.28s` weapon sweep.
+  - Six non-core active memories and echoes were made more visible through larger generated sprite scaling, stronger alpha, longer lifetimes, and clearer secondary cues.
+  - `StoppedSecond` now places its time-stop focus on the nearest enemy cluster instead of only around the player, with clock-hand VFX and a stronger freeze window.
+  - Added debug review buttons for `Mem A`, `Mem B`, `Echo A`, `Echo B`, `Ult 3`, and `VFX` so utility memory/echo/ultimate VFX can be checked immediately.
+  - Added runtime arena dressing: dark backdrop, boundary bands, memory cracks, and outer markers that keep the arena readable without competing with combat VFX.
+  - Player movement animation was softened with lower acceleration/deceleration, slower walk cadence, reduced bob, and reduced tilt.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity Play Mode utility smoke: `greatDelay=0.18`, `sweep=0.28`, `activeMemories=3`, `bgDecor=30`, `utilityVfx=36`, `enemies=14`.
+  - Unity Play Mode echo/ultimate smoke: `echoCount=6`, `previewUlt=6`, `clockHands=21`, and utility echoes all reached +5.
+  - Unity console error count: 0.
+
 - Completed a three-part weapon/combat flow follow-up:
   - Dual blades now use staggered slash VFX timing: A slash `0.045s`, cut flash `0.067s`, B slash `0.085s`.
   - Dual-blade slash/spark profile scales and lifetimes were increased slightly so the quick cross-cut reads without becoming a greatsword fan.

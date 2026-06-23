@@ -77,6 +77,18 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Unity compile error count: 0.
   - Unity Play Mode smoke attempts produced console error count 0.
   - Remaining risk: Game/Scene capture still returned solid-color images, so jaewoo direct visual review must judge final scale, alpha, timing, and natural combat readability.
+- Utility VFX / background / movement follow-up, 2026-06-23:
+  - Greatsword slash VFX delay is now `0.18s`, about `64.3%` of the `0.28s` weapon sweep.
+  - Execution, Hunter, Shatter, Stopped, Ashen, and Brand active/echo VFX were enlarged and made longer-lived.
+  - Stopped Second now focuses on the nearest enemy cluster and draws clock-hand VFX.
+  - Right-side debug panel now exposes `Mem A`, `Mem B`, `Echo A`, `Echo B`, `Ult 3`, and `VFX` review buttons.
+  - Runtime arena dressing now creates 30 decorative boundary/crack/marker objects.
+  - Player walk animation is softer: lower acceleration/deceleration, slower frame cadence, lower bob, and lower tilt.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity Play Mode smoke: `greatDelay=0.18`, `sweep=0.28`, `activeMemories=3`, `bgDecor=30`, `utilityVfx=36`, `enemies=14`.
+  - Unity Play Mode echo/ultimate smoke: `echoCount=6`, `previewUlt=6`, `clockHands=21`.
+  - Unity console error count: 0.
 - Blood Blade Storm payoff / movement pass, 2026-06-22:
   - Blood Blade Storm now has opening cue, continuous pressure, and periodic burst pulses instead of only Kalmuri-like rotating blades.
   - Dual-blade storm uses faster blade orbit and more frequent bursts; greatsword storm uses slower/heavier slashes and burst impact.

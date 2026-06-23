@@ -42,6 +42,31 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 utility VFX / background / movement follow-up:
+  - Responded to jaewoo review that game feel is now promising, but greatsword slash VFX can appear faster and non-core memories such as Stopped Second feel invisible.
+  - Greatsword slash delay reduced from `0.20s` to `0.18s`; with the `0.28s` weapon sweep, slash VFX appears at roughly `64.3%`.
+  - Utility active/echo VFX pass:
+    - Execution, Hunter, Shatter, Stopped, Ashen, and Brand active memory VFX now use larger target widths, higher alpha, longer lifetimes, and secondary cue sprites.
+    - Stopped Second now targets the nearest enemy cluster, draws clock hands, and applies a stronger freeze window.
+    - Utility echo VFX was similarly enlarged and lengthened so it no longer reads as absent when it procs.
+  - Utility ultimate pass:
+    - Fracture Execution, Stasis Hunt, and Ashen Oblivion previews are larger and longer-lived.
+    - Stasis Hunt includes clock-hand VFX and stronger freeze readability.
+  - Debug review:
+    - Right-side debug panel now exposes `Mem A`, `Mem B`, `Echo A`, `Echo B`, `Ult 3`, and `VFX`.
+    - These buttons let jaewoo immediately inspect utility memory/echo/ultimate VFX without waiting for a full run.
+  - Arena / movement:
+    - Runtime arena dressing now adds dark backdrop, boundary bands, memory cracks, and outer markers.
+    - Player walk feel was softened with lower acceleration/deceleration, slower walk cadence, less bob, and less tilt.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity compile error count: `0`.
+    - Unity Play Mode utility smoke: `greatDelay=0.18`, `sweep=0.28`, `activeMemories=3`, `bgDecor=30`, `utilityVfx=36`, `enemies=14`.
+    - Unity Play Mode echo/ultimate smoke: `echoCount=6`, `previewUlt=6`, `clockHands=21`; utility echoes reached +5.
+    - Unity console error count: `0`.
+  - Next review:
+    - Jaewoo should use the new debug buttons first, then play the first 120 seconds to judge whether utility memories are now visible without cluttering the screen.
+
 - Unity v1 dual blades / Blood Blade Storm / first-120 tempo pass:
   - Completed the three next work items after greatsword reached a reviewable state.
   - Dual blades:

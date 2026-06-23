@@ -18,6 +18,12 @@
 
 ## Progress
 
+- 2026-06-23 Update:
+  - [x] 대검 slash VFX delay를 `0.18s`로 당겨 더 빠르게 읽히게 했다.
+  - [x] 6개 유틸리티 기억/잔향 VFX의 scale, alpha, lifetime, secondary cue를 보강했다.
+  - [x] `멈춘 1초`는 적 무리 중심의 시간 정지 초점과 시계바늘 VFX로 변경했다.
+  - [x] `Mem A/B`, `Echo A/B`, `Ult 3`, `VFX` 디버그 버튼을 추가했다.
+  - [x] 배경 1차 드레싱과 걷기 애니메이션 완화가 들어갔다.
 - A. 데이터 구조 정리: partially done
 - B. 공격/잔향 타격감 보정: working
 - C. M2 실제 플레이 루프 연결: working

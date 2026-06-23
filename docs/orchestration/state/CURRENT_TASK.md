@@ -68,6 +68,17 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Utility VFX / background / movement follow-up:
+  - Greatsword slash delay reduced to `0.18s`, so VFX appears at roughly `64.3%` of the `0.28s` sweep.
+  - Six utility memories/echoes now have stronger runtime visibility.
+  - `StoppedSecond` now creates an enemy-cluster time-stop focus with clock hands.
+  - Debug panel now exposes `Mem A`, `Mem B`, `Echo A`, `Echo B`, `Ult 3`, and `VFX`.
+  - Runtime arena dressing and softer player walking were added.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity Play Mode smoke: `greatDelay=0.18`, `sweep=0.28`, `activeMemories=3`, `bgDecor=30`, `utilityVfx=36`, `enemies=14`.
+  - Unity Play Mode echo/ultimate smoke: `echoCount=6`, `previewUlt=6`, `clockHands=21`.
+  - Unity console error count: `0`.
 - Dual blades / Blood Blade Storm / first-120 tempo pass:
   - Dual-blade VFX stagger: A `0.045s`, cut flash `0.067s`, B `0.085s`, assist `0.045s`.
   - Blood Blade Storm opening, pressure, burst cadence, burst damage, heal, hitstop, and camera shake increased.
