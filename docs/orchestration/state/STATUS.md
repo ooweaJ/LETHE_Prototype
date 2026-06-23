@@ -42,6 +42,32 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 enemy / boss sprite insertion:
+  - Responded to jaewoo asking about the next enemy/boss sprite step.
+  - Generated first-pass prototype sprites:
+    - `LETHE/Assets/_dev/Art/Sprites/Enemies/Eye/sheet_enemy_eye_4dir.png`
+    - `LETHE/Assets/_dev/Art/Sprites/Enemies/Splitter/sheet_enemy_splitter_4dir.png`
+    - `LETHE/Assets/_dev/Art/Sprites/Enemies/VoidPriest/sheet_enemy_voidpriest_4dir.png`
+    - `LETHE/Assets/_dev/Art/Sprites/Enemies/Bosses/spr_boss_gatekeeper_01.png`
+  - Generated matching chroma source files under `LETHE/Assets/_dev/Art/Source/`.
+  - Added `scripts/generate_enemy_boss_sprites.ps1` as the reproducible local generator.
+  - Runtime wiring:
+    - `V1GameManager.EnemySprite()` now loads the new sprites for Drifting Eye, Split One, Void Priest, and Gatekeeper before procedural fallback.
+  - Visual role read:
+    - Drifting Eye = floating eye with tendrils.
+    - Split One = amber dividing blob.
+    - Void Priest = hooded caster with green casting cue.
+    - Gatekeeper = large armored guardian / door motif.
+  - Verification:
+    - Opened local PNGs for visual sanity.
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity `Assets/Refresh`: success.
+    - Unity compile error count: `0`.
+    - Unity Play Mode entry reached `isPlaying=true`.
+    - Unity console error count: `0`.
+  - Next review:
+    - Run both starting weapons and check whether the new enemy roles are visually distinct enough during combat, especially under VFX clutter.
+
 - Unity v1 lingering VFX / echo readability follow-up:
   - Responded to jaewoo review that Shatter Wave and Stopped Second should persist on screen instead of disappearing immediately, and that echo VFX may feel absent.
   - Shatter Wave:

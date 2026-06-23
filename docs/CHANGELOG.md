@@ -2,6 +2,20 @@
 
 ## 2026-06-23
 
+- Added first-pass enemy and boss sprites:
+  - Generated role-readable prototype PNGs for `sheet_enemy_eye_4dir.png`, `sheet_enemy_splitter_4dir.png`, `sheet_enemy_voidpriest_4dir.png`, and `spr_boss_gatekeeper_01.png`.
+  - Saved matching chroma source PNGs under `LETHE/Assets/_dev/Art/Source/`.
+  - Added `scripts/generate_enemy_boss_sprites.ps1` so the sprites can be regenerated consistently.
+  - Wired `V1GameManager.EnemySprite()` to load the new role sprites before falling back to procedural shapes.
+  - Drifting Eye now has a floating eyeball/tendrils sheet, Split One has a dividing amber blob sheet, Void Priest has a hooded caster sheet, and Gatekeeper has a larger armored guardian sprite.
+- Verification:
+  - Local visual check opened the new eye, splitter, void priest, and gatekeeper PNGs.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity `Assets/Refresh`: success.
+  - Unity compile error count: 0.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console error count: 0.
+
 - Improved lingering VFX readability for Shatter Wave, Stopped Second, and utility echoes:
   - Shatter Wave active VFX now uses a lingering field helper instead of a short one-frame-feeling ring.
   - Shatter Wave active field lifetime increased to `1.05s`.

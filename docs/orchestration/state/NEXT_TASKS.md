@@ -24,11 +24,11 @@ Current source of truth:
 - Check: dual blades stay quick and visible after the new stagger; greatsword stays heavy without being oversized; greatsword handle/tip orientation stays readable; phantom weapons align with slash VFX; slash/spark timing does not feel late; utility memories are visible but do not hide enemies; arena dressing supports VFX readability; and Blood Blade Storm feels meaningfully stronger than Kalmuri rather than only visually different.
 - Done: direct review no longer calls out VFX size/timing as the weakest axis.
 
-## 3. Generate enemies and boss sprites
+## 3. Review enemy and boss sprite readability
 
 - Priority: high
-- Include: `sheet_enemy_eye_4dir.png`, `sheet_enemy_splitter_4dir.png`, `sheet_enemy_voidpriest_4dir.png`, and `spr_boss_gatekeeper_01.png`.
-- Done: enemy roles have dedicated sprites instead of only procedural silhouettes.
+- Include: check `sheet_enemy_eye_4dir.png`, `sheet_enemy_splitter_4dir.png`, `sheet_enemy_voidpriest_4dir.png`, and `spr_boss_gatekeeper_01.png` in live combat under VFX.
+- Done: jaewoo can recognize ranged eye, splitter, void priest, and Gatekeeper without reading debug labels.
 
 ## 4. Reliable visual evidence path
 

@@ -1,0 +1,962 @@
+fileFormatVersion: 2
+guid: 4aab8b3dd122c3840942896996b26529
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5512441785396208294
+    second: sheet_enemy_voidpriest_4dir_0
+  - first:
+      213: -3471459375976025322
+    second: sheet_enemy_voidpriest_4dir_1
+  - first:
+      213: -504939449528283270
+    second: sheet_enemy_voidpriest_4dir_2
+  - first:
+      213: 177183382279444688
+    second: sheet_enemy_voidpriest_4dir_3
+  - first:
+      213: 6170866455038973892
+    second: sheet_enemy_voidpriest_4dir_4
+  - first:
+      213: -7073571670218648562
+    second: sheet_enemy_voidpriest_4dir_5
+  - first:
+      213: -1518586533812296789
+    second: sheet_enemy_voidpriest_4dir_6
+  - first:
+      213: 965603248535905064
+    second: sheet_enemy_voidpriest_4dir_7
+  - first:
+      213: -309726321355028533
+    second: sheet_enemy_voidpriest_4dir_8
+  - first:
+      213: -5441474523836890485
+    second: sheet_enemy_voidpriest_4dir_9
+  - first:
+      213: -8330415420827140285
+    second: sheet_enemy_voidpriest_4dir_10
+  - first:
+      213: 6958331280090425413
+    second: sheet_enemy_voidpriest_4dir_11
+  - first:
+      213: -1353625942101452310
+    second: sheet_enemy_voidpriest_4dir_12
+  - first:
+      213: -3289139976295365755
+    second: sheet_enemy_voidpriest_4dir_13
+  - first:
+      213: 2365779432049610034
+    second: sheet_enemy_voidpriest_4dir_14
+  - first:
+      213: -3859463082891296369
+    second: sheet_enemy_voidpriest_4dir_15
+  - first:
+      213: -4671205996703341770
+    second: sheet_enemy_voidpriest_4dir_16
+  - first:
+      213: 6994087688212310020
+    second: sheet_enemy_voidpriest_4dir_17
+  - first:
+      213: 9127929692273539802
+    second: sheet_enemy_voidpriest_4dir_18
+  - first:
+      213: -66846460218867581
+    second: sheet_enemy_voidpriest_4dir_19
+  - first:
+      213: -7804760587863914858
+    second: sheet_enemy_voidpriest_4dir_20
+  - first:
+      213: -3312518155118025175
+    second: sheet_enemy_voidpriest_4dir_21
+  - first:
+      213: 9216739387908178085
+    second: sheet_enemy_voidpriest_4dir_22
+  - first:
+      213: -8376491449494852203
+    second: sheet_enemy_voidpriest_4dir_23
+  - first:
+      213: -2533646520824343357
+    second: sheet_enemy_voidpriest_4dir_24
+  - first:
+      213: -5847674698099191788
+    second: sheet_enemy_voidpriest_4dir_25
+  - first:
+      213: 283968762349820234
+    second: sheet_enemy_voidpriest_4dir_26
+  - first:
+      213: -1902881700989082945
+    second: sheet_enemy_voidpriest_4dir_27
+  - first:
+      213: 2630235486020204408
+    second: sheet_enemy_voidpriest_4dir_28
+  - first:
+      213: 9209969222311793966
+    second: sheet_enemy_voidpriest_4dir_29
+  - first:
+      213: -7422126297400250028
+    second: sheet_enemy_voidpriest_4dir_30
+  - first:
+      213: -3894029158301312780
+    second: sheet_enemy_voidpriest_4dir_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_0
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 671
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5d5070076fdf73b0800000000000000
+      internalID: -5512441785396208294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_1
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 671
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 613ffb21716e2dfc0800000000000000
+      internalID: -3471459375976025322
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_2
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 671
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a7f09c5fe381ef8f0800000000000000
+      internalID: -504939449528283270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_3
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 671
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d85ed0f85b757200800000000000000
+      internalID: 177183382279444688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_4
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 575
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c7d8f0a85253a550800000000000000
+      internalID: 6170866455038973892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_5
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 575
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e04d9571b00a5dd90800000000000000
+      internalID: -7073571670218648562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_6
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 575
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba32d63e795eceae0800000000000000
+      internalID: -1518586533812296789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_7
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 575
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82322fed903866d00800000000000000
+      internalID: 965603248535905064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_8
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 479
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc78b0e3d81a3bbf0800000000000000
+      internalID: -309726321355028533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_9
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 479
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b824d5030cffb74b0800000000000000
+      internalID: -5441474523836890485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_10
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 479
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34f792aaf4b646c80800000000000000
+      internalID: -8330415420827140285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_11
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 479
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5486743be65f09060800000000000000
+      internalID: 6958331280090425413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_12
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 383
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae91a42a064f63de0800000000000000
+      internalID: -1353625942101452310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_13
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 383
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 583c0604e90aa52d0800000000000000
+      internalID: -3289139976295365755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_14
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 383
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23d0e38ebdfe4d020800000000000000
+      internalID: 2365779432049610034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_15
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 383
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f81c78046ce607ac0800000000000000
+      internalID: -3859463082891296369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_16
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 287
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 633a2d525ea8c2fb0800000000000000
+      internalID: -4671205996703341770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_17
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 287
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 408e3d732bdff0160800000000000000
+      internalID: 6994087688212310020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_18
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 287
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ada74ba71bbecae70800000000000000
+      internalID: 9127929692273539802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_19
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 287
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3808924af73821ff0800000000000000
+      internalID: -66846460218867581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_20
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 191
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6960763c89befa390800000000000000
+      internalID: -7804760587863914858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_21
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 191
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9266824d9429702d0800000000000000
+      internalID: -3312518155118025175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_22
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 191
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a04e9314af68ef70800000000000000
+      internalID: 9216739387908178085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_23
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 191
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59d23c04869b0cb80800000000000000
+      internalID: -8376491449494852203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_24
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 95
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c45cd3c9eda6dcd0800000000000000
+      internalID: -2533646520824343357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_25
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 95
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41012c928d2e8dea0800000000000000
+      internalID: -5847674698099191788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_26
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 95
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a491b27b51cd0f300800000000000000
+      internalID: 283968762349820234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_27
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 95
+        width: 70
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb264f2cc2b9795e0800000000000000
+      internalID: -1902881700989082945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_28
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 0
+        width: 70
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8777cdb2d39708420800000000000000
+      internalID: 2630235486020204408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_29
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 0
+        width: 70
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e25dc20163260df70800000000000000
+      internalID: 9209969222311793966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_30
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 0
+        width: 70
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4517f55e47f4ff890800000000000000
+      internalID: -7422126297400250028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_voidpriest_4dir_31
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 0
+        width: 70
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f8df6aac11a5f9c0800000000000000
+      internalID: -3894029158301312780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      sheet_enemy_voidpriest_4dir_0: -5512441785396208294
+      sheet_enemy_voidpriest_4dir_1: -3471459375976025322
+      sheet_enemy_voidpriest_4dir_10: -8330415420827140285
+      sheet_enemy_voidpriest_4dir_11: 6958331280090425413
+      sheet_enemy_voidpriest_4dir_12: -1353625942101452310
+      sheet_enemy_voidpriest_4dir_13: -3289139976295365755
+      sheet_enemy_voidpriest_4dir_14: 2365779432049610034
+      sheet_enemy_voidpriest_4dir_15: -3859463082891296369
+      sheet_enemy_voidpriest_4dir_16: -4671205996703341770
+      sheet_enemy_voidpriest_4dir_17: 6994087688212310020
+      sheet_enemy_voidpriest_4dir_18: 9127929692273539802
+      sheet_enemy_voidpriest_4dir_19: -66846460218867581
+      sheet_enemy_voidpriest_4dir_2: -504939449528283270
+      sheet_enemy_voidpriest_4dir_20: -7804760587863914858
+      sheet_enemy_voidpriest_4dir_21: -3312518155118025175
+      sheet_enemy_voidpriest_4dir_22: 9216739387908178085
+      sheet_enemy_voidpriest_4dir_23: -8376491449494852203
+      sheet_enemy_voidpriest_4dir_24: -2533646520824343357
+      sheet_enemy_voidpriest_4dir_25: -5847674698099191788
+      sheet_enemy_voidpriest_4dir_26: 283968762349820234
+      sheet_enemy_voidpriest_4dir_27: -1902881700989082945
+      sheet_enemy_voidpriest_4dir_28: 2630235486020204408
+      sheet_enemy_voidpriest_4dir_29: 9209969222311793966
+      sheet_enemy_voidpriest_4dir_3: 177183382279444688
+      sheet_enemy_voidpriest_4dir_30: -7422126297400250028
+      sheet_enemy_voidpriest_4dir_31: -3894029158301312780
+      sheet_enemy_voidpriest_4dir_4: 6170866455038973892
+      sheet_enemy_voidpriest_4dir_5: -7073571670218648562
+      sheet_enemy_voidpriest_4dir_6: -1518586533812296789
+      sheet_enemy_voidpriest_4dir_7: 965603248535905064
+      sheet_enemy_voidpriest_4dir_8: -309726321355028533
+      sheet_enemy_voidpriest_4dir_9: -5441474523836890485
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

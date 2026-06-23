@@ -125,6 +125,15 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
   - Unity compile error count: 0.
   - Unity Play Mode entry reached `isPlaying=true`; Unity console error count: 0.
+- Enemy / boss sprite insertion, 2026-06-23:
+  - Generated/imported `sheet_enemy_eye_4dir.png`, `sheet_enemy_splitter_4dir.png`, `sheet_enemy_voidpriest_4dir.png`, and `spr_boss_gatekeeper_01.png`.
+  - Generated matching chroma source files under `_dev/Art/Source`.
+  - Runtime `EnemySprite()` now loads these assets before procedural fallback.
+  - Local visual check opened the eye, splitter, void priest, and gatekeeper images.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity `Assets/Refresh`: success.
+  - Unity compile error count: 0.
+  - Unity Play Mode entry reached `isPlaying=true`; Unity console error count: 0.
 - Blood Blade Storm payoff / movement pass, 2026-06-22:
   - Blood Blade Storm now has opening cue, continuous pressure, and periodic burst pulses instead of only Kalmuri-like rotating blades.
   - Dual-blade storm uses faster blade orbit and more frequent bursts; greatsword storm uses slower/heavier slashes and burst impact.

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-23-12 - 적/보스 판독 스프라이트 삽입</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-23-12 - 적/보스 판독 스프라이트 삽입</h1>
+      <p class="meta">Generated from 2026-06-23-12-적-보스-판독-스프라이트-삽입.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260623/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-23-12 - 적/보스 판독 스프라이트 삽입</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 계속 <code>_dev</code> 검증 빌드다. 이번 작업은 전투가 재미있어지기 시작한 뒤, 적 역할이 도형 fallback으로만 보이는 문제를 줄이기 위한 첫 적/보스 스프라이트 삽입 패스다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>떠도는 눈 스프라이트 시트 <code>sheet_enemy_eye_4dir.png</code>를 추가했다.</li>
+<li>쪼개진 자 스프라이트 시트 <code>sheet_enemy_splitter_4dir.png</code>를 추가했다.</li>
+<li>공허 사제 스프라이트 시트 <code>sheet_enemy_voidpriest_4dir.png</code>를 추가했다.</li>
+<li>첫 보스 문지기 스프라이트 <code>spr_boss_gatekeeper_01.png</code>를 추가했다.</li>
+<li>같은 이미지의 chroma source PNG를 <code>_dev/Art/Source</code>에 남겼다.</li>
+<li><code>scripts/generate_enemy_boss_sprites.ps1</code>를 추가해서 같은 판독용 스프라이트를 재생성할 수 있게 했다.</li>
+<li><code>V1GameManager.EnemySprite()</code>가 새 이미지를 먼저 로드하고, 실패할 때만 기존 도형 fallback을 쓰게 바꿨다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>생성된 눈/분열자/사제/문지기 PNG를 로컬 이미지 뷰어로 확인했다.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy warning 7개, error 0개.</li>
+<li>Unity <code>Assets/Refresh</code>: success.</li>
+<li>Unity compile error count: 0.</li>
+<li>Unity Play Mode entry: <code>isPlaying=true</code>.</li>
+<li>Unity console error count: 0.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>이번 스프라이트는 최종 아트가 아니라 역할 판독용이다. 지금 목표는 예쁜 완성본보다, 전투 중 원거리 눈/분열자/지원 사제/보스 문지기가 서로 헷갈리지 않는 것이다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>사제와 문지기는 아직 단순한 문양형 실루엣이다. 직접 플레이에서 너무 추상적으로 보이면 다음 패스에서 디테일보다 외곽 실루엣과 색 대비를 먼저 보강한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>적 3종과 첫 보스가 procedural fallback에서 전용 PNG 기반 판독 이미지로 넘어갔다. 다음 리뷰는 VFX가 많은 상황에서도 역할이 구분되는지 확인하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>직접 플레이에서 적 역할이 잘 보이면 보스 등장 연출/첫 180초 pacing을 본다. 잘 안 보이면 적 스프라이트 색 대비, 크기, outline을 먼저 조정한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 전투 재미가 올라왔지만 적 역할이 도형 fallback이라 게임처럼 보이는 감각이 부족했다.</li>
+<li>방향: 최종 아트 전에 역할 판독용 스프라이트를 먼저 넣는다.</li>
+<li>행동: 적 3종 4방향 시트와 보스 단일 PNG를 만들고 런타임 로드 경로를 연결했다.</li>
+<li>결과: 기술 검증상 새 PNG import, 빌드, Unity Play Mode 진입이 정상이다.</li>
+</ul>
+  </main>
+</body>
+</html>

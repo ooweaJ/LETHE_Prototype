@@ -68,6 +68,15 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Enemy / boss sprite insertion:
+  - Generated first-pass sprites for Drifting Eye, Split One, Void Priest, and Gatekeeper.
+  - Added matching chroma source PNGs and `scripts/generate_enemy_boss_sprites.ps1`.
+  - `V1GameManager.EnemySprite()` now loads these assets before procedural fallback.
+  - Local visual sanity check opened the generated PNGs.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity `Assets/Refresh`: success.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`; Unity console error count: `0`.
 - Lingering VFX / echo readability follow-up:
   - Shatter Wave active VFX now persists for `1.05s` as a field with hold rings and fracture spokes.
   - Shatter Echo now persists for `0.90s` with the same field language.

@@ -110,6 +110,11 @@ namespace Lethe.PrototypeV1
         const float GreatswordPhantomSweepDuration = 0.28f;
         const float GreatswordPhantomAfterimageSweepDuration = 0.32f;
         const string PlayerSheetPath = "Assets/_dev/Art/Sprites/Characters/Player/sheet_player_v1_4dir.png";
+        const string EnemyChaserSheetPath = "Assets/_dev/Art/Sprites/Enemies/Chaser/sheet_enemy_chaser_4dir.png";
+        const string EnemyEyeSheetPath = "Assets/_dev/Art/Sprites/Enemies/Eye/sheet_enemy_eye_4dir.png";
+        const string EnemySplitterSheetPath = "Assets/_dev/Art/Sprites/Enemies/Splitter/sheet_enemy_splitter_4dir.png";
+        const string EnemyVoidPriestSheetPath = "Assets/_dev/Art/Sprites/Enemies/VoidPriest/sheet_enemy_voidpriest_4dir.png";
+        const string BossGatekeeperPath = "Assets/_dev/Art/Sprites/Enemies/Bosses/spr_boss_gatekeeper_01.png";
         const string DualBladeSwingArcAPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_01.png";
         const string DualBladeSwingArcBPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_02.png";
         const string GreatswordCleaveArcPath = "Assets/_dev/Art/Sprites/Weapons/spr_greatsword_cleave_arc_01.png";
@@ -2937,13 +2942,13 @@ namespace Lethe.PrototypeV1
 
         Sprite EnemySprite(V1EnemyKind kind)
         {
-            if (kind == V1EnemyKind.Eroder) return LoadSheetFrame("Assets/_dev/Art/Sprites/Enemies/Chaser/sheet_enemy_chaser_4dir.png", 4, 8, 0, 0) ?? MakeCircleSprite("eroder", EnemyColor(kind), 80);
+            if (kind == V1EnemyKind.Eroder) return LoadSheetFrame(EnemyChaserSheetPath, 4, 8, 0, 0) ?? MakeCircleSprite("eroder", EnemyColor(kind), 80);
             return kind switch
             {
-                V1EnemyKind.DriftingEye => MakeEyeSprite("drifting_eye", EnemyColor(kind), 88),
-                V1EnemyKind.SplitOne => MakeSplitterSprite("split_one", EnemyColor(kind), 88),
-                V1EnemyKind.VoidPriest => MakePriestSprite("void_priest", EnemyColor(kind), 88),
-                V1EnemyKind.Gatekeeper => MakeGatekeeperSprite("gatekeeper", EnemyColor(kind), 144),
+                V1EnemyKind.DriftingEye => LoadSheetFrame(EnemyEyeSheetPath, 4, 8, 0, 0) ?? MakeEyeSprite("drifting_eye", EnemyColor(kind), 88),
+                V1EnemyKind.SplitOne => LoadSheetFrame(EnemySplitterSheetPath, 4, 8, 0, 0) ?? MakeSplitterSprite("split_one", EnemyColor(kind), 88),
+                V1EnemyKind.VoidPriest => LoadSheetFrame(EnemyVoidPriestSheetPath, 4, 8, 0, 0) ?? MakePriestSprite("void_priest", EnemyColor(kind), 88),
+                V1EnemyKind.Gatekeeper => LoadSheetFrame(BossGatekeeperPath, 1, 1, 0, 0) ?? MakeGatekeeperSprite("gatekeeper", EnemyColor(kind), 144),
                 _ => MakeCircleSprite(kind.ToString(), EnemyColor(kind), 72)
             };
         }

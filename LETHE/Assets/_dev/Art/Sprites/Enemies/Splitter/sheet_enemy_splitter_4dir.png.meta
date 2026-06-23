@@ -1,0 +1,962 @@
+fileFormatVersion: 2
+guid: bbe4a5e78187bf946a27be907c372437
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 6023291609992831708
+    second: sheet_enemy_splitter_4dir_0
+  - first:
+      213: 3301013894099491970
+    second: sheet_enemy_splitter_4dir_1
+  - first:
+      213: 8003615138771775240
+    second: sheet_enemy_splitter_4dir_2
+  - first:
+      213: 6034819916119571280
+    second: sheet_enemy_splitter_4dir_3
+  - first:
+      213: -2045579788529284737
+    second: sheet_enemy_splitter_4dir_4
+  - first:
+      213: 2958925714284614072
+    second: sheet_enemy_splitter_4dir_5
+  - first:
+      213: 848761213317636989
+    second: sheet_enemy_splitter_4dir_6
+  - first:
+      213: 6384433917154180294
+    second: sheet_enemy_splitter_4dir_7
+  - first:
+      213: 716001418396255310
+    second: sheet_enemy_splitter_4dir_8
+  - first:
+      213: 3670048577322041849
+    second: sheet_enemy_splitter_4dir_9
+  - first:
+      213: 1518570009694805384
+    second: sheet_enemy_splitter_4dir_10
+  - first:
+      213: 1097862448142992165
+    second: sheet_enemy_splitter_4dir_11
+  - first:
+      213: 3294352657910362256
+    second: sheet_enemy_splitter_4dir_12
+  - first:
+      213: 8647272908600662776
+    second: sheet_enemy_splitter_4dir_13
+  - first:
+      213: 4722465951037443478
+    second: sheet_enemy_splitter_4dir_14
+  - first:
+      213: 7171179653471604009
+    second: sheet_enemy_splitter_4dir_15
+  - first:
+      213: -6331214966934711982
+    second: sheet_enemy_splitter_4dir_16
+  - first:
+      213: 1520788482143435408
+    second: sheet_enemy_splitter_4dir_17
+  - first:
+      213: -6049954716472327160
+    second: sheet_enemy_splitter_4dir_18
+  - first:
+      213: -5047808336091017210
+    second: sheet_enemy_splitter_4dir_19
+  - first:
+      213: -7233178647832535219
+    second: sheet_enemy_splitter_4dir_20
+  - first:
+      213: 2192935052598310117
+    second: sheet_enemy_splitter_4dir_21
+  - first:
+      213: -7983067537373915774
+    second: sheet_enemy_splitter_4dir_22
+  - first:
+      213: 4333210166043923625
+    second: sheet_enemy_splitter_4dir_23
+  - first:
+      213: 1624420816333098122
+    second: sheet_enemy_splitter_4dir_24
+  - first:
+      213: 4003385044468590980
+    second: sheet_enemy_splitter_4dir_25
+  - first:
+      213: 5355147490447591436
+    second: sheet_enemy_splitter_4dir_26
+  - first:
+      213: 950142926180227091
+    second: sheet_enemy_splitter_4dir_27
+  - first:
+      213: 5604062515733639821
+    second: sheet_enemy_splitter_4dir_28
+  - first:
+      213: -8142053555243610911
+    second: sheet_enemy_splitter_4dir_29
+  - first:
+      213: 2010324663746797282
+    second: sheet_enemy_splitter_4dir_30
+  - first:
+      213: 5119081156801041157
+    second: sheet_enemy_splitter_4dir_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_0
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 690
+        width: 80
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd2a6387ec7079350800000000000000
+      internalID: 6023291609992831708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_1
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 690
+        width: 80
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28cdd6ca5ae8fcd20800000000000000
+      internalID: 3301013894099491970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_2
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 690
+        width: 80
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80f2e61509d821f60800000000000000
+      internalID: 8003615138771775240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_3
+      rect:
+        serializedVersion: 2
+        x: 298
+        y: 690
+        width: 80
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 05b72c76dbcffb350800000000000000
+      internalID: 6034819916119571280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_4
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 594
+        width: 78
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f794ef03504ac93e0800000000000000
+      internalID: -2045579788529284737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_5
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 594
+        width: 78
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b114b49247301920800000000000000
+      internalID: 2958925714284614072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_6
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 594
+        width: 78
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d736dea93d767cb00800000000000000
+      internalID: 848761213317636989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_7
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 594
+        width: 78
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6cc3eeb42d01a9850800000000000000
+      internalID: 6384433917154180294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_8
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 498
+        width: 74
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e444f2a1f7fbfe900800000000000000
+      internalID: 716001418396255310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_9
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 498
+        width: 74
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f145bf7cb1aee230800000000000000
+      internalID: 3670048577322041849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_10
+      rect:
+        serializedVersion: 2
+        x: 205
+        y: 498
+        width: 74
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88d9b6ac06b031510800000000000000
+      internalID: 1518570009694805384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_11
+      rect:
+        serializedVersion: 2
+        x: 301
+        y: 498
+        width: 74
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 523cdc174146c3f00800000000000000
+      internalID: 1097862448142992165
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_12
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 402
+        width: 72
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0907c93c944e7bd20800000000000000
+      internalID: 3294352657910362256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_13
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 402
+        width: 72
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fa500925e8410870800000000000000
+      internalID: 8647272908600662776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_14
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 402
+        width: 72
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69dc67303c1998140800000000000000
+      internalID: 4722465951037443478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_15
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 402
+        width: 72
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92d0fa976e5258360800000000000000
+      internalID: 7171179653471604009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_16
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 306
+        width: 80
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 251583328810328a0800000000000000
+      internalID: -6331214966934711982
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_17
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 306
+        width: 80
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09a3aa8211dea1510800000000000000
+      internalID: 1520788482143435408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_18
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 306
+        width: 80
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 804c7794d3e3a0ca0800000000000000
+      internalID: -6049954716472327160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_19
+      rect:
+        serializedVersion: 2
+        x: 298
+        y: 306
+        width: 80
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6001a01101592f9b0800000000000000
+      internalID: -5047808336091017210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_20
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 210
+        width: 78
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4f5003c7569e9b90800000000000000
+      internalID: -7233178647832535219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_21
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 210
+        width: 78
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5e4ff99cfcede6e10800000000000000
+      internalID: 2192935052598310117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_22
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 210
+        width: 78
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28510e0fe52763190800000000000000
+      internalID: -7983067537373915774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_23
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 210
+        width: 78
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a4d82c00b7a22c30800000000000000
+      internalID: 4333210166043923625
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_24
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 114
+        width: 74
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8cc84b302a1b8610800000000000000
+      internalID: 1624420816333098122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_25
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 114
+        width: 74
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48969a2bc71ee8730800000000000000
+      internalID: 4003385044468590980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_26
+      rect:
+        serializedVersion: 2
+        x: 205
+        y: 114
+        width: 74
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0804ff054e415a40800000000000000
+      internalID: 5355147490447591436
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_27
+      rect:
+        serializedVersion: 2
+        x: 301
+        y: 114
+        width: 74
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31892d015f59f2d00800000000000000
+      internalID: 950142926180227091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_28
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 18
+        width: 72
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d82b26d9a21a5cd40800000000000000
+      internalID: 5604062515733639821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_29
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 18
+        width: 72
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ec8f711e6d910f80800000000000000
+      internalID: -8142053555243610911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_30
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 18
+        width: 72
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ee95d961ab16eb10800000000000000
+      internalID: 2010324663746797282
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_splitter_4dir_31
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 18
+        width: 72
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5039587a031aa0740800000000000000
+      internalID: 5119081156801041157
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      sheet_enemy_splitter_4dir_0: 6023291609992831708
+      sheet_enemy_splitter_4dir_1: 3301013894099491970
+      sheet_enemy_splitter_4dir_10: 1518570009694805384
+      sheet_enemy_splitter_4dir_11: 1097862448142992165
+      sheet_enemy_splitter_4dir_12: 3294352657910362256
+      sheet_enemy_splitter_4dir_13: 8647272908600662776
+      sheet_enemy_splitter_4dir_14: 4722465951037443478
+      sheet_enemy_splitter_4dir_15: 7171179653471604009
+      sheet_enemy_splitter_4dir_16: -6331214966934711982
+      sheet_enemy_splitter_4dir_17: 1520788482143435408
+      sheet_enemy_splitter_4dir_18: -6049954716472327160
+      sheet_enemy_splitter_4dir_19: -5047808336091017210
+      sheet_enemy_splitter_4dir_2: 8003615138771775240
+      sheet_enemy_splitter_4dir_20: -7233178647832535219
+      sheet_enemy_splitter_4dir_21: 2192935052598310117
+      sheet_enemy_splitter_4dir_22: -7983067537373915774
+      sheet_enemy_splitter_4dir_23: 4333210166043923625
+      sheet_enemy_splitter_4dir_24: 1624420816333098122
+      sheet_enemy_splitter_4dir_25: 4003385044468590980
+      sheet_enemy_splitter_4dir_26: 5355147490447591436
+      sheet_enemy_splitter_4dir_27: 950142926180227091
+      sheet_enemy_splitter_4dir_28: 5604062515733639821
+      sheet_enemy_splitter_4dir_29: -8142053555243610911
+      sheet_enemy_splitter_4dir_3: 6034819916119571280
+      sheet_enemy_splitter_4dir_30: 2010324663746797282
+      sheet_enemy_splitter_4dir_31: 5119081156801041157
+      sheet_enemy_splitter_4dir_4: -2045579788529284737
+      sheet_enemy_splitter_4dir_5: 2958925714284614072
+      sheet_enemy_splitter_4dir_6: 848761213317636989
+      sheet_enemy_splitter_4dir_7: 6384433917154180294
+      sheet_enemy_splitter_4dir_8: 716001418396255310
+      sheet_enemy_splitter_4dir_9: 3670048577322041849
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

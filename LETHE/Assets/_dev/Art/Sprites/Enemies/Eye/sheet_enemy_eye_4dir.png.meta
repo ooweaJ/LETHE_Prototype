@@ -1,0 +1,962 @@
+fileFormatVersion: 2
+guid: de96933eecdeee6489e5e962aa089f58
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4364342174498038917
+    second: sheet_enemy_eye_4dir_0
+  - first:
+      213: -6943231465308913097
+    second: sheet_enemy_eye_4dir_1
+  - first:
+      213: -5926699761511606253
+    second: sheet_enemy_eye_4dir_2
+  - first:
+      213: -7791735963928192126
+    second: sheet_enemy_eye_4dir_3
+  - first:
+      213: 2836164910114957287
+    second: sheet_enemy_eye_4dir_4
+  - first:
+      213: -3843454654768267113
+    second: sheet_enemy_eye_4dir_5
+  - first:
+      213: -2796790396909039126
+    second: sheet_enemy_eye_4dir_6
+  - first:
+      213: 7080322859671183776
+    second: sheet_enemy_eye_4dir_7
+  - first:
+      213: -9210435675864913737
+    second: sheet_enemy_eye_4dir_8
+  - first:
+      213: 2904051654099947248
+    second: sheet_enemy_eye_4dir_9
+  - first:
+      213: 8409241510484134013
+    second: sheet_enemy_eye_4dir_10
+  - first:
+      213: 7089747888707792569
+    second: sheet_enemy_eye_4dir_11
+  - first:
+      213: -3670708541093760483
+    second: sheet_enemy_eye_4dir_12
+  - first:
+      213: 8717336377049747628
+    second: sheet_enemy_eye_4dir_13
+  - first:
+      213: -3284001796543968865
+    second: sheet_enemy_eye_4dir_14
+  - first:
+      213: -6892224528402694607
+    second: sheet_enemy_eye_4dir_15
+  - first:
+      213: -59150669224248918
+    second: sheet_enemy_eye_4dir_16
+  - first:
+      213: -7749636093351722572
+    second: sheet_enemy_eye_4dir_17
+  - first:
+      213: 9084030072803322380
+    second: sheet_enemy_eye_4dir_18
+  - first:
+      213: -22145243241644626
+    second: sheet_enemy_eye_4dir_19
+  - first:
+      213: -1776441949185255336
+    second: sheet_enemy_eye_4dir_20
+  - first:
+      213: -5820802812177857287
+    second: sheet_enemy_eye_4dir_21
+  - first:
+      213: 9037522640772076096
+    second: sheet_enemy_eye_4dir_22
+  - first:
+      213: 3765937818202687151
+    second: sheet_enemy_eye_4dir_23
+  - first:
+      213: -2955221135116343310
+    second: sheet_enemy_eye_4dir_24
+  - first:
+      213: 563753930189905728
+    second: sheet_enemy_eye_4dir_25
+  - first:
+      213: 6775991105473856711
+    second: sheet_enemy_eye_4dir_26
+  - first:
+      213: 4153910124099894279
+    second: sheet_enemy_eye_4dir_27
+  - first:
+      213: 2136989231058562276
+    second: sheet_enemy_eye_4dir_28
+  - first:
+      213: 5650544940061372357
+    second: sheet_enemy_eye_4dir_29
+  - first:
+      213: 6749784056847846655
+    second: sheet_enemy_eye_4dir_30
+  - first:
+      213: 7885680126538975299
+    second: sheet_enemy_eye_4dir_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_0
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 668
+        width: 66
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b7bd9c26aedbe63c0800000000000000
+      internalID: -4364342174498038917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_1
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 668
+        width: 66
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73282f4e4cfa4af90800000000000000
+      internalID: -6943231465308913097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_2
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 668
+        width: 66
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31855b8c7f120cda0800000000000000
+      internalID: -5926699761511606253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_3
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 668
+        width: 66
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28b9c665c613ed390800000000000000
+      internalID: -7791735963928192126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_4
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 570
+        width: 66
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e764d785f41c5720800000000000000
+      internalID: 2836164910114957287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_5
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 570
+        width: 66
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7904730ea5e49aac0800000000000000
+      internalID: -3843454654768267113
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_6
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 570
+        width: 66
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae15309b3fdcf29d0800000000000000
+      internalID: -2796790396909039126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_7
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 570
+        width: 66
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a167c1b02c524260800000000000000
+      internalID: 7080322859671183776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_8
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 476
+        width: 66
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b8ac714d85fd2080800000000000000
+      internalID: -9210435675864913737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_9
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 476
+        width: 66
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fe4304d7934d4820800000000000000
+      internalID: 2904051654099947248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_10
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 476
+        width: 66
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7840e68990a3b470800000000000000
+      internalID: 8409241510484134013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_11
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 476
+        width: 66
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9bee0854428d36260800000000000000
+      internalID: 7089747888707792569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_12
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 378
+        width: 66
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d123d16b7060f0dc0800000000000000
+      internalID: -3670708541093760483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_13
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 378
+        width: 66
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca014ad9f333af870800000000000000
+      internalID: 8717336377049747628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_14
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 378
+        width: 66
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f998043f3c1ec62d0800000000000000
+      internalID: -3284001796543968865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_15
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 378
+        width: 66
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13eb258de46e950a0800000000000000
+      internalID: -6892224528402694607
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_16
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 284
+        width: 66
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa979ac97cadd2ff0800000000000000
+      internalID: -59150669224248918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_17
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 284
+        width: 66
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b1893d4803c37490800000000000000
+      internalID: -7749636093351722572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_18
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 284
+        width: 66
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0a6862d835f01e70800000000000000
+      internalID: 9084030072803322380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_19
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 284
+        width: 66
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eadfd13c40351bff0800000000000000
+      internalID: -22145243241644626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_20
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 186
+        width: 66
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 858d5be857fc857e0800000000000000
+      internalID: -1776441949185255336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_21
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 186
+        width: 66
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f44b88aeaa583fa0800000000000000
+      internalID: -5820802812177857287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_22
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 186
+        width: 66
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04215cc75fabb6d70800000000000000
+      internalID: 9037522640772076096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_23
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 186
+        width: 66
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa64e2c2e7c434430800000000000000
+      internalID: 3765937818202687151
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_24
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 92
+        width: 66
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f7e9a8f802fcf6d0800000000000000
+      internalID: -2955221135116343310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_25
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 92
+        width: 66
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04f13bd663bd2d700800000000000000
+      internalID: 563753930189905728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_26
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 92
+        width: 66
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c4c9fa7208290e50800000000000000
+      internalID: 6775991105473856711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_27
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 92
+        width: 66
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70c7fdfdf37a5a930800000000000000
+      internalID: 4153910124099894279
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_28
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 0
+        width: 66
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4eca416226c18ad10800000000000000
+      internalID: 2136989231058562276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_29
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 0
+        width: 66
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5cf2db36fa4ca6e40800000000000000
+      internalID: 5650544940061372357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_30
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 0
+        width: 66
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ffcc20b76dc0cad50800000000000000
+      internalID: 6749784056847846655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sheet_enemy_eye_4dir_31
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 0
+        width: 66
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34886b28b409f6d60800000000000000
+      internalID: 7885680126538975299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      sheet_enemy_eye_4dir_0: -4364342174498038917
+      sheet_enemy_eye_4dir_1: -6943231465308913097
+      sheet_enemy_eye_4dir_10: 8409241510484134013
+      sheet_enemy_eye_4dir_11: 7089747888707792569
+      sheet_enemy_eye_4dir_12: -3670708541093760483
+      sheet_enemy_eye_4dir_13: 8717336377049747628
+      sheet_enemy_eye_4dir_14: -3284001796543968865
+      sheet_enemy_eye_4dir_15: -6892224528402694607
+      sheet_enemy_eye_4dir_16: -59150669224248918
+      sheet_enemy_eye_4dir_17: -7749636093351722572
+      sheet_enemy_eye_4dir_18: 9084030072803322380
+      sheet_enemy_eye_4dir_19: -22145243241644626
+      sheet_enemy_eye_4dir_2: -5926699761511606253
+      sheet_enemy_eye_4dir_20: -1776441949185255336
+      sheet_enemy_eye_4dir_21: -5820802812177857287
+      sheet_enemy_eye_4dir_22: 9037522640772076096
+      sheet_enemy_eye_4dir_23: 3765937818202687151
+      sheet_enemy_eye_4dir_24: -2955221135116343310
+      sheet_enemy_eye_4dir_25: 563753930189905728
+      sheet_enemy_eye_4dir_26: 6775991105473856711
+      sheet_enemy_eye_4dir_27: 4153910124099894279
+      sheet_enemy_eye_4dir_28: 2136989231058562276
+      sheet_enemy_eye_4dir_29: 5650544940061372357
+      sheet_enemy_eye_4dir_3: -7791735963928192126
+      sheet_enemy_eye_4dir_30: 6749784056847846655
+      sheet_enemy_eye_4dir_31: 7885680126538975299
+      sheet_enemy_eye_4dir_4: 2836164910114957287
+      sheet_enemy_eye_4dir_5: -3843454654768267113
+      sheet_enemy_eye_4dir_6: -2796790396909039126
+      sheet_enemy_eye_4dir_7: 7080322859671183776
+      sheet_enemy_eye_4dir_8: -9210435675864913737
+      sheet_enemy_eye_4dir_9: 2904051654099947248
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
