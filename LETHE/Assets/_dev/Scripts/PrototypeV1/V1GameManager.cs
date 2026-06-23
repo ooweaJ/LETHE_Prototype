@@ -95,7 +95,7 @@ namespace Lethe.PrototypeV1
         const float DualBladePhantomLifetime = 0.24f;
         const float GreatswordPhantomLifetime = 0.42f;
         const float DualBladeSlashDelay = 0.055f;
-        const float GreatswordSlashDelay = 0.22f;
+        const float GreatswordSlashDelay = 0.20f;
         const float WeaponSlashLifetimeMultiplier = 1.45f;
         const float DualBladeSlashMinLifetime = 0.34f;
         const float GreatswordSlashMinLifetime = 0.62f;

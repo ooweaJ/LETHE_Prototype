@@ -68,6 +68,12 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Greatsword slash timing tighten:
+  - Greatsword slash delay reduced from `0.22s` to `0.20s`, so VFX appears at roughly `71.4%` of the `0.28s` weapon sweep.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Runtime value check: delay `0.20s`, sweep `0.28s`, slash appears at `71.4%`.
+  - Unity console error count: `0`.
 - Greatsword timing / coverage review loop:
   - Greatsword slash delay increased to `0.22s`, so VFX appears at roughly `78.6%` of the `0.28s` weapon sweep.
   - Greatsword minimum slash lifetime increased to `0.62s`.

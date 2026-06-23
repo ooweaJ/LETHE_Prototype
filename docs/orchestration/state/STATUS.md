@@ -42,6 +42,16 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 greatsword slash timing tighten:
+  - Responded to jaewoo review that the greatsword slash VFX felt slightly slow.
+  - Greatsword slash delay reduced from `0.22s` to `0.20s`.
+  - With the `0.28s` weapon sweep, slash VFX now appears at about `71.4%` of the motion instead of `78.6%`.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity compile error count: `0`.
+    - Runtime value check: delay `0.20s`, sweep `0.28s`, slash appears at `71.4%`.
+    - Unity console error count: `0`.
+
 - Unity v1 greatsword timing / coverage review loop:
   - Responded to jaewoo review that the greatsword VFX may still feel too fast because it appears while the sword is swinging, and that VFX size/position needs finer matching to the swept range.
   - Greatsword slash delay increased from `0.18s` to `0.22s`; with the `0.28s` sweep this makes slash VFX appear at about `78.6%` of the weapon motion.

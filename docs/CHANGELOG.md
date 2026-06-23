@@ -2,6 +2,15 @@
 
 ## 2026-06-23
 
+- Tightened greatsword slash VFX timing:
+  - greatsword slash delay reduced from `0.22s` to `0.20s` after jaewoo review that the slash VFX felt slightly late.
+  - with the `0.28s` weapon sweep, slash VFX now appears at roughly `71.4%` of the motion instead of `78.6%`.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Runtime value check: delay `0.20s`, sweep `0.28s`, slash appears at `71.4%`.
+  - Unity console error count: 0.
+
 - Tuned greatsword VFX timing and sweep coverage after visual review:
   - greatsword slash delay increased from `0.18s` to `0.22s`; with the `0.28s` sweep, slash VFX now appears at roughly `78.6%` of the weapon swing.
   - greatsword phantom lifetime increased to `0.42s`; slash minimum lifetime increased to `0.62s`.

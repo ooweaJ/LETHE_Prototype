@@ -148,6 +148,13 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Runtime value check: delay `0.22s`, sweep `0.28s`, min slash lifetime `0.62s`, AoE scale/lifetime `1.65 / 0.62`, Primary scale/lifetime `1.38 / 0.52`.
   - Unity console error count: 0.
   - Remaining risk: Game View capture was inline rather than saved to evidence. Jaewoo direct play review is still the final feel gate.
+- Greatsword slash timing tighten, 2026-06-23:
+  - Greatsword slash delay reduced from `0.22s` to `0.20s` because the VFX felt slightly late.
+  - With the `0.28s` weapon sweep, slash VFX now appears after roughly `71.4%` of the swing.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Runtime value check: delay `0.20s`, sweep `0.28s`, slash appears at `71.4%`.
+  - Unity console error count: 0.
 
 ### C. Real M2 Loop
 

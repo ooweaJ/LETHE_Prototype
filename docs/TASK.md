@@ -203,6 +203,7 @@ Verification:
 - [x] Greatsword spectacle pass: sweep widened to `90` degrees and weapon-hit VFX scale/lifetime increased.
 - [x] Unity Play Mode spectacle check confirmed blade sweep `-45.0 -> 45.0`, Primary slash bounds `(4.28, 4.28)`, and tip error `0.000`.
 - [x] Greatsword timing/coverage pass: slash VFX now appears at `78.6%` of the sweep, lasts longer, and places AoE/Primary/Assist along different points of the 90-degree tip arc.
+- [x] Greatsword slash timing tighten: VFX delay pulled from `0.22s` to `0.20s`, so it appears around `71.4%` of the sweep.
 - [ ] Dual-blade follow-up uses the same principle in a smaller form: weapon motion first, then short staggered cross-slash VFX, without becoming a greatsword-sized fan.
 - [ ] Jaewoo direct review confirms the greatsword sweep angle, tip VFX placement, and hit readability feel natural in real play.
 
