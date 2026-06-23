@@ -155,6 +155,13 @@
           <p>Dev_Prototype_v1은 계속 _dev 검증 빌드다. 이번 작업은 새 시스템 추가가 아니라 대검 공격 연출의 좌표 기준을 고친 작업이다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-23-02</span>
+          <h2><a href="#unit-2026-06-23-02" data-unit-link="unit-2026-06-23-02">대검 손잡이 pivot 회전과 부채꼴 VFX 방향 보정</a></h2>
+          <p>Dev_Prototype_v1은 계속 _dev 검증 빌드다. 이번 작업은 앞선 칼끝 정렬을 유지하면서, 대검이 위치를 미는 느낌이 아니라 손잡이를 축으로 회전하는 느낌이 나도록 고친 작업이다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -201,6 +208,50 @@
 <li>방향: 현실적인 장착 무기보다 마법처럼 소환되는 자동 칼 연출을 우선하되, 판독 기준은 칼끝으로 통일한다.</li>
 <li>행동: 칼끝 좌표를 먼저 계산하고, 무기 중심과 slash VFX anchor를 그 좌표에서 역산했다.</li>
 <li>결과: 기술 검증상 손잡이가 플레이어 쪽에 더 가깝고, VFX 위치는 계산된 칼끝과 일치한다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-23-02" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-23-02 - 대검 손잡이 pivot 회전과 부채꼴 VFX 방향 보정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 계속 <code>_dev</code> 검증 빌드다. 이번 작업은 앞선 칼끝 정렬을 유지하면서, 대검이 위치를 미는 느낌이 아니라 손잡이를 축으로 회전하는 느낌이 나도록 고친 작업이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>대검 팬텀 무기는 이제 시작 위치에서 끝 위치로 미끄러지지 않는다.</li>
+<li>손잡이 pivot을 플레이어 몸쪽에 두고, 칼날 방향을 <code>-28도 -&gt; +28도</code>로 회전시킨다.</li>
+<li>대검 부채꼴 slash VFX는 sweep의 끝 칼날 방향을 기준으로 회전한다.</li>
+<li>현재 반대로 읽히던 부채꼴 방향은 대검 VFX에 한해 <code>180도</code> 보정했다.</li>
+<li>칼끝 VFX 위치 정렬은 유지해서, 부채꼴이 계산된 칼끝에 붙는다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy warning 7개, error 0개.</li>
+<li>Unity compile error count: 0.</li>
+<li>Play Mode 강제 대검 공격 체크:</li>
+<li><code>usePivot=True</code></li>
+<li>손잡이 pivot과 플레이어 거리: <code>0.13</code></li>
+<li>대검 중심과 플레이어 거리: <code>0.61</code></li>
+<li>칼날 sweep: <code>-28.0 -&gt; 28.0</code></li>
+<li>직접 slash VFX 체크:</li>
+<li>끝 칼날 각도: <code>28.0</code></li>
+<li>VFX 회전값: <code>208.0</code></li>
+<li>칼끝 위치 오차: <code>0.000</code></li>
+<li>Unity console error count: 0.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>대검은 앞으로 “칼끝 좌표를 맞추기 위해 무기 전체를 이동”시키지 않고, “손잡이 pivot을 기준으로 칼날이 회전”하는 연출을 기본으로 한다. 부채꼴 VFX도 이 회전의 끝 칼날 방향에 맞춘다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>자동 검증은 pivot 모드, 회전 각도, VFX 방향값, 칼끝 위치를 확인했다. 실제로 사람이 베는 느낌처럼 자연스러운지는 jaewoo가 직접 플레이하면서 봐야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>대검 연출이 손잡이 pivot 기반으로 바뀌었다. 다음 리뷰에서는 대검이 “밀리는 이미지”가 아니라 “손잡이를 잡고 휘두르는 이미지”로 읽히는지, 부채꼴이 검의 움직임과 같은 방향으로 보이는지를 본다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>직접 플레이에서 대검 sweep이 아직 어색하면 <code>GreatswordSwingHalfAngle</code>, 손잡이 pivot 거리, VFX <code>180도</code> 보정 여부를 좁게 조정한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 대검이 실제로 베는 느낌보다 위치만 바뀌는 느낌이 있었고, 부채꼴 VFX가 검과 반대로 읽혔다.</li>
+<li>방향: 손잡이를 축으로 회전하는 공격 연출로 바꿔 물리적 판독성을 높인다.</li>
+<li>행동: <code>V1WeaponPhantomSweep</code>에 handle-pivot 모드를 추가하고, 대검 VFX 회전을 sweep 끝 칼날 방향 기준으로 보정했다.</li>
+<li>결과: 기술 검증상 대검 팬텀은 pivot 회전으로 움직이고, 부채꼴 VFX는 칼끝 위치와 회전값이 맞는다.</li>
 </ul>
     </article>
       </div>

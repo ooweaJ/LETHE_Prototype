@@ -197,6 +197,9 @@ Verification:
 - [x] Greatsword phantom attack now uses a blade-tip-first calculation: the tip travels through the hit/VFX point, and the handle stays closer to the player body.
 - [x] Greatsword slash VFX now uses a tip-aligned anchor so the crescent appears at the sword tip rather than the weapon center.
 - [x] Unity Play Mode geometry check confirmed `handleCloser=True` and slash-tip alignment distance `0.000`.
+- [x] Greatsword phantom attack now rotates around a handle pivot instead of sliding between two positions.
+- [x] Greatsword crescent/fan VFX now uses the sweep end blade direction with a `180` degree correction so it faces with the sword.
+- [x] Unity Play Mode pivot check confirmed `usePivot=True`, blade sweep `-28.0 -> 28.0`, and slash tip error `0.000`.
 - [ ] Jaewoo direct review confirms the greatsword sweep angle, tip VFX placement, and hit readability feel natural in real play.
 
 Current next:

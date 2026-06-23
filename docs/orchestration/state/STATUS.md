@@ -42,6 +42,20 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 greatsword handle-pivot / crescent direction pass:
+  - Responded to jaewoo review that the greatsword slash VFX was reversed and the sword motion should feel like rotating around a handle gizmo, not shifting the whole sword position.
+  - Greatsword phantom attacks now use a pivot sweep mode in `V1WeaponPhantomSweep`.
+  - The handle pivot stays on the player-facing side while the blade direction rotates from `-28` to `+28` degrees.
+  - Greatsword crescent VFX now uses the sweep end blade direction with a `180` degree facing correction so the fan/crescent opens with the sword motion.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity compile error count: `0`.
+    - Play Mode forced greatsword attack: `usePivot=True`, handle distance from player `0.13`, strike center distance `0.61`, start blade `-28.0`, end blade `28.0`.
+    - Direct slash VFX check: end blade `28.0`, VFX rotation `208.0`, tip alignment error `0.000`.
+    - Unity console error count: `0`.
+  - Limitation:
+    - This validates runtime geometry and VFX rotation. The final "human-like cut" feel still needs jaewoo direct play review.
+
 - Unity v1 greatsword blade-tip alignment pass:
   - Responded to jaewoo review that the greatsword handle should face the player body and the slash VFX should be calculated from the sword tip.
   - Greatsword phantom attack now calculates the intended blade-tip path first.

@@ -2,6 +2,17 @@
 
 ## 2026-06-23
 
+- Reworked greatsword phantom attack into a handle-pivot sweep:
+  - greatsword phantom no longer slides from one position to another; it rotates around a handle pivot placed near the player-facing side.
+  - blade direction now sweeps from `-28` to `+28` degrees around the handle, making the motion read more like a real cut.
+  - greatsword crescent VFX now uses the sweep end blade direction with a `180` degree facing correction so the fan/crescent opens with the sword instead of backwards.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Play Mode forced greatsword attack: `usePivot=True`, handle distance from player `0.13`, strike center distance `0.61`, start blade `-28.0`, end blade `28.0`.
+  - Direct slash VFX check: end blade `28.0`, VFX rotation `208.0`, tip alignment error `0.000`.
+  - Unity console error count: 0.
+
 - Aligned greatsword phantom weapon and slash VFX around the blade tip:
   - greatsword phantom now calculates the blade tip first, then derives the sprite center and rotation from player-to-tip direction.
   - the handle side now points back toward the player body while the blade tip points through the target.

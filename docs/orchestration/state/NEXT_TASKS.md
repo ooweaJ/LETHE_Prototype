@@ -14,7 +14,7 @@ Current source of truth:
 
 - Priority: highest
 - Include: run `Dev_Prototype_v1`, choose both starting weapons, and judge the first 120 seconds with the newly wired generated VFX and hit-point phantom weapon sweep timing.
-- Check: player body stability, 4-direction movement frames, walking/stop/start naturalness, whether phantom dual blades/greatsword visibly sweep before slash VFX, whether greatsword handle direction points back toward the player body, whether greatsword slash VFX sits on the blade tip, whether the attacked enemy is readable, terrain readability, HUD density, VFX scale/timing, hit readability, Blood Blade Storm payoff, and whether the build feels like a real survivor-game shell.
+- Check: player body stability, 4-direction movement frames, walking/stop/start naturalness, whether phantom dual blades/greatsword visibly sweep before slash VFX, whether greatsword rotates around the handle instead of sliding, whether greatsword handle direction points back toward the player body, whether greatsword fan/crescent VFX faces with the blade and sits on the blade tip, whether the attacked enemy is readable, terrain readability, HUD density, VFX scale/timing, hit readability, Blood Blade Storm payoff, and whether the build feels like a real survivor-game shell.
 - Done: jaewoo can name the weakest visual/game-feel axis in one sentence.
 
 ## 2. VFX scale/timing follow-up

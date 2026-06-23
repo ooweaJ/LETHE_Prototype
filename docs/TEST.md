@@ -118,6 +118,16 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Slash alignment check: desired tip and `GreatswordCrescent_Primary` position matched with distance `0.000`.
   - Unity console error count: 0.
   - Remaining risk: this confirms geometry and runtime errors, not final feel. Jaewoo direct play review should confirm the 45-degree sweep reads naturally.
+- Greatsword handle-pivot / crescent direction pass, 2026-06-23:
+  - Greatsword phantom sweep now rotates around a handle pivot instead of moving the whole weapon from start position to end position.
+  - The handle pivot is placed on the player-facing side; the blade direction sweeps `-28` to `+28` degrees.
+  - Greatsword crescent VFX now uses the sweep end blade direction plus a `180` degree facing correction so the fan/crescent faces with the sword.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Play Mode forced greatsword attack: `usePivot=True`, handle distance from player `0.13`, strike center distance `0.61`, start blade `-28.0`, end blade `28.0`.
+  - Direct slash VFX check: end blade `28.0`, VFX rotation `208.0`, tip alignment error `0.000`.
+  - Unity console error count: 0.
+  - Remaining risk: automated verification confirms pivot geometry and VFX rotation, but final visual feel still needs jaewoo direct play review.
 
 ### C. Real M2 Loop
 

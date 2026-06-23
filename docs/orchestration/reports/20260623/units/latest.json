@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260623\\index.md",
-  "generatedAt": "2026-06-23T01:58:16.608Z",
-  "unitCount": 1,
+  "generatedAt": "2026-06-23T02:19:14.323Z",
+  "unitCount": 2,
   "latest": {
-    "title": "2026-06-23-01 - 대검 손잡이 방향과 칼끝 VFX 정렬",
-    "number": "01",
-    "markdownPath": "docs\\orchestration\\reports\\20260623\\units\\2026-06-23-01-대검-손잡이-방향과-칼끝-vfx-정렬.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260623\\units\\2026-06-23-01-대검-손잡이-방향과-칼끝-vfx-정렬.html"
+    "title": "2026-06-23-02 - 대검 손잡이 pivot 회전과 부채꼴 VFX 방향 보정",
+    "number": "02",
+    "markdownPath": "docs\\orchestration\\reports\\20260623\\units\\2026-06-23-02-대검-손잡이-pivot-회전과-부채꼴-vfx-방향-보정.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260623\\units\\2026-06-23-02-대검-손잡이-pivot-회전과-부채꼴-vfx-방향-보정.html"
   }
 }
