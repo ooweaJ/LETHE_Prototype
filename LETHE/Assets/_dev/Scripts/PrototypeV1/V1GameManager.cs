@@ -132,6 +132,10 @@ namespace Lethe.PrototypeV1
         const string UltimateFracturePath = "Assets/_dev/Art/Sprites/Ultimates/spr_fracture_execution_01.png";
         const string UltimateStasisPath = "Assets/_dev/Art/Sprites/Ultimates/spr_stasis_hunt_01.png";
         const string UltimateAshenOblivionPath = "Assets/_dev/Art/Sprites/Ultimates/spr_ashen_oblivion_01.png";
+        const string HunterOathSource = "추적자의 맹세";
+        const string HunterOathBurstSource = "추적자의 맹세 폭발";
+        const string HunterEchoSource = "추적 잔향";
+        const string HunterEchoBurstSource = "추적 잔향 폭발";
         static readonly float[] BossScheduleSeconds = { 180f, 340f, 490f, 600f };
         static readonly float[] FastBossScheduleSeconds = { 18f, 38f, 62f, 88f };
         static readonly V1MemoryId[] UtilityMemorySetA = { V1MemoryId.ExecutionFlash, V1MemoryId.HunterOath, V1MemoryId.StoppedSecond };
@@ -816,23 +820,44 @@ namespace Lethe.PrototypeV1
         {
             memory.TickTimer -= dt;
             if (memory.TickTimer > 0f) return;
-            memory.TickTimer = Mathf.Max(0.48f, 1.35f - memory.Level * 0.10f);
+            memory.TickTimer = Mathf.Max(0.62f, 1.25f - memory.Level * 0.11f);
 
-            var target = enemies
+            var targets = enemies
                 .Where(e => e != null && e.IsAlive)
                 .OrderBy(e => Vector2.Distance(player.position, e.transform.position))
-                .FirstOrDefault();
-            if (target == null) return;
+                .Take(Mathf.Min(5, 2 + memory.Level / 2))
+                .ToList();
+            if (targets.Count == 0) return;
 
-            var go = new GameObject("HunterOathShot");
-            go.transform.position = player.position;
+            var projectileCount = Mathf.Min(5, 2 + memory.Level / 2);
+            var speed = 9.4f + memory.Level * 0.85f;
+            var damage = 13f + memory.Level * 4.8f;
+            SpawnTransientSprite("HunterOathMuzzle", MakeRingSprite("HunterOathMuzzle", Color.white, 104), player.position, Quaternion.identity, 0.48f + projectileCount * 0.055f, new Color(0.80f, 1f, 0.42f, 0.58f), 0.24f);
+            for (int i = 0; i < projectileCount; i++)
+            {
+                SpawnHunterOathShot(targets[i % targets.Count], player.position, i, projectileCount, speed, damage, HunterOathSource, false);
+            }
+        }
+
+        void SpawnHunterOathShot(V1Enemy target, Vector3 origin, int volleyIndex, int volleyCount, float speed, float damage, string source, bool echo)
+        {
+            if (target == null || !target.IsAlive) return;
+            var toTarget = (Vector2)(target.transform.position - origin);
+            var forward = toTarget.sqrMagnitude > 0.01f ? toTarget.normalized : Vector2.up;
+            var side = new Vector3(-forward.y, forward.x, 0f);
+            var spreadIndex = volleyIndex - (volleyCount - 1) * 0.5f;
+            var go = new GameObject(echo ? "HunterEchoShot" : "HunterOathShot");
+            go.transform.position = origin + side * spreadIndex * 0.16f + (Vector3)forward * Mathf.Abs(spreadIndex) * 0.04f;
             var sr = go.AddComponent<SpriteRenderer>();
-            sr.sprite = MemoryVfxSprite(V1MemoryId.HunterOath) ?? MakeCrescentSlashSprite("HunterOathShot", Color.white, false);
-            go.transform.localScale = Vector3.one * (sr.sprite != null && sr.sprite.bounds.size.x > 2f ? ScaleSpriteToWorldWidth(sr.sprite, 0.78f) : 0.15f);
-            sr.color = new Color(0.90f, 1f, 0.62f, 0.88f);
-            sr.sortingOrder = 44;
-            SpawnTransientSprite("HunterOathMuzzle", MakeRingSprite("HunterOathMuzzle", Color.white, 88), player.position, Quaternion.identity, 0.34f, new Color(0.82f, 1f, 0.66f, 0.42f), 0.18f);
-            go.AddComponent<V1Projectile>().Configure(this, target, 7.5f + memory.Level * 0.55f, 9f + memory.Level * 3.2f, "추적자의 맹세");
+            sr.sprite = echo
+                ? EchoVfxSprite(V1MemoryId.HunterOath) ?? MakeCrescentSlashSprite("HunterEchoShot", Color.white, false)
+                : MemoryVfxSprite(V1MemoryId.HunterOath) ?? MakeCrescentSlashSprite("HunterOathShot", Color.white, false);
+            var targetWidth = echo ? 0.80f : 0.92f;
+            go.transform.localScale = Vector3.one * (sr.sprite != null && sr.sprite.bounds.size.x > 2f ? ScaleSpriteToWorldWidth(sr.sprite, targetWidth) : echo ? 0.145f : 0.17f);
+            sr.color = echo ? new Color(0.88f, 1f, 0.46f, 0.90f) : new Color(0.84f, 1f, 0.34f, 0.96f);
+            sr.sortingOrder = 45;
+            SpawnTransientSprite(echo ? "HunterEchoTargetLock" : "HunterOathTargetLock", MakeRingSprite("HunterTargetLock", Color.white, 96), target.transform.position, Quaternion.identity, echo ? 0.38f : 0.48f, echo ? new Color(0.76f, 1f, 0.42f, 0.32f) : new Color(0.80f, 1f, 0.32f, 0.42f), echo ? 0.20f : 0.26f);
+            go.AddComponent<V1Projectile>().Configure(this, target, speed, damage, source);
         }
 
         void UpdateShatterWave(MemoryState memory, float dt)
@@ -1010,19 +1035,16 @@ namespace Lethe.PrototypeV1
             }
 
             var hunterLevel = EchoLevel(V1MemoryId.HunterOath);
-            if (hunterLevel > 0 && hitIndex == 0 && UnityEngine.Random.value < 0.22f + hunterLevel * 0.06f)
+            if (hunterLevel > 0 && hitIndex == 0 && UnityEngine.Random.value < 0.30f + hunterLevel * 0.08f)
             {
-                var target = enemies.Where(e => e != null && e.IsAlive && e != enemy).OrderBy(e => Vector2.Distance(enemy.transform.position, e.transform.position)).FirstOrDefault();
-                if (target != null)
+                var targets = enemies
+                    .Where(e => e != null && e.IsAlive && e != enemy)
+                    .OrderBy(e => Vector2.Distance(enemy.transform.position, e.transform.position))
+                    .Take(1 + hunterLevel / 4)
+                    .ToList();
+                for (int i = 0; i < targets.Count; i++)
                 {
-                    var go = new GameObject("HunterEchoShot");
-                    go.transform.position = enemy.transform.position;
-                    var sr = go.AddComponent<SpriteRenderer>();
-                    sr.sprite = EchoVfxSprite(V1MemoryId.HunterOath) ?? MakeCrescentSlashSprite("HunterEchoShot", Color.white, false);
-                    go.transform.localScale = Vector3.one * (sr.sprite != null && sr.sprite.bounds.size.x > 2f ? ScaleSpriteToWorldWidth(sr.sprite, 0.72f) : 0.13f);
-                    sr.color = new Color(0.92f, 1f, 0.58f, 0.86f);
-                    sr.sortingOrder = 44;
-                    go.AddComponent<V1Projectile>().Configure(this, target, 8f, weapon.Damage * (0.14f + hunterLevel * 0.04f), "추적 잔향");
+                    SpawnHunterOathShot(targets[i], enemy.transform.position, i, targets.Count, 9.2f + hunterLevel * 0.25f, weapon.Damage * (0.22f + hunterLevel * 0.055f), HunterEchoSource, true);
                 }
             }
 
@@ -1614,7 +1636,35 @@ namespace Lethe.PrototypeV1
 
         public void ProjectileHit(V1Enemy enemy, float damage, string source)
         {
+            var impactPos = enemy != null ? enemy.transform.position : Vector3.zero;
+            var isHunter = source == HunterOathSource;
+            var isHunterEcho = source == HunterEchoSource;
             DealDamage(enemy, damage, source, false);
+            if (isHunter || isHunterEcho)
+            {
+                SpawnHunterOathImpact(impactPos, damage, isHunterEcho);
+            }
+        }
+
+        public V1Enemy FindNearestLivingEnemy(Vector3 origin, V1Enemy exclude = null)
+        {
+            return enemies
+                .Where(e => e != null && e.IsAlive && e != exclude)
+                .OrderBy(e => Vector2.Distance(origin, e.transform.position))
+                .FirstOrDefault();
+        }
+
+        void SpawnHunterOathImpact(Vector3 center, float primaryDamage, bool echo)
+        {
+            var radius = echo ? 0.72f : 0.92f;
+            var splashDamage = primaryDamage * (echo ? 0.30f : 0.42f);
+            SpawnTransientSprite(echo ? "HunterEchoLockBurst" : "HunterOathLockBurst", MakeRingSprite("HunterOathLockBurst", Color.white, 128), center, Quaternion.Euler(0f, 0f, elapsed * 120f), radius * 0.92f, echo ? new Color(0.74f, 1f, 0.42f, 0.46f) : new Color(0.78f, 1f, 0.30f, 0.58f), echo ? 0.24f : 0.30f);
+            SpawnTransientSprite(echo ? "HunterEchoCore" : "HunterOathCore", MakeImpactDiamondSprite("HunterOathCore", Color.white), center, Quaternion.identity, echo ? 0.18f : 0.24f, echo ? new Color(0.90f, 1f, 0.50f, 0.70f) : new Color(0.94f, 1f, 0.38f, 0.86f), echo ? 0.20f : 0.26f);
+            foreach (var target in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(center, e.transform.position) <= radius + e.TouchRadius).Take(echo ? 3 : 4).ToList())
+            {
+                var dir = (Vector2)(target.transform.position - center);
+                DealDamage(target, splashDamage, echo ? HunterEchoBurstSource : HunterOathBurstSource, false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, echo ? 0.12f : 0.22f);
+            }
         }
 
         void OnEnemyKilled(V1Enemy enemy)
@@ -3809,6 +3859,10 @@ namespace Lethe.PrototypeV1
         void Update()
         {
             if (V1GameManager.GameplayPaused || V1GameManager.HitstopActive) return;
+            if (target == null || !target.IsAlive)
+            {
+                target = manager != null ? manager.FindNearestLivingEnemy(transform.position, target) : null;
+            }
             if (target == null)
             {
                 Destroy(gameObject);

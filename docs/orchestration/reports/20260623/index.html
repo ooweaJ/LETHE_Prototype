@@ -211,6 +211,13 @@
           <p>Dev_Prototype_v1은 계속 _dev 검증 빌드다. 이번 작업은 추적자의 맹세와 멈춘 1초의 색/역할이 겹쳐 보이는 문제를 분리하고, 멈춘 1초를 노란 시계 장판으로 더 시원하게 읽히게 만든 패스다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-23-10</span>
+          <h2><a href="#unit-2026-06-23-10" data-unit-link="unit-2026-06-23-10">추적자의 맹세 밸류 보강</a></h2>
+          <p>Dev_Prototype_v1은 계속 _dev 검증 빌드다. 이번 작업은 추적자의 맹세가 기본공격보다 약하게 느껴진다는 직접 피드백을 받아, 기억 선택지로서의 전투 가치를 끌어올린 밸런스 패스다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -644,6 +651,45 @@
 <li>방향: 시간 정지는 금색 시계 장판으로 강하게 읽히게 하고, 추적 투사체와 색 언어를 분리한다.</li>
 <li>행동: 멈춘 1초 색, 지속시간, 정지시간, 링/눈금/바늘/core/pulse를 강화했다.</li>
 <li>결과: Unity smoke에서 금색 clock face, tick, hand, pulse, 1초 근처 freeze가 정상 확인됐다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-23-10" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-23-10 - 추적자의 맹세 밸류 보강</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 계속 <code>_dev</code> 검증 빌드다. 이번 작업은 추적자의 맹세가 기본공격보다 약하게 느껴진다는 직접 피드백을 받아, 기억 선택지로서의 전투 가치를 끌어올린 밸런스 패스다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>추적자의 맹세 active가 한 발짜리 약한 자동탄에서 다중 유도탄 volley로 바뀌었다.</li>
+<li>레벨 1은 2발, 레벨 3은 3발, 레벨 5는 4발을 발사한다.</li>
+<li>쿨다운은 <code>max(0.48, 1.35 - level*0.10)</code>에서 <code>max(0.62, 1.25 - level*0.11)</code>로 조정했다.</li>
+<li>투사체 속도는 <code>7.5 + level*0.55</code>에서 <code>9.4 + level*0.85</code>로 올렸다.</li>
+<li>투사체 피해는 <code>9 + level*3.2</code>에서 <code>13 + level*4.8</code>로 올렸다.</li>
+<li>타깃 락온 VFX와 피격 지점의 짧은 락온 폭발을 추가했다.</li>
+<li>추적 잔향 발동 확률과 피해를 올렸고, +5에서는 잔향 투사체가 2발까지 나간다.</li>
+<li>유도탄은 목표가 죽으면 가장 가까운 살아있는 적에게 재추적한다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy warning 7개, error 0개.</li>
+<li>Unity compile error count: 0.</li>
+<li>Unity Play Mode entry: <code>isPlaying=true</code>.</li>
+<li>Unity console error count: 0.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>추적자의 맹세는 기본공격과 같은 근접 DPS 경쟁자가 아니라, 원거리 자동 추적과 다중 락온 폭발로 가치를 만든다. 선택했을 때 최소한 “멀리 있는 적을 알아서 지워준다”는 체감이 있어야 한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>투사체 수와 폭발이 동시에 올라갔기 때문에, 직접 플레이에서 너무 강하면 피해보다 폭발 반경이나 발사 수를 먼저 줄인다. 피의 칼폭풍보다 더 큰 payoff로 느껴지면 안 된다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>추적자의 맹세는 이제 레벨에 따라 2/3/4발 다중 유도탄과 락온 폭발을 가진다. 다음 리뷰에서는 <code>Mem A</code> 또는 <code>VFX</code> 버튼으로 추적자의 맹세를 먼저 확인하고, 기본공격보다 확실히 선택 가치가 있는지 본다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>직접 리뷰에서 여전히 약하면 발사 수는 유지하고 피해/폭발 반경을 올린다. 너무 강하면 폭발 추가 피해나 잔향 발동 확률부터 낮춘다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 추적자의 맹세가 기본공격보다 약해서 기억 선택지로 설득력이 없었다.</li>
+<li>방향: 단발 피해가 아니라 다중 유도와 락온 폭발로 고유 가치를 만든다.</li>
+<li>행동: 발사 수, 속도, 피해, 잔향 확률/피해, 재추적, 피격 폭발을 보강했다.</li>
+<li>결과: 기술 검증상 빌드/Unity 컴파일/Play Mode 진입이 정상이며, 직접 플레이 밸런스 리뷰 대상이 됐다.</li>
 </ul>
     </article>
       </div>

@@ -42,6 +42,29 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 Hunter Oath value follow-up:
+  - Responded to jaewoo review that Hunter Oath felt weaker than basic attacks and had no meaningful reason to pick.
+  - Active Hunter Oath:
+    - Now fires a volley instead of a single projectile.
+    - Level 1 fires `2` shots, level 3 fires `3`, and level 5 fires `4`.
+    - Cooldown is now `max(0.62, 1.25 - level*0.11)`.
+    - Projectile speed is now `9.4 + level*0.85`.
+    - Projectile damage is now `13 + level*4.8`.
+    - Each hit spawns a short lock-on burst that can damage nearby enemies.
+  - Hunter Echo:
+    - Proc chance is now `0.30 + level*0.08`.
+    - Damage is now `weaponDamage * (0.22 + level*0.055)`.
+    - +5 can fire two echo shots.
+  - Projectile reliability:
+    - Homing shots retarget to the nearest living enemy if the original target dies mid-flight.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity compile error count: `0`.
+    - Unity Play Mode entry reached `isPlaying=true`.
+    - Unity console error count: `0`.
+  - Next review:
+    - Use `Mem A` / `VFX` and judge whether Hunter Oath now feels like a real ranged tracking memory without overtaking Blood Blade Storm or Kalmuri as the main payoff.
+
 - Unity v1 Stopped Second gold clock-field follow-up:
   - Responded to jaewoo review that Stopped Second should be yellow like a time/clock field, remain visible during the 1-second stop, and deliver more spectacle.
   - External reference check:

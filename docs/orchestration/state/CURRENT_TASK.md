@@ -68,6 +68,14 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Hunter Oath value follow-up:
+  - Active Hunter Oath now fires 2/3/4 projectiles at levels 1/3/5.
+  - Active cooldown, projectile speed, projectile damage, target-lock VFX, and hit burst were strengthened.
+  - Hunter Echo proc chance and damage were increased, and +5 can fire two echo shots.
+  - Homing projectiles retarget if their original target dies mid-flight.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`; Unity console error count: `0`.
 - Stopped Second gold clock-field follow-up:
   - Hunter Oath remains yellow-green/green, while Stopped Second is now the yellow/gold time-stop VFX language.
   - Active Stopped Second now freezes enemies for up to `1.0s` and keeps the clock-field VFX visible for `1.50s`.

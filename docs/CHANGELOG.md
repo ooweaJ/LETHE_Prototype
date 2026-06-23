@@ -2,6 +2,21 @@
 
 ## 2026-06-23
 
+- Rebalanced Hunter Oath so it is no longer weaker than basic attacks:
+  - Active Hunter Oath now fires a volley instead of one weak projectile: level 1 = 2 shots, level 3 = 3 shots, level 5 = 4 shots.
+  - Active cooldown changed from `max(0.48, 1.35 - level*0.10)` to `max(0.62, 1.25 - level*0.11)`.
+  - Active projectile speed changed from `7.5 + level*0.55` to `9.4 + level*0.85`.
+  - Active projectile damage changed from `9 + level*3.2` to `13 + level*4.8`.
+  - Hunter projectiles now spawn target-lock VFX and a short lock-on burst on hit.
+  - Hunter Echo proc chance changed from `0.22 + level*0.06` to `0.30 + level*0.08`.
+  - Hunter Echo damage changed from `weaponDamage * (0.14 + level*0.04)` to `weaponDamage * (0.22 + level*0.055)`, and +5 can fire 2 echo shots.
+  - Homing projectiles retarget to the nearest living enemy if their original target dies mid-flight.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity Play Mode entry: reached `isPlaying=true`.
+  - Unity console error count: 0.
+
 - Strengthened Stopped Second as a gold clock-field VFX:
   - Kept Hunter Oath in the yellow-green/green projectile family, and separated Stopped Second into a clear yellow/gold time-field language.
   - Stopped Second active VFX now uses gold clock colors instead of the prior blue/cyan read.

@@ -107,6 +107,14 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Unity compile error count: 0.
   - Unity Play Mode smoke: `clockFaces=2`, `totalClockFaces=3`, `clockTicks=24`, `totalClockTicks=36`, `clockPulses=2`, `clockHands=6`, `goldFaces=2`, `frozenNear1s=5`.
   - Unity console error count: 0.
+- Hunter Oath value follow-up, 2026-06-23:
+  - Active Hunter Oath now fires 2/3/4 projectiles at levels 1/3/5 instead of a single weak projectile.
+  - Projectile speed and damage were increased, and hits now create a short lock-on burst.
+  - Hunter Echo proc chance and damage were increased; +5 can fire two echo shots.
+  - Homing projectiles now retarget if their original target dies.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity Play Mode entry reached `isPlaying=true`; Unity console error count: 0.
 - Blood Blade Storm payoff / movement pass, 2026-06-22:
   - Blood Blade Storm now has opening cue, continuous pressure, and periodic burst pulses instead of only Kalmuri-like rotating blades.
   - Dual-blade storm uses faster blade orbit and more frequent bursts; greatsword storm uses slower/heavier slashes and burst impact.
