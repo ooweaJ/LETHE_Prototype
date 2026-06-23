@@ -68,6 +68,15 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Execution Flash / Stopped Second readability follow-up:
+  - Execution Flash active VFX target width increased to `1.95`, lifetime to `0.38s`, and now adds cross/diagonal crack lines.
+  - Execution Echo target width increased to `1.48` and uses the same crack helper.
+  - Stopped Second now draws a clock-field floor telegraph with face, rings, 12 ticks, hands, and core.
+  - Stopped Echo and Stasis Hunt paths reuse the clock-field language.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity Play Mode smoke: `executionCracks=16`, `executionVfx=24`, `clockFaces=5`, `clockTicks=60`, `clockHands=15`, `stoppedVfx=79`.
+  - Unity console error count: `0`.
 - Utility VFX / background / movement follow-up:
   - Greatsword slash delay reduced to `0.18s`, so VFX appears at roughly `64.3%` of the `0.28s` sweep.
   - Six utility memories/echoes now have stronger runtime visibility.

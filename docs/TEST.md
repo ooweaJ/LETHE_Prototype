@@ -89,6 +89,15 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Unity Play Mode smoke: `greatDelay=0.18`, `sweep=0.28`, `activeMemories=3`, `bgDecor=30`, `utilityVfx=36`, `enemies=14`.
   - Unity Play Mode echo/ultimate smoke: `echoCount=6`, `previewUlt=6`, `clockHands=21`.
   - Unity console error count: 0.
+- Execution / Stopped Second readability follow-up, 2026-06-23:
+  - Execution Flash active target width increased to `1.95`, lifetime to `0.38s`, and now adds vertical/horizontal/diagonal crack lines.
+  - Execution Echo target width increased to `1.48` and uses the same crack burst language.
+  - Stopped Second now draws a floor-readable clock field: clock face, outer/inner rings, 12 tick marks, hands, and core.
+  - Stopped Echo and Stasis Hunt preview/ultimate VFX reuse the same clock-field language.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity Play Mode smoke: `executionCracks=16`, `executionVfx=24`, `clockFaces=5`, `clockTicks=60`, `clockHands=15`, `stoppedVfx=79`.
+  - Unity console error count: 0.
 - Blood Blade Storm payoff / movement pass, 2026-06-22:
   - Blood Blade Storm now has opening cue, continuous pressure, and periodic burst pulses instead of only Kalmuri-like rotating blades.
   - Dual-blade storm uses faster blade orbit and more frequent bursts; greatsword storm uses slower/heavier slashes and burst impact.

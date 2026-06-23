@@ -807,8 +807,8 @@ namespace Lethe.PrototypeV1
                 .FirstOrDefault();
             if (target == null) return;
 
-            SpawnPromptSprite("ExecutionFlash", MemoryVfxSprite(V1MemoryId.ExecutionFlash), () => MakeImpactDiamondSprite("ExecutionFlash", Color.white), target.transform.position, Quaternion.identity, 1.30f, 0.54f, new Color(1f, 0.95f, 0.62f, 0.90f), 0.24f);
-            SpawnTransientSprite("ExecutionFlashCore", MakeImpactDiamondSprite("ExecutionFlashCore", Color.white), target.transform.position, Quaternion.Euler(0f, 0f, elapsed * 160f), 0.34f, new Color(1f, 1f, 0.86f, 0.82f), 0.18f);
+            SpawnPromptSprite("ExecutionFlash", MemoryVfxSprite(V1MemoryId.ExecutionFlash), () => MakeImpactDiamondSprite("ExecutionFlash", Color.white), target.transform.position, Quaternion.identity, 1.95f, 0.82f, new Color(1f, 0.95f, 0.62f, 0.96f), 0.38f);
+            SpawnExecutionFlashBurst(target.transform.position, 1.00f, 0.34f);
             DealDamage(target, 26f + memory.Level * 7f, "처형 섬광", false);
         }
 
@@ -872,8 +872,7 @@ namespace Lethe.PrototypeV1
                 .FirstOrDefault();
             var center = focus != null ? focus.transform.position : player.position;
             var radius = 1.65f + memory.Level * 0.18f;
-            SpawnPromptSprite("StoppedSecond", MemoryVfxSprite(V1MemoryId.StoppedSecond), () => MakeRingSprite("StoppedSecond", Color.white, 144), center, Quaternion.identity, radius * 1.72f, radius * 0.74f, new Color(0.62f, 0.72f, 1f, 0.54f), 0.58f);
-            SpawnClockHands(center, radius, new Color(0.82f, 0.92f, 1f, 0.68f), 0.48f);
+            SpawnStoppedSecondField(center, radius, new Color(0.62f, 0.76f, 1f, 0.58f), 0.72f, true);
             foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(center, e.transform.position) <= radius + e.TouchRadius).Take(10).ToList())
             {
                 var dir = (Vector2)(enemy.transform.position - center);
@@ -1004,7 +1003,8 @@ namespace Lethe.PrototypeV1
             var executionLevel = EchoLevel(V1MemoryId.ExecutionFlash);
             if (executionLevel > 0 && enemy.HealthRatio <= 0.22f + executionLevel * 0.025f)
             {
-                SpawnPromptSprite("ExecutionEcho", EchoVfxSprite(V1MemoryId.ExecutionFlash), () => MakeImpactDiamondSprite("ExecutionEcho", Color.white), enemy.transform.position, Quaternion.identity, 1.08f, 0.46f, new Color(1f, 0.90f, 0.55f, 0.86f), 0.22f);
+                SpawnPromptSprite("ExecutionEcho", EchoVfxSprite(V1MemoryId.ExecutionFlash), () => MakeImpactDiamondSprite("ExecutionEcho", Color.white), enemy.transform.position, Quaternion.identity, 1.48f, 0.62f, new Color(1f, 0.90f, 0.55f, 0.92f), 0.30f);
+                SpawnExecutionFlashBurst(enemy.transform.position, 0.72f, 0.26f);
                 DealDamage(enemy, weapon.Damage * (0.18f + executionLevel * 0.05f), "처형 잔향", false);
             }
 
@@ -1029,8 +1029,7 @@ namespace Lethe.PrototypeV1
             if (stoppedLevel > 0 && hitIndex == 0 && UnityEngine.Random.value < 0.16f + stoppedLevel * 0.05f)
             {
                 enemy.ApplyBriefFreeze(0.08f + stoppedLevel * 0.025f);
-                SpawnPromptSprite("StoppedEcho", EchoVfxSprite(V1MemoryId.StoppedSecond), () => MakeRingSprite("StoppedEcho", Color.white, 96), enemy.transform.position, Quaternion.identity, 1.14f + stoppedLevel * 0.055f, 0.48f + stoppedLevel * 0.032f, new Color(0.62f, 0.72f, 1f, 0.46f), 0.32f);
-                SpawnClockHands(enemy.transform.position, 0.62f + stoppedLevel * 0.08f, new Color(0.80f, 0.90f, 1f, 0.54f), 0.26f);
+                SpawnStoppedSecondField(enemy.transform.position, 0.78f + stoppedLevel * 0.08f, new Color(0.62f, 0.76f, 1f, 0.48f), 0.40f, false);
             }
 
             var ashLevel = EchoLevel(V1MemoryId.AshenShield);
@@ -1310,7 +1309,7 @@ namespace Lethe.PrototypeV1
                 {
                     ultimatePulseTimer = 0.42f;
                     SpawnPromptSprite("StasisHunt", LoadSprite(UltimateStasisPath), () => MakeRingSprite("StasisHunt", Color.white, 160), player.position, Quaternion.identity, 2.72f, 1.05f, new Color(0.62f, 0.74f, 1f, 0.50f), 0.44f);
-                    SpawnClockHands(player.position, 1.45f, new Color(0.82f, 0.92f, 1f, 0.52f), 0.40f);
+                    SpawnStoppedSecondField(player.position, 1.45f, new Color(0.82f, 0.92f, 1f, 0.52f), 0.46f, true);
                     foreach (var enemy in enemies.Where(e => e != null && e.IsAlive).OrderBy(e => Vector2.Distance(player.position, e.transform.position)).Take(6).ToList())
                     {
                         enemy.ApplyBriefFreeze(0.30f);
@@ -2002,18 +2001,23 @@ namespace Lethe.PrototypeV1
             var name = echo ? $"PreviewEcho_{id}" : $"PreviewMemory_{id}";
             var width = id switch
             {
+                V1MemoryId.ExecutionFlash => echo ? 1.52f : 1.95f,
                 V1MemoryId.ShatterWave => echo ? 1.26f : 1.58f,
-                V1MemoryId.StoppedSecond => echo ? 1.22f : 1.70f,
+                V1MemoryId.StoppedSecond => echo ? 1.65f : 2.20f,
                 V1MemoryId.AshenShield => echo ? 1.20f : 1.48f,
                 V1MemoryId.OblivionBrand => echo ? 1.16f : 1.22f,
                 V1MemoryId.HunterOath => echo ? 0.74f : 0.82f,
                 _ => echo ? 1.06f : 1.28f
             };
-            var fallbackScale = id is V1MemoryId.ExecutionFlash or V1MemoryId.OblivionBrand ? 0.46f : 0.62f;
+            var fallbackScale = id == V1MemoryId.ExecutionFlash ? 0.72f : id == V1MemoryId.OblivionBrand ? 0.46f : 0.62f;
             SpawnPromptSprite(name, sprite, () => id == V1MemoryId.ExecutionFlash || id == V1MemoryId.OblivionBrand ? MakeImpactDiamondSprite(name, Color.white) : MakeRingSprite(name, Color.white, 128), pos, Quaternion.Euler(0f, 0f, angle), width, fallbackScale, color, echo ? 0.58f : 0.72f);
+            if (id == V1MemoryId.ExecutionFlash)
+            {
+                SpawnExecutionFlashBurst(pos, echo ? 0.74f : 1.00f, echo ? 0.42f : 0.56f);
+            }
             if (id == V1MemoryId.StoppedSecond)
             {
-                SpawnClockHands(pos, echo ? 0.72f : 1.04f, new Color(0.82f, 0.92f, 1f, echo ? 0.54f : 0.68f), echo ? 0.46f : 0.62f);
+                SpawnStoppedSecondField(pos, echo ? 0.92f : 1.24f, new Color(0.82f, 0.92f, 1f, echo ? 0.54f : 0.68f), echo ? 0.58f : 0.78f, !echo);
             }
         }
 
@@ -2025,7 +2029,7 @@ namespace Lethe.PrototypeV1
             var ashen = center + Vector3.right * 2.65f;
             SpawnPromptSprite("Preview_FractureExecution", LoadSprite(UltimateFracturePath), () => MakeRingSprite("Preview_FractureExecution", Color.white, 160), fracture, Quaternion.identity, 2.55f, 1.05f, new Color(1f, 0.94f, 0.62f, 0.66f), 0.70f);
             SpawnPromptSprite("Preview_StasisHunt", LoadSprite(UltimateStasisPath), () => MakeRingSprite("Preview_StasisHunt", Color.white, 160), stasis, Quaternion.identity, 2.72f, 1.05f, new Color(0.62f, 0.74f, 1f, 0.50f), 0.70f);
-            SpawnClockHands(stasis, 1.45f, new Color(0.82f, 0.92f, 1f, 0.52f), 0.62f);
+            SpawnStoppedSecondField(stasis, 1.45f, new Color(0.82f, 0.92f, 1f, 0.52f), 0.70f, true);
             SpawnPromptSprite("Preview_AshenOblivion", LoadSprite(UltimateAshenOblivionPath), () => MakeRingSprite("Preview_AshenOblivion", Color.white, 180), ashen, Quaternion.identity, 2.95f, 1.18f, new Color(0.78f, 0.68f, 1f, 0.52f), 0.70f);
         }
 
@@ -2728,6 +2732,41 @@ namespace Lethe.PrototypeV1
         void SpawnKalmuriBlade(string name, Vector3 position, float angle, float scale, Color color, float lifetime)
         {
             SpawnTransientSprite(name, KalmuriBladeSprite(), position, Quaternion.Euler(0f, 0f, angle), scale, color, lifetime);
+        }
+
+        void SpawnExecutionFlashBurst(Vector3 center, float scale, float lifetime)
+        {
+            var line = MakeBoxSprite("ExecutionFlashCrack", Color.white, 8, 128);
+            var color = new Color(1f, 0.94f, 0.58f, 0.78f);
+            var hot = new Color(1f, 1f, 0.84f, 0.92f);
+            SpawnTransientSpriteScaled("ExecutionFlashCrack_V", line, center, Quaternion.identity, new Vector3(0.038f * scale, 1.12f * scale, 1f), color, lifetime);
+            SpawnTransientSpriteScaled("ExecutionFlashCrack_H", line, center, Quaternion.Euler(0f, 0f, 90f), new Vector3(0.038f * scale, 1.12f * scale, 1f), color, lifetime);
+            SpawnTransientSpriteScaled("ExecutionFlashCrack_D1", line, center, Quaternion.Euler(0f, 0f, 45f), new Vector3(0.026f * scale, 0.82f * scale, 1f), new Color(1f, 0.88f, 0.48f, 0.58f), lifetime * 0.86f);
+            SpawnTransientSpriteScaled("ExecutionFlashCrack_D2", line, center, Quaternion.Euler(0f, 0f, 135f), new Vector3(0.026f * scale, 0.82f * scale, 1f), new Color(1f, 0.88f, 0.48f, 0.58f), lifetime * 0.86f);
+            SpawnTransientSprite("ExecutionFlashCore", MakeImpactDiamondSprite("ExecutionFlashCore", Color.white), center, Quaternion.Euler(0f, 0f, elapsed * 160f), 0.34f * scale, hot, lifetime * 0.72f);
+        }
+
+        void SpawnStoppedSecondField(Vector3 center, float radius, Color color, float lifetime, bool strong)
+        {
+            var fieldAlpha = strong ? Mathf.Min(0.46f, color.a) : Mathf.Min(0.34f, color.a);
+            var ringAlpha = strong ? Mathf.Min(0.72f, color.a + 0.14f) : Mathf.Min(0.56f, color.a + 0.08f);
+            SpawnPromptSprite("StoppedSecondClockFace", MemoryVfxSprite(V1MemoryId.StoppedSecond), () => MakeRingSprite("StoppedSecondClockFace", Color.white, 168), center, Quaternion.identity, radius * 2.28f, radius * 0.96f, new Color(color.r, color.g, color.b, fieldAlpha), lifetime);
+            SpawnTransientSprite("StoppedSecondClockOuter", MakeRingSprite("StoppedSecondClockOuter", Color.white, 168), center, Quaternion.identity, radius * 0.86f, new Color(color.r, color.g, color.b, ringAlpha), lifetime);
+            SpawnTransientSprite("StoppedSecondClockInner", MakeRingSprite("StoppedSecondClockInner", Color.white, 128), center, Quaternion.identity, radius * 0.48f, new Color(color.r, color.g, color.b, fieldAlpha * 0.72f), lifetime * 0.88f);
+
+            var tick = MakeBoxSprite("StoppedSecondTick", Color.white, 7, 48);
+            for (int i = 0; i < 12; i++)
+            {
+                var angle = i * 30f;
+                var dir = Quaternion.Euler(0f, 0f, angle) * Vector3.up;
+                var pos = center + dir * radius * 0.72f;
+                var tickScale = strong && i % 3 == 0
+                    ? new Vector3(0.024f, 0.28f, 1f)
+                    : new Vector3(0.018f, 0.18f, 1f);
+                SpawnTransientSpriteScaled("StoppedSecondClockTick", tick, pos, Quaternion.Euler(0f, 0f, angle), tickScale, new Color(color.r, color.g, color.b, ringAlpha), lifetime);
+            }
+
+            SpawnClockHands(center, radius, new Color(color.r, color.g, color.b, Mathf.Min(0.86f, color.a + 0.18f)), lifetime * 0.88f);
         }
 
         void SpawnClockHands(Vector3 center, float radius, Color color, float lifetime)

@@ -2,6 +2,18 @@
 
 ## 2026-06-23
 
+- Refined Execution Flash and Stopped Second readability:
+  - Execution Flash active VFX target width increased from `1.30` to `1.95`, with a longer `0.38s` lifetime.
+  - Execution Flash now spawns explicit vertical/horizontal/diagonal crack lines around the target so it reads as a large execution burst instead of a tiny diamond.
+  - Execution Echo target width increased from `1.08` to `1.48` and now also uses the crack burst helper.
+  - Stopped Second now uses a clock-field floor telegraph: clock face, outer/inner rings, 12 tick marks, clock hands, and core.
+  - Stopped Echo and Stasis Hunt preview/ultimate paths also use the clock-field language.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity Play Mode smoke: `executionCracks=16`, `executionVfx=24`, `clockFaces=5`, `clockTicks=60`, `clockHands=15`, `stoppedVfx=79`.
+  - Unity console error count: 0.
+
 - Completed the utility VFX / background / movement follow-up:
   - Greatsword slash VFX delay reduced again from `0.20s` to `0.18s`, so the slash appears at roughly `64.3%` of the `0.28s` weapon sweep.
   - Six non-core active memories and echoes were made more visible through larger generated sprite scaling, stronger alpha, longer lifetimes, and clearer secondary cues.

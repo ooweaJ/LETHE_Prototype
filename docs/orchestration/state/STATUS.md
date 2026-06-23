@@ -42,6 +42,25 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 Execution Flash / Stopped Second readability follow-up:
+  - Responded to jaewoo review that Execution Flash still felt too small and Stopped Second needed an obvious clock-floor telegraph.
+  - Execution Flash:
+    - Active memory VFX target width increased from `1.30` to `1.95`.
+    - Lifetime increased to `0.38s`.
+    - Added a crack burst helper that draws vertical, horizontal, and diagonal execution fracture lines plus a bright core.
+    - Execution Echo also increased to `1.48` target width and uses the same crack language.
+  - Stopped Second:
+    - Replaced subtle clock-hand-only feedback with a full clock-field floor telegraph.
+    - The field now draws a clock face, outer/inner rings, 12 tick marks, clock hands, and center core.
+    - Stopped Echo and Stasis Hunt preview/ultimate paths reuse the same clock-field language.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity compile error count: `0`.
+    - Unity Play Mode smoke: `executionCracks=16`, `executionVfx=24`, `clockFaces=5`, `clockTicks=60`, `clockHands=15`, `stoppedVfx=79`.
+    - Unity console error count: `0`.
+  - Next review:
+    - Use `Mem A` / `VFX` debug buttons and judge whether Execution Flash is now big enough and Stopped Second reads as a clock field without hiding enemies.
+
 - Unity v1 utility VFX / background / movement follow-up:
   - Responded to jaewoo review that game feel is now promising, but greatsword slash VFX can appear faster and non-core memories such as Stopped Second feel invisible.
   - Greatsword slash delay reduced from `0.20s` to `0.18s`; with the `0.28s` weapon sweep, slash VFX appears at roughly `64.3%`.

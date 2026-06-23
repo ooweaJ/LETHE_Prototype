@@ -14,7 +14,7 @@ Current source of truth:
 
 - Priority: highest
 - Include: run `Dev_Prototype_v1`, use the new `Mem A`, `Mem B`, `Echo A`, `Echo B`, `Ult 3`, and `VFX` debug buttons first, then choose both starting weapons and judge the first 120 seconds.
-- Check: player body stability, 4-direction movement frames, walking/stop/start naturalness after the softer movement pass, whether phantom dual blades/greatsword visibly sweep before slash VFX, whether greatsword slash VFX now appears fast enough at `0.18s`, whether utility memories/echoes read through VFX, whether `멈춘 1초` is visible as an enemy-cluster time-stop focus, terrain readability after arena dressing, HUD density, hit readability, Blood Blade Storm payoff, and whether the first 120 seconds reaches choices/combat pressure quickly enough.
+- Check: player body stability, 4-direction movement frames, walking/stop/start naturalness after the softer movement pass, whether phantom dual blades/greatsword visibly sweep before slash VFX, whether greatsword slash VFX now appears fast enough at `0.18s`, whether 처형섬광 is large enough as a crack burst, whether `멈춘 1초` reads as a clock-field floor telegraph, terrain readability after arena dressing, HUD density, hit readability, Blood Blade Storm payoff, and whether the first 120 seconds reaches choices/combat pressure quickly enough.
 - Done: jaewoo can name the weakest visual/game-feel axis in one sentence.
 
 ## 2. VFX scale/timing follow-up
