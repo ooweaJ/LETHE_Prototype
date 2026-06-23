@@ -42,6 +42,24 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 greatsword timing / coverage review loop:
+  - Responded to jaewoo review that the greatsword VFX may still feel too fast because it appears while the sword is swinging, and that VFX size/position needs finer matching to the swept range.
+  - Greatsword slash delay increased from `0.18s` to `0.22s`; with the `0.28s` sweep this makes slash VFX appear at about `78.6%` of the weapon motion.
+  - Greatsword phantom lifetime increased to `0.42s`; minimum slash lifetime increased to `0.62s`.
+  - Greatsword AoE / Primary / Assist VFX now sample different points along the 90-degree tip arc:
+    - AoE: `58%`, to cover the middle-late arc.
+    - Primary: `78%`, to sit near the late blade path.
+    - Assist: `72%`, to stay between AoE and final tip.
+    - Shock/cutpoint remains on the final tip.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity compile error count: `0`.
+    - Unity inline Game View capture succeeded for a frozen review frame with sword at about `85%` of the swing and long-lived VFX visible.
+    - Runtime value check: delay `0.22s`, sweep `0.28s`, min slash lifetime `0.62s`, AoE scale/lifetime `1.65 / 0.62`, Primary scale/lifetime `1.38 / 0.52`.
+    - Unity console error count: `0`.
+  - Dual-blade note:
+    - Dual blades should use the same readability principle, but as shorter staggered cross-slashes rather than a large fan. This remains a follow-up pass after greatsword review.
+
 - Unity v1 greatsword spectacle pass:
   - Responded to jaewoo review that the cut still lacked heat and spectacle.
   - Greatsword handle-pivot sweep increased from `-28 -> +28` to `-45 -> +45`, giving a full `90` degree cut.

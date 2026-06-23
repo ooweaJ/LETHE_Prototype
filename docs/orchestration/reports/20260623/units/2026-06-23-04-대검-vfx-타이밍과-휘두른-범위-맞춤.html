@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-23-04 - 대검 VFX 타이밍과 휘두른 범위 맞춤</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-23-04 - 대검 VFX 타이밍과 휘두른 범위 맞춤</h1>
+      <p class="meta">Generated from 2026-06-23-04-대검-vfx-타이밍과-휘두른-범위-맞춤.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260623/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-23-04 - 대검 VFX 타이밍과 휘두른 범위 맞춤</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 계속 <code>_dev</code> 검증 빌드다. 이번 작업은 대검 90도 베기 연출을 실제로 캡처해서 보며, VFX가 너무 빨리 덮는 느낌과 휘두른 범위 대비 위치가 애매한 부분을 다듬은 작업이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>대검 slash VFX delay를 <code>0.18s</code>에서 <code>0.22s</code>로 늦췄다.</li>
+<li>대검 sweep은 <code>0.28s</code>라서, VFX는 이제 휘두르기 약 <code>78.6%</code> 지점부터 나온다.</li>
+<li>대검 팬텀 무기 lifetime을 <code>0.42s</code>로 늘렸다.</li>
+<li>대검 slash 최소 lifetime을 <code>0.62s</code>로 늘렸다.</li>
+<li>대검 AoE / Primary / Assist VFX 위치를 모두 칼끝 끝점에 몰아두지 않고, 90도 칼끝 호 위에 나눠 배치했다.</li>
+<li>AoE crescent: 호의 <code>58%</code> 지점.</li>
+<li>Primary crescent: 호의 <code>78%</code> 지점.</li>
+<li>Assist crescent: 호의 <code>72%</code> 지점.</li>
+<li>Shock / cut point: 최종 칼끝.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy warning 7개, error 0개.</li>
+<li>Unity compile error count: 0.</li>
+<li>Unity inline Game View capture 성공:</li>
+<li>대검을 약 <code>85%</code> 휘두른 지점에 고정했다.</li>
+<li>긴 lifetime VFX를 함께 띄워 칼과 VFX 위치 관계를 눈으로 확인했다.</li>
+<li>Runtime 값 확인:</li>
+<li>slash delay: <code>0.22s</code></li>
+<li>sweep duration: <code>0.28s</code></li>
+<li>slash 등장 지점: 약 <code>78.6%</code></li>
+<li>min slash lifetime: <code>0.62s</code></li>
+<li>AoE scale/lifetime: <code>1.65 / 0.62</code></li>
+<li>Primary scale/lifetime: <code>1.38 / 0.52</code></li>
+<li>Unity console error count: 0.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>대검은 “무기 모션이 먼저 읽히고, VFX가 뒤따라 강하게 남는” 구조로 간다. VFX는 최종 칼끝 하나에만 붙이지 않고, 휘두른 90도 호를 따라 역할별로 나눠 배치한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>캡처로 위치 관계는 확인했지만, 실제 반복 전투에서 적이 여러 마리일 때 VFX가 너무 오래 남거나 다음 공격과 겹칠 가능성은 직접 플레이로 봐야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>대검 VFX는 이제 sweep 후반부에 나오고 더 오래 남는다. AoE/Primary/Assist는 90도 tip arc 위의 서로 다른 위치를 쓴다. 다음 판단은 “무겁고 화려한데 빠르게 덮지 않는가”다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>쌍검도 같은 원칙을 적용하되, 대검처럼 큰 부채꼴이 아니라 짧은 교차 베기 두 개를 약간 엇갈리게 보여주는 방향으로 별도 pass를 한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 대검 VFX가 칼 모션과 동시에 덮이면서 빠르게 느껴질 수 있었고, VFX 위치가 휘두른 범위 전체와 정교하게 맞지 않았다.</li>
+<li>방향: 무기 모션을 먼저 읽히게 하고, VFX는 sweep 후반부와 칼끝 호 위에 배치한다.</li>
+<li>행동: VFX delay/lifetime을 늘리고, VFX별 배치 지점을 90도 tip arc에 나눴다.</li>
+<li>결과: 기술 검증상 VFX는 sweep의 약 <code>78.6%</code> 지점부터 나오며, 캡처로 칼과 VFX의 위치 관계를 확인했다.</li>
+</ul>
+  </main>
+</body>
+</html>

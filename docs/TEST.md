@@ -138,6 +138,16 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Direct slash VFX check: end blade `45.0`, VFX rotation `225.0`, generated bounds `(4.28, 4.28)`, tip alignment error `0.000`.
   - Unity console error count: 0.
   - Remaining risk: this is intentionally more explosive; jaewoo direct review should confirm it is flashy, not screen-covering.
+- Greatsword timing / coverage review loop, 2026-06-23:
+  - Greatsword slash delay increased from `0.18s` to `0.22s`, so slash VFX appears after roughly `78.6%` of the `0.28s` sweep.
+  - Greatsword minimum slash lifetime increased to `0.62s`.
+  - Greatsword AoE / Primary / Assist crescent positions now use different points along the 90-degree blade-tip arc: `58%`, `78%`, and `72%`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity inline Game View capture succeeded on a frozen review frame with the sword held around `85%` of the swing and long-lived VFX visible.
+  - Runtime value check: delay `0.22s`, sweep `0.28s`, min slash lifetime `0.62s`, AoE scale/lifetime `1.65 / 0.62`, Primary scale/lifetime `1.38 / 0.52`.
+  - Unity console error count: 0.
+  - Remaining risk: Game View capture was inline rather than saved to evidence. Jaewoo direct play review is still the final feel gate.
 
 ### C. Real M2 Loop
 

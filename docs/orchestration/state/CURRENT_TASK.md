@@ -68,6 +68,15 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Greatsword timing / coverage review loop:
+  - Greatsword slash delay increased to `0.22s`, so VFX appears at roughly `78.6%` of the `0.28s` weapon sweep.
+  - Greatsword minimum slash lifetime increased to `0.62s`.
+  - Greatsword AoE / Primary / Assist positions now sample different points along the 90-degree tip arc (`58%`, `78%`, `72%`).
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity inline Game View capture succeeded on a frozen review frame with sword around `85%` of the swing and VFX visible.
+  - Runtime value check: delay `0.22s`, sweep `0.28s`, min slash lifetime `0.62s`, AoE scale/lifetime `1.65 / 0.62`, Primary scale/lifetime `1.38 / 0.52`.
+  - Unity console error count: `0`.
 - Greatsword spectacle pass:
   - Greatsword handle-pivot sweep increased to `-45.0 -> 45.0`, a full `90` degree cut.
   - Greatsword weapon-hit VFX profile scales/lifetimes increased for a flashier hit.

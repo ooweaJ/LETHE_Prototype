@@ -93,12 +93,12 @@ namespace Lethe.PrototypeV1
         const float DualBladePhantomHeight = 0.82f;
         const float GreatswordPhantomHeight = 1.72f;
         const float DualBladePhantomLifetime = 0.24f;
-        const float GreatswordPhantomLifetime = 0.34f;
+        const float GreatswordPhantomLifetime = 0.42f;
         const float DualBladeSlashDelay = 0.055f;
-        const float GreatswordSlashDelay = 0.075f;
+        const float GreatswordSlashDelay = 0.22f;
         const float WeaponSlashLifetimeMultiplier = 1.45f;
         const float DualBladeSlashMinLifetime = 0.34f;
-        const float GreatswordSlashMinLifetime = 0.48f;
+        const float GreatswordSlashMinLifetime = 0.62f;
         const float GreatswordCenterToTipRatio = 0.44f;
         const float GreatswordHandleToTipRatio = 0.86f;
         const float GreatswordHandleToCenterRatio = GreatswordHandleToTipRatio - GreatswordCenterToTipRatio;
@@ -106,6 +106,8 @@ namespace Lethe.PrototypeV1
         const float GreatswordTipSweepSideOffset = 0.28f;
         const float GreatswordSwingHalfAngle = 45f;
         const float GreatswordSlashFacingCorrection = 180f;
+        const float GreatswordPhantomSweepDuration = 0.28f;
+        const float GreatswordPhantomAfterimageSweepDuration = 0.32f;
         const string PlayerSheetPath = "Assets/_dev/Art/Sprites/Characters/Player/sheet_player_v1_4dir.png";
         const string DualBladeSwingArcAPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_01.png";
         const string DualBladeSwingArcBPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_02.png";
@@ -2141,8 +2143,8 @@ namespace Lethe.PrototypeV1
                         var centerSwing = GreatswordSwingForTarget(hitCenter, hitCenter, f, 0);
                         slashForward = targetSwing.EndDirection;
                         slashBaseAngle = GreatswordSlashVfxBaseAngle(slashForward);
-                        slashTarget = GreatswordSlashAnchorForTip(entry, targetSwing.TipEnd, slashForward);
-                        slashCenter = GreatswordSlashAnchorForTip(entry, centerSwing.TipEnd, centerSwing.EndDirection);
+                        slashTarget = GreatswordSlashAnchorForTip(entry, GreatswordSlashTipForEntry(entry, targetSwing), slashForward);
+                        slashCenter = GreatswordSlashAnchorForTip(entry, GreatswordSlashTipForEntry(entry, centerSwing), centerSwing.EndDirection);
                     }
                     var slashDelay = weapon.Id == V1WeaponId.Greatsword ? GreatswordSlashDelay : DualBladeSlashDelay;
                     var minLifetime = weapon.Id == V1WeaponId.Greatsword ? GreatswordSlashMinLifetime : DualBladeSlashMinLifetime;
@@ -2160,8 +2162,8 @@ namespace Lethe.PrototypeV1
                 var swing = GreatswordSwingForTarget(primary, hitCenter, forward, 0);
                 var scale = ScaleSpriteToWorldHeight(greatswordWeaponSprite, GreatswordPhantomHeight);
                 var centerDistance = GreatswordPhantomHeight * GreatswordHandleToCenterRatio;
-                SpawnPivotSweepingTransientSprite("GreatswordPhantomStrike", greatswordWeaponSprite, swing.HandlePivot, swing.StartBladeAngle, swing.EndBladeAngle, centerDistance, scale, scale * 1.04f, new Color(0.90f, 0.98f, 1f, 0.90f), GreatswordPhantomLifetime, 0.20f);
-                SpawnPivotSweepingTransientSprite("GreatswordPhantomAfterimage", greatswordWeaponSprite, swing.HandlePivot - (Vector3)(forward * 0.06f), swing.StartBladeAngle - 4f, swing.EndBladeAngle - 4f, centerDistance, scale * 1.10f, scale * 1.14f, new Color(0.55f, 0.82f, 1f, 0.28f), GreatswordPhantomLifetime + 0.04f, 0.22f);
+                SpawnPivotSweepingTransientSprite("GreatswordPhantomStrike", greatswordWeaponSprite, swing.HandlePivot, swing.StartBladeAngle, swing.EndBladeAngle, centerDistance, scale, scale * 1.04f, new Color(0.90f, 0.98f, 1f, 0.90f), GreatswordPhantomLifetime, GreatswordPhantomSweepDuration);
+                SpawnPivotSweepingTransientSprite("GreatswordPhantomAfterimage", greatswordWeaponSprite, swing.HandlePivot - (Vector3)(forward * 0.06f), swing.StartBladeAngle - 4f, swing.EndBladeAngle - 4f, centerDistance, scale * 1.10f, scale * 1.14f, new Color(0.55f, 0.82f, 1f, 0.28f), GreatswordPhantomLifetime + 0.08f, GreatswordPhantomAfterimageSweepDuration);
                 return;
             }
 
@@ -2192,6 +2194,24 @@ namespace Lethe.PrototypeV1
             var startBladeAngle = Mathf.Atan2(startDirection.y, startDirection.x) * Mathf.Rad2Deg;
             var endBladeAngle = Mathf.Atan2(endDirection.y, endDirection.x) * Mathf.Rad2Deg;
             return new GreatswordSwingPose(handlePivot, startDirection, endDirection, startBladeAngle, endBladeAngle, handlePivot + (Vector3)(startDirection * handleToTip), handlePivot + (Vector3)(endDirection * handleToTip));
+        }
+
+        Vector3 GreatswordSlashTipForEntry(SlashVfxEntry entry, GreatswordSwingPose swing)
+        {
+            var id = entry != null ? entry.id ?? "" : "";
+            if (id.Contains("Aoe", StringComparison.OrdinalIgnoreCase))
+            {
+                return Vector3.Lerp(swing.TipStart, swing.TipEnd, 0.58f);
+            }
+            if (id.Contains("Primary", StringComparison.OrdinalIgnoreCase))
+            {
+                return Vector3.Lerp(swing.TipStart, swing.TipEnd, 0.78f);
+            }
+            if (id.Contains("Assist", StringComparison.OrdinalIgnoreCase))
+            {
+                return Vector3.Lerp(swing.TipStart, swing.TipEnd, 0.72f);
+            }
+            return swing.TipEnd;
         }
 
         Vector3 GreatswordSlashAnchorForTip(SlashVfxEntry entry, Vector3 desiredTipPosition, Vector2 forward)

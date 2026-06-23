@@ -2,6 +2,19 @@
 
 ## 2026-06-23
 
+- Tuned greatsword VFX timing and sweep coverage after visual review:
+  - greatsword slash delay increased from `0.18s` to `0.22s`; with the `0.28s` sweep, slash VFX now appears at roughly `78.6%` of the weapon swing.
+  - greatsword phantom lifetime increased to `0.42s`; slash minimum lifetime increased to `0.62s`.
+  - AoE / Primary / Assist crescent placement now samples different points along the 90-degree tip arc instead of placing every VFX at the final blade tip.
+  - AoE crescent stays around the middle-late arc (`58%`), Primary around the late arc (`78%`), and shock/cutpoint remains at the final tip.
+  - Greatsword VFX profile lifetimes increased: AoE `0.62s`, Primary `0.52s`, shock `0.26s`, assist `0.22s`.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Unity inline Game View capture succeeded for a frozen review frame with sword at about `85%` of the swing and long-lived VFX visible.
+  - Runtime check: slash appears at `78.6%` of the sweep; AoE scale/lifetime `1.65 / 0.62`, Primary scale/lifetime `1.38 / 0.52`.
+  - Unity console error count: 0.
+
 - Increased greatsword swing spectacle:
   - greatsword handle-pivot sweep increased from `-28 -> +28` degrees to `-45 -> +45` degrees, for a full `90` degree cut.
   - greatsword wide crescent prompt-sprite scale factor increased from `0.150` to `0.175`.

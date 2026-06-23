@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260623\\index.md",
-  "generatedAt": "2026-06-23T02:39:57.180Z",
-  "unitCount": 3,
+  "generatedAt": "2026-06-23T02:52:39.427Z",
+  "unitCount": 4,
   "latest": {
-    "title": "2026-06-23-03 - 대검 90도 베기와 화려한 VFX 보강",
-    "number": "03",
-    "markdownPath": "docs\\orchestration\\reports\\20260623\\units\\2026-06-23-03-대검-90도-베기와-화려한-vfx-보강.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260623\\units\\2026-06-23-03-대검-90도-베기와-화려한-vfx-보강.html"
+    "title": "2026-06-23-04 - 대검 VFX 타이밍과 휘두른 범위 맞춤",
+    "number": "04",
+    "markdownPath": "docs\\orchestration\\reports\\20260623\\units\\2026-06-23-04-대검-vfx-타이밍과-휘두른-범위-맞춤.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260623\\units\\2026-06-23-04-대검-vfx-타이밍과-휘두른-범위-맞춤.html"
   }
 }
