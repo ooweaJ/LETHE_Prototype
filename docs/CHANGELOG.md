@@ -2,6 +2,17 @@
 
 ## 2026-06-23
 
+- Increased greatsword swing spectacle:
+  - greatsword handle-pivot sweep increased from `-28 -> +28` degrees to `-45 -> +45` degrees, for a full `90` degree cut.
+  - greatsword wide crescent prompt-sprite scale factor increased from `0.150` to `0.175`.
+  - greatsword weapon-hit VFX profile scales/lifetimes increased for AoE crescent, primary crescent, shock, cut point, and assist crescent.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Play Mode forced greatsword attack: `usePivot=True`, blade sweep `-45.0 -> 45.0`, total `90.0`, AoE scale `1.65`, primary scale `1.38`.
+  - Direct slash VFX check: end blade `45.0`, VFX rotation `225.0`, generated bounds `(4.28, 4.28)`, tip alignment error `0.000`.
+  - Unity console error count: 0.
+
 - Reworked greatsword phantom attack into a handle-pivot sweep:
   - greatsword phantom no longer slides from one position to another; it rotates around a handle pivot placed near the player-facing side.
   - blade direction now sweeps from `-28` to `+28` degrees around the handle, making the motion read more like a real cut.

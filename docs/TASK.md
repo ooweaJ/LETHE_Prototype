@@ -200,6 +200,8 @@ Verification:
 - [x] Greatsword phantom attack now rotates around a handle pivot instead of sliding between two positions.
 - [x] Greatsword crescent/fan VFX now uses the sweep end blade direction with a `180` degree correction so it faces with the sword.
 - [x] Unity Play Mode pivot check confirmed `usePivot=True`, blade sweep `-28.0 -> 28.0`, and slash tip error `0.000`.
+- [x] Greatsword spectacle pass: sweep widened to `90` degrees and weapon-hit VFX scale/lifetime increased.
+- [x] Unity Play Mode spectacle check confirmed blade sweep `-45.0 -> 45.0`, Primary slash bounds `(4.28, 4.28)`, and tip error `0.000`.
 - [ ] Jaewoo direct review confirms the greatsword sweep angle, tip VFX placement, and hit readability feel natural in real play.
 
 Current next:

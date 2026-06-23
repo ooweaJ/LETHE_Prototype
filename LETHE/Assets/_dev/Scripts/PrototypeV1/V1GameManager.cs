@@ -104,7 +104,7 @@ namespace Lethe.PrototypeV1
         const float GreatswordHandleToCenterRatio = GreatswordHandleToTipRatio - GreatswordCenterToTipRatio;
         const float GreatswordTipForwardOffset = 0.30f;
         const float GreatswordTipSweepSideOffset = 0.28f;
-        const float GreatswordSwingHalfAngle = 28f;
+        const float GreatswordSwingHalfAngle = 45f;
         const float GreatswordSlashFacingCorrection = 180f;
         const string PlayerSheetPath = "Assets/_dev/Art/Sprites/Characters/Player/sheet_player_v1_4dir.png";
         const string DualBladeSwingArcAPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_01.png";
@@ -2278,7 +2278,9 @@ namespace Lethe.PrototypeV1
             switch (entry.spriteShape)
             {
                 case SlashSpriteShape.WideCrescent:
-                    spriteScaleFactor = 0.150f;
+                    spriteScaleFactor = id.Contains("Greatsword", StringComparison.OrdinalIgnoreCase)
+                        ? 0.175f
+                        : 0.150f;
                     return LoadSprite(GreatswordCleaveArcPath);
                 case SlashSpriteShape.ImpactDiamond:
                     spriteScaleFactor = id.Contains("Greatsword", StringComparison.OrdinalIgnoreCase) || id.Contains("Blood", StringComparison.OrdinalIgnoreCase)

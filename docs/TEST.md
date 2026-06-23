@@ -128,6 +128,16 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - Direct slash VFX check: end blade `28.0`, VFX rotation `208.0`, tip alignment error `0.000`.
   - Unity console error count: 0.
   - Remaining risk: automated verification confirms pivot geometry and VFX rotation, but final visual feel still needs jaewoo direct play review.
+- Greatsword spectacle pass, 2026-06-23:
+  - Greatsword handle-pivot sweep increased to a full `90` degree cut: `-45.0 -> 45.0`.
+  - Greatsword wide crescent generated sprite scale factor increased from `0.150` to `0.175`.
+  - Greatsword weapon-hit VFX profile scales/lifetimes increased so the slash reads more hot and flashy.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: 0.
+  - Play Mode forced greatsword attack: `usePivot=True`, blade sweep `-45.0 -> 45.0`, total `90.0`, AoE scale `1.65`, primary scale `1.38`.
+  - Direct slash VFX check: end blade `45.0`, VFX rotation `225.0`, generated bounds `(4.28, 4.28)`, tip alignment error `0.000`.
+  - Unity console error count: 0.
+  - Remaining risk: this is intentionally more explosive; jaewoo direct review should confirm it is flashy, not screen-covering.
 
 ### C. Real M2 Loop
 

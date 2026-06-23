@@ -42,6 +42,23 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 greatsword spectacle pass:
+  - Responded to jaewoo review that the cut still lacked heat and spectacle.
+  - Greatsword handle-pivot sweep increased from `-28 -> +28` to `-45 -> +45`, giving a full `90` degree cut.
+  - Greatsword wide crescent generated sprite scale factor increased from `0.150` to `0.175`.
+  - Greatsword weapon-hit VFX profile scales/lifetimes increased:
+    - AoE crescent scale `1.24 -> 1.65`, lifetime `0.42 -> 0.50`.
+    - Primary crescent scale `1.02 -> 1.38`, lifetime `0.34 -> 0.42`.
+    - Shock, cut point, and assist crescent were also enlarged slightly.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity compile error count: `0`.
+    - Play Mode forced greatsword attack: `usePivot=True`, blade sweep `-45.0 -> 45.0`, total `90.0`, AoE scale `1.65`, primary scale `1.38`.
+    - Direct slash VFX check: end blade `45.0`, VFX rotation `225.0`, generated bounds `(4.28, 4.28)`, tip alignment error `0.000`.
+    - Unity console error count: `0`.
+  - Limitation:
+    - This verifies scale and geometry. Final review should confirm the larger slash feels flashy rather than too screen-covering.
+
 - Unity v1 greatsword handle-pivot / crescent direction pass:
   - Responded to jaewoo review that the greatsword slash VFX was reversed and the sword motion should feel like rotating around a handle gizmo, not shifting the whole sword position.
   - Greatsword phantom attacks now use a pivot sweep mode in `V1WeaponPhantomSweep`.

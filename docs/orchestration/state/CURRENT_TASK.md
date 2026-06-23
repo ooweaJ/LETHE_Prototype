@@ -68,6 +68,14 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Greatsword spectacle pass:
+  - Greatsword handle-pivot sweep increased to `-45.0 -> 45.0`, a full `90` degree cut.
+  - Greatsword weapon-hit VFX profile scales/lifetimes increased for a flashier hit.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Play Mode forced greatsword attack: `usePivot=True`, blade sweep `-45.0 -> 45.0`, total `90.0`, AoE scale `1.65`, primary scale `1.38`.
+  - Direct slash VFX check: end blade `45.0`, VFX rotation `225.0`, generated bounds `(4.28, 4.28)`, tip alignment error `0.000`.
+  - Unity console error count: `0`.
 - Greatsword handle-pivot / crescent direction pass:
   - Greatsword phantom weapon now rotates around a handle pivot instead of sliding between start/end positions.
   - Greatsword crescent VFX now uses the sweep end blade direction with a `180` degree facing correction.

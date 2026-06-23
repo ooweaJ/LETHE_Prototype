@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-23-03 - 대검 90도 베기와 화려한 VFX 보강</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-23-03 - 대검 90도 베기와 화려한 VFX 보강</h1>
+      <p class="meta">Generated from 2026-06-23-03-대검-90도-베기와-화려한-vfx-보강.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260623/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-23-03 - 대검 90도 베기와 화려한 VFX 보강</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 계속 <code>_dev</code> 검증 빌드다. 이번 작업은 대검이 너무 얌전하게 보인다는 피드백에 맞춰, 회전각과 베기 VFX 크기를 키운 체감 보강이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>대검 손잡이 pivot sweep을 <code>-28도 -&gt; +28도</code>에서 <code>-45도 -&gt; +45도</code>로 늘렸다.</li>
+<li>결과적으로 대검 베기 각도는 총 <code>90도</code>가 됐다.</li>
+<li>대검 wide crescent PNG 스케일 보정값을 <code>0.150</code>에서 <code>0.175</code>로 키웠다.</li>
+<li>대검 AoE crescent scale/lifetime을 <code>1.24 / 0.42</code>에서 <code>1.65 / 0.50</code>으로 키웠다.</li>
+<li>대검 Primary crescent scale/lifetime을 <code>1.02 / 0.34</code>에서 <code>1.38 / 0.42</code>로 키웠다.</li>
+<li>Shock, cut point, assist crescent도 같이 조금 키워서 타격감이 더 화끈하게 보이도록 했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy warning 7개, error 0개.</li>
+<li>Unity compile error count: 0.</li>
+<li>Play Mode 강제 대검 공격 체크:</li>
+<li><code>usePivot=True</code></li>
+<li>칼날 sweep: <code>-45.0 -&gt; 45.0</code></li>
+<li>총 sweep: <code>90.0</code></li>
+<li>AoE scale: <code>1.65</code></li>
+<li>Primary scale: <code>1.38</code></li>
+<li>직접 slash VFX 체크:</li>
+<li>끝 칼날 각도: <code>45.0</code></li>
+<li>VFX 회전값: <code>225.0</code></li>
+<li>생성 bounds: <code>(4.28, 4.28)</code></li>
+<li>칼끝 위치 오차: <code>0.000</code></li>
+<li>Unity console error count: 0.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>대검 기본 공격은 더 이상 절제된 작은 참격이 아니라, 한 번 휘두르면 확실히 화면에 남는 큰 베기로 간다. 대신 칼끝 정렬과 손잡이 pivot 기준은 유지한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>VFX가 커졌기 때문에 화려함은 올라갔지만, 적이나 플레이어를 가릴 위험도 생겼다. jaewoo 직접 플레이에서 “화끈하다”와 “너무 덮는다” 사이를 확인해야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>대검은 90도 pivot sweep과 더 큰 crescent VFX로 보강됐다. 다음 리뷰는 대검이 충분히 화려한지, 타격 대상이 계속 읽히는지, Blood Blade Storm과 비교했을 때 기본 공격이 너무 과해지지 않았는지를 본다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>직접 플레이에서 아직 밋밋하면 VFX alpha/lifetime을 더 올리고, 너무 덮으면 scale만 약간 낮춘다. sweep 각도는 우선 90도를 기준값으로 본다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 대검 베기 연출이 정확해졌지만 화끈하고 화려한 맛이 부족했다.</li>
+<li>방향: 대검은 느린 무기인 만큼 기본 공격도 넓고 강하게 읽히게 만든다.</li>
+<li>행동: pivot sweep을 90도로 키우고, 대검 crescent 계열 VFX scale/lifetime을 올렸다.</li>
+<li>결과: 기술 검증상 대검은 총 90도로 회전하고, Primary slash VFX bounds가 <code>(4.28, 4.28)</code>까지 커졌다.</li>
+</ul>
+  </main>
+</body>
+</html>
