@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260624\\index.md",
-  "generatedAt": "2026-06-24T01:12:29.446Z",
-  "unitCount": 3,
+  "generatedAt": "2026-06-24T01:54:38.927Z",
+  "unitCount": 4,
   "latest": {
-    "title": "2026-06-24-03 - 지형 연결감 보정",
-    "number": "03",
-    "markdownPath": "docs\\orchestration\\reports\\20260624\\units\\2026-06-24-03-지형-연결감-보정.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260624\\units\\2026-06-24-03-지형-연결감-보정.html"
+    "title": "2026-06-24-04 - 8잔향 VFX 판독성 보강",
+    "number": "04",
+    "markdownPath": "docs\\orchestration\\reports\\20260624\\units\\2026-06-24-04-8잔향-vfx-판독성-보강.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260624\\units\\2026-06-24-04-8잔향-vfx-판독성-보강.html"
   }
 }

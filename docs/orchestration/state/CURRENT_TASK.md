@@ -68,6 +68,12 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- 8-echo VFX readability follow-up:
+  - All 8 echoes already had runtime VFX hooks, but jaewoo feedback was that several were hard to notice in live combat.
+  - Strengthened Kalmuri, Blood, Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion echo VFX through scale, alpha, lifetime, proc chance, and added ring/halo/slash accent sprites.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`; Unity console error count: `0`.
 - Terrain continuity follow-up:
   - Regenerated the terrain tiles from one shared wet black stone base.
   - Runtime floor tile selection now favors connected base tiles and keeps high-character variants rare.

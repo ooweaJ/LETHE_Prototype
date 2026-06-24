@@ -2,6 +2,21 @@
 
 ## 2026-06-24
 
+- Improved 8-echo VFX readability in `Dev_Prototype_v1`:
+  - Confirmed all 8 echoes had runtime VFX hooks, then made subtle echoes easier to see in live combat.
+  - Kalmuri now has a stronger range ring, inner flash ring, larger/longer blade barrage, and stronger awakened launch blade.
+  - Blood now adds a mark pulse ring and a larger, longer Blood Bloom with a red bloom ring.
+  - Execution now uses a larger gold prompt, added halo, and larger burst.
+  - Hunter echo projectiles and target-lock rings are larger/brighter and last longer.
+  - Shatter echo fields are more frequent, larger, longer, and brighter.
+  - Stopped echo fields are more frequent, larger, longer, and keep the gold clock language visible longer.
+  - Ashen and Oblivion now have higher proc visibility with added guard/slash accent VFX.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console error count: `0`.
+
 - Improved Lethe terrain continuity:
   - Regenerated `tile_lethe_terrain_01..08.png` from the same wet black stone base so the ground no longer reads as unrelated terrain chunks.
   - Changed floor tile selection to mostly use the connected base tiles, with rare variants only for subtle detail.

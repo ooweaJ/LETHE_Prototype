@@ -23,6 +23,28 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 
 ## Current Epic Checks
 
+### 8 Echo VFX Readability, 2026-06-24
+
+- Runtime hooks checked:
+  - Kalmuri Echo
+  - Blood Echo
+  - Execution Echo
+  - Hunter Echo
+  - Shatter Echo
+  - Stopped Echo
+  - Ashen Echo
+  - Oblivion Echo
+- Technical readability pass:
+  - Increased scale, alpha, lifetime, proc chance, or added support ring/halo/slash accents for the subtle echo families.
+  - Kalmuri, Blood, Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion now have clearer color/shape separation.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console error count: `0`.
+- Remaining risk:
+  - Human direct play is still required to judge whether each echo is distinguishable during real combat speed and under the new terrain background.
+
 ### Release-Prep Map / Background, 2026-06-24
 
 - Terrain continuity follow-up:

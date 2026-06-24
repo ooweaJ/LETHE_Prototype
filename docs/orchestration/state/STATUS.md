@@ -42,6 +42,23 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 8-echo VFX readability follow-up:
+  - Confirmed all 8 implemented echoes already had runtime VFX hooks, but several were too subtle to read during combat.
+  - Strengthened per-echo visual reads in `V1GameManager`:
+    - Kalmuri: brighter range ring, added inner flash ring, larger/longer blade barrage, stronger +5 launch blade.
+    - Blood: added mark pulse ring, larger/longer Blood Bloom, added Blood Bloom ring, slightly larger bloom hit radius.
+    - Execution: larger golden prompt, added execution halo, larger/longer burst.
+    - Hunter: larger/brighter echo projectile and longer target-lock ring.
+    - Shatter: higher echo proc chance, larger/longer field, brighter rings and fracture spokes.
+    - Stopped: higher echo proc chance, larger/longer gold clock field, slightly longer freeze.
+    - Ashen: higher proc chance, larger/longer player guard VFX and added guard ring.
+    - Oblivion: higher proc chance, larger/longer purple brand and added slash accent.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+    - Unity compile error count: `0`.
+    - Unity Play Mode entry reached `isPlaying=true`.
+    - Unity console error count: `0`.
+
 - Unity v1 terrain continuity follow-up:
   - Responded to jaewoo feedback that the map did not feel connected and tiles looked like separate pieces.
   - Regenerated `tile_lethe_terrain_01..08.png` from the same wet black stone base instead of eight unrelated terrain categories.
