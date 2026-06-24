@@ -42,6 +42,22 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 single-echo debug review flow:
+  - Added a per-echo isolated test path so jaewoo can identify exactly which echo is unreadable or too similar.
+  - Debug panel now shows the selected echo name and includes `Prev`, `Echo One`, and `Next`.
+  - Hotkeys:
+    - `F10`: all 8 echoes at +5, ultimate suppressed.
+    - `F11`: selected single echo at +5, ultimate suppressed.
+    - `F12`: cycle to the next echo.
+  - Next review order:
+    - Test one echo at a time with `Echo One` / `F11`.
+    - Mark only echoes that remain invisible, too similar to memories, or too noisy.
+    - Then review map/background/enemy contrast after echo identity is judged.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+    - Unity compile error count: `0`.
+    - Unity console error count: `0`.
+
 - Unity v1 echo identity / greatsword timing follow-up:
   - Responded to jaewoo feedback that echoes may still be either low-visibility or too similar to memories.
   - Reduced greatsword slash VFX delay from `0.18s` to `0.045s` so the cleave appears almost immediately after the weapon swing.

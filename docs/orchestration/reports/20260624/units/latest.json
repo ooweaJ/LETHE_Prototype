@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260624\\index.md",
-  "generatedAt": "2026-06-24T02:37:09.910Z",
-  "unitCount": 5,
+  "generatedAt": "2026-06-24T03:36:48.976Z",
+  "unitCount": 6,
   "latest": {
-    "title": "2026-06-24-05 - 잔향 정체성 분리와 대검 VFX 즉발화",
-    "number": "05",
-    "markdownPath": "docs\\orchestration\\reports\\20260624\\units\\2026-06-24-05-잔향-정체성-분리와-대검-vfx-즉발화.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260624\\units\\2026-06-24-05-잔향-정체성-분리와-대검-vfx-즉발화.html"
+    "title": "2026-06-24-06 - 단일 잔향 디버그 리뷰 플로우",
+    "number": "06",
+    "markdownPath": "docs\\orchestration\\reports\\20260624\\units\\2026-06-24-06-단일-잔향-디버그-리뷰-플로우.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260624\\units\\2026-06-24-06-단일-잔향-디버그-리뷰-플로우.html"
   }
 }

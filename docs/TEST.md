@@ -44,6 +44,9 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
   - `Echo A`: tests Execution / Hunter / Stopped echoes at +5 with ultimate updates suppressed.
   - `Echo B`: tests Shatter / Ashen / Oblivion echoes at +5 with ultimate updates suppressed.
   - `Echo All` or `F10`: tests all 8 echoes at +5 with ultimate updates suppressed.
+  - `Prev` / `Next`: cycles the selected single echo in the debug panel.
+  - `Echo One` or `F11`: tests only the selected echo at +5 with ultimate updates suppressed.
+  - `F12`: cycles to the next selected echo.
   - `Ult 3`: remains separate for utility ultimate preview.
 - Verification:
   - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.

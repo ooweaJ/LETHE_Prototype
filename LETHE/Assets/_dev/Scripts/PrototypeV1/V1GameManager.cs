@@ -245,6 +245,7 @@ namespace Lethe.PrototypeV1
         int nextXp = 5;
         int kills;
         int bossSpawnIndex;
+        int debugEchoIndex;
         bool reviewBloodGranted;
         bool reviewHungryBoosted;
         bool reviewBloodBoosted;
@@ -328,6 +329,8 @@ namespace Lethe.PrototypeV1
             if (KeyDown(KeyCode.F8)) DebugRunM2Smoke();
             if (KeyDown(KeyCode.F9)) ToggleDebugWeapon();
             if (KeyDown(KeyCode.F10)) DebugSetEchoOnlyLoadout(AllEchoIds, "Debug echo-only all 8 set");
+            if (KeyDown(KeyCode.F11)) DebugSetSelectedEchoOnly();
+            if (KeyDown(KeyCode.F12)) DebugCycleSelectedEcho(1);
             if (KeyDown(KeyCode.Space) && resultOverlay)
             {
                 ContinueAfterForgetResult();
@@ -2165,6 +2168,29 @@ namespace Lethe.PrototypeV1
             DebugSetEchoOnlyLoadout(ids, "Debug echo-only VFX set");
         }
 
+        void DebugCycleSelectedEcho(int step)
+        {
+            debugEchoIndex = (debugEchoIndex + step) % AllEchoIds.Length;
+            if (debugEchoIndex < 0) debugEchoIndex += AllEchoIds.Length;
+            EnsureRunStarted();
+            SpawnFloatingText(player.position + Vector3.up * 1.05f, $"Echo Pick: {DebugSelectedEchoName()}", new Color(0.62f, 0.96f, 1f));
+            Log($"Debug echo pick: {DebugSelectedEchoName()}");
+        }
+
+        void DebugSetSelectedEchoOnly()
+        {
+            DebugSetEchoOnlyLoadout(new[] { DebugSelectedEchoId() }, $"Debug echo-only {DebugSelectedEchoName()} set");
+        }
+
+        V1MemoryId DebugSelectedEchoId()
+        {
+            if (AllEchoIds.Length == 0) return V1MemoryId.HungryBlades;
+            debugEchoIndex = Mathf.Clamp(debugEchoIndex, 0, AllEchoIds.Length - 1);
+            return AllEchoIds[debugEchoIndex];
+        }
+
+        string DebugSelectedEchoName() => EchoName(DebugSelectedEchoId());
+
         void DebugSetEchoOnlyLoadout(IEnumerable<V1MemoryId> ids, string label)
         {
             EnsureRunStarted();
@@ -2344,7 +2370,7 @@ namespace Lethe.PrototypeV1
             GUI.Label(new Rect(24, 151, 392, 20), BloodBladeStormReady ? $"{UltimateGoalText()} / {UltimatePatternText(weapon)}" : UltimateGoalText(), smallStyle);
             GUI.Label(new Rect(24, 170, 392, 20), M2LoopText(), smallStyle);
 
-            GUI.Box(new Rect(Screen.width - 326, 12, 314, 262), "", panelStyle);
+            GUI.Box(new Rect(Screen.width - 326, 12, 314, 326), "", panelStyle);
             GUI.Label(new Rect(Screen.width - 314, 22, 292, 20), "Debug  F1/F2 기억  F4/F5 잔향  F8 M2", smallStyle);
             if (GUI.Button(new Rect(Screen.width - 314, 48, 92, 28), "M1", buttonStyle)) DebugRunM1Smoke();
             if (GUI.Button(new Rect(Screen.width - 216, 48, 92, 28), "M2", buttonStyle)) DebugRunM2Smoke();
@@ -2361,7 +2387,11 @@ namespace Lethe.PrototypeV1
             if (GUI.Button(new Rect(Screen.width - 118, 116, 92, 28), "Ult 3", buttonStyle)) DebugSetUtilityUltimates();
             if (GUI.Button(new Rect(Screen.width - 314, 150, 92, 28), "VFX", buttonStyle)) DebugPreviewAllUtilityVfx();
             GUI.Label(new Rect(Screen.width - 216, 154, 190, 20), echoOnlyDebugMode ? "Echo Only: ultimate off" : "Ultimate: normal", smallStyle);
-            var y = 190;
+            GUI.Label(new Rect(Screen.width - 314, 184, 292, 20), $"Pick: {DebugSelectedEchoName()}", smallStyle);
+            if (GUI.Button(new Rect(Screen.width - 314, 208, 92, 28), "Prev", buttonStyle)) DebugCycleSelectedEcho(-1);
+            if (GUI.Button(new Rect(Screen.width - 216, 208, 92, 28), "Echo One", buttonStyle)) DebugSetSelectedEchoOnly();
+            if (GUI.Button(new Rect(Screen.width - 118, 208, 92, 28), "Next", buttonStyle)) DebugCycleSelectedEcho(1);
+            var y = 250;
             foreach (var line in combatLog.TakeLast(3))
             {
                 GUI.Label(new Rect(Screen.width - 314, y, 292, 20), line, smallStyle);
