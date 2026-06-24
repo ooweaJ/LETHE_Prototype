@@ -2,6 +2,23 @@
 
 ## 2026-06-24
 
+- Separated echo identity further from memory VFX and tightened greatsword timing:
+  - Greatsword slash VFX delay changed from `0.18s` to `0.045s`.
+  - Added hit-site echo accents so echoes read as weapon aftereffects instead of standalone memory casts:
+    - Kalmuri cyan cut trace.
+    - Blood red wound slash.
+    - Execution gold cut line.
+    - Hunter origin mark and aim-line links.
+    - Shatter fracture scar lines.
+    - Stopped small clock clamp around the struck enemy.
+    - Ashen hit seal, return thread, and smaller player guard.
+    - Oblivion purple brand seal and brand lines.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console error count: `0`.
+
 - Improved 8-echo VFX readability in `Dev_Prototype_v1`:
   - Confirmed all 8 echoes had runtime VFX hooks, then made subtle echoes easier to see in live combat.
   - Kalmuri now has a stronger range ring, inner flash ring, larger/longer blade barrage, and stronger awakened launch blade.

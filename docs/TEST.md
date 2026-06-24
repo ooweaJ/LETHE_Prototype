@@ -37,6 +37,9 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 - Technical readability pass:
   - Increased scale, alpha, lifetime, proc chance, or added support ring/halo/slash accents for the subtle echo families.
   - Kalmuri, Blood, Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion now have clearer color/shape separation.
+  - Echo identity follow-up:
+    - Greatsword slash VFX delay is now `0.045s`, nearly immediate instead of `0.18s`.
+    - Echoes now add hit-site accents: cut traces, wound marks, aim lines, fracture scars, clock clamps, return threads, and brand lines.
 - Echo-only debug path:
   - `Echo A`: tests Execution / Hunter / Stopped echoes at +5 with ultimate updates suppressed.
   - `Echo B`: tests Shatter / Ashen / Oblivion echoes at +5 with ultimate updates suppressed.

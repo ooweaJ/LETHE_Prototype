@@ -42,6 +42,24 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 echo identity / greatsword timing follow-up:
+  - Responded to jaewoo feedback that echoes may still be either low-visibility or too similar to memories.
+  - Reduced greatsword slash VFX delay from `0.18s` to `0.045s` so the cleave appears almost immediately after the weapon swing.
+  - Added hit-site echo identity accents so echoes read as weapon-hit aftereffects rather than standalone memory skills:
+    - Kalmuri: added cyan cut trace at the hit origin.
+    - Blood: added red wound slash on the marked enemy.
+    - Execution: added golden execution cut line over the target.
+    - Hunter: added hit-origin target mark and aim-line links toward homing targets.
+    - Shatter: added fracture scar lines at the hit point before the field pulse.
+    - Stopped: added small gold clock clamp on the struck enemy and slightly tightened the echo field.
+    - Ashen: changed read toward hit seal -> return thread -> smaller player guard.
+    - Oblivion: added purple brand seal and brand lines on the target.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+    - Unity compile error count: `0`.
+    - Unity Play Mode entry reached `isPlaying=true`.
+    - Unity console error count: `0`.
+
 - Unity v1 8-echo VFX readability follow-up:
   - Confirmed all 8 implemented echoes already had runtime VFX hooks, but several were too subtle to read during combat.
   - Added Echo Only debug mode so jaewoo can test echoes without triggering ultimate awakenings:
