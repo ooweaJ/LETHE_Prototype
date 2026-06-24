@@ -74,7 +74,7 @@ namespace Lethe.PrototypeV1
         const float GreatswordDamage = 42f;
         const float GreatswordArcDeg = 96f;
         const float GreatswordEngageMul = 1.12f;
-        const float FirstBossSeconds = 180f;
+        const float FirstBossSeconds = 150f;
         const float FastFirstBossSeconds = 62f;
         const float DeficitSurvivalSeconds = 54f;
         const float FastDeficitSeconds = 6f;
@@ -83,7 +83,7 @@ namespace Lethe.PrototypeV1
         const int MaxMemoryLevel = 5;
         const int MaxEchoLevel = 5;
         const int MaxActiveMemories = 3;
-        const float FirstBossHp = 2050f;
+        const float FirstBossHp = 1750f;
         const float FastBossHp = 180f;
         const float RunSeconds = 600f;
         const float ArenaHalfWidth = 24f;
@@ -157,7 +157,7 @@ namespace Lethe.PrototypeV1
         const string HunterOathBurstSource = "추적자의 맹세 폭발";
         const string HunterEchoSource = "추적 잔향";
         const string HunterEchoBurstSource = "추적 잔향 폭발";
-        static readonly float[] BossScheduleSeconds = { 180f, 340f, 490f, 600f };
+        static readonly float[] BossScheduleSeconds = { 150f, 300f, 450f, 600f };
         static readonly float[] FastBossScheduleSeconds = { 18f, 38f, 62f, 88f };
         static readonly V1MemoryId[] UtilityMemorySetA = { V1MemoryId.ExecutionFlash, V1MemoryId.HunterOath, V1MemoryId.StoppedSecond };
         static readonly V1MemoryId[] UtilityMemorySetB = { V1MemoryId.ShatterWave, V1MemoryId.AshenShield, V1MemoryId.OblivionBrand };
@@ -246,6 +246,7 @@ namespace Lethe.PrototypeV1
         int nextXp = 5;
         int kills;
         int bossSpawnIndex;
+        int warnedBossIndex = -1;
         int debugEchoIndex;
         bool reviewBloodGranted;
         bool reviewHungryBoosted;
@@ -367,6 +368,11 @@ namespace Lethe.PrototypeV1
                 UpdateReviewPacing();
             }
             bossTimer -= dt;
+            if (bossTimer <= 18f && warnedBossIndex != bossSpawnIndex && !enemies.Any(e => e != null && e.Kind == V1EnemyKind.Gatekeeper))
+            {
+                warnedBossIndex = bossSpawnIndex;
+                SpawnGatekeeperWarning();
+            }
             if (bossTimer <= 0f && !enemies.Any(e => e != null && e.Kind == V1EnemyKind.Gatekeeper))
             {
                 SpawnGatekeeper();
@@ -431,6 +437,7 @@ namespace Lethe.PrototypeV1
             fastDebugRun = true;
             echoOnlyDebugMode = false;
             bossSpawnIndex = 0;
+            warnedBossIndex = -1;
             bossTimer = 42f;
             playerHp = Mathf.Max(playerHp, playerMaxHp * 0.65f);
             AddMemory(V1MemoryId.HungryBlades, 3, true);
@@ -506,6 +513,7 @@ namespace Lethe.PrototypeV1
             fastDebugRun = true;
             echoOnlyDebugMode = false;
             bossSpawnIndex = 0;
+            warnedBossIndex = -1;
             bossTimer = 18f;
             playerHp = Mathf.Max(playerHp, playerMaxHp * 0.75f);
             AddMemory(V1MemoryId.HungryBlades, 5, true);
@@ -583,6 +591,7 @@ namespace Lethe.PrototypeV1
                 }
             }
             CreateArenaBackdrop();
+            CreateArenaLandmarks();
         }
 
         void CreateArenaBackdrop()
@@ -627,6 +636,32 @@ namespace Lethe.PrototypeV1
                     _ => new Color(0.18f, 0.20f, 0.20f, 0.24f)
                 };
                 CreateArenaSprite($"Memory_Gravel_{i:00}", new Vector3(x, y, 0.84f), Vector3.one * scale, Quaternion.identity, gravel, color, -82);
+            }
+        }
+
+        void CreateArenaLandmarks()
+        {
+            var ring = MakeRingSprite("terrain_memory_ring", Color.white, 180);
+            var shard = MakeImpactDiamondSprite("terrain_memory_shard", Color.white);
+            var pillar = MakeBoxSprite("terrain_lethe_pillar", Color.white, 16, 96);
+            var positions = new[]
+            {
+                new Vector3(-15.8f, 9.4f, 0.86f),
+                new Vector3(14.6f, 8.2f, 0.86f),
+                new Vector3(-17.2f, -8.6f, 0.86f),
+                new Vector3(12.0f, -10.4f, 0.86f),
+                new Vector3(-2.6f, 4.6f, 0.86f)
+            };
+
+            for (int i = 0; i < positions.Length; i++)
+            {
+                var p = positions[i];
+                var color = i % 2 == 0
+                    ? new Color(0.22f, 0.52f, 0.56f, 0.20f)
+                    : new Color(0.42f, 0.38f, 0.52f, 0.18f);
+                CreateArenaSprite($"Memory_Landmark_Ring_{i:00}", p, Vector3.one * (0.72f + i * 0.04f), Quaternion.Euler(0f, 0f, i * 37f), ring, color, -81);
+                CreateArenaSprite($"Memory_Landmark_Pillar_{i:00}", p + Vector3.up * 0.03f, new Vector3(0.22f, 0.62f + i * 0.05f, 1f), Quaternion.Euler(0f, 0f, 8f + i * 33f), pillar, new Color(0.18f, 0.23f, 0.25f, 0.24f), -80);
+                CreateArenaSprite($"Memory_Landmark_Shard_{i:00}", p + Vector3.up * 0.10f, Vector3.one * (0.12f + i * 0.012f), Quaternion.Euler(0f, 0f, i * 41f), shard, new Color(0.52f, 0.86f, 0.88f, 0.28f), -79);
             }
         }
 
@@ -1654,6 +1689,7 @@ namespace Lethe.PrototypeV1
             sr.sortingOrder = 15;
             var enemy = go.AddComponent<V1Enemy>();
             enemy.Configure(this, kind, player, EnemyHp(kind), EnemySpeed(kind), EnemyDamage(kind), EnemyRadius(kind));
+            AddEnemyRoleMarker(go.transform, kind);
             enemies.Add(enemy);
         }
 
@@ -1662,6 +1698,41 @@ namespace Lethe.PrototypeV1
             if (enemies.Any(e => e != null && e.Kind == V1EnemyKind.Gatekeeper)) return;
             SpawnEnemy(V1EnemyKind.Gatekeeper, player.position + Vector3.up * 7.2f);
             Log($"문지기 등장 {bossSpawnIndex + 1}/{BossSchedule().Length}: 망각 관문");
+        }
+
+        void SpawnGatekeeperWarning()
+        {
+            if (player == null) return;
+            var warningPos = player.position + Vector3.up * 5.2f;
+            warningPos.x = Mathf.Clamp(warningPos.x, -ArenaHalfWidth + 1.2f, ArenaHalfWidth - 1.2f);
+            warningPos.y = Mathf.Clamp(warningPos.y, -ArenaHalfHeight + 1.2f, ArenaHalfHeight - 1.2f);
+            SpawnTransientSprite("GatekeeperWarningOuter", MakeRingSprite("GatekeeperWarningOuter", Color.white, 180), warningPos, Quaternion.identity, 1.18f, new Color(1f, 0.20f, 0.16f, 0.54f), 1.15f);
+            SpawnTransientSprite("GatekeeperWarningInner", MakeRingSprite("GatekeeperWarningInner", Color.white, 132), warningPos, Quaternion.Euler(0f, 0f, elapsed * -90f), 0.66f, new Color(1f, 0.72f, 0.36f, 0.42f), 1.05f);
+            SpawnTransientSprite("GatekeeperWarningCore", MakeImpactDiamondSprite("GatekeeperWarningCore", Color.white), warningPos, Quaternion.Euler(0f, 0f, 45f), 0.34f, new Color(1f, 0.30f, 0.20f, 0.78f), 0.82f);
+            SpawnFloatingText(warningPos + Vector3.up * 0.35f, "문지기 접근", new Color(1f, 0.46f, 0.34f));
+        }
+
+        void AddEnemyRoleMarker(Transform target, V1EnemyKind kind)
+        {
+            if (target == null || kind == V1EnemyKind.Eroder) return;
+            var marker = new GameObject("RoleMarker");
+            marker.transform.SetParent(target, false);
+            marker.transform.localPosition = new Vector3(0f, -0.06f, 0.02f);
+            marker.transform.localRotation = Quaternion.identity;
+            marker.transform.localScale = Vector3.one * (kind == V1EnemyKind.Gatekeeper ? 0.78f : 0.46f);
+            var sr = marker.AddComponent<SpriteRenderer>();
+            sr.sprite = kind == V1EnemyKind.SplitOne
+                ? MakeImpactDiamondSprite("role_split_marker", Color.white)
+                : MakeRingSprite($"role_{kind}_marker", Color.white, kind == V1EnemyKind.Gatekeeper ? 180 : 112);
+            sr.color = kind switch
+            {
+                V1EnemyKind.DriftingEye => new Color(0.82f, 0.44f, 1f, 0.58f),
+                V1EnemyKind.SplitOne => new Color(1f, 0.72f, 0.28f, 0.50f),
+                V1EnemyKind.VoidPriest => new Color(0.36f, 1f, 0.62f, 0.56f),
+                V1EnemyKind.Gatekeeper => new Color(1f, 0.22f, 0.16f, 0.62f),
+                _ => new Color(1f, 1f, 1f, 0.35f)
+            };
+            sr.sortingOrder = 14;
         }
 
         float[] BossSchedule() => fastDebugRun ? FastBossScheduleSeconds : BossScheduleSeconds;
@@ -2124,6 +2195,7 @@ namespace Lethe.PrototypeV1
             fastDebugRun = false;
             echoOnlyDebugMode = false;
             bossSpawnIndex = 0;
+            warnedBossIndex = -1;
             bossTimer = BossSchedule()[0];
             refillTimer = 0f;
             spawnTimer = 0.35f;

@@ -2,6 +2,19 @@
 
 ## 2026-06-24
 
+- Addressed the next visible prototype gaps after the VFX/range scale-up:
+  - Listed the current weak points as enlarged-VFX review, early-run looseness, map landmark/direction feel, enemy role readability, and post-scale echo clutter.
+  - Moved the first Gatekeeper timing from `180s` to `150s`, with later gates at `300s`, `450s`, and `600s`.
+  - Reduced first Gatekeeper HP from `2050` to `1750` so the earlier boss creates a goal without becoming a long wall.
+  - Added an 18-second Gatekeeper warning VFX with red/gold rings and a short "문지기 접근" callout.
+  - Added five subtle terrain memory landmarks on the large map so the arena has direction points, not only repeating ground.
+  - Added low-alpha enemy role markers for Drifting Eye, Split One, Void Priest, and Gatekeeper.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after Unity refresh.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console showed only MCP server info logs and no gameplay errors/warnings.
+
 - Increased combat VFX scale and weapon attack coverage:
   - Added `CombatVfxVisibilityScale = 1.18f` so transient combat VFX, prompt-style echo sprites, hit sparks, clock hands, slash traces, and weapon phantom sweeps render larger together.
   - Increased dual blades attack range from `2.35` to `2.8`, arc from `119` to `132`, max targets from `6` to `7`, and echo size scale from `0.8` to `1.05`.

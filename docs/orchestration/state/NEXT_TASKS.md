@@ -10,12 +10,12 @@ Current source of truth:
 - Test gate: `docs/TEST.md`
 - Detailed design: `docs/design/README.md` and `docs/design/LETHE_DESIGN_00..07`
 
-## 1. Direct enlarged VFX / attack range review
+## 1. Direct integrated feel review
 
 - Priority: highest
-- Include: use debug/normal play with both dual blades and greatsword after the global VFX/range scale-up.
-- Check: whether attacks now feel satisfying and readable, whether enlarged VFX are too noisy, whether the larger hit ranges feel fair, and whether red/gold/green/purple effects remain visible on the current terrain.
-- Done: jaewoo can say which weapon/echo still feels too small, too large, too late, or too visually crowded.
+- Include: use debug/normal play with both dual blades and greatsword after the VFX/range scale-up, 150s first Gatekeeper, arena landmarks, and enemy role markers.
+- Check: whether attacks feel satisfying/readable, whether enlarged VFX are too noisy, whether the first boss now arrives at a good time, whether landmarks help the map feel less empty, and whether role markers help identify enemy types.
+- Done: jaewoo can name which part still feels too small, too crowded, too slow, too early, too empty, or too hard to read.
 
 ## 2. Direct release-prep map review
 
@@ -27,7 +27,7 @@ Current source of truth:
 ## 3. Terrain polish pass
 
 - Priority: high
-- Include: after direct play, tune tile brightness, repetition, backdrop visibility, root/water/gravel density, and landmark placement.
+- Include: after direct play, tune tile brightness, repetition, backdrop visibility, root/water/gravel density, and the new memory landmark placement.
 - Check: readable floor value range, Lethe identity, enemy silhouette contrast, and no conflict with gold/red/green combat VFX.
 - Done: the background reads as LETHE terrain in motion, not only good standalone tiles.
 

@@ -23,6 +23,29 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 
 ## Current Epic Checks
 
+### Prototype Gap Pass, 2026-06-24
+
+- Weak points listed for direct review:
+  - enlarged VFX may still need human scale/noise judgment.
+  - first 180 seconds felt potentially loose.
+  - enlarged map needed directional landmarks.
+  - enemy/boss sprites needed stronger in-combat role readability.
+  - scaled-up echoes may now risk clutter when stacked.
+- Implemented technical pass:
+  - First Gatekeeper timing moved from `180s` to `150s`.
+  - Boss schedule changed to `150 / 300 / 450 / 600`.
+  - First Gatekeeper HP changed from `2050` to `1750`.
+  - Gatekeeper warning VFX appears 18 seconds before spawn.
+  - Five subtle memory landmarks are generated on the arena floor.
+  - Role markers are generated for Drifting Eye, Split One, Void Priest, and Gatekeeper.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after Unity refresh.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console showed only MCP server info logs and no gameplay errors/warnings.
+- Remaining risk:
+  - Human direct play must confirm whether the 150-second first boss feels exciting rather than abrupt, and whether role markers/landmarks are visible without adding clutter.
+
 ### 8 Echo VFX Readability, 2026-06-24
 
 - Combat VFX / attack coverage follow-up:

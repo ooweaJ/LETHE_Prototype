@@ -42,6 +42,25 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 prototype gap pass:
+  - Listed the current weak points after the VFX/range scale-up:
+    - enlarged VFX still needs human noise/readability review.
+    - first 180 seconds could feel loose.
+    - enlarged map lacked directional landmarks.
+    - enemy/boss sprites still needed stronger in-combat role readability.
+    - stacked echoes may now risk clutter after scale-up.
+  - Implemented three safe fixes:
+    - First Gatekeeper timing moved from `180s` to `150s`; full schedule is now `150 / 300 / 450 / 600`.
+    - First Gatekeeper HP reduced from `2050` to `1750`.
+    - Added an 18-second Gatekeeper warning VFX.
+    - Added five subtle memory landmarks to the arena.
+    - Added low-alpha role markers for Drifting Eye, Split One, Void Priest, and Gatekeeper.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after Unity refresh.
+    - Unity compile error count: `0`.
+    - Unity Play Mode entry reached `isPlaying=true`.
+    - Unity console showed only MCP server info logs and no gameplay errors/warnings.
+
 - Unity v1 combat VFX / attack coverage scale-up:
   - Responded to jaewoo feedback that the effects may be too small and the game should enlarge both VFX and attack range.
   - Added a shared `CombatVfxVisibilityScale = 1.18f` to enlarge transient combat VFX, weapon phantom sweeps, hit sparks, clock hands, slash traces, and prompt-style echo sprites through the common spawn path.

@@ -68,6 +68,15 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Prototype gap pass:
+  - First Gatekeeper moved from `180s` to `150s`; later schedule is `300 / 450 / 600`.
+  - First Gatekeeper HP reduced from `2050` to `1750`.
+  - Added 18-second Gatekeeper warning VFX.
+  - Added five subtle arena memory landmarks.
+  - Added role markers for Drifting Eye, Split One, Void Priest, and Gatekeeper.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after Unity refresh.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`; Unity console showed no gameplay errors/warnings.
 - Combat VFX / attack coverage scale-up:
   - Added shared combat VFX visibility multiplier `1.18x`.
   - Increased dual blades range/arc/max targets/echo size scale to `2.8` / `132` / `7` / `1.05`.

@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260624\\index.md",
-  "generatedAt": "2026-06-24T06:02:21.363Z",
-  "unitCount": 7,
+  "generatedAt": "2026-06-24T06:16:20.092Z",
+  "unitCount": 8,
   "latest": {
-    "title": "2026-06-24-07 - VFX / 공격 범위 전체 확대",
-    "number": "07",
-    "markdownPath": "docs\\orchestration\\reports\\20260624\\units\\2026-06-24-07-vfx-공격-범위-전체-확대.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260624\\units\\2026-06-24-07-vfx-공격-범위-전체-확대.html"
+    "title": "2026-06-24-08 - 부족분 1차 보강",
+    "number": "08",
+    "markdownPath": "docs\\orchestration\\reports\\20260624\\units\\2026-06-24-08-부족분-1차-보강.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260624\\units\\2026-06-24-08-부족분-1차-보강.html"
   }
 }
