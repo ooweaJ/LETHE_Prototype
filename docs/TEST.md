@@ -37,6 +37,11 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 - Technical readability pass:
   - Increased scale, alpha, lifetime, proc chance, or added support ring/halo/slash accents for the subtle echo families.
   - Kalmuri, Blood, Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion now have clearer color/shape separation.
+- Echo-only debug path:
+  - `Echo A`: tests Execution / Hunter / Stopped echoes at +5 with ultimate updates suppressed.
+  - `Echo B`: tests Shatter / Ashen / Oblivion echoes at +5 with ultimate updates suppressed.
+  - `Echo All` or `F10`: tests all 8 echoes at +5 with ultimate updates suppressed.
+  - `Ult 3`: remains separate for utility ultimate preview.
 - Verification:
   - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
   - Unity compile error count: `0`.

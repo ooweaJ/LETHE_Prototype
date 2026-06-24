@@ -160,8 +160,24 @@ namespace Lethe.PrototypeV1
         static readonly float[] FastBossScheduleSeconds = { 18f, 38f, 62f, 88f };
         static readonly V1MemoryId[] UtilityMemorySetA = { V1MemoryId.ExecutionFlash, V1MemoryId.HunterOath, V1MemoryId.StoppedSecond };
         static readonly V1MemoryId[] UtilityMemorySetB = { V1MemoryId.ShatterWave, V1MemoryId.AshenShield, V1MemoryId.OblivionBrand };
+        static readonly V1MemoryId[] CoreEchoIds =
+        {
+            V1MemoryId.HungryBlades,
+            V1MemoryId.BloodReflection
+        };
         static readonly V1MemoryId[] UtilityMemoryIds =
         {
+            V1MemoryId.ExecutionFlash,
+            V1MemoryId.HunterOath,
+            V1MemoryId.ShatterWave,
+            V1MemoryId.StoppedSecond,
+            V1MemoryId.AshenShield,
+            V1MemoryId.OblivionBrand
+        };
+        static readonly V1MemoryId[] AllEchoIds =
+        {
+            V1MemoryId.HungryBlades,
+            V1MemoryId.BloodReflection,
             V1MemoryId.ExecutionFlash,
             V1MemoryId.HunterOath,
             V1MemoryId.ShatterWave,
@@ -241,6 +257,7 @@ namespace Lethe.PrototypeV1
         bool refillOverlay;
         bool deathOverlay;
         bool fastDebugRun;
+        bool echoOnlyDebugMode;
         bool bloodStormWasReady;
         string overlayTitle = "";
         string overlayBody = "";
@@ -310,6 +327,7 @@ namespace Lethe.PrototypeV1
             if (KeyDown(KeyCode.F7)) GrantXp(nextXp);
             if (KeyDown(KeyCode.F8)) DebugRunM2Smoke();
             if (KeyDown(KeyCode.F9)) ToggleDebugWeapon();
+            if (KeyDown(KeyCode.F10)) DebugSetEchoOnlyLoadout(AllEchoIds, "Debug echo-only all 8 set");
             if (KeyDown(KeyCode.Space) && resultOverlay)
             {
                 ContinueAfterForgetResult();
@@ -367,7 +385,10 @@ namespace Lethe.PrototypeV1
             UpdateWeaponVisuals(dt);
             UpdateWeapon(dt);
             UpdateActiveMemories(dt);
-            UpdateEchoUltimate(dt);
+            if (!echoOnlyDebugMode)
+            {
+                UpdateEchoUltimate(dt);
+            }
             UpdatePendingKalmuriFollowups(dt);
             UpdateSpawning(dt);
             UpdateXpCollection(dt);
@@ -404,6 +425,7 @@ namespace Lethe.PrototypeV1
             refillOverlay = false;
             deathOverlay = false;
             fastDebugRun = true;
+            echoOnlyDebugMode = false;
             bossSpawnIndex = 0;
             bossTimer = 42f;
             playerHp = Mathf.Max(playerHp, playerMaxHp * 0.65f);
@@ -478,6 +500,7 @@ namespace Lethe.PrototypeV1
             refillOverlay = false;
             deathOverlay = false;
             fastDebugRun = true;
+            echoOnlyDebugMode = false;
             bossSpawnIndex = 0;
             bossTimer = 18f;
             playerHp = Mathf.Max(playerHp, playerMaxHp * 0.75f);
@@ -2025,6 +2048,7 @@ namespace Lethe.PrototypeV1
             weaponSelectOverlay = false;
             runStarted = true;
             fastDebugRun = false;
+            echoOnlyDebugMode = false;
             bossSpawnIndex = 0;
             bossTimer = BossSchedule()[0];
             refillTimer = 0f;
@@ -2056,6 +2080,7 @@ namespace Lethe.PrototypeV1
         {
             EnsureRunStarted();
             EnsureReviewEnemies(10);
+            echoOnlyDebugMode = false;
             activeMemories.Clear();
             foreach (var id in ids)
             {
@@ -2067,20 +2092,35 @@ namespace Lethe.PrototypeV1
 
         void DebugSetUtilityEchoLoadout(V1MemoryId[] ids)
         {
+            DebugSetEchoOnlyLoadout(ids, "Debug echo-only VFX set");
+        }
+
+        void DebugSetEchoOnlyLoadout(IEnumerable<V1MemoryId> ids, string label)
+        {
             EnsureRunStarted();
-            EnsureReviewEnemies(10);
-            foreach (var id in ids)
+            EnsureReviewEnemies(14);
+            echoOnlyDebugMode = true;
+            activeMemories.Clear();
+            echoLevels.Clear();
+            bloodStormWasReady = false;
+            bloodStormBurstTimer = 0f;
+            ultimatePulseTimer = 0f;
+
+            var list = ids.Distinct().ToList();
+            foreach (var id in list)
             {
-                SetEcho(id, MaxEchoLevel);
+                echoLevels[id] = MaxEchoLevel;
             }
-            SpawnUtilityPreview(ids, true);
-            Log("Debug echo VFX set");
+            SpawnUtilityPreview(list, true);
+            SpawnFloatingText(player.position + Vector3.up * 1.25f, "Echo Only: ultimate off", new Color(0.62f, 0.96f, 1f));
+            Log(label);
         }
 
         void DebugSetUtilityUltimates()
         {
             EnsureRunStarted();
             EnsureReviewEnemies(14);
+            echoOnlyDebugMode = false;
             foreach (var id in UtilityMemoryIds)
             {
                 echoLevels[id] = MaxEchoLevel;
@@ -2234,7 +2274,7 @@ namespace Lethe.PrototypeV1
             GUI.Label(new Rect(24, 151, 392, 20), BloodBladeStormReady ? $"{UltimateGoalText()} / {UltimatePatternText(weapon)}" : UltimateGoalText(), smallStyle);
             GUI.Label(new Rect(24, 170, 392, 20), M2LoopText(), smallStyle);
 
-            GUI.Box(new Rect(Screen.width - 326, 12, 314, 226), "", panelStyle);
+            GUI.Box(new Rect(Screen.width - 326, 12, 314, 262), "", panelStyle);
             GUI.Label(new Rect(Screen.width - 314, 22, 292, 20), "Debug  F1/F2 기억  F4/F5 잔향  F8 M2", smallStyle);
             if (GUI.Button(new Rect(Screen.width - 314, 48, 92, 28), "M1", buttonStyle)) DebugRunM1Smoke();
             if (GUI.Button(new Rect(Screen.width - 216, 48, 92, 28), "M2", buttonStyle)) DebugRunM2Smoke();
@@ -2247,9 +2287,11 @@ namespace Lethe.PrototypeV1
             if (GUI.Button(new Rect(Screen.width - 216, 82, 92, 28), "Mem B", buttonStyle)) DebugSetUtilityMemoryLoadout(UtilityMemorySetB);
             if (GUI.Button(new Rect(Screen.width - 118, 82, 92, 28), "Echo A", buttonStyle)) DebugSetUtilityEchoLoadout(UtilityMemorySetA);
             if (GUI.Button(new Rect(Screen.width - 314, 116, 92, 28), "Echo B", buttonStyle)) DebugSetUtilityEchoLoadout(UtilityMemorySetB);
-            if (GUI.Button(new Rect(Screen.width - 216, 116, 92, 28), "Ult 3", buttonStyle)) DebugSetUtilityUltimates();
-            if (GUI.Button(new Rect(Screen.width - 118, 116, 92, 28), "VFX", buttonStyle)) DebugPreviewAllUtilityVfx();
-            var y = 154;
+            if (GUI.Button(new Rect(Screen.width - 216, 116, 92, 28), "Echo All", buttonStyle)) DebugSetEchoOnlyLoadout(AllEchoIds, "Debug echo-only all 8 set");
+            if (GUI.Button(new Rect(Screen.width - 118, 116, 92, 28), "Ult 3", buttonStyle)) DebugSetUtilityUltimates();
+            if (GUI.Button(new Rect(Screen.width - 314, 150, 92, 28), "VFX", buttonStyle)) DebugPreviewAllUtilityVfx();
+            GUI.Label(new Rect(Screen.width - 216, 154, 190, 20), echoOnlyDebugMode ? "Echo Only: ultimate off" : "Ultimate: normal", smallStyle);
+            var y = 190;
             foreach (var line in combatLog.TakeLast(3))
             {
                 GUI.Label(new Rect(Screen.width - 314, y, 292, 20), line, smallStyle);
@@ -2451,6 +2493,7 @@ namespace Lethe.PrototypeV1
 
         string UltimateGoalText()
         {
+            if (echoOnlyDebugMode) return "Echo Only Debug: 궁극 억제 중";
             if (AnyUltimateReady) return $"궁극: {UltimateReadyName()} 활성";
             return $"궁극 준비: 칼무리 {EchoLevel(V1MemoryId.HungryBlades)}/5 + 혈반 {EchoLevel(V1MemoryId.BloodReflection)}/5";
         }

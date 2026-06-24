@@ -336,6 +336,11 @@
 <li>정지 잔향: 금색 시계장판의 발동률, 범위, 유지시간을 올리고 정지 시간을 살짝 늘렸다.</li>
 <li>잿빛 잔향: 플레이어 주변 보호/회복 링이 더 크게 남도록 했다.</li>
 <li>낙인 잔향: 보라색 낙인 프롬프트를 키우고 추가 보라 베기 액센트를 넣었다.</li>
+<li>잔향만 테스트하는 Echo Only 디버그를 추가했다:</li>
+<li><code>Echo A</code>: 처형/추적/정지 잔향 +5, 궁극 억제.</li>
+<li><code>Echo B</code>: 파문/잿빛/낙인 잔향 +5, 궁극 억제.</li>
+<li><code>Echo All</code> 또는 <code>F10</code>: 8잔향 전체 +5, 궁극 억제.</li>
+<li><code>Ult 3</code>: 궁극 테스트용으로 따로 유지.</li>
 </ul>
 <h2>3. 테스트 결과와 근거</h2>
 <ul>
@@ -343,6 +348,7 @@
 <li>Unity compile error count: <code>0</code>.</li>
 <li>Unity Play Mode 진입: <code>isPlaying=true</code> 확인.</li>
 <li>Unity console error count: <code>0</code>.</li>
+<li>Echo Only 디버그 추가 후 <code>dotnet build</code> 재확인: 통과, error 0개.</li>
 </ul>
 <h2>4. 결정한 것</h2>
 <p>잔향은 디버그 텍스트나 설명보다 먼저 전투 VFX로 읽혀야 한다. 앞으로 8잔향은 각자 색, 형태, 유지시간이 달라야 하고, &quot;발동했네&quot;가 아니라 &quot;아, 이 잔향이 터졌네&quot;까지 보여야 한다.</p>

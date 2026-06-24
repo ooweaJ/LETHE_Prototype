@@ -44,6 +44,11 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 - Unity v1 8-echo VFX readability follow-up:
   - Confirmed all 8 implemented echoes already had runtime VFX hooks, but several were too subtle to read during combat.
+  - Added Echo Only debug mode so jaewoo can test echoes without triggering ultimate awakenings:
+    - `Echo A`: Execution / Hunter / Stopped echoes at +5, ultimate loop suppressed.
+    - `Echo B`: Shatter / Ashen / Oblivion echoes at +5, ultimate loop suppressed.
+    - `Echo All` or `F10`: all 8 echoes at +5, ultimate loop suppressed.
+    - `Ult 3` remains the separate utility ultimate preview path.
   - Strengthened per-echo visual reads in `V1GameManager`:
     - Kalmuri: brighter range ring, added inner flash ring, larger/longer blade barrage, stronger +5 launch blade.
     - Blood: added mark pulse ring, larger/longer Blood Bloom, added Blood Bloom ring, slightly larger bloom hit radius.
