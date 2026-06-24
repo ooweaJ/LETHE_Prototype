@@ -21,17 +21,17 @@ MonoBehaviour:
   sfxLayers: []
   echoStyle: 0
   rhythm: 0
-  attackRange: 3.15
-  attackArcDegrees: 82
-  maxTargetsPerSwing: 5
-  engageMultiplier: 1.08
+  attackRange: 3.75
+  attackArcDegrees: 96
+  maxTargetsPerSwing: 6
+  engageMultiplier: 1.12
   secondaryDamageMultiplier: 0.58
   primaryKnockback: 3.75
   secondaryKnockback: 2.1
   hitStopSeconds: 0.066
   cameraShakeAmount: 0.088
   swingAnimDuration: 0.34
-  echoSizeScale: 1.8
+  echoSizeScale: 2.15
   echoDamageScale: 1.6
   targetingMode: 1
   echoProcStyle: 1

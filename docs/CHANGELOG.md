@@ -2,6 +2,18 @@
 
 ## 2026-06-24
 
+- Increased combat VFX scale and weapon attack coverage:
+  - Added `CombatVfxVisibilityScale = 1.18f` so transient combat VFX, prompt-style echo sprites, hit sparks, clock hands, slash traces, and weapon phantom sweeps render larger together.
+  - Increased dual blades attack range from `2.35` to `2.8`, arc from `119` to `132`, max targets from `6` to `7`, and echo size scale from `0.8` to `1.05`.
+  - Increased greatsword attack range from `3.15` to `3.75`, arc from `82` to `96`, max targets from `5` to `6`, and echo size scale from `1.8` to `2.15`.
+  - Enlarged dual-blade and greatsword VFX profile scales for crescents, hit sparks, Kalmuri followups, and heavy ultimate slash.
+  - Increased Hungry Blades, Shatter Echo, and Stopped Echo field radii so visual coverage and actual hit/utility area stay aligned.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after Unity refresh.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console showed only MCP server info logs and no gameplay errors/warnings.
+
 - Separated echo identity further from memory VFX and tightened greatsword timing:
   - Greatsword slash VFX delay changed from `0.18s` to `0.045s`.
   - Added hit-site echo accents so echoes read as weapon aftereffects instead of standalone memory casts:

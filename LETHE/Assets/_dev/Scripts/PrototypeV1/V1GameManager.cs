@@ -64,21 +64,21 @@ namespace Lethe.PrototypeV1
     {
         const float PixelsPerUnit = 40f;
         const float PlayerSpeed = 184f / PixelsPerUnit;
-        const float TwinBladeRange = 94f / PixelsPerUnit;
+        const float TwinBladeRange = 112f / PixelsPerUnit;
         const float TwinBladeInterval = 0.36f;
         const float TwinBladeDamage = 15f;
-        const float TwinBladeArcDeg = 119f;
-        const float TwinBladeEngageMul = 1.15f;
-        const float GreatswordRange = 126f / PixelsPerUnit;
+        const float TwinBladeArcDeg = 132f;
+        const float TwinBladeEngageMul = 1.20f;
+        const float GreatswordRange = 150f / PixelsPerUnit;
         const float GreatswordInterval = 1.02f;
         const float GreatswordDamage = 42f;
-        const float GreatswordArcDeg = 82f;
-        const float GreatswordEngageMul = 1.08f;
+        const float GreatswordArcDeg = 96f;
+        const float GreatswordEngageMul = 1.12f;
         const float FirstBossSeconds = 180f;
         const float FastFirstBossSeconds = 62f;
         const float DeficitSurvivalSeconds = 54f;
         const float FastDeficitSeconds = 6f;
-        const float HungryBladesRadius = 72f / PixelsPerUnit;
+        const float HungryBladesRadius = 86f / PixelsPerUnit;
         const float HungryBladesDps = 28f;
         const int MaxMemoryLevel = 5;
         const int MaxEchoLevel = 5;
@@ -101,6 +101,7 @@ namespace Lethe.PrototypeV1
         const float DualBladeSecondSlashExtraDelay = 0.040f;
         const float GreatswordSlashDelay = 0.045f;
         const float WeaponSlashLifetimeMultiplier = 1.45f;
+        const float CombatVfxVisibilityScale = 1.18f;
         const float DualBladeSlashMinLifetime = 0.34f;
         const float GreatswordSlashMinLifetime = 0.62f;
         const float GreatswordCenterToTipRatio = 0.44f;
@@ -1176,7 +1177,7 @@ namespace Lethe.PrototypeV1
             var shatterLevel = EchoLevel(V1MemoryId.ShatterWave);
             if (shatterLevel > 0 && (shatterLevel >= 2 || hitIndex == 0) && UnityEngine.Random.value < 0.26f + shatterLevel * 0.09f)
             {
-                var radius = 0.82f + shatterLevel * 0.10f;
+                var radius = 1.00f + shatterLevel * 0.12f;
                 SpawnShatterEchoScar(enemy.transform.position, forward, radius, 0.54f);
                 SpawnShatterWaveField(enemy.transform.position, radius, 1.14f, true);
                 foreach (var target in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(enemy.transform.position, e.transform.position) <= radius + e.TouchRadius).Take(5).ToList())
@@ -1216,8 +1217,8 @@ namespace Lethe.PrototypeV1
             if (stoppedLevel > 0 && hitIndex == 0 && UnityEngine.Random.value < 0.24f + stoppedLevel * 0.055f)
             {
                 enemy.ApplyBriefFreeze(0.22f + stoppedLevel * 0.052f);
-                SpawnStoppedEchoClamp(enemy.transform.position, 0.64f + stoppedLevel * 0.045f, 1.12f);
-                SpawnStoppedSecondField(enemy.transform.position, 1.05f + stoppedLevel * 0.12f, TimeStopGold(false), 1.28f, false);
+                SpawnStoppedEchoClamp(enemy.transform.position, 0.74f + stoppedLevel * 0.055f, 1.12f);
+                SpawnStoppedSecondField(enemy.transform.position, 1.24f + stoppedLevel * 0.14f, TimeStopGold(false), 1.28f, false);
             }
 
             var ashLevel = EchoLevel(V1MemoryId.AshenShield);
@@ -2992,7 +2993,7 @@ namespace Lethe.PrototypeV1
             var go = SpawnTransientSprite(name, sprite, startPosition, Quaternion.Euler(0f, 0f, startAngle), startScale, color, lifetime);
             var sweep = go.GetComponent<V1WeaponPhantomSweep>();
             if (sweep == null) sweep = go.AddComponent<V1WeaponPhantomSweep>();
-            sweep.Configure(startPosition, endPosition, startAngle, endAngle, Vector3.one * startScale, Vector3.one * endScale, sweepDuration);
+            sweep.Configure(startPosition, endPosition, startAngle, endAngle, Vector3.one * (startScale * CombatVfxVisibilityScale), Vector3.one * (endScale * CombatVfxVisibilityScale), sweepDuration);
             return go;
         }
 
@@ -3003,7 +3004,7 @@ namespace Lethe.PrototypeV1
             var go = SpawnTransientSprite(name, sprite, startPosition, Quaternion.Euler(0f, 0f, startBladeAngle - 90f), startScale, color, lifetime);
             var sweep = go.GetComponent<V1WeaponPhantomSweep>();
             if (sweep == null) sweep = go.AddComponent<V1WeaponPhantomSweep>();
-            sweep.ConfigurePivot(handlePivot, startBladeAngle, endBladeAngle, centerDistance, Vector3.one * startScale, Vector3.one * endScale, sweepDuration);
+            sweep.ConfigurePivot(handlePivot, startBladeAngle, endBladeAngle, centerDistance, Vector3.one * (startScale * CombatVfxVisibilityScale), Vector3.one * (endScale * CombatVfxVisibilityScale), sweepDuration);
             return go;
         }
 
@@ -3074,7 +3075,7 @@ namespace Lethe.PrototypeV1
             var go = RentPooled(transientSpritePool, name);
             go.transform.position = new Vector3(position.x, position.y, -0.05f);
             go.transform.rotation = rotation;
-            go.transform.localScale = scale;
+            go.transform.localScale = scale * CombatVfxVisibilityScale;
             var sweep = go.GetComponent<V1WeaponPhantomSweep>();
             if (sweep != null) sweep.enabled = false;
             var sr = go.GetComponent<SpriteRenderer>();
@@ -3785,14 +3786,14 @@ namespace Lethe.PrototypeV1
                 TwinBladeInterval,
                 TwinBladeArcDeg,
                 TwinBladeEngageMul,
-                6,
+                7,
                 0.72f,
                 1.78f,
                 1.05f,
                 0.022f,
                 0.035f,
                 0.16f,
-                0.80f,
+                1.05f,
                 0.75f,
                 V1WeaponTargetingMode.Nearest,
                 V1EchoProcStyle.MultiSmall,
@@ -3809,14 +3810,14 @@ namespace Lethe.PrototypeV1
                 GreatswordInterval,
                 GreatswordArcDeg,
                 GreatswordEngageMul,
-                5,
+                6,
                 0.58f,
                 3.75f,
                 2.10f,
                 0.066f,
                 0.088f,
                 0.34f,
-                1.80f,
+                2.15f,
                 1.60f,
                 V1WeaponTargetingMode.DensestArc,
                 V1EchoProcStyle.SingleHeavy,

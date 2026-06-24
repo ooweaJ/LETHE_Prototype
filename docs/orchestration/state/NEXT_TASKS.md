@@ -10,12 +10,12 @@ Current source of truth:
 - Test gate: `docs/TEST.md`
 - Detailed design: `docs/design/README.md` and `docs/design/LETHE_DESIGN_00..07`
 
-## 1. Direct 8-echo VFX readability review
+## 1. Direct enlarged VFX / attack range review
 
 - Priority: highest
-- Include: use debug/normal play to confirm Kalmuri, Blood, Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion echoes are visually identifiable without reading text.
-- Check: whether each echo has its own color/shape read, whether it lasts long enough, whether proc frequency feels visible but not spammy, and whether the background hides red/gold/green/purple effects.
-- Done: jaewoo can name which echoes still feel invisible, too small, too fast, or too similar.
+- Include: use debug/normal play with both dual blades and greatsword after the global VFX/range scale-up.
+- Check: whether attacks now feel satisfying and readable, whether enlarged VFX are too noisy, whether the larger hit ranges feel fair, and whether red/gold/green/purple effects remain visible on the current terrain.
+- Done: jaewoo can say which weapon/echo still feels too small, too large, too late, or too visually crowded.
 
 ## 2. Direct release-prep map review
 
@@ -37,7 +37,7 @@ Current source of truth:
 - Include: check `sheet_enemy_eye_4dir.png`, `sheet_enemy_splitter_4dir.png`, `sheet_enemy_voidpriest_4dir.png`, and `spr_boss_gatekeeper_01.png` in live combat under VFX.
 - Done: jaewoo can recognize ranged eye, splitter, void priest, and Gatekeeper without reading debug labels, even when they enter from farther away.
 
-## 5. VFX scale/timing follow-up after direct echo/map review
+## 5. VFX scale/timing follow-up after direct review
 
 - Priority: high
 - Include: tune generated sprite scale, alpha, sorting order, duration, and spawn frequency for weapon hits, phantom weapons, memories, echoes, ultimates, and background contrast after the new map is judged.

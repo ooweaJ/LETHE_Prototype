@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260624\\index.md",
-  "generatedAt": "2026-06-24T03:36:48.976Z",
-  "unitCount": 6,
+  "generatedAt": "2026-06-24T06:02:21.363Z",
+  "unitCount": 7,
   "latest": {
-    "title": "2026-06-24-06 - 단일 잔향 디버그 리뷰 플로우",
-    "number": "06",
-    "markdownPath": "docs\\orchestration\\reports\\20260624\\units\\2026-06-24-06-단일-잔향-디버그-리뷰-플로우.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260624\\units\\2026-06-24-06-단일-잔향-디버그-리뷰-플로우.html"
+    "title": "2026-06-24-07 - VFX / 공격 범위 전체 확대",
+    "number": "07",
+    "markdownPath": "docs\\orchestration\\reports\\20260624\\units\\2026-06-24-07-vfx-공격-범위-전체-확대.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260624\\units\\2026-06-24-07-vfx-공격-범위-전체-확대.html"
   }
 }

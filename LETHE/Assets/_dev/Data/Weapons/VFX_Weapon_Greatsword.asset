@@ -24,7 +24,7 @@ MonoBehaviour:
     mirrorSideByLeadHand: 0
     rotationOffsetDegrees: 0
     mirrorRotationByLeadHand: 0
-    scale: 1.65
+    scale: 1.86
     color: {r: 0.76, g: 0.94, b: 1, a: 0.3}
     lifetime: 0.62
   - id: GreatswordCrescent_Primary
@@ -37,7 +37,7 @@ MonoBehaviour:
     mirrorSideByLeadHand: 0
     rotationOffsetDegrees: 0
     mirrorRotationByLeadHand: 0
-    scale: 1.38
+    scale: 1.56
     color: {r: 0.92, g: 1, b: 1, a: 0.94}
     lifetime: 0.52
   - id: GreatswordTargetShock
@@ -50,7 +50,7 @@ MonoBehaviour:
     mirrorSideByLeadHand: 0
     rotationOffsetDegrees: 0
     mirrorRotationByLeadHand: 0
-    scale: 0.68
+    scale: 0.80
     color: {r: 0.8, g: 0.95, b: 1, a: 0.58}
     lifetime: 0.26
   - id: GreatswordTargetCutPoint
@@ -63,7 +63,7 @@ MonoBehaviour:
     mirrorSideByLeadHand: 0
     rotationOffsetDegrees: 0
     mirrorRotationByLeadHand: 0
-    scale: 0.26
+    scale: 0.32
     color: {r: 0.95, g: 1, b: 1, a: 0.92}
     lifetime: 0.18
   - id: GreatswordCrescent_Assist
@@ -76,7 +76,7 @@ MonoBehaviour:
     mirrorSideByLeadHand: 0
     rotationOffsetDegrees: -8
     mirrorRotationByLeadHand: 0
-    scale: 0.58
+    scale: 0.70
     color: {r: 0.62, g: 0.86, b: 1, a: 0.56}
     lifetime: 0.22
   kalmuriFollowupSlashes:
@@ -90,7 +90,7 @@ MonoBehaviour:
     mirrorSideByLeadHand: 0
     rotationOffsetDegrees: 0
     mirrorRotationByLeadHand: 0
-    scale: 0.98
+    scale: 1.16
     color: {r: 0.82, g: 0.98, b: 1, a: 0.86}
     lifetime: 0.24
   ultimateSlashes:
@@ -104,7 +104,7 @@ MonoBehaviour:
     mirrorSideByLeadHand: 0
     rotationOffsetDegrees: 0
     mirrorRotationByLeadHand: 0
-    scale: 1.05
+    scale: 1.24
     color: {r: 1, g: 0.12, b: 0.18, a: 0.78}
     lifetime: 0.3
   weaponDamageNumberColor: {r: 1, g: 0.9, b: 0.58, a: 1}
@@ -129,6 +129,6 @@ MonoBehaviour:
     mirrorSideByLeadHand: 0
     rotationOffsetDegrees: 0
     mirrorRotationByLeadHand: 0
-    scale: 0.24
+    scale: 0.31
     color: {r: 1, g: 0.98, b: 0.88, a: 0.92}
     lifetime: 0.085

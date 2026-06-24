@@ -42,6 +42,27 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 combat VFX / attack coverage scale-up:
+  - Responded to jaewoo feedback that the effects may be too small and the game should enlarge both VFX and attack range.
+  - Added a shared `CombatVfxVisibilityScale = 1.18f` to enlarge transient combat VFX, weapon phantom sweeps, hit sparks, clock hands, slash traces, and prompt-style echo sprites through the common spawn path.
+  - Increased dual blades data:
+    - range `2.35 -> 2.8`
+    - arc `119 -> 132`
+    - max targets `6 -> 7`
+    - echo size scale `0.8 -> 1.05`
+  - Increased greatsword data:
+    - range `3.15 -> 3.75`
+    - arc `82 -> 96`
+    - max targets `5 -> 6`
+    - echo size scale `1.8 -> 2.15`
+  - Enlarged dual-blade/greatsword VFX profile scales for crescents, cut flashes, hit sparks, Kalmuri followups, and heavy Blood Blade Storm slash.
+  - Increased Hungry Blades, Shatter Echo, and Stopped Echo field radii so visual size and functional coverage are closer.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after Unity refresh.
+    - Unity compile error count: `0`.
+    - Unity Play Mode entry reached `isPlaying=true`.
+    - Unity console showed only MCP server info logs and no gameplay errors/warnings.
+
 - Unity v1 single-echo debug review flow:
   - Added a per-echo isolated test path so jaewoo can identify exactly which echo is unreadable or too similar.
   - Debug panel now shows the selected echo name and includes `Prev`, `Echo One`, and `Next`.

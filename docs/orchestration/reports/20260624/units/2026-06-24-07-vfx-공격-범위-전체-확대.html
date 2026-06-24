@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-24-07 - VFX / 공격 범위 전체 확대</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-24-07 - VFX / 공격 범위 전체 확대</h1>
+      <p class="meta">Generated from 2026-06-24-07-vfx-공격-범위-전체-확대.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260624/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-24-07 - VFX / 공격 범위 전체 확대</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 무기별 베기 VFX와 8잔향 VFX가 이미 연결된 상태였지만, 실제 플레이 피드백상 화면에서 작게 읽히고 공격 범위도 좁게 느껴질 가능성이 있었다. 이번 작업은 가시성 문제를 단순 색/시간만이 아니라 실제 VFX 크기와 타격 범위 자체를 키워 해결하는 방향이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>공통 전투 VFX 배율 <code>CombatVfxVisibilityScale = 1.18f</code>를 추가했다.</li>
+<li>transient 전투 VFX, 베기 잔상, 시계 바늘, 타격 스파크, 잔향 아이콘형 VFX가 공통으로 더 크게 나온다.</li>
+<li>쌍검 공격 범위를 키웠다:</li>
+<li>range <code>2.35 -&gt; 2.8</code></li>
+<li>arc <code>119 -&gt; 132</code></li>
+<li>max targets <code>6 -&gt; 7</code></li>
+<li>echo size scale <code>0.8 -&gt; 1.05</code></li>
+<li>대검 공격 범위를 키웠다:</li>
+<li>range <code>3.15 -&gt; 3.75</code></li>
+<li>arc <code>82 -&gt; 96</code></li>
+<li>max targets <code>5 -&gt; 6</code></li>
+<li>echo size scale <code>1.8 -&gt; 2.15</code></li>
+<li>쌍검/대검 VFX 프로필에서 반달 베기, 컷 플래시, 히트 스파크, 칼무리 후속타, 대검 피의 칼폭풍 베기 스케일을 키웠다.</li>
+<li>칼무리, 파쇄의 파문, 멈춘 1초 계열의 반경도 같이 키워 보이는 범위와 실제 기능 범위가 덜 따로 놀게 했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, warning 0개, error 0개.</li>
+<li>Unity <code>Assets/Refresh</code>: 성공.</li>
+<li>Unity compile error count: <code>0</code>.</li>
+<li>Unity Play Mode 진입: <code>isPlaying=true</code> 확인.</li>
+<li>Unity console에는 MCP 서버 정보 로그만 있었고 게임 런타임 오류/경고는 없었다.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>이번에는 VFX를 조금만 다듬는 방식보다 전투 전체의 판독 크기 기준을 올렸다. LETHE의 목표가 시원시원한 뽕맛이라면, 작은 이펙트를 여러 번 보강하는 것보다 기본 전투 스케일 자체가 한 단계 커져야 한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>이제 남은 리스크는 반대 방향이다. 이전에는 안 보이는 것이 문제였다면, 지금은 여러 잔향이 동시에 터질 때 너무 복잡하거나 배경을 덮을 수 있다. 특히 <code>Echo All</code>과 대검 조합은 직접 플레이로 과밀도를 봐야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Codex가 무기 판정과 VFX 스케일을 동시에 키웠다. 다음 판단 기준은 &quot;보이는가?&quot;에서 &quot;시원하지만 과하지 않은가?&quot;, &quot;실제 맞는 범위와 VFX 범위가 맞아 보이는가?&quot;로 바뀐다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>1. jaewoo가 쌍검/대검으로 직접 플레이한다.</p>
+<p>2. 너무 작은 VFX가 남았는지, 반대로 너무 화면을 덮는 VFX가 생겼는지 이름을 찍는다.</p>
+<p>3. 문제 있는 무기/잔향만 개별적으로 scale, alpha, lifetime, timing을 다시 조정한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 구현된 VFX가 있어도 크기와 공격 범위가 작으면 전투 감각이 약하게 느껴진다.</li>
+<li>방향: 판독성 문제를 색상/텍스트가 아니라 전투 스케일과 타격 범위로 해결한다.</li>
+<li>행동: 무기 데이터, VFX 프로필, 런타임 공통 VFX 배율, 핵심 잔향 반경을 함께 조정했다.</li>
+<li>결과: 기술 검증은 통과했고, 이제 직접 플레이로 &quot;작음&quot; 문제가 해결됐는지와 &quot;과밀&quot; 문제가 생겼는지를 판단할 수 있다.</li>
+</ul>
+  </main>
+</body>
+</html>

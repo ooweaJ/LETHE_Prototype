@@ -25,6 +25,20 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 
 ### 8 Echo VFX Readability, 2026-06-24
 
+- Combat VFX / attack coverage follow-up:
+  - Global transient combat VFX scale is now `1.18x`.
+  - Dual blades coverage changed to range `2.8`, arc `132`, max targets `7`, echo size scale `1.05`.
+  - Greatsword coverage changed to range `3.75`, arc `96`, max targets `6`, echo size scale `2.15`.
+  - Weapon VFX profiles were enlarged for crescents, cut flashes, Kalmuri followups, heavy ultimate slash, and hit sparks.
+  - Hungry Blades, Shatter Echo, and Stopped Echo radii were increased so the readable field better matches the useful area.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after Unity refresh.
+    - Unity compile error count: `0`.
+    - Unity Play Mode entry reached `isPlaying=true`.
+    - Unity console showed only MCP server info logs and no gameplay errors/warnings.
+  - Remaining risk:
+    - Human direct play must judge whether the larger VFX now feel juicy or too noisy on the current terrain.
+
 - Runtime hooks checked:
   - Kalmuri Echo
   - Blood Echo

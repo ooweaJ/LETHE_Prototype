@@ -68,6 +68,14 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Combat VFX / attack coverage scale-up:
+  - Added shared combat VFX visibility multiplier `1.18x`.
+  - Increased dual blades range/arc/max targets/echo size scale to `2.8` / `132` / `7` / `1.05`.
+  - Increased greatsword range/arc/max targets/echo size scale to `3.75` / `96` / `6` / `2.15`.
+  - Enlarged weapon VFX profile scales and key echo field radii.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after Unity refresh.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`; Unity console showed no gameplay errors/warnings.
 - 8-echo VFX readability follow-up:
   - All 8 echoes already had runtime VFX hooks, but jaewoo feedback was that several were hard to notice in live combat.
   - Strengthened Kalmuri, Blood, Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion echo VFX through scale, alpha, lifetime, proc chance, and added ring/halo/slash accent sprites.
