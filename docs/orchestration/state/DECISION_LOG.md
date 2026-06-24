@@ -4,6 +4,7 @@ This file is an index of durable decisions. Link to detailed reports, legacy doc
 
 | ID | Date | Decision | Reason | Evidence / Links |
 | --- | --- | --- | --- | --- |
+| DEC-2026-06-24-01 | 2026-06-24 | Shift the next Unity visual work from prototype arena dressing toward a release-prep world baseline. | Jaewoo said the background should be redone, the map is too small, and the project should start preparing for actual release rather than staying in prototype presentation. | `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`, `scripts/generate_world_sprites.ps1`, `docs/orchestration/reports/20260624/index.md` |
 | DEC-2026-06-08-01 | 2026-06-08 | Adopt `docs/orchestration/` as the project-management interface. | The user wants a reusable cross-project Codex orchestration layer for status, tasks, logs, reports, evidence, and portfolio material. | `EXISTING_PROJECT_MIGRATION_PROMPT.md`, `AGENTS.md`, `docs/orchestration/README.md` |
 | DEC-2026-06-08-02 | 2026-06-08 | Keep root `AGENTS.md` as top-level rules and add only an Orchestration Interface section. | Existing agent rules are project-specific and should not be replaced by orchestration docs. | `AGENTS.md`, `docs/orchestration/state/PROMPT_CONTEXT.md` |
 | DEC-2026-06-08-03 | 2026-06-08 | Treat v0.12 as the current controlled human-test candidate. | The latest balance loop passed and package regeneration succeeded; further direction needs human evidence. | `docs/CODEX_STATUS.md`, `docs/orchestration/state/STATUS.md`, `docs/orchestration/reports/20260608/index.md` |

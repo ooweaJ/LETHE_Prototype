@@ -68,6 +68,18 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Release-prep map / background pass:
+  - Generated four new Lethe stone floor tiles and one large arena backdrop.
+  - Added `scripts/generate_world_sprites.ps1` for reproducible map sprite generation.
+  - Expanded player clamp from `x +/-12`, `y -8.5..8.5` to `x +/-24`, `y +/-16`.
+  - Expanded floor coverage from `11x9` to `21x15` tile placements.
+  - Increased camera orthographic size from `6.1` to `6.8` and clamped camera follow inside the enlarged arena.
+  - Increased enemy spawn radius for the larger space.
+  - Local visual sanity check opened representative generated map PNGs.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity `Assets/Refresh`: success.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`; Unity console error count: `0`.
 - Enemy / boss sprite insertion:
   - Generated first-pass sprites for Drifting Eye, Split One, Void Priest, and Gatekeeper.
   - Added matching chroma source PNGs and `scripts/generate_enemy_boss_sprites.ps1`.

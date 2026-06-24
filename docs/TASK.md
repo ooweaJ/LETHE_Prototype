@@ -18,6 +18,14 @@
 
 ## Progress
 
+- 2026-06-24 Update:
+  - [x] Release-prep map/background direction started after jaewoo said the map felt too small and the project should move beyond prototype feel.
+  - [x] New Lethe stone floor tile set and arena backdrop generated under `_dev/Art/Sprites/Map`.
+  - [x] Runtime arena expanded from prototype bounds `x +/-12`, `y -8.5..8.5` to `x +/-24`, `y +/-16`.
+  - [x] Camera size and clamped follow updated for the larger arena.
+  - [x] Enemy spawn radius expanded so combat has more room to breathe.
+  - [ ] Direct jaewoo play review still needs to judge whether the larger map feels like a real game space rather than a small test box.
+
 - 2026-06-23 Update:
   - [x] 적 3종과 첫 보스 판독용 스프라이트를 생성하고 런타임에 연결했다.
   - [x] 대검 slash VFX delay를 `0.18s`로 당겨 더 빠르게 읽히게 했다.

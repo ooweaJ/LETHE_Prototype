@@ -86,6 +86,9 @@ namespace Lethe.PrototypeV1
         const float FirstBossHp = 2050f;
         const float FastBossHp = 180f;
         const float RunSeconds = 600f;
+        const float ArenaHalfWidth = 24f;
+        const float ArenaHalfHeight = 16f;
+        const float ArenaTileSpacing = 2.65f;
         const float PlayerMoveAcceleration = 14f;
         const float PlayerMoveDeceleration = 22f;
         const float DualBladeVisualScale = 0.43f;
@@ -115,6 +118,14 @@ namespace Lethe.PrototypeV1
         const string EnemySplitterSheetPath = "Assets/_dev/Art/Sprites/Enemies/Splitter/sheet_enemy_splitter_4dir.png";
         const string EnemyVoidPriestSheetPath = "Assets/_dev/Art/Sprites/Enemies/VoidPriest/sheet_enemy_voidpriest_4dir.png";
         const string BossGatekeeperPath = "Assets/_dev/Art/Sprites/Enemies/Bosses/spr_boss_gatekeeper_01.png";
+        const string ArenaBackdropPath = "Assets/_dev/Art/Sprites/Map/spr_lethe_arena_backdrop_01.png";
+        static readonly string[] ArenaFloorTilePaths =
+        {
+            "Assets/_dev/Art/Sprites/Map/tile_lethe_stone_01.png",
+            "Assets/_dev/Art/Sprites/Map/tile_lethe_stone_02.png",
+            "Assets/_dev/Art/Sprites/Map/tile_lethe_stone_03.png",
+            "Assets/_dev/Art/Sprites/Map/tile_lethe_stone_04.png"
+        };
         const string DualBladeSwingArcAPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_01.png";
         const string DualBladeSwingArcBPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_02.png";
         const string GreatswordCleaveArcPath = "Assets/_dev/Art/Sprites/Weapons/spr_greatsword_cleave_arc_01.png";
@@ -253,7 +264,7 @@ namespace Lethe.PrototypeV1
             }
 
             mainCamera.orthographic = true;
-            mainCamera.orthographicSize = 6.1f;
+            mainCamera.orthographicSize = 6.8f;
             mainCamera.backgroundColor = new Color(0.035f, 0.045f, 0.055f);
 
             WeaponStat.AttackSpeed = 0f;
@@ -509,21 +520,30 @@ namespace Lethe.PrototypeV1
 
         void CreateArena()
         {
-            var floorSprite = LoadSprite("Assets/_dev/Art/Sprites/Map/tile_dev_floor_dark_01.png") ?? MakeBoxSprite("floor", new Color(0.08f, 0.09f, 0.105f), 64, 64);
-            CreateArenaSprite("Arena_Backdrop", Vector3.forward * 1.8f, new Vector3(170f, 130f, 1f), Quaternion.identity, MakeBoxSprite("arena_backdrop", Color.white, 16, 16), new Color(0.025f, 0.032f, 0.040f, 1f), -130);
-            for (int x = -5; x <= 5; x++)
+            var floorSprites = ArenaFloorTilePaths
+                .Select(path => LoadSprite(path))
+                .Where(sprite => sprite != null)
+                .ToArray();
+            if (floorSprites.Length == 0)
             {
-                for (int y = -4; y <= 4; y++)
+                floorSprites = new[] { LoadSprite("Assets/_dev/Art/Sprites/Map/tile_dev_floor_dark_01.png") ?? MakeBoxSprite("floor", new Color(0.08f, 0.09f, 0.105f), 64, 64) };
+            }
+            var backdrop = LoadSprite(ArenaBackdropPath) ?? MakeBoxSprite("arena_backdrop", Color.white, 16, 16);
+            CreateArenaSprite("Arena_Backdrop", Vector3.forward * 1.8f, new Vector3(72f, 72f, 1f), Quaternion.identity, backdrop, new Color(0.54f, 0.62f, 0.68f, 1f), -130);
+            for (int x = -10; x <= 10; x++)
+            {
+                for (int y = -7; y <= 7; y++)
                 {
                     var tile = new GameObject($"Floor_{x}_{y}");
-                    tile.transform.position = new Vector3(x * 2.5f, y * 2.5f, 1f);
+                    tile.transform.position = new Vector3(x * ArenaTileSpacing, y * ArenaTileSpacing, 1f);
                     tile.transform.rotation = Quaternion.Euler(0f, 0f, ((x * 17 + y * 31) & 3) * 90f);
                     var sr = tile.AddComponent<SpriteRenderer>();
-                    sr.sprite = floorSprite;
+                    var tileIndex = Mathf.Abs((x * 17 + y * 31 + x * y * 3) % floorSprites.Length);
+                    sr.sprite = floorSprites[tileIndex];
                     var v = Mathf.PerlinNoise(x * 0.37f + 12.1f, y * 0.41f + 4.7f);
-                    sr.color = Color.Lerp(new Color(0.105f, 0.125f, 0.145f, 1f), new Color(0.18f, 0.205f, 0.235f, 1f), v);
+                    sr.color = Color.Lerp(new Color(0.70f, 0.78f, 0.84f, 1f), new Color(1.00f, 1.04f, 1.08f, 1f), v * 0.45f);
                     sr.sortingOrder = -100;
-                    tile.transform.localScale = Vector3.one * (2.54f + v * 0.08f);
+                    tile.transform.localScale = Vector3.one * (1.40f + v * 0.05f);
                 }
             }
             CreateArenaBackdrop();
@@ -532,16 +552,16 @@ namespace Lethe.PrototypeV1
         void CreateArenaBackdrop()
         {
             var boundary = MakeBoxSprite("arena_boundary", Color.white, 96, 8);
-            CreateArenaSprite("North_Boundary", new Vector3(0f, 10.05f, 0.85f), new Vector3(30f, 1f, 1f), Quaternion.identity, boundary, new Color(0.12f, 0.18f, 0.22f, 0.58f), -86);
-            CreateArenaSprite("South_Boundary", new Vector3(0f, -10.05f, 0.85f), new Vector3(30f, 1f, 1f), Quaternion.identity, boundary, new Color(0.08f, 0.12f, 0.16f, 0.62f), -86);
-            CreateArenaSprite("West_Boundary", new Vector3(-13.95f, 0f, 0.85f), new Vector3(22f, 1f, 1f), Quaternion.Euler(0f, 0f, 90f), boundary, new Color(0.08f, 0.13f, 0.16f, 0.58f), -86);
-            CreateArenaSprite("East_Boundary", new Vector3(13.95f, 0f, 0.85f), new Vector3(22f, 1f, 1f), Quaternion.Euler(0f, 0f, 90f), boundary, new Color(0.12f, 0.16f, 0.18f, 0.54f), -86);
+            CreateArenaSprite("North_Boundary", new Vector3(0f, ArenaHalfHeight + 1.05f, 0.85f), new Vector3(ArenaHalfWidth * 2.25f, 1f, 1f), Quaternion.identity, boundary, new Color(0.11f, 0.18f, 0.22f, 0.52f), -86);
+            CreateArenaSprite("South_Boundary", new Vector3(0f, -ArenaHalfHeight - 1.05f, 0.85f), new Vector3(ArenaHalfWidth * 2.25f, 1f, 1f), Quaternion.identity, boundary, new Color(0.07f, 0.11f, 0.15f, 0.60f), -86);
+            CreateArenaSprite("West_Boundary", new Vector3(-ArenaHalfWidth - 1.05f, 0f, 0.85f), new Vector3(ArenaHalfHeight * 2.25f, 1f, 1f), Quaternion.Euler(0f, 0f, 90f), boundary, new Color(0.07f, 0.12f, 0.15f, 0.54f), -86);
+            CreateArenaSprite("East_Boundary", new Vector3(ArenaHalfWidth + 1.05f, 0f, 0.85f), new Vector3(ArenaHalfHeight * 2.25f, 1f, 1f), Quaternion.Euler(0f, 0f, 90f), boundary, new Color(0.12f, 0.16f, 0.18f, 0.48f), -86);
 
             var crack = MakeBoxSprite("arena_memory_crack", Color.white, 84, 5);
-            for (int i = 0; i < 18; i++)
+            for (int i = 0; i < 34; i++)
             {
                 var angle = i * 37f + ((i & 1) == 0 ? 11f : -9f);
-                var radius = 2.3f + (i % 6) * 1.55f;
+                var radius = 3.0f + (i % 11) * 1.65f;
                 var pos = Quaternion.Euler(0f, 0f, angle) * Vector3.right * radius;
                 var len = 0.55f + (i % 4) * 0.16f;
                 var color = (i % 3) switch
@@ -554,10 +574,10 @@ namespace Lethe.PrototypeV1
             }
 
             var marker = MakeRingSprite("arena_marker", Color.white, 128);
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 14; i++)
             {
-                var angle = i * 45f;
-                var pos = Quaternion.Euler(0f, 0f, angle) * Vector3.right * 8.6f;
+                var angle = i * (360f / 14f);
+                var pos = Quaternion.Euler(0f, 0f, angle) * Vector3.right * 15.4f;
                 CreateArenaSprite($"Outer_Marker_{i:00}", new Vector3(pos.x, pos.y, 0.78f), Vector3.one * (0.74f + (i & 1) * 0.12f), Quaternion.Euler(0f, 0f, angle), marker, new Color(0.26f, 0.52f, 0.62f, 0.13f), -88);
             }
         }
@@ -628,7 +648,7 @@ namespace Lethe.PrototypeV1
             }
 
             player.position += (Vector3)(playerMoveVelocity * dt);
-            player.position = new Vector3(Mathf.Clamp(player.position.x, -12f, 12f), Mathf.Clamp(player.position.y, -8.5f, 8.5f), 0f);
+            player.position = new Vector3(Mathf.Clamp(player.position.x, -ArenaHalfWidth, ArenaHalfWidth), Mathf.Clamp(player.position.y, -ArenaHalfHeight, ArenaHalfHeight), 0f);
 
             var visualMove = playerMoveVelocity.sqrMagnitude > 0.003f ? playerMoveVelocity.normalized : move;
             if (visualMove.sqrMagnitude > 0.01f)
@@ -654,7 +674,11 @@ namespace Lethe.PrototypeV1
 
         void UpdateCamera()
         {
-            var target = player.position + new Vector3(0f, 0f, -10f);
+            var halfViewHeight = mainCamera.orthographicSize;
+            var halfViewWidth = halfViewHeight * mainCamera.aspect;
+            var targetX = Mathf.Clamp(player.position.x, -ArenaHalfWidth + halfViewWidth, ArenaHalfWidth - halfViewWidth);
+            var targetY = Mathf.Clamp(player.position.y, -ArenaHalfHeight + halfViewHeight, ArenaHalfHeight - halfViewHeight);
+            var target = new Vector3(targetX, targetY, -10f);
             if (cameraShakeTimer > 0f)
             {
                 cameraShakeTimer -= Time.deltaTime;
@@ -1511,7 +1535,7 @@ namespace Lethe.PrototypeV1
         void SpawnGatekeeper()
         {
             if (enemies.Any(e => e != null && e.Kind == V1EnemyKind.Gatekeeper)) return;
-            SpawnEnemy(V1EnemyKind.Gatekeeper, player.position + Vector3.up * 4.8f);
+            SpawnEnemy(V1EnemyKind.Gatekeeper, player.position + Vector3.up * 7.2f);
             Log($"문지기 등장 {bossSpawnIndex + 1}/{BossSchedule().Length}: 망각 관문");
         }
 
@@ -1540,8 +1564,9 @@ namespace Lethe.PrototypeV1
         Vector3 RandomSpawnPosition()
         {
             var angle = UnityEngine.Random.value * Mathf.PI * 2f;
-            var radius = elapsed < 120f ? 4.9f + UnityEngine.Random.value * 1.35f : 5.9f + UnityEngine.Random.value * 1.7f;
-            return player.position + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * radius;
+            var radius = elapsed < 120f ? 6.2f + UnityEngine.Random.value * 2.0f : 7.2f + UnityEngine.Random.value * 2.8f;
+            var pos = player.position + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * radius;
+            return new Vector3(Mathf.Clamp(pos.x, -ArenaHalfWidth, ArenaHalfWidth), Mathf.Clamp(pos.y, -ArenaHalfHeight, ArenaHalfHeight), 0f);
         }
 
         float EnemyHp(V1EnemyKind kind)
@@ -3048,6 +3073,13 @@ namespace Lethe.PrototypeV1
             var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
             if (sprite != null)
             {
+                spriteCache[path] = sprite;
+                return sprite;
+            }
+            var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+            if (texture != null)
+            {
+                sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100f);
                 spriteCache[path] = sprite;
                 return sprite;
             }

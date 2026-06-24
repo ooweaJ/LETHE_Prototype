@@ -31,6 +31,7 @@ playtest_logs/*.json
 # Unity generated project files
 *.csproj
 *.sln
+*.slnx
 *.suo
 *.user
 *.userprefs

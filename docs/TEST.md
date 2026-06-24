@@ -23,6 +23,27 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 
 ## Current Epic Checks
 
+### Release-Prep Map / Background, 2026-06-24
+
+- Generated map sprites:
+  - `LETHE/Assets/_dev/Art/Sprites/Map/tile_lethe_stone_01.png`
+  - `LETHE/Assets/_dev/Art/Sprites/Map/tile_lethe_stone_02.png`
+  - `LETHE/Assets/_dev/Art/Sprites/Map/tile_lethe_stone_03.png`
+  - `LETHE/Assets/_dev/Art/Sprites/Map/tile_lethe_stone_04.png`
+  - `LETHE/Assets/_dev/Art/Sprites/Map/spr_lethe_arena_backdrop_01.png`
+- Runtime arena checks:
+  - Player clamp expanded from `x +/-12`, `y -8.5..8.5` to `x +/-24`, `y +/-16`.
+  - Runtime floor coverage expanded from `11x9` to `21x15` tile placements.
+  - Camera orthographic size changed from `6.1` to `6.8` and camera follow is clamped inside the enlarged arena.
+  - Enemy spawn radius increased for the larger play space.
+- Verification:
+  - Local visual check opened representative generated tile/backdrop PNGs.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity `Assets/Refresh`: success.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console error count: `0`.
+
 ### A. Data Contract
 
 - Definition 타입이 컴파일된다.

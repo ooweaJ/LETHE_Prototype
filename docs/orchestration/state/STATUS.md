@@ -1,6 +1,6 @@
 # Status
 
-Last updated: 2026-06-23
+Last updated: 2026-06-24
 
 ## Current Snapshot
 
@@ -41,6 +41,32 @@ The report/devlog/review migration is now applied physically: old `docs/reports/
 The current development-docs plugin baseline from `docs/orchestration/MIGRATION_PROMPT.md` has been applied. `AGENTS.md` now uses a `Development Docs Plugin` section, `docs/orchestration/templates/HTML_INTERFACE_TEMPLATE.md` exists, legacy review pointer READMEs are readable, `reports/index.html` is generated as a newest-first date archive, daily report pages are generated as unit-card pages, and Discord delivery is documented as Project Orchestrator first with local direct-send scripts as trusted fallback only.
 
 ## Latest Verified Result
+
+- Unity v1 release-prep map / background pass:
+  - Responded to jaewoo saying the background should be redone, the map is too small, and LETHE should start moving from prototype feel toward release preparation.
+  - Generated a reproducible first map art set:
+    - `LETHE/Assets/_dev/Art/Sprites/Map/tile_lethe_stone_01.png`
+    - `LETHE/Assets/_dev/Art/Sprites/Map/tile_lethe_stone_02.png`
+    - `LETHE/Assets/_dev/Art/Sprites/Map/tile_lethe_stone_03.png`
+    - `LETHE/Assets/_dev/Art/Sprites/Map/tile_lethe_stone_04.png`
+    - `LETHE/Assets/_dev/Art/Sprites/Map/spr_lethe_arena_backdrop_01.png`
+  - Added `scripts/generate_world_sprites.ps1` as the local generator for those map sprites and source PNGs.
+  - Runtime changes:
+    - Player bounds expanded from prototype clamps `x +/-12`, `y -8.5..8.5` to `x +/-24`, `y +/-16`.
+    - Arena floor placement expanded from `11x9` to `21x15` tiles.
+    - Camera orthographic size increased from `6.1` to `6.8`.
+    - Camera follow now clamps inside the enlarged arena instead of drifting outside the map.
+    - Enemy spawn radius increased so the larger map produces more travel and positioning room.
+    - Arena dressing now uses the new backdrop and bigger boundary/crack/marker layout.
+  - Verification:
+    - Local visual check opened the generated floor tile and backdrop PNGs.
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity `Assets/Refresh`: success.
+    - Unity compile error count: `0`.
+    - Unity Play Mode entry reached `isPlaying=true`.
+    - Unity console error count: `0`.
+  - Next review:
+    - Directly play both weapons on the larger map and judge whether the world now feels like an actual release-facing arena rather than a small test room.
 
 - Unity v1 enemy / boss sprite insertion:
   - Responded to jaewoo asking about the next enemy/boss sprite step.

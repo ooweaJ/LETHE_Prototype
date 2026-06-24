@@ -1,5 +1,25 @@
 # LETHE CHANGELOG
 
+## 2026-06-24
+
+- Added a first release-prep map/background pass for `Dev_Prototype_v1`:
+  - Generated four new Lethe stone floor tiles and one large arena backdrop under `LETHE/Assets/_dev/Art/Sprites/Map/`.
+  - Saved matching source PNGs under `LETHE/Assets/_dev/Art/Source/`.
+  - Added `scripts/generate_world_sprites.ps1` so the map sprites can be regenerated locally.
+  - Expanded player movement bounds from old prototype clamps `x +/-12`, `y -8.5..8.5` to `x +/-24`, `y +/-16`.
+  - Expanded runtime floor placement from `11x9` tiles to `21x15` tiles.
+  - Added a large backdrop sprite, larger boundary bands, more memory cracks, and more outer markers.
+  - Increased camera orthographic size from `6.1` to `6.8` and clamped camera follow inside the enlarged arena.
+  - Increased enemy spawn radius so the larger map has more travel/read space instead of spawning directly on the player.
+  - Added a texture fallback in `LoadSprite()` so generated PNGs can render even when Unity imports them as generic textures.
+- Verification:
+  - Local visual check opened the new floor tile and arena backdrop PNGs.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity `Assets/Refresh`: success.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console error count: `0`.
+
 ## 2026-06-23
 
 - Added first-pass enemy and boss sprites:

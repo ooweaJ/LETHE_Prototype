@@ -10,34 +10,34 @@ Current source of truth:
 - Test gate: `docs/TEST.md`
 - Detailed design: `docs/design/README.md` and `docs/design/LETHE_DESIGN_00..07`
 
-## 1. Direct v1 visual review
+## 1. Direct release-prep map review
 
 - Priority: highest
-- Include: run `Dev_Prototype_v1`, use the new `Mem A`, `Mem B`, `Echo A`, `Echo B`, `Ult 3`, and `VFX` debug buttons first, then choose both starting weapons and judge the first 120 seconds.
-- Check: player body stability, 4-direction movement frames, walking/stop/start naturalness after the softer movement pass, whether phantom dual blades/greatsword visibly sweep before slash VFX, whether greatsword slash VFX now appears fast enough at `0.18s`, whether 처형섬광 is large enough as a crack burst, whether `멈춘 1초` reads as a yellow/gold clock-field floor telegraph that remains visible through the stop, whether 파쇄의 파문 and 파문 잔향 now persist long enough to read, whether 추적자의 맹세 now feels worth picking as multi-shot homing damage instead of weaker-than-basic filler, terrain readability after arena dressing, HUD density, hit readability, Blood Blade Storm payoff, and whether the first 180 seconds still feel loose before the first boss.
-- Done: jaewoo can name the weakest visual/game-feel axis in one sentence.
+- Include: run `Dev_Prototype_v1` on the enlarged map, choose both starting weapons, and judge whether the arena now feels like a real game space instead of a small prototype box.
+- Check: map scale, camera size, player travel distance, enemy approach readability, background contrast under VFX, whether the new backdrop/tile pattern supports combat without becoming visual noise, and whether the first 180 seconds still feel loose.
+- Done: jaewoo can say whether the map should stay this size, grow again, or become denser with scenery/landmarks.
 
-## 2. VFX scale/timing follow-up
+## 2. Release-facing background art pass
 
 - Priority: high
-- Include: after direct play, tune generated sprite scale, alpha, sorting order, duration, and spawn frequency for weapon hits, phantom weapons, memories, echoes, ultimates, and background contrast.
-- Check: dual blades stay quick and visible after the new stagger; greatsword stays heavy without being oversized; greatsword handle/tip orientation stays readable; phantom weapons align with slash VFX; slash/spark timing does not feel late; utility memories are visible but do not hide enemies; arena dressing supports VFX readability; and Blood Blade Storm feels meaningfully stronger than Kalmuri rather than only visually different.
-- Done: direct review no longer calls out VFX size/timing as the weakest axis.
+- Include: replace the generated first-pass map art with stronger production-direction sprites after scale is approved.
+- Check: readable floor value range, Lethe identity, clear boundary language, environmental landmarks, enemy silhouette contrast, and no conflict with gold/red/green combat VFX.
+- Done: the background reads as LETHE's world identity, not only a dark test floor.
 
-## 3. Review enemy and boss sprite readability
+## 3. Enemy / boss sprite readability on the larger map
 
 - Priority: high
 - Include: check `sheet_enemy_eye_4dir.png`, `sheet_enemy_splitter_4dir.png`, `sheet_enemy_voidpriest_4dir.png`, and `spr_boss_gatekeeper_01.png` in live combat under VFX.
-- Done: jaewoo can recognize ranged eye, splitter, void priest, and Gatekeeper without reading debug labels.
+- Done: jaewoo can recognize ranged eye, splitter, void priest, and Gatekeeper without reading debug labels, even when they enter from farther away.
 
-## 4. Reliable visual evidence path
+## 4. VFX scale/timing follow-up after map review
+
+- Priority: high
+- Include: tune generated sprite scale, alpha, sorting order, duration, and spawn frequency for weapon hits, phantom weapons, memories, echoes, ultimates, and background contrast after the new map is judged.
+- Done: direct review no longer calls out VFX size/timing/background contrast as the weakest axis.
+
+## 5. Continue release-prep shell work
 
 - Priority: medium
-- Include: replace the current camera screenshot path that sometimes captures a solid-color image.
-- Done: saved evidence can show player, terrain, weapon, enemies, and relevant UI without manual interpretation.
-
-## 5. Continue M2 loop review
-
-- Priority: medium
-- Include: after the visual shell is acceptable, continue checking reward cadence, forgetting UX, echo anticipation, and Blood Blade Storm payoff.
+- Include: after the world baseline is acceptable, continue checking HUD polish, reward cadence, forgetting UX, echo anticipation, Blood Blade Storm payoff, and evidence capture.
 - Done: jaewoo can give `GO`, `ITERATE`, or `NO-GO` for promotion out of `_dev`.
