@@ -2,6 +2,19 @@
 
 ## 2026-06-24
 
+- Improved Lethe terrain continuity:
+  - Regenerated `tile_lethe_terrain_01..08.png` from the same wet black stone base so the ground no longer reads as unrelated terrain chunks.
+  - Changed floor tile selection to mostly use the connected base tiles, with rare variants only for subtle detail.
+  - Reduced runtime water seam, drowned root, and memory gravel density so they read as dressing instead of separate tile biomes.
+  - Increased floor tile overlap slightly to hide hard tile boundaries.
+- Verification:
+  - Local visual check opened regenerated terrain tiles and backdrop.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity `Assets/Refresh`: success.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console error count: `0`.
+
 - Reworked the first release-prep background from artificial arena field to Lethe terrain:
   - Used built-in image generation to create a terrain concept sheet inspired by Vampire Survivors-style natural ground readability.
   - Saved the concept sheet as `LETHE/Assets/_dev/Art/Source/spr_lethe_terrain_sheet_01_source.png`.

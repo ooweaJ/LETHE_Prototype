@@ -42,6 +42,20 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 terrain continuity follow-up:
+  - Responded to jaewoo feedback that the map did not feel connected and tiles looked like separate pieces.
+  - Regenerated `tile_lethe_terrain_01..08.png` from the same wet black stone base instead of eight unrelated terrain categories.
+  - Runtime floor selection now mostly uses base terrain tiles, with high-character variants only as rare variation.
+  - Water seams, drowned roots, and memory gravel were reduced so they act as dressing rather than separate terrain chunks.
+  - Floor tile scale was increased slightly to overlap hard seams.
+  - Verification:
+    - Local visual check opened regenerated terrain tiles and backdrop.
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+    - Unity `Assets/Refresh`: success.
+    - Unity compile error count: `0`.
+    - Unity Play Mode entry reached `isPlaying=true`.
+    - Unity console error count: `0`.
+
 - Unity v1 Lethe terrain background follow-up:
   - Responded to jaewoo feedback that the new background still felt like an artificial field and should feel more like Vampire Survivors-style terrain.
   - Used built-in image generation to create a natural terrain concept sheet for the Lethe world: wet black stone, mud bank, shallow turquoise water seams, cracked slate, memory-shard gravel, drowned roots, ash soil, and worn marsh path.

@@ -25,6 +25,16 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 
 ### Release-Prep Map / Background, 2026-06-24
 
+- Terrain continuity follow-up:
+  - Regenerated the eight terrain tiles from one shared wet black stone base to avoid unrelated tile chunks.
+  - Runtime floor selection now mostly uses connected base tiles and keeps high-character variants rare.
+  - Runtime water/root/gravel dressing density was reduced.
+  - Floor tile scale increased slightly to overlap seams.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity `Assets/Refresh`: success.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console error count: `0`.
 - Terrain redo follow-up:
   - Added image-generated source sheet `LETHE/Assets/_dev/Art/Source/spr_lethe_terrain_sheet_01_source.png`.
   - Generated 8 terrain tiles `tile_lethe_terrain_01.png` through `tile_lethe_terrain_08.png`.

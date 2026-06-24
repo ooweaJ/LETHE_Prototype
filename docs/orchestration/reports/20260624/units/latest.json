@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260624\\index.md",
-  "generatedAt": "2026-06-24T01:00:50.508Z",
-  "unitCount": 2,
+  "generatedAt": "2026-06-24T01:12:29.446Z",
+  "unitCount": 3,
   "latest": {
-    "title": "2026-06-24-02 - 레테 지형 스프라이트 교체",
-    "number": "02",
-    "markdownPath": "docs\\orchestration\\reports\\20260624\\units\\2026-06-24-02-레테-지형-스프라이트-교체.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260624\\units\\2026-06-24-02-레테-지형-스프라이트-교체.html"
+    "title": "2026-06-24-03 - 지형 연결감 보정",
+    "number": "03",
+    "markdownPath": "docs\\orchestration\\reports\\20260624\\units\\2026-06-24-03-지형-연결감-보정.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260624\\units\\2026-06-24-03-지형-연결감-보정.html"
   }
 }

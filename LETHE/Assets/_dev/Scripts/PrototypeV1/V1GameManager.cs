@@ -542,12 +542,17 @@ namespace Lethe.PrototypeV1
                     tile.transform.position = new Vector3(x * ArenaTileSpacing, y * ArenaTileSpacing, 1f);
                     tile.transform.rotation = Quaternion.Euler(0f, 0f, ((x * 17 + y * 31) & 3) * 90f);
                     var sr = tile.AddComponent<SpriteRenderer>();
-                    var tileIndex = Mathf.Abs((x * 17 + y * 31 + x * y * 3) % floorSprites.Length);
+                    var terrainNoise = Mathf.PerlinNoise(x * 0.19f + 42.7f, y * 0.21f + 9.3f);
+                    var tileIndex = floorSprites.Length <= 1
+                        ? 0
+                        : terrainNoise > 0.82f
+                            ? Mathf.Abs((x * 13 + y * 7) % floorSprites.Length)
+                            : Mathf.Abs((x * 3 + y * 5) % Mathf.Min(2, floorSprites.Length));
                     sr.sprite = floorSprites[tileIndex];
                     var v = Mathf.PerlinNoise(x * 0.37f + 12.1f, y * 0.41f + 4.7f);
-                    sr.color = Color.Lerp(new Color(0.78f, 0.82f, 0.82f, 1f), new Color(1.00f, 1.02f, 1.00f, 1f), v * 0.35f);
+                    sr.color = Color.Lerp(new Color(0.86f, 0.88f, 0.86f, 1f), new Color(1.00f, 1.01f, 0.98f, 1f), v * 0.22f);
                     sr.sortingOrder = -100;
-                    tile.transform.localScale = Vector3.one * (1.04f + v * 0.03f);
+                    tile.transform.localScale = Vector3.one * (1.08f + v * 0.02f);
                 }
             }
             CreateArenaBackdrop();
@@ -562,31 +567,31 @@ namespace Lethe.PrototypeV1
             CreateArenaSprite("East_Marsh_Edge", new Vector3(ArenaHalfWidth + 1.15f, 0f, 0.85f), new Vector3(ArenaHalfHeight * 2.35f, 1.5f, 1f), Quaternion.Euler(0f, 0f, 90f), edgeMist, new Color(0.06f, 0.09f, 0.10f, 0.52f), -86);
 
             var waterSeam = MakeBoxSprite("lethe_water_seam", Color.white, 128, 9);
-            for (int i = 0; i < 18; i++)
+            for (int i = 0; i < 12; i++)
             {
-                var x = -ArenaHalfWidth + 2.8f + (i % 6) * 8.3f + ((i & 1) == 0 ? 0.7f : -0.9f);
-                var y = -ArenaHalfHeight + 2.2f + (i / 6) * 6.4f + Mathf.Sin(i * 1.37f) * 1.2f;
+                var x = -ArenaHalfWidth + 4.2f + (i % 4) * 11.2f + Mathf.Sin(i * 1.91f) * 1.2f;
+                var y = -ArenaHalfHeight + 3.0f + (i / 4) * 8.8f + Mathf.Sin(i * 1.37f) * 1.2f;
                 var angle = -18f + Mathf.Sin(i * 0.83f) * 26f;
                 var len = 0.58f + (i % 4) * 0.22f;
-                var color = new Color(0.12f, 0.48f, 0.52f, 0.11f + (i % 3) * 0.025f);
+                var color = new Color(0.12f, 0.48f, 0.52f, 0.085f + (i % 3) * 0.018f);
                 CreateArenaSprite($"Lethe_Water_Seam_{i:00}", new Vector3(x, y, 0.82f), new Vector3(len, 1f, 1f), Quaternion.Euler(0f, 0f, angle), waterSeam, color, -84);
             }
 
             var root = MakeBoxSprite("drowned_root", Color.white, 104, 5);
-            for (int i = 0; i < 22; i++)
+            for (int i = 0; i < 14; i++)
             {
-                var x = -ArenaHalfWidth + 1.4f + (i % 7) * 7.4f + Mathf.Sin(i * 2.1f) * 0.9f;
-                var y = -ArenaHalfHeight + 1.5f + (i / 7) * 7.2f + Mathf.Cos(i * 1.6f) * 1.1f;
+                var x = -ArenaHalfWidth + 2.8f + (i % 5) * 10.0f + Mathf.Sin(i * 2.1f) * 0.9f;
+                var y = -ArenaHalfHeight + 2.6f + (i / 5) * 8.8f + Mathf.Cos(i * 1.6f) * 1.1f;
                 var angle = 25f + Mathf.Sin(i * 0.91f) * 82f;
                 var len = 0.32f + (i % 5) * 0.12f;
-                CreateArenaSprite($"Drowned_Root_{i:00}", new Vector3(x, y, 0.83f), new Vector3(len, 1f, 1f), Quaternion.Euler(0f, 0f, angle), root, new Color(0.34f, 0.32f, 0.29f, 0.23f), -83);
+                CreateArenaSprite($"Drowned_Root_{i:00}", new Vector3(x, y, 0.83f), new Vector3(len, 1f, 1f), Quaternion.Euler(0f, 0f, angle), root, new Color(0.34f, 0.32f, 0.29f, 0.18f), -83);
             }
 
             var gravel = MakeCircleSprite("memory_gravel", Color.white, 72);
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 18; i++)
             {
-                var x = -ArenaHalfWidth + 1.8f + (i % 10) * 5.0f + Mathf.Sin(i * 1.73f) * 0.7f;
-                var y = -ArenaHalfHeight + 1.2f + (i / 10) * 8.4f + Mathf.Cos(i * 1.27f) * 0.8f;
+                var x = -ArenaHalfWidth + 2.6f + (i % 6) * 8.8f + Mathf.Sin(i * 1.73f) * 0.7f;
+                var y = -ArenaHalfHeight + 2.0f + (i / 6) * 9.0f + Mathf.Cos(i * 1.27f) * 0.8f;
                 var scale = 0.06f + (i % 4) * 0.018f;
                 var color = (i % 5) switch
                 {

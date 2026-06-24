@@ -70,6 +70,50 @@ function Draw-RootLine($g, [System.Random]$rng, [int]$size) {
     $root.Dispose()
 }
 
+function Draw-ConnectedTerrainTile([System.Drawing.Bitmap]$sheet, [string]$name, [int]$variant) {
+    $outSize = 256
+    $cellW = [int][Math]::Floor($sheet.Width / 4)
+    $cellH = [int][Math]::Floor($sheet.Height / 2)
+    $canvas = New-Canvas $outSize $outSize (ColorA 255 18 24 27)
+    $rng = New-Object System.Random (260624 + $variant * 317)
+
+    # Use the same wet black stone source for every floor tile. Variation comes from
+    # soft tint and small details, not from switching to a different terrain biome.
+    $cropInset = 10 + ($variant % 3) * 8
+    $src = New-Object System.Drawing.Rectangle $cropInset, $cropInset, ($cellW - $cropInset * 2), ($cellH - $cropInset * 2)
+    $dest = New-Object System.Drawing.Rectangle 0, 0, $outSize, $outSize
+    $canvas.Graphics.DrawImage($sheet, $dest, $src, [System.Drawing.GraphicsUnit]::Pixel)
+
+    $veilAlpha = 50 + ($variant % 4) * 5
+    $veil = Brush (ColorA $veilAlpha 4 7 9)
+    $canvas.Graphics.FillRectangle($veil, 0, 0, $outSize, $outSize)
+    $veil.Dispose()
+
+    for ($i = 0; $i -lt 18; $i++) {
+        $a = $rng.Next(10, 27)
+        $tone = $rng.Next(36, 62)
+        $brush = Brush (ColorA $a $tone ($tone + 3) ($tone + 5))
+        $x = [float]$rng.Next(-8, $outSize)
+        $y = [float]$rng.Next(-8, $outSize)
+        $w = [float]$rng.Next(18, 58)
+        $h = [float]$rng.Next(8, 34)
+        $canvas.Graphics.FillEllipse($brush, $x, $y, $w, $h)
+        $brush.Dispose()
+    }
+
+    if ($variant -in @(2, 5)) {
+        Draw-WaterVein $canvas.Graphics $rng $outSize 42
+    }
+
+    if ($variant -in @(4, 7)) {
+        for ($i = 0; $i -lt 2; $i++) {
+            Draw-RootLine $canvas.Graphics $rng $outSize
+        }
+    }
+
+    Save-Png $canvas (Join-Path $mapRoot $name)
+}
+
 function Draw-FallbackTerrainTile([string]$name, [int]$variant) {
     $size = 256
     $baseColors = @(
@@ -138,42 +182,21 @@ function Draw-FallbackTerrainTile([string]$name, [int]$variant) {
 function Crop-TerrainSheet([string]$sheetPath) {
     $sheet = [System.Drawing.Bitmap]::FromFile($sheetPath)
     try {
-        $cols = 4
-        $rows = 2
-        $cellW = [int][Math]::Floor($sheet.Width / $cols)
-        $cellH = [int][Math]::Floor($sheet.Height / $rows)
-        $outSize = 256
-
         for ($i = 0; $i -lt 8; $i++) {
-            $col = $i % $cols
-            $row = [int][Math]::Floor($i / $cols)
-            $x = $col * $cellW
-            $y = $row * $cellH
-            $w = if ($col -eq $cols - 1) { $sheet.Width - $x } else { $cellW }
-            $h = if ($row -eq $rows - 1) { $sheet.Height - $y } else { $cellH }
-
-            $canvas = New-Canvas $outSize $outSize (ColorA 255 18 24 27)
-            $dest = New-Object System.Drawing.Rectangle 0, 0, $outSize, $outSize
-            $src = New-Object System.Drawing.Rectangle $x, $y, $w, $h
-            $canvas.Graphics.DrawImage($sheet, $dest, $src, [System.Drawing.GraphicsUnit]::Pixel)
-
-            $overlay = Brush (ColorA 44 4 7 9)
-            $canvas.Graphics.FillRectangle($overlay, 0, 0, $outSize, $outSize)
-            $overlay.Dispose()
-
             $file = "tile_lethe_terrain_{0:D2}.png" -f ($i + 1)
-            Save-Png $canvas (Join-Path $mapRoot $file)
+            Draw-ConnectedTerrainTile $sheet $file $i
             Copy-Item (Join-Path $mapRoot $file) (Join-Path $sourceRoot ($file -replace '\.png$', '_source.png')) -Force
         }
 
+        $cols = 4
+        $cellW = [int][Math]::Floor($sheet.Width / $cols)
+        $cellH = [int][Math]::Floor($sheet.Height / 2)
         $backdrop = New-Canvas 768 768 (ColorA 255 11 15 18)
         for ($i = 0; $i -lt 9; $i++) {
             $col = $i % 3
             $row = [int][Math]::Floor($i / 3)
-            $tileIndex = ($i * 3) % 8
-            $srcCol = $tileIndex % $cols
-            $srcRow = [int][Math]::Floor($tileIndex / $cols)
-            $src = New-Object System.Drawing.Rectangle ($srcCol * $cellW), ($srcRow * $cellH), $cellW, $cellH
+            $inset = 10 + ($i % 3) * 8
+            $src = New-Object System.Drawing.Rectangle $inset, $inset, ($cellW - $inset * 2), ($cellH - $inset * 2)
             $dest = New-Object System.Drawing.Rectangle ($col * 256), ($row * 256), 256, 256
             $backdrop.Graphics.DrawImage($sheet, $dest, $src, [System.Drawing.GraphicsUnit]::Pixel)
         }

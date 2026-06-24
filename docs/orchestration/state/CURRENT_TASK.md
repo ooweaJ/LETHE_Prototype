@@ -68,6 +68,15 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Terrain continuity follow-up:
+  - Regenerated the terrain tiles from one shared wet black stone base.
+  - Runtime floor tile selection now favors connected base tiles and keeps high-character variants rare.
+  - Reduced water seam, drowned root, and memory gravel dressing density.
+  - Increased floor tile overlap slightly to soften grid boundaries.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity `Assets/Refresh`: success.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`; Unity console error count: `0`.
 - Lethe terrain background follow-up:
   - Replaced artificial arena-field direction with Vampire Survivors-style natural terrain readability.
   - Added source sheet `LETHE/Assets/_dev/Art/Source/spr_lethe_terrain_sheet_01_source.png`.
