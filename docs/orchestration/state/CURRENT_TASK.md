@@ -68,6 +68,17 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Lethe terrain background follow-up:
+  - Replaced artificial arena-field direction with Vampire Survivors-style natural terrain readability.
+  - Added source sheet `LETHE/Assets/_dev/Art/Source/spr_lethe_terrain_sheet_01_source.png`.
+  - Generated eight terrain tiles and `spr_lethe_terrain_backdrop_01.png`.
+  - Updated `V1GameManager` to load `tile_lethe_terrain_01..08.png`.
+  - Replaced outer marker rings with marsh edges, Lethe water seams, drowned roots, and memory gravel runtime dressing.
+  - Local visual sanity check opened representative generated terrain PNGs.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity `Assets/Refresh`: success.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`; Unity console error count: `0`.
 - Release-prep map / background pass:
   - Generated four new Lethe stone floor tiles and one large arena backdrop.
   - Added `scripts/generate_world_sprites.ps1` for reproducible map sprite generation.

@@ -19,6 +19,8 @@
 ## Progress
 
 - 2026-06-24 Update:
+  - [x] Artificial arena-field read replaced with Lethe natural terrain direction: wet stone, mud, shallow water seams, roots, shard gravel, ash soil.
+  - [x] Runtime outer marker rings removed in favor of marsh edges, water seams, drowned roots, and memory gravel.
   - [x] Release-prep map/background direction started after jaewoo said the map felt too small and the project should move beyond prototype feel.
   - [x] New Lethe stone floor tile set and arena backdrop generated under `_dev/Art/Sprites/Map`.
   - [x] Runtime arena expanded from prototype bounds `x +/-12`, `y -8.5..8.5` to `x +/-24`, `y +/-16`.

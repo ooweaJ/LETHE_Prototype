@@ -25,6 +25,17 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 
 ### Release-Prep Map / Background, 2026-06-24
 
+- Terrain redo follow-up:
+  - Added image-generated source sheet `LETHE/Assets/_dev/Art/Source/spr_lethe_terrain_sheet_01_source.png`.
+  - Generated 8 terrain tiles `tile_lethe_terrain_01.png` through `tile_lethe_terrain_08.png`.
+  - Replaced runtime references from `tile_lethe_stone_*.png` / `spr_lethe_arena_backdrop_01.png` to `tile_lethe_terrain_*.png` / `spr_lethe_terrain_backdrop_01.png`.
+  - Replaced artificial outer marker rings with natural marsh edge, water seam, drowned root, and memory gravel dressing.
+  - Local visual check opened representative terrain tiles and backdrop.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity `Assets/Refresh`: success.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console error count: `0`.
 - Generated map sprites:
   - `LETHE/Assets/_dev/Art/Sprites/Map/tile_lethe_stone_01.png`
   - `LETHE/Assets/_dev/Art/Sprites/Map/tile_lethe_stone_02.png`

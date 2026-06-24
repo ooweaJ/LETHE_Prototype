@@ -118,13 +118,17 @@ namespace Lethe.PrototypeV1
         const string EnemySplitterSheetPath = "Assets/_dev/Art/Sprites/Enemies/Splitter/sheet_enemy_splitter_4dir.png";
         const string EnemyVoidPriestSheetPath = "Assets/_dev/Art/Sprites/Enemies/VoidPriest/sheet_enemy_voidpriest_4dir.png";
         const string BossGatekeeperPath = "Assets/_dev/Art/Sprites/Enemies/Bosses/spr_boss_gatekeeper_01.png";
-        const string ArenaBackdropPath = "Assets/_dev/Art/Sprites/Map/spr_lethe_arena_backdrop_01.png";
+        const string ArenaBackdropPath = "Assets/_dev/Art/Sprites/Map/spr_lethe_terrain_backdrop_01.png";
         static readonly string[] ArenaFloorTilePaths =
         {
-            "Assets/_dev/Art/Sprites/Map/tile_lethe_stone_01.png",
-            "Assets/_dev/Art/Sprites/Map/tile_lethe_stone_02.png",
-            "Assets/_dev/Art/Sprites/Map/tile_lethe_stone_03.png",
-            "Assets/_dev/Art/Sprites/Map/tile_lethe_stone_04.png"
+            "Assets/_dev/Art/Sprites/Map/tile_lethe_terrain_01.png",
+            "Assets/_dev/Art/Sprites/Map/tile_lethe_terrain_02.png",
+            "Assets/_dev/Art/Sprites/Map/tile_lethe_terrain_03.png",
+            "Assets/_dev/Art/Sprites/Map/tile_lethe_terrain_04.png",
+            "Assets/_dev/Art/Sprites/Map/tile_lethe_terrain_05.png",
+            "Assets/_dev/Art/Sprites/Map/tile_lethe_terrain_06.png",
+            "Assets/_dev/Art/Sprites/Map/tile_lethe_terrain_07.png",
+            "Assets/_dev/Art/Sprites/Map/tile_lethe_terrain_08.png"
         };
         const string DualBladeSwingArcAPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_01.png";
         const string DualBladeSwingArcBPath = "Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_02.png";
@@ -529,7 +533,7 @@ namespace Lethe.PrototypeV1
                 floorSprites = new[] { LoadSprite("Assets/_dev/Art/Sprites/Map/tile_dev_floor_dark_01.png") ?? MakeBoxSprite("floor", new Color(0.08f, 0.09f, 0.105f), 64, 64) };
             }
             var backdrop = LoadSprite(ArenaBackdropPath) ?? MakeBoxSprite("arena_backdrop", Color.white, 16, 16);
-            CreateArenaSprite("Arena_Backdrop", Vector3.forward * 1.8f, new Vector3(72f, 72f, 1f), Quaternion.identity, backdrop, new Color(0.54f, 0.62f, 0.68f, 1f), -130);
+            CreateArenaSprite("Terrain_Backdrop", Vector3.forward * 1.8f, new Vector3(72f, 72f, 1f), Quaternion.identity, backdrop, new Color(0.66f, 0.72f, 0.74f, 1f), -130);
             for (int x = -10; x <= 10; x++)
             {
                 for (int y = -7; y <= 7; y++)
@@ -541,9 +545,9 @@ namespace Lethe.PrototypeV1
                     var tileIndex = Mathf.Abs((x * 17 + y * 31 + x * y * 3) % floorSprites.Length);
                     sr.sprite = floorSprites[tileIndex];
                     var v = Mathf.PerlinNoise(x * 0.37f + 12.1f, y * 0.41f + 4.7f);
-                    sr.color = Color.Lerp(new Color(0.70f, 0.78f, 0.84f, 1f), new Color(1.00f, 1.04f, 1.08f, 1f), v * 0.45f);
+                    sr.color = Color.Lerp(new Color(0.78f, 0.82f, 0.82f, 1f), new Color(1.00f, 1.02f, 1.00f, 1f), v * 0.35f);
                     sr.sortingOrder = -100;
-                    tile.transform.localScale = Vector3.one * (1.40f + v * 0.05f);
+                    tile.transform.localScale = Vector3.one * (1.04f + v * 0.03f);
                 }
             }
             CreateArenaBackdrop();
@@ -551,34 +555,46 @@ namespace Lethe.PrototypeV1
 
         void CreateArenaBackdrop()
         {
-            var boundary = MakeBoxSprite("arena_boundary", Color.white, 96, 8);
-            CreateArenaSprite("North_Boundary", new Vector3(0f, ArenaHalfHeight + 1.05f, 0.85f), new Vector3(ArenaHalfWidth * 2.25f, 1f, 1f), Quaternion.identity, boundary, new Color(0.11f, 0.18f, 0.22f, 0.52f), -86);
-            CreateArenaSprite("South_Boundary", new Vector3(0f, -ArenaHalfHeight - 1.05f, 0.85f), new Vector3(ArenaHalfWidth * 2.25f, 1f, 1f), Quaternion.identity, boundary, new Color(0.07f, 0.11f, 0.15f, 0.60f), -86);
-            CreateArenaSprite("West_Boundary", new Vector3(-ArenaHalfWidth - 1.05f, 0f, 0.85f), new Vector3(ArenaHalfHeight * 2.25f, 1f, 1f), Quaternion.Euler(0f, 0f, 90f), boundary, new Color(0.07f, 0.12f, 0.15f, 0.54f), -86);
-            CreateArenaSprite("East_Boundary", new Vector3(ArenaHalfWidth + 1.05f, 0f, 0.85f), new Vector3(ArenaHalfHeight * 2.25f, 1f, 1f), Quaternion.Euler(0f, 0f, 90f), boundary, new Color(0.12f, 0.16f, 0.18f, 0.48f), -86);
+            var edgeMist = MakeBoxSprite("terrain_edge_mist", Color.white, 96, 10);
+            CreateArenaSprite("North_Marsh_Edge", new Vector3(0f, ArenaHalfHeight + 1.15f, 0.85f), new Vector3(ArenaHalfWidth * 2.35f, 1.6f, 1f), Quaternion.identity, edgeMist, new Color(0.05f, 0.09f, 0.10f, 0.58f), -86);
+            CreateArenaSprite("South_Marsh_Edge", new Vector3(0f, -ArenaHalfHeight - 1.15f, 0.85f), new Vector3(ArenaHalfWidth * 2.35f, 1.7f, 1f), Quaternion.identity, edgeMist, new Color(0.04f, 0.07f, 0.08f, 0.66f), -86);
+            CreateArenaSprite("West_Marsh_Edge", new Vector3(-ArenaHalfWidth - 1.15f, 0f, 0.85f), new Vector3(ArenaHalfHeight * 2.35f, 1.5f, 1f), Quaternion.Euler(0f, 0f, 90f), edgeMist, new Color(0.04f, 0.08f, 0.09f, 0.58f), -86);
+            CreateArenaSprite("East_Marsh_Edge", new Vector3(ArenaHalfWidth + 1.15f, 0f, 0.85f), new Vector3(ArenaHalfHeight * 2.35f, 1.5f, 1f), Quaternion.Euler(0f, 0f, 90f), edgeMist, new Color(0.06f, 0.09f, 0.10f, 0.52f), -86);
 
-            var crack = MakeBoxSprite("arena_memory_crack", Color.white, 84, 5);
-            for (int i = 0; i < 34; i++)
+            var waterSeam = MakeBoxSprite("lethe_water_seam", Color.white, 128, 9);
+            for (int i = 0; i < 18; i++)
             {
-                var angle = i * 37f + ((i & 1) == 0 ? 11f : -9f);
-                var radius = 3.0f + (i % 11) * 1.65f;
-                var pos = Quaternion.Euler(0f, 0f, angle) * Vector3.right * radius;
-                var len = 0.55f + (i % 4) * 0.16f;
-                var color = (i % 3) switch
-                {
-                    0 => new Color(0.22f, 0.42f, 0.50f, 0.20f),
-                    1 => new Color(0.26f, 0.30f, 0.42f, 0.18f),
-                    _ => new Color(0.28f, 0.12f, 0.16f, 0.16f)
-                };
-                CreateArenaSprite($"Memory_Crack_{i:00}", new Vector3(pos.x, pos.y, 0.82f), new Vector3(len, 1f, 1f), Quaternion.Euler(0f, 0f, angle + 90f), crack, color, -84);
+                var x = -ArenaHalfWidth + 2.8f + (i % 6) * 8.3f + ((i & 1) == 0 ? 0.7f : -0.9f);
+                var y = -ArenaHalfHeight + 2.2f + (i / 6) * 6.4f + Mathf.Sin(i * 1.37f) * 1.2f;
+                var angle = -18f + Mathf.Sin(i * 0.83f) * 26f;
+                var len = 0.58f + (i % 4) * 0.22f;
+                var color = new Color(0.12f, 0.48f, 0.52f, 0.11f + (i % 3) * 0.025f);
+                CreateArenaSprite($"Lethe_Water_Seam_{i:00}", new Vector3(x, y, 0.82f), new Vector3(len, 1f, 1f), Quaternion.Euler(0f, 0f, angle), waterSeam, color, -84);
             }
 
-            var marker = MakeRingSprite("arena_marker", Color.white, 128);
-            for (int i = 0; i < 14; i++)
+            var root = MakeBoxSprite("drowned_root", Color.white, 104, 5);
+            for (int i = 0; i < 22; i++)
             {
-                var angle = i * (360f / 14f);
-                var pos = Quaternion.Euler(0f, 0f, angle) * Vector3.right * 15.4f;
-                CreateArenaSprite($"Outer_Marker_{i:00}", new Vector3(pos.x, pos.y, 0.78f), Vector3.one * (0.74f + (i & 1) * 0.12f), Quaternion.Euler(0f, 0f, angle), marker, new Color(0.26f, 0.52f, 0.62f, 0.13f), -88);
+                var x = -ArenaHalfWidth + 1.4f + (i % 7) * 7.4f + Mathf.Sin(i * 2.1f) * 0.9f;
+                var y = -ArenaHalfHeight + 1.5f + (i / 7) * 7.2f + Mathf.Cos(i * 1.6f) * 1.1f;
+                var angle = 25f + Mathf.Sin(i * 0.91f) * 82f;
+                var len = 0.32f + (i % 5) * 0.12f;
+                CreateArenaSprite($"Drowned_Root_{i:00}", new Vector3(x, y, 0.83f), new Vector3(len, 1f, 1f), Quaternion.Euler(0f, 0f, angle), root, new Color(0.34f, 0.32f, 0.29f, 0.23f), -83);
+            }
+
+            var gravel = MakeCircleSprite("memory_gravel", Color.white, 72);
+            for (int i = 0; i < 30; i++)
+            {
+                var x = -ArenaHalfWidth + 1.8f + (i % 10) * 5.0f + Mathf.Sin(i * 1.73f) * 0.7f;
+                var y = -ArenaHalfHeight + 1.2f + (i / 10) * 8.4f + Mathf.Cos(i * 1.27f) * 0.8f;
+                var scale = 0.06f + (i % 4) * 0.018f;
+                var color = (i % 5) switch
+                {
+                    0 => new Color(0.44f, 0.62f, 0.62f, 0.20f),
+                    1 => new Color(0.24f, 0.30f, 0.32f, 0.28f),
+                    _ => new Color(0.18f, 0.20f, 0.20f, 0.24f)
+                };
+                CreateArenaSprite($"Memory_Gravel_{i:00}", new Vector3(x, y, 0.84f), Vector3.one * scale, Quaternion.identity, gravel, color, -82);
             }
         }
 

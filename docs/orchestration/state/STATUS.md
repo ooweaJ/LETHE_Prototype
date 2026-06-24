@@ -42,6 +42,26 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 Lethe terrain background follow-up:
+  - Responded to jaewoo feedback that the new background still felt like an artificial field and should feel more like Vampire Survivors-style terrain.
+  - Used built-in image generation to create a natural terrain concept sheet for the Lethe world: wet black stone, mud bank, shallow turquoise water seams, cracked slate, memory-shard gravel, drowned roots, ash soil, and worn marsh path.
+  - Saved the generated source sheet into the project at `LETHE/Assets/_dev/Art/Source/spr_lethe_terrain_sheet_01_source.png`.
+  - Updated `scripts/generate_world_sprites.ps1` so it crops the sheet into eight Unity-ready terrain tiles and a terrain backdrop.
+  - Runtime wiring:
+    - `V1GameManager` now loads `tile_lethe_terrain_01..08.png` instead of the previous artificial stone tile set.
+    - `ArenaBackdropPath` now points to `spr_lethe_terrain_backdrop_01.png`.
+    - Artificial outer marker rings were removed.
+    - Runtime dressing now uses marsh edges, Lethe water seams, drowned roots, and memory gravel.
+  - Verification:
+    - Local visual check opened representative terrain tiles and the new terrain backdrop.
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+    - Unity `Assets/Refresh`: success.
+    - Unity compile error count: `0`.
+    - Unity Play Mode entry reached `isPlaying=true`.
+    - Unity console error count: `0`.
+  - Next review:
+    - Directly play both weapons and judge whether the new terrain supports LETHE's world identity while staying quiet enough for combat VFX.
+
 - Unity v1 release-prep map / background pass:
   - Responded to jaewoo saying the background should be redone, the map is too small, and LETHE should start moving from prototype feel toward release preparation.
   - Generated a reproducible first map art set:

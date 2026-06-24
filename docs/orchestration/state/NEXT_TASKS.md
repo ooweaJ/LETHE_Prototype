@@ -14,15 +14,15 @@ Current source of truth:
 
 - Priority: highest
 - Include: run `Dev_Prototype_v1` on the enlarged map, choose both starting weapons, and judge whether the arena now feels like a real game space instead of a small prototype box.
-- Check: map scale, camera size, player travel distance, enemy approach readability, background contrast under VFX, whether the new backdrop/tile pattern supports combat without becoming visual noise, and whether the first 180 seconds still feel loose.
-- Done: jaewoo can say whether the map should stay this size, grow again, or become denser with scenery/landmarks.
+- Check: map scale, camera size, player travel distance, enemy approach readability, background contrast under VFX, whether the new Lethe terrain tiles feel like a world instead of an artificial field, and whether the first 180 seconds still feel loose.
+- Done: jaewoo can say whether the map should stay this size, grow again, or become denser with terrain landmarks.
 
-## 2. Release-facing background art pass
+## 2. Terrain polish pass
 
 - Priority: high
-- Include: replace the generated first-pass map art with stronger production-direction sprites after scale is approved.
-- Check: readable floor value range, Lethe identity, clear boundary language, environmental landmarks, enemy silhouette contrast, and no conflict with gold/red/green combat VFX.
-- Done: the background reads as LETHE's world identity, not only a dark test floor.
+- Include: after direct play, tune tile brightness, repetition, backdrop visibility, root/water/gravel density, and landmark placement.
+- Check: readable floor value range, Lethe identity, enemy silhouette contrast, and no conflict with gold/red/green combat VFX.
+- Done: the background reads as LETHE terrain in motion, not only good standalone tiles.
 
 ## 3. Enemy / boss sprite readability on the larger map
 

@@ -2,6 +2,28 @@
 
 ## 2026-06-24
 
+- Reworked the first release-prep background from artificial arena field to Lethe terrain:
+  - Used built-in image generation to create a terrain concept sheet inspired by Vampire Survivors-style natural ground readability.
+  - Saved the concept sheet as `LETHE/Assets/_dev/Art/Source/spr_lethe_terrain_sheet_01_source.png`.
+  - Updated `scripts/generate_world_sprites.ps1` to crop that sheet into eight terrain tiles:
+    - wet black stone
+    - mud bank
+    - shallow Lethe water seam
+    - cracked slate
+    - memory-shard gravel
+    - drowned roots
+    - ash soil
+    - worn marsh path
+  - Added `spr_lethe_terrain_backdrop_01.png` and wired `V1GameManager` to use the new terrain tile set.
+  - Removed the most artificial arena read from runtime dressing by replacing outer marker rings with marsh edges, Lethe water seams, drowned roots, and memory gravel.
+- Verification:
+  - Local visual check opened representative terrain tiles and the new terrain backdrop.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity `Assets/Refresh`: success.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console error count: `0`.
+
 - Added a first release-prep map/background pass for `Dev_Prototype_v1`:
   - Generated four new Lethe stone floor tiles and one large arena backdrop under `LETHE/Assets/_dev/Art/Sprites/Map/`.
   - Saved matching source PNGs under `LETHE/Assets/_dev/Art/Source/`.

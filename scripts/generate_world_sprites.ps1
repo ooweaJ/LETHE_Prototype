@@ -1,5 +1,6 @@
 param(
-    [string]$Root = "."
+    [string]$Root = ".",
+    [string]$ConceptSheet = ""
 )
 
 Set-StrictMode -Version Latest
@@ -36,6 +37,7 @@ function New-Canvas([int]$w, [int]$h, [System.Drawing.Color]$clear) {
     $bmp = New-Object System.Drawing.Bitmap($w, $h, [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
     $g = [System.Drawing.Graphics]::FromImage($bmp)
     $g.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
+    $g.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
     $g.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
     $g.CompositingQuality = [System.Drawing.Drawing2D.CompositingQuality]::HighQuality
     $g.Clear($clear)
@@ -50,99 +52,158 @@ function Save-Png($canvas, [string]$path) {
     Write-Host "Wrote $path"
 }
 
-function Draw-Tile([string]$name, [int]$variant) {
-    $size = 192
+function Draw-WaterVein($g, [System.Random]$rng, [int]$size, [int]$alpha) {
+    $shadow = PenC (ColorA ([Math]::Min(180, $alpha + 38)) 3 10 14) 5.0
+    $water = PenC (ColorA $alpha 48 165 178) 2.0
+    $y = [float]$rng.Next(22, $size - 22)
+    $g.DrawBezier($shadow, -12, $y, $size * 0.28, $y + $rng.Next(-40, 41), $size * 0.68, $y + $rng.Next(-38, 39), $size + 12, $y + $rng.Next(-24, 25))
+    $g.DrawBezier($water, -12, $y, $size * 0.28, $y + $rng.Next(-40, 41), $size * 0.68, $y + $rng.Next(-38, 39), $size + 12, $y + $rng.Next(-24, 25))
+    $shadow.Dispose()
+    $water.Dispose()
+}
+
+function Draw-RootLine($g, [System.Random]$rng, [int]$size) {
+    $root = PenC (ColorA 116 102 100 92) ([float]$rng.Next(2, 5))
+    $x = [float]$rng.Next(-20, $size + 8)
+    $y = [float]$rng.Next(0, $size)
+    $g.DrawBezier($root, $x, $y, $x + $rng.Next(20, 80), $y + $rng.Next(-36, 37), $x + $rng.Next(76, 132), $y + $rng.Next(-28, 29), $x + $rng.Next(128, 220), $y + $rng.Next(-20, 21))
+    $root.Dispose()
+}
+
+function Draw-FallbackTerrainTile([string]$name, [int]$variant) {
+    $size = 256
     $baseColors = @(
-        (ColorA 255 31 43 51),
-        (ColorA 255 36 38 54),
-        (ColorA 255 28 48 54),
-        (ColorA 255 42 34 48)
+        (ColorA 255 22 29 32),
+        (ColorA 255 31 30 27),
+        (ColorA 255 18 43 45),
+        (ColorA 255 38 39 42),
+        (ColorA 255 24 26 29),
+        (ColorA 255 18 38 40),
+        (ColorA 255 35 30 29),
+        (ColorA 255 36 38 34)
     )
-    $canvas = New-Canvas $size $size $baseColors[$variant]
+    $canvas = New-Canvas $size $size $baseColors[$variant % $baseColors.Length]
     $g = $canvas.Graphics
+    $rng = New-Object System.Random (240624 + $variant * 251)
 
-    $rng = New-Object System.Random (120612 + $variant * 97)
-    $edgePen = PenC (ColorA 68 120 178 190) 2.0
-    $darkPen = PenC (ColorA 58 5 10 16) 3.0
-    $glowPen = PenC (ColorA 92 54 216 218) 2.0
-    $redPen = PenC (ColorA 72 164 45 58) 2.0
-
-    for ($i = 0; $i -lt 11; $i++) {
-        $x1 = [float]$rng.Next(4, $size - 4)
-        $y1 = [float]$rng.Next(4, $size - 4)
-        $x2 = [float]($x1 + $rng.Next(-72, 73))
-        $y2 = [float]($y1 + $rng.Next(-36, 37))
-        $pen = if (($i + $variant) % 4 -eq 0) { $glowPen } elseif ($i % 3 -eq 0) { $redPen } else { $darkPen }
-        $g.DrawLine($pen, $x1, $y1, $x2, $y2)
-    }
-
-    for ($i = 0; $i -lt 5; $i++) {
-        $x = [float]$rng.Next(-20, $size - 16)
-        $y = [float]$rng.Next(-20, $size - 16)
-        $w = [float]$rng.Next(58, 104)
-        $h = [float]$rng.Next(28, 64)
-        $brush = Brush (ColorA 28 78 100 112)
+    for ($i = 0; $i -lt 80; $i++) {
+        $a = $rng.Next(18, 54)
+        $r = $rng.Next(34, 74)
+        $brush = Brush (ColorA $a $r ($r + $rng.Next(-6, 11)) ($r + $rng.Next(-4, 14)))
+        $x = [float]$rng.Next(-8, $size)
+        $y = [float]$rng.Next(-8, $size)
+        $w = [float]$rng.Next(4, 22)
+        $h = [float]$rng.Next(3, 16)
         $g.FillEllipse($brush, $x, $y, $w, $h)
         $brush.Dispose()
     }
 
-    $g.DrawRectangle($edgePen, 3, 3, $size - 7, $size - 7)
-    $g.DrawLine($edgePen, 0, $size * 0.50, $size, $size * 0.50)
-    $g.DrawLine($edgePen, $size * 0.50, 0, $size * 0.50, $size)
-
-    $edgePen.Dispose(); $darkPen.Dispose(); $glowPen.Dispose(); $redPen.Dispose()
-    Save-Png $canvas (Join-Path $mapRoot $name)
-}
-
-function Draw-Backdrop {
-    $w = 512
-    $h = 512
-    $canvas = New-Canvas $w $h (ColorA 255 12 18 25)
-    $g = $canvas.Graphics
-    $rng = New-Object System.Random 240624
-
-    for ($i = 0; $i -lt 24; $i++) {
-        $a = [int](18 + ($i % 5) * 6)
-        $brush = Brush (ColorA $a 22 72 86)
-        $x = [float]$rng.Next(-80, $w - 20)
-        $y = [float]$rng.Next(-80, $h - 20)
-        $rw = [float]$rng.Next(120, 260)
-        $rh = [float]$rng.Next(44, 110)
-        $g.FillEllipse($brush, $x, $y, $rw, $rh)
-        $brush.Dispose()
+    if ($variant -in @(0, 2, 5)) {
+        for ($i = 0; $i -lt 3; $i++) { Draw-WaterVein $g $rng $size (76 + $i * 12) }
     }
 
-    $riverPen = PenC (ColorA 92 34 190 206) 5.0
-    $shadowPen = PenC (ColorA 88 5 9 18) 9.0
-    for ($i = 0; $i -lt 7; $i++) {
-        $offset = $i * 34
-        $g.DrawBezier($shadowPen, -30, 110 + $offset, 110, 70 + $offset, 280, 170 + $offset, 548, 112 + $offset)
-        if ($i % 2 -eq 0) {
-            $g.DrawBezier($riverPen, -24, 110 + $offset, 110, 70 + $offset, 280, 170 + $offset, 548, 112 + $offset)
+    if ($variant -in @(1, 5, 7)) {
+        for ($i = 0; $i -lt 8; $i++) { Draw-RootLine $g $rng $size }
+    }
+
+    if ($variant -in @(3, 4)) {
+        $crack = PenC (ColorA 108 6 10 14) 3.0
+        for ($i = 0; $i -lt 13; $i++) {
+            $x = [float]$rng.Next(0, $size)
+            $y = [float]$rng.Next(0, $size)
+            $g.DrawLine($crack, $x, $y, $x + $rng.Next(-70, 71), $y + $rng.Next(-44, 45))
+        }
+        $crack.Dispose()
+    }
+
+    if ($variant -eq 4) {
+        for ($i = 0; $i -lt 16; $i++) {
+            $brush = Brush (ColorA 96 104 146 146)
+            $x = [float]$rng.Next(0, $size)
+            $y = [float]$rng.Next(0, $size)
+            $s = [float]$rng.Next(5, 15)
+            $g.FillPolygon($brush, @(
+                (New-Object System.Drawing.PointF($x, $y - $s)),
+                (New-Object System.Drawing.PointF($x + $s * 0.8, $y)),
+                (New-Object System.Drawing.PointF($x, $y + $s)),
+                (New-Object System.Drawing.PointF($x - $s * 0.65, $y))
+            ))
+            $brush.Dispose()
         }
     }
 
-    $runePen = PenC (ColorA 72 132 224 218) 2.0
-    for ($i = 0; $i -lt 18; $i++) {
-        $x = [float]$rng.Next(20, $w - 20)
-        $y = [float]$rng.Next(20, $h - 20)
-        $r = [float]$rng.Next(10, 28)
-        $g.DrawEllipse($runePen, $x - $r, $y - $r, $r * 2, $r * 2)
-        $g.DrawLine($runePen, $x - $r * 0.55, $y, $x + $r * 0.55, $y)
-    }
+    Save-Png $canvas (Join-Path $mapRoot $name)
+}
 
-    $riverPen.Dispose(); $shadowPen.Dispose(); $runePen.Dispose()
-    Save-Png $canvas (Join-Path $mapRoot "spr_lethe_arena_backdrop_01.png")
+function Crop-TerrainSheet([string]$sheetPath) {
+    $sheet = [System.Drawing.Bitmap]::FromFile($sheetPath)
+    try {
+        $cols = 4
+        $rows = 2
+        $cellW = [int][Math]::Floor($sheet.Width / $cols)
+        $cellH = [int][Math]::Floor($sheet.Height / $rows)
+        $outSize = 256
+
+        for ($i = 0; $i -lt 8; $i++) {
+            $col = $i % $cols
+            $row = [int][Math]::Floor($i / $cols)
+            $x = $col * $cellW
+            $y = $row * $cellH
+            $w = if ($col -eq $cols - 1) { $sheet.Width - $x } else { $cellW }
+            $h = if ($row -eq $rows - 1) { $sheet.Height - $y } else { $cellH }
+
+            $canvas = New-Canvas $outSize $outSize (ColorA 255 18 24 27)
+            $dest = New-Object System.Drawing.Rectangle 0, 0, $outSize, $outSize
+            $src = New-Object System.Drawing.Rectangle $x, $y, $w, $h
+            $canvas.Graphics.DrawImage($sheet, $dest, $src, [System.Drawing.GraphicsUnit]::Pixel)
+
+            $overlay = Brush (ColorA 44 4 7 9)
+            $canvas.Graphics.FillRectangle($overlay, 0, 0, $outSize, $outSize)
+            $overlay.Dispose()
+
+            $file = "tile_lethe_terrain_{0:D2}.png" -f ($i + 1)
+            Save-Png $canvas (Join-Path $mapRoot $file)
+            Copy-Item (Join-Path $mapRoot $file) (Join-Path $sourceRoot ($file -replace '\.png$', '_source.png')) -Force
+        }
+
+        $backdrop = New-Canvas 768 768 (ColorA 255 11 15 18)
+        for ($i = 0; $i -lt 9; $i++) {
+            $col = $i % 3
+            $row = [int][Math]::Floor($i / 3)
+            $tileIndex = ($i * 3) % 8
+            $srcCol = $tileIndex % $cols
+            $srcRow = [int][Math]::Floor($tileIndex / $cols)
+            $src = New-Object System.Drawing.Rectangle ($srcCol * $cellW), ($srcRow * $cellH), $cellW, $cellH
+            $dest = New-Object System.Drawing.Rectangle ($col * 256), ($row * 256), 256, 256
+            $backdrop.Graphics.DrawImage($sheet, $dest, $src, [System.Drawing.GraphicsUnit]::Pixel)
+        }
+        $veil = Brush (ColorA 82 3 7 10)
+        $backdrop.Graphics.FillRectangle($veil, 0, 0, 768, 768)
+        $veil.Dispose()
+        Save-Png $backdrop (Join-Path $mapRoot "spr_lethe_terrain_backdrop_01.png")
+        Copy-Item (Join-Path $mapRoot "spr_lethe_terrain_backdrop_01.png") (Join-Path $sourceRoot "spr_lethe_terrain_backdrop_01_source.png") -Force
+    }
+    finally {
+        $sheet.Dispose()
+    }
 }
 
 Ensure-Dir $sourceRoot
 Ensure-Dir $mapRoot
 
-for ($i = 0; $i -lt 4; $i++) {
-    $file = "tile_lethe_stone_0$($i + 1).png"
-    Draw-Tile $file $i
-    Copy-Item (Join-Path $mapRoot $file) (Join-Path $sourceRoot ($file -replace '\.png$', '_source.png')) -Force
+if ([string]::IsNullOrWhiteSpace($ConceptSheet)) {
+    $ConceptSheet = Join-Path $sourceRoot "spr_lethe_terrain_sheet_01_source.png"
 }
 
-Draw-Backdrop
-Copy-Item (Join-Path $mapRoot "spr_lethe_arena_backdrop_01.png") (Join-Path $sourceRoot "spr_lethe_arena_backdrop_01_source.png") -Force
+if (Test-Path $ConceptSheet) {
+    Crop-TerrainSheet (Resolve-Path $ConceptSheet)
+}
+else {
+    for ($i = 0; $i -lt 8; $i++) {
+        Draw-FallbackTerrainTile ("tile_lethe_terrain_{0:D2}.png" -f ($i + 1)) $i
+        $file = "tile_lethe_terrain_{0:D2}.png" -f ($i + 1)
+        Copy-Item (Join-Path $mapRoot $file) (Join-Path $sourceRoot ($file -replace '\.png$', '_source.png')) -Force
+    }
+    Copy-Item (Join-Path $mapRoot "tile_lethe_terrain_03.png") (Join-Path $mapRoot "spr_lethe_terrain_backdrop_01.png") -Force
+    Copy-Item (Join-Path $mapRoot "spr_lethe_terrain_backdrop_01.png") (Join-Path $sourceRoot "spr_lethe_terrain_backdrop_01_source.png") -Force
+}
