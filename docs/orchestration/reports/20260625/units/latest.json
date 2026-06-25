@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260625\\index.md",
-  "generatedAt": "2026-06-25T00:55:35.668Z",
-  "unitCount": 2,
+  "generatedAt": "2026-06-25T01:14:21.694Z",
+  "unitCount": 3,
   "latest": {
-    "title": "2026-06-25-02 - 통합 리뷰 프리셋 추가",
-    "number": "02",
-    "markdownPath": "docs\\orchestration\\reports\\20260625\\units\\2026-06-25-02-통합-리뷰-프리셋-추가.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260625\\units\\2026-06-25-02-통합-리뷰-프리셋-추가.html"
+    "title": "2026-06-25-03 - 기억/잔향 단일 테스트 패널",
+    "number": "03",
+    "markdownPath": "docs\\orchestration\\reports\\20260625\\units\\2026-06-25-03-기억-잔향-단일-테스트-패널.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260625\\units\\2026-06-25-03-기억-잔향-단일-테스트-패널.html"
   }
 }

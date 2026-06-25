@@ -13,9 +13,9 @@ Current source of truth:
 ## 1. Direct integrated feel review
 
 - Priority: highest
-- Include: use `DB Rev` / `GS Rev` debug buttons and normal play with both weapons after the VFX/range scale-up, 150s first Gatekeeper, arena landmarks, and enemy role markers.
-- Check: whether attacks feel satisfying/readable, whether enlarged VFX are too noisy, whether the first boss now arrives at a good time, whether landmarks help the map feel less empty, and whether role markers help identify enemy types.
-- Done: jaewoo can name which part still feels too small, too crowded, too slow, too early, too empty, or too hard to read.
+- Include: use `Mem One` / `Echo One` to test each selected memory/echo id one by one, then use `DB Rev` / `GS Rev` and normal play with both weapons after the VFX/range scale-up, 150s first Gatekeeper, arena landmarks, and enemy role markers.
+- Check: whether each memory and matching echo are visually distinct, whether attacks feel satisfying/readable, whether enlarged VFX are too noisy, whether the first boss now arrives at a good time, whether landmarks help the map feel less empty, and whether role markers help identify enemy types.
+- Done: jaewoo can name which memory/echo ids need tuning and which broader part still feels too small, too crowded, too slow, too early, too empty, or too hard to read.
 
 ## 2. Direct release-prep map review
 

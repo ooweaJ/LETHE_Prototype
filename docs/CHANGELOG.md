@@ -2,6 +2,18 @@
 
 ## 2026-06-25
 
+- Added one-by-one memory/echo debug testing:
+  - Added `Mem One` to the debug panel.
+  - `Prev` / `Next` now select one of the 8 memory/echo ids for isolated review.
+  - `Mem One` starts the run if needed, spawns nearby review enemies, clears echoes/ultimates, and enables only the selected memory at +5.
+  - `Echo One` remains available below it for the selected echo at +5 with ultimate suppression.
+  - `DB Rev` and `GS Rev` remain integrated all-echo review presets.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after Unity refresh.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console showed only MCP server info logs and no gameplay errors/warnings.
+
 - Added integrated feel review debug presets:
   - Added `DB Rev` and `GS Rev` buttons to the debug panel.
   - Each preset starts the run if needed, switches to the selected weapon, spawns 18 nearby review enemies, sets all echoes to +5, suppresses ultimates with Echo Only mode, and sets Gatekeeper warning timing to 20 seconds.

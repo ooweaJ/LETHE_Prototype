@@ -162,6 +162,13 @@
           <p>대검 VFX는 보장형 cleave로 다시 보이게 만들었지만, 이제 남은 문제는 직접 리뷰를 빠르게 반복하는 것이다. 기존에는 대검/쌍검, 잔향 과밀, 적 판독, 문지기 예고를 보려면 플레이를 길게 진행해야 했다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-25-03</span>
+          <h2><a href="#unit-2026-06-25-03" data-unit-link="unit-2026-06-25-03">기억/잔향 단일 테스트 패널</a></h2>
+          <p>디버그 패널에서 8종 기억/잔향을 한 종류씩 골라 테스트할 수 있게 되었다. 이제 통합 화면에서 &quot;뭔가 안 보인다&quot;를 느끼는 단계에서 멈추지 않고, 같은 id의 기억과 잔향을 따로 켜서 비교할 수 있다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -252,6 +259,45 @@
 <li>방향: 검증해야 하는 화면을 빠르게 만드는 디버그 프리셋을 제공한다.</li>
 <li>행동: <code>DB Rev</code>와 <code>GS Rev</code> 버튼을 추가하고, 무기/잔향/적/보스예고를 동시에 띄우는 상태를 만들었다.</li>
 <li>결과: 기술 검증은 통과했고, 이제 직접 플레이 리뷰 속도를 높일 수 있다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-25-03" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-25-03 - 기억/잔향 단일 테스트 패널</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>디버그 패널에서 8종 기억/잔향을 한 종류씩 골라 테스트할 수 있게 되었다. 이제 통합 화면에서 &quot;뭔가 안 보인다&quot;를 느끼는 단계에서 멈추지 않고, 같은 id의 기억과 잔향을 따로 켜서 비교할 수 있다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>Prev</code> / <code>Next</code>는 테스트할 기억/잔향 id를 선택한다.</li>
+<li><code>Mem One</code> 버튼을 추가했다.</li>
+<li><code>Mem One</code>은 주변 리뷰 적을 만들고, 잔향/궁극 상태를 지운 뒤 선택한 기억만 +5로 켠다.</li>
+<li><code>Echo One</code>은 그대로 유지해서 선택한 잔향만 +5로 켠다.</li>
+<li><code>DB Rev</code> / <code>GS Rev</code>는 전체 잔향 통합 리뷰용으로 유지했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, warning 0개, error 0개.</li>
+<li>Unity <code>Assets/Refresh</code>: 성공.</li>
+<li>Unity compile error count: <code>0</code>.</li>
+<li>Unity Play Mode 진입: <code>isPlaying=true</code> 확인.</li>
+<li>Unity console에는 MCP 서버 정보 로그만 있었고 게임 오류/경고는 없었다.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>기억과 잔향의 가시성 문제는 한꺼번에 보면 원인을 분리하기 어렵다. 그래서 같은 선택 슬롯으로 <code>Mem One</code>과 <code>Echo One</code>을 번갈아 켜서 &quot;기억 자체가 약한지&quot;, &quot;잔향만 약한지&quot;, &quot;둘이 너무 비슷한지&quot;를 확인하는 흐름으로 바꿨다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>기술 검증은 통과했지만, 실제 판단은 직접 플레이가 필요하다. 특히 각 id별로 색, 범위, 유지시간, 피해 가치가 기억과 잔향 사이에서 충분히 다르게 느껴지는지 봐야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Codex가 패널에 <code>Mem One</code>을 추가했고 기존 <code>Echo One</code>과 같은 선택 id를 공유하게 만들었다. 다음 리뷰는 8종을 하나씩 돌면서 기억/잔향의 차별성, 밸류, 가시성을 표로 적는 방식이 좋다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>1. jaewoo가 <code>Prev</code> / <code>Next</code>로 8종을 하나씩 고른다.</p>
+<p>2. 각 id마다 <code>Mem One</code>과 <code>Echo One</code>을 번갈아 눌러본다.</p>
+<p>3. 약한 id는 scale, alpha, lifetime, proc, damage, field radius 순서로 조정한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 잔향/기억 가시성 피드백이 전체 화면에서는 원인 분리가 어려웠다.</li>
+<li>방향: 같은 id를 단일 조건으로 켜서 비교 가능한 테스트 루프를 만든다.</li>
+<li>행동: <code>Mem One</code> 버튼과 단일 기억 세팅 함수를 추가하고, 기존 <code>Echo One</code>과 나란히 배치했다.</li>
+<li>결과: 이제 8종 기억/잔향을 하나씩 검수할 수 있는 디버그 패널이 생겼다.</li>
 </ul>
     </article>
       </div>

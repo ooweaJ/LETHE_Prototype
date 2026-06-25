@@ -42,6 +42,18 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 one-by-one memory/echo debug testing:
+  - Added `Mem One` to the debug panel so jaewoo can test the selected memory alone at +5.
+  - `Prev` / `Next` choose one of the 8 shared memory/echo ids.
+  - `Mem One` starts the run if needed, spawns nearby review enemies, clears echo/ultimate state, and enables only the selected memory.
+  - `Echo One` remains available for the selected echo alone at +5 with ultimate suppression.
+  - `DB Rev` / `GS Rev` remain integrated all-echo review presets.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after Unity refresh.
+    - Unity compile error count: `0`.
+    - Unity Play Mode entry reached `isPlaying=true`.
+    - Unity console showed only MCP server info logs and no gameplay errors/warnings.
+
 - Unity v1 integrated review presets:
   - Added `DB Rev` and `GS Rev` debug buttons for fast direct review.
   - Each preset starts the run if needed, switches weapon, spawns 18 nearby review enemies, sets all 8 echoes to +5, suppresses ultimates with Echo Only mode, and sets Gatekeeper warning timing to 20 seconds.

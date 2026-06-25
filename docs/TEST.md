@@ -23,6 +23,26 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 
 ## Current Epic Checks
 
+### One-by-One Memory / Echo Debug, 2026-06-25
+
+- Added debug panel flow:
+  - `Prev` / `Next`: cycle the selected memory/echo id.
+  - `Mem One`: selected memory only at +5, with echoes and ultimate state cleared.
+  - `Echo One`: selected echo only at +5, with ultimate updates suppressed.
+  - `DB Rev` / `GS Rev`: integrated all-echo weapon review remains available.
+- Intended manual review loop:
+  - Pick one id.
+  - Test `Mem One` to judge the memory's own readability and value.
+  - Test `Echo One` to judge whether the matching echo reads as a distinct aftereffect.
+  - Record ids that feel invisible, too similar, too weak, too noisy, or too strong.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after Unity refresh.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console showed only MCP server info logs and no gameplay errors/warnings.
+- Remaining risk:
+  - Direct play is required to judge feel and visual distinction; this patch only creates the isolated test harness.
+
 ### Integrated Review Presets, 2026-06-25
 
 - Added debug panel buttons:
