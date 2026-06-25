@@ -23,6 +23,32 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 
 ## Current Epic Checks
 
+### Release-Feel Second Integration Pass, 2026-06-25
+
+- Map/background:
+  - Runtime now overlays connected Lethe river bands, banks, and sunken ruin slabs on the enlarged terrain.
+  - Purpose is to reduce the separated-tile feeling and give the arena a larger world read before authored map chunks exist.
+- Enemy/boss readability:
+  - All runtime enemies now get HP bars.
+  - Blood-mark color restore now returns to each enemy's base sprite color instead of plain white.
+- Memory/echo value and VFX:
+  - Execution Flash threshold, tick speed, VFX size/lifetime, and damage increased.
+  - Hunter Oath fires faster, reaches up to 6 shots, and hits harder.
+  - Shatter Wave has larger/longer fields, higher target cap, damage, and knockback.
+  - Stopped Second echo has higher proc/freeze values and longer gold clock fields.
+  - Ashen Shield and Oblivion Brand echoes have stronger proc/value; Ashen damage reduction increased.
+  - Utility ultimates received larger VFX and stronger damage/freeze/heal values.
+- Growth feedback:
+  - Level-up now emits a cyan/gold burst around the player.
+  - Ultimate-ready state now emits a colored burst, floating text, and camera shake.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console error count: `0`.
+- Remaining risk:
+  - Direct play is required to judge whether larger VFX and HP bars improve readability without making the screen too busy.
+
 ### Integrated Feel Pass, 2026-06-25
 
 - Greatsword duplicate-VFX correction:

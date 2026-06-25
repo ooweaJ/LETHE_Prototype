@@ -10,36 +10,37 @@ Current source of truth:
 - Test gate: `docs/TEST.md`
 - Detailed design: `docs/design/README.md` and `docs/design/LETHE_DESIGN_00..07`
 
-## 1. Direct integrated feel review
+## 1. Direct release-feel review
 
 - Priority: highest
-- Include: normal play and `DB Rev` / `GS Rev` with the new greatsword duplicate-VFX correction, weapon feel split, 135s first Gatekeeper, larger 22s warning, darker terrain, stronger landmarks, and larger enemy role markers.
-- Check: whether greatsword now reads as one strong slash instead of two stacked cleaves, whether dual blades feel faster/lighter, whether the first boss is exciting rather than too early, and whether terrain/markers improve readability.
-- Done: jaewoo can name which of weapon VFX, weapon balance, first boss timing, enemy markers, or map contrast is now the weakest remaining axis.
+- Include: normal play and `DB Rev` / `GS Rev` after the second integration pass.
+- Check: greatsword slash timing, dual-blade speed, larger memory/echo VFX, level-up burst, ultimate-ready burst, enemy HP bars, and whether the first Gatekeeper at `135s` feels exciting instead of rushed.
+- Done: jaewoo can name the weakest axis among weapon feel, VFX clutter, early pacing, enemy readability, growth feedback, and map identity.
 
-## 2. Single memory/echo identity review
-
-- Priority: high
-- Include: use `Mem One` / `Echo One` after the broader combat pass is judged.
-- Check: whether each memory and matching echo are visually distinct, useful, and not too similar.
-- Done: jaewoo can name which memory/echo ids need tuning.
-
-## 3. Direct release-prep map review
+## 2. Map identity review
 
 - Priority: high
-- Include: run `Dev_Prototype_v1` on the enlarged and darkened map, choose both starting weapons, and judge whether the arena now feels like a real game space instead of a small prototype box.
-- Check: map scale, camera size, player travel distance, enemy approach readability, background contrast under VFX, and whether the new Lethe terrain tiles feel like a world instead of an artificial field.
-- Done: jaewoo can say whether the map should stay this size, grow again, or become denser with terrain landmarks.
+- Include: judge the new connected Lethe river/bank bands and sunken ruin slabs while moving through the enlarged arena.
+- Check: whether the map now feels like one terrain space instead of separated decorations, and whether enemy/VFX contrast remains readable.
+- Done: jaewoo can decide whether the next map pass should add hand-authored chunks, more terrain density, or a new larger arena layout.
 
-## 4. Terrain polish pass
-
-- Priority: high
-- Include: after direct play, tune tile brightness, repetition, backdrop visibility, root/water/gravel density, and the new memory landmark placement.
-- Check: readable floor value range, Lethe identity, enemy silhouette contrast, and no conflict with gold/red/green combat VFX.
-- Done: the background reads as LETHE terrain in motion, not only good standalone tiles.
-
-## 5. Enemy / boss sprite readability on the larger map
+## 3. Enemy / boss readability review
 
 - Priority: high
-- Include: check `sheet_enemy_eye_4dir.png`, `sheet_enemy_splitter_4dir.png`, `sheet_enemy_voidpriest_4dir.png`, and `spr_boss_gatekeeper_01.png` in live combat under VFX.
-- Done: jaewoo can recognize ranged eye, splitter, void priest, and Gatekeeper without reading debug labels, even when they enter from farther away.
+- Include: live combat with Drifting Eye, Split One, Void Priest, and Gatekeeper.
+- Check: sprite size, role marker, new HP bar, boss silhouette, and whether health bars help without making the screen too UI-heavy.
+- Done: jaewoo can identify which enemy/boss sprite needs repainting or scale/color changes.
+
+## 4. Single memory/echo identity review
+
+- Priority: high
+- Include: use `Mem One` / `Echo One` for all 8 ids after broad feel review.
+- Check: whether memory and matching echo are visually distinct, useful, and not too similar after the value/VFX buffs.
+- Done: jaewoo can name exact ids that need tuning.
+
+## 5. Release-prep structure decision
+
+- Priority: medium
+- Include: decide whether `_dev` should keep getting tuned or whether a limited `Assets/Lethe` promotion prep branch should begin.
+- Check: remaining prototype-only runtime generation, missing audio, authored prefabs, scene organization, and asset naming.
+- Done: GO/ITERATE decision for promotion prep is recorded.

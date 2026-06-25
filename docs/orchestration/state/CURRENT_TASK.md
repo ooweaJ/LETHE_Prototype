@@ -68,6 +68,14 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Release-feel second integration pass:
+  - Added connected Lethe river/bank terrain bands and sunken ruin slabs over the enlarged arena.
+  - Added enemy/boss HP bars and fixed blood-mark color restore to preserve enemy base colors.
+  - Buffed under-readable memories/echoes and utility ultimates through scale, lifetime, proc chance, radius, damage, freeze, heal, and damage reduction values.
+  - Added level-up and ultimate-ready burst feedback.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`; Unity console error count: `0`.
 - Prototype gap pass:
   - First Gatekeeper moved from `180s` to `150s`; later schedule is `300 / 450 / 600`.
   - First Gatekeeper HP reduced from `2050` to `1750`.

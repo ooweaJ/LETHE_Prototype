@@ -2,6 +2,17 @@
 
 ## 2026-06-25
 
+- Added the release-feel second integration pass:
+  - Added connected Lethe river/bank bands and sunken ruin slabs to make the enlarged map read as one terrain space.
+  - Added enemy/boss HP bars and preserved enemy base colors when blood-mark flash clears.
+  - Increased value/readability for Execution Flash, Hunter Oath, Shatter Wave, Stopped Second, Ashen Shield, Oblivion Brand, and utility ultimate echoes.
+  - Added visible level-up and ultimate-ready burst feedback.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console error count: `0`.
+
 - Tuned the next integrated feel pass after memory/echo single-test tooling was deferred:
   - Changed guaranteed greatsword slash from a second full cleave into a subdued tip afterglow/cut line when the normal VFX profile is present.
   - Tightened greatsword slash delay and lifetime so it appears sooner and clears faster.

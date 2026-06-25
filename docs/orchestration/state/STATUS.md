@@ -42,6 +42,17 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 release-feel second integration pass:
+  - Added connected Lethe river/bank bands and sunken ruin slabs over the large arena so the background reads less like separated tiles and more like one terrain space.
+  - Added enemy/boss health bars and preserved each enemy sprite's base color when blood-mark flash clears.
+  - Increased readability/value for Execution Flash, Hunter Oath, Shatter Wave, Stopped Second, Ashen Shield, Oblivion Brand, and utility ultimate echoes through larger VFX, longer fields, stronger proc rates, and higher damage/utility values.
+  - Added level-up burst feedback and ultimate-ready burst feedback so growth moments are visible before reading the panel.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity compile error count: `0`.
+    - Unity Play Mode entry reached `isPlaying=true`.
+    - Unity console error count: `0`.
+
 - Unity v1 integrated feel pass after deferring single memory/echo review:
   - Reframed the greatsword guaranteed slash so it no longer creates a second full cleave when the normal VFX profile is present.
   - When profile VFX exists, the fallback is now only a subdued tip afterglow and cut line; if profile VFX is missing, it still emits a readable cleave.
