@@ -23,6 +23,26 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 
 ## Current Epic Checks
 
+### Integrated Review Presets, 2026-06-25
+
+- Added debug panel buttons:
+  - `DB Rev`: dual-blade integrated review.
+  - `GS Rev`: greatsword integrated review.
+- Preset behavior:
+  - Starts the run if needed.
+  - Switches to the chosen weapon.
+  - Spawns 18 nearby review enemies.
+  - Sets all 8 echoes to +5.
+  - Enables Echo Only mode to suppress ultimates.
+  - Sets Gatekeeper warning timing to 20 seconds.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after Unity refresh.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console showed only MCP server info logs and no gameplay errors/warnings.
+- Remaining risk:
+  - Direct play is required to judge whether the review presets expose the right amount of VFX clutter without creating an unrealistic worst-case screen.
+
 ### Greatsword VFX Guarantee, 2026-06-25
 
 - Issue:

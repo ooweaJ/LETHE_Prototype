@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-25-02 - 통합 리뷰 프리셋 추가</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-25-02 - 통합 리뷰 프리셋 추가</h1>
+      <p class="meta">Generated from 2026-06-25-02-통합-리뷰-프리셋-추가.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260625/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-25-02 - 통합 리뷰 프리셋 추가</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>대검 VFX는 보장형 cleave로 다시 보이게 만들었지만, 이제 남은 문제는 직접 리뷰를 빠르게 반복하는 것이다. 기존에는 대검/쌍검, 잔향 과밀, 적 판독, 문지기 예고를 보려면 플레이를 길게 진행해야 했다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>디버그 패널에 <code>DB Rev</code>, <code>GS Rev</code> 버튼을 추가했다.</li>
+<li>버튼을 누르면 바로 통합 리뷰 상태로 들어간다:</li>
+<li>필요한 경우 런 시작</li>
+<li>선택 무기로 전환</li>
+<li>주변에 리뷰용 적 18마리 배치</li>
+<li>8잔향 전체 +5 설정</li>
+<li>궁극은 Echo Only 모드로 억제</li>
+<li>문지기 예고 타이밍을 20초로 설정</li>
+<li>디버그 패널 높이를 늘려 버튼과 로그가 겹치지 않게 했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, warning 0개, error 0개.</li>
+<li>Unity <code>Assets/Refresh</code>: 성공.</li>
+<li>Unity compile error count: <code>0</code>.</li>
+<li>Unity Play Mode 진입: <code>isPlaying=true</code> 확인.</li>
+<li>Unity console에는 MCP 서버 정보 로그만 있었고 게임 런타임 오류/경고는 없었다.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>지금 단계에서는 감각 판단을 빨리 반복하는 도구가 필요하다. <code>DB Rev</code>와 <code>GS Rev</code>는 일반 플레이를 대체하는 모드가 아니라, 무기 VFX/잔향 과밀/적 판독/문지기 예고를 한 화면에서 빠르게 확인하기 위한 리뷰 프리셋이다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>리뷰 프리셋은 의도적으로 과밀한 상황을 만든다. 실제 150초 플레이보다 더 복잡하게 보일 수 있으니, 이 버튼에서 문제를 찾은 뒤 일반 플레이에서도 같은 문제가 반복되는지 확인해야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Codex가 직접 리뷰 반복을 줄이기 위해 <code>DB Rev</code> / <code>GS Rev</code> 디버그 프리셋을 추가했다. 다음 판단 기준은 이 프리셋에서 대검 VFX, 쌍검 VFX, 잔향 과밀도, 적 표식, 문지기 예고가 한눈에 읽히는가다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>1. jaewoo가 <code>GS Rev</code>로 대검 VFX와 과밀도를 본다.</p>
+<p>2. jaewoo가 <code>DB Rev</code>로 쌍검 VFX와 과밀도를 본다.</p>
+<p>3. 문제 있는 축만 scale, alpha, lifetime, enemy marker, boss warning timing 순서로 조정한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 통합 감각을 보려면 플레이 시간이 길어 리뷰 반복이 느렸다.</li>
+<li>방향: 검증해야 하는 화면을 빠르게 만드는 디버그 프리셋을 제공한다.</li>
+<li>행동: <code>DB Rev</code>와 <code>GS Rev</code> 버튼을 추가하고, 무기/잔향/적/보스예고를 동시에 띄우는 상태를 만들었다.</li>
+<li>결과: 기술 검증은 통과했고, 이제 직접 플레이 리뷰 속도를 높일 수 있다.</li>
+</ul>
+  </main>
+</body>
+</html>

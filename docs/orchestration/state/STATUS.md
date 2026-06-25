@@ -42,6 +42,16 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 integrated review presets:
+  - Added `DB Rev` and `GS Rev` debug buttons for fast direct review.
+  - Each preset starts the run if needed, switches weapon, spawns 18 nearby review enemies, sets all 8 echoes to +5, suppresses ultimates with Echo Only mode, and sets Gatekeeper warning timing to 20 seconds.
+  - Purpose: quickly test weapon VFX, echo clutter, enemy role readability, and boss warning timing without waiting through a full run.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after Unity refresh.
+    - Unity compile error count: `0`.
+    - Unity Play Mode entry reached `isPlaying=true`.
+    - Unity console showed only MCP server info logs and no gameplay errors/warnings.
+
 - Unity v1 greatsword VFX missing-read fix:
   - Responded to jaewoo feedback that the greatsword VFX appeared to be gone.
   - Added a guaranteed greatsword cleave fallback on every successful greatsword hit.

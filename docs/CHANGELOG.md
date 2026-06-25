@@ -2,6 +2,16 @@
 
 ## 2026-06-25
 
+- Added integrated feel review debug presets:
+  - Added `DB Rev` and `GS Rev` buttons to the debug panel.
+  - Each preset starts the run if needed, switches to the selected weapon, spawns 18 nearby review enemies, sets all echoes to +5, suppresses ultimates with Echo Only mode, and sets Gatekeeper warning timing to 20 seconds.
+  - This lets jaewoo quickly review weapon VFX, echo clutter, enemy role readability, and boss warning timing without waiting through a full run.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after Unity refresh.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console showed only MCP server info logs and no gameplay errors/warnings.
+
 - Fixed missing/unclear greatsword slash VFX:
   - Added a guaranteed greatsword cleave fallback that spawns on every successful greatsword hit.
   - The fallback emits two large cleave arcs and a cut line aligned to the current greatsword swing tip, independent of ScriptableObject VFX entry filtering.

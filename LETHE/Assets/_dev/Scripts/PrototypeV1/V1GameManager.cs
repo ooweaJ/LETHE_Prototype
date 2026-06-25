@@ -2309,6 +2309,27 @@ namespace Lethe.PrototypeV1
             Log("Debug utility VFX preview");
         }
 
+        void DebugIntegratedReview(V1WeaponId weaponId)
+        {
+            EnsureRunStarted();
+            SetDebugWeapon(weaponId);
+            EnsureReviewEnemies(18);
+            activeMemories.Clear();
+            echoLevels.Clear();
+            foreach (var id in AllEchoIds)
+            {
+                echoLevels[id] = MaxEchoLevel;
+            }
+            echoOnlyDebugMode = true;
+            bossSpawnIndex = 0;
+            warnedBossIndex = -1;
+            bossTimer = 20f;
+            weaponTimer = 0.02f;
+            weaponAnimTimer = 0f;
+            SpawnFloatingText(player.position + Vector3.up * 1.32f, weaponId == V1WeaponId.Greatsword ? "GS VFX Review" : "DB VFX Review", new Color(0.78f, 0.96f, 1f));
+            Log(weaponId == V1WeaponId.Greatsword ? "Debug greatsword integrated review" : "Debug dual-blade integrated review");
+        }
+
         void EnsureReviewEnemies(int targetCount)
         {
             var live = enemies.Count(e => e != null && e.IsAlive);
@@ -2443,7 +2464,7 @@ namespace Lethe.PrototypeV1
             GUI.Label(new Rect(24, 151, 392, 20), BloodBladeStormReady ? $"{UltimateGoalText()} / {UltimatePatternText(weapon)}" : UltimateGoalText(), smallStyle);
             GUI.Label(new Rect(24, 170, 392, 20), M2LoopText(), smallStyle);
 
-            GUI.Box(new Rect(Screen.width - 326, 12, 314, 326), "", panelStyle);
+            GUI.Box(new Rect(Screen.width - 326, 12, 314, 366), "", panelStyle);
             GUI.Label(new Rect(Screen.width - 314, 22, 292, 20), "Debug  F1/F2 기억  F4/F5 잔향  F8 M2", smallStyle);
             if (GUI.Button(new Rect(Screen.width - 314, 48, 92, 28), "M1", buttonStyle)) DebugRunM1Smoke();
             if (GUI.Button(new Rect(Screen.width - 216, 48, 92, 28), "M2", buttonStyle)) DebugRunM2Smoke();
@@ -2464,7 +2485,10 @@ namespace Lethe.PrototypeV1
             if (GUI.Button(new Rect(Screen.width - 314, 208, 92, 28), "Prev", buttonStyle)) DebugCycleSelectedEcho(-1);
             if (GUI.Button(new Rect(Screen.width - 216, 208, 92, 28), "Echo One", buttonStyle)) DebugSetSelectedEchoOnly();
             if (GUI.Button(new Rect(Screen.width - 118, 208, 92, 28), "Next", buttonStyle)) DebugCycleSelectedEcho(1);
-            var y = 250;
+            if (GUI.Button(new Rect(Screen.width - 314, 242, 92, 28), "DB Rev", buttonStyle)) DebugIntegratedReview(V1WeaponId.DualBlades);
+            if (GUI.Button(new Rect(Screen.width - 216, 242, 92, 28), "GS Rev", buttonStyle)) DebugIntegratedReview(V1WeaponId.Greatsword);
+            GUI.Label(new Rect(Screen.width - 118, 246, 92, 20), "all echo", smallStyle);
+            var y = 284;
             foreach (var line in combatLog.TakeLast(3))
             {
                 GUI.Label(new Rect(Screen.width - 314, y, 292, 20), line, smallStyle);

@@ -13,7 +13,7 @@ Current source of truth:
 ## 1. Direct integrated feel review
 
 - Priority: highest
-- Include: use debug/normal play with both dual blades and greatsword after the VFX/range scale-up, 150s first Gatekeeper, arena landmarks, and enemy role markers.
+- Include: use `DB Rev` / `GS Rev` debug buttons and normal play with both weapons after the VFX/range scale-up, 150s first Gatekeeper, arena landmarks, and enemy role markers.
 - Check: whether attacks feel satisfying/readable, whether enlarged VFX are too noisy, whether the first boss now arrives at a good time, whether landmarks help the map feel less empty, and whether role markers help identify enemy types.
 - Done: jaewoo can name which part still feels too small, too crowded, too slow, too early, too empty, or too hard to read.
 
