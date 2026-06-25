@@ -2,6 +2,18 @@
 
 ## 2026-06-25
 
+- Tuned the next integrated feel pass after memory/echo single-test tooling was deferred:
+  - Changed guaranteed greatsword slash from a second full cleave into a subdued tip afterglow/cut line when the normal VFX profile is present.
+  - Tightened greatsword slash delay and lifetime so it appears sooner and clears faster.
+  - Updated weapon data so greatsword attacks slightly faster with heavier knockback and fewer targets, while dual blades attack faster with lighter individual hits.
+  - Pulled the first Gatekeeper from `150s` to `135s`, extended the warning lead to `22s`, and enlarged the warning field.
+  - Increased first-120s spawn pressure, enemy role marker size/alpha, terrain darkness, and memory landmark readability.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console showed only MCP server info logs and no gameplay errors/warnings.
+
 - Added one-by-one memory/echo debug testing:
   - Added `Mem One` to the debug panel.
   - `Prev` / `Next` now select one of the 8 memory/echo ids for isolated review.

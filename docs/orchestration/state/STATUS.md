@@ -42,6 +42,22 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 integrated feel pass after deferring single memory/echo review:
+  - Reframed the greatsword guaranteed slash so it no longer creates a second full cleave when the normal VFX profile is present.
+  - When profile VFX exists, the fallback is now only a subdued tip afterglow and cut line; if profile VFX is missing, it still emits a readable cleave.
+  - Split weapon feel through data:
+    - Greatsword attacks faster (`1.02 -> 0.92`) with slightly larger range/arc, fewer max targets, stronger knockback, hitstop, and shake.
+    - Dual blades attack faster (`0.36 -> 0.32`) with lighter individual hits, slightly shorter range, fewer max targets, and shorter hitstop.
+  - Improved early pacing and readability:
+    - First Gatekeeper timing moved to `135s`; schedule is now `135 / 285 / 435 / 600`.
+    - Gatekeeper warning starts at `22s` and uses larger/longer warning rings.
+    - First-120s spawn pressure, enemy role marker visibility, terrain darkness, and memory landmark visibility were increased.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity compile error count: `0`.
+    - Unity Play Mode entry reached `isPlaying=true`.
+    - Unity console showed only MCP server info logs and no gameplay errors/warnings.
+
 - Unity v1 one-by-one memory/echo debug testing:
   - Added `Mem One` to the debug panel so jaewoo can test the selected memory alone at +5.
   - `Prev` / `Next` choose one of the 8 shared memory/echo ids.

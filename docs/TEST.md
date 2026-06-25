@@ -23,6 +23,29 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 
 ## Current Epic Checks
 
+### Integrated Feel Pass, 2026-06-25
+
+- Greatsword duplicate-VFX correction:
+  - Profile-driven greatsword slash remains the main visible slash.
+  - Guaranteed fallback now becomes a subdued tip afterglow/cut line when profile slashes exist.
+  - If profile slashes are missing, fallback still emits a readable cleave.
+- Weapon feel split:
+  - Greatsword cadence `1.02 -> 0.92`, range `3.75 -> 3.85`, arc `96 -> 102`, max targets `6 -> 5`, hitstop/shake/knockback increased.
+  - Dual blades cadence `0.36 -> 0.32`, damage `15 -> 13.5`, range `2.8 -> 2.72`, max targets `7 -> 6`, hitstop/shake shortened.
+- Early run/readability pass:
+  - First Gatekeeper timing `150s -> 135s`; schedule now `135 / 285 / 435 / 600`.
+  - Gatekeeper warning lead `18s -> 22s`; warning field scale/lifetime increased.
+  - First 120 seconds spawn pressure increased.
+  - Enemy role markers and terrain memory landmarks are more readable.
+  - Terrain base tint is darker to help enemies/VFX sit above the floor.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console showed only MCP server info logs and no gameplay errors/warnings.
+- Remaining risk:
+  - Direct play must judge whether the greatsword now reads as one strong slash, whether 135s first boss feels too early, and whether the darker terrain improves contrast without losing Lethe mood.
+
 ### One-by-One Memory / Echo Debug, 2026-06-25
 
 - Added debug panel flow:

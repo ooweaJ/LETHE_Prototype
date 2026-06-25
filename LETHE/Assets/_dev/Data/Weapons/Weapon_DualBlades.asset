@@ -14,23 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp:Lethe.Dev:WeaponDefinition
   id: Weapon_DualBlades
   displayName: "\uC808\uB2E8\uC30D\uAC80"
-  attackCadence: 0.36
+  attackCadence: 0.32
   hitboxPrefab: {fileID: 0}
-  baseDamage: 15
+  baseDamage: 13.5
   hitStopProfile: {fileID: 0}
   sfxLayers: []
   echoStyle: 0
   rhythm: 0
-  attackRange: 2.8
+  attackRange: 2.72
   attackArcDegrees: 132
-  maxTargetsPerSwing: 7
+  maxTargetsPerSwing: 6
   engageMultiplier: 1.2
   secondaryDamageMultiplier: 0.72
   primaryKnockback: 1.78
   secondaryKnockback: 1.05
-  hitStopSeconds: 0.022
-  cameraShakeAmount: 0.035
-  swingAnimDuration: 0.16
+  hitStopSeconds: 0.014
+  cameraShakeAmount: 0.026
+  swingAnimDuration: 0.14
   echoSizeScale: 1.05
   echoDamageScale: 0.75
   targetingMode: 0

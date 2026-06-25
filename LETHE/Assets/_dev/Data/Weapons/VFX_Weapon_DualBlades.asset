@@ -24,9 +24,9 @@ MonoBehaviour:
     mirrorSideByLeadHand: 1
     rotationOffsetDegrees: 32
     mirrorRotationByLeadHand: 1
-    scale: 0.94
+    scale: 0.86
     color: {r: 0.62, g: 0.95, b: 1, a: 0.98}
-    lifetime: 0.23
+    lifetime: 0.20
   - id: DualBladeCrescent_B
     spriteShape: 0
     anchor: 0
@@ -37,9 +37,9 @@ MonoBehaviour:
     mirrorSideByLeadHand: 1
     rotationOffsetDegrees: -34
     mirrorRotationByLeadHand: 1
-    scale: 0.88
+    scale: 0.82
     color: {r: 0.93, g: 1, b: 1, a: 0.88}
-    lifetime: 0.25
+    lifetime: 0.21
   - id: DualBladeCutFlash
     spriteShape: 2
     anchor: 0

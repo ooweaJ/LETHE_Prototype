@@ -13,32 +13,33 @@ Current source of truth:
 ## 1. Direct integrated feel review
 
 - Priority: highest
-- Include: use `Mem One` / `Echo One` to test each selected memory/echo id one by one, then use `DB Rev` / `GS Rev` and normal play with both weapons after the VFX/range scale-up, 150s first Gatekeeper, arena landmarks, and enemy role markers.
-- Check: whether each memory and matching echo are visually distinct, whether attacks feel satisfying/readable, whether enlarged VFX are too noisy, whether the first boss now arrives at a good time, whether landmarks help the map feel less empty, and whether role markers help identify enemy types.
-- Done: jaewoo can name which memory/echo ids need tuning and which broader part still feels too small, too crowded, too slow, too early, too empty, or too hard to read.
+- Include: normal play and `DB Rev` / `GS Rev` with the new greatsword duplicate-VFX correction, weapon feel split, 135s first Gatekeeper, larger 22s warning, darker terrain, stronger landmarks, and larger enemy role markers.
+- Check: whether greatsword now reads as one strong slash instead of two stacked cleaves, whether dual blades feel faster/lighter, whether the first boss is exciting rather than too early, and whether terrain/markers improve readability.
+- Done: jaewoo can name which of weapon VFX, weapon balance, first boss timing, enemy markers, or map contrast is now the weakest remaining axis.
 
-## 2. Direct release-prep map review
+## 2. Single memory/echo identity review
 
 - Priority: high
-- Include: run `Dev_Prototype_v1` on the enlarged map, choose both starting weapons, and judge whether the arena now feels like a real game space instead of a small prototype box.
-- Check: map scale, camera size, player travel distance, enemy approach readability, background contrast under VFX, whether the new Lethe terrain tiles feel like a world instead of an artificial field, and whether the first 180 seconds still feel loose.
+- Include: use `Mem One` / `Echo One` after the broader combat pass is judged.
+- Check: whether each memory and matching echo are visually distinct, useful, and not too similar.
+- Done: jaewoo can name which memory/echo ids need tuning.
+
+## 3. Direct release-prep map review
+
+- Priority: high
+- Include: run `Dev_Prototype_v1` on the enlarged and darkened map, choose both starting weapons, and judge whether the arena now feels like a real game space instead of a small prototype box.
+- Check: map scale, camera size, player travel distance, enemy approach readability, background contrast under VFX, and whether the new Lethe terrain tiles feel like a world instead of an artificial field.
 - Done: jaewoo can say whether the map should stay this size, grow again, or become denser with terrain landmarks.
 
-## 3. Terrain polish pass
+## 4. Terrain polish pass
 
 - Priority: high
 - Include: after direct play, tune tile brightness, repetition, backdrop visibility, root/water/gravel density, and the new memory landmark placement.
 - Check: readable floor value range, Lethe identity, enemy silhouette contrast, and no conflict with gold/red/green combat VFX.
 - Done: the background reads as LETHE terrain in motion, not only good standalone tiles.
 
-## 4. Enemy / boss sprite readability on the larger map
+## 5. Enemy / boss sprite readability on the larger map
 
 - Priority: high
 - Include: check `sheet_enemy_eye_4dir.png`, `sheet_enemy_splitter_4dir.png`, `sheet_enemy_voidpriest_4dir.png`, and `spr_boss_gatekeeper_01.png` in live combat under VFX.
 - Done: jaewoo can recognize ranged eye, splitter, void priest, and Gatekeeper without reading debug labels, even when they enter from farther away.
-
-## 5. VFX scale/timing follow-up after direct review
-
-- Priority: high
-- Include: tune generated sprite scale, alpha, sorting order, duration, and spawn frequency for weapon hits, phantom weapons, memories, echoes, ultimates, and background contrast after the new map is judged.
-- Done: direct review no longer calls out VFX size/timing/background contrast as the weakest axis.

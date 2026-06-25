@@ -65,16 +65,17 @@ namespace Lethe.PrototypeV1
         const float PixelsPerUnit = 40f;
         const float PlayerSpeed = 184f / PixelsPerUnit;
         const float TwinBladeRange = 112f / PixelsPerUnit;
-        const float TwinBladeInterval = 0.36f;
-        const float TwinBladeDamage = 15f;
+        const float TwinBladeInterval = 0.32f;
+        const float TwinBladeDamage = 13.5f;
         const float TwinBladeArcDeg = 132f;
         const float TwinBladeEngageMul = 1.20f;
         const float GreatswordRange = 150f / PixelsPerUnit;
-        const float GreatswordInterval = 1.02f;
-        const float GreatswordDamage = 42f;
-        const float GreatswordArcDeg = 96f;
+        const float GreatswordInterval = 0.92f;
+        const float GreatswordDamage = 40f;
+        const float GreatswordArcDeg = 102f;
         const float GreatswordEngageMul = 1.12f;
-        const float FirstBossSeconds = 150f;
+        const float FirstBossSeconds = 135f;
+        const float BossWarningSeconds = 22f;
         const float FastFirstBossSeconds = 62f;
         const float DeficitSurvivalSeconds = 54f;
         const float FastDeficitSeconds = 6f;
@@ -99,11 +100,11 @@ namespace Lethe.PrototypeV1
         const float GreatswordPhantomLifetime = 0.42f;
         const float DualBladeSlashDelay = 0.045f;
         const float DualBladeSecondSlashExtraDelay = 0.040f;
-        const float GreatswordSlashDelay = 0.045f;
-        const float WeaponSlashLifetimeMultiplier = 1.45f;
+        const float GreatswordSlashDelay = 0.025f;
+        const float WeaponSlashLifetimeMultiplier = 1.28f;
         const float CombatVfxVisibilityScale = 1.18f;
-        const float DualBladeSlashMinLifetime = 0.34f;
-        const float GreatswordSlashMinLifetime = 0.62f;
+        const float DualBladeSlashMinLifetime = 0.28f;
+        const float GreatswordSlashMinLifetime = 0.48f;
         const float GreatswordCenterToTipRatio = 0.44f;
         const float GreatswordHandleToTipRatio = 0.86f;
         const float GreatswordHandleToCenterRatio = GreatswordHandleToTipRatio - GreatswordCenterToTipRatio;
@@ -157,7 +158,7 @@ namespace Lethe.PrototypeV1
         const string HunterOathBurstSource = "추적자의 맹세 폭발";
         const string HunterEchoSource = "추적 잔향";
         const string HunterEchoBurstSource = "추적 잔향 폭발";
-        static readonly float[] BossScheduleSeconds = { 150f, 300f, 450f, 600f };
+        static readonly float[] BossScheduleSeconds = { 135f, 285f, 435f, 600f };
         static readonly float[] FastBossScheduleSeconds = { 18f, 38f, 62f, 88f };
         static readonly V1MemoryId[] UtilityMemorySetA = { V1MemoryId.ExecutionFlash, V1MemoryId.HunterOath, V1MemoryId.StoppedSecond };
         static readonly V1MemoryId[] UtilityMemorySetB = { V1MemoryId.ShatterWave, V1MemoryId.AshenShield, V1MemoryId.OblivionBrand };
@@ -368,7 +369,7 @@ namespace Lethe.PrototypeV1
                 UpdateReviewPacing();
             }
             bossTimer -= dt;
-            if (bossTimer <= 18f && warnedBossIndex != bossSpawnIndex && !enemies.Any(e => e != null && e.Kind == V1EnemyKind.Gatekeeper))
+            if (bossTimer <= BossWarningSeconds && warnedBossIndex != bossSpawnIndex && !enemies.Any(e => e != null && e.Kind == V1EnemyKind.Gatekeeper))
             {
                 warnedBossIndex = bossSpawnIndex;
                 SpawnGatekeeperWarning();
@@ -568,7 +569,7 @@ namespace Lethe.PrototypeV1
                 floorSprites = new[] { LoadSprite("Assets/_dev/Art/Sprites/Map/tile_dev_floor_dark_01.png") ?? MakeBoxSprite("floor", new Color(0.08f, 0.09f, 0.105f), 64, 64) };
             }
             var backdrop = LoadSprite(ArenaBackdropPath) ?? MakeBoxSprite("arena_backdrop", Color.white, 16, 16);
-            CreateArenaSprite("Terrain_Backdrop", Vector3.forward * 1.8f, new Vector3(72f, 72f, 1f), Quaternion.identity, backdrop, new Color(0.66f, 0.72f, 0.74f, 1f), -130);
+            CreateArenaSprite("Terrain_Backdrop", Vector3.forward * 1.8f, new Vector3(76f, 76f, 1f), Quaternion.identity, backdrop, new Color(0.58f, 0.65f, 0.68f, 1f), -130);
             for (int x = -10; x <= 10; x++)
             {
                 for (int y = -7; y <= 7; y++)
@@ -585,7 +586,7 @@ namespace Lethe.PrototypeV1
                             : Mathf.Abs((x * 3 + y * 5) % Mathf.Min(2, floorSprites.Length));
                     sr.sprite = floorSprites[tileIndex];
                     var v = Mathf.PerlinNoise(x * 0.37f + 12.1f, y * 0.41f + 4.7f);
-                    sr.color = Color.Lerp(new Color(0.86f, 0.88f, 0.86f, 1f), new Color(1.00f, 1.01f, 0.98f, 1f), v * 0.22f);
+                    sr.color = Color.Lerp(new Color(0.72f, 0.76f, 0.75f, 1f), new Color(0.90f, 0.94f, 0.90f, 1f), v * 0.24f);
                     sr.sortingOrder = -100;
                     tile.transform.localScale = Vector3.one * (1.08f + v * 0.02f);
                 }
@@ -657,11 +658,11 @@ namespace Lethe.PrototypeV1
             {
                 var p = positions[i];
                 var color = i % 2 == 0
-                    ? new Color(0.22f, 0.52f, 0.56f, 0.20f)
-                    : new Color(0.42f, 0.38f, 0.52f, 0.18f);
-                CreateArenaSprite($"Memory_Landmark_Ring_{i:00}", p, Vector3.one * (0.72f + i * 0.04f), Quaternion.Euler(0f, 0f, i * 37f), ring, color, -81);
-                CreateArenaSprite($"Memory_Landmark_Pillar_{i:00}", p + Vector3.up * 0.03f, new Vector3(0.22f, 0.62f + i * 0.05f, 1f), Quaternion.Euler(0f, 0f, 8f + i * 33f), pillar, new Color(0.18f, 0.23f, 0.25f, 0.24f), -80);
-                CreateArenaSprite($"Memory_Landmark_Shard_{i:00}", p + Vector3.up * 0.10f, Vector3.one * (0.12f + i * 0.012f), Quaternion.Euler(0f, 0f, i * 41f), shard, new Color(0.52f, 0.86f, 0.88f, 0.28f), -79);
+                    ? new Color(0.20f, 0.58f, 0.62f, 0.28f)
+                    : new Color(0.48f, 0.42f, 0.62f, 0.24f);
+                CreateArenaSprite($"Memory_Landmark_Ring_{i:00}", p, Vector3.one * (0.92f + i * 0.05f), Quaternion.Euler(0f, 0f, i * 37f), ring, color, -81);
+                CreateArenaSprite($"Memory_Landmark_Pillar_{i:00}", p + Vector3.up * 0.03f, new Vector3(0.26f, 0.82f + i * 0.06f, 1f), Quaternion.Euler(0f, 0f, 8f + i * 33f), pillar, new Color(0.20f, 0.28f, 0.30f, 0.32f), -80);
+                CreateArenaSprite($"Memory_Landmark_Shard_{i:00}", p + Vector3.up * 0.10f, Vector3.one * (0.17f + i * 0.014f), Quaternion.Euler(0f, 0f, i * 41f), shard, new Color(0.58f, 0.94f, 0.96f, 0.38f), -79);
             }
         }
 
@@ -1631,14 +1632,14 @@ namespace Lethe.PrototypeV1
 
             if (pressure.FirstCycle && elapsed < 120f)
             {
-                if (elapsed < 35f)
+                if (elapsed < 30f)
                 {
-                    return new SpawnWaveProfile(0.46f, 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye);
+                    return new SpawnWaveProfile(0.42f, 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye);
                 }
 
-                return elapsed < 80f
-                    ? new SpawnWaveProfile(0.52f, 3, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne)
-                    : new SpawnWaveProfile(0.46f, 4, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.VoidPriest);
+                return elapsed < 76f
+                    ? new SpawnWaveProfile(0.48f, 3, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne)
+                    : new SpawnWaveProfile(0.42f, 4, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.VoidPriest);
             }
 
             if (pressure.Progress < 0.24f)
@@ -1653,8 +1654,8 @@ namespace Lethe.PrototypeV1
                 return elapsed >= 126f
                     ? new SpawnWaveProfile(0.54f, 3, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.VoidPriest)
                     : elapsed > 95f
-                        ? new SpawnWaveProfile(1.05f, 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.VoidPriest)
-                        : new SpawnWaveProfile(1.05f, 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne);
+                        ? new SpawnWaveProfile(0.86f, 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.VoidPriest)
+                        : new SpawnWaveProfile(0.92f, 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne);
             }
 
             if (pressure.FirstCycle && pressure.Progress >= 0.94f)
@@ -1671,7 +1672,7 @@ namespace Lethe.PrototypeV1
         {
             var pressure = CurrentPressure();
             if (pressure.Deficit) return pressure.Progress < 0.30f ? 16 : 14;
-            if (pressure.FirstCycle && elapsed < 120f) return 32;
+            if (pressure.FirstCycle && elapsed < 120f) return 36;
             if (pressure.FirstCycle && pressure.Progress >= 0.94f) return 22;
             if (pressure.FirstCycle && pressure.Progress >= 0.70f) return 32;
             if (pressure.FirstCycle) return 34;
@@ -1706,9 +1707,9 @@ namespace Lethe.PrototypeV1
             var warningPos = player.position + Vector3.up * 5.2f;
             warningPos.x = Mathf.Clamp(warningPos.x, -ArenaHalfWidth + 1.2f, ArenaHalfWidth - 1.2f);
             warningPos.y = Mathf.Clamp(warningPos.y, -ArenaHalfHeight + 1.2f, ArenaHalfHeight - 1.2f);
-            SpawnTransientSprite("GatekeeperWarningOuter", MakeRingSprite("GatekeeperWarningOuter", Color.white, 180), warningPos, Quaternion.identity, 1.18f, new Color(1f, 0.20f, 0.16f, 0.54f), 1.15f);
-            SpawnTransientSprite("GatekeeperWarningInner", MakeRingSprite("GatekeeperWarningInner", Color.white, 132), warningPos, Quaternion.Euler(0f, 0f, elapsed * -90f), 0.66f, new Color(1f, 0.72f, 0.36f, 0.42f), 1.05f);
-            SpawnTransientSprite("GatekeeperWarningCore", MakeImpactDiamondSprite("GatekeeperWarningCore", Color.white), warningPos, Quaternion.Euler(0f, 0f, 45f), 0.34f, new Color(1f, 0.30f, 0.20f, 0.78f), 0.82f);
+            SpawnTransientSprite("GatekeeperWarningOuter", MakeRingSprite("GatekeeperWarningOuter", Color.white, 180), warningPos, Quaternion.identity, 1.46f, new Color(1f, 0.20f, 0.16f, 0.58f), 1.55f);
+            SpawnTransientSprite("GatekeeperWarningInner", MakeRingSprite("GatekeeperWarningInner", Color.white, 132), warningPos, Quaternion.Euler(0f, 0f, elapsed * -90f), 0.84f, new Color(1f, 0.72f, 0.36f, 0.48f), 1.40f);
+            SpawnTransientSprite("GatekeeperWarningCore", MakeImpactDiamondSprite("GatekeeperWarningCore", Color.white), warningPos, Quaternion.Euler(0f, 0f, 45f), 0.42f, new Color(1f, 0.30f, 0.20f, 0.82f), 1.00f);
             SpawnFloatingText(warningPos + Vector3.up * 0.35f, "문지기 접근", new Color(1f, 0.46f, 0.34f));
         }
 
@@ -1719,17 +1720,17 @@ namespace Lethe.PrototypeV1
             marker.transform.SetParent(target, false);
             marker.transform.localPosition = new Vector3(0f, -0.06f, 0.02f);
             marker.transform.localRotation = Quaternion.identity;
-            marker.transform.localScale = Vector3.one * (kind == V1EnemyKind.Gatekeeper ? 0.78f : 0.46f);
+            marker.transform.localScale = Vector3.one * (kind == V1EnemyKind.Gatekeeper ? 0.96f : 0.56f);
             var sr = marker.AddComponent<SpriteRenderer>();
             sr.sprite = kind == V1EnemyKind.SplitOne
                 ? MakeImpactDiamondSprite("role_split_marker", Color.white)
                 : MakeRingSprite($"role_{kind}_marker", Color.white, kind == V1EnemyKind.Gatekeeper ? 180 : 112);
             sr.color = kind switch
             {
-                V1EnemyKind.DriftingEye => new Color(0.82f, 0.44f, 1f, 0.58f),
-                V1EnemyKind.SplitOne => new Color(1f, 0.72f, 0.28f, 0.50f),
-                V1EnemyKind.VoidPriest => new Color(0.36f, 1f, 0.62f, 0.56f),
-                V1EnemyKind.Gatekeeper => new Color(1f, 0.22f, 0.16f, 0.62f),
+                V1EnemyKind.DriftingEye => new Color(0.88f, 0.48f, 1f, 0.72f),
+                V1EnemyKind.SplitOne => new Color(1f, 0.78f, 0.30f, 0.66f),
+                V1EnemyKind.VoidPriest => new Color(0.36f, 1f, 0.66f, 0.70f),
+                V1EnemyKind.Gatekeeper => new Color(1f, 0.22f, 0.16f, 0.76f),
                 _ => new Color(1f, 1f, 1f, 0.35f)
             };
             sr.sortingOrder = 14;
@@ -2747,12 +2748,13 @@ namespace Lethe.PrototypeV1
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
             var hitCenter = (Vector3)hits.Aggregate(Vector2.zero, (sum, hit) => sum + (Vector2)hit.Enemy.transform.position) / hits.Count;
             SpawnPhantomWeaponAttack(weapon, hits, f, baseAngle, hitCenter);
+            var entries = weapon.VfxProfile != null ? weapon.VfxProfile.weaponHitSlashes : Array.Empty<SlashVfxEntry>();
+            var hasProfileSlash = entries != null && entries.Length > 0;
             if (weapon.Id == V1WeaponId.Greatsword)
             {
-                SpawnGreatswordGuaranteedSlash(hits[0].Enemy.transform.position, hitCenter, f);
+                SpawnGreatswordGuaranteedSlash(hits[0].Enemy.transform.position, hitCenter, f, hasProfileSlash);
             }
 
-            var entries = weapon.VfxProfile != null ? weapon.VfxProfile.weaponHitSlashes : Array.Empty<SlashVfxEntry>();
             if (entries == null || entries.Length == 0) return;
 
             for (int i = 0; i < hits.Count; i++)
@@ -2820,7 +2822,7 @@ namespace Lethe.PrototypeV1
             SpawnSweepingTransientSprite("DualBladePhantomRight", dualRightWeaponSprite, rightPos + (Vector3)(side * 0.12f * lead), rightPos - (Vector3)(side * 0.12f * lead) + (Vector3)(forward * 0.08f), baseAngle - 32f * lead, baseAngle - 78f * lead, rightScale, rightScale * 1.04f, new Color(0.95f, 1f, 1f, 0.88f), DualBladePhantomLifetime + 0.02f, 0.14f);
         }
 
-        void SpawnGreatswordGuaranteedSlash(Vector3 primaryTarget, Vector3 hitCenter, Vector2 forward)
+        void SpawnGreatswordGuaranteedSlash(Vector3 primaryTarget, Vector3 hitCenter, Vector2 forward, bool profileLayerPresent)
         {
             var f = forward.sqrMagnitude > 0.001f ? forward.normalized : lastAim.normalized;
             var swing = GreatswordSwingForTarget(primaryTarget, hitCenter, f, 0);
@@ -2828,9 +2830,15 @@ namespace Lethe.PrototypeV1
             var tip = Vector3.Lerp(swing.TipStart, swing.TipEnd, 0.70f);
             var baseAngle = GreatswordSlashVfxBaseAngle(slashForward);
             var arc = LoadSprite(GreatswordCleaveArcPath) ?? MakeWideCrescentSprite("GreatswordGuaranteedCleave", Color.white);
-            SpawnTransientSprite("GreatswordGuaranteedCleave_A", arc, tip, Quaternion.Euler(0f, 0f, baseAngle), 0.42f, new Color(0.82f, 0.96f, 1f, 0.62f), GreatswordSlashMinLifetime);
-            SpawnTransientSprite("GreatswordGuaranteedCleave_B", arc, hitCenter + (Vector3)(f * 0.18f), Quaternion.Euler(0f, 0f, baseAngle + 3f), 0.34f, new Color(0.96f, 1f, 1f, 0.88f), GreatswordSlashMinLifetime * 0.84f);
-            SpawnEchoWoundSlash("GreatswordGuaranteedCutLine", tip - (Vector3)(f * 0.12f), slashForward, new Color(0.92f, 1f, 1f, 0.68f), 1.38f, 0.30f);
+            if (profileLayerPresent)
+            {
+                SpawnTransientSprite("GreatswordTipAfterglow", arc, tip + (Vector3)(f * 0.04f), Quaternion.Euler(0f, 0f, baseAngle), 0.24f, new Color(0.72f, 0.94f, 1f, 0.26f), GreatswordSlashMinLifetime * 0.62f);
+                SpawnEchoWoundSlash("GreatswordTipCutLine", tip - (Vector3)(f * 0.08f), slashForward, new Color(0.92f, 1f, 1f, 0.38f), 1.04f, 0.20f);
+                return;
+            }
+
+            SpawnTransientSprite("GreatswordGuaranteedCleave_A", arc, tip, Quaternion.Euler(0f, 0f, baseAngle), 0.38f, new Color(0.82f, 0.96f, 1f, 0.58f), GreatswordSlashMinLifetime);
+            SpawnEchoWoundSlash("GreatswordGuaranteedCutLine", tip - (Vector3)(f * 0.12f), slashForward, new Color(0.92f, 1f, 1f, 0.58f), 1.24f, 0.26f);
         }
 
         GreatswordSwingPose GreatswordSwingForTarget(Vector3 targetPosition, Vector3 hitCenter, Vector2 forward, int hitIndex)

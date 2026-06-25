@@ -14,24 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp:Lethe.Dev:WeaponDefinition
   id: Weapon_Greatsword
   displayName: "\uC7A5\uC1A1\uB300\uAC80"
-  attackCadence: 1.02
+  attackCadence: 0.92
   hitboxPrefab: {fileID: 0}
-  baseDamage: 42
+  baseDamage: 40
   hitStopProfile: {fileID: 0}
   sfxLayers: []
   echoStyle: 0
   rhythm: 0
-  attackRange: 3.75
-  attackArcDegrees: 96
-  maxTargetsPerSwing: 6
+  attackRange: 3.85
+  attackArcDegrees: 102
+  maxTargetsPerSwing: 5
   engageMultiplier: 1.12
   secondaryDamageMultiplier: 0.58
-  primaryKnockback: 3.75
-  secondaryKnockback: 2.1
-  hitStopSeconds: 0.066
-  cameraShakeAmount: 0.088
-  swingAnimDuration: 0.34
-  echoSizeScale: 2.15
+  primaryKnockback: 4.15
+  secondaryKnockback: 2.35
+  hitStopSeconds: 0.074
+  cameraShakeAmount: 0.1
+  swingAnimDuration: 0.31
+  echoSizeScale: 2.05
   echoDamageScale: 1.6
   targetingMode: 1
   echoProcStyle: 1

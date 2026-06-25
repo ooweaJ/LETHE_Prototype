@@ -24,9 +24,9 @@ MonoBehaviour:
     mirrorSideByLeadHand: 0
     rotationOffsetDegrees: 0
     mirrorRotationByLeadHand: 0
-    scale: 1.86
-    color: {r: 0.76, g: 0.94, b: 1, a: 0.3}
-    lifetime: 0.62
+    scale: 1.70
+    color: {r: 0.76, g: 0.94, b: 1, a: 0.22}
+    lifetime: 0.50
   - id: GreatswordCrescent_Primary
     spriteShape: 1
     anchor: 2
@@ -37,9 +37,9 @@ MonoBehaviour:
     mirrorSideByLeadHand: 0
     rotationOffsetDegrees: 0
     mirrorRotationByLeadHand: 0
-    scale: 1.56
-    color: {r: 0.92, g: 1, b: 1, a: 0.94}
-    lifetime: 0.52
+    scale: 1.44
+    color: {r: 0.92, g: 1, b: 1, a: 0.84}
+    lifetime: 0.46
   - id: GreatswordTargetShock
     spriteShape: 2
     anchor: 2
@@ -76,9 +76,9 @@ MonoBehaviour:
     mirrorSideByLeadHand: 0
     rotationOffsetDegrees: -8
     mirrorRotationByLeadHand: 0
-    scale: 0.70
-    color: {r: 0.62, g: 0.86, b: 1, a: 0.56}
-    lifetime: 0.22
+    scale: 0.60
+    color: {r: 0.62, g: 0.86, b: 1, a: 0.42}
+    lifetime: 0.18
   kalmuriFollowupSlashes:
   - id: KalmuriFollowup_Heavy
     spriteShape: 1

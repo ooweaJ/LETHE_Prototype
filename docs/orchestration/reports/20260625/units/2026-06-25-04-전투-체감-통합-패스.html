@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-25-04 - 전투 체감 통합 패스</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-25-04 - 전투 체감 통합 패스</h1>
+      <p class="meta">Generated from 2026-06-25-04-전투-체감-통합-패스.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260625/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-25-04 - 전투 체감 통합 패스</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>기억/잔향 단일 테스트는 나중으로 미루고, 지금은 대검 VFX 중복감과 전체 전투 진행감을 먼저 정리했다. 대검은 이제 프로필 참격이 메인이고, 보장형 VFX는 겹쳐 보이는 큰 두 번째 참격이 아니라 칼끝 잔광/컷라인으로 낮췄다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>대검 보장형 VFX를 상황별로 나눴다.</li>
+<li>프로필 VFX가 있으면 얇은 tip afterglow와 cut line만 나온다.</li>
+<li>프로필 VFX가 없을 때만 fallback cleave가 크게 나온다.</li>
+<li>대검은 <code>1.02s -&gt; 0.92s</code>로 조금 빨라졌고, 사거리/각도/넉백/히트스톱/흔들림은 더 묵직하게 정리했다.</li>
+<li>쌍검은 <code>0.36s -&gt; 0.32s</code>로 더 빠르게 만들고, 단일 피해/범위/히트스톱은 줄여 빠르고 가벼운 무기 쪽으로 밀었다.</li>
+<li>첫 문지기 타이밍은 <code>150s -&gt; 135s</code>, 보스 스케줄은 <code>135 / 285 / 435 / 600</code>으로 바꿨다.</li>
+<li>문지기 경고는 22초 전에 더 크고 오래 보이게 바꿨다.</li>
+<li>초반 120초 스폰 압력을 올리고, 적 역할 마커와 맵 랜드마크를 더 잘 보이게 했다.</li>
+<li>배경/바닥 톤을 조금 어둡게 내려 적과 VFX가 더 위에 뜨게 했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, 기존 v0/debug 경고 7개, error 0개.</li>
+<li>Unity compile error count: <code>0</code>.</li>
+<li>Unity Play Mode 진입: <code>isPlaying=true</code> 확인.</li>
+<li>Unity console에는 MCP 서버 정보 로그만 있었고 게임 오류/경고는 없었다.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>대검 문제는 VFX 부재가 아니라 VFX 위계 문제로 본다. 그래서 대검의 “맛”은 프로필 참격과 무기 스윙이 맡고, 보장형 VFX는 안전장치 겸 칼끝 확인선으로 낮췄다. 초반 루즈함은 새 시스템을 추가하기보다 보스 타이밍, 스폰 압력, 역할 마커, 맵 대비를 먼저 조정했다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>직접 플레이에서 135초 첫 보스가 너무 빠르게 느껴질 수 있다. 또 대검 fallback을 낮춘 만큼, 프로필 VFX가 실제 화면에서 충분히 선명한지 다시 봐야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Codex가 전투 체감 통합 패스를 적용했다. 다음 판단 기준은 대검이 한 번의 큰 베기로 읽히는지, 쌍검이 더 빠르고 가볍게 느껴지는지, 첫 문지기 135초가 목표감을 주는지, 어두워진 지형이 가시성을 살리는지다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>1. jaewoo가 일반 플레이로 쌍검/대검을 각각 확인한다.</p>
+<p>2. <code>GS Rev</code>로 대검 VFX가 두 번 터지는 느낌이 사라졌는지 본다.</p>
+<p>3. 첫 문지기 135초가 빠르면 145초로 되돌리고, 괜찮으면 초반 보상/적 밀도 조정을 이어간다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 대검 VFX가 사라진 문제를 고쳤더니 이번에는 두 겹으로 나오는 느낌이 생겼다.</li>
+<li>방향: VFX를 더 넣는 대신 메인/보조 위계를 정하고, 초반 흐름을 출시 준비형 게임 템포에 가깝게 만든다.</li>
+<li>행동: 대검 fallback을 보조 잔광으로 낮추고, 무기 데이터/보스 타이밍/스폰/맵 대비/역할 마커를 조정했다.</li>
+<li>결과: 기술 검증은 통과했고, 이제 직접 플레이에서 전투 체감만 판단하면 된다.</li>
+</ul>
+  </main>
+</body>
+</html>
