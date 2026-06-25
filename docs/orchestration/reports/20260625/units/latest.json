@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260625\\index.md",
-  "generatedAt": "2026-06-25T03:37:05.801Z",
-  "unitCount": 5,
+  "generatedAt": "2026-06-25T05:38:24.776Z",
+  "unitCount": 6,
   "latest": {
-    "title": "2026-06-25-05 - 출시감 2차 통합 패스",
-    "number": "05",
-    "markdownPath": "docs\\orchestration\\reports\\20260625\\units\\2026-06-25-05-출시감-2차-통합-패스.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260625\\units\\2026-06-25-05-출시감-2차-통합-패스.html"
+    "title": "2026-06-25-06 - 프로토타입 완주 구조 패스",
+    "number": "06",
+    "markdownPath": "docs\\orchestration\\reports\\20260625\\units\\2026-06-25-06-프로토타입-완주-구조-패스.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260625\\units\\2026-06-25-06-프로토타입-완주-구조-패스.html"
   }
 }

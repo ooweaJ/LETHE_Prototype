@@ -68,6 +68,14 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Prototype completion loop pass:
+  - Death, 600-second survival, and full Gatekeeper clear now route into a shared result overlay.
+  - Fourth Gatekeeper kill now completes the prototype run.
+  - Result summary records survival time, kills, Gatekeeper progress, weapon, level, choices, forgotten memories, and echoes.
+  - Added boss-clear VFX, minimal procedural SFX, Gatekeeper HUD progress, and `F12` debug panel toggle.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`; Unity console error count: `0`.
 - Release-feel second integration pass:
   - Added connected Lethe river/bank terrain bands and sunken ruin slabs over the enlarged arena.
   - Added enemy/boss HP bars and fixed blood-mark color restore to preserve enemy base colors.

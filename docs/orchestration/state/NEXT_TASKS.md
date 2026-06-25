@@ -10,37 +10,37 @@ Current source of truth:
 - Test gate: `docs/TEST.md`
 - Detailed design: `docs/design/README.md` and `docs/design/LETHE_DESIGN_00..07`
 
-## 1. Direct release-feel review
+## 1. Full prototype playthrough review
 
 - Priority: highest
-- Include: normal play and `DB Rev` / `GS Rev` after the second integration pass.
-- Check: greatsword slash timing, dual-blade speed, larger memory/echo VFX, level-up burst, ultimate-ready burst, enemy HP bars, and whether the first Gatekeeper at `135s` feels exciting instead of rushed.
-- Done: jaewoo can name the weakest axis among weapon feel, VFX clutter, early pacing, enemy readability, growth feedback, and map identity.
+- Include: normal play with debug panel hidden, both starting weapons, death case, 600-second survival if reachable, and fourth Gatekeeper clear if reachable.
+- Check: whether the run now feels like a complete prototype with a clear ending, readable boss progress, acceptable SFX, and useful result summary.
+- Done: jaewoo can say GO/ITERATE for prototype completion loop.
 
-## 2. Map identity review
-
-- Priority: high
-- Include: judge the new connected Lethe river/bank bands and sunken ruin slabs while moving through the enlarged arena.
-- Check: whether the map now feels like one terrain space instead of separated decorations, and whether enemy/VFX contrast remains readable.
-- Done: jaewoo can decide whether the next map pass should add hand-authored chunks, more terrain density, or a new larger arena layout.
-
-## 3. Enemy / boss readability review
+## 2. Weapon final feel review
 
 - Priority: high
-- Include: live combat with Drifting Eye, Split One, Void Priest, and Gatekeeper.
-- Check: sprite size, role marker, new HP bar, boss silhouette, and whether health bars help without making the screen too UI-heavy.
-- Done: jaewoo can identify which enemy/boss sprite needs repainting or scale/color changes.
+- Include: play dual blades and greatsword in the full run, not only debug presets.
+- Check: whether greatsword blocks the view, whether its slash appears fast enough, and whether dual blades have enough quick-hit identity.
+- Done: weapon timing/visibility is either locked for prototype or specific values are named for tuning.
 
-## 4. Single memory/echo identity review
+## 3. Memory/echo comment pass
 
 - Priority: high
-- Include: use `Mem One` / `Echo One` for all 8 ids after broad feel review.
-- Check: whether memory and matching echo are visually distinct, useful, and not too similar after the value/VFX buffs.
-- Done: jaewoo can name exact ids that need tuning.
+- Include: jaewoo deferred detailed memory/echo comments; wait for direct feedback before changing values again.
+- Check: which ids are invisible, too similar, too weak, too strong, or too noisy.
+- Done: exact memory/echo ids and desired direction are listed.
+
+## 4. Map identity review
+
+- Priority: high
+- Include: judge the current terrain later, after prototype completion is reviewed.
+- Check: whether map should stay runtime-generated, move to hand-authored chunks, or grow into a larger arena layout.
+- Done: map direction is chosen.
 
 ## 5. Release-prep structure decision
 
 - Priority: medium
-- Include: decide whether `_dev` should keep getting tuned or whether a limited `Assets/Lethe` promotion prep branch should begin.
+- Include: decide whether `_dev` should keep getting tuned or whether a limited `Assets/Lethe` promotion prep branch should begin after full playthrough review.
 - Check: remaining prototype-only runtime generation, missing audio, authored prefabs, scene organization, and asset naming.
 - Done: GO/ITERATE decision for promotion prep is recorded.

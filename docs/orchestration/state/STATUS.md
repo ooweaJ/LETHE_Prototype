@@ -42,6 +42,17 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 prototype completion loop pass:
+  - Added a shared result overlay for death, 600-second survival, and full Gatekeeper clear.
+  - Fourth Gatekeeper kill now ends the prototype as `프로토타입 클리어`.
+  - Result summary now reports survival time, kills, Gatekeepers cleared, weapon, level, level-up choices, forgotten memories, and echoes.
+  - Added Gatekeeper clear burst VFX, minimal procedural SFX, Gatekeeper HUD progress, and an `F12` debug-panel toggle so the default view is closer to a playtest build.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity compile error count: `0`.
+    - Unity Play Mode entry reached `isPlaying=true`.
+    - Unity console error count: `0`.
+
 - Unity v1 release-feel second integration pass:
   - Added connected Lethe river/bank bands and sunken ruin slabs over the large arena so the background reads less like separated tiles and more like one terrain space.
   - Added enemy/boss health bars and preserved each enemy sprite's base color when blood-mark flash clears.

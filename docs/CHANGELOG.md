@@ -2,6 +2,19 @@
 
 ## 2026-06-25
 
+- Added the prototype completion loop pass:
+  - Added a shared run-end result overlay for defeat, 600-second survival, and full Gatekeeper clear.
+  - The fourth Gatekeeper kill now ends the prototype as a clear instead of waiting until the timer expires.
+  - Added result summary stats for survival time, kills, Gatekeepers cleared, weapon, level, choices, forgotten memories, and echoes.
+  - Added boss-clear VFX feedback and minimal procedural SFX for weapon attacks, hits, kills, level-up, boss warning, boss clear, run clear, and defeat.
+  - Hid the debug panel by default behind `F12` so the prototype screen reads more like a playtest build.
+  - Added Gatekeeper progress to the HUD.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console error count: `0`.
+
 - Added the release-feel second integration pass:
   - Added connected Lethe river/bank bands and sunken ruin slabs to make the enlarged map read as one terrain space.
   - Added enemy/boss HP bars and preserved enemy base colors when blood-mark flash clears.

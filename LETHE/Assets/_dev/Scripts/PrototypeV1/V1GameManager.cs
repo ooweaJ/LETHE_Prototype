@@ -213,9 +213,11 @@ namespace Lethe.PrototypeV1
         SpriteRenderer playerSprite;
         SpriteRenderer leftBladeSprite;
         SpriteRenderer rightBladeSprite;
+        AudioSource sfxSource;
         Sprite dualLeftWeaponSprite;
         Sprite dualRightWeaponSprite;
         Sprite greatswordWeaponSprite;
+        readonly Dictionary<string, AudioClip> sfxClips = new();
         GUIStyle smallStyle;
         GUIStyle titleStyle;
         GUIStyle buttonStyle;
@@ -246,6 +248,9 @@ namespace Lethe.PrototypeV1
         int xp;
         int nextXp = 5;
         int kills;
+        int gatekeeperKills;
+        int memoriesForgotten;
+        int choicesTaken;
         int bossSpawnIndex;
         int warnedBossIndex = -1;
         int debugEchoIndex;
@@ -262,6 +267,8 @@ namespace Lethe.PrototypeV1
         bool deathOverlay;
         bool fastDebugRun;
         bool echoOnlyDebugMode;
+        bool runWon;
+        bool showDebugPanel;
         bool bloodStormWasReady;
         string overlayTitle = "";
         string overlayBody = "";
@@ -295,6 +302,7 @@ namespace Lethe.PrototypeV1
             WeaponStat.AttackSpeed = 0f;
             WeaponStat.DamageMul = 0f;
             LoadFont();
+            CreateAudio();
             CreateArena();
             CreatePlayer();
             Log("런 준비: 시작 무기를 선택하세요");
@@ -333,7 +341,7 @@ namespace Lethe.PrototypeV1
             if (KeyDown(KeyCode.F9)) ToggleDebugWeapon();
             if (KeyDown(KeyCode.F10)) DebugSetEchoOnlyLoadout(AllEchoIds, "Debug echo-only all 8 set");
             if (KeyDown(KeyCode.F11)) DebugSetSelectedEchoOnly();
-            if (KeyDown(KeyCode.F12)) DebugCycleSelectedEcho(1);
+            if (KeyDown(KeyCode.F12)) showDebugPanel = !showDebugPanel;
             if (KeyDown(KeyCode.Space) && resultOverlay)
             {
                 ContinueAfterForgetResult();
@@ -407,16 +415,14 @@ namespace Lethe.PrototypeV1
 
             if (playerHp <= 0f)
             {
-                deathOverlay = true;
-                overlayTitle = "사망";
-                overlayBody = $"생존 {Mathf.FloorToInt(elapsed)}초 / 처치 {kills} / Lv.{level}\nR 키로 재시작";
+                EndRun(false, "침몰");
+                return;
             }
 
             if (elapsed >= RunSeconds && !deathOverlay)
             {
-                deathOverlay = true;
-                overlayTitle = "런 종료";
-                overlayBody = $"600초 생존 완료 / 처치 {kills} / Lv.{level}\nR 키로 다시 시작";
+                EndRun(true, "600초 생존");
+                return;
             }
         }
 
@@ -428,6 +434,98 @@ namespace Lethe.PrototypeV1
             return $"scene=v1 weapon={CurrentWeaponSpec().DisplayName} elapsed={elapsed:0.0} hp={playerHp:0.0}/{playerMaxHp:0.0} level={level} xp={xp}/{nextXp} kills={kills} memories=[{memoryText}] echoes=[{echoText}] enemies={liveEnemies} storm={BloodBladeStormReady} result={resultOverlay} refill={refillOverlay} death={deathOverlay}";
         }
 
+        void EndRun(bool victory, string reason)
+        {
+            if (deathOverlay) return;
+            runWon = victory;
+            deathOverlay = true;
+            pausedForChoice = false;
+            resultOverlay = false;
+            refillOverlay = false;
+            GameplayPaused = true;
+            HitstopActive = false;
+            overlayTitle = victory ? "프로토타입 클리어" : "런 종료";
+            overlayBody = BuildRunResultBody(reason);
+            SpawnRunEndCue(victory);
+            PlaySfx(victory ? "clear" : "defeat");
+            Log(victory ? $"클리어: {reason}" : $"종료: {reason}");
+        }
+
+        string BuildRunResultBody(string reason)
+        {
+            var echoSummary = EchoText();
+            if (echoSummary.Length > 42) echoSummary = echoSummary[..42] + "...";
+            return
+                $"{reason}\n" +
+                $"생존 {Mathf.FloorToInt(elapsed)}초 / 처치 {kills} / 관문 {gatekeeperKills}/{BossSchedule().Length}\n" +
+                $"{CurrentWeaponSpec().DisplayName} / Lv.{level} / 선택 {choicesTaken}회 / 망각 {memoriesForgotten}회\n" +
+                $"잔향: {echoSummary}\n" +
+                "R 또는 아래 버튼으로 다시 시작";
+        }
+
+        void SpawnRunEndCue(bool victory)
+        {
+            if (player == null) return;
+            var color = victory ? new Color(0.58f, 1f, 0.78f, 0.74f) : new Color(1f, 0.30f, 0.34f, 0.68f);
+            SpawnTransientSprite("RunEndOuter", MakeRingSprite("RunEndOuter", Color.white, 180), player.position, Quaternion.identity, victory ? 2.35f : 1.55f, color, 1.20f);
+            SpawnTransientSprite("RunEndCore", MakeImpactDiamondSprite("RunEndCore", Color.white), player.position + Vector3.up * 0.18f, Quaternion.Euler(0f, 0f, 45f), victory ? 0.76f : 0.48f, new Color(1f, 1f, 1f, 0.72f), 0.72f);
+            cameraShakeTimer = Mathf.Max(cameraShakeTimer, victory ? 0.38f : 0.22f);
+            cameraShakeAmount = Mathf.Max(cameraShakeAmount, victory ? 0.11f : 0.07f);
+        }
+
+        void SpawnBossClearCue(Vector3 center)
+        {
+            SpawnTransientSprite("GatekeeperClearOuter", MakeRingSprite("GatekeeperClearOuter", Color.white, 180), center, Quaternion.identity, 2.25f, new Color(1f, 0.72f, 0.38f, 0.58f), 0.92f);
+            SpawnTransientSprite("GatekeeperClearInner", MakeRingSprite("GatekeeperClearInner", Color.white, 132), center, Quaternion.Euler(0f, 0f, elapsed * -110f), 1.18f, new Color(0.66f, 1f, 0.92f, 0.48f), 0.78f);
+            SpawnTransientSprite("GatekeeperClearCore", MakeImpactDiamondSprite("GatekeeperClearCore", Color.white), center + Vector3.up * 0.18f, Quaternion.Euler(0f, 0f, 45f), 0.56f, new Color(1f, 0.94f, 0.62f, 0.82f), 0.54f);
+            SpawnFloatingText(center + Vector3.up * 0.95f, $"관문 {Mathf.Min(gatekeeperKills, BossSchedule().Length)}/{BossSchedule().Length}", new Color(1f, 0.88f, 0.48f));
+            cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.26f);
+            cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.09f);
+        }
+
+        void CreateAudio()
+        {
+            sfxSource = gameObject.GetComponent<AudioSource>();
+            if (sfxSource == null) sfxSource = gameObject.AddComponent<AudioSource>();
+            sfxSource.playOnAwake = false;
+            sfxSource.volume = 0.42f;
+            sfxClips["select"] = MakeToneClip("sfx_select", 520f, 780f, 0.10f, 0.16f);
+            sfxClips["slash_dual"] = MakeToneClip("sfx_slash_dual", 620f, 260f, 0.075f, 0.18f);
+            sfxClips["slash_great"] = MakeToneClip("sfx_slash_great", 220f, 92f, 0.16f, 0.28f);
+            sfxClips["hit_player"] = MakeToneClip("sfx_hit_player", 180f, 90f, 0.12f, 0.24f);
+            sfxClips["kill"] = MakeToneClip("sfx_kill", 440f, 220f, 0.09f, 0.14f);
+            sfxClips["levelup"] = MakeToneClip("sfx_levelup", 420f, 980f, 0.20f, 0.24f);
+            sfxClips["warning"] = MakeToneClip("sfx_warning", 180f, 260f, 0.30f, 0.22f);
+            sfxClips["boss_clear"] = MakeToneClip("sfx_boss_clear", 260f, 740f, 0.28f, 0.25f);
+            sfxClips["clear"] = MakeToneClip("sfx_clear", 360f, 1120f, 0.42f, 0.30f);
+            sfxClips["defeat"] = MakeToneClip("sfx_defeat", 220f, 72f, 0.42f, 0.22f);
+        }
+
+        void PlaySfx(string id)
+        {
+            if (sfxSource == null || !sfxClips.TryGetValue(id, out var clip) || clip == null) return;
+            sfxSource.PlayOneShot(clip);
+        }
+
+        static AudioClip MakeToneClip(string name, float startHz, float endHz, float duration, float volume)
+        {
+            const int sampleRate = 22050;
+            var sampleCount = Mathf.Max(1, Mathf.CeilToInt(sampleRate * duration));
+            var samples = new float[sampleCount];
+            var phase = 0f;
+            for (int i = 0; i < sampleCount; i++)
+            {
+                var t = i / (float)(sampleCount - 1);
+                var hz = Mathf.Lerp(startHz, endHz, t);
+                phase += hz * Mathf.PI * 2f / sampleRate;
+                var env = Mathf.Sin(Mathf.Clamp01(t) * Mathf.PI);
+                samples[i] = Mathf.Sin(phase) * env * volume;
+            }
+            var clip = AudioClip.Create(name, sampleCount, 1, sampleRate, false);
+            clip.SetData(samples, 0);
+            return clip;
+        }
+
         public void DebugRunM1Smoke()
         {
             EnsureRunStarted();
@@ -437,6 +535,10 @@ namespace Lethe.PrototypeV1
             deathOverlay = false;
             fastDebugRun = true;
             echoOnlyDebugMode = false;
+            runWon = false;
+            gatekeeperKills = 0;
+            memoriesForgotten = 0;
+            choicesTaken = 0;
             bossSpawnIndex = 0;
             warnedBossIndex = -1;
             bossTimer = 42f;
@@ -1730,6 +1832,7 @@ namespace Lethe.PrototypeV1
         void SpawnGatekeeperWarning()
         {
             if (player == null) return;
+            PlaySfx("warning");
             var warningPos = player.position + Vector3.up * 5.2f;
             warningPos.x = Mathf.Clamp(warningPos.x, -ArenaHalfWidth + 1.2f, ArenaHalfWidth - 1.2f);
             warningPos.y = Mathf.Clamp(warningPos.y, -ArenaHalfHeight + 1.2f, ArenaHalfHeight - 1.2f);
@@ -1944,6 +2047,7 @@ namespace Lethe.PrototypeV1
         void OnEnemyKilled(V1Enemy enemy)
         {
             kills++;
+            if (enemy.Kind != V1EnemyKind.Gatekeeper) PlaySfx("kill");
             var xpAmount = KillXpAmount(enemy);
             SpawnXpOrb(enemy.transform.position, xpAmount);
             SpawnFloatingText(enemy.transform.position, $"+{xpAmount}", elapsed < 120f ? new Color(0.48f, 1f, 1f) : Color.white);
@@ -1954,7 +2058,15 @@ namespace Lethe.PrototypeV1
             if (enemy.Kind == V1EnemyKind.Gatekeeper)
             {
                 Log("문지기 처치: 망각 발생");
+                gatekeeperKills++;
+                SpawnBossClearCue(enemy.transform.position);
+                PlaySfx("boss_clear");
                 bossSpawnIndex = Mathf.Min(bossSpawnIndex + 1, BossSchedule().Length);
+                if (!fastDebugRun && bossSpawnIndex >= BossSchedule().Length)
+                {
+                    EndRun(true, "모든 관문 돌파");
+                    return;
+                }
                 bossTimer = NextBossDelay();
                 ForgetHighestMemory();
             }
@@ -2052,6 +2164,7 @@ namespace Lethe.PrototypeV1
         void SpawnLevelUpCue()
         {
             if (player == null) return;
+            PlaySfx("levelup");
             SpawnTransientSprite("LevelUpOuterRing", MakeRingSprite("LevelUpOuterRing", Color.white, 168), player.position, Quaternion.identity, 1.05f, new Color(0.28f, 0.94f, 1f, 0.58f), 0.70f);
             SpawnTransientSprite("LevelUpInnerRing", MakeRingSprite("LevelUpInnerRing", Color.white, 128), player.position, Quaternion.Euler(0f, 0f, elapsed * -90f), 0.58f, new Color(0.94f, 1f, 0.70f, 0.52f), 0.54f);
             SpawnTransientSprite("LevelUpCoreFlash", MakeImpactDiamondSprite("LevelUpCoreFlash", Color.white), player.position + Vector3.up * 0.16f, Quaternion.Euler(0f, 0f, 45f), 0.40f, new Color(1f, 0.96f, 0.72f, 0.86f), 0.42f);
@@ -2103,6 +2216,7 @@ namespace Lethe.PrototypeV1
             if (activeMemories.Count == 0) return;
             var forgotten = activeMemories.OrderByDescending(m => m.Level).ThenByDescending(m => m.RecentOrder).First();
             activeMemories.Remove(forgotten);
+            memoriesForgotten++;
             var before = EchoLevel(forgotten.Id);
             var raw = before + forgotten.Level;
             var after = Mathf.Min(MaxEchoLevel, raw);
@@ -2270,6 +2384,7 @@ namespace Lethe.PrototypeV1
             weaponTimer = 0.18f;
             weaponAnimTimer = 0f;
             var weapon = CurrentWeaponSpec();
+            PlaySfx("select");
             SpawnFloatingText(player.position + Vector3.up * 1.15f, weapon.DisplayName, new Color(0.78f, 0.96f, 1f));
             Log($"런 시작: {weapon.DisplayName}");
         }
@@ -2541,11 +2656,18 @@ namespace Lethe.PrototypeV1
             DrawBar(new Rect(98, 52, 318, 10), Mathf.Clamp01(playerHp / playerMaxHp), new Color(0.18f, 0.95f, 0.62f), new Color(0.08f, 0.12f, 0.13f));
             GUI.Label(new Rect(24, 69, 70, 20), $"XP {xp}/{nextXp}", smallStyle);
             DrawBar(new Rect(98, 74, 318, 10), Mathf.Clamp01(nextXp <= 0 ? 0f : (float)xp / nextXp), new Color(0.32f, 0.88f, 1f), new Color(0.07f, 0.10f, 0.13f));
+            GUI.Label(new Rect(312, 92, 104, 22), $"Gate {gatekeeperKills}/{BossSchedule().Length}", smallStyle);
             GUI.Label(new Rect(24, 92, 180, 22), $"처치 {kills}", smallStyle);
             GUI.Label(new Rect(210, 92, 206, 22), $"망각 후보 {ForgetCandidateText()}", smallStyle);
             DrawMemoryStrip(new Rect(24, 119, 392, 30));
             GUI.Label(new Rect(24, 151, 392, 20), BloodBladeStormReady ? $"{UltimateGoalText()} / {UltimatePatternText(weapon)}" : UltimateGoalText(), smallStyle);
             GUI.Label(new Rect(24, 170, 392, 20), M2LoopText(), smallStyle);
+
+            if (!showDebugPanel)
+            {
+                GUI.Label(new Rect(Screen.width - 142, 18, 124, 20), "F12 Debug", smallStyle);
+                return;
+            }
 
             GUI.Box(new Rect(Screen.width - 326, 12, 314, 406), "", panelStyle);
             GUI.Label(new Rect(Screen.width - 314, 22, 292, 20), "Debug  F1/F2 기억  F4/F5 잔향  F8 M2", smallStyle);
@@ -2619,6 +2741,7 @@ namespace Lethe.PrototypeV1
                 var card = new Rect(origin.x + 42f + i * (cardWidth + cardGap), origin.y + 106f, cardWidth, cardHeight);
                 if (GUI.Button(card, "", buttonStyle))
                 {
+                    choicesTaken++;
                     choice.Apply();
                     currentLevelUpChoices.Clear();
                     pausedForChoice = false;
@@ -2642,6 +2765,10 @@ namespace Lethe.PrototypeV1
             if (refillOverlay && GUI.Button(new Rect(Screen.width * 0.5f - 110, Screen.height * 0.5f + 76, 220, 38), "공명 재획득", buttonStyle))
             {
                 ReacquireLastForgotten();
+            }
+            if (deathOverlay && GUI.Button(new Rect(Screen.width * 0.5f - 110, Screen.height * 0.5f + 76, 220, 38), runWon ? "다시 시작" : "재도전", buttonStyle))
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
             }
         }
 
@@ -2808,6 +2935,7 @@ namespace Lethe.PrototypeV1
         void SpawnWeaponHitVfx(WeaponRuntimeSpec weapon, List<WeaponHit> hits, Vector2 forward)
         {
             if (hits.Count == 0) return;
+            PlaySfx(weapon.Id == V1WeaponId.Greatsword ? "slash_great" : "slash_dual");
             var f = forward.sqrMagnitude > 0.001f ? forward.normalized : lastAim.normalized;
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
             var hitCenter = (Vector3)hits.Aggregate(Vector2.zero, (sum, hit) => sum + (Vector2)hit.Enemy.transform.position) / hits.Count;
@@ -3528,6 +3656,7 @@ namespace Lethe.PrototypeV1
                 SpawnTransientSprite("AshenGuardHit", MakeRingSprite("AshenGuardHit", Color.white, 96), player.position, Quaternion.identity, 0.42f, new Color(0.78f, 0.84f, 0.90f, 0.32f), 0.16f);
             }
             playerHp -= finalDamage;
+            PlaySfx("hit_player");
             SpawnFloatingText(player.position + Vector3.up * 0.45f, $"-{Mathf.CeilToInt(finalDamage)}", new Color(1f, 0.45f, 0.55f));
             Log($"{source}: 피해 {finalDamage:0.0}");
         }
@@ -3575,6 +3704,9 @@ namespace Lethe.PrototypeV1
                     KeyCode.F7 => keyboard.f7Key.wasPressedThisFrame,
                     KeyCode.F8 => keyboard.f8Key.wasPressedThisFrame,
                     KeyCode.F9 => keyboard.f9Key.wasPressedThisFrame,
+                    KeyCode.F10 => keyboard.f10Key.wasPressedThisFrame,
+                    KeyCode.F11 => keyboard.f11Key.wasPressedThisFrame,
+                    KeyCode.F12 => keyboard.f12Key.wasPressedThisFrame,
                     _ => false
                 };
             }

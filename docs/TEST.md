@@ -23,6 +23,26 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 
 ## Current Epic Checks
 
+### Prototype Completion Loop Pass, 2026-06-25
+
+- Run completion:
+  - Defeat, 600-second survival, and full Gatekeeper clear now use one result overlay.
+  - The fourth Gatekeeper kill ends the prototype as a clear.
+  - Result summary includes survival time, kills, Gatekeeper progress, weapon, level, choice count, forgotten memory count, and echo summary.
+- Boss/progression feedback:
+  - Gatekeeper kills now emit a clear burst and camera shake.
+  - HUD shows Gatekeeper progress.
+- Playtest presentation:
+  - Debug panel is hidden by default and toggled with `F12`.
+  - Minimal procedural SFX exist for select, weapon slashes, player hit, enemy kill, level-up, warning, boss clear, clear, and defeat.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console error count: `0`.
+- Remaining risk:
+  - Human playtest should confirm the clear screen, SFX volume, and hidden debug panel feel right in an actual run.
+
 ### Release-Feel Second Integration Pass, 2026-06-25
 
 - Map/background:
