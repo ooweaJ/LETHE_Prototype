@@ -1,5 +1,17 @@
 # LETHE CHANGELOG
 
+## 2026-06-25
+
+- Fixed missing/unclear greatsword slash VFX:
+  - Added a guaranteed greatsword cleave fallback that spawns on every successful greatsword hit.
+  - The fallback emits two large cleave arcs and a cut line aligned to the current greatsword swing tip, independent of ScriptableObject VFX entry filtering.
+  - This prevents the greatsword from visually becoming only a phantom weapon swing when the profile slash is skipped or hard to read.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after Unity refresh.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console showed only MCP server info logs and no gameplay errors/warnings.
+
 ## 2026-06-24
 
 - Addressed the next visible prototype gaps after the VFX/range scale-up:

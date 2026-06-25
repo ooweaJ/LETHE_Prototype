@@ -1,6 +1,6 @@
 # Status
 
-Last updated: 2026-06-24
+Last updated: 2026-06-25
 
 ## Current Snapshot
 
@@ -41,6 +41,16 @@ The report/devlog/review migration is now applied physically: old `docs/reports/
 The current development-docs plugin baseline from `docs/orchestration/MIGRATION_PROMPT.md` has been applied. `AGENTS.md` now uses a `Development Docs Plugin` section, `docs/orchestration/templates/HTML_INTERFACE_TEMPLATE.md` exists, legacy review pointer READMEs are readable, `reports/index.html` is generated as a newest-first date archive, daily report pages are generated as unit-card pages, and Discord delivery is documented as Project Orchestrator first with local direct-send scripts as trusted fallback only.
 
 ## Latest Verified Result
+
+- Unity v1 greatsword VFX missing-read fix:
+  - Responded to jaewoo feedback that the greatsword VFX appeared to be gone.
+  - Added a guaranteed greatsword cleave fallback on every successful greatsword hit.
+  - The fallback spawns two large cleave arcs and a cut line aligned to the current greatsword swing tip, so the attack does not depend solely on VFX profile entry filtering.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after Unity refresh.
+    - Unity compile error count: `0`.
+    - Unity Play Mode entry reached `isPlaying=true`.
+    - Unity console showed only MCP server info logs and no gameplay errors/warnings.
 
 - Unity v1 prototype gap pass:
   - Listed the current weak points after the VFX/range scale-up:

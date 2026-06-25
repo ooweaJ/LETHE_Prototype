@@ -2704,6 +2704,10 @@ namespace Lethe.PrototypeV1
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
             var hitCenter = (Vector3)hits.Aggregate(Vector2.zero, (sum, hit) => sum + (Vector2)hit.Enemy.transform.position) / hits.Count;
             SpawnPhantomWeaponAttack(weapon, hits, f, baseAngle, hitCenter);
+            if (weapon.Id == V1WeaponId.Greatsword)
+            {
+                SpawnGreatswordGuaranteedSlash(hits[0].Enemy.transform.position, hitCenter, f);
+            }
 
             var entries = weapon.VfxProfile != null ? weapon.VfxProfile.weaponHitSlashes : Array.Empty<SlashVfxEntry>();
             if (entries == null || entries.Length == 0) return;
@@ -2771,6 +2775,19 @@ namespace Lethe.PrototypeV1
             var rightScale = ScaleSpriteToWorldHeight(dualRightWeaponSprite, DualBladePhantomHeight);
             SpawnSweepingTransientSprite("DualBladePhantomLeft", dualLeftWeaponSprite, leftPos - (Vector3)(side * 0.12f * lead), leftPos + (Vector3)(side * 0.12f * lead) + (Vector3)(forward * 0.06f), baseAngle + 30f * lead, baseAngle + 76f * lead, leftScale, leftScale * 1.04f, new Color(0.80f, 0.98f, 1f, 0.92f), DualBladePhantomLifetime, 0.13f);
             SpawnSweepingTransientSprite("DualBladePhantomRight", dualRightWeaponSprite, rightPos + (Vector3)(side * 0.12f * lead), rightPos - (Vector3)(side * 0.12f * lead) + (Vector3)(forward * 0.08f), baseAngle - 32f * lead, baseAngle - 78f * lead, rightScale, rightScale * 1.04f, new Color(0.95f, 1f, 1f, 0.88f), DualBladePhantomLifetime + 0.02f, 0.14f);
+        }
+
+        void SpawnGreatswordGuaranteedSlash(Vector3 primaryTarget, Vector3 hitCenter, Vector2 forward)
+        {
+            var f = forward.sqrMagnitude > 0.001f ? forward.normalized : lastAim.normalized;
+            var swing = GreatswordSwingForTarget(primaryTarget, hitCenter, f, 0);
+            var slashForward = swing.EndDirection;
+            var tip = Vector3.Lerp(swing.TipStart, swing.TipEnd, 0.70f);
+            var baseAngle = GreatswordSlashVfxBaseAngle(slashForward);
+            var arc = LoadSprite(GreatswordCleaveArcPath) ?? MakeWideCrescentSprite("GreatswordGuaranteedCleave", Color.white);
+            SpawnTransientSprite("GreatswordGuaranteedCleave_A", arc, tip, Quaternion.Euler(0f, 0f, baseAngle), 0.42f, new Color(0.82f, 0.96f, 1f, 0.62f), GreatswordSlashMinLifetime);
+            SpawnTransientSprite("GreatswordGuaranteedCleave_B", arc, hitCenter + (Vector3)(f * 0.18f), Quaternion.Euler(0f, 0f, baseAngle + 3f), 0.34f, new Color(0.96f, 1f, 1f, 0.88f), GreatswordSlashMinLifetime * 0.84f);
+            SpawnEchoWoundSlash("GreatswordGuaranteedCutLine", tip - (Vector3)(f * 0.12f), slashForward, new Color(0.92f, 1f, 1f, 0.68f), 1.38f, 0.30f);
         }
 
         GreatswordSwingPose GreatswordSwingForTarget(Vector3 targetPosition, Vector3 hitCenter, Vector2 forward, int hitIndex)

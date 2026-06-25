@@ -23,6 +23,21 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 
 ## Current Epic Checks
 
+### Greatsword VFX Guarantee, 2026-06-25
+
+- Issue:
+  - Jaewoo reported that the greatsword VFX appeared to be missing.
+- Fix:
+  - Greatsword hits now spawn a guaranteed cleave fallback in addition to profile-driven slash entries.
+  - The fallback emits two large cleave arcs and one cut line at the calculated swing tip.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after Unity refresh.
+  - Unity compile error count: `0`.
+  - Unity Play Mode entry reached `isPlaying=true`.
+  - Unity console showed only MCP server info logs and no gameplay errors/warnings.
+- Remaining risk:
+  - Human direct play should confirm whether the guaranteed cleave is now visible enough without becoming too noisy on top of the existing profile VFX.
+
 ### Prototype Gap Pass, 2026-06-24
 
 - Weak points listed for direct review:
