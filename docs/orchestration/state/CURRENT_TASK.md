@@ -68,6 +68,19 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- MCP automated play/QA pass, 2026-06-27:
+  - AnkleBreaker Unity MCP targeted `LETHE` on port `7890`.
+  - Unity compile error count: `0`; scene missing references: `0`.
+  - Smoke menu results:
+    - `Start Dual Blades`: initialized `weapon=절단쌍검` with no console errors.
+    - `Start Greatsword`: initialized `weapon=장송대검`; 2.2-second result showed `enemies=10`.
+    - `M2 Loop`: injected Hungry/Blood echoes at +5 and `storm=True`.
+  - Direct Play Mode reflection result: dual-blades run advanced to `elapsed=6.2`, `level=2`, `kills=2`, `enemies=26`, `timeScale=1`.
+  - VFX probe: all 8 memory ids and all 8 echo ids spawned preview objects.
+  - Utility probe: 6 utility memory previews, 6 utility echo previews, and 3 non-blood ultimate previews spawned.
+  - Ultimate readiness probe: all 8 echoes at +5, Blood Blade Storm readiness `storm=True`, console errors `0`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Limit: this confirms technical playability and VFX wiring, not human readability or hand-feel.
 - Beta-play preparation pass:
   - Added `V1ContentCatalog` for prototype v1 runtime asset references.
   - Created and wired `Assets/_dev/Data/V1_ContentCatalog.asset`.

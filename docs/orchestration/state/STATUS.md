@@ -1,6 +1,6 @@
 # Status
 
-Last updated: 2026-06-25
+Last updated: 2026-06-27
 
 ## Current Snapshot
 
@@ -41,6 +41,22 @@ The report/devlog/review migration is now applied physically: old `docs/reports/
 The current development-docs plugin baseline from `docs/orchestration/MIGRATION_PROMPT.md` has been applied. `AGENTS.md` now uses a `Development Docs Plugin` section, `docs/orchestration/templates/HTML_INTERFACE_TEMPLATE.md` exists, legacy review pointer READMEs are readable, `reports/index.html` is generated as a newest-first date archive, daily report pages are generated as unit-card pages, and Discord delivery is documented as Project Orchestrator first with local direct-send scripts as trusted fallback only.
 
 ## Latest Verified Result
+
+- Unity v1 MCP automated play/QA pass:
+  - Confirmed AnkleBreaker Unity MCP is targeting `LETHE` on port `7890`.
+  - `Dev_Prototype_v1` is open, clean, and contains the expected root objects: `V1_GameManager` and `Main Camera`.
+  - Unity compile error count: `0`.
+  - Unity scene missing references: `0`.
+  - `LETHE/V1 Smoke/Start Dual Blades` initialized the dual-blades run without console errors.
+  - `LETHE/V1 Smoke/Start Greatsword` initialized the greatsword run; after 2.2 seconds it reported `enemies=10`.
+  - `LETHE/V1 Smoke/M2 Loop` injected the compressed Hungry/Blood loop with `HungryBlades:5`, `BloodReflection:5`, and `storm=True`.
+  - Direct Play Mode reflection test confirmed a real dual-blades run advances to `elapsed=6.2`, `level=2`, `kills=2`, `enemies=26`, `timeScale=1`.
+  - Individual VFX spawn probe confirmed all 8 memory ids and all 8 echo ids spawn one preview object each.
+  - Utility VFX probe confirmed 6 utility memory previews, 6 utility echo previews, and the 3 non-blood ultimate previews.
+  - Ultimate readiness probe confirmed 8 echoes at +5 and Blood Blade Storm readiness (`storm=True`) with no console errors.
+  - Final Unity console error count after stopping Play Mode: `0`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - QA note: MCP can verify wiring, state, object creation, and runtime errors; it still cannot replace jaewoo's hand-feel/VFX readability judgment.
 
 - Unity v1 beta-play preparation pass:
   - Added `V1ContentCatalog` and created `Assets/_dev/Data/V1_ContentCatalog.asset` with 46 sprite references, Korean font reference, and the two weapon definitions.

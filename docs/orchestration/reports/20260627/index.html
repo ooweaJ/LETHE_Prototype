@@ -155,6 +155,13 @@
           <p>Dev_Prototype_v1은 계속 _dev의 메인 플레이 씬이다. 이번 작업은 실행 파일 빌드가 아니라, 에디터에서 베타처럼 플레이하기 위한 구조 정리다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-27-02</span>
+          <h2><a href="#unit-2026-06-27-02" data-unit-link="unit-2026-06-27-02">MCP 자동 플레이 QA</a></h2>
+          <p>Dev_Prototype_v1은 Unity Editor에서 열리고, AnkleBreaker Unity MCP는 LETHE 인스턴스 7890 포트에 연결되어 있다. 이번 확인은 빌드/export가 아니라 에디터 플레이 가능성, 런타임 주입, VFX 생성, 오류 여부를 보는 자동 QA다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -203,6 +210,51 @@
 <li>방향: 빌드가 아니라 에디터 플레이 안정화와 승격 준비부터 한다.</li>
 <li>행동: catalog, <code>Assets/Lethe</code> 구조, HUD 목표 정보를 추가했다.</li>
 <li>결과: missing reference 0, compile error 0, Play Mode start state 정상 확인.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-27-02" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-27-02 - MCP 자동 플레이 QA</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 Unity Editor에서 열리고, AnkleBreaker Unity MCP는 <code>LETHE</code> 인스턴스 <code>7890</code> 포트에 연결되어 있다. 이번 확인은 빌드/export가 아니라 에디터 플레이 가능성, 런타임 주입, VFX 생성, 오류 여부를 보는 자동 QA다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<p>코드나 에셋 구현은 바꾸지 않았다. 대신 MCP로 다음 항목을 직접 실행했다.</p>
+<ul>
+<li>쌍검 시작 스모크.</li>
+<li>대검 시작 스모크.</li>
+<li>M2 압축 루프 스모크.</li>
+<li>직접 Play Mode 진입 후 쌍검 런 시작.</li>
+<li>8개 기억/8개 잔향 개별 VFX 프리뷰 생성.</li>
+<li>6개 유틸 기억/6개 유틸 잔향/3개 비혈폭풍 궁극 프리뷰 생성.</li>
+<li>8개 잔향 +5 및 피의 칼폭풍 준비 상태 확인.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>Unity compile error count: <code>0</code>.</li>
+<li>Unity scene missing references: <code>0</code>.</li>
+<li>최종 Unity console error count: <code>0</code>.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: warning <code>0</code>, error <code>0</code>.</li>
+<li>쌍검 직접 런: <code>elapsed=6.2</code>, <code>level=2</code>, <code>kills=2</code>, <code>enemies=26</code>, <code>timeScale=1</code>.</li>
+<li>대검 스모크: <code>elapsed=2.2</code>, <code>enemies=10</code>.</li>
+<li>M2 스모크: <code>HungryBlades:5</code>, <code>BloodReflection:5</code>, <code>storm=True</code>.</li>
+<li>8개 기억/잔향 개별 프리뷰: 모든 id가 <code>M1/E1</code>로 생성 확인.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>현재 상태는 “MCP 기준 기술적으로 플레이 진입 가능”으로 본다. 다만 이것은 손맛, VFX 과밀도, HUD 피로도, 잔향 구분감까지 통과했다는 뜻은 아니다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>MCP는 클릭/키 입력을 사람처럼 오래 운용하는 플레이어가 아니다. 자동 QA는 참조/컴파일/상태/VFX 오브젝트 생성을 잡아낼 수 있지만, 재미와 가독성은 jaewoo 직접 플레이가 최종이다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Codex 자동 QA에서 <code>Dev_Prototype_v1</code>은 쌍검/대검 시작, M2 압축 루프, 8기억/8잔향 VFX 프리뷰, 궁극 준비 상태까지 오류 없이 확인됐다. 다음 판단은 VFX 수정 요청 전에 jaewoo가 직접 보고 “어떤 기억/잔향이 안 보이는지, 너무 비슷한지, 너무 시끄러운지”를 id 단위로 적는 것이다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>1. jaewoo 직접 플레이 피드백을 받는다.</p>
+<p>2. 피드백이 VFX라면 기억/잔향 id 단위로 scale, alpha, lifetime, spawn position을 조정한다.</p>
+<p>3. 피드백이 게임 완성도라면 reward cadence, attack readability, forgetting UX, spawn pressure 중 하나만 좁게 고친다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 사람이 플레이하기 전 자동으로 확인할 수 있는 범위와 없는 범위가 섞여 있었다.</li>
+<li>방향: MCP 자동 QA는 기술 안정성과 런타임 연결을 검증하고, 감각 판단은 직접 플레이로 넘긴다.</li>
+<li>행동: Unity 스모크 메뉴, Play Mode reflection, VFX preview probe, compile/missing-reference/console 검사를 실행했다.</li>
+<li>결과: 기술적 막힘은 발견되지 않았고, 남은 핵심은 VFX/손맛 직접 리뷰로 좁혀졌다.</li>
 </ul>
     </article>
       </div>

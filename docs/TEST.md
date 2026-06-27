@@ -23,6 +23,28 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 
 ## Current Epic Checks
 
+### MCP Automated Play/QA, 2026-06-27
+
+- Connection:
+  - AnkleBreaker Unity MCP targeted `LETHE` on port `7890`.
+  - Active scene: `Assets/_dev/Scenes/Dev_Prototype_v1.unity`.
+- Stability:
+  - Unity compile error count: `0`.
+  - Unity scene missing references: `0`.
+  - Final Unity console error count after Play Mode stop: `0`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
+- Smoke routes:
+  - `LETHE/V1 Smoke/Start Dual Blades`: initialized `weapon=절단쌍검`.
+  - `LETHE/V1 Smoke/Start Greatsword`: initialized `weapon=장송대검`; result snapshot showed `elapsed=2.2`, `enemies=10`.
+  - `LETHE/V1 Smoke/M2 Loop`: injected `HungryBlades:5`, `BloodReflection:5`, and `storm=True`.
+- Direct runtime probe:
+  - Dual-blades run advanced to `elapsed=6.2`, `level=2`, `kills=2`, `enemies=26`, `timeScale=1`.
+  - All 8 memory ids and all 8 echo ids spawned preview objects by reflection.
+  - Utility preview path spawned 6 utility memory previews, 6 utility echo previews, and 3 non-blood ultimate previews.
+  - All 8 echoes at +5 produced Blood Blade Storm readiness (`storm=True`).
+- Remaining risk:
+  - This is an automated technical QA pass. It cannot judge whether combat movement, VFX scale, echo identity, and HUD density feel good to jaewoo in direct play.
+
 ### Beta-Play Preparation, 2026-06-27
 
 - Runtime asset catalog:
