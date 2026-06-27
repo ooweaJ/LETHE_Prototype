@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-27 개발 리포트</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f3;
+      --paper: #ffffff;
+      --ink: #17201d;
+      --muted: #64706b;
+      --line: #dce2da;
+      --accent: #1f6b4d;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); }
+    body.panel-open { overflow: hidden; }
+    main { width: min(980px, 100%); margin: 0 auto; padding: 30px 22px 44px; }
+    nav { margin-bottom: 18px; font-size: 14px; }
+    a { color: var(--accent); font-weight: 900; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .eyebrow { margin: 0 0 8px; color: var(--accent); font-size: 13px; font-weight: 900; }
+    h1 { margin: 0 0 10px; font-size: clamp(30px, 5vw, 46px); line-height: 1.08; }
+    .intro { margin: 0 0 18px; color: var(--muted); line-height: 1.65; }
+    ul { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+    li { margin: 0; }
+    .unit-card {
+      min-height: 136px;
+      padding: 17px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+    .unit-card:focus-within,
+    .unit-card:hover,
+    .unit-card.is-active {
+      border-color: rgba(31, 107, 77, 0.55);
+      box-shadow: 0 14px 30px rgba(23, 32, 29, 0.08);
+      transform: translateY(-1px);
+    }
+    .unit-panel[hidden] { display: none; }
+    .unit-panel {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: flex;
+      justify-content: flex-end;
+      background: rgba(23, 32, 29, 0.22);
+    }
+    .unit-panel__scrim {
+      position: absolute;
+      inset: 0;
+      cursor: pointer;
+    }
+    .unit-panel__shell {
+      position: relative;
+      width: min(760px, calc(100% - 28px));
+      height: calc(100% - 28px);
+      margin: 14px;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: 0 24px 70px rgba(23, 32, 29, 0.22);
+    }
+    .unit-panel__bar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+    }
+    .unit-panel__title {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .unit-panel__close {
+      min-width: 38px;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .unit-panel__close:hover {
+      border-color: rgba(31, 107, 77, 0.55);
+      color: var(--accent);
+    }
+    .unit-detail {
+      padding: 22px;
+    }
+    .unit-detail h1 { font-size: 28px; }
+    .unit-detail h2 {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      font-size: 21px;
+    }
+    .unit-detail ul { display: block; padding-left: 22px; list-style: disc; }
+    .unit-detail li { margin-bottom: 6px; }
+    .unit-detail code {
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: #eef2f7;
+    }
+    .back-inline { margin-bottom: 16px; }
+    .number { display: block; margin-bottom: 8px; color: var(--muted); font-size: 13px; font-weight: 900; }
+    h2 { margin: 0 0 8px; font-size: 20px; line-height: 1.3; }
+    p { margin: 0; color: var(--muted); line-height: 1.6; }
+    footer { margin-top: 20px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 720px) {
+      main { padding: 24px 16px 36px; }
+      .unit-panel {
+        align-items: flex-end;
+      }
+      .unit-panel__shell {
+        width: 100%;
+        height: min(86vh, calc(100% - 18px));
+        margin: 9px;
+      }
+      .unit-detail { padding: 18px; }
+      .unit-detail h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <nav><a href="/api/projects/lethe/reports/index.html">전체 리포트 목록</a></nav>
+    <p class="eyebrow">20260627 개발 기록</p>
+    <h1>2026-06-27 개발 리포트</h1>
+    <p class="intro">Dev_Prototype_v1은 계속 _dev의 메인 플레이 씬이다. 이번 작업은 실행 파일 빌드가 아니라, 에디터에서 베타처럼 플레이하기 위한 구조 정리다.</p>
+    <ul id="unit-list">
+      <li>
+        <article class="unit-card">
+          <span class="number">2026-06-27-01</span>
+          <h2><a href="#unit-2026-06-27-01" data-unit-link="unit-2026-06-27-01">베타 플레이 준비: 카탈로그, 승격 구조, HUD 정리</a></h2>
+          <p>Dev_Prototype_v1은 계속 _dev의 메인 플레이 씬이다. 이번 작업은 실행 파일 빌드가 아니라, 에디터에서 베타처럼 플레이하기 위한 구조 정리다.</p>
+        </article>
+      </li>
+    </ul>
+    <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
+      <div class="unit-panel__scrim" data-panel-close></div>
+      <div class="unit-panel__shell" role="dialog" aria-modal="true" aria-label="작업 단위 상세">
+        <div class="unit-panel__bar">
+          <p class="unit-panel__title">작업 단위 상세</p>
+          <button class="unit-panel__close" type="button" data-panel-close aria-label="패널 닫기">&times;</button>
+        </div>
+        <article class="unit-detail" id="unit-2026-06-27-01" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-27-01 - 베타 플레이 준비: 카탈로그, 승격 구조, HUD 정리</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 계속 <code>_dev</code>의 메인 플레이 씬이다. 이번 작업은 실행 파일 빌드가 아니라, 에디터에서 베타처럼 플레이하기 위한 구조 정리다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>V1ContentCatalog</code>를 추가했다.</li>
+<li><code>Assets/_dev/Data/V1_ContentCatalog.asset</code>에 46개 sprite reference, Pretendard font, 무기 Definition 2개를 묶었다.</li>
+<li><code>V1_GameManager</code>에 catalog와 <code>Weapon_DualBlades</code>, <code>Weapon_Greatsword</code>를 연결했다.</li>
+<li><code>Assets/Lethe</code> 승격 준비 폴더와 <code>README.md</code>를 만들었다.</li>
+<li><code>Assets/Lethe/Scenes/Lethe_BetaPreview.unity</code> 후보 씬을 만들었다.</li>
+<li>HUD에 현재 잔향 요약과 짧은 목표 문장을 추가했다.</li>
+<li>F12 기억/잔향/VFX 테스트 UI는 일부러 유지했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy v0/debug warning 7개, error 0개.</li>
+<li>Unity compile error count: <code>0</code>.</li>
+<li>Unity scene missing references: <code>0</code>.</li>
+<li>Unity Play Mode 진입 성공.</li>
+<li><code>V1GameManager.DebugSnapshot()</code> 정상 시작 상태 확인.</li>
+<li>Unity console error count after stop: <code>0</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>빌드/배포는 아직 하지 않는다. 대신 runtime asset reference, promotion-prep folder, player-facing HUD를 먼저 정리한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p><code>V1GameManager</code>는 아직 큰 단일 클래스이고, 많은 오브젝트가 런타임 생성 기반이다. <code>Assets/Lethe</code>는 후보 구조일 뿐이며, 전체 승격 완료 상태가 아니다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Codex가 베타 플레이 준비 1차로 카탈로그와 승격 후보 구조를 추가했다. 다음 판단은 HUD/objective line이 플레이 중 방해되지 않는지, 그리고 기억/잔향 VFX 수정 요청을 어떤 id부터 처리할지다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>1. jaewoo가 <code>Dev_Prototype_v1</code>을 직접 플레이한다.</p>
+<p>2. F12 테스트 UI로 기억/잔향 VFX를 확인한다.</p>
+<p>3. 수정 요청이 온 id부터 VFX scale, alpha, lifetime, spawn position을 조정한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 프로토타입은 돌아가지만 베타 플레이용 참조/구조/UI 층이 약했다.</li>
+<li>방향: 빌드가 아니라 에디터 플레이 안정화와 승격 준비부터 한다.</li>
+<li>행동: catalog, <code>Assets/Lethe</code> 구조, HUD 목표 정보를 추가했다.</li>
+<li>결과: missing reference 0, compile error 0, Play Mode start state 정상 확인.</li>
+</ul>
+    </article>
+      </div>
+    </section>
+    <footer>기준: 2026-06-27</footer>
+  </main>
+  <script>
+    (() => {
+      const panel = document.getElementById('unit-detail-root');
+      const panelShell = panel?.querySelector('.unit-panel__shell');
+      const closeButton = panel?.querySelector('.unit-panel__close');
+      const details = Array.from(document.querySelectorAll('.unit-detail'));
+      const links = Array.from(document.querySelectorAll('[data-unit-link]'));
+      const setActiveCard = (id) => {
+        links.forEach((link) => {
+          const isActive = link.getAttribute('data-unit-link') === id;
+          link.closest('.unit-card')?.classList.toggle('is-active', isActive);
+        });
+      };
+      const closePanel = () => {
+        if (!panel) return;
+        panel.hidden = true;
+        document.body.classList.remove('panel-open');
+        details.forEach((detail) => { detail.hidden = true; });
+        setActiveCard('');
+        if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+      };
+      const showUnit = (id) => {
+        const target = document.getElementById(id);
+        if (!target) return;
+        if (!panel) return;
+        panel.hidden = false;
+        document.body.classList.add('panel-open');
+        details.forEach((detail) => { detail.hidden = detail !== target; });
+        setActiveCard(id);
+        if (panelShell) panelShell.scrollTop = 0;
+        if (closeButton) closeButton.focus({ preventScroll: true });
+      };
+      document.addEventListener('click', (event) => {
+        const unitLink = event.target.closest('[data-unit-link]');
+        if (unitLink) {
+          event.preventDefault();
+          const id = unitLink.getAttribute('data-unit-link');
+          history.pushState(null, '', '#' + id);
+          showUnit(id);
+          return;
+        }
+        if (event.target.closest('[data-panel-close]')) {
+          event.preventDefault();
+          closePanel();
+        }
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && panel && !panel.hidden) closePanel();
+      });
+      window.addEventListener('popstate', () => {
+        const id = location.hash.replace(/^#/, '');
+        if (id) showUnit(id);
+        else closePanel();
+      });
+      const initial = location.hash.replace(/^#/, '');
+      if (initial) showUnit(initial);
+    })();
+  </script>
+</body>
+</html>

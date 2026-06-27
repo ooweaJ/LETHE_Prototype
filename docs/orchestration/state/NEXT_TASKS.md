@@ -14,6 +14,7 @@ Current source of truth:
 
 - Priority: highest
 - Include: normal play with debug panel hidden, both starting weapons, death case, 600-second survival if reachable, and fourth Gatekeeper clear if reachable.
+- Also check: the new HUD echo/objective lines are helpful rather than noisy.
 - Check: whether the run now feels like a complete prototype with a clear ending, readable boss progress, acceptable SFX, and useful result summary.
 - Done: jaewoo can say GO/ITERATE for prototype completion loop.
 
@@ -41,6 +42,6 @@ Current source of truth:
 ## 5. Release-prep structure decision
 
 - Priority: medium
-- Include: decide whether `_dev` should keep getting tuned or whether a limited `Assets/Lethe` promotion prep branch should begin after full playthrough review.
+- Include: decide whether `_dev` should keep getting tuned or whether the new `Assets/Lethe` promotion-prep structure should start receiving stable prefabs/data after full playthrough review.
 - Check: remaining prototype-only runtime generation, missing audio, authored prefabs, scene organization, and asset naming.
 - Done: GO/ITERATE decision for promotion prep is recorded.

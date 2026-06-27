@@ -23,6 +23,27 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 
 ## Current Epic Checks
 
+### Beta-Play Preparation, 2026-06-27
+
+- Runtime asset catalog:
+  - `V1ContentCatalog` exists under `Assets/_dev/Scripts/PrototypeV1/`.
+  - `Assets/_dev/Data/V1_ContentCatalog.asset` contains 46 sprite references plus Korean font and weapon definitions.
+  - `Dev_Prototype_v1` `V1_GameManager` references the catalog and both weapon definitions.
+- Promotion prep:
+  - `Assets/Lethe/` exists with `Scenes`, `Prefabs`, `Data`, `Art`, `UI`, `Audio`, and `Runtime`.
+  - `Assets/Lethe/Scenes/Lethe_BetaPreview.unity` exists as a beta-facing candidate scene copy.
+- UI:
+  - HUD shows current echo summary and a short player objective line.
+  - F12 debug / memory / echo review UI remains available by design for upcoming VFX review.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity scene missing references: `0`.
+  - Unity Play Mode entered; `V1GameManager.DebugSnapshot()` returned a valid start state.
+  - Unity console error count after stop: `0`.
+- Not included:
+  - Player build/export and debug UI removal were intentionally deferred.
+
 ### Prototype Completion Loop Pass, 2026-06-25
 
 - Run completion:

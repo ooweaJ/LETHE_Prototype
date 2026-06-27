@@ -42,6 +42,19 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 beta-play preparation pass:
+  - Added `V1ContentCatalog` and created `Assets/_dev/Data/V1_ContentCatalog.asset` with 46 sprite references, Korean font reference, and the two weapon definitions.
+  - Wired `Dev_Prototype_v1` `V1_GameManager` to the catalog plus `Weapon_DualBlades` / `Weapon_Greatsword`, removing the two missing scene object references.
+  - Added `Assets/Lethe/` promotion-prep structure (`Scenes`, `Prefabs`, `Data`, `Art`, `UI`, `Audio`, `Runtime`) and copied a beta-facing candidate scene to `Assets/Lethe/Scenes/Lethe_BetaPreview.unity`.
+  - Updated the player-facing HUD to show current echoes and a short run objective while keeping the F12 debug / memory / echo review panel intact for upcoming VFX review.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity compile error count: `0`.
+    - Unity scene missing references: `0`.
+    - Unity Play Mode entered and `V1GameManager.DebugSnapshot()` returned a valid v1 start state.
+    - Unity console error count after stop: `0`.
+  - Scope note: player build/export is intentionally not part of this pass.
+
 - Unity v1 prototype completion loop pass:
   - Added a shared result overlay for death, 600-second survival, and full Gatekeeper clear.
   - Fourth Gatekeeper kill now ends the prototype as `프로토타입 클리어`.

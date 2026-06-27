@@ -1,0 +1,110 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db5640c842036f94998b6dc6e1d9d4d7, type: 3}
+  m_Name: V1_ContentCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::Lethe.PrototypeV1.V1ContentCatalog
+  dualBladesDefinition: {fileID: 11400000, guid: a57b50950a9e3a947b9a7d291b1e731d, type: 2}
+  greatswordDefinition: {fileID: 11400000, guid: 0dbb86180703b844f921db8d2de44566, type: 2}
+  koreanFont: {fileID: 12800000, guid: 64f2a49a986ee1c499a1cf8f5e46fa99, type: 3}
+  sprites:
+  - id: Assets/_dev/Art/Sprites/Characters/Player/sheet_player_v1_4dir.png
+    sprite: {fileID: 21300000, guid: 5dc8446ea5bffc4448e2e7560da987d8, type: 3}
+  - id: Assets/_dev/Art/Sprites/Enemies/Chaser/sheet_enemy_chaser_4dir.png
+    sprite: {fileID: 21300000, guid: f0eda2248cac6cf4d9d7383fbcf0bef4, type: 3}
+  - id: Assets/_dev/Art/Sprites/Enemies/Eye/sheet_enemy_eye_4dir.png
+    sprite: {fileID: -4364342174498038917, guid: de96933eecdeee6489e5e962aa089f58, type: 3}
+  - id: Assets/_dev/Art/Sprites/Enemies/Splitter/sheet_enemy_splitter_4dir.png
+    sprite: {fileID: 6023291609992831708, guid: bbe4a5e78187bf946a27be907c372437, type: 3}
+  - id: Assets/_dev/Art/Sprites/Enemies/VoidPriest/sheet_enemy_voidpriest_4dir.png
+    sprite: {fileID: -5512441785396208294, guid: 4aab8b3dd122c3840942896996b26529, type: 3}
+  - id: Assets/_dev/Art/Sprites/Enemies/Bosses/spr_boss_gatekeeper_01.png
+    sprite: {fileID: 3081770887698117240, guid: c6c352eb2b2744541be79b0aae5fdfe0, type: 3}
+  - id: Assets/_dev/Art/Sprites/Map/spr_lethe_terrain_backdrop_01.png
+    sprite: {fileID: 2972231142610428079, guid: fc197c415fc02af4d80012ee3418c187, type: 3}
+  - id: Assets/_dev/Art/Sprites/Map/tile_lethe_terrain_01.png
+    sprite: {fileID: 6626478805975482668, guid: 7816dfdc4fe7c3b41ba4966cb0becb75, type: 3}
+  - id: Assets/_dev/Art/Sprites/Map/tile_lethe_terrain_02.png
+    sprite: {fileID: -1875450442732141705, guid: 32e9ab361c527a54c83eff4b47544e1c, type: 3}
+  - id: Assets/_dev/Art/Sprites/Map/tile_lethe_terrain_03.png
+    sprite: {fileID: -8195452621865459069, guid: 76fd89f83c3f9e04195fb97c7c4ea1a7, type: 3}
+  - id: Assets/_dev/Art/Sprites/Map/tile_lethe_terrain_04.png
+    sprite: {fileID: 4670853854859281681, guid: 7863219066319f548be3b341f4182725, type: 3}
+  - id: Assets/_dev/Art/Sprites/Map/tile_lethe_terrain_05.png
+    sprite: {fileID: 8950570526618598509, guid: 97ef03ea0a19f314c9a0bd997e14ff8b, type: 3}
+  - id: Assets/_dev/Art/Sprites/Map/tile_lethe_terrain_06.png
+    sprite: {fileID: 5311096412493395025, guid: 21604b550e7e0f342a6bd2310c32bc51, type: 3}
+  - id: Assets/_dev/Art/Sprites/Map/tile_lethe_terrain_07.png
+    sprite: {fileID: -1742486878808776863, guid: 1e573274f90dccc448d0b90eebad7575, type: 3}
+  - id: Assets/_dev/Art/Sprites/Map/tile_lethe_terrain_08.png
+    sprite: {fileID: 5668801561400434112, guid: fdfd81bd23df4194eb8f404cc1eb9f85, type: 3}
+  - id: Assets/_dev/Art/Sprites/Map/tile_dev_floor_dark_01.png
+    sprite: {fileID: 21300000, guid: 71bbd8c64392bde4a8ea63e92d2c1a2c, type: 3}
+  - id: Assets/_dev/Art/Sprites/Weapons/spr_weapon_dual_blade_left_01.png
+    sprite: {fileID: 21300000, guid: 691d8a000ca16fc41b69e21c808eb5e9, type: 3}
+  - id: Assets/_dev/Art/Sprites/Weapons/spr_weapon_dual_blade_right_01.png
+    sprite: {fileID: 21300000, guid: 33990fa8e271b0e49bddab9da881e4be, type: 3}
+  - id: Assets/_dev/Art/Sprites/Weapons/spr_weapon_greatsword_01.png
+    sprite: {fileID: 8640378773916789034, guid: 1a6868e251365924c97fc4ca29882f63, type: 3}
+  - id: Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_01.png
+    sprite: {fileID: 21300000, guid: 74664c1033fe5924d9c86c0942b239e0, type: 3}
+  - id: Assets/_dev/Art/Sprites/Weapons/spr_dual_blade_swing_arc_02.png
+    sprite: {fileID: 21300000, guid: 8f305dd57498d7c4790b4b35879c7f94, type: 3}
+  - id: Assets/_dev/Art/Sprites/Weapons/spr_greatsword_cleave_arc_01.png
+    sprite: {fileID: 21300000, guid: ba65cfa623ceb0944a60706db511d805, type: 3}
+  - id: Assets/_dev/Art/Sprites/Feedback/spr_hit_spark_cyan_01.png
+    sprite: {fileID: 21300000, guid: 432460219797b594db1b1162670d5441, type: 3}
+  - id: Assets/_dev/Art/Sprites/Feedback/spr_hit_spark_red_01.png
+    sprite: {fileID: 21300000, guid: 1f94e65915ac5e8428966adfb2cf54d1, type: 3}
+  - id: Assets/_dev/Art/Sprites/Memories/Execution/spr_execution_flash_01.png
+    sprite: {fileID: 21300000, guid: 150321f10a412b94585e5a53278e5a82, type: 3}
+  - id: Assets/_dev/Art/Sprites/Memories/Homing/spr_homing_shot_01.png
+    sprite: {fileID: 21300000, guid: 388164c2e56bc3d4794603028af65d24, type: 3}
+  - id: Assets/_dev/Art/Sprites/Memories/Shockwave/spr_shockwave_ring_01.png
+    sprite: {fileID: 21300000, guid: 750ec3156cec842459e9cc541589460b, type: 3}
+  - id: Assets/_dev/Art/Sprites/Memories/TimeStop/spr_timestop_field_01.png
+    sprite: {fileID: 21300000, guid: e1c3219a2f0b9fb42a50011a61b7056f, type: 3}
+  - id: Assets/_dev/Art/Sprites/Memories/Ashen/spr_ashen_shield_01.png
+    sprite: {fileID: 21300000, guid: 1cab37e61702607488bae2b0dfdfd7e3, type: 3}
+  - id: Assets/_dev/Art/Sprites/Memories/Brand/spr_brand_mark_01.png
+    sprite: {fileID: 21300000, guid: 54b8be30fbd31d54bb7471e7ad716198, type: 3}
+  - id: Assets/_dev/Art/Sprites/Echoes/Execution/spr_execution_burst_01.png
+    sprite: {fileID: 21300000, guid: ff178a691e3f2c54a96cefe90cdf3fb6, type: 3}
+  - id: Assets/_dev/Art/Sprites/Echoes/Homing/spr_homing_echo_01.png
+    sprite: {fileID: 21300000, guid: c616f9a5adf97c94eb2f69cc0973f653, type: 3}
+  - id: Assets/_dev/Art/Sprites/Echoes/Shockwave/spr_shockwave_echo_01.png
+    sprite: {fileID: 21300000, guid: 21f5cbe2018bf984a9aa570101e94a8f, type: 3}
+  - id: Assets/_dev/Art/Sprites/Echoes/TimeStop/spr_timestop_echo_01.png
+    sprite: {fileID: 21300000, guid: 16fcbebe3e42d714598157b1b270520f, type: 3}
+  - id: Assets/_dev/Art/Sprites/Echoes/Ashen/spr_ashen_echo_01.png
+    sprite: {fileID: 21300000, guid: afa38149207625249960c385e8af4a43, type: 3}
+  - id: Assets/_dev/Art/Sprites/Echoes/Brand/spr_brand_echo_01.png
+    sprite: {fileID: 21300000, guid: 9e45de2436b5f16429e8e5c62f976c11, type: 3}
+  - id: Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_echo_slash_01.png
+    sprite: {fileID: 21300000, guid: 937b6113e41d07c4c86b06aa4cfba132, type: 3}
+  - id: Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_orbit_blade_01.png
+    sprite: {fileID: 21300000, guid: 3dd1797ba119bba4fa537c78ba55b449, type: 3}
+  - id: Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_launch_blade_01.png
+    sprite: {fileID: 21300000, guid: 686c56ab382dd424bae1330c79effe7b, type: 3}
+  - id: Assets/_dev/Art/Sprites/Echoes/Blood/spr_blood_mark_01.png
+    sprite: {fileID: 21300000, guid: ef3ee5e547bf7e04093f521622e3b709, type: 3}
+  - id: Assets/_dev/Art/Sprites/Echoes/Blood/spr_blood_bloom_01.png
+    sprite: {fileID: 21300000, guid: e7b22bf1f1357394fbd03ae3bc7cb03a, type: 3}
+  - id: Assets/_dev/Art/Sprites/Ultimates/spr_blood_blade_storm_ring_01.png
+    sprite: {fileID: 21300000, guid: 419bb77b62e5e3943a41a66d0d381b22, type: 3}
+  - id: Assets/_dev/Art/Sprites/Ultimates/spr_blood_blade_storm_blade_01.png
+    sprite: {fileID: 21300000, guid: 32c18d930cbe0d34998307fa37fe1b6d, type: 3}
+  - id: Assets/_dev/Art/Sprites/Ultimates/spr_fracture_execution_01.png
+    sprite: {fileID: 21300000, guid: 8630f8513374dfc4ab650683103adf98, type: 3}
+  - id: Assets/_dev/Art/Sprites/Ultimates/spr_stasis_hunt_01.png
+    sprite: {fileID: 21300000, guid: 6c7b700156e3b5b4386f8ca2acbb0283, type: 3}
+  - id: Assets/_dev/Art/Sprites/Ultimates/spr_ashen_oblivion_01.png
+    sprite: {fileID: 21300000, guid: deb750d6d58ab904db062e023edb1669, type: 3}

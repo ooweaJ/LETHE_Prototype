@@ -163,7 +163,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bc26b5645bb4a839ae29ca1d4f1d0f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  contentCatalog: {fileID: 11400000, guid: 331fb4c6e72b73344b33bba4992efd49, type: 2}
   dualBladesDefinition: {fileID: 11400000, guid: a57b50950a9e3a947b9a7d291b1e731d, type: 2}
   greatswordDefinition: {fileID: 11400000, guid: 0dbb86180703b844f921db8d2de44566, type: 2}
 --- !u!1 &200000

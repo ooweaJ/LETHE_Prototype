@@ -189,6 +189,7 @@ namespace Lethe.PrototypeV1
         };
 
         [Header("Data")]
+        [SerializeField] V1ContentCatalog contentCatalog;
         [SerializeField] WeaponDefinition dualBladesDefinition;
         [SerializeField] WeaponDefinition greatswordDefinition;
 
@@ -301,6 +302,7 @@ namespace Lethe.PrototypeV1
 
             WeaponStat.AttackSpeed = 0f;
             WeaponStat.DamageMul = 0f;
+            ResolveCatalogDefaults();
             LoadFont();
             CreateAudio();
             CreateArena();
@@ -2649,7 +2651,7 @@ namespace Lethe.PrototypeV1
         void DrawHud()
         {
             var weapon = CurrentWeaponSpec();
-            GUI.Box(new Rect(12, 12, 430, 184), "", panelStyle);
+            GUI.Box(new Rect(12, 12, 430, 238), "", panelStyle);
             GUI.Label(new Rect(24, 20, 224, 24), $"LETHE  {Mathf.FloorToInt(elapsed)}s  {PhaseName()}", smallStyle);
             GUI.Label(new Rect(260, 20, 166, 24), $"{weapon.DisplayName}  Lv.{level}", smallStyle);
             GUI.Label(new Rect(24, 47, 70, 20), $"HP {Mathf.CeilToInt(playerHp)}/{Mathf.CeilToInt(playerMaxHp)}", smallStyle);
@@ -2660,8 +2662,10 @@ namespace Lethe.PrototypeV1
             GUI.Label(new Rect(24, 92, 180, 22), $"처치 {kills}", smallStyle);
             GUI.Label(new Rect(210, 92, 206, 22), $"망각 후보 {ForgetCandidateText()}", smallStyle);
             DrawMemoryStrip(new Rect(24, 119, 392, 30));
-            GUI.Label(new Rect(24, 151, 392, 20), BloodBladeStormReady ? $"{UltimateGoalText()} / {UltimatePatternText(weapon)}" : UltimateGoalText(), smallStyle);
-            GUI.Label(new Rect(24, 170, 392, 20), M2LoopText(), smallStyle);
+            GUI.Label(new Rect(24, 151, 392, 20), $"잔향 {EchoText()}", smallStyle);
+            GUI.Label(new Rect(24, 172, 392, 20), BloodBladeStormReady ? $"{UltimateGoalText()} / {UltimatePatternText(weapon)}" : UltimateGoalText(), smallStyle);
+            GUI.Label(new Rect(24, 193, 392, 20), M2LoopText(), smallStyle);
+            GUI.Label(new Rect(24, 214, 392, 22), PlayerGoalText(), smallStyle);
 
             if (!showDebugPanel)
             {
@@ -2700,6 +2704,15 @@ namespace Lethe.PrototypeV1
                 GUI.Label(new Rect(Screen.width - 314, y, 292, 20), line, smallStyle);
                 y += 19;
             }
+        }
+
+        string PlayerGoalText()
+        {
+            if (resultOverlay) return "결손 생존을 버티고 공명으로 잃은 기억을 되찾으세요.";
+            if (refillOverlay) return "공명 선택으로 빌드를 다시 맞출 차례입니다.";
+            if (BloodBladeStormReady) return "궁극 잔향 준비 완료. 무기 공격으로 피의 칼폭풍을 터뜨리세요.";
+            if (activeMemories.Count < MaxActiveMemories) return "XP를 모아 기억 3칸을 채우고 첫 망각 후보를 만드세요.";
+            return "가장 높은 기억은 다음 망각 후보입니다. 잔향과 공명을 노리세요.";
         }
 
         void DrawMemoryStrip(Rect rect)
@@ -3573,6 +3586,12 @@ namespace Lethe.PrototypeV1
         Sprite LoadSprite(string path)
         {
             if (spriteCache.TryGetValue(path, out var cached)) return cached;
+            var catalogSprite = contentCatalog != null ? contentCatalog.SpriteForPath(path) : null;
+            if (catalogSprite != null)
+            {
+                spriteCache[path] = catalogSprite;
+                return catalogSprite;
+            }
 #if UNITY_EDITOR
             var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
             if (sprite != null)
@@ -3595,8 +3614,10 @@ namespace Lethe.PrototypeV1
         {
             var cacheKey = $"{path}:{columns}x{rows}:{column}:{rowFromTop}";
             if (spriteCache.TryGetValue(cacheKey, out var cached)) return cached;
+            var texture = contentCatalog != null ? contentCatalog.TextureForPath(path) : null;
 #if UNITY_EDITOR
-            var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+            texture ??= AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+#endif
             if (texture == null) return null;
 
             var width = texture.width / columns;
@@ -3606,16 +3627,25 @@ namespace Lethe.PrototypeV1
             var sprite = Sprite.Create(texture, new Rect(x, y, width, height), new Vector2(0.5f, 0.5f), 100f);
             spriteCache[cacheKey] = sprite;
             return sprite;
-#else
-            return null;
-#endif
         }
 
         void LoadFont()
         {
+            if (contentCatalog != null && contentCatalog.koreanFont != null)
+            {
+                koreanFont = contentCatalog.koreanFont;
+                return;
+            }
 #if UNITY_EDITOR
             koreanFont = AssetDatabase.LoadAssetAtPath<Font>("Assets/_dev/Fonts/Pretendard-Regular.otf");
 #endif
+        }
+
+        void ResolveCatalogDefaults()
+        {
+            if (contentCatalog == null) return;
+            dualBladesDefinition ??= contentCatalog.dualBladesDefinition;
+            greatswordDefinition ??= contentCatalog.greatswordDefinition;
         }
 
         void EnsureStyles()

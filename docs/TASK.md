@@ -176,11 +176,15 @@ Implementation list:
 - [x] Add a dedicated transparent greatsword sprite asset and load it before procedural fallback.
 - [x] Add per-tile rotation, color variation, and tiny scale variation to the arena floor.
 - [x] Compact the HUD into a cleaner survivor-style status panel with HP, XP, memory slots, ultimate status, and smaller debug controls.
+- [x] Add a v1 content catalog for runtime sprites/font/weapon definitions and wire it to `Dev_Prototype_v1`.
+- [x] Create `Assets/Lethe` promotion-prep folders plus a `Lethe_BetaPreview` scene copy.
+- [x] Add current echo summary and a short player objective line to the HUD while keeping F12 debug review UI.
 - [ ] Replace or slice/import the full player sheet through Unity Sprite Editor instead of runtime cropping.
 - [ ] Capture a reliable visual screenshot path that includes camera objects and relevant UI overlays.
 
 Verification:
 
+- Beta-play prep verification: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 7 legacy warnings and 0 errors; Unity compile error count `0`; scene missing references `0`; Play Mode start snapshot valid; console error count `0`.
 - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
 - Unity MCP `Assets/Refresh`: success.
 - Unity compile error count: 0.

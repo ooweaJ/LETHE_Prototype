@@ -34,11 +34,24 @@ namespace Lethe.PrototypeV1.Editor
             lightObject.transform.rotation = Quaternion.Euler(50f, -30f, 0f);
 
             var manager = new GameObject("V1_GameManager");
-            manager.AddComponent<V1GameManager>();
+            var gameManager = manager.AddComponent<V1GameManager>();
+            WireManagerReferences(gameManager);
 
             EditorSceneManager.SaveScene(scene, ScenePath);
             Selection.activeGameObject = manager;
             Debug.Log($"Built fresh LETHE prototype scene: {ScenePath}");
+        }
+
+        static void WireManagerReferences(V1GameManager gameManager)
+        {
+            var serialized = new SerializedObject(gameManager);
+            serialized.FindProperty("contentCatalog").objectReferenceValue =
+                AssetDatabase.LoadAssetAtPath<V1ContentCatalog>("Assets/_dev/Data/V1_ContentCatalog.asset");
+            serialized.FindProperty("dualBladesDefinition").objectReferenceValue =
+                AssetDatabase.LoadAssetAtPath<Lethe.Dev.WeaponDefinition>("Assets/_dev/Data/Weapons/Weapon_DualBlades.asset");
+            serialized.FindProperty("greatswordDefinition").objectReferenceValue =
+                AssetDatabase.LoadAssetAtPath<Lethe.Dev.WeaponDefinition>("Assets/_dev/Data/Weapons/Weapon_Greatsword.asset");
+            serialized.ApplyModifiedPropertiesWithoutUndo();
         }
 
         static void EnsureFolders()
@@ -46,6 +59,7 @@ namespace Lethe.PrototypeV1.Editor
             CreateFolder("Assets/_dev/Scripts", "PrototypeV1");
             CreateFolder("Assets/_dev/Scripts/PrototypeV1", "Editor");
             CreateFolder("Assets/_dev/Scenes", string.Empty);
+            CreateFolder("Assets/_dev/Data", string.Empty);
         }
 
         static void CreateFolder(string parent, string child)

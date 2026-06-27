@@ -68,6 +68,17 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Beta-play preparation pass:
+  - Added `V1ContentCatalog` for prototype v1 runtime asset references.
+  - Created and wired `Assets/_dev/Data/V1_ContentCatalog.asset`.
+  - Created `Assets/Lethe/` promotion-prep folders and `Assets/Lethe/Scenes/Lethe_BetaPreview.unity`.
+  - HUD now surfaces current echoes and the current player objective.
+  - F12 debug and memory/echo review UI remain available for the next VFX iteration.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity scene missing references: `0`.
+  - Unity Play Mode start snapshot: `scene=v1`, weapon `절단쌍검`, HP `210/210`, no death/result/refill state.
+  - Unity console error count after stop: `0`.
 - Prototype completion loop pass:
   - Death, 600-second survival, and full Gatekeeper clear now route into a shared result overlay.
   - Fourth Gatekeeper kill now completes the prototype run.
