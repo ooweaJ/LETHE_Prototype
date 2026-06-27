@@ -42,6 +42,21 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 20-minute beta-run balance pass:
+  - Adopted a 20-minute target run for `Dev_Prototype_v1`: expected clear band `18~22m`, hard cap `1260s`, and normal clear through all 4 Gatekeepers rather than timer-only survival.
+  - Changed Gatekeeper schedule to `300 / 600 / 900 / 1140s`.
+  - Changed Gatekeeper HP to `1900 / 2800 / 4000 / 5400`.
+  - Changed initial XP requirement to `7`.
+  - Changed XP tempo to `0~120s x1.00`, `120~600s x1.34`, `600s+ x1.00`; removed the first-120-second kill XP bonus.
+  - Extended reward focus from the Blood Blade Storm pair to all 4 ultimate echo pairs so route testing can cover Blood Storm, Fracture Execution, Stasis Hunt, and Ashen Oblivion.
+  - Added `scripts/balance_sim_v1.js` and recorded evidence in `docs/orchestration/evidence/2026-06-27-balance-sim-v1.md`.
+  - Simulation result for the selected `20m_slow_start` candidate:
+    - first reward: `24~28s`.
+    - first forgetting: `323~329s`.
+    - ultimate completion: `936~945s`.
+    - final clear: `1178~1188s`.
+  - Known tuning risk: pure simulation rates greatsword route clears lower than dual blades (`0.63~0.68` vs `1.00`), so the next MCP/hand-play pass should inspect greatsword route consistency first.
+
 - Unity v1 reliable MCP QA line:
   - Reworked `V1SmokeTestMenu` so smoke/QA runs wait for explicit pass conditions and log `[V1QA] PASS/FAIL` instead of relying on a fixed delayed snapshot.
   - Start-weapon QA now requires real runtime progress: `elapsed >= 2.0`, at least 5 live enemies, `timeScale=1`, and no result/refill/death overlay.
@@ -1365,24 +1380,27 @@ Continue from `Dev_Prototype_v1`, not `Dev_Prototype_v0`.
 
 Next implementation step:
 
-1. Let jaewoo run `Dev_Prototype_v1`, choose each of the two weapon cards, and review the first 120 seconds before judging the full 600-second run.
+1. Run the updated 20-minute `Dev_Prototype_v1` balance line through MCP technical checks and jaewoo direct play.
 2. Review checklist:
    - 시작 무기 카드 2개가 명확하게 읽히는가?
-   - 첫 보상에서 칼무리/혈반 기억 선택이 빠르고 자연스럽게 보이는가?
-   - 첫 20~30초 안에 XP/카드 보상 리듬이 오는가?
-   - 60~90초 안에 기억 2~3개와 다음 망각 후보가 보이는가?
+   - 첫 보상은 24~30초 전후에 와서 너무 빠르지도 느리지도 않은가?
+   - 120초 시점 레벨 3~4가 답답하지 않은가?
+   - 첫 문지기 300초와 첫 망각 5분대가 성취/상실 리듬으로 읽히는가?
+   - 600초 시점에 빌드가 충분히 달라졌고 레벨 9~10 전후가 적절한가?
+   - 15~16분 궁극 완성이 후반 보상처럼 느껴지는가?
+   - 19~20분 최종 문지기 처치가 클리어 목표로 명확한가?
    - 쌍검 기본공격이 적 위치 발도선으로 읽히는가?
    - 적이 맞을 때 넉백/피격/공간 반응이 충분한가?
    - 칼무리 잔향이 기본공격 뒤 후속타로 읽히는가?
    - 대검이 느린 큰 한 방으로 읽히는가?
-   - 60~120초 안에 망각 -> 결손 -> 공명 -> +5 잔향 -> 피의 칼폭풍 흐름이 보이는가?
-   - 쌍검/대검 피의 칼폭풍 차이가 보이는가?
+   - 4개 궁극 루트(`피의 칼폭풍`, `파쇄 처형`, `정지 추적`, `잿빛 망각`) 중 특정 루트만 압도적으로 쉽거나 막히지 않는가?
+   - 순수 시뮬레이션에서 낮게 나온 대검 루트가 실제 플레이에서도 불안한가?
 3. Pay special attention to the newly wired generated VFX:
    - Are dual-blade arcs readable as fast paired cuts instead of screen noise?
    - Is the greatsword cleave large enough to feel heavy without hiding enemies?
    - Do Execution/Hunter/Shatter/Stopped/Ashen/Brand memories and echoes appear at natural target/player positions?
    - Are Fracture Execution, Stasis Hunt, and Ashen Oblivion distinct enough from normal echo bursts?
-4. After feedback, choose one narrow next pass: reward cadence, attack readability, forgetting UX, spawn pressure, VFX scale/timing, or enemy art replacement.
+4. After feedback, choose one narrow next pass: XP cadence, Gatekeeper HP, weapon route balance, reward route steering, VFX scale/timing, or enemy pressure.
 
 Do not promote `_dev` assets to `Assets/Lethe` until `Dev_Prototype_v1` receives explicit `GO`.
 

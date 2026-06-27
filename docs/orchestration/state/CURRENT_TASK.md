@@ -68,6 +68,16 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- 20-minute beta balance pass, 2026-06-27:
+  - Normal run target is now `18~22m`, with hard cap `1260s`.
+  - Gatekeeper schedule is now `300 / 600 / 900 / 1140s`.
+  - Gatekeeper HP is now `1900 / 2800 / 4000 / 5400`.
+  - Initial required XP is now `7`.
+  - XP tempo is now `0~120s x1.00`, `120~600s x1.34`, `600s+ x1.00`; first-120 kill XP bonus removed.
+  - Timer-only victory removed; clear requires all 4 Gatekeepers.
+  - Reward focus now supports all 4 ultimate echo pairs, not only Blood Blade Storm.
+  - `node scripts\balance_sim_v1.js`: selected `20m_slow_start`; first reward `24~28s`, first forget `323~329s`, ultimate `936~945s`, clear `1178~1188s`.
+  - Evidence: `docs/orchestration/evidence/2026-06-27-balance-sim-v1.md`.
 - Reliable MCP QA line, 2026-06-27:
   - `V1SmokeTestMenu` now logs explicit `[V1QA] PASS/FAIL` results based on runtime conditions.
   - Start-weapon QA requires elapsed runtime, live enemies, normal time scale, and no overlay state.
@@ -571,12 +581,15 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Next Implementation
 
-1. Ask jaewoo to review `Dev_Prototype_v1` as a 120-second early fun loop first, not as a full 600-second balance run.
+1. Review `Dev_Prototype_v1` as a 20-minute beta-run candidate, not as the old 600-second prototype loop.
 2. Collect one combined feedback pass for:
    - 시작 무기 카드 2개가 명확하게 읽히는지.
-   - 첫 보상에서 칼무리/혈반 기억 선택이 자연스럽게 보이는지.
-   - 첫 20~30초 안에 첫 레벨업/보상 리듬이 오는지.
-   - 60~90초 안에 활성 기억 2~3개와 다음 망각 후보가 보이는지.
+   - 첫 보상이 24~30초 전후에 자연스럽게 오는지.
+   - 120초 레벨 3~4가 너무 느리거나 너무 빠르지 않은지.
+   - 첫 문지기 300초와 첫 망각 5분대가 적절한 성취/상실 리듬인지.
+   - 600초 시점 레벨 9~10 전후와 빌드 다양성이 적절한지.
+   - 15~16분 궁극 1종 완성이 후반 보상처럼 느껴지는지.
+   - 19~20분대 최종 문지기 처치가 명확한 클리어 목표인지.
    - 카드 선택 중 적/탄이 완전히 멈추는지.
    - 쌍검 기본공격.
    - 쌍검 반달 2연 베기가 슥슥 하는 느낌인지.
@@ -586,11 +599,12 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
    - 적 피격 시 흰색 플래시와 데미지 숫자가 충분한지.
    - 원거리몹이 사거리 안에서 후퇴하지 않고 정지 사격하는지.
    - 대검/칼무리 hitstop 중 캐릭터 이동감이 끊기지 않는지.
-   - 대검 시작 선택과 `F9` 비교.
-   - 망각 예고/공명/+5 잔향/피의 칼폭풍 목표가 너무 늦거나 복잡하지 않은지.
+   - 대검 루트가 순수 시뮬레이션처럼 실제로도 낮은 클리어 안정성을 보이는지.
+   - 피의 칼폭풍, 파쇄 처형, 정지 추적, 잿빛 망각 루트 중 한쪽만 과도하게 쉽거나 막히지 않는지.
+   - 망각 예고/공명/+5 잔향/궁극 목표가 너무 늦거나 복잡하지 않은지.
    - HUD readability and combat density.
 3. During review, specifically judge the newly wired generated VFX scale/timing for weapon hits, six utility memories, six utility echoes, and three non-blood ultimates.
-4. After feedback, pick exactly one next pass: reward cadence, attack readability, forgetting UX, spawn pressure, VFX scale/timing, or art replacement.
+4. After feedback, pick exactly one next pass: XP cadence, Gatekeeper HP, weapon route balance, reward route steering, VFX scale/timing, or enemy pressure.
 
 ## Open Questions
 

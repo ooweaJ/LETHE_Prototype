@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260627\\index.md",
-  "generatedAt": "2026-06-27T11:39:55.689Z",
-  "unitCount": 3,
+  "generatedAt": "2026-06-27T12:24:08.520Z",
+  "unitCount": 4,
   "latest": {
-    "title": "2026-06-27-03 - 플레이 전 검증선 보강",
-    "number": "03",
-    "markdownPath": "docs\\orchestration\\reports\\20260627\\units\\2026-06-27-03-플레이-전-검증선-보강.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260627\\units\\2026-06-27-03-플레이-전-검증선-보강.html"
+    "title": "2026-06-27-04 - 20분 베타 런 밸런스 1차",
+    "number": "04",
+    "markdownPath": "docs\\orchestration\\reports\\20260627\\units\\2026-06-27-04-20분-베타-런-밸런스-1차.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260627\\units\\2026-06-27-04-20분-베타-런-밸런스-1차.html"
   }
 }

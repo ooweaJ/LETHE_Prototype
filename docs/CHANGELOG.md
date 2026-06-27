@@ -1,5 +1,26 @@
 # LETHE CHANGELOG
 
+## 2026-06-27
+
+- Applied the first Unity v1 20-minute beta-run balance pass:
+  - Changed normal run hard cap from `600s` to `1260s`.
+  - Changed Gatekeeper schedule from `135 / 285 / 435 / 600s` to `300 / 600 / 900 / 1140s`.
+  - Changed first Gatekeeper HP to `1900`, and later Gatekeeper HP to `2800 / 4000 / 5400`.
+  - Removed the first-120-second kill XP bonus and slowed early XP from the previous fast prototype curve to `0~120s x1.00`, `120~600s x1.34`, `600s+ x1.00`.
+  - Changed initial required XP from `5` to `7`.
+  - Removed timer-only survival victory; normal clear now requires all 4 Gatekeepers.
+  - Extended level-up reward focus from the Blood Blade Storm pair to all 4 ultimate echo pairs.
+- Added `scripts/balance_sim_v1.js` to compare 10-minute and 20-minute candidates across 4 ultimate routes and 2 weapons.
+- Added balance evidence at `docs/orchestration/evidence/2026-06-27-balance-sim-v1.md`.
+- Updated `LETHE_DESIGN_01_RUN_LOOP.md` and `LETHE_DESIGN_04_BALANCE.md` with the Unity beta 20-minute target.
+- Verification:
+  - `node scripts\balance_sim_v1.js`: selected `20m_slow_start`; average first choice `24~28s`, first forget `323~329s`, ultimate `936~945s`, clear `1178~1188s`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity console error count after QA: `0`.
+  - Unity MCP QA rerun: Dual Blades, Greatsword, M2 Loop, VFX Matrix, and Blood Blade Storm all logged `[V1QA] PASS`.
+
 ## 2026-06-25
 
 - Added the prototype completion loop pass:

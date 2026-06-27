@@ -1,10 +1,31 @@
 # 04. 성장 / 밸런스 / 전 상수표
 
-최종 갱신: 2026-06-12 · 출처: `src/game.js` (`balance`, `levelUpChoices`, `queueLevelUp`, `chooseLevelUpChoices`) · `balance.version = "v0.12-balance-1"`
+최종 갱신: 2026-06-27 · 출처: `src/game.js` (`balance`, `levelUpChoices`, `queueLevelUp`, `chooseLevelUpChoices`) + Unity v1 20분 밸런스 시뮬레이션
 
-이 문서는 Unity 이식 시 그대로 옮길 검증된 수치 모음이다. 임의로 재유도하지 말 것.
+이 문서는 HTML v0.12에서 검증된 원본 수치와 Unity v1 베타 플레이용 20분 목표 수치를 함께 기록한다. Unity `Dev_Prototype_v1`에서는 아래의 "Unity 베타 20분 1차 적용값"이 우선한다.
+
+## Unity 베타 20분 1차 적용값
+
+2026-06-27 기준 1차 목표는 "초반 레벨업 과속을 낮추고, 궁극 1종을 15~16분에 완성한 뒤, 19~20분대 최종 문지기 처치로 끝나는 런"이다.
+
+| 항목 | 값 | 의도 |
+| --- | --- | --- |
+| 시작 필요 XP | 7 | 첫 보상을 24~30초 전후로 늦춤 |
+| 0~120초 XP 배수 | ×1.00 | 초반 레벨 폭주 방지 |
+| 120~600초 XP 배수 | ×1.34 | 중반 빌드 형성은 유지 |
+| 600초 이후 XP 배수 | ×1.00 | 후반은 잔향/궁극 완성으로 템포 유지 |
+| 초반 처치 XP 보너스 | 없음 | 레벨 120초 3.5~4.0 목표 |
+| 문지기 스케줄 | 300 / 600 / 900 / 1140초 | 20분 목표 런의 4개 검문 |
+| 하드 캡 | 1260초 | 최종 문지기 미돌파 시 실패 |
+| 문지기 HP | 1900 / 2800 / 4000 / 5400 | 1궁극 완성 후 최종 처치 목표 |
+| 클리어 조건 | 문지기 4체 처치 | 단순 생존 승리 제거 |
+| 궁극 목표 | 1개 궁극 잔향 완성 | 2궁극은 숙련 목표 |
+
+`scripts/balance_sim_v1.js`의 `20m_slow_start` 후보가 현재 코드 반영 기준이다. 4개 궁극 루트와 2개 무기 조합의 40회 반복 시뮬레이션에서 평균 첫 선택 24~28초, 첫 망각 323~329초, 궁극 완성 936~945초, 클리어 1178~1188초가 나왔다. 대검 루트의 순수 시뮬레이션 클리어율은 0.63~0.68로 쌍검보다 낮아 다음 MCP/실플레이에서 우선 확인한다.
 
 ## 경험치 / 레벨업 곡선
+
+아래 표는 HTML v0.12 원본 기준이다. Unity 베타 20분 런에서는 위의 1차 적용값이 우선한다.
 
 출처: `balance.runGrowth` + `queueLevelUp()`.
 
@@ -55,8 +76,8 @@ nextXp = round(prevNextXp * mul + add)
 | --- | --- | --- |
 | 플레이어 최대 HP | 210 | `balance.player.maxHp` |
 | 플레이어 속도 | 184 | `balance.player.speed` |
-| 첫 보스 HP | 2050 | `balance.boss.firstBossHp` |
-| 이후 보스 HP | round(560×(1+0.18×(idx-2))) | `experiment.bossHp` |
+| 첫 보스 HP | HTML 원본 2050 / Unity 베타 1900 | `balance.boss.firstBossHp`, `V1GameManager.FirstBossHp` |
+| 이후 보스 HP | HTML 원본 round(560×(1+0.18×(idx-2))) / Unity 베타 2800, 4000, 5400 | `experiment.bossHp`, `V1GameManager.GatekeeperHp()` |
 | 첫 보스 TTK 목표(중앙값) | 약 18~24초 | 밸런스 루프 근거 |
 
 적 스탯·스케일링은 [02_COMBAT](LETHE_DESIGN_02_COMBAT.md) 참조.
@@ -100,7 +121,7 @@ nextXp = round(prevNextXp * mul + add)
 | --- | --- |
 | `player.maxHp` | 210 |
 | `player.speed` | 184 |
-| `boss.firstBossHp` | 2050 |
+| `boss.firstBossHp` | HTML 원본 2050 / Unity 베타 1900 |
 | `hungryBlades.dps` | 28 |
 | `hungryBlades.radius` | 72 |
 | `hungryBlades.targetSoftCap` | 4 |
@@ -110,8 +131,8 @@ nextXp = round(prevNextXp * mul + add)
 | `enemyScaling.damageTimePerMinute` | 0.025 |
 | `enemyScaling.damageLevelPerLevel` | 0.008 |
 | `enemyScaling.damageCap` | 2.2 |
-| `runGrowth.initialNextXp` | 5 |
-| `runGrowth.preBossXpMul` | 1.95 |
+| `runGrowth.initialNextXp` | HTML 원본 5 / Unity 베타 7 |
+| `runGrowth.preBossXpMul` | HTML 원본 1.95 / Unity 베타 0~120s ×1.00, 120~600s ×1.34 |
 | `runGrowth.earlyCurveUntilLevel` | 10 |
 | `runGrowth.earlyNextXpMul` | 1.24 |
 | `runGrowth.earlyNextXpAdd` | 3 |

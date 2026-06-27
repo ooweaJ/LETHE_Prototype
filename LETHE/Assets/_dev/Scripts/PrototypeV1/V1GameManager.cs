@@ -74,8 +74,8 @@ namespace Lethe.PrototypeV1
         const float GreatswordDamage = 40f;
         const float GreatswordArcDeg = 102f;
         const float GreatswordEngageMul = 1.12f;
-        const float FirstBossSeconds = 135f;
-        const float BossWarningSeconds = 22f;
+        const float FirstBossSeconds = 300f;
+        const float BossWarningSeconds = 28f;
         const float FastFirstBossSeconds = 62f;
         const float DeficitSurvivalSeconds = 54f;
         const float FastDeficitSeconds = 6f;
@@ -84,9 +84,9 @@ namespace Lethe.PrototypeV1
         const int MaxMemoryLevel = 5;
         const int MaxEchoLevel = 5;
         const int MaxActiveMemories = 3;
-        const float FirstBossHp = 1750f;
+        const float FirstBossHp = 1900f;
         const float FastBossHp = 180f;
-        const float RunSeconds = 600f;
+        const float RunSeconds = 1260f;
         const float ArenaHalfWidth = 24f;
         const float ArenaHalfHeight = 16f;
         const float ArenaTileSpacing = 2.65f;
@@ -158,7 +158,7 @@ namespace Lethe.PrototypeV1
         const string HunterOathBurstSource = "추적자의 맹세 폭발";
         const string HunterEchoSource = "추적 잔향";
         const string HunterEchoBurstSource = "추적 잔향 폭발";
-        static readonly float[] BossScheduleSeconds = { 135f, 285f, 435f, 600f };
+        static readonly float[] BossScheduleSeconds = { 300f, 600f, 900f, 1140f };
         static readonly float[] FastBossScheduleSeconds = { 18f, 38f, 62f, 88f };
         static readonly V1MemoryId[] UtilityMemorySetA = { V1MemoryId.ExecutionFlash, V1MemoryId.HunterOath, V1MemoryId.StoppedSecond };
         static readonly V1MemoryId[] UtilityMemorySetB = { V1MemoryId.ShatterWave, V1MemoryId.AshenShield, V1MemoryId.OblivionBrand };
@@ -166,6 +166,13 @@ namespace Lethe.PrototypeV1
         {
             V1MemoryId.HungryBlades,
             V1MemoryId.BloodReflection
+        };
+        static readonly V1MemoryId[][] UltimateEchoPairs =
+        {
+            new[] { V1MemoryId.HungryBlades, V1MemoryId.BloodReflection },
+            new[] { V1MemoryId.ShatterWave, V1MemoryId.ExecutionFlash },
+            new[] { V1MemoryId.StoppedSecond, V1MemoryId.HunterOath },
+            new[] { V1MemoryId.AshenShield, V1MemoryId.OblivionBrand }
         };
         static readonly V1MemoryId[] UtilityMemoryIds =
         {
@@ -247,7 +254,7 @@ namespace Lethe.PrototypeV1
         float bloodStormBurstTimer;
         int level = 1;
         int xp;
-        int nextXp = 5;
+        int nextXp = 7;
         int kills;
         int gatekeeperKills;
         int memoriesForgotten;
@@ -423,7 +430,7 @@ namespace Lethe.PrototypeV1
 
             if (elapsed >= RunSeconds && !deathOverlay)
             {
-                EndRun(true, "600초 생존");
+                EndRun(gatekeeperKills >= BossSchedule().Length, gatekeeperKills >= BossSchedule().Length ? "모든 관문 돌파" : "최종 관문 미돌파");
                 return;
             }
         }
@@ -1915,8 +1922,13 @@ namespace Lethe.PrototypeV1
         float GatekeeperHp()
         {
             if (fastDebugRun) return FastBossHp;
-            if (bossSpawnIndex <= 0) return FirstBossHp;
-            return Mathf.Round(560f * (1f + 0.18f * Mathf.Max(0, bossSpawnIndex - 1)));
+            return bossSpawnIndex switch
+            {
+                <= 0 => FirstBossHp,
+                1 => 2800f,
+                2 => 4000f,
+                _ => 5400f
+            };
         }
 
         float EnemySpeed(V1EnemyKind kind) => (kind switch
@@ -2125,8 +2137,7 @@ namespace Lethe.PrototypeV1
         {
             if (enemy == null) return 1;
             if (enemy.Kind == V1EnemyKind.Gatekeeper) return 18;
-            var earlyTempoBonus = elapsed < 120f ? 1 : 0;
-            return Mathf.Max(1, enemy.Score + earlyTempoBonus);
+            return Mathf.Max(1, enemy.Score);
         }
 
         float NextBossDelay()
@@ -2138,7 +2149,7 @@ namespace Lethe.PrototypeV1
 
         void GrantXp(int amount)
         {
-            var earlyMultiplier = elapsed < 120f ? 2.15f : (elapsed < 180f ? 1.95f : 1f);
+            var earlyMultiplier = elapsed < 120f ? 1.0f : (elapsed < 600f ? 1.34f : 1f);
             xp += Mathf.RoundToInt(amount * earlyMultiplier);
             while (xp >= nextXp)
             {
@@ -2789,13 +2800,24 @@ namespace Lethe.PrototypeV1
         {
             var choices = new List<Choice>();
             var priorityTitles = new List<string>();
-            if (activeMemories.Count < MaxActiveMemories && !HasMemory(V1MemoryId.HungryBlades))
+            var priorityUpgradeIds = new HashSet<V1MemoryId>();
+            var ultimateFocus = UltimateFocusMemory();
+            if (ultimateFocus != null)
+            {
+                var focus = ultimateFocus;
+                priorityUpgradeIds.Add(focus.Id);
+                var choice = new Choice("궁극 준비", MemoryName(focus.Id), $"현재 Lv.{focus.Level} -> Lv.{focus.Level + 1}\n\n아직 완성되지 않은 궁극 잔향 조합을 먼저 밀어줍니다.", () => AddMemory(focus.Id, focus.Level + 1, true));
+                choices.Add(choice);
+                priorityTitles.Add(choice.Title);
+            }
+
+            if (activeMemories.Count < MaxActiveMemories && !HasMemory(V1MemoryId.HungryBlades) && ShouldOfferUltimateMemory(V1MemoryId.HungryBlades))
             {
                 var kalmuriChoice = new Choice("새 기억", "굶주린 칼무리", "주변을 도는 칼날 군집이 적을 물어뜯습니다.\n\n혈반과 함께 키우면 첫 궁극 목표인 피의 칼폭풍으로 이어집니다.", () => AddMemory(V1MemoryId.HungryBlades, 1, true));
                 choices.Add(kalmuriChoice);
                 priorityTitles.Add(kalmuriChoice.Title);
             }
-            if (activeMemories.Count < MaxActiveMemories && !HasMemory(V1MemoryId.BloodReflection))
+            if (activeMemories.Count < MaxActiveMemories && !HasMemory(V1MemoryId.BloodReflection) && ShouldOfferUltimateMemory(V1MemoryId.BloodReflection))
             {
                 var bloodChoice = new Choice("새 기억", "피의 반사", "타격한 적에게 혈반을 남깁니다.\n\n칼무리와 함께 키우면 회복/출혈 축과 피의 칼폭풍 목표가 열립니다.", () => AddMemory(V1MemoryId.BloodReflection, 1, true));
                 choices.Add(bloodChoice);
@@ -2812,13 +2834,13 @@ namespace Lethe.PrototypeV1
                 choices.Add(new Choice("새 기억", MemoryName(id), $"새 전투 축을 여는 기억입니다.\n\n망각되면 {EchoName(id)}으로 형태가 바뀌어 무기 타격에 남습니다.", () => AddMemory(id, 1, true)));
             }
             var lowest = activeMemories.OrderBy(m => m.Level).FirstOrDefault(m => m.Level < MaxMemoryLevel);
-            if (lowest != null)
+            if (lowest != null && !priorityUpgradeIds.Contains(lowest.Id))
             {
                 choices.Add(new Choice("기억 강화", MemoryName(lowest.Id), $"현재 Lv.{lowest.Level} -> Lv.{lowest.Level + 1}\n\n효과의 빈도, 개수, 화면 존재감이 함께 올라갑니다.", () => AddMemory(lowest.Id, lowest.Level + 1, true)));
             }
             if (activeMemories.Count >= MaxActiveMemories)
             {
-                var secondLowest = activeMemories.Where(m => m.Level < MaxMemoryLevel).OrderBy(m => m.Level).Skip(1).FirstOrDefault();
+                var secondLowest = activeMemories.Where(m => m.Level < MaxMemoryLevel && !priorityUpgradeIds.Contains(m.Id)).OrderBy(m => m.Level).Skip(1).FirstOrDefault();
                 if (secondLowest != null)
                 {
                     choices.Add(new Choice("기억 강화", MemoryName(secondLowest.Id), $"현재 Lv.{secondLowest.Level} -> Lv.{secondLowest.Level + 1}\n\n슬롯이 찼을 때는 낮은 레벨 기억을 한 번 더 밀어줍니다.", () => AddMemory(secondLowest.Id, secondLowest.Level + 1, true)));
@@ -2860,6 +2882,39 @@ namespace Lethe.PrototypeV1
 
         bool HasMemory(V1MemoryId id) => activeMemories.Any(m => m.Id == id);
 
+        bool UltimatePairComplete(V1MemoryId[] pair) => pair.All(id => EchoLevel(id) >= MaxEchoLevel);
+
+        bool ShouldOfferUltimateMemory(V1MemoryId id)
+        {
+            var pair = UltimateEchoPairs.FirstOrDefault(p => p.Contains(id));
+            if (pair == null) return true;
+            return UltimatePairComplete(pair) || EchoLevel(id) < MaxEchoLevel;
+        }
+
+        MemoryState UltimateFocusMemory()
+        {
+            return activeMemories
+                .Where(m => IsIncompleteUltimatePairMember(m.Id) && EchoLevel(m.Id) < MaxEchoLevel && m.Level < MaxMemoryLevel)
+                .OrderByDescending(m => m.Level)
+                .ThenBy(m => UltimatePairIndex(m.Id))
+                .FirstOrDefault();
+        }
+
+        bool IsIncompleteUltimatePairMember(V1MemoryId id)
+        {
+            var pair = UltimateEchoPairs.FirstOrDefault(p => p.Contains(id));
+            return pair != null && !UltimatePairComplete(pair);
+        }
+
+        int UltimatePairIndex(V1MemoryId id)
+        {
+            for (int i = 0; i < UltimateEchoPairs.Length; i++)
+            {
+                if (UltimateEchoPairs[i].Contains(id)) return i;
+            }
+            return UltimateEchoPairs.Length;
+        }
+
         V1MemoryId? NextMissingRewardMemory()
         {
             if (activeMemories.Count >= MaxActiveMemories) return null;
@@ -2880,6 +2935,7 @@ namespace Lethe.PrototypeV1
             {
                 var id = order[(start + i) % order.Length];
                 if (id == V1MemoryId.StoppedSecond && HasMemory(V1MemoryId.BloodReflection) && !HasMemory(V1MemoryId.StoppedSecond)) continue;
+                if (!ShouldOfferUltimateMemory(id)) continue;
                 if (!HasMemory(id)) return id;
             }
             return null;

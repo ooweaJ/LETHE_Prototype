@@ -23,6 +23,40 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 
 ## Current Epic Checks
 
+### 20-Minute Beta Balance Pass, 2026-06-27
+
+- Purpose:
+  - Set a playable beta-run target before jaewoo direct play: 1 ultimate echo plus final Gatekeeper clear around 20 minutes.
+- Applied target:
+  - Run hard cap: `1260s`.
+  - Gatekeeper schedule: `300 / 600 / 900 / 1140s`.
+  - Gatekeeper HP: `1900 / 2800 / 4000 / 5400`.
+  - Initial required XP: `7`.
+  - XP multiplier: `0~120s x1.00`, `120~600s x1.34`, `600s+ x1.00`.
+  - Timer-only survival win removed; all 4 Gatekeepers must be cleared.
+- Simulation command:
+  - `node scripts\balance_sim_v1.js`
+- Simulation result for selected `20m_slow_start`:
+  - First choice: `24~28s`.
+  - First forgetting: `323~329s`.
+  - Ultimate completion: `936~945s`.
+  - Final clear: `1178~1188s`.
+  - Evidence: `docs/orchestration/evidence/2026-06-27-balance-sim-v1.md`.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity console error count after QA: `0`.
+  - Unity MCP QA rerun:
+    - Dual blades: `[V1QA] PASS`, `elapsed=2.1`, `xp=0/7`, `enemies=8`.
+    - Greatsword: `[V1QA] PASS`, `elapsed=2.1`, `xp=0/7`, `enemies=8`.
+    - M2 loop: `[V1QA] PASS`, `HungryBlades:5`, `BloodReflection:5`, `storm=True`, `result=True`.
+    - VFX Matrix: `[V1QA] PASS`, `previewMemory=8`, `previewEcho=8`, `fracture=1`, `stasis=1`, `ashen=1`.
+    - Blood Blade Storm: `[V1QA] PASS`, `stormObjects=77`, `hungryEcho=5`, `bloodEcho=5`.
+- Remaining risk:
+  - Pure simulation does not model player dodging, death pressure, camera readability, or VFX clutter.
+  - Greatsword route clear rate was lower than dual blades in pure sim, so this is the first route to inspect in MCP/hand play.
+
 ### Reliable MCP QA Line, 2026-06-27
 
 - Purpose:

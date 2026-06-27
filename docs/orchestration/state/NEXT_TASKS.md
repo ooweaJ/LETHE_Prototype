@@ -10,21 +10,21 @@ Current source of truth:
 - Test gate: `docs/TEST.md`
 - Detailed design: `docs/design/README.md` and `docs/design/LETHE_DESIGN_00..07`
 
-## 1. Full prototype playthrough review
+## 1. 20-minute beta balance playthrough review
 
 - Priority: highest
 - MCP automated QA on 2026-06-27 passed the technical gate: compile `0`, missing references `0`, console errors `0`, dual/greatsword/M2 smoke routes initialized, and 8 memory/8 echo VFX previews spawned.
 - Reliable QA line is now stronger: dual blades, greatsword, M2, VFX Matrix, and Blood Blade Storm all log explicit `[V1QA] PASS` from Unity MCP.
-- Include: normal play with debug panel hidden, both starting weapons, death case, 600-second survival if reachable, and fourth Gatekeeper clear if reachable.
+- Include: normal play with debug panel hidden, both starting weapons, first reward timing, first Gatekeeper at 300s, first forgetting around 5m, 1 ultimate around 15~16m, and fourth Gatekeeper clear around 19~20m.
 - Also check: the new HUD echo/objective lines are helpful rather than noisy.
-- Check: whether the run now feels like a complete prototype with a clear ending, readable boss progress, acceptable SFX, and useful result summary.
-- Done: jaewoo can say GO/ITERATE for prototype completion loop.
+- Check: whether the new 20-minute tempo feels satisfying, whether early XP is no longer too fast, and whether 1 ultimate + final Gatekeeper is a clear enough completion rule.
+- Done: jaewoo can say GO/ITERATE for the 20-minute beta balance line.
 
 ## 2. Weapon final feel review
 
 - Priority: high
 - Include: play dual blades and greatsword in the full run, not only debug presets.
-- Check: whether greatsword blocks the view, whether its slash appears fast enough, and whether dual blades have enough quick-hit identity.
+- Check: whether greatsword blocks the view, whether its slash appears fast enough, whether dual blades have enough quick-hit identity, and whether greatsword route clears are less stable than dual blades in real play.
 - Done: weapon timing/visibility is either locked for prototype or specific values are named for tuning.
 
 ## 3. Memory/echo comment pass

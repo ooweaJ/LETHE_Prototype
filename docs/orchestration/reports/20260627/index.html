@@ -169,6 +169,13 @@
           <p>Dev_Prototype_v1은 플레이 전 자동 QA 기준을 통과했다. 이제 단순히 “에러가 없다”가 아니라 쌍검, 대검, M2 루프, 8기억/8잔향 VFX, 피의 칼폭풍 실제 생성까지 조건 기반으로 확인한다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-27-04</span>
+          <h2><a href="#unit-2026-06-27-04" data-unit-link="unit-2026-06-27-04">20분 베타 런 밸런스 1차</a></h2>
+          <p>Dev_Prototype_v1은 이제 600초 압축 프로토타입이 아니라 20분 베타 런 후보로 조정됐다. 기본 목표는 1개 궁극 잔향을 완성하고 최종 문지기까지 처치하는 것이다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -306,6 +313,58 @@
 <li>방향: 플레이 전 자동 QA를 조건 기반 PASS/FAIL 라인으로 바꾼다.</li>
 <li>행동: 시작 무기, M2, VFX Matrix, 피의 칼폭풍 검증 메뉴를 강화/추가했다.</li>
 <li>결과: 기술 검증선은 통과했고, 남은 리스크는 사람 눈과 손으로 판단할 감각 영역으로 좁혀졌다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-27-04" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-27-04 - 20분 베타 런 밸런스 1차</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 이제 600초 압축 프로토타입이 아니라 20분 베타 런 후보로 조정됐다. 기본 목표는 1개 궁극 잔향을 완성하고 최종 문지기까지 처치하는 것이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>런 하드 캡을 <code>1260초</code>로 바꿨다.</li>
+<li>문지기 스케줄을 <code>300 / 600 / 900 / 1140초</code>로 바꿨다.</li>
+<li>문지기 HP를 <code>1900 / 2800 / 4000 / 5400</code>으로 바꿨다.</li>
+<li>시작 필요 XP를 <code>5</code>에서 <code>7</code>로 올렸다.</li>
+<li>초반 XP 과속을 줄였다:</li>
+<li>0~120초 <code>x1.00</code>.</li>
+<li>120~600초 <code>x1.34</code>.</li>
+<li>600초 이후 <code>x1.00</code>.</li>
+<li>첫 120초 처치 XP 보너스 제거.</li>
+<li>시간 생존만으로 클리어되는 조건을 제거하고, 4번째 문지기 처치를 클리어 조건으로 고정했다.</li>
+<li>레벨업 보상 우선순위를 피의 칼폭풍 전용에서 4개 궁극 조합 공통으로 확장했다.</li>
+<li><code>scripts/balance_sim_v1.js</code>를 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<p><code>node scripts\balance_sim_v1.js</code> 기준 <code>20m_slow_start</code>가 1차 채택 후보가 됐다.</p>
+<ul>
+<li>첫 보상: <code>24~28초</code>.</li>
+<li>첫 망각: <code>323~329초</code>.</li>
+<li>궁극 완성: <code>936~945초</code>.</li>
+<li>최종 클리어: <code>1178~1188초</code>.</li>
+<li>근거 문서: <code>docs/orchestration/evidence/2026-06-27-balance-sim-v1.md</code>.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy warning 7개, error 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: warning 0개, error 0개.</li>
+<li>Unity compile error count: <code>0</code>.</li>
+<li>Unity console error count after QA: <code>0</code>.</li>
+<li>Unity MCP QA: 쌍검, 대검, M2, VFX Matrix, 피의 칼폭풍 모두 <code>[V1QA] PASS</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>기본 클리어 목표는 <strong>20분 런 + 궁극 잔향 1개 + 최종 문지기 처치</strong>로 잡는다. 궁극 2개 완성은 기본 클리어 조건이 아니라 숙련/고점 목표로 둔다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>순수 시뮬레이션은 위치, 피격, 회피, VFX 가림, 실제 손맛을 반영하지 않는다. 특히 대검 루트 클리어율이 쌍검보다 낮게 나와서 실제 플레이와 MCP 장기 검증에서 먼저 봐야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Codex가 20분 베타 런 1차 수치를 코드와 문서에 반영했다. 다음 판단은 <code>20m_slow_start</code>가 직접 플레이에서도 적절한지, 대검 루트가 너무 불안정한지, 4개 궁극 루트가 각자 다른 맛으로 클리어 가능한지다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>1. MCP로 가능한 장기 상태 검증을 추가한다.</p>
+<p>2. jaewoo 직접 플레이 후 XP, 문지기 HP, 보상 루트 유도, 대검 안정성 중 하나를 좁게 조정한다.</p>
+<p>3. VFX 수정 요청이 오면 이번 밸런스 라인을 유지한 채 잔향/기억 id 단위로 조정한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 기존 초반 XP와 600초 구조는 베타 플레이로 보기엔 너무 빠르고 압축적이었다.</li>
+<li>방향: 현대 플레이 템포에 맞춰 20분 목표, 1궁극, 최종 문지기 클리어 구조로 전환한다.</li>
+<li>행동: 시뮬레이션을 만들고 XP/문지기/클리어 조건/보상 루트 우선순위를 조정했다.</li>
+<li>결과: 첫 보상 24~28초, 궁극 15~16분, 클리어 19~20분대의 1차 수치 라인이 생겼다.</li>
 </ul>
     </article>
       </div>

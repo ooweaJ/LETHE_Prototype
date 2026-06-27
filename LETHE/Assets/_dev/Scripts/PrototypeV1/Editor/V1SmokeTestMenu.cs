@@ -168,6 +168,7 @@ namespace Lethe.PrototypeV1.Editor
             }
 
             BeginRun(manager, smoke.WeaponId);
+            AdvanceStartSmoke(manager, 2.1f);
         }
 
         static void BeginRun(V1GameManager manager, V1WeaponId weaponId)
@@ -353,10 +354,33 @@ namespace Lethe.PrototypeV1.Editor
             return count;
         }
 
+        static void AdvanceStartSmoke(V1GameManager manager, float seconds)
+        {
+            const float dt = 0.1f;
+            var steps = Mathf.CeilToInt(seconds / dt);
+            for (int i = 0; i < steps; i++)
+            {
+                SetField(manager, "elapsed", Field<float>(manager, "elapsed") + dt);
+                Invoke(manager, "UpdateSpawning", new[] { typeof(float) }, dt);
+                Invoke(manager, "CleanupLists");
+            }
+        }
+
         static T Field<T>(V1GameManager manager, string name)
         {
             var field = typeof(V1GameManager).GetField(name, BindingFlags.Instance | BindingFlags.NonPublic);
             return field != null && field.GetValue(manager) is T value ? value : default;
+        }
+
+        static void SetField<T>(V1GameManager manager, string name, T value)
+        {
+            var field = typeof(V1GameManager).GetField(name, BindingFlags.Instance | BindingFlags.NonPublic);
+            if (field == null)
+            {
+                throw new MissingFieldException(nameof(V1GameManager), name);
+            }
+
+            field.SetValue(manager, value);
         }
 
         static object Invoke(V1GameManager manager, string name)
