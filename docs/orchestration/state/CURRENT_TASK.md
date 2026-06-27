@@ -68,6 +68,21 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Verification
 
+- Reliable MCP QA line, 2026-06-27:
+  - `V1SmokeTestMenu` now logs explicit `[V1QA] PASS/FAIL` results based on runtime conditions.
+  - Start-weapon QA requires elapsed runtime, live enemies, normal time scale, and no overlay state.
+  - M2 QA requires Hungry/Blood echoes at +5, Blood Blade Storm readiness, result overlay, and live enemies.
+  - VFX Matrix QA verifies all 8 memory previews, all 8 echo previews, and 3 non-blood ultimate previews.
+  - Blood Blade Storm QA ticks `UpdateEchoUltimate` and verifies actual `BloodBladeStorm*` objects.
+  - Unity MCP results:
+    - Dual blades: PASS, `elapsed=2.0`, `liveEnemies=8`.
+    - Greatsword: PASS, `elapsed=2.0`, `liveEnemies=8`.
+    - M2 loop: PASS, `HungryBlades:5`, `BloodReflection:5`, `storm=True`.
+    - VFX Matrix: PASS, `previewMemory=8`, `previewEcho=8`, `fracture=1`, `stasis=1`, `ashen=1`.
+    - Blood Blade Storm: PASS, `stormObjects=77`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Unity compile error count: `0`; scene missing references: `0`; console error count: `0`.
 - MCP automated play/QA pass, 2026-06-27:
   - AnkleBreaker Unity MCP targeted `LETHE` on port `7890`.
   - Unity compile error count: `0`; scene missing references: `0`.

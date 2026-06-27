@@ -18,6 +18,15 @@
 
 ## Progress
 
+- 2026-06-27 Update:
+  - [x] `V1SmokeTestMenu`를 고정 지연 스냅샷에서 조건 기반 `[V1QA] PASS/FAIL` 검증으로 보강했다.
+  - [x] 쌍검/대검 시작 QA는 실제 `elapsed >= 2.0`, 적 생성, 정상 `timeScale`, overlay 없음 조건을 확인한다.
+  - [x] M2 QA는 칼무리/혈반 잔향 +5, 피의 칼폭풍 준비, result overlay, 적 생성을 확인한다.
+  - [x] `LETHE/V1 QA/VFX Matrix`로 8기억/8잔향/3유틸궁극 프리뷰 생성을 확인한다.
+  - [x] `LETHE/V1 QA/Blood Blade Storm`으로 피의 칼폭풍 준비뿐 아니라 실제 storm 오브젝트 생성을 확인한다.
+  - [x] Unity MCP QA 결과: 쌍검, 대검, M2, VFX Matrix, Blood Blade Storm 모두 `[V1QA] PASS`.
+  - [ ] jaewoo 직접 플레이에서 손맛, VFX 과밀도, 잔향 구분감, HUD 피로도를 판단한다.
+
 - 2026-06-24 Update:
   - [x] Artificial arena-field read replaced with Lethe natural terrain direction: wet stone, mud, shallow water seams, roots, shard gravel, ash soil.
   - [x] Runtime outer marker rings removed in favor of marsh edges, water seams, drowned roots, and memory gravel.

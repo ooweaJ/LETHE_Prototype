@@ -23,6 +23,36 @@ Unity MCP가 연결되어 있으면 추가로 확인한다.
 
 ## Current Epic Checks
 
+### Reliable MCP QA Line, 2026-06-27
+
+- Purpose:
+  - Replace ambiguous delayed smoke snapshots with explicit Unity Editor QA pass/fail checks before jaewoo direct play.
+- QA menu paths:
+  - `LETHE/V1 Smoke/Start Dual Blades`
+  - `LETHE/V1 Smoke/Start Greatsword`
+  - `LETHE/V1 Smoke/M2 Loop`
+  - `LETHE/V1 QA/VFX Matrix`
+  - `LETHE/V1 QA/Blood Blade Storm`
+- Pass conditions:
+  - Start weapon: runtime `elapsed >= 2.0`, at least 5 live enemies, `timeScale=1`, and no result/refill/death overlay.
+  - M2 loop: Hungry/Blood echoes at +5, `BloodBladeStormReady`, result overlay, and at least 8 live enemies.
+  - VFX Matrix: all 8 memory preview objects, all 8 echo preview objects, and `Preview_FractureExecution`, `Preview_StasisHunt`, `Preview_AshenOblivion`.
+  - Blood Blade Storm: Hungry/Blood echoes at +5 plus actual `BloodBladeStorm*` runtime objects after `UpdateEchoUltimate` ticks.
+- Unity MCP results:
+  - Dual blades: `[V1QA] PASS`, `elapsed=2.0`, `liveEnemies=8`.
+  - Greatsword: `[V1QA] PASS`, `elapsed=2.0`, `liveEnemies=8`.
+  - M2 loop: `[V1QA] PASS`, `HungryBlades:5`, `BloodReflection:5`, `storm=True`, `result=True`.
+  - VFX Matrix: `[V1QA] PASS`, `previewMemory=8`, `previewEcho=8`, `fracture=1`, `stasis=1`, `ashen=1`.
+  - Blood Blade Storm: `[V1QA] PASS`, `stormObjects=77`, `hungryEcho=5`, `bloodEcho=5`.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity scene missing references: `0`.
+  - Unity console error count after QA: `0`.
+- Remaining risk:
+  - The line is now strong enough for technical pre-play QA, but it still cannot judge hand-feel, final VFX readability, or whether the combat screen is emotionally exciting.
+
 ### MCP Automated Play/QA, 2026-06-27
 
 - Connection:

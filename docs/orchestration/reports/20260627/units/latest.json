@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260627\\index.md",
-  "generatedAt": "2026-06-27T08:33:00.201Z",
-  "unitCount": 2,
+  "generatedAt": "2026-06-27T11:39:55.689Z",
+  "unitCount": 3,
   "latest": {
-    "title": "2026-06-27-02 - MCP 자동 플레이 QA",
-    "number": "02",
-    "markdownPath": "docs\\orchestration\\reports\\20260627\\units\\2026-06-27-02-mcp-자동-플레이-qa.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260627\\units\\2026-06-27-02-mcp-자동-플레이-qa.html"
+    "title": "2026-06-27-03 - 플레이 전 검증선 보강",
+    "number": "03",
+    "markdownPath": "docs\\orchestration\\reports\\20260627\\units\\2026-06-27-03-플레이-전-검증선-보강.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260627\\units\\2026-06-27-03-플레이-전-검증선-보강.html"
   }
 }

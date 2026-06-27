@@ -42,6 +42,22 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 reliable MCP QA line:
+  - Reworked `V1SmokeTestMenu` so smoke/QA runs wait for explicit pass conditions and log `[V1QA] PASS/FAIL` instead of relying on a fixed delayed snapshot.
+  - Start-weapon QA now requires real runtime progress: `elapsed >= 2.0`, at least 5 live enemies, `timeScale=1`, and no result/refill/death overlay.
+  - M2 QA now requires Hungry/Blood echoes at +5, `BloodBladeStormReady`, result overlay, and at least 8 live enemies.
+  - Added `LETHE/V1 QA/VFX Matrix` to spawn and verify all 8 memory previews, all 8 echo previews, and 3 non-blood ultimate previews.
+  - Added `LETHE/V1 QA/Blood Blade Storm` to force Hungry/Blood +5, tick the ultimate loop, and verify actual `BloodBladeStorm*` objects are generated.
+  - Verified through Unity MCP:
+    - Dual blades QA: PASS at `elapsed=2.0`, `liveEnemies=8`.
+    - Greatsword QA: PASS at `elapsed=2.0`, `liveEnemies=8`.
+    - M2 loop QA: PASS with `HungryBlades:5`, `BloodReflection:5`, `storm=True`, `result=True`.
+    - VFX Matrix QA: PASS with `previewMemory=8`, `previewEcho=8`, `fracture=1`, `stasis=1`, `ashen=1`.
+    - Blood Blade Storm QA: PASS with `stormObjects=77`, `hungryEcho=5`, `bloodEcho=5`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Unity compile error count: `0`; scene missing references: `0`; Unity console error count after QA: `0`.
+
 - Unity v1 MCP automated play/QA pass:
   - Confirmed AnkleBreaker Unity MCP is targeting `LETHE` on port `7890`.
   - `Dev_Prototype_v1` is open, clean, and contains the expected root objects: `V1_GameManager` and `Main Camera`.

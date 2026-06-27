@@ -14,6 +14,7 @@ Current source of truth:
 
 - Priority: highest
 - MCP automated QA on 2026-06-27 passed the technical gate: compile `0`, missing references `0`, console errors `0`, dual/greatsword/M2 smoke routes initialized, and 8 memory/8 echo VFX previews spawned.
+- Reliable QA line is now stronger: dual blades, greatsword, M2, VFX Matrix, and Blood Blade Storm all log explicit `[V1QA] PASS` from Unity MCP.
 - Include: normal play with debug panel hidden, both starting weapons, death case, 600-second survival if reachable, and fourth Gatekeeper clear if reachable.
 - Also check: the new HUD echo/objective lines are helpful rather than noisy.
 - Check: whether the run now feels like a complete prototype with a clear ending, readable boss progress, acceptable SFX, and useful result summary.

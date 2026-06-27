@@ -162,6 +162,13 @@
           <p>Dev_Prototype_v1은 Unity Editor에서 열리고, AnkleBreaker Unity MCP는 LETHE 인스턴스 7890 포트에 연결되어 있다. 이번 확인은 빌드/export가 아니라 에디터 플레이 가능성, 런타임 주입, VFX 생성, 오류 여부를 보는 자동 QA다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-27-03</span>
+          <h2><a href="#unit-2026-06-27-03" data-unit-link="unit-2026-06-27-03">플레이 전 검증선 보강</a></h2>
+          <p>Dev_Prototype_v1은 플레이 전 자동 QA 기준을 통과했다. 이제 단순히 “에러가 없다”가 아니라 쌍검, 대검, M2 루프, 8기억/8잔향 VFX, 피의 칼폭풍 실제 생성까지 조건 기반으로 확인한다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -255,6 +262,50 @@
 <li>방향: MCP 자동 QA는 기술 안정성과 런타임 연결을 검증하고, 감각 판단은 직접 플레이로 넘긴다.</li>
 <li>행동: Unity 스모크 메뉴, Play Mode reflection, VFX preview probe, compile/missing-reference/console 검사를 실행했다.</li>
 <li>결과: 기술적 막힘은 발견되지 않았고, 남은 핵심은 VFX/손맛 직접 리뷰로 좁혀졌다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-27-03" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-27-03 - 플레이 전 검증선 보강</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 플레이 전 자동 QA 기준을 통과했다. 이제 단순히 “에러가 없다”가 아니라 쌍검, 대검, M2 루프, 8기억/8잔향 VFX, 피의 칼폭풍 실제 생성까지 조건 기반으로 확인한다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>V1SmokeTestMenu</code>를 고정 지연 스냅샷 방식에서 <code>[V1QA] PASS/FAIL</code> 방식으로 바꿨다.</li>
+<li>쌍검/대검 시작 QA는 실제 시간이 흐르고 적이 생성되어야 PASS가 된다.</li>
+<li>M2 QA는 칼무리/혈반 잔향 +5, 피의 칼폭풍 준비, 결과 overlay, 적 생성을 확인한다.</li>
+<li><code>LETHE/V1 QA/VFX Matrix</code>를 추가했다.</li>
+<li><code>LETHE/V1 QA/Blood Blade Storm</code>을 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: warning <code>0</code>, error <code>0</code>.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: warning <code>0</code>, error <code>0</code>.</li>
+<li>Unity compile error count: <code>0</code>.</li>
+<li>Unity scene missing references: <code>0</code>.</li>
+<li>쌍검 QA: <code>[V1QA] PASS</code>, <code>elapsed=2.0</code>, <code>liveEnemies=8</code>.</li>
+<li>대검 QA: <code>[V1QA] PASS</code>, <code>elapsed=2.0</code>, <code>liveEnemies=8</code>.</li>
+<li>M2 QA: <code>[V1QA] PASS</code>, <code>HungryBlades:5</code>, <code>BloodReflection:5</code>, <code>storm=True</code>, <code>result=True</code>.</li>
+<li>VFX Matrix QA: <code>[V1QA] PASS</code>, <code>previewMemory=8</code>, <code>previewEcho=8</code>, <code>fracture=1</code>, <code>stasis=1</code>, <code>ashen=1</code>.</li>
+<li>피의 칼폭풍 QA: <code>[V1QA] PASS</code>, <code>stormObjects=77</code>.</li>
+<li>최종 Unity console error count: <code>0</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>플레이 전 기술 검증선은 이제 충분히 강한 상태로 본다. 이 다음부터는 자동 테스트보다 jaewoo 직접 플레이에서 보이는 감각 피드백이 우선이다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>MCP 메뉴 실행은 가끔 <code>fetch failed</code>를 반환하지만 Unity 안에서는 명령이 실행된다. 따라서 이 작업의 기준은 MCP 호출 반환값이 아니라 Unity console의 <code>[V1QA] PASS/FAIL</code> 로그다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Codex가 플레이 전 QA 메뉴를 보강했고, 쌍검/대검/M2/VFX Matrix/피의 칼폭풍이 모두 PASS했다. 남은 판단은 실제 플레이에서 공격 손맛, VFX 과밀도, 기억/잔향 구분감, HUD 피로도를 보는 것이다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>1. jaewoo가 직접 플레이한다.</p>
+<p>2. VFX 피드백이 오면 기억/잔향 id 단위로 수정한다.</p>
+<p>3. 게임 완성도 피드백이 오면 보상 템포, 공격 판독성, 망각 UX, 스폰 압력 중 하나만 좁게 고친다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 이전 스모크 테스트는 고정 시간 스냅샷이라 실제 통과 조건이 약했다.</li>
+<li>방향: 플레이 전 자동 QA를 조건 기반 PASS/FAIL 라인으로 바꾼다.</li>
+<li>행동: 시작 무기, M2, VFX Matrix, 피의 칼폭풍 검증 메뉴를 강화/추가했다.</li>
+<li>결과: 기술 검증선은 통과했고, 남은 리스크는 사람 눈과 손으로 판단할 감각 영역으로 좁혀졌다.</li>
 </ul>
     </article>
       </div>

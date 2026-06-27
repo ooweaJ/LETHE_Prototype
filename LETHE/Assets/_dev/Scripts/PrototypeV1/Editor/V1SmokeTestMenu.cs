@@ -7,7 +7,7 @@ namespace Lethe.PrototypeV1.Editor
 {
     public static class V1SmokeTestMenu
     {
-        const double ResultDelaySeconds = 2.25;
+        const double DefaultTimeoutSeconds = 12.0;
         const string ActiveKey = "Lethe.V1Smoke.Active";
         const string ModeKey = "Lethe.V1Smoke.Mode";
         const string WeaponKey = "Lethe.V1Smoke.Weapon";
@@ -38,6 +38,38 @@ namespace Lethe.PrototypeV1.Editor
         public static void StartM2Loop()
         {
             SavePending(new PendingSmoke(SmokeMode.M2Loop, V1WeaponId.DualBlades));
+            StartRunner();
+        }
+
+        [MenuItem("LETHE/V1 QA/Start Dual Blades")]
+        public static void QaStartDualBlades()
+        {
+            BeginStartWeaponSmoke(V1WeaponId.DualBlades);
+        }
+
+        [MenuItem("LETHE/V1 QA/Start Greatsword")]
+        public static void QaStartGreatsword()
+        {
+            BeginStartWeaponSmoke(V1WeaponId.Greatsword);
+        }
+
+        [MenuItem("LETHE/V1 QA/M2 Loop")]
+        public static void QaM2Loop()
+        {
+            StartM2Loop();
+        }
+
+        [MenuItem("LETHE/V1 QA/VFX Matrix")]
+        public static void QaVfxMatrix()
+        {
+            SavePending(new PendingSmoke(SmokeMode.VfxMatrix, V1WeaponId.DualBlades));
+            StartRunner();
+        }
+
+        [MenuItem("LETHE/V1 QA/Blood Blade Storm")]
+        public static void QaBloodBladeStorm()
+        {
+            SavePending(new PendingSmoke(SmokeMode.BloodBladeStorm, V1WeaponId.DualBlades));
             StartRunner();
         }
 
@@ -85,15 +117,24 @@ namespace Lethe.PrototypeV1.Editor
                 invokedAt = EditorApplication.timeSinceStartup;
                 RunPending(manager, smoke);
                 Debug.Log($"[V1Smoke] invoked {smoke.Label}: {manager.DebugSnapshot()}");
-                return;
             }
 
-            if (EditorApplication.timeSinceStartup - invokedAt < ResultDelaySeconds)
+            var age = EditorApplication.timeSinceStartup - invokedAt;
+            var result = EvaluatePending(manager, smoke, age, out var details);
+            if (result == SmokeResult.Pending && age < DefaultTimeoutSeconds)
             {
                 return;
             }
 
-            Debug.Log($"[V1Smoke] result {smoke.Label}: {manager.DebugSnapshot()}");
+            if (result == SmokeResult.Pass)
+            {
+                Debug.Log($"[V1QA] PASS {smoke.Label}: {details}");
+            }
+            else
+            {
+                Debug.LogError($"[V1QA] FAIL {smoke.Label}: {details}");
+            }
+
             Finish();
         }
 
@@ -105,19 +146,95 @@ namespace Lethe.PrototypeV1.Editor
                 return;
             }
 
+            if (smoke.Mode == SmokeMode.VfxMatrix)
+            {
+                BeginRun(manager, V1WeaponId.DualBlades);
+                SpawnAllMemoryEchoPreviews(manager);
+                Invoke(manager, "SpawnUtilityUltimatePreview");
+                return;
+            }
+
+            if (smoke.Mode == SmokeMode.BloodBladeStorm)
+            {
+                BeginRun(manager, smoke.WeaponId);
+                Invoke(manager, "EnsureReviewEnemies", new[] { typeof(int) }, 18);
+                Invoke(manager, "SetEcho", new[] { typeof(V1MemoryId), typeof(int) }, V1MemoryId.HungryBlades, 5);
+                Invoke(manager, "SetEcho", new[] { typeof(V1MemoryId), typeof(int) }, V1MemoryId.BloodReflection, 5);
+                for (int i = 0; i < 6; i++)
+                {
+                    Invoke(manager, "UpdateEchoUltimate", new[] { typeof(float) }, 0.12f);
+                }
+                return;
+            }
+
+            BeginRun(manager, smoke.WeaponId);
+        }
+
+        static void BeginRun(V1GameManager manager, V1WeaponId weaponId)
+        {
             var method = typeof(V1GameManager).GetMethod(
                 "BeginRun",
                 BindingFlags.Instance | BindingFlags.NonPublic,
                 null,
                 new[] { typeof(V1WeaponId) },
                 null);
-
             if (method == null)
             {
                 throw new MissingMethodException(nameof(V1GameManager), "BeginRun(V1WeaponId)");
             }
 
-            method.Invoke(manager, new object[] { smoke.WeaponId });
+            method.Invoke(manager, new object[] { weaponId });
+        }
+
+        static SmokeResult EvaluatePending(V1GameManager manager, PendingSmoke smoke, double age, out string details)
+        {
+            var snapshot = manager.DebugSnapshot();
+            var liveEnemies = LiveEnemyCount(manager);
+            var elapsed = Field<float>(manager, "elapsed");
+            var resultOverlay = Field<bool>(manager, "resultOverlay");
+            var refillOverlay = Field<bool>(manager, "refillOverlay");
+            var deathOverlay = Field<bool>(manager, "deathOverlay");
+
+            details = $"{snapshot} | age={age:0.0}s liveEnemies={liveEnemies} timeScale={Time.timeScale:0.00}";
+
+            switch (smoke.Mode)
+            {
+                case SmokeMode.StartWeapon:
+                    if (elapsed >= 2f && liveEnemies >= 5 && Time.timeScale > 0.99f && !resultOverlay && !refillOverlay && !deathOverlay)
+                    {
+                        return SmokeResult.Pass;
+                    }
+                    return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
+
+                case SmokeMode.M2Loop:
+                    details += $" | hungryEcho={EchoLevel(manager, V1MemoryId.HungryBlades)} bloodEcho={EchoLevel(manager, V1MemoryId.BloodReflection)}";
+                    if (EchoLevel(manager, V1MemoryId.HungryBlades) >= 5 && EchoLevel(manager, V1MemoryId.BloodReflection) >= 5 && manager.BloodBladeStormReady && resultOverlay && liveEnemies >= 8)
+                    {
+                        return SmokeResult.Pass;
+                    }
+                    return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
+
+                case SmokeMode.VfxMatrix:
+                    var missing = MissingPreviewIds();
+                    details += $" | previewMemory={CountObjects("PreviewMemory_")} previewEcho={CountObjects("PreviewEcho_")} fracture={CountObjects("Preview_FractureExecution")} stasis={CountObjects("Preview_StasisHunt")} ashen={CountObjects("Preview_AshenOblivion")} missing={missing}";
+                    if (missing.Length == 0 && CountObjects("Preview_FractureExecution") > 0 && CountObjects("Preview_StasisHunt") > 0 && CountObjects("Preview_AshenOblivion") > 0)
+                    {
+                        return SmokeResult.Pass;
+                    }
+                    return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
+
+                case SmokeMode.BloodBladeStorm:
+                    var stormObjects = CountObjects("BloodBladeStorm");
+                    details += $" | stormObjects={stormObjects} hungryEcho={EchoLevel(manager, V1MemoryId.HungryBlades)} bloodEcho={EchoLevel(manager, V1MemoryId.BloodReflection)}";
+                    if (manager.BloodBladeStormReady && stormObjects >= 8 && liveEnemies >= 1)
+                    {
+                        return SmokeResult.Pass;
+                    }
+                    return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
+
+                default:
+                    return SmokeResult.Fail;
+            }
         }
 
         static void Finish()
@@ -145,7 +262,16 @@ namespace Lethe.PrototypeV1.Editor
         enum SmokeMode
         {
             StartWeapon,
-            M2Loop
+            M2Loop,
+            VfxMatrix,
+            BloodBladeStorm
+        }
+
+        enum SmokeResult
+        {
+            Pending,
+            Pass,
+            Fail
         }
 
         readonly struct PendingSmoke
@@ -161,7 +287,92 @@ namespace Lethe.PrototypeV1.Editor
 
             public string Label => Mode == SmokeMode.M2Loop
                 ? "M2 Loop"
-                : $"{WeaponId}";
+                : Mode == SmokeMode.VfxMatrix
+                    ? "VFX Matrix"
+                    : Mode == SmokeMode.BloodBladeStorm
+                        ? "Blood Blade Storm"
+                        : $"{WeaponId}";
+        }
+
+        static void SpawnAllMemoryEchoPreviews(V1GameManager manager)
+        {
+            var ids = (V1MemoryId[])Enum.GetValues(typeof(V1MemoryId));
+            var player = Field<Transform>(manager, "player");
+            var center = player != null ? player.position : Vector3.zero;
+            for (int i = 0; i < ids.Length; i++)
+            {
+                var angle = i * (360f / ids.Length);
+                var pos = center + Quaternion.Euler(0f, 0f, angle) * Vector3.right * 2.8f;
+                Invoke(manager, "SpawnOneUtilityPreview", new[] { typeof(V1MemoryId), typeof(Vector3), typeof(bool), typeof(float) }, ids[i], pos, false, angle);
+                Invoke(manager, "SpawnOneUtilityPreview", new[] { typeof(V1MemoryId), typeof(Vector3), typeof(bool), typeof(float) }, ids[i], pos + Vector3.up * 0.7f, true, angle + 18f);
+            }
+        }
+
+        static string MissingPreviewIds()
+        {
+            var ids = (V1MemoryId[])Enum.GetValues(typeof(V1MemoryId));
+            var missing = new System.Text.StringBuilder();
+            foreach (var id in ids)
+            {
+                if (CountObjects($"PreviewMemory_{id}") <= 0)
+                {
+                    if (missing.Length > 0) missing.Append(",");
+                    missing.Append("M:").Append(id);
+                }
+                if (CountObjects($"PreviewEcho_{id}") <= 0)
+                {
+                    if (missing.Length > 0) missing.Append(",");
+                    missing.Append("E:").Append(id);
+                }
+            }
+            return missing.ToString();
+        }
+
+        static int EchoLevel(V1GameManager manager, V1MemoryId id)
+        {
+            var levels = Field<System.Collections.Generic.Dictionary<V1MemoryId, int>>(manager, "echoLevels");
+            return levels != null && levels.TryGetValue(id, out var value) ? value : 0;
+        }
+
+        static int LiveEnemyCount(V1GameManager manager)
+        {
+            var enemies = Field<System.Collections.Generic.List<V1Enemy>>(manager, "enemies");
+            return enemies == null ? 0 : enemies.FindAll(enemy => enemy != null && enemy.IsAlive).Count;
+        }
+
+        static int CountObjects(string namePart)
+        {
+            var count = 0;
+            foreach (var transform in UnityEngine.Object.FindObjectsByType<Transform>(FindObjectsSortMode.None))
+            {
+                if (transform != null && transform.gameObject.activeInHierarchy && transform.name.Contains(namePart, StringComparison.Ordinal))
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        static T Field<T>(V1GameManager manager, string name)
+        {
+            var field = typeof(V1GameManager).GetField(name, BindingFlags.Instance | BindingFlags.NonPublic);
+            return field != null && field.GetValue(manager) is T value ? value : default;
+        }
+
+        static object Invoke(V1GameManager manager, string name)
+        {
+            return Invoke(manager, name, Type.EmptyTypes);
+        }
+
+        static object Invoke(V1GameManager manager, string name, Type[] parameterTypes, params object[] args)
+        {
+            var method = typeof(V1GameManager).GetMethod(name, BindingFlags.Instance | BindingFlags.NonPublic, null, parameterTypes, null);
+            if (method == null)
+            {
+                throw new MissingMethodException(nameof(V1GameManager), name);
+            }
+
+            return method.Invoke(manager, args);
         }
     }
 }
