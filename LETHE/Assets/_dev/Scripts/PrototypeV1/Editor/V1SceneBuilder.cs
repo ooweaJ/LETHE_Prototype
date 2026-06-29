@@ -26,6 +26,7 @@ namespace Lethe.PrototypeV1.Editor
             camera.orthographicSize = 6.1f;
             camera.backgroundColor = new Color(0.035f, 0.045f, 0.055f);
             camera.clearFlags = CameraClearFlags.SolidColor;
+            cameraObject.AddComponent<AudioListener>();
 
             var lightObject = new GameObject("V1_Readability_Light");
             var light = lightObject.AddComponent<Light>();

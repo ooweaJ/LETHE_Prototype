@@ -13,6 +13,8 @@ Current source of truth:
 ## 1. 20-minute beta balance playthrough review
 
 - Priority: highest
+- 2026-06-29 재확인: 씬 누락 참조를 v1 scene rebuild로 복구했고, compile `0`, scene/assets missing references `0`, console errors `0` 상태에서 dual blades, greatsword, M2, VFX Matrix, Blood Blade Storm QA가 모두 `[V1QA] PASS`했다.
+- Review sheet: `docs/orchestration/review_prompts/2026-06-29-jaewoo-beta-run-review.md`
 - MCP automated QA on 2026-06-27 passed the technical gate: compile `0`, missing references `0`, console errors `0`, dual/greatsword/M2 smoke routes initialized, and 8 memory/8 echo VFX previews spawned.
 - Reliable QA line is now stronger: dual blades, greatsword, M2, VFX Matrix, and Blood Blade Storm all log explicit `[V1QA] PASS` from Unity MCP.
 - Include: normal play with debug panel hidden, both starting weapons, first reward timing, first Gatekeeper at 300s, first forgetting around 5m, 1 ultimate around 15~16m, and fourth Gatekeeper clear around 19~20m.

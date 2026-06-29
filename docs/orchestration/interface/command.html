@@ -59,8 +59,8 @@
       <div class="grid">
         <article>
           <h2>Codex에게 지금 시킬 일</h2>
-          <p><code>Dev_Prototype_v1</code> 플레이 감각 리뷰와 데이터 기반 보정으로 이어갑니다.</p>
-          <textarea id="prompt-next" readonly>AGENTS.md와 docs/orchestration/state/CURRENT_TASK.md, docs/orchestration/state/STATUS.md, docs/orchestration/state/NEXT_TASKS.md를 읽고 Dev_Prototype_v1의 최신 상태를 기준으로 진행해줘. 현재 대상은 Dev_EchoSlice가 아니라 Dev_Prototype_v1이고, 쌍검/대검 수치와 베기 VFX/피격 피드백은 LETHE/Assets/_dev/Data/Weapons의 WeaponDefinition/WeaponVfxProfile ScriptableObject 자산에서 조절해야 해. 먼저 Play Mode로 시작 무기 선택, 쌍검 2연 반달, 대검 범위 반달, 칼무리 후속타, 흰색 피격 플래시, 데미지 숫자, 원거리몹 정지 사격을 확인하고, 약한 지점 하나를 고른 뒤 코드 하드코딩보다 SO 자산 값 조절을 우선해서 보정해줘.</textarea>
+          <p><code>Dev_Prototype_v1</code> 20분 베타런을 직접 리뷰하고 다음 수정 축을 하나만 고릅니다.</p>
+          <textarea id="prompt-next" readonly>AGENTS.md와 docs/orchestration/state/STATUS.md, docs/orchestration/state/CURRENT_TASK.md, docs/orchestration/state/NEXT_TASKS.md, docs/orchestration/review_prompts/2026-06-29-jaewoo-beta-run-review.md를 읽고 Dev_Prototype_v1 20분 베타런 직접 리뷰를 진행해줘. 자동 QA는 2026-06-29 기준 dual blades, greatsword, M2, VFX Matrix, Blood Blade Storm 모두 [V1QA] PASS야. 새 기능을 추가하지 말고 쌍검/대검 각각 플레이하면서 첫 보상 24~30초, 첫 문지기 300초, 첫 망각 5분대, 궁극 15~16분, 최종 문지기 19~20분 흐름과 기억/잔향/VFX/HUD 가독성을 기록해줘. 리뷰 후 GO, ITERATE, NO-GO 중 하나를 고르고, ITERATE라면 XP cadence, Gatekeeper HP, weapon route balance, reward route steering, VFX scale/timing, enemy pressure, forgetting UX, HUD readability 중 하나만 다음 Codex 수정 축으로 정리해줘.</textarea>
           <button type="button" data-copy-target="prompt-next">프롬프트 복사</button>
         </article>
 
@@ -70,18 +70,18 @@
             <li>무기/기억/잔향 신규 확장 금지</li>
             <li>새 지역, 최종 보스, 상점, 메타 진행 추가 금지</li>
             <li><code>Assets/Lethe</code> 승격은 보류하고 <code>Assets/_dev</code>에서 먼저 검증</li>
-            <li>베기 scale/lifetime/color를 다시 코드 상수로 박지 않기</li>
+            <li>직접 리뷰 전 추가 수치 튜닝 금지</li>
           </ul>
         </article>
 
         <article>
           <h2>완료 기준</h2>
           <ul>
-            <li><code>Dev_Prototype_v1</code> Play Mode 리뷰 완료</li>
-            <li>쌍검/대검/칼무리/피격 피드백 중 약한 지점 1개 선택</li>
-            <li><code>_dev/Data/Weapons</code> SO 값 우선 보정</li>
-            <li>Unity compile 0 error와 Play Mode smoke 확인</li>
-            <li>상태, devlog, reports 갱신</li>
+            <li>쌍검/대검 각각 직접 플레이 기록</li>
+            <li>20분 템포와 첫 6분 감각 기록</li>
+            <li>기억/잔향/VFX/HUD 문제 id 또는 축 기록</li>
+            <li><code>GO</code>, <code>ITERATE</code>, <code>NO-GO</code> 결정</li>
+            <li><code>ITERATE</code>라면 다음 수정 축 1개만 선택</li>
           </ul>
         </article>
 
@@ -90,6 +90,7 @@
           <ul>
             <li><a href="../state/CURRENT_TASK.md">CURRENT_TASK.md</a></li>
             <li><a href="../state/NEXT_TASKS.md">NEXT_TASKS.md</a></li>
+            <li><a href="../review_prompts/2026-06-29-jaewoo-beta-run-review.md">2026-06-29 직접 리뷰 기록지</a></li>
             <li><a href="../../design/README.md">docs/design README</a></li>
             <li><a href="../../design/LETHE_DESIGN_02_COMBAT.md">LETHE_DESIGN_02_COMBAT.md</a></li>
             <li><a href="../../design/LETHE_DESIGN_03_MEMORY_ECHO.md">LETHE_DESIGN_03_MEMORY_ECHO.md</a></li>

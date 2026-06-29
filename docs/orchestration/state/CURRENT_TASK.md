@@ -581,7 +581,7 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 
 ## Next Implementation
 
-1. Review `Dev_Prototype_v1` as a 20-minute beta-run candidate, not as the old 600-second prototype loop.
+1. Review `Dev_Prototype_v1` as a 20-minute beta-run candidate, not as the old 600-second prototype loop. Use `docs/orchestration/review_prompts/2026-06-29-jaewoo-beta-run-review.md` as the direct-play checklist.
 2. Collect one combined feedback pass for:
    - 시작 무기 카드 2개가 명확하게 읽히는지.
    - 첫 보상이 24~30초 전후에 자연스럽게 오는지.

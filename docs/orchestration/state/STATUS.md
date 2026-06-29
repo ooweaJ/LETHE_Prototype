@@ -1,6 +1,6 @@
 # Status
 
-Last updated: 2026-06-27
+Last updated: 2026-06-29
 
 ## Current Snapshot
 
@@ -41,6 +41,23 @@ The report/devlog/review migration is now applied physically: old `docs/reports/
 The current development-docs plugin baseline from `docs/orchestration/MIGRATION_PROMPT.md` has been applied. `AGENTS.md` now uses a `Development Docs Plugin` section, `docs/orchestration/templates/HTML_INTERFACE_TEMPLATE.md` exists, legacy review pointer READMEs are readable, `reports/index.html` is generated as a newest-first date archive, daily report pages are generated as unit-card pages, and Discord delivery is documented as Project Orchestrator first with local direct-send scripts as trusted fallback only.
 
 ## Latest Verified Result
+
+- Unity v1 20-minute beta direct-review preparation, 2026-06-29:
+  - Rechecked Unity MCP state: active instance `LETHE` on port `7890`, active scene `Assets/_dev/Scenes/Dev_Prototype_v1.unity`.
+  - Found and fixed two scene missing references on `V1_GameManager` by running `LETHE/_dev/Rebuild Prototype v1 Scene`.
+  - Rechecked technical gate after rebuild:
+    - Unity compile error count: `0`.
+    - Unity scene missing references: `0`.
+    - Unity asset missing references: `0`.
+  - Reran the pre-play QA menu line:
+    - Dual blades: `[V1QA] PASS`, `elapsed=2.1`, `liveEnemies=8`.
+    - Greatsword: `[V1QA] PASS`, `elapsed=2.1`, `liveEnemies=8`.
+    - M2 loop: `[V1QA] PASS`, `HungryBlades:5`, `BloodReflection:5`, `storm=True`, `result=True`.
+    - VFX Matrix: `[V1QA] PASS`, `previewMemory=8`, `previewEcho=8`, `fracture=1`, `stasis=1`, `ashen=1`.
+    - Blood Blade Storm: `[V1QA] PASS`, `stormObjects=77`, `hungryEcho=5`, `bloodEcho=5`.
+  - Unity console error count during QA checks: `0`.
+  - Created direct-review checklist: `docs/orchestration/review_prompts/2026-06-29-jaewoo-beta-run-review.md`.
+  - Added `AudioListener` to `Main Camera` and to `V1SceneBuilder`; follow-up dual-blades smoke still logged `[V1QA] PASS` with console error count `0` and no repeated no-audio-listener log.
 
 - Unity v1 20-minute beta-run balance pass:
   - Adopted a 20-minute target run for `Dev_Prototype_v1`: expected clear band `18~22m`, hard cap `1260s`, and normal clear through all 4 Gatekeepers rather than timer-only survival.
@@ -1380,7 +1397,7 @@ Continue from `Dev_Prototype_v1`, not `Dev_Prototype_v0`.
 
 Next implementation step:
 
-1. Run the updated 20-minute `Dev_Prototype_v1` balance line through MCP technical checks and jaewoo direct play.
+1. Use `docs/orchestration/review_prompts/2026-06-29-jaewoo-beta-run-review.md` for jaewoo direct play of the updated 20-minute `Dev_Prototype_v1` balance line.
 2. Review checklist:
    - 시작 무기 카드 2개가 명확하게 읽히는가?
    - 첫 보상은 24~30초 전후에 와서 너무 빠르지도 느리지도 않은가?

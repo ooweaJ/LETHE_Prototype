@@ -74,23 +74,23 @@
       <section class="metrics" aria-label="핵심 상태 요약">
         <div class="metric green">
           <span>현재 단계</span>
-          <strong>Unity v1 Prototype</strong>
-          <small>플레이어 체감 튜닝 단계</small>
+          <strong>20분 베타런 후보</strong>
+          <small>Dev_Prototype_v1 직접 리뷰 대기</small>
         </div>
         <div class="metric blue">
           <span>최신 검증</span>
-          <strong>SO VFX smoke 통과</strong>
-          <small>Unity compile 0 error</small>
+          <strong>5개 V1QA PASS</strong>
+          <small>compile 0, missing refs 0</small>
         </div>
         <div class="metric amber">
           <span>막힌 점</span>
-          <strong>Orchestrator intake</strong>
-          <small>Discord API project not found</small>
+          <strong>기술 blocker 없음</strong>
+          <small>오디오 리스너 log는 polish debt</small>
         </div>
         <div class="metric red">
           <span>다음 게이트</span>
-          <strong>통합 플레이 리뷰</strong>
-          <small>무기/잔향 타격감 판단</small>
+          <strong>jaewoo 직접 플레이</strong>
+          <small>GO / ITERATE / NO-GO 판단</small>
         </div>
       </section>
 
@@ -98,10 +98,9 @@
         <h2>현재 결론</h2>
         <p>
           현재 작업 대상은 <code>Dev_EchoSlice</code>가 아니라 <code>Dev_Prototype_v1</code>입니다.
-          쌍검/대검 수치와 베기 VFX, 피격 섬광, 데미지 숫자는
-          <code>_dev/Data/Weapons</code>의 ScriptableObject 자산으로 분리됐습니다.
-          다음 판단은 코드 구조 세팅이 아니라, 실제 플레이에서 쌍검/대검 기본공격과 칼무리 잔향,
-          피의 칼폭풍이 충분히 읽히고 손맛이 있는지 확인하는 것입니다.
+          2026-06-29 기준 쌍검, 대검, M2 루프, 8기억/8잔향 VFX Matrix, 피의 칼폭풍 QA가 모두
+          <code>[V1QA] PASS</code>를 냈습니다. 다음 판단은 자동 QA가 아니라 직접 플레이에서
+          20분 템포, 쌍검/대검 손맛, 기억/잔향 구분감, HUD 피로도를 확인하는 것입니다.
         </p>
       </section>
 
@@ -111,11 +110,11 @@
           <div class="decision">
             <div>
               <span class="label">해야 할 일</span>
-              <span class="value">Dev_Prototype_v1 플레이 감각 리뷰</span>
+              <span class="value">20분 베타런 직접 리뷰</span>
             </div>
             <div>
               <span class="label">필요한 입력</span>
-              <span class="value">쌍검/대검, 칼무리 잔향, 데미지 숫자, 피격 플래시 체감</span>
+              <span class="value">리뷰 기록지 기준 쌍검/대검, 런 템포, 기억/잔향, 궁극, HUD 체감</span>
             </div>
             <div>
               <span class="label">완료 신호</span>
@@ -129,9 +128,9 @@
           <ul>
             <li>쌍검 2연 반달이 빠른 연쇄감으로 읽히는가?</li>
             <li>대검 반달이 실제 범위만큼 큰 한 방으로 읽히는가?</li>
-            <li>칼무리 잔향이 기본공격 후속타로 보이는가?</li>
-            <li>흰색 피격 플래시와 데미지 숫자가 충분한가?</li>
-            <li>다음 수정은 <code>_dev/Data/Weapons</code> 수치 조절로 해결되는가?</li>
+            <li>첫 보상, 첫 망각, 궁극 완성, 최종 문지기 흐름이 자연스러운가?</li>
+            <li>8기억/8잔향이 서로 구분되는가?</li>
+            <li>다음 수정 축을 하나만 고를 수 있는가?</li>
           </ul>
         </article>
 
@@ -140,22 +139,22 @@
           <div class="decision">
             <div>
               <span class="label">완료 작업</span>
-              <span class="value">무기/베기 VFX ScriptableObject 데이터화</span>
+              <span class="value">20분 베타 직접 리뷰 준비</span>
             </div>
             <div>
               <span class="label">검증</span>
-              <span class="value"><code>dotnet build</code>, Unity compile 0 error, Play Mode SO smoke</span>
+              <span class="value">Unity V1QA 5종 PASS, <code>dotnet build</code>, report/check 통과</span>
             </div>
             <div>
               <span class="label">주의</span>
-              <span class="value">직접 Discord webhook은 정책 차단, Orchestrator intake는 <code>project not found</code></span>
+              <span class="value">새 기능 추가보다 직접 리뷰 피드백 수집이 우선</span>
             </div>
           </div>
         </article>
       </section>
 
       <footer>
-        기준: 2026-06-16 · <a href="../reports/index.html">보고서 목록</a>
+        기준: 2026-06-29 · <a href="../reports/index.html">보고서 목록</a> · <a href="../review_prompts/2026-06-29-jaewoo-beta-run-review.md">직접 리뷰 기록지</a>
       </footer>
     </main>
   </body>
