@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260629\\index.md",
-  "generatedAt": "2026-06-29T08:39:26.027Z",
-  "unitCount": 2,
+  "generatedAt": "2026-06-29T10:03:28.448Z",
+  "unitCount": 3,
   "latest": {
-    "title": "2026-06-29-02 - 보스 템포 / XP / DPS 재설계안",
-    "number": "02",
-    "markdownPath": "docs\\orchestration\\reports\\20260629\\units\\2026-06-29-02-보스-템포-xp-dps-재설계안.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260629\\units\\2026-06-29-02-보스-템포-xp-dps-재설계안.html"
+    "title": "2026-06-29-03 - 보스 템포 / XP / DPS 재설계안",
+    "number": "03",
+    "markdownPath": "docs\\orchestration\\reports\\20260629\\units\\2026-06-29-03-보스-템포-xp-dps-재설계안.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260629\\units\\2026-06-29-03-보스-템포-xp-dps-재설계안.html"
   }
 }

@@ -1704,6 +1704,34 @@ For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` b
   - `npm.cmd run report:check`: passed, `15` unit headings ok.
   - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
   - evidence: `LETHE/Assets/_dev/Evidence/prototype_memory_identity_pass_game.png`.
+# 2026-06-29 Update: Stepped Boss Runtime Applied
+
+The stepped boss / XP / DPS candidate is now applied in Unity `Dev_Prototype_v1`.
+
+Applied runtime values:
+
+- Gatekeeper schedule: `150 / 360 / 660 / 1020s`.
+- Gatekeeper intervals: `150 / 210 / 300 / 360s`.
+- Gatekeeper HP: `1200 / 2250 / 4050 / 8650`.
+- Hard cap: `1200s`.
+- Initial XP requirement: `8`.
+- Normal-run deficit survival: removed as a timed `54s` pocket.
+
+Normal Gatekeeper clear now still forgets the highest memory and grants the echo, but Space moves directly to immediate memory refill/resonance instead of a timed deficit survival phase.
+
+Verification:
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+- `node scripts/balance_curve_v1.js`: passed.
+- `node scripts/verify_unity_stepped_balance.js`: passed.
+- Unity MCP compile error count: `0`.
+- Unity MCP console error count: `0`.
+
+Current limitation: Unity MCP `unity_execute_menu_item` repeatedly returned `Error polling queue: fetch failed` during V1 smoke menu attempts, so the explicit V1QA menu line needs a retry before final handoff.
+
+Current next step: retry V1QA smoke when MCP menu execution is stable, then run a focused first-6-minute jaewoo review.
+
 # 2026-06-29 Update: Stepped Boss Balance Candidate
 
 Jaewoo direct review changed the immediate balance direction:

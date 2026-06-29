@@ -49,6 +49,25 @@ Current source of truth:
 - Include: decide whether `_dev` should keep getting tuned or whether the new `Assets/Lethe` promotion-prep structure should start receiving stable prefabs/data after full playthrough review.
 - Check: remaining prototype-only runtime generation, missing audio, authored prefabs, scene organization, and asset naming.
 - Done: GO/ITERATE decision for promotion prep is recorded.
+# 2026-06-29 Update: Next Priority After Patch
+
+## 1. Retry V1QA smoke and first-6-minute review
+
+- Priority: highest
+- Stepped boss / XP / DPS curve is now applied to Unity runtime.
+- Retry V1QA menu line when MCP menu execution stops returning `Error polling queue: fetch failed`:
+  - `LETHE/V1 Smoke/Start Dual Blades`
+  - `LETHE/V1 Smoke/Start Greatsword`
+  - `LETHE/V1 Smoke/M2 Loop`
+  - `LETHE/V1 QA/VFX Matrix`
+  - `LETHE/V1 QA/Blood Blade Storm`
+- Then run jaewoo first-6-minute review:
+  - Is first boss at ~2:30 a better hook?
+  - Does the first forgetting/echo moment arrive soon enough?
+  - Does immediate refill feel cleaner than deficit survival?
+  - Is enemy count/HP readable, not empty or oppressive?
+- Done: jaewoo can say whether this pacing line is `GO` or needs one numeric adjustment.
+
 # 2026-06-29 Update: Next Priority
 
 ## 1. Apply stepped boss / XP / DPS curve

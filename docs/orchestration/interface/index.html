@@ -66,7 +66,7 @@
       <header>
         <div>
           <p class="eyebrow">LETHE 프로젝트 대시보드</p>
-          <h1>보스 템포 재설계</h1>
+          <h1>보스 템포 적용 완료</h1>
         </div>
         <span class="badge">Dev_Prototype_v1</span>
       </header>
@@ -74,8 +74,8 @@
       <section class="metrics" aria-label="핵심 상태 요약">
         <div class="metric green">
           <span>현재 단계</span>
-          <strong>stepped boss 설계 완료</strong>
-          <small>Unity 런타임 적용 전</small>
+          <strong>stepped boss 적용 완료</strong>
+          <small>Unity 런타임 패치됨</small>
         </div>
         <div class="metric blue">
           <span>새 후보값</span>
@@ -89,8 +89,8 @@
         </div>
         <div class="metric red">
           <span>다음 작업</span>
-          <strong>Unity 적용 + QA</strong>
-          <small>첫 6분 재리뷰 준비</small>
+          <strong>V1QA 재시도 + 첫 6분 리뷰</strong>
+          <small>MCP 메뉴 큐 오류 후속</small>
         </div>
       </section>
 
@@ -98,8 +98,8 @@
         <h2>현재 결론</h2>
         <p>
           jaewoo 리뷰에서 첫 문지기까지의 5분이 너무 길고 지루하다는 문제가 확인됐다.
-          다음 작업은 새 콘텐츠가 아니라 시간대별 몹 수, 체력, XP, 평균 DPS, 보스 타이밍을 하나의 곡선으로 묶는 것이다.
-          계산 근거는 <code>scripts/balance_curve_v1.js</code>와 evidence 문서에 정리했다.
+          지금은 새 콘텐츠가 아니라 시간대별 몹 수, 체력, XP, 평균 DPS, 보스 타이밍을 하나의 곡선으로 묶어 Unity 런타임에 적용한 상태다.
+          빌드와 정적 검증은 통과했고, MCP 메뉴 실행만 <code>fetch failed</code>로 재시도가 필요하다.
         </p>
       </section>
 

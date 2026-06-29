@@ -594,6 +594,25 @@
 - `Dev_Prototype_v1` remained the active Unity prototype target.
 # 2026-06-29
 
+- Applied the stepped boss / XP / DPS curve to Unity `Dev_Prototype_v1`:
+  - Changed normal Gatekeeper schedule to `150 / 360 / 660 / 1020s`.
+  - Changed normal Gatekeeper HP to `1200 / 2250 / 4050 / 8650`.
+  - Changed normal run hard cap to `1200s`.
+  - Changed initial XP requirement to `8`.
+  - Added time-band spawn profiles, enemy caps, enemy HP targets, and XP phase values.
+  - Removed the separate normal-run `54s` deficit survival pocket while preserving forgetting, echo grant, and immediate resonance/refill.
+  - Kept fast/debug deficit timing for compressed M2 smoke coverage.
+- Added `scripts/verify_unity_stepped_balance.js` to ensure runtime constants match the stepped design.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy deprecation warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Unity MCP compile error count: `0`.
+  - Unity MCP console error count: `0`.
+  - `node scripts/balance_curve_v1.js`: passed.
+  - `node scripts/verify_unity_stepped_balance.js`: passed.
+- Limitation:
+  - Unity V1 smoke menu execution was blocked by repeated MCP `fetch failed` queue polling errors in this session.
+
 - Added a stepped boss / XP / DPS planning pass after jaewoo review found the first Gatekeeper too late and the early run boring.
 - Added `scripts/balance_curve_v1.js` to calculate a candidate schedule, XP curve, spawn bands, enemy HP bands, average field DPS, average boss DPS, and Gatekeeper HP.
 - Proposed next candidate values:

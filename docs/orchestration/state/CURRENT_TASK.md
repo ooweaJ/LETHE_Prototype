@@ -618,6 +618,34 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 ## Do Not Touch
 
 Do not continue polishing `Dev_EchoSlice` or `Dev_Prototype_v0` as the main path. Do not add shop, meta progression, multi-region structure, or final boss.
+# 2026-06-29 Active Task Result
+
+## Status
+
+Stepped boss / XP / DPS curve has been applied to Unity `Dev_Prototype_v1`.
+
+## Applied Runtime Values
+
+- Gatekeeper schedule: `150 / 360 / 660 / 1020s`.
+- Gatekeeper HP: `1200 / 2250 / 4050 / 8650`.
+- Hard cap: `1200s`.
+- Initial XP requirement: `8`.
+- Normal-run deficit survival: removed as a timed pocket.
+- Fast/debug deficit timing: preserved for compressed smoke paths.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+- `node scripts/balance_curve_v1.js`: passed.
+- `node scripts/verify_unity_stepped_balance.js`: passed.
+- Unity MCP compile error count: `0`.
+- Unity MCP console error count: `0`.
+
+## Remaining Gate
+
+V1QA smoke menus need a retry because MCP `unity_execute_menu_item` returned `Error polling queue: fetch failed` in this session. After that, jaewoo should replay the first 6 minutes and judge whether the early run is no longer dull.
+
 # 2026-06-29 Active Task Update
 
 ## Goal

@@ -59,8 +59,8 @@
       <div class="grid">
         <article>
           <h2>Codex에게 지금 시킬 일</h2>
-          <p><code>Dev_Prototype_v1</code>에 stepped boss / XP / DPS 곡선을 적용한다.</p>
-          <textarea id="prompt-next" readonly>AGENTS.md와 docs/orchestration/state/STATUS.md, docs/orchestration/state/CURRENT_TASK.md, docs/orchestration/state/NEXT_TASKS.md, docs/orchestration/evidence/2026-06-29-stepped-boss-xp-dps-plan.md를 읽고 Dev_Prototype_v1에 새 보스/XP/DPS 곡선을 적용해줘. 후보값은 문지기 150/360/660/1020초, HP 1200/2250/4050/8650, 하드캡 1200초야. 결손 생존 54초 구간은 normal run에서 제거하고, 망각과 잔향 획득은 유지한 뒤 바로 전투/보상 흐름으로 돌아가게 해줘. 새 콘텐츠를 추가하지 말고 이 pacing 축만 고친 뒤 dotnet build, Unity QA, npm.cmd run report, npm.cmd run report:check까지 실행해줘.</textarea>
+          <p><code>Dev_Prototype_v1</code>의 stepped boss 패치 QA를 재시도하고 첫 6분 리뷰를 준비한다.</p>
+          <textarea id="prompt-next" readonly>AGENTS.md와 docs/orchestration/state/STATUS.md, docs/orchestration/state/CURRENT_TASK.md, docs/orchestration/state/NEXT_TASKS.md, docs/orchestration/evidence/2026-06-29-stepped-boss-xp-dps-plan.md를 읽고 Dev_Prototype_v1의 stepped boss 패치 QA를 재시도해줘. 런타임 적용값은 문지기 150/360/660/1020초, HP 1200/2250/4050/8650, 하드캡 1200초, 결손 생존 제거야. 먼저 Unity MCP V1QA 메뉴를 다시 실행하고, 성공하면 jaewoo 첫 6분 리뷰 기준을 정리해줘. 새 콘텐츠를 추가하지 말고 QA 결과가 명확히 이상할 때만 한 가지 수치만 조정해줘.</textarea>
           <button type="button" data-copy-target="prompt-next">프롬프트 복사</button>
         </article>
 
@@ -77,6 +77,7 @@
         <article>
           <h2>완료 기준</h2>
           <ul>
+            <li>V1QA smoke 메뉴 재시도</li>
             <li>첫 문지기가 약 2분 30초에 등장</li>
             <li>이후 보스 간격이 210초, 300초, 360초로 증가</li>
             <li>몹 수, 체력, XP, 보스 HP가 시간대별 표와 맞음</li>

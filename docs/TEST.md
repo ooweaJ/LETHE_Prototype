@@ -668,6 +668,24 @@ jaewoo 리뷰 질문:
 ## Known Non-Blocking Warnings
 
 현재 `dotnet build`에는 legacy v0/debug 코드의 `Object.FindObjectOfType<T>()` deprecation warning 7개가 남아 있다. `Dev_Prototype_v1` compile error가 아니므로 현재 EPIC 진행을 막지 않는다.
+# 2026-06-29 Stepped Boss Unity Runtime Patch Check
+
+- Purpose:
+  - Verify that the stepped boss / XP / DPS candidate is now applied to `Dev_Prototype_v1`.
+- Commands:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
+  - `node scripts/balance_curve_v1.js`
+  - `node scripts/verify_unity_stepped_balance.js`
+- Results:
+  - Runtime build passed with 7 legacy v0/debug deprecation warnings and 0 errors.
+  - Editor build passed with 0 warnings and 0 errors.
+  - Unity MCP compile error count: `0`.
+  - Unity MCP console error count: `0`.
+  - Static balance verification passed for schedule, HP, XP curve, immediate refill, stepped spawn, cap, and HP helpers.
+- Limitation:
+  - `LETHE/V1 Smoke/*` menu execution could not be completed through MCP because `unity_execute_menu_item` repeatedly returned `Error polling queue: fetch failed` and restarted the MCP bridge. This should be retried before treating the patch as fully handoff-ready.
+
 # 2026-06-29 Stepped Boss / XP / DPS Planning Check
 
 - Purpose:

@@ -74,19 +74,19 @@ namespace Lethe.PrototypeV1
         const float GreatswordDamage = 40f;
         const float GreatswordArcDeg = 102f;
         const float GreatswordEngageMul = 1.12f;
-        const float FirstBossSeconds = 300f;
-        const float BossWarningSeconds = 28f;
+        const float FirstBossSeconds = 150f;
+        const float BossWarningSeconds = 20f;
         const float FastFirstBossSeconds = 62f;
-        const float DeficitSurvivalSeconds = 54f;
+        const float DeficitSurvivalSeconds = 0f;
         const float FastDeficitSeconds = 6f;
         const float HungryBladesRadius = 86f / PixelsPerUnit;
         const float HungryBladesDps = 28f;
         const int MaxMemoryLevel = 5;
         const int MaxEchoLevel = 5;
         const int MaxActiveMemories = 3;
-        const float FirstBossHp = 1900f;
+        const float FirstBossHp = 1200f;
         const float FastBossHp = 180f;
-        const float RunSeconds = 1260f;
+        const float RunSeconds = 1200f;
         const float ArenaHalfWidth = 24f;
         const float ArenaHalfHeight = 16f;
         const float ArenaTileSpacing = 2.65f;
@@ -158,7 +158,7 @@ namespace Lethe.PrototypeV1
         const string HunterOathBurstSource = "추적자의 맹세 폭발";
         const string HunterEchoSource = "추적 잔향";
         const string HunterEchoBurstSource = "추적 잔향 폭발";
-        static readonly float[] BossScheduleSeconds = { 300f, 600f, 900f, 1140f };
+        static readonly float[] BossScheduleSeconds = { 150f, 360f, 660f, 1020f };
         static readonly float[] FastBossScheduleSeconds = { 18f, 38f, 62f, 88f };
         static readonly V1MemoryId[] UtilityMemorySetA = { V1MemoryId.ExecutionFlash, V1MemoryId.HunterOath, V1MemoryId.StoppedSecond };
         static readonly V1MemoryId[] UtilityMemorySetB = { V1MemoryId.ShatterWave, V1MemoryId.AshenShield, V1MemoryId.OblivionBrand };
@@ -254,7 +254,7 @@ namespace Lethe.PrototypeV1
         float bloodStormBurstTimer;
         int level = 1;
         int xp;
-        int nextXp = 7;
+        int nextXp = 8;
         int kills;
         int gatekeeperKills;
         int memoriesForgotten;
@@ -1759,6 +1759,11 @@ namespace Lethe.PrototypeV1
 
         SpawnWaveProfile SpawnProfile()
         {
+            if (!fastDebugRun)
+            {
+                return SteppedSpawnProfile();
+            }
+
             var pressure = CurrentPressure();
             if (pressure.Deficit)
             {
@@ -1805,8 +1810,45 @@ namespace Lethe.PrototypeV1
                 : new SpawnWaveProfile(0.43f, 4, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.VoidPriest);
         }
 
+        SpawnWaveProfile SteppedSpawnProfile()
+        {
+            if (elapsed < 60f)
+            {
+                var t = Mathf.Clamp01(elapsed / 60f);
+                return new SpawnWaveProfile(Mathf.Lerp(1.05f, 0.78f, t), t < 0.55f ? 1 : 2, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye);
+            }
+            if (elapsed < 150f)
+            {
+                var t = Mathf.Clamp01((elapsed - 60f) / 90f);
+                return new SpawnWaveProfile(Mathf.Lerp(0.76f, 0.58f, t), t < 0.62f ? 2 : 3, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne);
+            }
+            if (elapsed < 360f)
+            {
+                var t = Mathf.Clamp01((elapsed - 150f) / 210f);
+                return new SpawnWaveProfile(Mathf.Lerp(0.58f, 0.48f, t), t < 0.55f ? 2 : 3, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.VoidPriest);
+            }
+            if (elapsed < 660f)
+            {
+                var t = Mathf.Clamp01((elapsed - 360f) / 300f);
+                return new SpawnWaveProfile(Mathf.Lerp(0.48f, 0.40f, t), t < 0.55f ? 3 : 4, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.VoidPriest);
+            }
+            if (elapsed < 1020f)
+            {
+                var t = Mathf.Clamp01((elapsed - 660f) / 360f);
+                return new SpawnWaveProfile(Mathf.Lerp(0.40f, 0.34f, t), t < 0.55f ? 4 : 5, V1EnemyKind.Eroder, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.VoidPriest, V1EnemyKind.VoidPriest);
+            }
+
+            var finalT = Mathf.Clamp01((elapsed - 1020f) / Mathf.Max(1f, RunSeconds - 1020f));
+            return new SpawnWaveProfile(Mathf.Lerp(0.34f, 0.30f, finalT), 5, V1EnemyKind.Eroder, V1EnemyKind.DriftingEye, V1EnemyKind.SplitOne, V1EnemyKind.VoidPriest, V1EnemyKind.VoidPriest);
+        }
+
         int EnemyCap()
         {
+            if (!fastDebugRun)
+            {
+                return SteppedEnemyCap();
+            }
+
             var pressure = CurrentPressure();
             if (pressure.Deficit) return pressure.Progress < 0.30f ? 16 : 14;
             if (pressure.FirstCycle && elapsed < 120f) return 36;
@@ -1815,6 +1857,16 @@ namespace Lethe.PrototypeV1
             if (pressure.FirstCycle) return 34;
             if (pressure.Progress >= 0.70f) return 46;
             return 46;
+        }
+
+        int SteppedEnemyCap()
+        {
+            if (elapsed < 60f) return Mathf.RoundToInt(Mathf.Lerp(14f, 20f, Mathf.Clamp01(elapsed / 60f)));
+            if (elapsed < 150f) return Mathf.RoundToInt(Mathf.Lerp(22f, 30f, Mathf.Clamp01((elapsed - 60f) / 90f)));
+            if (elapsed < 360f) return Mathf.RoundToInt(Mathf.Lerp(30f, 38f, Mathf.Clamp01((elapsed - 150f) / 210f)));
+            if (elapsed < 660f) return Mathf.RoundToInt(Mathf.Lerp(38f, 48f, Mathf.Clamp01((elapsed - 360f) / 300f)));
+            if (elapsed < 1020f) return Mathf.RoundToInt(Mathf.Lerp(48f, 58f, Mathf.Clamp01((elapsed - 660f) / 360f)));
+            return Mathf.RoundToInt(Mathf.Lerp(58f, 64f, Mathf.Clamp01((elapsed - 1020f) / Mathf.Max(1f, RunSeconds - 1020f))));
         }
 
         void SpawnEnemy(V1EnemyKind kind, Vector3 pos)
@@ -1886,7 +1938,7 @@ namespace Lethe.PrototypeV1
             var span = Mathf.Max(1f, nextBossTime - previousBossTime);
             var progress = Mathf.Clamp01((elapsed - previousBossTime) / span);
 
-            if (refillTimer > 0f || (lastForgotten.HasValue && activeMemories.Count < MaxActiveMemories))
+            if (fastDebugRun && (refillTimer > 0f || (lastForgotten.HasValue && activeMemories.Count < MaxActiveMemories)))
             {
                 var deficitDuration = CurrentDeficitDuration();
                 var deficitProgress = refillTimer > 0f ? Mathf.Clamp01(1f - refillTimer / Mathf.Max(1f, deficitDuration)) : progress;
@@ -1907,6 +1959,7 @@ namespace Lethe.PrototypeV1
         float EnemyHp(V1EnemyKind kind)
         {
             if (kind == V1EnemyKind.Gatekeeper) return GatekeeperHp();
+            if (!fastDebugRun) return SteppedEnemyHp(kind);
             var baseHp = kind switch
             {
                 V1EnemyKind.Eroder => 48f,
@@ -1919,15 +1972,39 @@ namespace Lethe.PrototypeV1
             return baseHp * (1f + minutes * 0.12f) * (1f + (level - 1) * 0.03f);
         }
 
+        float SteppedEnemyHp(V1EnemyKind kind)
+        {
+            var avg = SteppedAverageEnemyHp();
+            var roleMul = kind switch
+            {
+                V1EnemyKind.Eroder => 0.90f,
+                V1EnemyKind.DriftingEye => 0.78f,
+                V1EnemyKind.SplitOne => 1.14f,
+                V1EnemyKind.VoidPriest => 1.34f,
+                _ => 1f
+            };
+            return avg * roleMul;
+        }
+
+        float SteppedAverageEnemyHp()
+        {
+            if (elapsed < 60f) return Mathf.Lerp(38f, 48f, Mathf.Clamp01(elapsed / 60f));
+            if (elapsed < 150f) return Mathf.Lerp(50f, 66f, Mathf.Clamp01((elapsed - 60f) / 90f));
+            if (elapsed < 360f) return Mathf.Lerp(68f, 92f, Mathf.Clamp01((elapsed - 150f) / 210f));
+            if (elapsed < 660f) return Mathf.Lerp(94f, 132f, Mathf.Clamp01((elapsed - 360f) / 300f));
+            if (elapsed < 1020f) return Mathf.Lerp(134f, 190f, Mathf.Clamp01((elapsed - 660f) / 360f));
+            return Mathf.Lerp(192f, 245f, Mathf.Clamp01((elapsed - 1020f) / Mathf.Max(1f, RunSeconds - 1020f)));
+        }
+
         float GatekeeperHp()
         {
             if (fastDebugRun) return FastBossHp;
             return bossSpawnIndex switch
             {
                 <= 0 => FirstBossHp,
-                1 => 2800f,
-                2 => 4000f,
-                _ => 5400f
+                1 => 2250f,
+                2 => 4050f,
+                _ => 8650f
             };
         }
 
@@ -2137,7 +2214,26 @@ namespace Lethe.PrototypeV1
         {
             if (enemy == null) return 1;
             if (enemy.Kind == V1EnemyKind.Gatekeeper) return 18;
-            return Mathf.Max(1, enemy.Score);
+            if (fastDebugRun) return Mathf.Max(1, enemy.Score);
+            var roleMul = enemy.Kind switch
+            {
+                V1EnemyKind.Eroder => 1.00f,
+                V1EnemyKind.DriftingEye => 1.28f,
+                V1EnemyKind.SplitOne => 1.38f,
+                V1EnemyKind.VoidPriest => 1.68f,
+                _ => 1f
+            };
+            return Mathf.Max(1, Mathf.RoundToInt(SteppedBaseXpPerKill() * roleMul));
+        }
+
+        float SteppedBaseXpPerKill()
+        {
+            if (elapsed < 60f) return 1.18f;
+            if (elapsed < 150f) return 1.36f;
+            if (elapsed < 360f) return 1.72f;
+            if (elapsed < 660f) return 2.72f;
+            if (elapsed < 1020f) return 4.18f;
+            return 5.10f;
         }
 
         float NextBossDelay()
@@ -2149,13 +2245,13 @@ namespace Lethe.PrototypeV1
 
         void GrantXp(int amount)
         {
-            var earlyMultiplier = elapsed < 120f ? 1.0f : (elapsed < 600f ? 1.34f : 1f);
+            var earlyMultiplier = XpMultiplierForTime();
             xp += Mathf.RoundToInt(amount * earlyMultiplier);
             while (xp >= nextXp)
             {
                 xp -= nextXp;
                 level++;
-                nextXp = Mathf.RoundToInt(nextXp * (level < 10 ? 1.24f : 1.42f) + (level < 10 ? 3f : 4f));
+                nextXp = NextXpAfterLevelUp();
                 currentLevelUpChoices.Clear();
                 currentLevelUpChoices.AddRange(BuildChoices());
                 SpawnLevelUpCue();
@@ -2163,6 +2259,28 @@ namespace Lethe.PrototypeV1
                 Log($"레벨업 Lv.{level}");
                 break;
             }
+        }
+
+        float XpMultiplierForTime()
+        {
+            if (fastDebugRun) return elapsed < 120f ? 1.0f : (elapsed < 600f ? 1.34f : 1f);
+            if (elapsed < 60f) return 1.08f;
+            if (elapsed < 150f) return 1.06f;
+            if (elapsed < 360f) return 1.08f;
+            if (elapsed < 660f) return 1.06f;
+            if (elapsed < 1020f) return 1.02f;
+            return 1f;
+        }
+
+        int NextXpAfterLevelUp()
+        {
+            if (fastDebugRun)
+            {
+                return Mathf.RoundToInt(nextXp * (level < 10 ? 1.24f : 1.42f) + (level < 10 ? 3f : 4f));
+            }
+            if (level < 10) return Mathf.RoundToInt(nextXp * 1.32f + 5f);
+            if (level < 16) return Mathf.RoundToInt(nextXp * 1.20f + 4f);
+            return Mathf.RoundToInt(nextXp * 1.18f + 5f);
         }
 
         void UpdateXpCollection(float dt)
@@ -2243,6 +2361,7 @@ namespace Lethe.PrototypeV1
                 (raw > MaxEchoLevel ? $"과부하: +{raw - MaxEchoLevel} 즉시 폭발/궁극 기대\n" : "") +
                 $"다음: {Mathf.CeilToInt(CurrentDeficitDuration())}초를 잔향으로 버틴 뒤 같은 기억을 다시 얻으면 공명합니다.\n" +
                 "Space로 결손 생존에 진입";
+            ConfigureForgetOverlay(forgotten, after, raw);
             resultOverlay = true;
             SpawnEchoTransformVfx(forgotten.Id);
             if (after >= MaxEchoLevel && AnyUltimateReady)
@@ -2252,6 +2371,19 @@ namespace Lethe.PrototypeV1
             SpawnFloatingText(player.position + Vector3.up * 1.35f, $"{MemoryName(forgotten.Id)} 상실", new Color(1f, 0.82f, 0.74f));
             SpawnFloatingText(player.position + Vector3.up * 1.05f, $"{EchoName(forgotten.Id)} +{after}", forgotten.Id == V1MemoryId.BloodReflection ? new Color(1f, 0.22f, 0.28f) : new Color(0.62f, 0.96f, 1f));
             Log($"{MemoryName(forgotten.Id)} 망각 -> {EchoName(forgotten.Id)} +{after}");
+        }
+
+        void ConfigureForgetOverlay(MemoryState forgotten, int echoLevel, int rawEchoLevel)
+        {
+            overlayTitle = "망각 결과";
+            overlayBody =
+                $"사라진 기억: {MemoryName(forgotten.Id)} +{forgotten.Level}\n" +
+                $"남은 잔향: {EchoName(forgotten.Id)} +{echoLevel}{(echoLevel >= MaxEchoLevel ? " 각성" : "")}\n" +
+                (rawEchoLevel > MaxEchoLevel ? $"초과 잔향 +{rawEchoLevel - MaxEchoLevel}: 궁극 준비 가속\n" : "") +
+                (fastDebugRun
+                    ? $"다음: {Mathf.CeilToInt(CurrentDeficitDuration())}초 동안 잔향으로 버틴 뒤 보충합니다.\n"
+                    : "다음: 결손 생존 없이 바로 기억을 보충합니다.\n") +
+                "Space로 계속";
         }
 
         void SpawnMemoryGainVfx(V1MemoryId id, int levelValue)
@@ -2279,6 +2411,16 @@ namespace Lethe.PrototypeV1
         void ContinueAfterForgetResult()
         {
             resultOverlay = false;
+            if (!fastDebugRun)
+            {
+                refillTimer = 0f;
+                refillOverlay = true;
+                overlayTitle = "기억 보충";
+                overlayBody = "망각은 끝났고 잔향은 남았습니다.\nSpace로 잃은 기억을 공명 회수합니다.\n전투 흐름은 바로 다음 문지기 구간으로 이어집니다.";
+                Log("망각 후 즉시 보충 선택");
+                return;
+            }
+
             refillTimer = CurrentDeficitDuration();
             Log($"결손 생존 시작: {Mathf.CeilToInt(refillTimer)}초");
         }

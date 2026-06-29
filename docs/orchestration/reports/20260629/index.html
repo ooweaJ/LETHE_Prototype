@@ -158,7 +158,14 @@
 <li>
         <article class="unit-card">
           <span class="number">2026-06-29-02</span>
-          <h2><a href="#unit-2026-06-29-02" data-unit-link="unit-2026-06-29-02">보스 템포 / XP / DPS 재설계안</a></h2>
+          <h2><a href="#unit-2026-06-29-02" data-unit-link="unit-2026-06-29-02">보스 템포 Unity 적용</a></h2>
+          <p>Dev_Prototype_v1에 stepped boss / XP / DPS 곡선을 실제 적용했다. 이번 패치는 새 콘텐츠 추가가 아니라 보스 타이밍, 몹 압력, 체력, XP, 결손 흐름만 조정한 좁은 밸런스 패치다.</p>
+        </article>
+      </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-29-03</span>
+          <h2><a href="#unit-2026-06-29-03" data-unit-link="unit-2026-06-29-03">보스 템포 / XP / DPS 재설계안</a></h2>
           <p>Dev_Prototype_v1의 20분 베타 기술 QA는 통과했지만, jaewoo 직접 리뷰에서 첫 문지기까지의 시간이 너무 길어 초반이 지루하다는 문제가 확인됐다.</p>
         </article>
       </li>
@@ -218,7 +225,48 @@
     </article>
 <article class="unit-detail" id="unit-2026-06-29-02" hidden>
       <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
-      <h1>2026-06-29-02 - 보스 템포 / XP / DPS 재설계안</h1>
+      <h1>2026-06-29-02 - 보스 템포 Unity 적용</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에 stepped boss / XP / DPS 곡선을 실제 적용했다. 이번 패치는 새 콘텐츠 추가가 아니라 보스 타이밍, 몹 압력, 체력, XP, 결손 흐름만 조정한 좁은 밸런스 패치다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>문지기 스케줄을 <code>150 / 360 / 660 / 1020s</code>로 변경했다.</li>
+<li>문지기 HP를 <code>1200 / 2250 / 4050 / 8650</code>으로 변경했다.</li>
+<li>런 하드캡을 <code>1200s</code>로 변경했다.</li>
+<li>시작 필요 XP를 <code>8</code>로 변경했다.</li>
+<li>시간대별 스폰 간격, 팩 크기, 적 캡, 적 평균 체력, XP 보상을 코드에 반영했다.</li>
+<li>normal run에서 결손 생존 54초 구간을 제거했다.</li>
+<li>망각과 잔향 획득은 유지하고, Space 이후 바로 기억 보충/공명으로 넘어가게 했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, 기존 v0/debug 경고 7개, 오류 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 통과, 경고 0개, 오류 0개.</li>
+<li><code>node scripts/balance_curve_v1.js</code>: 통과.</li>
+<li><code>node scripts/verify_unity_stepped_balance.js</code>: 통과.</li>
+<li>Unity MCP compile error count: <code>0</code>.</li>
+<li>Unity MCP console error count: <code>0</code>.</li>
+</ul>
+<p>제한: 기존 V1QA 메뉴 실행은 MCP <code>fetch failed</code> 큐 오류로 완료하지 못했다. Unity 에디터는 <code>Dev_Prototype_v1</code>에 열려 있고 컴파일/콘솔 오류는 0이다.</p>
+<h2>4. 결정한 것</h2>
+<p>시뮬레이션상 첫 문지기는 레벨 6 전후, 목표 TTK 18초로 나온다. 후반 최종 문지기는 궁극 활성 이후 목표 TTK 48초라 의도한 상승 곡선에 맞는다. QA 결과만 보면 지금 단계에서 추가 수치 조정은 하지 않는 쪽이 맞다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>MCP 메뉴 QA가 실패했으므로, 다음에는 smoke 메뉴를 다시 돌리거나 직접 첫 6분 플레이로 첫 보스 체감, 첫 망각, 즉시 보충 흐름을 확인해야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Codex가 보스 템포 재설계안을 Unity 런타임에 적용했다. 핵심 후보값은 <code>150/360/660/1020s</code>, HP <code>1200/2250/4050/8650</code>, 결손 생존 제거다. 기술 빌드와 정적 검증은 통과했지만 MCP smoke 메뉴는 큐 오류로 미완료다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>MCP 메뉴 실행이 안정화되면 V1QA smoke를 재시도한다. 그 다음 jaewoo가 첫 6분을 플레이해 첫 보스가 지루함을 해소했는지 판단한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 초반 5분이 평평하고 첫 보스가 늦었다.</li>
+<li>방향: 보스 간격과 난이도를 시간대별 수치 곡선으로 만든다.</li>
+<li>행동: Unity 런타임의 스케줄, HP, XP, 몹 압력, 결손 흐름을 패치했다.</li>
+<li>결과: 첫 보스가 2분 30초 목표로 당겨졌고, 다음 리뷰는 첫 6분 체감으로 좁혀졌다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-29-03" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-29-03 - 보스 템포 / XP / DPS 재설계안</h1>
 <h2>1. 현재 빌드 상태</h2>
 <p><code>Dev_Prototype_v1</code>의 20분 베타 기술 QA는 통과했지만, jaewoo 직접 리뷰에서 첫 문지기까지의 시간이 너무 길어 초반이 지루하다는 문제가 확인됐다.</p>
 <h2>2. 오늘 바뀐 것</h2>

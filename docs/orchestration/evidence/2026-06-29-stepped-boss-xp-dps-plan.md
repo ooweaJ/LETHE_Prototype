@@ -80,3 +80,38 @@ Enemy XP value should rise by phase so the first boss is reached around level 6,
 - The run still gets longer between bosses, so the player has more time to assemble and feel the build after each Gatekeeper.
 - Difficulty increases through enemy cap, enemy HP, pack size, boss HP, and target TTK instead of only waiting longer.
 - Removing deficit survival should reduce downtime. The regret should come from losing the highest memory and seeing the echo remain, not from a separate empty survival phase.
+
+## Unity Runtime Patch, 2026-06-29
+
+Applied to `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`:
+
+- Normal Gatekeeper schedule: `150 / 360 / 660 / 1020s`.
+- Normal run hard cap: `1200s`.
+- Gatekeeper HP: `1200 / 2250 / 4050 / 8650`.
+- Initial XP requirement: `8`.
+- Normal XP curve: `1.32 + 5`, `1.20 + 4`, `1.18 + 5`.
+- Time-band spawn interval, pack size, cap, enemy HP, and kill XP follow the stepped table above.
+- Normal-run deficit survival duration is `0s`.
+- Fast/debug smoke still keeps the old compressed deficit timer so existing M2 smoke paths can continue to test the post-loss state quickly.
+- On normal Gatekeeper clear, forgetting still creates the echo, then Space opens immediate memory refill/resonance instead of a 54-second survival pocket.
+
+Verification:
+
+```powershell
+dotnet build LETHE/Assembly-CSharp.csproj --nologo
+dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo
+node scripts/balance_curve_v1.js
+node scripts/verify_unity_stepped_balance.js
+```
+
+Results:
+
+- Runtime build: passed with 7 legacy v0/debug deprecation warnings, 0 errors.
+- Editor build: passed with 0 warnings, 0 errors.
+- Unity compile error count through MCP: `0`.
+- Unity console error count through MCP: `0`.
+- Static runtime balance verification: passed.
+
+Limitation:
+
+- Existing `LETHE/V1 Smoke/*` menu execution could not be completed through MCP in this session because `unity_execute_menu_item` repeatedly returned `Error polling queue: fetch failed` and restarted the MCP bridge. The Unity editor itself remained open on `Dev_Prototype_v1`, with compile errors `0` and console errors `0`.
