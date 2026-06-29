@@ -592,3 +592,17 @@
 - Weapon and slash VFX tuning moved toward `_dev/Data/Weapons` ScriptableObject assets.
 - `WeaponDefinition`, `WeaponVfxProfile`, and `SlashVfxEntry` became the current weapon/VFX data baseline.
 - `Dev_Prototype_v1` remained the active Unity prototype target.
+# 2026-06-29
+
+- Added a stepped boss / XP / DPS planning pass after jaewoo review found the first Gatekeeper too late and the early run boring.
+- Added `scripts/balance_curve_v1.js` to calculate a candidate schedule, XP curve, spawn bands, enemy HP bands, average field DPS, average boss DPS, and Gatekeeper HP.
+- Proposed next candidate values:
+  - Gatekeeper schedule `150 / 360 / 660 / 1020s`.
+  - Gatekeeper HP `1200 / 2250 / 4050 / 8650`.
+  - Target TTK `18 / 26 / 36 / 48s`.
+  - Hard cap `1200s`.
+  - Remove separate `54s` deficit survival from normal pacing.
+- Added evidence at `docs/orchestration/evidence/2026-06-29-stepped-boss-xp-dps-plan.md`.
+- Updated design and orchestration docs so the next implementation target is the stepped curve, not another broad review pass.
+- Verification:
+  - `node scripts/balance_curve_v1.js`: passed and printed boss/minute curve tables.

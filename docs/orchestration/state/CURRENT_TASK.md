@@ -618,3 +618,28 @@ LETHE/Assets/_dev/Scenes/Dev_EchoSlice.unity
 ## Do Not Touch
 
 Do not continue polishing `Dev_EchoSlice` or `Dev_Prototype_v0` as the main path. Do not add shop, meta progression, multi-region structure, or final boss.
+# 2026-06-29 Active Task Update
+
+## Goal
+
+Apply the jaewoo review finding that the first boss is too late by converting the current flat 20-minute beta pacing into a stepped boss / XP / DPS curve.
+
+## Planned Runtime Candidate
+
+- Gatekeeper schedule: `150 / 360 / 660 / 1020s`.
+- Gatekeeper HP: `1200 / 2250 / 4050 / 8650`.
+- Target TTK: `18 / 26 / 36 / 48s`.
+- Hard cap: `1200s`.
+- XP model evidence: `scripts/balance_curve_v1.js`.
+- Evidence report: `docs/orchestration/evidence/2026-06-29-stepped-boss-xp-dps-plan.md`.
+- Remove the separate normal-run deficit survival timer unless later play review proves that downtime is valuable.
+
+## Done Criteria For This Update
+
+- Unity runtime constants/data follow the stepped schedule.
+- The first Gatekeeper appears around 2:30.
+- Later Gatekeeper intervals grow instead of staying flat.
+- Enemy cap/HP/XP phases follow the calculated table.
+- Deficit survival no longer inserts a 54-second post-forgetting pocket in normal play.
+- `dotnet build`, Unity QA, report generation, and report check pass.
+- jaewoo can replay the first 6 minutes and judge whether the early run is no longer dull.

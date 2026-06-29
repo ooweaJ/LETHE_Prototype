@@ -1704,3 +1704,23 @@ For reporting/Discord notification, use `npm run report:orchestrator:unit:dry` b
   - `npm.cmd run report:check`: passed, `15` unit headings ok.
   - `npm.cmd run report:orchestrator:unit:dry`: failed with `fetch failed`.
   - evidence: `LETHE/Assets/_dev/Evidence/prototype_memory_identity_pass_game.png`.
+# 2026-06-29 Update: Stepped Boss Balance Candidate
+
+Jaewoo direct review changed the immediate balance direction:
+
+- The first Gatekeeper at `300s` is too late and makes the early run feel boring.
+- Boss intervals should grow step by step, and difficulty should rise through enemy count, enemy HP, boss HP, and expected player DPS.
+- The separate deficit survival pocket is likely unnecessary for the current prototype.
+
+New calculated candidate:
+
+- Gatekeeper schedule: `150 / 360 / 660 / 1020s`.
+- Gatekeeper intervals: `150 / 210 / 300 / 360s`.
+- Gatekeeper HP: `1200 / 2250 / 4050 / 8650`.
+- Target boss TTK: `18 / 26 / 36 / 48s`.
+- Hard cap: `1200s`.
+- Deficit survival: remove as a separate `54s` timer; keep forgetting and echo grant, then return to the normal combat/reward flow.
+
+Evidence and formula source: `scripts/balance_curve_v1.js` and `docs/orchestration/evidence/2026-06-29-stepped-boss-xp-dps-plan.md`.
+
+Current next step: implement this single pacing axis in Unity `_dev`, then rerun technical QA and a focused first-6-minute jaewoo review.

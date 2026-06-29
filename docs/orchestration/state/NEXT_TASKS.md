@@ -49,3 +49,18 @@ Current source of truth:
 - Include: decide whether `_dev` should keep getting tuned or whether the new `Assets/Lethe` promotion-prep structure should start receiving stable prefabs/data after full playthrough review.
 - Check: remaining prototype-only runtime generation, missing audio, authored prefabs, scene organization, and asset naming.
 - Done: GO/ITERATE decision for promotion prep is recorded.
+# 2026-06-29 Update: Next Priority
+
+## 1. Apply stepped boss / XP / DPS curve
+
+- Priority: highest
+- jaewoo direct review found the current first Gatekeeper at `300s` too late and the early run too boring.
+- Use the new calculation evidence: `docs/orchestration/evidence/2026-06-29-stepped-boss-xp-dps-plan.md`.
+- Candidate values:
+  - Gatekeeper schedule: `150 / 360 / 660 / 1020s`.
+  - Gatekeeper HP: `1200 / 2250 / 4050 / 8650`.
+  - Target boss TTK: `18 / 26 / 36 / 48s`.
+  - Hard cap: `1200s`.
+  - Remove the separate `54s` deficit survival pocket from normal pacing.
+- Implement only this pacing/balance axis first; do not add new weapons, memories, bosses, shop, meta progression, or region structure.
+- Done: Unity runtime uses the stepped curve, technical QA passes, and jaewoo can replay the first 6 minutes to judge whether the early run is no longer dull.

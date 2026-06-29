@@ -155,6 +155,13 @@
           <p>Dev_Prototype_v1은 20분 베타런 후보로 다시 기술 QA를 통과했다. 현재 다음 게이트는 자동 테스트가 아니라 jaewoo 직접 플레이 리뷰다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-29-02</span>
+          <h2><a href="#unit-2026-06-29-02" data-unit-link="unit-2026-06-29-02">보스 템포 / XP / DPS 재설계안</a></h2>
+          <p>Dev_Prototype_v1의 20분 베타 기술 QA는 통과했지만, jaewoo 직접 리뷰에서 첫 문지기까지의 시간이 너무 길어 초반이 지루하다는 문제가 확인됐다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -207,6 +214,45 @@
 <li>방향: 자동 QA는 안정성만 확인하고, 재미 판단은 사람 리뷰로 넘긴다.</li>
 <li>행동: Unity MCP QA를 재실행하고, 누락 참조를 복구하고, 리뷰 기록지를 만들었다.</li>
 <li>결과: 기술 차단 요소는 사라졌고, 다음 작업은 직접 플레이 피드백 수집으로 좁혀졌다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-29-02" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-29-02 - 보스 템포 / XP / DPS 재설계안</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 20분 베타 기술 QA는 통과했지만, jaewoo 직접 리뷰에서 첫 문지기까지의 시간이 너무 길어 초반이 지루하다는 문제가 확인됐다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>새 계산 스크립트 <code>scripts/balance_curve_v1.js</code>를 추가했다.</li>
+<li>첫 문지기 시간을 <code>300s</code>에서 후보값 <code>150s</code>로 당겼다.</li>
+<li>문지기 간격을 고정 5분형에서 <code>150 -&gt; 210 -&gt; 300 -&gt; 360s</code>로 점점 길어지는 구조로 재설계했다.</li>
+<li>문지기 HP를 평균 보스 DPS와 목표 TTK로 역산했다.</li>
+<li>결손 생존 <code>54s</code> 구간은 다음 후보에서 제거하기로 정리했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<p><code>node scripts/balance_curve_v1.js</code> 실행 결과:</p>
+<ul>
+<li>문지기 스케줄: <code>150 / 360 / 660 / 1020s</code></li>
+<li>문지기 HP: <code>1200 / 2250 / 4050 / 8650</code></li>
+<li>목표 TTK: <code>18 / 26 / 36 / 48s</code></li>
+<li>예상 보스 시점 레벨: <code>6 / 8 / 11 / 14</code></li>
+<li>예상 보스 DPS: <code>68 / 86 / 112 / 180</code></li>
+<li>상세 근거: <code>docs/orchestration/evidence/2026-06-29-stepped-boss-xp-dps-plan.md</code></li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>다음 구현 축은 새 콘텐츠 추가가 아니라 시간대별 몹 수, 체력, XP, 보스 타이밍, 보스 HP를 하나의 곡선으로 맞추는 것이다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>이 수치는 아직 Unity 런타임에 적용되지 않은 설계안이다. 실제 체감은 첫 6분 직접 플레이로 다시 확인해야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>첫 보스가 너무 늦다는 jaewoo 피드백을 반영해 <code>150 / 360 / 660 / 1020s</code> 문지기 곡선을 설계했다. 결손 생존은 일단 제거 후보로 두고, 망각과 잔향 획득은 유지한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>Unity <code>_dev</code> 런타임에 stepped boss curve를 적용하고, <code>dotnet build</code>, Unity QA, report/check를 다시 통과시킨다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 초반 5분이 평평해서 첫 보스 전까지 목표감이 약했다.</li>
+<li>방향: 보스 간격을 단계적으로 늘리고, HP/XP/DPS를 수치로 묶는다.</li>
+<li>행동: 계산 스크립트와 근거 문서를 만들었다.</li>
+<li>결과: 다음 구현에 바로 넣을 수 있는 보스/몹/XP/DPS 후보표가 생겼다.</li>
 </ul>
     </article>
       </div>

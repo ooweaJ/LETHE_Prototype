@@ -66,7 +66,7 @@
       <header>
         <div>
           <p class="eyebrow">LETHE 프로젝트 대시보드</p>
-          <h1>상태 요약</h1>
+          <h1>보스 템포 재설계</h1>
         </div>
         <span class="badge">Dev_Prototype_v1</span>
       </header>
@@ -74,51 +74,50 @@
       <section class="metrics" aria-label="핵심 상태 요약">
         <div class="metric green">
           <span>현재 단계</span>
-          <strong>20분 베타런 후보</strong>
-          <small>Dev_Prototype_v1 직접 리뷰 대기</small>
+          <strong>stepped boss 설계 완료</strong>
+          <small>Unity 런타임 적용 전</small>
         </div>
         <div class="metric blue">
-          <span>최신 검증</span>
-          <strong>5개 V1QA PASS</strong>
-          <small>compile 0, missing refs 0</small>
+          <span>새 후보값</span>
+          <strong>150 / 360 / 660 / 1020s</strong>
+          <small>보스 간격 150 -> 210 -> 300 -> 360s</small>
         </div>
         <div class="metric amber">
-          <span>막힌 점</span>
-          <strong>기술 blocker 없음</strong>
-          <small>오디오 리스너 log는 polish debt</small>
+          <span>핵심 판단</span>
+          <strong>결손 생존 제거 후보</strong>
+          <small>망각과 잔향은 유지</small>
         </div>
         <div class="metric red">
-          <span>다음 게이트</span>
-          <strong>jaewoo 직접 플레이</strong>
-          <small>GO / ITERATE / NO-GO 판단</small>
+          <span>다음 작업</span>
+          <strong>Unity 적용 + QA</strong>
+          <small>첫 6분 재리뷰 준비</small>
         </div>
       </section>
 
       <section class="heroPanel">
         <h2>현재 결론</h2>
         <p>
-          현재 작업 대상은 <code>Dev_EchoSlice</code>가 아니라 <code>Dev_Prototype_v1</code>입니다.
-          2026-06-29 기준 쌍검, 대검, M2 루프, 8기억/8잔향 VFX Matrix, 피의 칼폭풍 QA가 모두
-          <code>[V1QA] PASS</code>를 냈습니다. 다음 판단은 자동 QA가 아니라 직접 플레이에서
-          20분 템포, 쌍검/대검 손맛, 기억/잔향 구분감, HUD 피로도를 확인하는 것입니다.
+          jaewoo 리뷰에서 첫 문지기까지의 5분이 너무 길고 지루하다는 문제가 확인됐다.
+          다음 작업은 새 콘텐츠가 아니라 시간대별 몹 수, 체력, XP, 평균 DPS, 보스 타이밍을 하나의 곡선으로 묶는 것이다.
+          계산 근거는 <code>scripts/balance_curve_v1.js</code>와 evidence 문서에 정리했다.
         </p>
       </section>
 
       <section class="grid" aria-label="대시보드 요약">
         <article class="panel">
-          <h2>이번 목표</h2>
+          <h2>적용 후보</h2>
           <div class="decision">
             <div>
-              <span class="label">해야 할 일</span>
-              <span class="value">20분 베타런 직접 리뷰</span>
+              <span class="label">문지기 스케줄</span>
+              <span class="value"><code>150 / 360 / 660 / 1020s</code></span>
             </div>
             <div>
-              <span class="label">필요한 입력</span>
-              <span class="value">리뷰 기록지 기준 쌍검/대검, 런 템포, 기억/잔향, 궁극, HUD 체감</span>
+              <span class="label">문지기 HP</span>
+              <span class="value"><code>1200 / 2250 / 4050 / 8650</code></span>
             </div>
             <div>
-              <span class="label">완료 신호</span>
-              <span class="value"><code>GO</code>, <code>ITERATE</code>, <code>NO-GO</code>와 약한 지점 1~3개 기록</span>
+              <span class="label">목표 TTK</span>
+              <span class="value"><code>18 / 26 / 36 / 48s</code></span>
             </div>
           </div>
         </article>
@@ -126,35 +125,35 @@
         <article class="panel">
           <h2>다음 판단</h2>
           <ul>
-            <li>쌍검 2연 반달이 빠른 연쇄감으로 읽히는가?</li>
-            <li>대검 반달이 실제 범위만큼 큰 한 방으로 읽히는가?</li>
-            <li>첫 보상, 첫 망각, 궁극 완성, 최종 문지기 흐름이 자연스러운가?</li>
-            <li>8기억/8잔향이 서로 구분되는가?</li>
-            <li>다음 수정 축을 하나만 고를 수 있는가?</li>
+            <li>첫 보스가 2분 30초 목표감을 만드는가?</li>
+            <li>보스 간격이 뒤로 갈수록 충분히 넓어지는가?</li>
+            <li>적 수와 체력이 빌드 성장을 따라 압박하는가?</li>
+            <li>결손 생존 제거가 공백을 줄이는가?</li>
+            <li>첫 6분이 다시 하고 싶은 흐름인가?</li>
           </ul>
         </article>
 
         <article class="panel">
-          <h2>최근 완료</h2>
+          <h2>바로 열 문서</h2>
           <div class="decision">
             <div>
-              <span class="label">완료 작업</span>
-              <span class="value">20분 베타 직접 리뷰 준비</span>
+              <span class="label">다음 지시</span>
+              <span class="value"><a href="./command.html">command.html</a></span>
             </div>
             <div>
-              <span class="label">검증</span>
-              <span class="value">Unity V1QA 5종 PASS, <code>dotnet build</code>, report/check 통과</span>
+              <span class="label">계산 근거</span>
+              <span class="value"><a href="../evidence/2026-06-29-stepped-boss-xp-dps-plan.md">stepped boss evidence</a></span>
             </div>
             <div>
-              <span class="label">주의</span>
-              <span class="value">새 기능 추가보다 직접 리뷰 피드백 수집이 우선</span>
+              <span class="label">오늘 보고</span>
+              <span class="value"><a href="../reports/20260629/index.html">20260629 report</a></span>
             </div>
           </div>
         </article>
       </section>
 
       <footer>
-        기준: 2026-06-29 · <a href="../reports/index.html">보고서 목록</a> · <a href="../review_prompts/2026-06-29-jaewoo-beta-run-review.md">직접 리뷰 기록지</a>
+        기준: 2026-06-29 | <a href="../reports/index.html">보고서 목록</a> | <a href="../state/NEXT_TASKS.md">NEXT_TASKS</a>
       </footer>
     </main>
   </body>

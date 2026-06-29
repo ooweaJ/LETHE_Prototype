@@ -668,3 +668,18 @@ jaewoo 리뷰 질문:
 ## Known Non-Blocking Warnings
 
 현재 `dotnet build`에는 legacy v0/debug 코드의 `Object.FindObjectOfType<T>()` deprecation warning 7개가 남아 있다. `Dev_Prototype_v1` compile error가 아니므로 현재 EPIC 진행을 막지 않는다.
+# 2026-06-29 Stepped Boss / XP / DPS Planning Check
+
+- Purpose:
+  - Convert jaewoo's "first boss is too late and boring" feedback into a numeric candidate before Unity runtime edits.
+- Command:
+  - `node scripts/balance_curve_v1.js`
+- Result:
+  - Gatekeeper schedule: `150 / 360 / 660 / 1020s`.
+  - Gatekeeper HP: `1200 / 2250 / 4050 / 8650`.
+  - Target TTK: `18 / 26 / 36 / 48s`.
+  - Expected boss levels: `6 / 8 / 11 / 14`.
+  - Expected boss DPS: `68 / 86 / 112 / 180`.
+  - Evidence: `docs/orchestration/evidence/2026-06-29-stepped-boss-xp-dps-plan.md`.
+- Remaining risk:
+  - This is a planning/simulation check only. Unity runtime implementation, technical QA, and jaewoo first-6-minute review remain required.

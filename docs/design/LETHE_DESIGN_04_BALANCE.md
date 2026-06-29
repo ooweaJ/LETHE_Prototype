@@ -165,3 +165,50 @@ nextXp = round(prevNextXp * mul + add)
 60~120초 스모크에서 측정: kill count, player HP, weapon id, 활성 기억 id/레벨, 잔향 id/레벨, 궁극 unlock, death 여부, 최다 피해 memory/echo. 목표: 기억 없는 구간이 너무 길지 않음 / 기억 획득 후 사냥 방식이 달라짐 / 망각 후 잔향이 새 방식으로 남음 / 궁극이 강하지만 화면 삭제만 하지 않음.
 
 HTML 기준 합격 예: 첫 보스 클리어 100%, 풀 클리어 60%, 사망 40%, 첫 보스 TTK 중앙값 ≈ 20초.
+# 2026-06-29 Addendum: Boss / XP / DPS Candidate
+
+Jaewoo direct review moved the next balance question from "is the 20-minute target technically playable?" to "does the run create early excitement and stepwise boss pressure?" This addendum records the next candidate before Unity implementation.
+
+## Candidate Summary
+
+| Category | Previous Unity beta | Next candidate |
+| --- | --- | --- |
+| Hard cap | 1260s | 1200s |
+| Gatekeeper schedule | 300 / 600 / 900 / 1140s | 150 / 360 / 660 / 1020s |
+| Gatekeeper intervals | 300 / 300 / 300 / 240s | 150 / 210 / 300 / 360s |
+| Gatekeeper HP | 1900 / 2800 / 4000 / 5400 | 1200 / 2250 / 4050 / 8650 |
+| Target TTK | roughly flat/implicit | 18 / 26 / 36 / 48s |
+| First forgetting | about 5m20s | after first Gatekeeper clear, around 2m30s+ |
+| Deficit survival | 54s separate pocket | removed as separate timer |
+
+## XP Curve Candidate
+
+```text
+initialNextXp = 8
+
+nextXp = round(prevNextXp * 1.32 + 5), level < 10
+nextXp = round(prevNextXp * 1.20 + 4), 10 <= level < 16
+nextXp = round(prevNextXp * 1.18 + 5), level >= 16
+```
+
+Enemy XP value rises by phase so early choices do not flood, but high-HP late enemies still move the bar:
+
+| Time band | XP per kill | XP multiplier |
+| --- | ---: | ---: |
+| 0~60s | 1.18 | 1.08 |
+| 60~150s | 1.36 | 1.06 |
+| 150~360s | 1.72 | 1.08 |
+| 360~660s | 2.72 | 1.06 |
+| 660~1020s | 4.18 | 1.02 |
+| 1020~1200s | 5.10 | 1.00 |
+
+## Expected Average Growth
+
+| Time | Expected level | Echoes | Ultimate | Avg field DPS | Avg boss DPS |
+| ---: | ---: | ---: | --- | ---: | ---: |
+| 150s | 6 | 0 | No | 52 before echo / 58 after echo | 68 |
+| 360s | 8 | 1 | No | 64 before echo / 73 after echo | 86 |
+| 660s | 11 | 2 | No | 83 before echo / 93 after echo | 112 |
+| 1020s | 14 | 3 | Yes | 149 | 180 |
+
+Detailed calculation evidence: `docs/orchestration/evidence/2026-06-29-stepped-boss-xp-dps-plan.md`.
