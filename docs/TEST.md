@@ -1,5 +1,26 @@
 # LETHE TEST
 
+## 2026-06-30 Intro / Weapon Select UI Refresh
+
+- Purpose:
+  - Verify that the Unity `Dev_Prototype_v1` start screen reads more like a playable game shell while preserving the current weapon-only start flow.
+- Applied target:
+  - LETHE title treatment, dark full-screen intro backdrop, accent lines, and first-goal strip.
+  - Two weapon cards with key badges, simple glyphs, rhythm summaries, and click/number-key affordance.
+  - Compact layout for the current short Game View height.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - Unity MCP `Assets/Refresh`
+  - Unity compile error check
+  - Unity Play Mode intro capture and console error check
+- Results:
+  - Runtime build passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity console error count during intro capture: `0`.
+  - Visual evidence saved at `LETHE/Assets/_dev/Evidence/v1_intro_weapon_select_ui_20260630_v2.png`.
+- Limitation:
+  - This is still OnGUI prototype UI, not final production UI. Direct play should judge whether the first-goal copy is helpful or too explanatory.
+
 ## 2026-06-30 Boss Pattern / No Reacquire Follow-up
 
 - Purpose:

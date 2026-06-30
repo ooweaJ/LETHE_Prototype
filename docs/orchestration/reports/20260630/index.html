@@ -155,6 +155,13 @@
           <p>Dev_Prototype_v1에 jaewoo 플레이 피드백을 반영한 보스/망각/체력바/칼무리 패치를 적용했다. Unity 컴파일 에러와 콘솔 에러는 0이다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-30-02</span>
+          <h2><a href="#unit-2026-06-30-02" data-unit-link="unit-2026-06-30-02">인트로 / 무기 선택 UI 게임 셸 강화</a></h2>
+          <p>Dev_Prototype_v1의 시작 화면이 기존의 단순 무기 카드에서 LETHE 타이틀, 첫 목표 안내, 무기별 리듬 요약, 조작 안내가 있는 게임형 인트로 화면으로 바뀌었다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -202,6 +209,43 @@
 <li>방향: 새 콘텐츠 추가 대신 기존 보스/망각 루프를 플레이 피드백 기준으로 좁게 수정했다.</li>
 <li>행동: 스케줄, HP, 보스 패턴, 망각 UX, 체력바, 칼무리 VFX/최적화를 패치했다.</li>
 <li>결과: 기술 검증은 통과했고, 다음 판단은 직접 플레이 감각으로 좁혀졌다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-30-02" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-30-02 - 인트로 / 무기 선택 UI 게임 셸 강화</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 시작 화면이 기존의 단순 무기 카드에서 LETHE 타이틀, 첫 목표 안내, 무기별 리듬 요약, 조작 안내가 있는 게임형 인트로 화면으로 바뀌었다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>시작 화면에 <code>LETHE</code> 타이틀과 어두운 풀스크린 배경, 상하단 컬러 라인을 추가했다.</li>
+<li>“첫 목표” 안내 줄을 넣어 XP, 기억 3칸, 첫 문지기, 잔향 변환 흐름을 바로 읽게 했다.</li>
+<li>절단쌍검/장송대검 카드에 숫자 키 배지, 무기 glyph, 리듬 요약, 선택 안내를 추가했다.</li>
+<li>현재 기획대로 시작은 무기만 고르고, 기억은 첫 보상 카드에서 선택하는 흐름을 유지했다.</li>
+<li>낮은 Game View 높이에서도 겹치지 않도록 compact 레이아웃을 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy 경고 7 / 오류 0.</li>
+<li>Unity MCP <code>Assets/Refresh</code>: 통과.</li>
+<li>Unity compile error count: <code>0</code>.</li>
+<li>Unity Play Mode intro capture 중 console error count: <code>0</code>.</li>
+<li>시각 근거: <code>LETHE/Assets/_dev/Evidence/v1_intro_weapon_select_ui_20260630_v2.png</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>이번 작업은 새 시스템 추가가 아니라 “게임처럼 보이는 첫 화면”을 만드는 범위로 제한했다. 시작 기억 선택은 아직 첫 보상 카드 흐름에 둔다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>OnGUI 기반 UI라 출시급 UI는 아니다. 다만 현재 <code>_dev</code> 직접 플레이용으로는 제목, 선택 카드, 첫 목표, 조작 안내가 한 화면에서 읽힌다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>인트로는 이제 무기 2종의 차이를 첫 화면에서 보여준다. 다음 리뷰에서는 실제 시작 화면을 보고 “무기만 고르는 모델이 충분히 명확한지”와 “첫 목표 안내가 과하지 않은지”를 확인하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo 직접 플레이에서 시작 화면을 확인한 뒤, 필요한 경우 시작 기억 후보까지 보여줄지 또는 현재처럼 첫 보상 카드에 남길지 결정한다.</p>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 프로토타입 시작 화면이 기능은 있지만 게임 첫 화면처럼 보이지 않았다.</li>
+<li>방향: 전투 로직을 건드리지 않고 시작 경험의 정보 구조와 분위기를 보강했다.</li>
+<li>행동: 타이틀, 목표 안내, 무기 카드, responsive compact 레이아웃, 캡처 검증을 추가했다.</li>
+<li>결과: 낮은 Game View에서도 겹치지 않는 인트로 화면을 확보했다.</li>
 </ul>
     </article>
       </div>

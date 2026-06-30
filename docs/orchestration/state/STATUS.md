@@ -42,6 +42,19 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 intro / weapon-select UI refresh, 2026-06-30:
+  - Reworked the `Dev_Prototype_v1` start overlay so it reads more like a game intro rather than a debug card picker.
+  - Added LETHE title treatment, dark full-screen backdrop, accent lines, first-goal strip, and two clearer weapon cards.
+  - Weapon cards now show number-key badges, simple weapon glyphs, rhythm summaries, and click/number-key selection affordance.
+  - Preserved the current start model: the player chooses only the weapon first; memories are still selected from the first reward card.
+  - Added compact layout behavior so the intro remains readable in the current short Game View.
+  - Evidence: `LETHE/Assets/_dev/Evidence/v1_intro_weapon_select_ui_20260630_v2.png`.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity MCP `Assets/Refresh`: success.
+    - Unity compile error count: `0`.
+    - Unity console error count during Play Mode intro capture: `0`.
+
 - Unity v1 jaewoo direct-play follow-up, 2026-06-30:
   - Feedback addressed:
     - first Gatekeeper timing felt good.

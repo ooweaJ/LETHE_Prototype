@@ -6,6 +6,7 @@
 
 - Priority: highest
 - The jaewoo direct-play follow-up is now applied to Unity runtime.
+- The intro / starting weapon screen was also refreshed. During the replay, first confirm whether the LETHE title, first-goal strip, and two weapon cards make the build feel like a real game start rather than a debug picker.
 - Current values:
   - Gatekeeper schedule: `150 / 300 / 540 / 900s`.
   - Gatekeeper HP: `2200 / 4200 / 7600 / 12800`.
@@ -19,6 +20,7 @@
   - Are HP bars stable and readable?
   - Is forgetting cleaner now that the lost memory does not come back?
   - Does Hungry Blades keep rotating through base attack hitstop?
+  - Does the intro explain weapon-only start clearly, or should starting memory preview return to the start panel later?
 - Done: jaewoo identifies at most one next numeric lever: first boss HP, second boss timing, pulse damage/frequency, or late boss HP.
 
 Keep this file short. Detailed history belongs in `docs/TASK.md`, `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, or evidence files.

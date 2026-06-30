@@ -230,6 +230,11 @@ namespace Lethe.PrototypeV1
         GUIStyle titleStyle;
         GUIStyle buttonStyle;
         GUIStyle panelStyle;
+        GUIStyle startEyebrowStyle;
+        GUIStyle startBodyStyle;
+        GUIStyle startCardTitleStyle;
+        GUIStyle startKeyStyle;
+        GUIStyle startFooterStyle;
         Font koreanFont;
 
         float playerHp = 210f;
@@ -2770,37 +2775,137 @@ namespace Lethe.PrototypeV1
 
         void DrawWeaponSelectOverlay()
         {
-            GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "", panelStyle);
-            var width = Mathf.Min(900f, Screen.width - 80f);
-            var height = Mathf.Min(460f, Screen.height - 70f);
+            DrawFilledRect(new Rect(0, 0, Screen.width, Screen.height), new Color(0.015f, 0.022f, 0.026f, 0.96f));
+            DrawFilledRect(new Rect(0, Screen.height * 0.54f, Screen.width, Screen.height * 0.46f), new Color(0.02f, 0.12f, 0.13f, 0.22f));
+            DrawFilledRect(new Rect(0, 0, Screen.width, 5f), new Color(0.24f, 0.78f, 0.82f, 0.80f));
+            DrawFilledRect(new Rect(0, Screen.height - 5f, Screen.width, 5f), new Color(0.42f, 0.12f, 0.15f, 0.82f));
+
+            var compact = Screen.height < 520;
+            var width = Mathf.Min(1060f, Screen.width - 72f);
+            var height = Mathf.Min(compact ? 374f : 620f, Screen.height - 32f);
             var origin = new Rect(Screen.width * 0.5f - width * 0.5f, Screen.height * 0.5f - height * 0.5f, width, height);
             GUI.Box(origin, "", panelStyle);
-            GUI.Label(new Rect(origin.x + 30, origin.y + 26, origin.width - 60, 42), "시작 무기 선택", titleStyle);
-            GUI.Label(new Rect(origin.x + 54, origin.y + 74, origin.width - 108, 42), "먼저 무기만 고릅니다. 칼무리와 혈반 같은 기억은 첫 보상 카드에서 선택합니다.", smallStyle);
 
-            var gap = 18f;
+            DrawFilledRect(new Rect(origin.x + 24f, origin.y + 20f, origin.width - 48f, 2f), new Color(0.52f, 0.94f, 0.98f, 0.55f));
+            GUI.Label(new Rect(origin.x + 34, origin.y + 30, origin.width - 68, 20), "망각의 강으로 들어가기 전", startEyebrowStyle);
+            GUI.Label(new Rect(origin.x + 34, origin.y + 50, origin.width - 68, 40), "LETHE", titleStyle);
+            GUI.Label(
+                new Rect(origin.x + 72, origin.y + 92, origin.width - 144, compact ? 26f : 48f),
+                compact
+                    ? "무기를 고르면 바로 시작합니다. 기억은 첫 보상 카드에서 선택합니다."
+                    : "무기는 첫 손맛을 결정합니다. 기억은 첫 보상 카드에서 고르고, 문지기를 쓰러뜨리면 가장 키운 기억이 잔향으로 남습니다.",
+                startBodyStyle);
+
+            var goal = new Rect(origin.x + 54f, origin.y + (compact ? 128f : 156f), origin.width - 108f, compact ? 36f : 48f);
+            DrawFilledRect(goal, new Color(0.035f, 0.07f, 0.075f, 0.82f));
+            DrawFilledRect(new Rect(goal.x, goal.y, 4f, goal.height), new Color(0.32f, 0.88f, 1f, 0.86f));
+            GUI.Label(new Rect(goal.x + 18f, goal.y + 5f, goal.width - 36f, 16f), "첫 목표", startEyebrowStyle);
+            GUI.Label(new Rect(goal.x + 18f, goal.y + 20f, goal.width - 36f, 16f), "XP로 기억 3칸을 채우고, 첫 문지기 이후 잃은 기억이 어떤 잔향으로 바뀌는지 확인하세요.", startFooterStyle);
+
+            var gap = 20f;
             var cardWidth = (origin.width - 108f - gap) * 0.5f;
-            var cardHeight = origin.height - 154f;
+            var footer = new Rect(origin.x + 54f, origin.yMax - 44f, origin.width - 108f, 28f);
             var x0 = origin.x + 54f;
             var x1 = x0 + cardWidth + gap;
-            var y0 = origin.y + 122f;
-            DrawWeaponCard(new Rect(x0, y0, cardWidth, cardHeight), V1WeaponId.DualBlades, "1", "절단쌍검", "빠른 2연 베기로 가까운 적을 깎는 시작 무기입니다.\n\n첫 보상에서 칼무리나 혈반 기억을 골라 빌드 방향을 정합니다.", new Color(0.32f, 0.88f, 1f));
-            DrawWeaponCard(new Rect(x1, y0, cardWidth, cardHeight), V1WeaponId.Greatsword, "2", "장송대검", "느린 큰 참격으로 무리를 가르는 시작 무기입니다.\n\n첫 보상에서 기억을 붙여 한 방의 잔향 방향을 정합니다.", new Color(0.92f, 0.86f, 0.70f));
+            var y0 = goal.yMax + (compact ? 14f : 18f);
+            var cardHeight = footer.y - y0 - 14f;
+            DrawWeaponCard(
+                new Rect(x0, y0, cardWidth, cardHeight),
+                V1WeaponId.DualBlades,
+                "1",
+                "절단쌍검",
+                "가까운 적을 자동 조준해 두 번 베고 빠르게 다음 타격으로 넘어갑니다.",
+                "빠른 온힛 / 짧은 hitstop / 잔향을 자주 발생",
+                "칼무리·혈반을 빠르게 쌓아 피의 칼폭풍 루트를 보기 좋습니다.",
+                new Color(0.32f, 0.88f, 1f));
+            DrawWeaponCard(
+                new Rect(x1, y0, cardWidth, cardHeight),
+                V1WeaponId.Greatsword,
+                "2",
+                "장송대검",
+                "가장 많이 맞는 방향을 골라 느리고 넓은 참격으로 무리를 갈라냅니다.",
+                "묵직한 강타 / 긴 hitstop / 큰 잔향 한 번",
+                "파문·처형·낙인처럼 한 방의 후속 효과를 크게 읽기 좋습니다.",
+                new Color(0.92f, 0.86f, 0.70f));
+
+            DrawFilledRect(footer, new Color(0.04f, 0.045f, 0.052f, 0.82f));
+            GUI.Label(new Rect(footer.x + 16f, footer.y + 5f, footer.width - 32f, 18f), "WASD 이동 · 기본공격 자동 · F12 디버그 · 첫 보상에서 기억 선택", startFooterStyle);
         }
 
-        void DrawWeaponCard(Rect card, V1WeaponId weaponId, string key, string title, string body, Color accent)
+        void DrawWeaponCard(Rect card, V1WeaponId weaponId, string key, string title, string body, string rhythm, string echoHint, Color accent)
         {
             if (GUI.Button(card, "", buttonStyle))
             {
                 BeginRun(weaponId);
             }
 
-            GUI.color = accent;
-            GUI.DrawTexture(new Rect(card.x + 18, card.y + 18, card.width - 36, 4), Texture2D.whiteTexture);
-            GUI.color = Color.white;
-            GUI.Label(new Rect(card.x + 22, card.y + 34, card.width - 44, 34), $"{key}. {title}", titleStyle);
-            GUI.Label(new Rect(card.x + 28, card.y + 88, card.width - 56, card.height - 144), body, smallStyle);
-            GUI.Label(new Rect(card.x + 28, card.yMax - 46, card.width - 56, 26), "클릭 또는 숫자키로 무기 선택", smallStyle);
+            DrawFilledRect(new Rect(card.x + 8f, card.y + 8f, card.width - 16f, card.height - 16f), new Color(0.025f, 0.034f, 0.040f, 0.84f));
+            DrawFilledRect(new Rect(card.x + 14f, card.y + 14f, card.width - 28f, 4f), accent);
+            DrawFilledRect(new Rect(card.x + 22f, card.y + 26f, 42f, 32f), new Color(accent.r, accent.g, accent.b, 0.92f));
+            GUI.Label(new Rect(card.x + 22f, card.y + 26f, 42f, 32f), key, startKeyStyle);
+            GUI.Label(new Rect(card.x + 72f, card.y + 25f, card.width - 104f, 36f), title, startCardTitleStyle);
+
+            if (card.height < 210f)
+            {
+                DrawWeaponGlyph(new Rect(card.xMax - 86f, card.y + 58f, 58f, 42f), weaponId, accent);
+                var compactInfo = new Rect(card.x + 28f, card.y + 76f, card.width - 126f, 24f);
+                DrawFilledRect(compactInfo, new Color(accent.r, accent.g, accent.b, 0.14f));
+                var summary = weaponId == V1WeaponId.Greatsword
+                    ? "느린 강타 / 큰 잔향 한 번"
+                    : "빠른 2연 베기 / 잔향 자주 발생";
+                GUI.Label(new Rect(compactInfo.x + 10f, compactInfo.y + 4f, compactInfo.width - 20f, 16f), summary, startFooterStyle);
+                var compactSelect = new Rect(card.x + 28f, card.yMax - 32f, card.width - 56f, 22f);
+                DrawFilledRect(compactSelect, new Color(accent.r, accent.g, accent.b, 0.16f));
+                GUI.Label(new Rect(compactSelect.x + 12f, compactSelect.y + 3f, compactSelect.width - 24f, 16f), "클릭 또는 숫자키로 선택", startFooterStyle);
+                return;
+            }
+
+            var bladeRect = new Rect(card.x + 26f, card.y + 74f, card.width - 52f, 52f);
+            DrawWeaponGlyph(bladeRect, weaponId, accent);
+
+            GUI.Label(new Rect(card.x + 28f, card.y + 138f, card.width - 56f, 48f), body, startBodyStyle);
+            var rowWidth = card.width - 56f;
+            var select = new Rect(card.x + 28f, card.yMax - 42f, rowWidth, 28f);
+            var row2 = new Rect(card.x + 28f, select.y - 56f, rowWidth, 48f);
+            var row1 = new Rect(card.x + 28f, row2.y - 48f, rowWidth, 40f);
+            DrawStartInfoRow(row1, "전투 리듬", rhythm, accent);
+            DrawStartInfoRow(row2, "잔향 방향", echoHint, accent);
+
+            DrawFilledRect(select, new Color(accent.r, accent.g, accent.b, 0.16f));
+            GUI.Label(new Rect(select.x + 12f, select.y + 5f, select.width - 24f, 18f), "클릭 또는 숫자키로 선택", startFooterStyle);
+        }
+
+        void DrawStartInfoRow(Rect rect, string label, string text, Color accent)
+        {
+            DrawFilledRect(rect, new Color(0.06f, 0.075f, 0.085f, 0.80f));
+            DrawFilledRect(new Rect(rect.x, rect.y, 3f, rect.height), new Color(accent.r, accent.g, accent.b, 0.72f));
+            GUI.Label(new Rect(rect.x + 12f, rect.y + 6f, rect.width - 24f, 17f), label, startEyebrowStyle);
+            GUI.Label(new Rect(rect.x + 12f, rect.y + 23f, rect.width - 24f, rect.height - 25f), text, startFooterStyle);
+        }
+
+        void DrawWeaponGlyph(Rect rect, V1WeaponId weaponId, Color accent)
+        {
+            DrawFilledRect(rect, new Color(0.04f, 0.055f, 0.064f, 0.72f));
+            var cx = rect.x + rect.width * 0.5f;
+            var cy = rect.y + rect.height * 0.5f;
+            var oldMatrix = GUI.matrix;
+            GUIUtility.RotateAroundPivot(weaponId == V1WeaponId.Greatsword ? -18f : -32f, new Vector2(cx, cy));
+            DrawFilledRect(new Rect(cx - 4f, cy - 28f, 8f, 56f), new Color(accent.r, accent.g, accent.b, 0.92f));
+            DrawFilledRect(new Rect(cx - 13f, cy + 18f, 26f, 5f), new Color(0.75f, 0.85f, 0.86f, 0.72f));
+            GUI.matrix = oldMatrix;
+            if (weaponId == V1WeaponId.DualBlades)
+            {
+                GUIUtility.RotateAroundPivot(32f, new Vector2(cx, cy));
+                DrawFilledRect(new Rect(cx - 4f, cy - 28f, 8f, 56f), new Color(accent.r, accent.g, accent.b, 0.92f));
+                DrawFilledRect(new Rect(cx - 13f, cy + 18f, 26f, 5f), new Color(0.75f, 0.85f, 0.86f, 0.72f));
+                GUI.matrix = oldMatrix;
+            }
+            else
+            {
+                GUIUtility.RotateAroundPivot(-18f, new Vector2(cx, cy));
+                DrawFilledRect(new Rect(cx - 9f, cy - 36f, 18f, 74f), new Color(accent.r, accent.g, accent.b, 0.62f));
+                GUI.matrix = oldMatrix;
+            }
         }
 
         void DrawHud()
@@ -3413,11 +3518,16 @@ namespace Lethe.PrototypeV1
 
         void DrawBar(Rect rect, float value, Color fill, Color background)
         {
-            GUI.color = background;
+            DrawFilledRect(rect, background);
+            DrawFilledRect(new Rect(rect.x, rect.y, rect.width * Mathf.Clamp01(value), rect.height), fill);
+        }
+
+        void DrawFilledRect(Rect rect, Color color)
+        {
+            var previous = GUI.color;
+            GUI.color = color;
             GUI.DrawTexture(rect, Texture2D.whiteTexture);
-            GUI.color = fill;
-            GUI.DrawTexture(new Rect(rect.x, rect.y, rect.width * Mathf.Clamp01(value), rect.height), Texture2D.whiteTexture);
-            GUI.color = Color.white;
+            GUI.color = previous;
         }
 
         void SpawnFloatingText(Vector3 pos, string text, Color color)
@@ -3846,11 +3956,21 @@ namespace Lethe.PrototypeV1
             titleStyle = new GUIStyle(GUI.skin.label) { fontSize = 28, alignment = TextAnchor.MiddleCenter, normal = { textColor = Color.white }, fontStyle = FontStyle.Bold };
             buttonStyle = new GUIStyle(GUI.skin.button) { fontSize = 16, alignment = TextAnchor.MiddleLeft, wordWrap = true };
             panelStyle = new GUIStyle(GUI.skin.box);
+            startEyebrowStyle = new GUIStyle(GUI.skin.label) { fontSize = 13, alignment = TextAnchor.MiddleCenter, normal = { textColor = new Color(0.62f, 0.96f, 1f) }, fontStyle = FontStyle.Bold };
+            startBodyStyle = new GUIStyle(GUI.skin.label) { fontSize = 16, alignment = TextAnchor.UpperCenter, normal = { textColor = new Color(0.88f, 0.94f, 0.94f) }, wordWrap = true };
+            startCardTitleStyle = new GUIStyle(GUI.skin.label) { fontSize = 25, alignment = TextAnchor.MiddleLeft, normal = { textColor = Color.white }, fontStyle = FontStyle.Bold };
+            startKeyStyle = new GUIStyle(GUI.skin.label) { fontSize = 24, alignment = TextAnchor.MiddleCenter, normal = { textColor = new Color(0.05f, 0.10f, 0.11f) }, fontStyle = FontStyle.Bold };
+            startFooterStyle = new GUIStyle(GUI.skin.label) { fontSize = 14, alignment = TextAnchor.MiddleCenter, normal = { textColor = new Color(0.82f, 0.90f, 0.90f) }, wordWrap = true };
             if (koreanFont != null)
             {
                 smallStyle.font = koreanFont;
                 titleStyle.font = koreanFont;
                 buttonStyle.font = koreanFont;
+                startEyebrowStyle.font = koreanFont;
+                startBodyStyle.font = koreanFont;
+                startCardTitleStyle.font = koreanFont;
+                startKeyStyle.font = koreanFont;
+                startFooterStyle.font = koreanFont;
             }
         }
 

@@ -1,5 +1,31 @@
 # Current Task
 
+## 2026-06-30 Intro UI Result
+
+## Status
+
+The Unity `Dev_Prototype_v1` intro / starting weapon screen has been refreshed so it reads more like a playable game shell.
+
+## Applied UI Changes
+
+- Added LETHE title treatment, dark intro backdrop, and top/bottom accent lines.
+- Added a first-goal strip: XP -> memory slots -> first Gatekeeper -> echo transformation.
+- Upgraded the two starting weapon cards with number-key badges, simple glyphs, rhythm summaries, and clearer click/number-key selection text.
+- Kept the current weapon-only start flow. Starting memories still come from the first reward card.
+- Added compact layout behavior for the current short Game View height.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+- Unity MCP `Assets/Refresh`: success.
+- Unity compile error count: `0`.
+- Unity console error count during Play Mode intro capture: `0`.
+- Visual evidence: `LETHE/Assets/_dev/Evidence/v1_intro_weapon_select_ui_20260630_v2.png`.
+
+## Remaining Gate
+
+Jaewoo should confirm whether the first-goal strip helps or feels too explanatory, and whether the weapon-only start model is clear enough before deciding whether to add starting memory preview to the intro.
+
 ## 2026-06-30 Active Task Result
 
 ## Status

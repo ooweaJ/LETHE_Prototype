@@ -2,6 +2,14 @@
 
 ## 2026-06-30
 
+- Refreshed the Unity `Dev_Prototype_v1` intro / weapon-select UI:
+  - Added a LETHE title treatment, dark intro backdrop, accent lines, and a first-goal strip.
+  - Upgraded the two starting weapon cards with key badges, simple weapon glyphs, weapon rhythm summaries, and clearer click/number-key affordance.
+  - Preserved the current weapon-only start flow; first memory choice still comes from the first reward card.
+  - Added compact OnGUI layout behavior so the intro remains readable at the current short Game View height.
+  - Added visual evidence at `LETHE/Assets/_dev/Evidence/v1_intro_weapon_select_ui_20260630_v2.png`.
+  - Verification: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 7 legacy warnings and 0 errors; Unity compile error count `0`; Unity console error count during Play Mode intro capture `0`.
+
 - Applied the jaewoo direct-play boss/no-reacquire follow-up for Unity `Dev_Prototype_v1`:
   - Kept the first Gatekeeper at `150s`.
   - Pulled the second Gatekeeper from `360s` to `300s`.
