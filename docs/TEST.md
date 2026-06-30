@@ -1,5 +1,31 @@
 # LETHE TEST
 
+## 2026-06-30 Hungry Blades / Kalmuri Visual Refresh
+
+- Purpose:
+  - Verify jaewoo feedback that `굶주린 칼무리` should read more like a real blade swarm instead of a thin/underwhelming effect.
+- Applied target:
+  - Active Hungry Blades orbit uses sweeping moving blades instead of mostly static short-lived markers.
+  - Outer blade ring is larger, brighter, and longer-lived.
+  - Bright lead blades and stronger cyan outer trace ring are added.
+  - Enemy-side bite VFX has more blades, a larger halo, and target-local cut trace.
+  - Memory gain VFX uses a ring plus 12 orbiting blades.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - Unity MCP `Assets/Refresh`
+  - Unity compile error check
+  - Forced Play Mode state: `절단쌍검`, `HungryBlades:5`, 18 nearby enemies
+  - Unity console error check
+- Results:
+  - Runtime build passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity console error count during forced Hungry Blades +5 check: `0`.
+  - Visual evidence:
+    - `LETHE/Assets/_dev/Evidence/v1_hungry_blades_kalmuri_refresh_20260630.png`
+    - `LETHE/Assets/_dev/Evidence/v1_hungry_blades_kalmuri_refresh_camera_20260630.png`
+- Limitation:
+  - This verifies readability in a forced +5 setup. Direct play should still judge +1/+3/+5 progression and late-run clutter.
+
 ## 2026-06-30 Intro / Weapon Select UI Refresh
 
 - Purpose:

@@ -2,6 +2,15 @@
 
 ## 2026-06-30
 
+- Re-strengthened Hungry Blades / Kalmuri visual identity after jaewoo feedback that it had become underwhelming:
+  - Changed active Hungry Blades orbit blades from short static markers into sweeping orbit blades.
+  - Increased outer ring radius, blade size, alpha, and lifetime.
+  - Added bright lead blades and a stronger cyan outer trace ring.
+  - Strengthened enemy-side bite VFX with more blades, larger halo, and target-local cut trace.
+  - Strengthened Hungry Blades memory-gain feedback with a ring plus 12 orbiting blades.
+  - Added evidence at `LETHE/Assets/_dev/Evidence/v1_hungry_blades_kalmuri_refresh_20260630.png` and `LETHE/Assets/_dev/Evidence/v1_hungry_blades_kalmuri_refresh_camera_20260630.png`.
+  - Verification: `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 7 legacy warnings and 0 errors; Unity compile error count `0`; Unity console error count during forced Hungry Blades +5 check `0`.
+
 - Refreshed the Unity `Dev_Prototype_v1` intro / weapon-select UI:
   - Added a LETHE title treatment, dark intro backdrop, accent lines, and a first-goal strip.
   - Upgraded the two starting weapon cards with key badges, simple weapon glyphs, weapon rhythm summaries, and clearer click/number-key affordance.

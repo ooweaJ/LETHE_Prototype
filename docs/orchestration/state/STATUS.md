@@ -42,6 +42,23 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity v1 Hungry Blades / Kalmuri visual refresh, 2026-06-30:
+  - Responded to jaewoo feedback that `굶주린 칼무리` had become visually underwhelming.
+  - Reworked active Hungry Blades orbit blades from short static markers into sweeping moving blades.
+  - Increased outer ring radius, blade scale, alpha, and lifetime.
+  - Added bright lead blades and a stronger cyan outer trace ring around the player.
+  - Strengthened enemy-side bite VFX with more blades, larger halo, and target-local cut trace.
+  - Strengthened Hungry Blades memory-gain feedback with a ring plus 12 orbiting blades.
+  - Evidence:
+    - `LETHE/Assets/_dev/Evidence/v1_hungry_blades_kalmuri_refresh_20260630.png`.
+    - `LETHE/Assets/_dev/Evidence/v1_hungry_blades_kalmuri_refresh_camera_20260630.png`.
+  - Verification:
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+    - Unity MCP `Assets/Refresh`: success.
+    - Unity compile error count: `0`.
+    - Unity console error count during forced Hungry Blades +5 check: `0`.
+    - Forced runtime snapshot: `weapon=절단쌍검`, `memories=[HungryBlades:5]`, `enemies=18`.
+
 - Unity v1 intro / weapon-select UI refresh, 2026-06-30:
   - Reworked the `Dev_Prototype_v1` start overlay so it reads more like a game intro rather than a debug card picker.
   - Added LETHE title treatment, dark full-screen backdrop, accent lines, first-goal strip, and two clearer weapon cards.

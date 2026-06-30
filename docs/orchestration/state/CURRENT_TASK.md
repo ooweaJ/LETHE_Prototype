@@ -1,5 +1,34 @@
 # Current Task
 
+## 2026-06-30 Hungry Blades Visual Result
+
+## Status
+
+The Unity `Dev_Prototype_v1` Hungry Blades / Kalmuri active-memory VFX has been strengthened after jaewoo feedback that it no longer felt like a proper blade swarm.
+
+## Applied VFX Changes
+
+- Active Hungry Blades orbit blades now sweep around the player instead of blinking as short static markers.
+- Outer blade ring radius, blade scale, alpha, and lifetime were increased.
+- Bright lead blades and a stronger cyan outer trace ring were added.
+- Enemy-side bite VFX now uses more blades, a larger halo, and target-local cut trace.
+- Hungry Blades memory-gain VFX now uses a ring plus 12 orbiting blades.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+- Unity MCP `Assets/Refresh`: success.
+- Unity compile error count: `0`.
+- Unity console error count during forced Hungry Blades +5 Play Mode check: `0`.
+- Forced runtime snapshot: `weapon=절단쌍검`, `memories=[HungryBlades:5]`, `enemies=18`.
+- Visual evidence:
+  - `LETHE/Assets/_dev/Evidence/v1_hungry_blades_kalmuri_refresh_20260630.png`
+  - `LETHE/Assets/_dev/Evidence/v1_hungry_blades_kalmuri_refresh_camera_20260630.png`
+
+## Remaining Gate
+
+Jaewoo should directly review whether +1/+3/+5 Hungry Blades progression is readable without becoming late-run clutter.
+
 ## 2026-06-30 Intro UI Result
 
 ## Status

@@ -1291,17 +1291,37 @@ namespace Lethe.PrototypeV1
             memory.VisualTimer += dt * (2.15f + memory.Level * 0.26f);
             memory.VisualSpawnTimer -= dt;
             if (memory.VisualSpawnTimer > 0f) return;
-            memory.VisualSpawnTimer = Mathf.Max(0.040f, 0.065f - memory.Level * 0.004f);
-            var bladeCount = Mathf.Clamp(4 + memory.Level * 2, 6, 14);
-            var innerRadius = HungryBladesRadius * 0.62f + memory.Level * 0.045f;
-            var outerRadius = HungryBladesRadius + memory.Level * 0.13f;
+            memory.VisualSpawnTimer = Mathf.Max(0.050f, 0.090f - memory.Level * 0.006f);
+            var bladeCount = Mathf.Clamp(10 + memory.Level * 3, 12, 26);
+            var innerRadius = HungryBladesRadius * 0.54f + memory.Level * 0.050f;
+            var outerRadius = HungryBladesRadius * 1.08f + memory.Level * 0.18f;
+            var ringPulse = 0.50f + Mathf.Sin(memory.VisualTimer * 4.8f) * 0.06f;
+            SpawnTransientSprite(
+                "KalmuriSwarmOuterTrace",
+                MakeRingSprite("KalmuriSwarmOuterTrace", Color.white, 160),
+                player.position,
+                Quaternion.Euler(0f, 0f, memory.VisualTimer * 120f),
+                outerRadius * ringPulse,
+                new Color(0.44f, 0.92f, 1f, 0.18f + memory.Level * 0.016f),
+                0.28f);
             for (int i = 0; i < bladeCount; i++)
             {
-                var ring = i % 2 == 0 ? outerRadius : innerRadius;
-                var angle = memory.VisualTimer * 210f + i * 360f / bladeCount + (i % 2) * 13f;
-                var pos = player.position + Quaternion.Euler(0f, 0f, angle) * Vector3.right * ring;
-                var scale = 0.13f + memory.Level * 0.012f + (i % 3) * 0.008f;
-                SpawnKalmuriBlade("KalmuriSwarmOrbit", pos, angle + 58f, scale, new Color(0.70f, 0.98f, 1f, 0.62f), 0.13f);
+                var outer = i % 3 != 1;
+                var ring = outer ? outerRadius : innerRadius;
+                var angle = memory.VisualTimer * (outer ? 250f : -185f) + i * 360f / bladeCount + (outer ? 0f : 17f);
+                var arc = outer ? 20f + memory.Level * 1.7f : -16f - memory.Level * 1.2f;
+                var scale = (outer ? 0.20f : 0.15f) + memory.Level * 0.017f + (i % 3) * 0.007f;
+                var color = outer
+                    ? new Color(0.78f, 1f, 1f, 0.96f)
+                    : new Color(0.50f, 0.92f, 1f, 0.64f);
+                SpawnOrbitingKalmuriBlade("KalmuriSwarmBlade", player.position, ring, angle, angle + arc, scale, color, outer ? 0.34f : 0.26f);
+            }
+
+            var leadCount = Mathf.Clamp(3 + memory.Level / 2, 3, 5);
+            for (int i = 0; i < leadCount; i++)
+            {
+                var angle = memory.VisualTimer * 280f + i * 360f / leadCount + 12f;
+                SpawnOrbitingKalmuriBlade("KalmuriSwarmLeadBlade", player.position, outerRadius * 1.06f, angle, angle + 32f, 0.28f + memory.Level * 0.018f, new Color(0.92f, 1f, 1f, 0.98f), 0.36f);
             }
         }
 
@@ -1311,15 +1331,17 @@ namespace Lethe.PrototypeV1
             if (toTarget.sqrMagnitude < 0.01f) toTarget = lastAim.sqrMagnitude > 0.01f ? lastAim.normalized : Vector2.up;
             var side = new Vector2(-toTarget.y, toTarget.x);
             var baseAngle = Mathf.Atan2(toTarget.y, toTarget.x) * Mathf.Rad2Deg;
-            var bladeCount = Mathf.Clamp(3 + levelValue / 2, 3, 6);
-            var scale = 0.13f + levelValue * 0.014f;
-            SpawnTransientSprite("KalmuriBiteHalo", MakeRingSprite("KalmuriBiteHalo", Color.white, 104), center, Quaternion.identity, 0.26f + levelValue * 0.022f, new Color(0.58f, 0.96f, 1f, 0.32f), 0.14f);
+            var bladeCount = Mathf.Clamp(5 + levelValue, 6, 10);
+            var scale = 0.15f + levelValue * 0.016f;
+            SpawnTransientSprite("KalmuriBiteHalo", MakeRingSprite("KalmuriBiteHalo", Color.white, 120), center, Quaternion.identity, 0.34f + levelValue * 0.030f, new Color(0.58f, 0.96f, 1f, 0.42f), 0.22f);
+            SpawnEchoWoundSlash("KalmuriBiteCut", center, toTarget, new Color(0.72f, 1f, 1f, 0.76f), 0.58f + levelValue * 0.04f, 0.18f);
             for (int i = 0; i < bladeCount; i++)
             {
-                var spread = (i - (bladeCount - 1) * 0.5f) * 0.13f;
-                var stagger = (i % 2 == 0 ? 0.16f : -0.08f) + targetIndex * 0.015f;
+                var spread = (i - (bladeCount - 1) * 0.5f) * 0.11f;
+                var stagger = Mathf.Sin(i * 1.7f + targetIndex * 0.4f) * 0.16f;
                 var pos = center - (Vector3)(toTarget * stagger) + (Vector3)(side * spread);
-                SpawnKalmuriBlade("KalmuriBiteBlade", pos, baseAngle + 90f + spread * 60f, scale, new Color(0.78f, 1f, 1f, 0.76f), 0.16f);
+                var angle = baseAngle + 90f + spread * 80f + (i % 2 == 0 ? 18f : -18f);
+                SpawnKalmuriBlade("KalmuriBiteBlade", pos, angle, scale, new Color(0.78f, 1f, 1f, 0.88f), 0.22f);
             }
         }
 
@@ -2435,11 +2457,12 @@ namespace Lethe.PrototypeV1
         {
             if (id == V1MemoryId.HungryBlades)
             {
-                for (int i = 0; i < 6; i++)
+                SpawnTransientSprite("MemoryGain_KalmuriRing", MakeRingSprite("MemoryGain_KalmuriRing", Color.white, 160), player.position, Quaternion.identity, 0.82f + levelValue * 0.06f, new Color(0.48f, 0.96f, 1f, 0.42f), 0.42f);
+                for (int i = 0; i < 12; i++)
                 {
-                    var angle = elapsed * 120f + i * 60f;
-                    var pos = player.position + Quaternion.Euler(0f, 0f, angle) * Vector3.right * (0.72f + levelValue * 0.05f);
-                    SpawnKalmuriBlade("MemoryGain_Kalmuri", pos, angle + 68f, 0.16f + levelValue * 0.012f, new Color(0.70f, 0.98f, 1f, 0.72f), 0.36f);
+                    var angle = elapsed * 120f + i * 30f;
+                    var radius = 0.62f + (i % 2) * 0.28f + levelValue * 0.045f;
+                    SpawnOrbitingKalmuriBlade("MemoryGain_Kalmuri", player.position, radius, angle, angle + 34f, 0.16f + levelValue * 0.014f, new Color(0.70f, 0.98f, 1f, 0.82f), 0.42f);
                 }
                 return;
             }
@@ -3657,6 +3680,15 @@ namespace Lethe.PrototypeV1
         void SpawnKalmuriBlade(string name, Vector3 position, float angle, float scale, Color color, float lifetime)
         {
             SpawnTransientSprite(name, KalmuriBladeSprite(), position, Quaternion.Euler(0f, 0f, angle), scale, color, lifetime);
+        }
+
+        void SpawnOrbitingKalmuriBlade(string name, Vector3 center, float radius, float startAngle, float endAngle, float scale, Color color, float lifetime)
+        {
+            var startDir = Quaternion.Euler(0f, 0f, startAngle) * Vector3.right;
+            var endDir = Quaternion.Euler(0f, 0f, endAngle) * Vector3.right;
+            var start = center + startDir * radius;
+            var end = center + endDir * radius;
+            SpawnSweepingTransientSprite(name, KalmuriBladeSprite(), start, end, startAngle + 60f, endAngle + 60f, scale, scale * 1.08f, color, lifetime, lifetime * 0.76f);
         }
 
         void SpawnExecutionFlashBurst(Vector3 center, float scale, float lifetime)

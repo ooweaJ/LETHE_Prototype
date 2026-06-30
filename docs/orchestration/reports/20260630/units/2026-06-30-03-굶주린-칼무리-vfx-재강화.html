@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-30-03 - 굶주린 칼무리 VFX 재강화</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-30-03 - 굶주린 칼무리 VFX 재강화</h1>
+      <p class="meta">Generated from 2026-06-30-03-굶주린-칼무리-vfx-재강화.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260630/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-30-03 - 굶주린 칼무리 VFX 재강화</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 굶주린 칼무리가 다시 칼날 군집처럼 읽히도록 활성 기억 VFX와 적중 지점 bite VFX를 강화했다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>칼무리 궤도 칼날을 정적인 짧은 표시가 아니라 이동하는 스윕 칼날로 바꿨다.</li>
+<li>바깥 칼날 고리의 반경, 스케일, 알파, 수명을 키웠다.</li>
+<li>바깥 고리에 밝은 lead blade를 추가해 “칼날 무리” 실루엣을 더 선명하게 했다.</li>
+<li>플레이어 주변 outer trace ring을 강화했다.</li>
+<li>적중 지점 bite 효과에 더 많은 칼날, 큰 halo, target-local cut trace를 추가했다.</li>
+<li>칼무리 기억 획득 순간도 ring + 12개 orbiting blade로 더 강하게 보이게 했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy 경고 7 / 오류 0.</li>
+<li>Unity MCP <code>Assets/Refresh</code>: 통과.</li>
+<li>Unity compile error count: <code>0</code>.</li>
+<li>Unity forced Hungry Blades +5 Play Mode 확인 중 console error count: <code>0</code>.</li>
+<li>강제 상태: <code>절단쌍검</code>, <code>HungryBlades:5</code>, 근처 적 18마리.</li>
+<li>시각 근거:</li>
+<li><code>LETHE/Assets/_dev/Evidence/v1_hungry_blades_kalmuri_refresh_20260630.png</code></li>
+<li><code>LETHE/Assets/_dev/Evidence/v1_hungry_blades_kalmuri_refresh_camera_20260630.png</code></li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>칼무리는 최적화 때문에 너무 얇게 보이면 안 된다. 활성 기억 칼무리는 “계속 도는 칼날 군집”을 우선하고, 잔향 칼무리는 무기 타격 지점의 후속 칼날로 구분한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>칼날 수와 수명이 늘어났으므로 후반 대량 전투에서 VFX 밀도/성능을 다시 볼 필요가 있다. 현재는 pooled transient sprite 경로를 쓰므로 기술 리스크는 제한적이다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>jaewoo가 칼무리가 멋없어졌다고 피드백했다. 이번 패치는 수치/피해를 바꾸지 않고, 칼무리의 시각 정체성을 더 강한 cyan blade swarm으로 되돌렸다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>직접 플레이에서 칼무리 +1/+3/+5 단계가 모두 충분히 구분되는지 확인하고, 필요하면 +1은 얇게, +5는 더 폭풍처럼 계층 차이를 만든다.</p>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 최적화/축약 이후 핵심 기억인 굶주린 칼무리가 밋밋하게 보였다.</li>
+<li>방향: 새 기능 추가 대신 핵심 판타지인 “칼날 군집”의 시각 언어를 복구했다.</li>
+<li>행동: 궤도 스윕 칼날, lead blade, bite 칼날, 획득 VFX를 강화하고 Unity에서 강제 상태 캡처로 확인했다.</li>
+<li>결과: 플레이어 주변에 더 명확한 칼날 고리가 생겨 칼무리 정체성이 다시 살아났다.</li>
+</ul>
+  </main>
+</body>
+</html>

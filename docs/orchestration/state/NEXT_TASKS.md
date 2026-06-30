@@ -14,6 +14,8 @@
   - Post-forget memory reacquire/refill: removed.
   - Gatekeeper pulse/guard pattern: added.
 - Review checklist:
+  - Does the refreshed Hungry Blades read as a real `칼무리`: orbiting blades, outer trace, bite impact, and level-up burst?
+  - Do +1 / +3 / +5 Hungry Blades stay readable without hiding enemies or the player?
   - Is the first Gatekeeper still good at 2:30 after the HP increase?
   - Is the second Gatekeeper at 5:00 no longer late?
   - Does the pulse/guard pattern make the boss less free-hit without feeling unfair?
