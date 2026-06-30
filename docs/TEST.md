@@ -1,5 +1,32 @@
 # LETHE TEST
 
+## 2026-06-30 Boss Pattern / No Reacquire Follow-up
+
+- Purpose:
+  - Verify jaewoo direct-play feedback fixes for second boss timing, short boss TTK, no boss pattern, HP-bar instability, unwanted memory reacquire, and Hungry Blades hitstop stutter.
+- Applied target:
+  - Gatekeeper schedule: `150 / 300 / 540 / 900s`.
+  - Gatekeeper HP: `2200 / 4200 / 7600 / 12800`.
+  - Hard cap: `1080s`.
+  - Post-forget memory reacquire/refill: removed.
+  - Gatekeeper pulse/guard pattern: added.
+  - Hungry Blades orbit visual update during hitstop: added.
+  - HP bar inverse scale: added.
+- Commands:
+  - `node scripts/balance_curve_v1.js`
+  - `node scripts/verify_unity_stepped_balance.js`
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
+- Results:
+  - Balance curve script passed.
+  - Static Unity balance verification passed.
+  - Runtime build passed with 0 warnings and 0 errors after retry.
+  - Editor build passed with 7 legacy warnings and 0 errors.
+  - Unity MCP compile error count: `0`.
+  - Unity MCP console error count: `0`.
+- Limitation:
+  - Unity MCP menu/play automation entered Play Mode, but a full `[V1QA] PASS` log was not captured because the MCP bridge restarted or returned a response parse error.
+
 ## Purpose
 
 이 문서는 LETHE 작업이 성공했는지 판단하는 기준이다. 자동 검증은 회귀 확인용이고, 최종 GO/ITERATE/NO-GO는 jaewoo 플레이 체감 리뷰가 우선한다.

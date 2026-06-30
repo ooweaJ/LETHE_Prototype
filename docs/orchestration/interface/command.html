@@ -5,48 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LETHE 다음 지시</title>
     <style>
-      :root {
-        --bg: #f7fcf8;
-        --panel: #ffffff;
-        --text: #17211c;
-        --muted: #64706b;
-        --line: #d9e1d7;
-        --green: #1f6b4d;
-        --amber: #916019;
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        color: var(--text);
-        background: var(--bg);
-      }
+      :root { --bg:#f7fcf8; --panel:#fff; --text:#17211c; --muted:#64706b; --line:#d9e1d7; --green:#1f6b4d; --amber:#916019; }
       * { box-sizing: border-box; }
-      body { margin: 0; }
-      main { width: min(980px, 100%); margin: 0 auto; padding: 16px; }
-      header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
-      h1 { margin: 0; font-size: 20px; }
-      a { color: var(--green); font-weight: 900; text-decoration: none; }
-      a:hover { text-decoration: underline; }
-      .grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 10px; }
-      article { min-width: 0; padding: 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
-      h2 { margin: 0 0 8px; color: var(--green); font-size: 15px; }
-      p, li { color: #26342f; font-size: 14px; line-height: 1.55; }
-      p { margin: 0 0 8px; }
-      ul { margin: 0; padding-left: 18px; }
-      li { margin-bottom: 4px; }
-      .warning { border-color: #e6d1ac; background: #fff8ec; }
-      .warning h2 { color: var(--amber); }
-      textarea {
-        width: 100%;
-        min-height: 150px;
-        resize: vertical;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        padding: 10px;
-        color: var(--text);
-        background: #fff;
-        font: 13px/1.55 "Cascadia Code", "SFMono-Regular", Consolas, monospace;
-      }
-      button { min-height: 34px; margin-top: 8px; border: 1px solid #b9d2c3; border-radius: 8px; background: var(--green); color: #fff; font-weight: 900; cursor: pointer; }
-      code { font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace; }
-      @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+      body { margin:0; background:var(--bg); color:var(--text); font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      main { width:min(980px,100%); margin:0 auto; padding:16px; }
+      header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
+      h1 { margin:0; font-size:20px; }
+      a { color:var(--green); font-weight:900; text-decoration:none; }
+      a:hover { text-decoration:underline; }
+      .grid { display:grid; grid-template-columns:1.2fr .8fr; gap:10px; }
+      article { min-width:0; padding:14px; border:1px solid var(--line); border-radius:8px; background:var(--panel); }
+      h2 { margin:0 0 8px; color:var(--green); font-size:15px; }
+      p, li { color:#26342f; font-size:14px; line-height:1.55; }
+      ul { margin:0; padding-left:18px; }
+      textarea { width:100%; min-height:170px; resize:vertical; border:1px solid var(--line); border-radius:8px; padding:10px; color:var(--text); background:#fff; font:13px/1.55 "Cascadia Code", "SFMono-Regular", Consolas, monospace; }
+      button { min-height:34px; margin-top:8px; border:1px solid #b9d2c3; border-radius:8px; background:var(--green); color:#fff; font-weight:900; cursor:pointer; }
+      .warning { border-color:#e6d1ac; background:#fff8ec; }
+      .warning h2 { color:var(--amber); }
+      code { font-family:"Cascadia Code", "SFMono-Regular", Consolas, monospace; }
+      @media (max-width:760px) { .grid { grid-template-columns:1fr; } }
     </style>
   </head>
   <body>
@@ -59,41 +36,38 @@
       <div class="grid">
         <article>
           <h2>Codex에게 지금 시킬 일</h2>
-          <p><code>Dev_Prototype_v1</code>의 stepped boss 패치 QA를 재시도하고 첫 6분 리뷰를 준비한다.</p>
-          <textarea id="prompt-next" readonly>AGENTS.md와 docs/orchestration/state/STATUS.md, docs/orchestration/state/CURRENT_TASK.md, docs/orchestration/state/NEXT_TASKS.md, docs/orchestration/evidence/2026-06-29-stepped-boss-xp-dps-plan.md를 읽고 Dev_Prototype_v1의 stepped boss 패치 QA를 재시도해줘. 런타임 적용값은 문지기 150/360/660/1020초, HP 1200/2250/4050/8650, 하드캡 1200초, 결손 생존 제거야. 먼저 Unity MCP V1QA 메뉴를 다시 실행하고, 성공하면 jaewoo 첫 6분 리뷰 기준을 정리해줘. 새 콘텐츠를 추가하지 말고 QA 결과가 명확히 이상할 때만 한 가지 수치만 조정해줘.</textarea>
+          <textarea id="prompt-next" readonly>AGENTS.md와 docs/orchestration/state/STATUS.md, CURRENT_TASK.md, NEXT_TASKS.md, docs/orchestration/evidence/2026-06-30-boss-pattern-no-reacquire-qa.md를 읽고 Dev_Prototype_v1의 2026-06-30 보스 패턴/망각 재획득 제거 패치 이후 QA를 이어가줘. 현재 적용값은 문지기 150/300/540/900초, HP 2200/4200/7600/12800, hard cap 1080초, 망각 후 재획득 제거, 문지기 파문/방어 패턴 추가야. 먼저 Unity MCP V1QA 메뉴를 재시도하고, 가능하면 jaewoo 첫 6분 재플레이 체크리스트를 정리해줘. 새 콘텐츠는 추가하지 말고 문제가 있으면 수치축 하나만 골라 조정해줘.</textarea>
           <button type="button" data-copy-target="prompt-next">프롬프트 복사</button>
         </article>
 
         <article class="warning">
-          <h2>지금 하지 말 것</h2>
+          <h2>하지 말 것</h2>
           <ul>
             <li>새 무기, 새 기억, 새 잔향, 새 궁극 추가 금지</li>
-            <li>상점, 메타 진행, 다지역 구조, 최종 보스 추가 금지</li>
-            <li><code>Assets/Lethe</code> 승격 보류</li>
-            <li>밸런스 축을 여러 개 동시에 크게 바꾸지 않기</li>
+            <li>상점, 메타 진행, 다중 지역, 최종 보스 추가 금지</li>
+            <li><code>Assets/Lethe</code> 승격 금지</li>
+            <li>여러 밸런스 축을 동시에 크게 바꾸지 않기</li>
           </ul>
         </article>
 
         <article>
           <h2>완료 기준</h2>
           <ul>
-            <li>V1QA smoke 메뉴 재시도</li>
-            <li>첫 문지기가 약 2분 30초에 등장</li>
-            <li>이후 보스 간격이 210초, 300초, 360초로 증가</li>
-            <li>몹 수, 체력, XP, 보스 HP가 시간대별 표와 맞음</li>
-            <li>기술 QA와 보고서 검증 통과</li>
-            <li>jaewoo가 첫 6분을 다시 판단할 수 있음</li>
+            <li>V1QA smoke 재시도 결과 기록</li>
+            <li>첫 보스/2보스/패턴/체력바/칼무리 체크</li>
+            <li>Unity compile error 0</li>
+            <li>Unity console error 0</li>
+            <li>필요 시 한 축만 수치 조정</li>
           </ul>
         </article>
 
         <article>
-          <h2>원본 문서</h2>
+          <h2>문서</h2>
           <ul>
             <li><a href="../state/CURRENT_TASK.md">CURRENT_TASK.md</a></li>
             <li><a href="../state/NEXT_TASKS.md">NEXT_TASKS.md</a></li>
-            <li><a href="../evidence/2026-06-29-stepped-boss-xp-dps-plan.md">계산 근거</a></li>
-            <li><a href="../../design/LETHE_DESIGN_01_RUN_LOOP.md">LETHE_DESIGN_01_RUN_LOOP.md</a></li>
-            <li><a href="../../design/LETHE_DESIGN_04_BALANCE.md">LETHE_DESIGN_04_BALANCE.md</a></li>
+            <li><a href="../evidence/2026-06-30-boss-pattern-no-reacquire-qa.md">QA 근거</a></li>
+            <li><a href="../reports/20260630/index.html">오늘 보고서</a></li>
           </ul>
         </article>
       </div>
@@ -107,13 +81,11 @@
           target.select();
           try {
             await navigator.clipboard.writeText(target.value);
-            button.textContent = "복사됨";
-            setTimeout(() => { button.textContent = "프롬프트 복사"; }, 1200);
           } catch {
             document.execCommand("copy");
-            button.textContent = "복사됨";
-            setTimeout(() => { button.textContent = "프롬프트 복사"; }, 1200);
           }
+          button.textContent = "복사됨";
+          setTimeout(() => { button.textContent = "프롬프트 복사"; }, 1200);
         });
       });
     </script>

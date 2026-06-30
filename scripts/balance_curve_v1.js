@@ -1,9 +1,9 @@
 const config = {
-  id: 'v2_stepped_boss_no_deficit',
-  hardCap: 1200,
+  id: 'v3_earlier_second_boss_patterns_no_reacquire',
+  hardCap: 1080,
   initialNextXp: 8,
-  bossSchedule: [150, 360, 660, 1020],
-  bossTargetTtk: [18, 26, 36, 48],
+  bossSchedule: [150, 300, 540, 900],
+  bossHp: [2200, 4200, 7600, 12800],
   damage: {
     baseFieldDps: 37,
     baseBossDps: 46,
@@ -38,7 +38,7 @@ const config = {
     {
       name: '2: 선택 검증',
       from: 150,
-      to: 360,
+      to: 300,
       spawnInterval: [0.58, 0.48],
       pack: [2, 3],
       cap: [30, 38],
@@ -48,8 +48,8 @@ const config = {
     },
     {
       name: '3: 잔향 압력',
-      from: 360,
-      to: 660,
+      from: 300,
+      to: 540,
       spawnInterval: [0.48, 0.40],
       pack: [3, 4],
       cap: [38, 48],
@@ -59,8 +59,8 @@ const config = {
     },
     {
       name: '4: 궁극 준비',
-      from: 660,
-      to: 1020,
+      from: 540,
+      to: 900,
       spawnInterval: [0.40, 0.34],
       pack: [4, 5],
       cap: [48, 58],
@@ -70,8 +70,8 @@ const config = {
     },
     {
       name: '5: 최종 압축',
-      from: 1020,
-      to: 1200,
+      from: 900,
+      to: 1080,
       spawnInterval: [0.34, 0.30],
       pack: [5, 5],
       cap: [58, 64],
@@ -165,8 +165,8 @@ function simulate() {
     const bossIndex = config.bossSchedule.indexOf(t);
     if (bossIndex >= 0) {
       const dps = bossDps(level, echoes, hasUltimate);
-      const targetTtk = config.bossTargetTtk[bossIndex];
-      const hp = roundTo(dps * targetTtk, 50);
+      const hp = config.bossHp[bossIndex];
+      const targetTtk = Math.round(hp / Math.max(1, dps));
       bossRows.push({
         gate: bossIndex + 1,
         time: t,

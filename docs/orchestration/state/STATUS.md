@@ -1,6 +1,6 @@
 # Status
 
-Last updated: 2026-06-29
+Last updated: 2026-06-30
 
 ## Current Snapshot
 
@@ -41,6 +41,33 @@ The report/devlog/review migration is now applied physically: old `docs/reports/
 The current development-docs plugin baseline from `docs/orchestration/MIGRATION_PROMPT.md` has been applied. `AGENTS.md` now uses a `Development Docs Plugin` section, `docs/orchestration/templates/HTML_INTERFACE_TEMPLATE.md` exists, legacy review pointer READMEs are readable, `reports/index.html` is generated as a newest-first date archive, daily report pages are generated as unit-card pages, and Discord delivery is documented as Project Orchestrator first with local direct-send scripts as trusted fallback only.
 
 ## Latest Verified Result
+
+- Unity v1 jaewoo direct-play follow-up, 2026-06-30:
+  - Feedback addressed:
+    - first Gatekeeper timing felt good.
+    - second Gatekeeper felt late.
+    - boss TTK was far too short.
+    - Gatekeeper had no pattern, so the player could free-hit too much.
+    - enemy count/HP felt okay.
+    - HP bars looked wrong.
+    - memory reacquire after forgetting should be removed entirely.
+    - Hungry Blades appeared to pause/stutter during base-attack hitstop.
+  - Applied runtime values:
+    - Gatekeeper schedule: `150 / 300 / 540 / 900s`.
+    - Gatekeeper HP: `2200 / 4200 / 7600 / 12800`.
+    - Hard cap: `1080s`.
+  - Added Gatekeeper pulse/guard behavior to create a real boss pattern and reduce free-DPS uptime.
+  - Removed normal post-forget memory reacquire/refill flow. Forgetting now turns the memory into an echo and returns directly to combat.
+  - Fixed enemy/boss HP bars by counter-scaling the bar root against enemy squash/local scale.
+  - Kept Hungry Blades orbit visuals updating during hitstop and throttled orbit VFX spawn cadence for optimization.
+  - Verification:
+    - `node scripts/balance_curve_v1.js`: passed.
+    - `node scripts/verify_unity_stepped_balance.js`: passed.
+    - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after retry.
+    - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+    - Unity MCP compile error count: `0`.
+    - Unity MCP console error count: `0`.
+  - Limitation: Unity MCP Play Mode/menu automation entered Play Mode but did not capture a full `[V1QA] PASS` log because the bridge restarted or returned a response parse error.
 
 - Unity v1 20-minute beta direct-review preparation, 2026-06-29:
   - Rechecked Unity MCP state: active instance `LETHE` on port `7890`, active scene `Assets/_dev/Scenes/Dev_Prototype_v1.unity`.

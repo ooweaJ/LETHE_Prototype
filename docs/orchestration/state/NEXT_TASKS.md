@@ -1,5 +1,26 @@
 # Next Tasks
 
+## 2026-06-30 Update: Next Priority After Boss Pattern Patch
+
+## 1. Replay updated first 6 minutes
+
+- Priority: highest
+- The jaewoo direct-play follow-up is now applied to Unity runtime.
+- Current values:
+  - Gatekeeper schedule: `150 / 300 / 540 / 900s`.
+  - Gatekeeper HP: `2200 / 4200 / 7600 / 12800`.
+  - Hard cap: `1080s`.
+  - Post-forget memory reacquire/refill: removed.
+  - Gatekeeper pulse/guard pattern: added.
+- Review checklist:
+  - Is the first Gatekeeper still good at 2:30 after the HP increase?
+  - Is the second Gatekeeper at 5:00 no longer late?
+  - Does the pulse/guard pattern make the boss less free-hit without feeling unfair?
+  - Are HP bars stable and readable?
+  - Is forgetting cleaner now that the lost memory does not come back?
+  - Does Hungry Blades keep rotating through base attack hitstop?
+- Done: jaewoo identifies at most one next numeric lever: first boss HP, second boss timing, pulse damage/frequency, or late boss HP.
+
 Keep this file short. Detailed history belongs in `docs/TASK.md`, `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, or evidence files.
 
 Current source of truth:

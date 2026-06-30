@@ -1,5 +1,41 @@
 # Current Task
 
+## 2026-06-30 Active Task Result
+
+## Status
+
+Jaewoo direct-play feedback follow-up has been applied to Unity `Dev_Prototype_v1`.
+
+## Applied Runtime Values
+
+- Gatekeeper schedule: `150 / 300 / 540 / 900s`.
+- Gatekeeper HP: `2200 / 4200 / 7600 / 12800`.
+- Hard cap: `1080s`.
+- Post-forget memory reacquire/refill: removed.
+- Gatekeeper pulse/guard pattern: added.
+- Enemy/boss HP bar inverse scale: added.
+- Hungry Blades orbit visual continuity during hitstop: added.
+
+## Verification
+
+- `node scripts/balance_curve_v1.js`: passed.
+- `node scripts/verify_unity_stepped_balance.js`: passed.
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after retry.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- Unity MCP compile error count: `0`.
+- Unity MCP console error count: `0`.
+
+## Remaining Gate
+
+MCP menu/play automation did not capture a full `[V1QA] PASS` log because the bridge restarted or returned a response parse error. Jaewoo should replay the updated run and judge:
+
+- first boss at 2:30 after HP increase.
+- second boss at 5:00.
+- Gatekeeper pulse/guard readability and damage.
+- HP bar stability.
+- no memory reacquire after forgetting.
+- Hungry Blades visual continuity during base attacks.
+
 ## Goal
 
 Rebuild the Unity prototype from the consolidated `LETHE_DESIGN_00..07` docs as a fresh v1, treating the previous `Dev_Prototype_v0` as failed reference only.

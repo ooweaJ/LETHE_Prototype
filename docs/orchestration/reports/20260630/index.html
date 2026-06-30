@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-30 개발 리포트</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f3;
+      --paper: #ffffff;
+      --ink: #17201d;
+      --muted: #64706b;
+      --line: #dce2da;
+      --accent: #1f6b4d;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); }
+    body.panel-open { overflow: hidden; }
+    main { width: min(980px, 100%); margin: 0 auto; padding: 30px 22px 44px; }
+    nav { margin-bottom: 18px; font-size: 14px; }
+    a { color: var(--accent); font-weight: 900; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .eyebrow { margin: 0 0 8px; color: var(--accent); font-size: 13px; font-weight: 900; }
+    h1 { margin: 0 0 10px; font-size: clamp(30px, 5vw, 46px); line-height: 1.08; }
+    .intro { margin: 0 0 18px; color: var(--muted); line-height: 1.65; }
+    ul { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+    li { margin: 0; }
+    .unit-card {
+      min-height: 136px;
+      padding: 17px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+    .unit-card:focus-within,
+    .unit-card:hover,
+    .unit-card.is-active {
+      border-color: rgba(31, 107, 77, 0.55);
+      box-shadow: 0 14px 30px rgba(23, 32, 29, 0.08);
+      transform: translateY(-1px);
+    }
+    .unit-panel[hidden] { display: none; }
+    .unit-panel {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: flex;
+      justify-content: flex-end;
+      background: rgba(23, 32, 29, 0.22);
+    }
+    .unit-panel__scrim {
+      position: absolute;
+      inset: 0;
+      cursor: pointer;
+    }
+    .unit-panel__shell {
+      position: relative;
+      width: min(760px, calc(100% - 28px));
+      height: calc(100% - 28px);
+      margin: 14px;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: 0 24px 70px rgba(23, 32, 29, 0.22);
+    }
+    .unit-panel__bar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+    }
+    .unit-panel__title {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .unit-panel__close {
+      min-width: 38px;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .unit-panel__close:hover {
+      border-color: rgba(31, 107, 77, 0.55);
+      color: var(--accent);
+    }
+    .unit-detail {
+      padding: 22px;
+    }
+    .unit-detail h1 { font-size: 28px; }
+    .unit-detail h2 {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      font-size: 21px;
+    }
+    .unit-detail ul { display: block; padding-left: 22px; list-style: disc; }
+    .unit-detail li { margin-bottom: 6px; }
+    .unit-detail code {
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: #eef2f7;
+    }
+    .back-inline { margin-bottom: 16px; }
+    .number { display: block; margin-bottom: 8px; color: var(--muted); font-size: 13px; font-weight: 900; }
+    h2 { margin: 0 0 8px; font-size: 20px; line-height: 1.3; }
+    p { margin: 0; color: var(--muted); line-height: 1.6; }
+    footer { margin-top: 20px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 720px) {
+      main { padding: 24px 16px 36px; }
+      .unit-panel {
+        align-items: flex-end;
+      }
+      .unit-panel__shell {
+        width: 100%;
+        height: min(86vh, calc(100% - 18px));
+        margin: 9px;
+      }
+      .unit-detail { padding: 18px; }
+      .unit-detail h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <nav><a href="/api/projects/lethe/reports/index.html">전체 리포트 목록</a></nav>
+    <p class="eyebrow">20260630 개발 기록</p>
+    <h1>2026-06-30 개발 리포트</h1>
+    <p class="intro">Dev_Prototype_v1에 jaewoo 플레이 피드백을 반영한 보스/망각/체력바/칼무리 패치를 적용했다. Unity 컴파일 에러와 콘솔 에러는 0이다.</p>
+    <ul id="unit-list">
+      <li>
+        <article class="unit-card">
+          <span class="number">2026-06-30-01</span>
+          <h2><a href="#unit-2026-06-30-01" data-unit-link="unit-2026-06-30-01">보스 패턴 / 망각 재획득 제거 패치</a></h2>
+          <p>Dev_Prototype_v1에 jaewoo 플레이 피드백을 반영한 보스/망각/체력바/칼무리 패치를 적용했다. Unity 컴파일 에러와 콘솔 에러는 0이다.</p>
+        </article>
+      </li>
+    </ul>
+    <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
+      <div class="unit-panel__scrim" data-panel-close></div>
+      <div class="unit-panel__shell" role="dialog" aria-modal="true" aria-label="작업 단위 상세">
+        <div class="unit-panel__bar">
+          <p class="unit-panel__title">작업 단위 상세</p>
+          <button class="unit-panel__close" type="button" data-panel-close aria-label="패널 닫기">&times;</button>
+        </div>
+        <article class="unit-detail" id="unit-2026-06-30-01" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-30-01 - 보스 패턴 / 망각 재획득 제거 패치</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에 jaewoo 플레이 피드백을 반영한 보스/망각/체력바/칼무리 패치를 적용했다. Unity 컴파일 에러와 콘솔 에러는 <code>0</code>이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>2번째 문지기 타이밍을 <code>360s</code>에서 <code>300s</code>로 당겼다.</li>
+<li>문지기 스케줄을 <code>150 / 300 / 540 / 900s</code>로 바꿨다.</li>
+<li>문지기 HP를 <code>2200 / 4200 / 7600 / 12800</code>으로 올렸다.</li>
+<li>문지기에게 주기적인 파문/방어 패턴을 추가했다.</li>
+<li>망각 후 기억 재획득/보충 메커니즘을 제거했다.</li>
+<li>체력바가 적 스케일/스쿼시에 같이 찌그러지지 않게 보정했다.</li>
+<li>칼무리 궤도 VFX가 hitstop 중에도 계속 돌도록 바꿨고, 생성 빈도를 줄여 최적화했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>node scripts/balance_curve_v1.js</code>: 통과.</li>
+<li><code>node scripts/verify_unity_stepped_balance.js</code>: 통과.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, 경고 0 / 오류 0.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 통과, legacy 경고 7 / 오류 0.</li>
+<li>Unity MCP compile error count: <code>0</code>.</li>
+<li>Unity MCP console error count: <code>0</code>.</li>
+<li>근거 파일: <code>docs/orchestration/evidence/2026-06-30-boss-pattern-no-reacquire-qa.md</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>현재 프로토타입에서는 망각 후 다시 같은 기억을 얻는 메커니즘을 제거한다. 재미 판단은 “잃은 기억이 잔향으로 남아 빌드를 바꾸는가”에 집중한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>MCP 메뉴 스모크는 Play Mode에 들어갔지만 브리지 재시작/응답 파싱 문제 때문에 <code>[V1QA] PASS</code> 로그를 확보하지 못했다. 다음 직접 플레이에서 체감 QA가 필요하다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>첫 보스 타이밍은 유지하고, 두 번째 보스만 빠르게 당겼다. 보스 TTK는 HP 증가와 패턴으로 보정했다. 망각 후 재획득은 완전히 제거했으며, 체력바와 칼무리 hitstop 시각 문제를 함께 고쳤다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo가 다시 플레이한 뒤 첫 보스 HP, 2보스 타이밍, 문지기 파문 피해/빈도, 4보스 HP 중 하나만 좁게 조정한다.</p>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 보스가 너무 빨리 죽고 패턴이 없어 프리딜이 됐으며, 망각 뒤 재획득 루프가 불필요하게 느껴졌다.</li>
+<li>방향: 새 콘텐츠 추가 대신 기존 보스/망각 루프를 플레이 피드백 기준으로 좁게 수정했다.</li>
+<li>행동: 스케줄, HP, 보스 패턴, 망각 UX, 체력바, 칼무리 VFX/최적화를 패치했다.</li>
+<li>결과: 기술 검증은 통과했고, 다음 판단은 직접 플레이 감각으로 좁혀졌다.</li>
+</ul>
+    </article>
+      </div>
+    </section>
+    <footer>기준: 2026-06-30</footer>
+  </main>
+  <script>
+    (() => {
+      const panel = document.getElementById('unit-detail-root');
+      const panelShell = panel?.querySelector('.unit-panel__shell');
+      const closeButton = panel?.querySelector('.unit-panel__close');
+      const details = Array.from(document.querySelectorAll('.unit-detail'));
+      const links = Array.from(document.querySelectorAll('[data-unit-link]'));
+      const setActiveCard = (id) => {
+        links.forEach((link) => {
+          const isActive = link.getAttribute('data-unit-link') === id;
+          link.closest('.unit-card')?.classList.toggle('is-active', isActive);
+        });
+      };
+      const closePanel = () => {
+        if (!panel) return;
+        panel.hidden = true;
+        document.body.classList.remove('panel-open');
+        details.forEach((detail) => { detail.hidden = true; });
+        setActiveCard('');
+        if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+      };
+      const showUnit = (id) => {
+        const target = document.getElementById(id);
+        if (!target) return;
+        if (!panel) return;
+        panel.hidden = false;
+        document.body.classList.add('panel-open');
+        details.forEach((detail) => { detail.hidden = detail !== target; });
+        setActiveCard(id);
+        if (panelShell) panelShell.scrollTop = 0;
+        if (closeButton) closeButton.focus({ preventScroll: true });
+      };
+      document.addEventListener('click', (event) => {
+        const unitLink = event.target.closest('[data-unit-link]');
+        if (unitLink) {
+          event.preventDefault();
+          const id = unitLink.getAttribute('data-unit-link');
+          history.pushState(null, '', '#' + id);
+          showUnit(id);
+          return;
+        }
+        if (event.target.closest('[data-panel-close]')) {
+          event.preventDefault();
+          closePanel();
+        }
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && panel && !panel.hidden) closePanel();
+      });
+      window.addEventListener('popstate', () => {
+        const id = location.hash.replace(/^#/, '');
+        if (id) showUnit(id);
+        else closePanel();
+      });
+      const initial = location.hash.replace(/^#/, '');
+      if (initial) showUnit(initial);
+    })();
+  </script>
+</body>
+</html>

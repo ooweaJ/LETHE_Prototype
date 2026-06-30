@@ -5,60 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LETHE 프로젝트 대시보드</title>
     <style>
-      :root {
-        --bg: #f6f7f3;
-        --panel: #ffffff;
-        --text: #17201d;
-        --muted: #64706b;
-        --line: #dce2da;
-        --green: #1f6b4d;
-        --blue: #285f8f;
-        --amber: #916019;
-        --red: #9a3d36;
-        --soft-green: #e7f3ec;
-        --soft-blue: #e8f1f8;
-        --soft-amber: #f8efe0;
-        --soft-red: #fae9e7;
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        color: var(--text);
-        background: var(--bg);
-      }
+      :root { color-scheme: light; --bg:#f6f7f3; --panel:#fff; --text:#17201d; --muted:#64706b; --line:#dce2da; --green:#1f6b4d; --blue:#285f8f; --amber:#916019; }
       * { box-sizing: border-box; }
-      body { margin: 0; }
-      main { width: min(1120px, 100%); margin: 0 auto; padding: 30px 22px 38px; }
-      header { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: end; margin-bottom: 16px; }
+      body { margin: 0; background: var(--bg); color: var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      main { width: min(1080px, 100%); margin: 0 auto; padding: 28px 20px 36px; }
+      header { display: flex; justify-content: space-between; gap: 18px; align-items: end; margin-bottom: 16px; }
+      h1 { margin: 0; font-size: clamp(30px, 5vw, 44px); line-height: 1.05; }
       .eyebrow { margin: 0 0 8px; color: var(--green); font-size: 13px; font-weight: 900; }
-      h1 { margin: 0; font-size: clamp(30px, 5vw, 46px); line-height: 1.05; }
-      .badge { display: inline-flex; align-items: center; min-height: 34px; padding: 7px 11px; border: 1px solid var(--line); border-radius: 999px; background: var(--soft-amber); color: var(--amber); font-size: 13px; font-weight: 900; white-space: nowrap; }
+      .badge { padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; background: #fff8ec; color: var(--amber); font-weight: 900; white-space: nowrap; }
       .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }
       .metric, .panel { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
-      .metric { min-height: 106px; padding: 15px; }
-      .metric span { display: block; margin-bottom: 8px; color: var(--muted); font-size: 13px; font-weight: 900; }
-      .metric strong { display: block; font-size: 18px; line-height: 1.32; }
-      .metric small { display: block; margin-top: 7px; color: var(--muted); font-size: 12px; line-height: 1.4; }
-      .green { background: var(--soft-green); }
-      .blue { background: var(--soft-blue); }
-      .amber { background: var(--soft-amber); }
-      .red { background: var(--soft-red); }
-      .heroPanel { padding: 18px; margin-bottom: 14px; border: 1px solid #cbdcce; border-radius: 8px; background: linear-gradient(180deg, #ffffff 0%, #f0f7f2 100%); }
-      .heroPanel h2, .panel h2 { margin: 0 0 10px; font-size: 19px; }
-      .heroPanel p, .panel p { margin: 0; color: var(--muted); line-height: 1.65; }
-      .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: start; }
+      .metric { min-height: 104px; padding: 15px; }
+      .metric span { display:block; margin-bottom: 8px; color: var(--muted); font-size: 13px; font-weight: 900; }
+      .metric strong { display:block; font-size: 18px; line-height: 1.32; }
+      .metric small { display:block; margin-top: 7px; color: var(--muted); font-size: 12px; line-height: 1.4; }
+      .green { background:#e7f3ec; } .blue { background:#e8f1f8; } .amber { background:#f8efe0; }
+      .hero { padding: 18px; margin-bottom: 14px; border: 1px solid #cbdcce; border-radius: 8px; background: linear-gradient(180deg,#fff 0%,#f0f7f2 100%); }
+      .hero h2, .panel h2 { margin: 0 0 10px; font-size: 19px; }
+      .hero p, .panel p, li { color: var(--muted); line-height: 1.65; }
+      .hero p { margin: 0; }
+      .grid { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items:start; }
       .panel { min-height: 166px; padding: 17px; }
-      .panel ul { margin: 0; padding-left: 19px; line-height: 1.58; }
-      .panel li { margin-bottom: 5px; }
-      .label { color: var(--muted); font-size: 13px; font-weight: 900; }
-      .value { display: block; margin-top: 4px; line-height: 1.5; }
-      .decision { display: grid; gap: 10px; }
-      .decision div { padding-bottom: 9px; border-bottom: 1px solid #edf0eb; }
-      .decision div:last-child { padding-bottom: 0; border-bottom: 0; }
+      .panel ul { margin: 0; padding-left: 19px; }
       code { font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace; }
       a { color: var(--green); font-weight: 900; text-decoration: none; }
       a:hover { text-decoration: underline; }
-      footer { margin-top: 18px; color: var(--muted); font-size: 13px; line-height: 1.6; }
-      @media (max-width: 900px) {
-        header, .metrics, .grid { grid-template-columns: 1fr; }
-      }
+      footer { margin-top: 18px; color: var(--muted); font-size: 13px; }
+      @media (max-width: 900px) { header, .metrics, .grid { grid-template-columns: 1fr; } header { display:block; } .badge { display:inline-block; margin-top: 12px; } }
     </style>
   </head>
   <body>
@@ -66,95 +39,76 @@
       <header>
         <div>
           <p class="eyebrow">LETHE 프로젝트 대시보드</p>
-          <h1>보스 템포 적용 완료</h1>
+          <h1>보스 패턴 / 망각 재획득 제거 패치 완료</h1>
         </div>
         <span class="badge">Dev_Prototype_v1</span>
       </header>
 
-      <section class="metrics" aria-label="핵심 상태 요약">
+      <section class="metrics" aria-label="핵심 상태">
         <div class="metric green">
           <span>현재 단계</span>
-          <strong>stepped boss 적용 완료</strong>
-          <small>Unity 런타임 패치됨</small>
+          <strong>플레이 피드백 2차 패치 완료</strong>
+          <small>첫 보스는 유지, 2보스는 당김</small>
         </div>
         <div class="metric blue">
-          <span>새 후보값</span>
-          <strong>150 / 360 / 660 / 1020s</strong>
-          <small>보스 간격 150 -> 210 -> 300 -> 360s</small>
+          <span>문지기</span>
+          <strong>150 / 300 / 540 / 900s</strong>
+          <small>HP 2200 / 4200 / 7600 / 12800</small>
         </div>
         <div class="metric amber">
-          <span>핵심 판단</span>
-          <strong>결손 생존 제거 후보</strong>
-          <small>망각과 잔향은 유지</small>
+          <span>망각</span>
+          <strong>재획득 제거</strong>
+          <small>기억은 잔향으로 변하고 바로 전투 복귀</small>
         </div>
-        <div class="metric red">
-          <span>다음 작업</span>
-          <strong>V1QA 재시도 + 첫 6분 리뷰</strong>
-          <small>MCP 메뉴 큐 오류 후속</small>
+        <div class="metric green">
+          <span>검증</span>
+          <strong>빌드 / 정적검증 / Unity 에러 0</strong>
+          <small>MCP V1QA 로그 캡처는 제한 있음</small>
         </div>
       </section>
 
-      <section class="heroPanel">
+      <section class="hero">
         <h2>현재 결론</h2>
         <p>
-          jaewoo 리뷰에서 첫 문지기까지의 5분이 너무 길고 지루하다는 문제가 확인됐다.
-          지금은 새 콘텐츠가 아니라 시간대별 몹 수, 체력, XP, 평균 DPS, 보스 타이밍을 하나의 곡선으로 묶어 Unity 런타임에 적용한 상태다.
-          빌드와 정적 검증은 통과했고, MCP 메뉴 실행만 <code>fetch failed</code>로 재시도가 필요하다.
+          jaewoo 플레이 피드백을 반영해 보스가 너무 빨리 녹는 문제와 프리딜 문제를 먼저 고쳤다.
+          두 번째 보스는 5분으로 당겼고, 문지기는 파문/방어 패턴을 갖는다.
+          체력바와 칼무리 hitstop 시각 문제도 같이 수정했으며, 다음 판단은 직접 재플레이 감각이다.
         </p>
       </section>
 
-      <section class="grid" aria-label="대시보드 요약">
+      <section class="grid">
         <article class="panel">
-          <h2>적용 후보</h2>
-          <div class="decision">
-            <div>
-              <span class="label">문지기 스케줄</span>
-              <span class="value"><code>150 / 360 / 660 / 1020s</code></span>
-            </div>
-            <div>
-              <span class="label">문지기 HP</span>
-              <span class="value"><code>1200 / 2250 / 4050 / 8650</code></span>
-            </div>
-            <div>
-              <span class="label">목표 TTK</span>
-              <span class="value"><code>18 / 26 / 36 / 48s</code></span>
-            </div>
-          </div>
-        </article>
-
-        <article class="panel">
-          <h2>다음 판단</h2>
+          <h2>다음 확인</h2>
           <ul>
-            <li>첫 보스가 2분 30초 목표감을 만드는가?</li>
-            <li>보스 간격이 뒤로 갈수록 충분히 넓어지는가?</li>
-            <li>적 수와 체력이 빌드 성장을 따라 압박하는가?</li>
-            <li>결손 생존 제거가 공백을 줄이는가?</li>
-            <li>첫 6분이 다시 하고 싶은 흐름인가?</li>
+            <li>첫 보스가 HP 증가 후에도 좋은 hook인지</li>
+            <li>2보스 5분이 늦지 않은지</li>
+            <li>파문/방어가 프리딜을 줄이는지</li>
+            <li>망각 후 재획득 제거가 깔끔한지</li>
+            <li>칼무리가 기본공격 중 끊겨 보이지 않는지</li>
           </ul>
         </article>
-
         <article class="panel">
-          <h2>바로 열 문서</h2>
-          <div class="decision">
-            <div>
-              <span class="label">다음 지시</span>
-              <span class="value"><a href="./command.html">command.html</a></span>
-            </div>
-            <div>
-              <span class="label">계산 근거</span>
-              <span class="value"><a href="../evidence/2026-06-29-stepped-boss-xp-dps-plan.md">stepped boss evidence</a></span>
-            </div>
-            <div>
-              <span class="label">오늘 보고</span>
-              <span class="value"><a href="../reports/20260629/index.html">20260629 report</a></span>
-            </div>
-          </div>
+          <h2>검증 근거</h2>
+          <ul>
+            <li><code>node scripts/balance_curve_v1.js</code></li>
+            <li><code>node scripts/verify_unity_stepped_balance.js</code></li>
+            <li><code>dotnet build Assembly-CSharp</code></li>
+            <li>Unity compile error count: <code>0</code></li>
+            <li>Unity console error count: <code>0</code></li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h2>바로가기</h2>
+          <ul>
+            <li><a href="./command.html">다음 지시문</a></li>
+            <li><a href="../reports/20260630/index.html">오늘 보고서</a></li>
+            <li><a href="../evidence/2026-06-30-boss-pattern-no-reacquire-qa.md">QA 근거</a></li>
+            <li><a href="../state/NEXT_TASKS.md">NEXT_TASKS</a></li>
+          </ul>
         </article>
       </section>
 
-      <footer>
-        기준: 2026-06-29 | <a href="../reports/index.html">보고서 목록</a> | <a href="../state/NEXT_TASKS.md">NEXT_TASKS</a>
-      </footer>
+      <footer>기준: 2026-06-30 | 승격 금지: <code>Assets/_dev</code> 검증 전 <code>Assets/Lethe</code> 이동 없음</footer>
     </main>
   </body>
 </html>

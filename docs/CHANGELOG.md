@@ -1,5 +1,29 @@
 # LETHE CHANGELOG
 
+## 2026-06-30
+
+- Applied the jaewoo direct-play boss/no-reacquire follow-up for Unity `Dev_Prototype_v1`:
+  - Kept the first Gatekeeper at `150s`.
+  - Pulled the second Gatekeeper from `360s` to `300s`.
+  - Changed the normal Gatekeeper schedule to `150 / 300 / 540 / 900s`.
+  - Changed Gatekeeper HP to `2200 / 4200 / 7600 / 12800`.
+  - Changed the hard cap to `1080s`.
+  - Added periodic Gatekeeper pulse/guard behavior to reduce pure free-DPS boss uptime.
+  - Removed the post-forget memory reacquire/refill mechanic from normal runtime flow.
+  - Fixed enemy/boss HP bars so they counter-scale against hit squash/local scale.
+  - Kept Hungry Blades orbit visuals updating during hitstop and throttled orbit VFX spawning for lower transient churn.
+- Updated `scripts/balance_curve_v1.js` and `scripts/verify_unity_stepped_balance.js` for the new runtime values and checks.
+- Added evidence at `docs/orchestration/evidence/2026-06-30-boss-pattern-no-reacquire-qa.md`.
+- Verification:
+  - `node scripts/balance_curve_v1.js`: passed.
+  - `node scripts/verify_unity_stepped_balance.js`: passed.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after retry.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity MCP compile error count: `0`.
+  - Unity MCP console error count: `0`.
+- Limitation:
+  - Unity MCP Play Mode/menu automation entered Play Mode but did not capture a full `[V1QA] PASS` log because the bridge restarted or returned a response parse error.
+
 ## 2026-06-27
 
 - Applied the first Unity v1 20-minute beta-run balance pass:
