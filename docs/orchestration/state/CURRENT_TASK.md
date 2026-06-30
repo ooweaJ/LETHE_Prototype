@@ -1,5 +1,35 @@
 # Current Task
 
+## 2026-06-30 Kalmuri C/D Candidate Asset Result
+
+## Status
+
+The C and D Kalmuri visual candidates are now available as Unity-viewable sprite assets and prefabs.
+
+## Created Assets
+
+- `LETHE/Assets/_dev/Art/Sprites/Echoes/Kalmuri/Candidates/spr_kalmuri_candidate_c_crescent_pack_01.png`
+- `LETHE/Assets/_dev/Art/Sprites/Echoes/Kalmuri/Candidates/spr_kalmuri_candidate_d_predator_bite_01.png`
+- `LETHE/Assets/_dev/Prefabs/Echoes/Kalmuri/Candidates/VFX_Kalmuri_Candidate_C_CrescentPack.prefab`
+- `LETHE/Assets/_dev/Prefabs/Echoes/Kalmuri/Candidates/VFX_Kalmuri_Candidate_D_PredatorBite.prefab`
+- `LETHE/Assets/_dev/Prefabs/Echoes/Kalmuri/Candidates/Preview_Kalmuri_C_D_SpriteCandidates.prefab`
+
+## Intended Read
+
+- C / Crescent Pack: always-on surrounding Kalmuri aura.
+- D / Predator Bite: enemy-hit lunge/bite frame.
+
+## Verification
+
+- Both PNGs import as Unity `Sprite`, `Single`, PPU `256`, alpha transparency enabled.
+- Unity compile error count: `0`.
+- Unity console error count: `0`.
+- Visual evidence: `LETHE/Assets/_dev/Evidence/v1_kalmuri_cd_sprite_assets_20260630.png`.
+
+## Remaining Gate
+
+Jaewoo should open the preview prefab or sprites in Unity and choose whether runtime Hungry Blades should use C as the idle aura, D as the hit frame, or another mix.
+
 ## 2026-06-30 Hungry Blades Visual Result
 
 ## Status

@@ -2,6 +2,14 @@
 
 ## 2026-06-30
 
+- Added Unity-viewable Hungry Blades / Kalmuri C and D candidate sprite assets:
+  - Created transparent `Sprite (2D and UI)` PNGs under `LETHE/Assets/_dev/Art/Sprites/Echoes/Kalmuri/Candidates/`.
+  - Created individual preview prefabs and a side-by-side preview prefab under `LETHE/Assets/_dev/Prefabs/Echoes/Kalmuri/Candidates/`.
+  - Candidate C is `Crescent Pack`, intended as the always-on surrounding Kalmuri aura.
+  - Candidate D is `Predator Bite`, intended as the target-hit lunge/bite frame.
+  - Added visual evidence at `LETHE/Assets/_dev/Evidence/v1_kalmuri_cd_sprite_assets_20260630.png`.
+  - Verification: Unity importer reports both PNGs as `Sprite`, `Single`, PPU `256`, alpha transparency enabled; Unity compile error count `0`; Unity console error count `0`.
+
 - Re-strengthened Hungry Blades / Kalmuri visual identity after jaewoo feedback that it had become underwhelming:
   - Changed active Hungry Blades orbit blades from short static markers into sweeping orbit blades.
   - Increased outer ring radius, blade size, alpha, and lifetime.

@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260630\\index.md",
-  "generatedAt": "2026-06-30T13:10:34.844Z",
-  "unitCount": 3,
+  "generatedAt": "2026-06-30T13:45:45.390Z",
+  "unitCount": 4,
   "latest": {
-    "title": "2026-06-30-03 - 굶주린 칼무리 VFX 재강화",
-    "number": "03",
-    "markdownPath": "docs\\orchestration\\reports\\20260630\\units\\2026-06-30-03-굶주린-칼무리-vfx-재강화.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260630\\units\\2026-06-30-03-굶주린-칼무리-vfx-재강화.html"
+    "title": "2026-06-30-04 - 칼무리 C/D 후보 스프라이트 에셋",
+    "number": "04",
+    "markdownPath": "docs\\orchestration\\reports\\20260630\\units\\2026-06-30-04-칼무리-c-d-후보-스프라이트-에셋.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260630\\units\\2026-06-30-04-칼무리-c-d-후보-스프라이트-에셋.html"
   }
 }

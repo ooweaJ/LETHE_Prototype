@@ -14,6 +14,7 @@
   - Post-forget memory reacquire/refill: removed.
   - Gatekeeper pulse/guard pattern: added.
 - Review checklist:
+  - Open `LETHE/Assets/_dev/Prefabs/Echoes/Kalmuri/Candidates/Preview_Kalmuri_C_D_SpriteCandidates.prefab` and choose whether Hungry Blades should use C as idle aura, D as hit-frame lunge, or a different mix.
   - Does the refreshed Hungry Blades read as a real `칼무리`: orbiting blades, outer trace, bite impact, and level-up burst?
   - Do +1 / +3 / +5 Hungry Blades stay readable without hiding enemies or the player?
   - Is the first Gatekeeper still good at 2:30 after the HP increase?

@@ -169,6 +169,13 @@
           <p>Dev_Prototype_v1의 굶주린 칼무리가 다시 칼날 군집처럼 읽히도록 활성 기억 VFX와 적중 지점 bite VFX를 강화했다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-06-30-04</span>
+          <h2><a href="#unit-2026-06-30-04" data-unit-link="unit-2026-06-30-04">칼무리 C/D 후보 스프라이트 에셋</a></h2>
+          <p>Dev_Prototype_v1의 칼무리 후보 C/D를 Unity Project 창에서 직접 볼 수 있는 투명 PNG Sprite와 프리팹으로 만들었다. 런타임 전투 VFX는 아직 바꾸지 않았고, jaewoo 선택용 후보 에셋 단계다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -294,6 +301,46 @@
 <li>방향: 새 기능 추가 대신 핵심 판타지인 “칼날 군집”의 시각 언어를 복구했다.</li>
 <li>행동: 궤도 스윕 칼날, lead blade, bite 칼날, 획득 VFX를 강화하고 Unity에서 강제 상태 캡처로 확인했다.</li>
 <li>결과: 플레이어 주변에 더 명확한 칼날 고리가 생겨 칼무리 정체성이 다시 살아났다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-06-30-04" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-06-30-04 - 칼무리 C/D 후보 스프라이트 에셋</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 칼무리 후보 C/D를 Unity Project 창에서 직접 볼 수 있는 투명 PNG Sprite와 프리팹으로 만들었다. 런타임 전투 VFX는 아직 바꾸지 않았고, jaewoo 선택용 후보 에셋 단계다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>C / Crescent Pack 후보를 상시 칼무리 오라용 투명 Sprite로 생성했다.</li>
+<li>D / Predator Bite 후보를 타격 순간 돌진/물어뜯기 프레임용 투명 Sprite로 생성했다.</li>
+<li>각 후보를 바로 씬에 끌어놓을 수 있는 개별 프리팹으로 만들었다.</li>
+<li>C/D를 나란히 볼 수 있는 <code>Preview_Kalmuri_C_D_SpriteCandidates.prefab</code>을 만들었다.</li>
+<li>기존 후보 보드와 C/D 확대 보드, 실제 Sprite 프리팹 프리뷰 캡처를 증거 이미지로 남겼다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>Unity importer 확인:</li>
+<li>두 PNG 모두 <code>Sprite</code>, <code>Single</code>, PPU <code>256</code>, alpha transparency enabled.</li>
+<li>Unity compile error count: <code>0</code>.</li>
+<li>Unity console error count: <code>0</code>.</li>
+<li>시각 근거:</li>
+<li><code>LETHE/Assets/_dev/Evidence/v1_kalmuri_candidates_20260630.png</code></li>
+<li><code>LETHE/Assets/_dev/Evidence/v1_kalmuri_candidates_cd_focus_20260630.png</code></li>
+<li><code>LETHE/Assets/_dev/Evidence/v1_kalmuri_cd_sprite_assets_20260630.png</code></li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>C는 상시로 플레이어 주변을 감싸는 칼무리 오라 후보로, D는 적에게 칼무리가 몰려가 물어뜯는 타격 순간 후보로 분리해 둔다. 최종 런타임 적용은 jaewoo가 Unity에서 후보를 보고 선택한 뒤 진행한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>현재 후보는 정적 합성 Sprite라 애니메이션/회전/타격 타이밍이 실제 게임에서 어떻게 보일지는 다음 런타임 적용 후 다시 봐야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>칼무리 방향은 C/D로 좁혀졌다. C는 덩어리감 있는 초승달 오라, D는 타격 순간 한 방향 돌진이다. 다음 판단은 <code>상시=C, 타격=D</code> 조합이 맞는지, 혹은 C만/D만 쓸지에 대한 jaewoo 선택이다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo가 후보를 선택하면 <code>V1GameManager</code>의 Hungry Blades 상시 orbit VFX와 enemy-side bite VFX에 선택된 Sprite/프리팹 방향을 반영한다.</p>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 칼무리가 코드 VFX로만 튜닝되면서 정체성이 어색하게 느껴졌다.</li>
+<li>방향: 런타임 수치보다 먼저 시각 후보를 실제 Unity 에셋으로 만들어 선택 가능하게 했다.</li>
+<li>행동: C/D 후보 Sprite, 개별 프리팹, 비교 프리팹, 증거 이미지를 생성했다.</li>
+<li>결과: 기획자/플레이어가 Unity 안에서 후보를 직접 보고 다음 적용 방향을 고를 수 있게 됐다.</li>
 </ul>
     </article>
       </div>

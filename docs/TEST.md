@@ -1,5 +1,28 @@
 # LETHE TEST
 
+## 2026-06-30 Kalmuri C/D Sprite Candidate Assets
+
+- Purpose:
+  - Make the selected C/D Kalmuri candidate concepts visible as real Unity sprite assets before changing runtime VFX behavior.
+- Created assets:
+  - `LETHE/Assets/_dev/Art/Sprites/Echoes/Kalmuri/Candidates/spr_kalmuri_candidate_c_crescent_pack_01.png`
+  - `LETHE/Assets/_dev/Art/Sprites/Echoes/Kalmuri/Candidates/spr_kalmuri_candidate_d_predator_bite_01.png`
+  - `LETHE/Assets/_dev/Prefabs/Echoes/Kalmuri/Candidates/VFX_Kalmuri_Candidate_C_CrescentPack.prefab`
+  - `LETHE/Assets/_dev/Prefabs/Echoes/Kalmuri/Candidates/VFX_Kalmuri_Candidate_D_PredatorBite.prefab`
+  - `LETHE/Assets/_dev/Prefabs/Echoes/Kalmuri/Candidates/Preview_Kalmuri_C_D_SpriteCandidates.prefab`
+- Commands / checks:
+  - Unity MCP asset generation/import.
+  - Unity MCP import settings query.
+  - Unity compile error check.
+  - Unity console error check.
+- Results:
+  - Both PNGs imported as `Sprite`, `Single`, PPU `256`, alpha transparency enabled.
+  - Unity compile error count: `0`.
+  - Unity console error count: `0`.
+  - Visual evidence: `LETHE/Assets/_dev/Evidence/v1_kalmuri_cd_sprite_assets_20260630.png`.
+- Limitation:
+  - These are candidate sprites/prefabs only. Runtime Hungry Blades behavior is not switched to C/D until jaewoo chooses the final direction.
+
 ## 2026-06-30 Hungry Blades / Kalmuri Visual Refresh
 
 - Purpose:

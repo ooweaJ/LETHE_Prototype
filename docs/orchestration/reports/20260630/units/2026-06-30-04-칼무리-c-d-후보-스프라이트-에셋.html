@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-06-30-04 - 칼무리 C/D 후보 스프라이트 에셋</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-06-30-04 - 칼무리 C/D 후보 스프라이트 에셋</h1>
+      <p class="meta">Generated from 2026-06-30-04-칼무리-c-d-후보-스프라이트-에셋.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260630/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-06-30-04 - 칼무리 C/D 후보 스프라이트 에셋</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 칼무리 후보 C/D를 Unity Project 창에서 직접 볼 수 있는 투명 PNG Sprite와 프리팹으로 만들었다. 런타임 전투 VFX는 아직 바꾸지 않았고, jaewoo 선택용 후보 에셋 단계다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>C / Crescent Pack 후보를 상시 칼무리 오라용 투명 Sprite로 생성했다.</li>
+<li>D / Predator Bite 후보를 타격 순간 돌진/물어뜯기 프레임용 투명 Sprite로 생성했다.</li>
+<li>각 후보를 바로 씬에 끌어놓을 수 있는 개별 프리팹으로 만들었다.</li>
+<li>C/D를 나란히 볼 수 있는 <code>Preview_Kalmuri_C_D_SpriteCandidates.prefab</code>을 만들었다.</li>
+<li>기존 후보 보드와 C/D 확대 보드, 실제 Sprite 프리팹 프리뷰 캡처를 증거 이미지로 남겼다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>Unity importer 확인:</li>
+<li>두 PNG 모두 <code>Sprite</code>, <code>Single</code>, PPU <code>256</code>, alpha transparency enabled.</li>
+<li>Unity compile error count: <code>0</code>.</li>
+<li>Unity console error count: <code>0</code>.</li>
+<li>시각 근거:</li>
+<li><code>LETHE/Assets/_dev/Evidence/v1_kalmuri_candidates_20260630.png</code></li>
+<li><code>LETHE/Assets/_dev/Evidence/v1_kalmuri_candidates_cd_focus_20260630.png</code></li>
+<li><code>LETHE/Assets/_dev/Evidence/v1_kalmuri_cd_sprite_assets_20260630.png</code></li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>C는 상시로 플레이어 주변을 감싸는 칼무리 오라 후보로, D는 적에게 칼무리가 몰려가 물어뜯는 타격 순간 후보로 분리해 둔다. 최종 런타임 적용은 jaewoo가 Unity에서 후보를 보고 선택한 뒤 진행한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>현재 후보는 정적 합성 Sprite라 애니메이션/회전/타격 타이밍이 실제 게임에서 어떻게 보일지는 다음 런타임 적용 후 다시 봐야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>칼무리 방향은 C/D로 좁혀졌다. C는 덩어리감 있는 초승달 오라, D는 타격 순간 한 방향 돌진이다. 다음 판단은 <code>상시=C, 타격=D</code> 조합이 맞는지, 혹은 C만/D만 쓸지에 대한 jaewoo 선택이다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo가 후보를 선택하면 <code>V1GameManager</code>의 Hungry Blades 상시 orbit VFX와 enemy-side bite VFX에 선택된 Sprite/프리팹 방향을 반영한다.</p>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 칼무리가 코드 VFX로만 튜닝되면서 정체성이 어색하게 느껴졌다.</li>
+<li>방향: 런타임 수치보다 먼저 시각 후보를 실제 Unity 에셋으로 만들어 선택 가능하게 했다.</li>
+<li>행동: C/D 후보 Sprite, 개별 프리팹, 비교 프리팹, 증거 이미지를 생성했다.</li>
+<li>결과: 기획자/플레이어가 Unity 안에서 후보를 직접 보고 다음 적용 방향을 고를 수 있게 됐다.</li>
+</ul>
+  </main>
+</body>
+</html>

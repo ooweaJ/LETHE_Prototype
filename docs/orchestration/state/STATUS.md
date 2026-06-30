@@ -42,6 +42,20 @@ The current development-docs plugin baseline from `docs/orchestration/MIGRATION_
 
 ## Latest Verified Result
 
+- Unity-viewable Kalmuri C/D candidate sprite assets, 2026-06-30:
+  - Created C / Crescent Pack as a transparent Unity sprite candidate for the always-on surrounding Kalmuri aura.
+  - Created D / Predator Bite as a transparent Unity sprite candidate for the enemy-hit lunge/bite frame.
+  - Added individual sprite prefabs and a side-by-side preview prefab under `LETHE/Assets/_dev/Prefabs/Echoes/Kalmuri/Candidates/`.
+  - Evidence:
+    - `LETHE/Assets/_dev/Evidence/v1_kalmuri_candidates_20260630.png`.
+    - `LETHE/Assets/_dev/Evidence/v1_kalmuri_candidates_cd_focus_20260630.png`.
+    - `LETHE/Assets/_dev/Evidence/v1_kalmuri_cd_sprite_assets_20260630.png`.
+  - Verification:
+    - Both PNGs import as Unity `Sprite`, `Single`, PPU `256`, alpha transparency enabled.
+    - Unity compile error count: `0`.
+    - Unity console error count: `0`.
+  - Runtime Hungry Blades behavior was not changed in this pass; jaewoo should choose the final C/D mix first.
+
 - Unity v1 Hungry Blades / Kalmuri visual refresh, 2026-06-30:
   - Responded to jaewoo feedback that `굶주린 칼무리` had become visually underwhelming.
   - Reworked active Hungry Blades orbit blades from short static markers into sweeping moving blades.
