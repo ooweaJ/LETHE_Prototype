@@ -2,6 +2,21 @@
 
 # 2026-07-01
 
+- Reworked Hungry Blades / Kalmuri away from C/D candidate images into a living blade-swarm motion pass:
+  - Removed runtime use of the C/D candidate silhouettes from `V1GameManager.cs`.
+  - Restored the original Kalmuri blade sprite as the core visual identity.
+  - Active Hungry Blades now uses irregular multi-speed orbit blades instead of static aura marks.
+  - Nearby enemies pull some blades into short hunting lunges, with cyan motion trails and recoil shards from higher levels.
+  - Active bite hits now converge multiple blades into the target, add crossing wound cuts, then throw return shards from +3 onward.
+  - Kalmuri echo follow-ups now surge forward as a fan of blade strokes instead of a large candidate image stamp.
+  - Hungry Blades memory-gain feedback now spirals blades outward rather than showing a C/D emblem.
+- Verification:
+  - `rg` found no C/D candidate runtime references in `V1GameManager.cs`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity MCP compile error count: `0`.
+  - Unity console error count: `0`.
+  - Unity `LETHE/V1 Smoke/M2 Loop`: `[V1QA] PASS`.
+
 - Switched Hungry Blades / Kalmuri runtime VFX to D-only after jaewoo feedback that D was not noticeable enough:
   - Removed runtime use of C / Crescent Pack from active aura, memory gain, and echo transform feedback.
   - D / Predator Bite is now the main player-side orbit read, enemy-side bite frame, Kalmuri echo follow-up impact, and Hungry Blades memory-gain burst.

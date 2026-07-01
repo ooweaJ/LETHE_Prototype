@@ -162,6 +162,13 @@
           <p>Dev_Prototype_v1의 굶주린 칼무리 VFX를 C/D 혼합에서 D 단독 중심으로 바꿨다. 아직 _dev 검증 단계이며 Assets/Lethe 승격은 하지 않았다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-01-03</span>
+          <h2><a href="#unit-2026-07-01-03" data-unit-link="unit-2026-07-01-03">칼무리 살아있는 칼날 군집 전환</a></h2>
+          <p>Dev_Prototype_v1의 굶주린 칼무리를 C/D 후보 이미지가 아니라 원래 칼날 스프라이트 기반의 동적 군집 VFX로 다시 만들었다. 아직 _dev 검증 단계이며 Assets/Lethe 승격은 하지 않았다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -243,6 +250,45 @@
 <li>방향: 후보를 섞지 않고 D 하나로 플레이 감각을 검증한다.</li>
 <li>행동: D를 모든 주요 칼무리 순간에 연결하고 보조 VFX를 낮췄다.</li>
 <li>결과: 기술 QA는 통과했고, 이제 직접 플레이로 D 단독 정체성을 판단할 수 있다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-01-03" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-01-03 - 칼무리 살아있는 칼날 군집 전환</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 굶주린 칼무리를 C/D 후보 이미지가 아니라 원래 칼날 스프라이트 기반의 동적 군집 VFX로 다시 만들었다. 아직 <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>C/D 후보 이미지는 런타임에서 제거했다.</li>
+<li>상시 칼무리는 서로 다른 속도, 반경, 투명도, arc를 가진 칼날들이 불규칙하게 돈다.</li>
+<li>가까운 적이 있으면 일부 칼날이 궤도에서 빠져나와 적에게 짧게 돌진한다.</li>
+<li>레벨이 오르면 돌진 후 되돌아가는 recoil shard가 붙는다.</li>
+<li>실제 피해 순간에는 여러 칼날이 한 점으로 모여 물고, 교차 상처선이 남는다.</li>
+<li>칼무리 잔향 후속타는 큰 문양 대신 칼날 fan/surge로 터진다.</li>
+<li>기억 획득 피드백은 칼날이 바깥으로 소용돌이치는 형태로 바뀌었다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>rg</code> 확인: <code>V1GameManager.cs</code>에 C/D 후보 런타임 참조 없음.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy 경고 7개 / 오류 0개.</li>
+<li>Unity MCP compile error count: <code>0</code>.</li>
+<li>Unity MCP console error count: <code>0</code>.</li>
+<li>Unity <code>LETHE/V1 Smoke/M2 Loop</code>: <code>[V1QA] PASS</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>칼무리의 핵심은 새 한 장짜리 이미지가 아니라 움직임이다. 지금 방향은 &quot;원형 오라&quot;나 &quot;큰 bite 문양&quot;이 아니라, 작은 칼날들이 돌고, 적에게 쏠리고, 베고, 다시 돌아오는 살아있는 군집이다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>동작은 강해졌지만 직접 플레이에서 과하면 적/플레이어를 가릴 수 있다. 다음 조정은 lunge frequency, trail alpha, blade count, hit convergence scale 중 하나만 좁게 건드리는 게 좋다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>jaewoo가 C/D 둘 다 별로라고 판단했다. 이에 따라 후보 이미지를 버리고 원래 칼날 기반 motion grammar로 칼무리를 재구성했다. 자동 QA는 통과했고, 남은 판단은 +1/+3/+5 직접 플레이에서 군집이 진짜 칼무리처럼 읽히는지다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo 직접 플레이 결과에 따라 lunge 빈도, trail 알파, 칼날 수, hit convergence 크기 중 하나만 조정한다. 쌍검 phantom 크기는 별도 피드백이 다시 나오면 분리해서 다룬다.</p>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 후보 이미지는 정적인 마크처럼 보였고, 굶주린 칼무리의 행동성이 부족했다.</li>
+<li>방향: 스틸 이미지가 아니라 모션 문법으로 정체성을 만든다.</li>
+<li>행동: orbit, lunge, bite convergence, recoil, echo surge, memory spiral을 구현했다.</li>
+<li>결과: 기술 QA는 통과했고, 이제 직접 플레이로 출시감에 가까운 VFX인지 판단할 수 있다.</li>
 </ul>
     </article>
       </div>

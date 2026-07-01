@@ -1,5 +1,34 @@
 # LETHE TEST
 
+# 2026-07-01 Kalmuri Living Swarm Motion Pass
+
+- Purpose:
+  - Respond to jaewoo feedback that both C and D candidate-image directions felt weak.
+  - Make Hungry Blades feel like a dynamic swarm of blades rather than a static aura or emblem.
+- Applied target:
+  - Removed C/D candidate runtime references from `V1GameManager.cs`.
+  - Returned the original Kalmuri blade sprite to the center of the effect language.
+  - Active Hungry Blades uses irregular orbit blades with different speeds, radii, alpha, and arcs.
+  - Nearby enemies trigger short hunting lunges from orbit toward the target, with cyan motion trails and higher-level recoil shards.
+  - Active bite hits converge blades into the target, add crossing wound cuts, and throw return shards from +3 onward.
+  - Kalmuri echo follow-ups use blade surges/fans instead of a large C/D candidate silhouette.
+  - Hungry Blades memory-gain feedback uses outward blade spirals.
+- Commands / checks:
+  - `rg -n "PredatorBite|CrescentPack|candidate_c|candidate_d" LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - Unity MCP compile error check.
+  - Unity MCP console error check.
+  - Unity `LETHE/V1 Smoke/M2 Loop`.
+  - Editor log check for `[V1QA] PASS`.
+- Results:
+  - No C/D candidate runtime references remain in `V1GameManager.cs`.
+  - Runtime build passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity console error count: `0`.
+  - M2 Loop QA logged `[V1QA] PASS`, with `HungryBlades:5`, `BloodReflection:5`, `storm=True`, and live enemies `10`.
+- Limitation:
+  - Automated QA confirms runtime safety. Direct jaewoo play is still needed to judge whether the new motion reads as release-quality enough.
+
 # 2026-07-01 Kalmuri D-Only Runtime Follow-up
 
 - Purpose:

@@ -2,6 +2,30 @@
 
 Last updated: 2026-07-01
 
+## 2026-07-01 Update: Kalmuri Living Swarm Motion Pass
+
+- Jaewoo rejected both C and D candidate-image directions as not good enough.
+- Implemented a new runtime direction: original Kalmuri blade sprite + dynamic swarm motion.
+- Applied in `Dev_Prototype_v1`:
+  - Removed C/D candidate runtime references from `V1GameManager.cs`.
+  - Active Hungry Blades now has irregular multi-speed orbit blades.
+  - Nearby enemies pull blades into hunting lunges from the orbit toward targets.
+  - Higher levels add recoil/return shards so the swarm feels like it bites and comes back.
+  - Active hit moments converge multiple blades into the target with crossing wound cuts.
+  - Kalmuri echo follow-ups now read as blade surge/fan impacts instead of a large image stamp.
+  - Memory-gain feedback is now an outward spiral of blades.
+- Reference direction:
+  - Immediate readable hit strokes like high-polish action roguelites.
+  - Dense but clear survival-game swarm motion.
+  - LETHE identity through cyan-white ghost blades, recoil, and returning forgotten edges.
+- Verification:
+  - No `PredatorBite`, `CrescentPack`, `candidate_c`, or `candidate_d` runtime references remain in `V1GameManager.cs`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity MCP compile error count: `0`.
+  - Unity MCP console error count: `0`.
+  - Unity `LETHE/V1 Smoke/M2 Loop`: `[V1QA] PASS`, `HungryBlades:5`, `BloodReflection:5`, `storm=True`, live enemies `10`.
+- Next visual gate: jaewoo should play +1/+3/+5 and judge whether the lunge/recoil swarm now feels like a real Kalmuri identity.
+
 ## 2026-07-01 Update: Kalmuri D-Only Runtime Follow-up
 
 - Jaewoo feedback: D / Predator Bite did not feel present enough when C was also used as the active aura.
