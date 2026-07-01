@@ -2,6 +2,17 @@
 
 # 2026-07-01
 
+- Added original runtime-generated SFX for the current skill set after jaewoo requested skill-appropriate sounds:
+  - Replaced the simple sine-only prototype tones with a small 22.05 kHz procedural SFX palette using sine, triangle, square, noise, and blade-like layered waves.
+  - Added throttled `PlaySfx` support so repeated auto-attack sounds do not become cacophonous.
+  - Wired distinct sounds to dual blades, greatsword, Hungry Blades lunge/pierce/echo, Blood Reflection mark/heal, Execution Flash, Hunter Oath, Shatter Wave, Stopped Second, Ashen Shield, Oblivion Brand, Blood Blade Storm, XP pickup, kill, warning, level-up, clear, and defeat moments.
+  - Kept all audio original and generated in code; no copyrighted Vampire Survivors samples were copied.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity MCP compile error count: `0`.
+  - Unity MCP console error count: `0`.
+  - Play Mode direct M2 smoke call returned `HungryBlades:5`, `BloodReflection:5`, `storm=True`, `enemies=10`, `result=True`, with console error count `0`.
+
 - Tuned Kalmuri launch feel after jaewoo feedback that blades only launched at orbit range and did not feel like stabbing:
   - Added a larger Hungry Blades `lungeRange` separate from the visible orbit.
   - Active Kalmuri can now launch toward enemies farther than the rotating blade circle.

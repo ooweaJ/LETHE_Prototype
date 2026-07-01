@@ -1,5 +1,32 @@
 # LETHE TEST
 
+# 2026-07-01 Skill SFX Runtime Pass
+
+- Purpose:
+  - Add skill-appropriate audio feedback for the current `Dev_Prototype_v1` combat slice.
+  - Use Vampire Survivors-like lessons as direction: short readable retro/gameplay sounds, clear pickup/level/cast cues, and throttled projectile impacts so dense auto-combat does not become noisy.
+- Applied target:
+  - Replaced the simple sine-only prototype clips with a procedural SFX palette in `V1GameManager`.
+  - Added `PlaySfx(id, volumeMul, minInterval)` to throttle dense repeated events.
+  - Added original generated clips for:
+    - basic weapon slashes.
+    - Hungry Blades lunge, pierce, and echo.
+    - Blood Reflection mark/heal and Blood Blade Storm pulses.
+    - Execution Flash, Hunter Oath, Shatter Wave, Stopped Second, Ashen Shield, Oblivion Brand.
+    - XP pickup, kill, warning, level-up, clear, defeat, and player hit.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - Unity MCP compile error check.
+  - Unity MCP console error check.
+  - Unity Play Mode direct call: `V1GameManager.DebugRunM2Smoke()`.
+- Results:
+  - Runtime build passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity console error count: `0`.
+  - Direct M2 smoke snapshot: `HungryBlades:5`, `BloodReflection:5`, `storm=True`, `enemies=10`, `result=True`.
+- Limitation:
+  - Automated checks confirm runtime safety. Final mix judgment still needs jaewoo direct play with speakers/headphones.
+
 # 2026-07-01 Kalmuri Lunge Range / Stab Feel
 
 - Purpose:

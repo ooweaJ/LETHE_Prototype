@@ -1,5 +1,32 @@
 # Current Task
 
+# 2026-07-01 Skill SFX Runtime Pass Result
+
+## Status
+
+`Dev_Prototype_v1` now has original generated SFX assigned to the main weapon, memory, echo, ultimate, pickup, and UI combat moments.
+
+## Applied Audio Changes
+
+- Added a procedural SFX palette using sine, triangle, square, noise, and layered blade waves.
+- Added `PlaySfx(id, volumeMul, minInterval)` so dense repeated events can be throttled.
+- Replaced the old sine-only placeholder clips.
+- Added Hungry Blades lunge, pierce, and echo sounds.
+- Added Blood Reflection mark/heal and Blood Blade Storm pulse sounds.
+- Added utility memory sounds for Execution Flash, Hunter Oath, Shatter Wave, Stopped Second, Ashen Shield, and Oblivion Brand.
+- Added or refreshed XP pickup, kill, warning, level-up, player hit, clear, and defeat cues.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- Unity compile error count: `0`.
+- Unity console error count: `0`.
+- Play Mode direct `DebugRunM2Smoke()` snapshot: `HungryBlades:5`, `BloodReflection:5`, `storm=True`, `enemies=10`, `result=True`.
+
+## Remaining Gate
+
+Jaewoo should direct-play with audio on and judge whether repeated Kalmuri pierce/lunge sounds are satisfying rather than tiring, and whether Blood Blade Storm feels powerful without overpowering the mix.
+
 # 2026-07-01 Kalmuri Lunge Range / Stab Feel Result
 
 ## Status

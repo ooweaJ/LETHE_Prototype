@@ -2,6 +2,22 @@
 
 Last updated: 2026-07-01
 
+## 2026-07-01 Update: Skill SFX Runtime Pass
+
+- Jaewoo requested skill-appropriate sound effects, with reference awareness from Vampire Survivors-like survival auto-combat.
+- Applied:
+  - Replaced the sine-only prototype sound palette with original runtime-generated clips.
+  - Added wave/noise based SFX generation at 22.05 kHz for retro-readable short cues.
+  - Added per-sound replay throttling to keep dense auto-attacks from becoming a wall of noise.
+  - Wired sounds to weapon attacks, Hungry Blades lunge/pierce/echo, Blood Reflection mark/heal, utility memories, ultimates, XP pickup, kill, hit, warning, level-up, clear, and defeat moments.
+  - No copyrighted Vampire Survivors audio was copied; the references informed audio grammar only.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity MCP compile error count: `0`.
+  - Unity MCP console error count: `0`.
+  - Play Mode direct `DebugRunM2Smoke()` returned `HungryBlades:5`, `BloodReflection:5`, `storm=True`, `enemies=10`, `result=True`, with console error count `0`.
+- Remaining gate: jaewoo should direct-play with audio on and judge the mix balance, especially Kalmuri lunge/pierce repetition and Blood Blade Storm loudness.
+
 ## 2026-07-01 Update: Kalmuri Lunge Range / Stab Feel
 
 - Jaewoo feedback: Kalmuri blades seemed to launch only at orbit range, and the flying blades did not feel like they were stabbing.
