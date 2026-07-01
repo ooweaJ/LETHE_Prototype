@@ -134,3 +134,46 @@ jaewoo 직접 플레이 결과에 따라 lunge 빈도, trail 알파, 칼날 수,
 - 행동: orbit, lunge, bite convergence, recoil, echo surge, memory spiral을 구현했다.
 - 결과: 기술 QA는 통과했고, 이제 직접 플레이로 출시감에 가까운 VFX인지 판단할 수 있다.
 
+# 2026-07-01-04 - 칼무리 큰 원 제거와 궤도 확장
+
+## 1. 현재 빌드 상태
+
+`Dev_Prototype_v1`의 굶주린 칼무리에서 큰 보조 원을 제거하고, 실제 칼날들이 도는 궤도를 더 크게 만들었다. 아직 `_dev` 검증 단계이며 `Assets/Lethe` 승격은 하지 않았다.
+
+## 2. 오늘 바뀐 것
+
+- `KalmuriSwarmBreathRing` 큰 원 연출을 제거했다.
+- 칼날 orbit 반경을 키웠다.
+- 상시 orbit 칼날 개수를 `10..22`개로 늘렸다.
+- 범위감은 큰 원이 아니라 실제 칼날 궤도로 읽히게 했다.
+
+## 3. 테스트 결과와 근거
+
+- `rg` 확인: `V1GameManager.cs`에 `KalmuriSwarmBreathRing` 참조 없음.
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: 통과, legacy 경고 7개 / 오류 0개.
+- Unity MCP compile error count: `0`.
+- Unity `LETHE/V1 Smoke/M2 Loop`: `[V1QA] PASS`.
+
+## 4. 결정한 것
+
+칼무리에는 큰 장판 원을 쓰지 않는다. 궤도와 범위는 실제 칼날 수, 칼날 반경, 칼날 trail로만 읽히게 한다.
+
+## 5. 문제 또는 리스크
+
+칼날 수가 늘어났기 때문에 +5에서 화면이 복잡해질 수 있다. 다음 직접 플레이에서 과하면 blade count나 trail alpha 중 하나만 줄인다.
+
+## 6. GPT/Claude 인계 요약
+
+jaewoo가 큰 원이 오류처럼 보인다고 지적했다. 해당 원은 제거했고, 대신 실제 orbit 칼날 반경과 개수를 늘렸다. 자동 QA는 통과했다.
+
+## 7. 다음 Codex 작업
+
+jaewoo 직접 플레이 결과에 따라 칼날 수, orbit 반경, trail alpha 중 하나만 좁게 조정한다.
+
+## 8. 포트폴리오 메모
+
+- 문제: 큰 원이 칼무리보다 장판/오라처럼 읽혔다.
+- 방향: 보조 원을 빼고 실제 칼날 움직임으로 범위감을 만든다.
+- 행동: 큰 원 제거, orbit 반경 확대, 칼날 수 증가.
+- 결과: 기술 QA는 통과했고, 직접 플레이로 가독성을 판단할 수 있다.
+

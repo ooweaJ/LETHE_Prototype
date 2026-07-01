@@ -1,5 +1,28 @@
 # Current Task
 
+# 2026-07-01 Kalmuri Orbit Ring Cleanup Result
+
+## Status
+
+Removed the large surrounding ring from Hungry Blades and shifted the readability budget into a larger, denser orbiting blade circle.
+
+## Applied VFX Changes
+
+- Removed `KalmuriSwarmBreathRing`.
+- Increased inner/outer orbit radius multipliers to `0.62` / `1.22`.
+- Increased active orbit blade count to `10..22`.
+
+## Verification
+
+- `rg` found no `KalmuriSwarmBreathRing` references.
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- Unity compile error count: `0`.
+- Unity `LETHE/V1 Smoke/M2 Loop`: `[V1QA] PASS`.
+
+## Remaining Gate
+
+Jaewoo should confirm that the larger blade orbit now reads as Kalmuri motion without the unwanted large ring.
+
 # 2026-07-01 Kalmuri Living Swarm Motion Result
 
 ## Status

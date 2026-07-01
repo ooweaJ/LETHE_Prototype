@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260701\\index.md",
-  "generatedAt": "2026-07-01T01:21:07.158Z",
-  "unitCount": 3,
+  "generatedAt": "2026-07-01T02:34:54.720Z",
+  "unitCount": 4,
   "latest": {
-    "title": "2026-07-01-03 - 칼무리 살아있는 칼날 군집 전환",
-    "number": "03",
-    "markdownPath": "docs\\orchestration\\reports\\20260701\\units\\2026-07-01-03-칼무리-살아있는-칼날-군집-전환.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260701\\units\\2026-07-01-03-칼무리-살아있는-칼날-군집-전환.html"
+    "title": "2026-07-01-04 - 칼무리 큰 원 제거와 궤도 확장",
+    "number": "04",
+    "markdownPath": "docs\\orchestration\\reports\\20260701\\units\\2026-07-01-04-칼무리-큰-원-제거와-궤도-확장.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260701\\units\\2026-07-01-04-칼무리-큰-원-제거와-궤도-확장.html"
   }
 }

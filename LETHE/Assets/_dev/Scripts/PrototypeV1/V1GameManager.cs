@@ -1295,17 +1295,8 @@ namespace Lethe.PrototypeV1
             memory.VisualSpawnTimer -= dt;
             if (memory.VisualSpawnTimer > 0f) return;
             memory.VisualSpawnTimer = Mathf.Max(0.056f, 0.100f - memory.Level * 0.007f);
-            var innerRadius = HungryBladesRadius * 0.54f + memory.Level * 0.050f;
-            var outerRadius = HungryBladesRadius * 1.06f + memory.Level * 0.16f;
-            var ringPulse = 0.46f + Mathf.Sin(memory.VisualTimer * 4.8f) * 0.04f;
-            SpawnTransientSprite(
-                "KalmuriSwarmBreathRing",
-                MakeRingSprite("KalmuriSwarmBreathRing", Color.white, 168),
-                player.position,
-                Quaternion.Euler(0f, 0f, memory.VisualTimer * 92f),
-                outerRadius * ringPulse,
-                new Color(0.38f, 0.88f, 1f, 0.13f + memory.Level * 0.010f),
-                0.30f);
+            var innerRadius = HungryBladesRadius * 0.62f + memory.Level * 0.060f;
+            var outerRadius = HungryBladesRadius * 1.22f + memory.Level * 0.20f;
 
             var focusTargets = enemies
                 .Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) <= outerRadius * 1.55f)
@@ -1313,7 +1304,7 @@ namespace Lethe.PrototypeV1
                 .Take(memory.Level >= 5 ? 3 : memory.Level >= 3 ? 2 : 1)
                 .ToList();
 
-            var bladeCount = Mathf.Clamp(5 + memory.Level * 2, 7, 14);
+            var bladeCount = Mathf.Clamp(7 + memory.Level * 3, 10, 22);
             for (int i = 0; i < bladeCount; i++)
             {
                 var lane = i % 4;

@@ -2,6 +2,18 @@
 
 Last updated: 2026-07-01
 
+## 2026-07-01 Update: Kalmuri Orbit Ring Cleanup
+
+- Jaewoo identified that the extra large ring around the player reads wrong for the current Kalmuri concept.
+- Applied:
+  - Removed `KalmuriSwarmBreathRing` from active Hungry Blades.
+  - Increased the actual orbiting blade radius so the circle is carried by blades instead of a large drawn ring.
+  - Increased active orbit blade count to `10..22`.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity MCP compile error count: `0`.
+  - Unity `LETHE/V1 Smoke/M2 Loop`: `[V1QA] PASS`.
+
 ## 2026-07-01 Update: Kalmuri Living Swarm Motion Pass
 
 - Jaewoo rejected both C and D candidate-image directions as not good enough.

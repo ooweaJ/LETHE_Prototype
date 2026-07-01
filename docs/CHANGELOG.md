@@ -2,6 +2,15 @@
 
 # 2026-07-01
 
+- Tuned the Kalmuri living swarm after jaewoo identified the extra large ring as visually wrong:
+  - Removed the large `KalmuriSwarmBreathRing` visual from active Hungry Blades.
+  - Increased the actual orbiting blade ring radius: inner `0.54 -> 0.62`, outer `1.06 -> 1.22` base multipliers.
+  - Increased active orbit blade count from `7..14` to `10..22` so the larger ring is carried by blades, not a UI-like circle.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity MCP compile error count: `0`.
+  - Unity `LETHE/V1 Smoke/M2 Loop`: `[V1QA] PASS`.
+
 - Reworked Hungry Blades / Kalmuri away from C/D candidate images into a living blade-swarm motion pass:
   - Removed runtime use of the C/D candidate silhouettes from `V1GameManager.cs`.
   - Restored the original Kalmuri blade sprite as the core visual identity.

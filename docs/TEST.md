@@ -1,5 +1,26 @@
 # LETHE TEST
 
+# 2026-07-01 Kalmuri Orbit Ring Cleanup
+
+- Purpose:
+  - Remove the unintended-feeling large ring around Hungry Blades and make the real orbiting blade circle larger/denser.
+- Applied target:
+  - Removed `KalmuriSwarmBreathRing` from active Hungry Blades visuals.
+  - Increased active Kalmuri orbit radius:
+    - inner base multiplier `0.54 -> 0.62`
+    - outer base multiplier `1.06 -> 1.22`
+  - Increased active orbit blade count from `Mathf.Clamp(5 + level * 2, 7, 14)` to `Mathf.Clamp(7 + level * 3, 10, 22)`.
+- Commands / checks:
+  - `rg -n 'KalmuriSwarmBreathRing' LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - Unity MCP compile error check.
+  - Unity `LETHE/V1 Smoke/M2 Loop`.
+- Results:
+  - `KalmuriSwarmBreathRing` no longer exists in `V1GameManager.cs`.
+  - Runtime build passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - M2 Loop QA logged `[V1QA] PASS`.
+
 # 2026-07-01 Kalmuri Living Swarm Motion Pass
 
 - Purpose:
