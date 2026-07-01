@@ -39,7 +39,7 @@
       <header>
         <div>
           <p class="eyebrow">LETHE 프로젝트 대시보드</p>
-          <h1>보스 패턴 / 망각 재획득 제거 패치 완료</h1>
+          <h1>칼무리 C/D 런타임 적용 완료</h1>
         </div>
         <span class="badge">Dev_Prototype_v1</span>
       </header>
@@ -47,32 +47,31 @@
       <section class="metrics" aria-label="핵심 상태">
         <div class="metric green">
           <span>현재 단계</span>
-          <strong>플레이 피드백 2차 패치 완료</strong>
-          <small>첫 보스는 유지, 2보스는 당김</small>
+          <strong>굶주린 칼무리 VFX 플레이 가능</strong>
+          <small>C는 오라, D는 bite 프레임</small>
         </div>
         <div class="metric blue">
-          <span>문지기</span>
-          <strong>150 / 300 / 540 / 900s</strong>
-          <small>HP 2200 / 4200 / 7600 / 12800</small>
+          <span>쌍검 확인</span>
+          <strong>오늘 변경 없음</strong>
+          <small>작아 보이는 원인은 6/22, 6/25 변경 이력</small>
         </div>
         <div class="metric amber">
-          <span>망각</span>
-          <strong>재획득 제거</strong>
-          <small>기억은 잔향으로 변하고 바로 전투 복귀</small>
+          <span>검증</span>
+          <strong>빌드 / Unity compile / M2 QA 통과</strong>
+          <small>M2 Loop [V1QA] PASS</small>
         </div>
         <div class="metric green">
-          <span>검증</span>
-          <strong>빌드 / 정적검증 / Unity 에러 0</strong>
-          <small>MCP V1QA 로그 캡처는 제한 있음</small>
+          <span>다음 판단</span>
+          <strong>jaewoo 직접 플레이</strong>
+          <small>+1/+3/+5 시야와 손맛 확인</small>
         </div>
       </section>
 
       <section class="hero">
         <h2>현재 결론</h2>
         <p>
-          jaewoo 플레이 피드백을 반영해 보스가 너무 빨리 녹는 문제와 프리딜 문제를 먼저 고쳤다.
-          두 번째 보스는 5분으로 당겼고, 문지기는 파문/방어 패턴을 갖는다.
-          체력바와 칼무리 hitstop 시각 문제도 같이 수정했으며, 다음 판단은 직접 재플레이 감각이다.
+          6/30에 만든 칼무리 후보 스프라이트를 실제 런타임으로 옮겼다.
+          이제 후보 프리뷰를 고르는 단계가 아니라 `Dev_Prototype_v1`에서 직접 플레이하며 C 오라와 D bite 조합이 충분히 굶주린 칼무리처럼 읽히는지 판단하면 된다.
         </p>
       </section>
 
@@ -80,35 +79,33 @@
         <article class="panel">
           <h2>다음 확인</h2>
           <ul>
-            <li>첫 보스가 HP 증가 후에도 좋은 hook인지</li>
-            <li>2보스 5분이 늦지 않은지</li>
-            <li>파문/방어가 프리딜을 줄이는지</li>
-            <li>망각 후 재획득 제거가 깔끔한지</li>
-            <li>칼무리가 기본공격 중 끊겨 보이지 않는지</li>
+            <li>C 오라가 +1에서도 너무 약하지 않은가</li>
+            <li>+3/+5에서 C 레이어가 적과 플레이어를 가리지 않는가</li>
+            <li>D bite가 적중 순간에 제대로 몰려드는가</li>
+            <li>쌍검 phantom strike가 너무 작으면 별도 조정할지 판단</li>
           </ul>
         </article>
         <article class="panel">
           <h2>검증 근거</h2>
           <ul>
-            <li><code>node scripts/balance_curve_v1.js</code></li>
-            <li><code>node scripts/verify_unity_stepped_balance.js</code></li>
-            <li><code>dotnet build Assembly-CSharp</code></li>
+            <li><code>dotnet build Assembly-CSharp</code>: 오류 0</li>
             <li>Unity compile error count: <code>0</code></li>
-            <li>Unity console error count: <code>0</code></li>
+            <li><code>LETHE/V1 Smoke/M2 Loop</code>: PASS</li>
+            <li>보고서 생성/check 통과</li>
           </ul>
         </article>
         <article class="panel">
           <h2>바로가기</h2>
           <ul>
             <li><a href="./command.html">다음 지시문</a></li>
-            <li><a href="../reports/20260630/index.html">오늘 보고서</a></li>
-            <li><a href="../evidence/2026-06-30-boss-pattern-no-reacquire-qa.md">QA 근거</a></li>
+            <li><a href="../reports/20260701/index.html">오늘 보고서</a></li>
+            <li><a href="../state/CURRENT_TASK.md">CURRENT_TASK</a></li>
             <li><a href="../state/NEXT_TASKS.md">NEXT_TASKS</a></li>
           </ul>
         </article>
       </section>
 
-      <footer>기준: 2026-06-30 | 승격 금지: <code>Assets/_dev</code> 검증 전 <code>Assets/Lethe</code> 이동 없음</footer>
+      <footer>기준: 2026-07-01 | 승격 금지: <code>Assets/_dev</code> 검증 전 <code>Assets/Lethe</code> 이동 없음</footer>
     </main>
   </body>
 </html>

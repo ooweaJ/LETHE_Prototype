@@ -6,6 +6,7 @@
 
 - Priority: highest
 - The jaewoo direct-play follow-up is now applied to Unity runtime.
+- 2026-07-01 addendum: Hungry Blades now uses the C/D Kalmuri candidate sprites in runtime, so review C as the player aura and D as the enemy bite frame during the same replay.
 - The intro / starting weapon screen was also refreshed. During the replay, first confirm whether the LETHE title, first-goal strip, and two weapon cards make the build feel like a real game start rather than a debug picker.
 - Current values:
   - Gatekeeper schedule: `150 / 300 / 540 / 900s`.

@@ -1,5 +1,21 @@
 # LETHE CHANGELOG
 
+# 2026-07-01
+
+- Wired the Kalmuri C/D candidate sprites into `Dev_Prototype_v1` runtime Hungry Blades VFX:
+  - C / Crescent Pack now appears as the active Hungry Blades aura around the player.
+  - C also appears in Hungry Blades memory-gain feedback.
+  - D / Predator Bite now appears on enemy-side Hungry Blades bite hits.
+  - D also appears on Kalmuri echo follow-up impacts.
+  - Existing small orbit blades remain as supporting motion detail.
+- Checked the dual-blade VFX/motion concern:
+  - No dual-blade code or data was changed in this unit.
+  - The smaller-feeling attack comes from prior work: hit-point phantom weapons replacing held weapon visuals, plus the 2026-06-25 dual-blade slash scale/lifetime/range reductions.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity MCP compile error count: `0`.
+  - Unity `LETHE/V1 Smoke/M2 Loop`: `[V1QA] PASS`.
+
 ## 2026-06-30
 
 - Added Unity-viewable Hungry Blades / Kalmuri C and D candidate sprite assets:

@@ -1,5 +1,41 @@
 # Current Task
 
+# 2026-07-01 Kalmuri C/D Runtime Result
+
+## Status
+
+The previously created Kalmuri C/D candidate sprites are now connected to actual `Dev_Prototype_v1` runtime VFX.
+
+## Applied VFX Changes
+
+- C / Crescent Pack is used for the active Hungry Blades player aura.
+- +3 and higher adds a counter-rotating C aura layer.
+- D / Predator Bite is used for enemy-side active Hungry Blades bite hits.
+- D / Predator Bite is also used for Kalmuri echo follow-up impacts.
+- Hungry Blades memory-gain feedback now includes the C candidate sprite.
+- Existing procedural/orbiting small blades remain as support detail instead of being the main read.
+
+## Dual-Blade VFX Check
+
+- No dual-blade VFX or attack-motion code was changed in this 2026-07-01 unit.
+- Prior causes for the smaller feel:
+  - 2026-06-22: held weapon renderers were disabled during normal play; dual blades became short hit-point phantom strikes.
+  - 2026-06-25: dual-blade slash profile was slightly reduced:
+    - `DualBladeCrescent_A` scale `0.94 -> 0.86`, lifetime `0.23 -> 0.20`.
+    - `DualBladeCrescent_B` scale `0.88 -> 0.82`, lifetime `0.25 -> 0.21`.
+    - minimum slash lifetime `0.34 -> 0.28`.
+    - attack range `2.8 -> 2.72`, max targets `7 -> 6`.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+- Unity compile error count: `0`.
+- Unity `LETHE/V1 Smoke/M2 Loop`: `[V1QA] PASS`, Hungry/Blood echoes at +5, storm ready, live enemies `10`.
+
+## Remaining Gate
+
+Jaewoo should play `Dev_Prototype_v1` and judge whether C as the aura plus D as the bite frame feels like a real hungry blade swarm without hiding enemies or making +5 too noisy.
+
 ## 2026-06-30 Kalmuri C/D Candidate Asset Result
 
 ## Status

@@ -35,8 +35,8 @@
 
       <div class="grid">
         <article>
-          <h2>Codex에게 지금 시킬 일</h2>
-          <textarea id="prompt-next" readonly>AGENTS.md와 docs/orchestration/state/STATUS.md, CURRENT_TASK.md, NEXT_TASKS.md, docs/orchestration/evidence/2026-06-30-boss-pattern-no-reacquire-qa.md를 읽고 Dev_Prototype_v1의 2026-06-30 보스 패턴/망각 재획득 제거 패치 이후 QA를 이어가줘. 현재 적용값은 문지기 150/300/540/900초, HP 2200/4200/7600/12800, hard cap 1080초, 망각 후 재획득 제거, 문지기 파문/방어 패턴 추가야. 먼저 Unity MCP V1QA 메뉴를 재시도하고, 가능하면 jaewoo 첫 6분 재플레이 체크리스트를 정리해줘. 새 콘텐츠는 추가하지 말고 문제가 있으면 수치축 하나만 골라 조정해줘.</textarea>
+          <h2>Codex에게 지금 지시할 말</h2>
+          <textarea id="prompt-next" readonly>Dev_Prototype_v1에서 새 칼무리 C/D 런타임 VFX를 직접 플레이 기준으로 확인해줘. C는 굶주린 칼무리 상시 오라, D는 적중 bite 프레임으로 적용된 상태야. +1/+3/+5에서 적과 플레이어를 가리는지, D가 실제로 물어뜯는 느낌인지, 쌍검 phantom strike가 너무 작게 느껴지는지도 같이 봐줘. 새 콘텐츠는 추가하지 말고, 문제가 있으면 C 알파/빈도, D 크기, 쌍검 phantom 크기 중 하나만 좁게 조정해줘.</textarea>
           <button type="button" data-copy-target="prompt-next">프롬프트 복사</button>
         </article>
 
@@ -53,11 +53,10 @@
         <article>
           <h2>완료 기준</h2>
           <ul>
-            <li>V1QA smoke 재시도 결과 기록</li>
-            <li>첫 보스/2보스/패턴/체력바/칼무리 체크</li>
+            <li>칼무리 C/D 직접 플레이 판단 기록</li>
+            <li>필요 시 한 축만 조정</li>
             <li>Unity compile error 0</li>
-            <li>Unity console error 0</li>
-            <li>필요 시 한 축만 수치 조정</li>
+            <li>보고서와 상태 문서 갱신</li>
           </ul>
         </article>
 
@@ -66,8 +65,8 @@
           <ul>
             <li><a href="../state/CURRENT_TASK.md">CURRENT_TASK.md</a></li>
             <li><a href="../state/NEXT_TASKS.md">NEXT_TASKS.md</a></li>
-            <li><a href="../evidence/2026-06-30-boss-pattern-no-reacquire-qa.md">QA 근거</a></li>
-            <li><a href="../reports/20260630/index.html">오늘 보고서</a></li>
+            <li><a href="../reports/20260701/index.html">오늘 보고서</a></li>
+            <li><a href="../devlog/2026-07-01.md">오늘 devlog</a></li>
           </ul>
         </article>
       </div>

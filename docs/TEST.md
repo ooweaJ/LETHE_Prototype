@@ -1,5 +1,28 @@
 # LETHE TEST
 
+# 2026-07-01 Kalmuri C/D Runtime Wiring
+
+- Purpose:
+  - Move the 2026-06-30 C/D Kalmuri candidate sprites from preview-only assets into actual `Dev_Prototype_v1` Hungry Blades runtime VFX.
+- Applied target:
+  - C / Crescent Pack: active Hungry Blades aura around the player, plus memory-gain feedback.
+  - D / Predator Bite: enemy-side active bite frame and Kalmuri echo follow-up impact.
+  - Existing small orbit blades kept as motion/detail support.
+- Dual-blade check:
+  - No new dual-blade VFX change was made in this unit.
+  - Smaller-feeling attack likely comes from prior hit-point phantom weapon change and 2026-06-25 scale/lifetime/range reductions.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - Unity MCP compile error check.
+  - Unity `LETHE/V1 Smoke/M2 Loop`.
+  - Editor log check for `[V1QA] PASS`.
+- Results:
+  - Runtime build passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - M2 Loop QA logged `[V1QA] PASS`, with `HungryBlades:5`, `BloodReflection:5`, `storm=True`, and live enemies `10`.
+- Limitation:
+  - Unity Game View screenshot did not reliably capture the forced Kalmuri combat frame in this session. Direct jaewoo play remains the final visual readability gate.
+
 ## 2026-06-30 Kalmuri C/D Sprite Candidate Assets
 
 - Purpose:

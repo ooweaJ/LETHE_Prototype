@@ -1,6 +1,21 @@
 # Status
 
-Last updated: 2026-06-30
+Last updated: 2026-07-01
+
+## 2026-07-01 Update: Kalmuri C/D Runtime Applied
+
+- Hungry Blades / Kalmuri now uses the 2026-06-30 C/D candidate sprites in actual `Dev_Prototype_v1` runtime behavior.
+- C / Crescent Pack is wired as the player-side active Hungry Blades aura, including a counter-rotating layer from +3 onward and memory-gain feedback.
+- D / Predator Bite is wired as the enemy-side active bite frame and Kalmuri echo follow-up impact frame.
+- Existing small orbit blades remain as motion/detail support, but the candidate sprites are now the main visual read.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity MCP compile error count: `0`.
+  - Unity `LETHE/V1 Smoke/M2 Loop`: `[V1QA] PASS`, `HungryBlades:5`, `BloodReflection:5`, `storm=True`, live enemies `10`.
+- Screenshot note: Unity Game View capture still does not reliably catch the forced Kalmuri frame in this project session, so direct jaewoo play remains the visual judgment gate.
+- Dual blades check:
+  - No new dual-blade change was made in this unit.
+  - The smaller-feeling attack is explained by prior changes: 2026-06-22 moved visible weapons from held sprites to short hit-point phantom strikes, and 2026-06-25 reduced dual-blade slash scale/lifetime (`0.94 -> 0.86`, `0.88 -> 0.82`, min lifetime `0.34 -> 0.28`) plus range/target count (`2.8 -> 2.72`, `7 -> 6`).
 
 ## Current Snapshot
 
