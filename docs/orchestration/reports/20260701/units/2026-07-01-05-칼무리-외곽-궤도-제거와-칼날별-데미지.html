@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-01-05 - 칼무리 외곽 궤도 제거와 칼날별 데미지</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-01-05 - 칼무리 외곽 궤도 제거와 칼날별 데미지</h1>
+      <p class="meta">Generated from 2026-07-01-05-칼무리-외곽-궤도-제거와-칼날별-데미지.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260701/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-01-05 - 칼무리 외곽 궤도 제거와 칼날별 데미지</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 굶주린 칼무리에서 바깥쪽 회전 칼무리 레이어를 제거하고, 날아가는 칼날마다 실제 데미지를 갖게 했다. 아직 <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>innerRadius</code> / <code>outerRadius</code> 2겹 구조를 제거했다.</li>
+<li>하나의 <code>orbitRadius</code>만 남겨 플레이어 주변 칼무리가 한 겹으로 돌게 했다.</li>
+<li><code>lane != 1</code>로 바깥 겹을 만드는 분기를 제거했다.</li>
+<li>대상당 한 번 들어가던 칼무리 데미지를 날아가는 칼날 수만큼 나눴다.</li>
+<li>각 <code>KalmuriBiteDiveBlade</code>가 개별 <code>DealDamage</code>를 호출한다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy 경고 7개 / 오류 0개.</li>
+<li>Unity MCP compile error count: <code>0</code>.</li>
+<li>Unity MCP console error count: <code>0</code>.</li>
+<li>Unity <code>LETHE/V1 Smoke/M2 Loop</code>: <code>[V1QA] PASS</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>칼무리는 한 겹의 회전 칼날에서 적에게 튀어나가는 구조로 간다. 데미지도 이제 칼날 연출과 분리하지 않고, 실제로 날아간 칼날마다 나눠서 적용한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>칼날마다 데미지를 주면 피격 피드백이 더 잦아진다. 현재는 전체 데미지를 분할해 DPS는 유지했지만, 직접 플레이에서 숫자/피격 반짝임이 많으면 표시 빈도만 줄여야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>jaewoo가 스크린샷으로 외곽 칼무리 레이어를 지적했다. 외곽 레이어를 제거하고 단일 orbit으로 바꿨으며, flying blade마다 damage event가 발생하도록 변경했다. 자동 QA는 통과했다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo 직접 플레이에서 한 겹 궤도가 맞는지, 칼날별 데미지 피드백이 과하지 않은지 확인한다. 필요하면 damage number 표시만 줄이고 실제 타격 구조는 유지한다.</p>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 칼무리가 2겹 원으로 보여 의도보다 산만했다.</li>
+<li>방향: 한 겹 orbit과 칼날별 실제 타격으로 연출과 판정을 일치시킨다.</li>
+<li>행동: 외곽 orbit 제거, per-blade damage 적용.</li>
+<li>결과: 기술 QA는 통과했고, 직접 플레이로 체감 확인 가능하다.</li>
+</ul>
+  </main>
+</body>
+</html>

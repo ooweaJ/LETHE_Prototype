@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260701\\index.md",
-  "generatedAt": "2026-07-01T02:34:54.720Z",
-  "unitCount": 4,
+  "generatedAt": "2026-07-01T02:39:45.330Z",
+  "unitCount": 5,
   "latest": {
-    "title": "2026-07-01-04 - 칼무리 큰 원 제거와 궤도 확장",
-    "number": "04",
-    "markdownPath": "docs\\orchestration\\reports\\20260701\\units\\2026-07-01-04-칼무리-큰-원-제거와-궤도-확장.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260701\\units\\2026-07-01-04-칼무리-큰-원-제거와-궤도-확장.html"
+    "title": "2026-07-01-05 - 칼무리 외곽 궤도 제거와 칼날별 데미지",
+    "number": "05",
+    "markdownPath": "docs\\orchestration\\reports\\20260701\\units\\2026-07-01-05-칼무리-외곽-궤도-제거와-칼날별-데미지.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260701\\units\\2026-07-01-05-칼무리-외곽-궤도-제거와-칼날별-데미지.html"
   }
 }

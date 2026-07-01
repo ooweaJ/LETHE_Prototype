@@ -2,6 +2,20 @@
 
 Last updated: 2026-07-01
 
+## 2026-07-01 Update: Kalmuri Outer Orbit Removal / Per-Blade Damage
+
+- Jaewoo screenshot feedback clarified that the visible problem was not only a drawn ring, but two rotating Kalmuri blade rings.
+- Applied:
+  - Removed the outer orbit layer from active Hungry Blades.
+  - Replaced inner/outer orbit radii with one active `orbitRadius`.
+  - Flying bite blades now each apply damage.
+  - Total tick damage is split across the spawned blades to keep the damage budget stable.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity MCP compile error count: `0`.
+  - Unity MCP console error count: `0`.
+  - Unity `LETHE/V1 Smoke/M2 Loop`: `[V1QA] PASS`.
+
 ## 2026-07-01 Update: Kalmuri Orbit Ring Cleanup
 
 - Jaewoo identified that the extra large ring around the player reads wrong for the current Kalmuri concept.

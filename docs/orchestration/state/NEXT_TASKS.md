@@ -6,7 +6,8 @@
 - Review the current `Dev_Prototype_v1` build after the boss/no-reacquire patch and the new Kalmuri living swarm pass.
 - Kalmuri review focus:
   - Does the original-blade living swarm read as real Kalmuri motion?
-  - Check the larger ring of actual orbiting blades after the large drawn ring was removed.
+  - Confirm the outer rotating Kalmuri layer is gone and only one orbit remains.
+  - Confirm each flying blade feels like it owns a damage hit.
   - Check irregular orbit, target lunge, bite convergence, recoil shards, echo surge, and level-up spiral.
   - Judge +1 / +3 / +5 readability without hiding enemies or the player.
   - If it still misses, name only one next lever: lunge frequency, trail alpha, blade count, or hit convergence scale.

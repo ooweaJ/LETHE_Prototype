@@ -2,6 +2,18 @@
 
 # 2026-07-01
 
+- Fixed Kalmuri living swarm orbit after jaewoo screenshot feedback:
+  - Removed the outer orbit layer by replacing the inner/outer radius split with one active `orbitRadius`.
+  - Kept one larger player-body orbit instead of two visible rotating rings.
+  - Changed Hungry Blades active damage from target-level damage to per-flying-blade damage:
+    - each `KalmuriBiteDiveBlade` now calls `DealDamage`.
+    - total tick damage is split across the flying blades so overall damage budget stays stable.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity MCP compile error count: `0`.
+  - Unity console error count: `0`.
+  - Unity `LETHE/V1 Smoke/M2 Loop`: `[V1QA] PASS`.
+
 - Tuned the Kalmuri living swarm after jaewoo identified the extra large ring as visually wrong:
   - Removed the large `KalmuriSwarmBreathRing` visual from active Hungry Blades.
   - Increased the actual orbiting blade ring radius: inner `0.54 -> 0.62`, outer `1.06 -> 1.22` base multipliers.

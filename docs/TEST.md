@@ -1,5 +1,23 @@
 # LETHE TEST
 
+# 2026-07-01 Kalmuri Outer Orbit Removal / Per-Blade Damage
+
+- Purpose:
+  - Respond to jaewoo screenshot feedback: the rotating Kalmuri still had two rings, and the outermost Kalmuri layer should be removed.
+  - Make each flying blade own damage instead of applying one damage event per target.
+- Applied target:
+  - Removed the inner/outer orbit split from active Hungry Blades.
+  - Replaced `innerRadius` / `outerRadius` with one `orbitRadius`.
+  - Removed `lane != 1` outer-ring branching.
+  - Changed `SpawnHungryBladeBite` to receive the target enemy and total damage.
+  - Split total Hungry Blades tick damage by the number of flying bite blades.
+  - Each spawned `KalmuriBiteDiveBlade` now calls `DealDamage`.
+- Results:
+  - Runtime build passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity console error count: `0`.
+  - M2 Loop QA logged `[V1QA] PASS`.
+
 # 2026-07-01 Kalmuri Orbit Ring Cleanup
 
 - Purpose:

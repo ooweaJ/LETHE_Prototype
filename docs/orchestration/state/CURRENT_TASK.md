@@ -1,5 +1,29 @@
 # Current Task
 
+# 2026-07-01 Kalmuri Outer Orbit Removal / Per-Blade Damage Result
+
+## Status
+
+The outer rotating Kalmuri layer is removed. Hungry Blades now keeps one active orbit around the player, and each flying bite blade applies damage.
+
+## Applied VFX / Combat Changes
+
+- Removed the inner/outer orbit split.
+- Replaced `innerRadius` / `outerRadius` with one `orbitRadius`.
+- Removed the `lane != 1` outer-ring branch.
+- Changed active bite damage from one target-level hit into per-flying-blade split damage.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- Unity compile error count: `0`.
+- Unity console error count: `0`.
+- Unity `LETHE/V1 Smoke/M2 Loop`: `[V1QA] PASS`.
+
+## Remaining Gate
+
+Jaewoo should confirm that only one rotating Kalmuri ring remains, and that flying blades now feel like real damaging blades.
+
 # 2026-07-01 Kalmuri Orbit Ring Cleanup Result
 
 ## Status

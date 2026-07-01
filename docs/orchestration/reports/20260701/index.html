@@ -176,6 +176,13 @@
           <p>Dev_Prototype_v1의 굶주린 칼무리에서 큰 보조 원을 제거하고, 실제 칼날들이 도는 궤도를 더 크게 만들었다. 아직 _dev 검증 단계이며 Assets/Lethe 승격은 하지 않았다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-01-05</span>
+          <h2><a href="#unit-2026-07-01-05" data-unit-link="unit-2026-07-01-05">칼무리 외곽 궤도 제거와 칼날별 데미지</a></h2>
+          <p>Dev_Prototype_v1의 굶주린 칼무리에서 바깥쪽 회전 칼무리 레이어를 제거하고, 날아가는 칼날마다 실제 데미지를 갖게 했다. 아직 _dev 검증 단계이며 Assets/Lethe 승격은 하지 않았다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -331,6 +338,42 @@
 <li>방향: 보조 원을 빼고 실제 칼날 움직임으로 범위감을 만든다.</li>
 <li>행동: 큰 원 제거, orbit 반경 확대, 칼날 수 증가.</li>
 <li>결과: 기술 QA는 통과했고, 직접 플레이로 가독성을 판단할 수 있다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-01-05" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-01-05 - 칼무리 외곽 궤도 제거와 칼날별 데미지</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 굶주린 칼무리에서 바깥쪽 회전 칼무리 레이어를 제거하고, 날아가는 칼날마다 실제 데미지를 갖게 했다. 아직 <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>innerRadius</code> / <code>outerRadius</code> 2겹 구조를 제거했다.</li>
+<li>하나의 <code>orbitRadius</code>만 남겨 플레이어 주변 칼무리가 한 겹으로 돌게 했다.</li>
+<li><code>lane != 1</code>로 바깥 겹을 만드는 분기를 제거했다.</li>
+<li>대상당 한 번 들어가던 칼무리 데미지를 날아가는 칼날 수만큼 나눴다.</li>
+<li>각 <code>KalmuriBiteDiveBlade</code>가 개별 <code>DealDamage</code>를 호출한다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy 경고 7개 / 오류 0개.</li>
+<li>Unity MCP compile error count: <code>0</code>.</li>
+<li>Unity MCP console error count: <code>0</code>.</li>
+<li>Unity <code>LETHE/V1 Smoke/M2 Loop</code>: <code>[V1QA] PASS</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>칼무리는 한 겹의 회전 칼날에서 적에게 튀어나가는 구조로 간다. 데미지도 이제 칼날 연출과 분리하지 않고, 실제로 날아간 칼날마다 나눠서 적용한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>칼날마다 데미지를 주면 피격 피드백이 더 잦아진다. 현재는 전체 데미지를 분할해 DPS는 유지했지만, 직접 플레이에서 숫자/피격 반짝임이 많으면 표시 빈도만 줄여야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>jaewoo가 스크린샷으로 외곽 칼무리 레이어를 지적했다. 외곽 레이어를 제거하고 단일 orbit으로 바꿨으며, flying blade마다 damage event가 발생하도록 변경했다. 자동 QA는 통과했다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo 직접 플레이에서 한 겹 궤도가 맞는지, 칼날별 데미지 피드백이 과하지 않은지 확인한다. 필요하면 damage number 표시만 줄이고 실제 타격 구조는 유지한다.</p>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 칼무리가 2겹 원으로 보여 의도보다 산만했다.</li>
+<li>방향: 한 겹 orbit과 칼날별 실제 타격으로 연출과 판정을 일치시킨다.</li>
+<li>행동: 외곽 orbit 제거, per-blade damage 적용.</li>
+<li>결과: 기술 QA는 통과했고, 직접 플레이로 체감 확인 가능하다.</li>
 </ul>
     </article>
       </div>
