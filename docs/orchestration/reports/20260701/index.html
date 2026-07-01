@@ -155,6 +155,13 @@
           <p>Dev_Prototype_v1에서 굶주린 칼무리 C/D 후보 스프라이트가 실제 전투 VFX에 연결됐다. 아직 _dev 단계이며 Assets/Lethe 승격은 하지 않았다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-01-02</span>
+          <h2><a href="#unit-2026-07-01-02" data-unit-link="unit-2026-07-01-02">칼무리 D 단독 런타임 전환</a></h2>
+          <p>Dev_Prototype_v1의 굶주린 칼무리 VFX를 C/D 혼합에서 D 단독 중심으로 바꿨다. 아직 _dev 검증 단계이며 Assets/Lethe 승격은 하지 않았다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -199,6 +206,43 @@
 <li>방향: 후보를 바로 런타임에 꽂아 플레이 판단 가능한 상태로 만든다.</li>
 <li>행동: C는 오라, D는 bite로 연결하고 기술 QA를 통과시켰다.</li>
 <li>결과: 칼무리 VFX는 이제 후보 이미지 기준으로 실제 플레이 리뷰가 가능해졌다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-01-02" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-01-02 - 칼무리 D 단독 런타임 전환</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 굶주린 칼무리 VFX를 C/D 혼합에서 D 단독 중심으로 바꿨다. 아직 <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>C / Crescent Pack의 런타임 사용을 제거했다.</li>
+<li>D / Predator Bite가 상시 칼무리 궤도, 적중 bite, 칼무리 잔향 후속타, 기억 획득, 잔향 변환 피드백에 모두 쓰이게 했다.</li>
+<li>작은 보조 칼날 수와 알파를 줄여 D 실루엣이 묻히지 않게 했다.</li>
+<li>적중/잔향 D bite는 더 크고 밝게 조정했다.</li>
+<li>잔향 +3 이상에서는 보조 side bite가 한 번 더 붙는다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>rg</code> 확인: <code>V1GameManager.cs</code>에 C 런타임 참조 없음.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy 경고 7개 / 오류 0개.</li>
+<li>Unity MCP compile error count: <code>0</code>.</li>
+<li>Unity MCP console error count: <code>0</code>.</li>
+<li>Unity <code>LETHE/V1 Smoke/M2 Loop</code>: <code>[V1QA] PASS</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>칼무리는 지금 단계에서 C/D 조합이 아니라 D 단독으로 체감 검증한다. 목표는 &quot;원형 오라&quot;보다 &quot;계속 물어뜯고 달려드는 칼무리&quot;가 먼저 읽히게 하는 것이다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>D만 쓰면 정체성은 강해질 수 있지만, 반복 프레임처럼 보이거나 주변 적을 가릴 위험이 있다. 다음 조정은 새 후보 추가가 아니라 D 크기/알파/빈도 중 하나만 좁게 건드리는 쪽이 안전하다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>jaewoo가 &quot;D가 안 느껴진다&quot;고 피드백해서 C 오라를 제거하고 D를 상시/적중/잔향/획득 피드백의 주연으로 바꿨다. 기술 검증은 통과했고, 남은 판단은 직접 플레이에서 +1/+3/+5가 충분히 굶주린 칼무리처럼 읽히는지다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo 직접 플레이 결과에 따라 D size, alpha, spawn frequency 중 하나만 좁게 조정한다. 쌍검 phantom 크기 문제는 별도 피드백이 다시 나오면 분리해서 처리한다.</p>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 후보 D를 붙였지만 C 오라에 묻혀 핵심 체감이 약했다.</li>
+<li>방향: 후보를 섞지 않고 D 하나로 플레이 감각을 검증한다.</li>
+<li>행동: D를 모든 주요 칼무리 순간에 연결하고 보조 VFX를 낮췄다.</li>
+<li>결과: 기술 QA는 통과했고, 이제 직접 플레이로 D 단독 정체성을 판단할 수 있다.</li>
 </ul>
     </article>
       </div>

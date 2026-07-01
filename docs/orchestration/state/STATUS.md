@@ -2,6 +2,24 @@
 
 Last updated: 2026-07-01
 
+## 2026-07-01 Update: Kalmuri D-Only Runtime Follow-up
+
+- Jaewoo feedback: D / Predator Bite did not feel present enough when C was also used as the active aura.
+- Applied a D-only runtime pass in `Dev_Prototype_v1`:
+  - Removed C / Crescent Pack from actual Hungry Blades runtime usage.
+  - D / Predator Bite is now the main active Hungry Blades player-side orbit read.
+  - D remains and is strengthened on enemy-side Hungry Blades bite hits.
+  - D remains and is strengthened on Kalmuri echo follow-up impacts.
+  - Hungry Blades memory-gain and echo transform feedback now prefer D.
+  - Supporting orbit blades remain, but are fewer/dimmer so D is not buried.
+- Verification:
+  - No `KalmuriCrescentPack` / `candidate_c` runtime references remain in `V1GameManager.cs`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity MCP compile error count: `0`.
+  - Unity MCP console error count: `0`.
+  - Unity `LETHE/V1 Smoke/M2 Loop`: `[V1QA] PASS`, `HungryBlades:5`, `BloodReflection:5`, `storm=True`, live enemies `10`.
+- Next visual gate: jaewoo should play +1/+3/+5 Hungry Blades and judge whether D now reads as a constant bite/lunge identity without hiding enemies.
+
 ## 2026-07-01 Update: Kalmuri C/D Runtime Applied
 
 - Hungry Blades / Kalmuri now uses the 2026-06-30 C/D candidate sprites in actual `Dev_Prototype_v1` runtime behavior.

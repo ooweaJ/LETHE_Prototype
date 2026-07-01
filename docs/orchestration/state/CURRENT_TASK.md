@@ -1,5 +1,33 @@
 # Current Task
 
+# 2026-07-01 Kalmuri D-Only Runtime Result
+
+## Status
+
+Jaewoo feedback said D was not noticeable enough, so Hungry Blades / Kalmuri runtime VFX has been changed from the C/D mix to D-only.
+
+## Applied VFX Changes
+
+- Removed C / Crescent Pack from active Hungry Blades runtime usage.
+- D / Predator Bite now appears around the player as the main active Hungry Blades orbit silhouette.
+- D / Predator Bite remains on enemy-side Hungry Blades bite hits, now larger/brighter.
+- D / Predator Bite remains on Kalmuri echo follow-up impacts, now larger/brighter with an extra side bite from +3 onward.
+- Hungry Blades memory-gain feedback now uses three D bite frames instead of the C aura.
+- Hungry Blades echo transform sprite now uses D.
+- Small orbit blades are kept as support, but their count/alpha is reduced so D is the main read.
+
+## Verification
+
+- `rg` found no remaining C runtime references in `V1GameManager.cs`.
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy v0/debug warnings and 0 errors.
+- Unity compile error count: `0`.
+- Unity console error count: `0`.
+- Unity `LETHE/V1 Smoke/M2 Loop`: `[V1QA] PASS`, Hungry/Blood echoes at +5, storm ready, live enemies `10`.
+
+## Remaining Gate
+
+Jaewoo should play `Dev_Prototype_v1` and judge D-only at +1/+3/+5. If D is still weak, the next narrow lever should be D size/alpha/frequency only, not a new candidate mix.
+
 # 2026-07-01 Kalmuri C/D Runtime Result
 
 ## Status

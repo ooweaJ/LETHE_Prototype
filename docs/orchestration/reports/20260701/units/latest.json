@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260701\\index.md",
-  "generatedAt": "2026-07-01T00:39:42.082Z",
-  "unitCount": 1,
+  "generatedAt": "2026-07-01T00:53:30.783Z",
+  "unitCount": 2,
   "latest": {
-    "title": "2026-07-01-01 - 칼무리 C/D 런타임 적용",
-    "number": "01",
-    "markdownPath": "docs\\orchestration\\reports\\20260701\\units\\2026-07-01-01-칼무리-c-d-런타임-적용.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260701\\units\\2026-07-01-01-칼무리-c-d-런타임-적용.html"
+    "title": "2026-07-01-02 - 칼무리 D 단독 런타임 전환",
+    "number": "02",
+    "markdownPath": "docs\\orchestration\\reports\\20260701\\units\\2026-07-01-02-칼무리-d-단독-런타임-전환.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260701\\units\\2026-07-01-02-칼무리-d-단독-런타임-전환.html"
   }
 }

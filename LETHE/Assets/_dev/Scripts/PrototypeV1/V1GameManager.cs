@@ -138,7 +138,6 @@ namespace Lethe.PrototypeV1
         const string KalmuriOrbitBladePath = "Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_orbit_blade_01.png";
         const string KalmuriEchoSlashPath = "Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_echo_slash_01.png";
         const string KalmuriLaunchBladePath = "Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_launch_blade_01.png";
-        const string KalmuriCrescentPackCandidatePath = "Assets/_dev/Art/Sprites/Echoes/Kalmuri/Candidates/spr_kalmuri_candidate_c_crescent_pack_01.png";
         const string KalmuriPredatorBiteCandidatePath = "Assets/_dev/Art/Sprites/Echoes/Kalmuri/Candidates/spr_kalmuri_candidate_d_predator_bite_01.png";
         const string HitSparkCyanPath = "Assets/_dev/Art/Sprites/Feedback/spr_hit_spark_cyan_01.png";
         const string HitSparkRedPath = "Assets/_dev/Art/Sprites/Feedback/spr_hit_spark_red_01.png";
@@ -1297,7 +1296,6 @@ namespace Lethe.PrototypeV1
             memory.VisualSpawnTimer -= dt;
             if (memory.VisualSpawnTimer > 0f) return;
             memory.VisualSpawnTimer = Mathf.Max(0.050f, 0.090f - memory.Level * 0.006f);
-            var bladeCount = Mathf.Clamp(10 + memory.Level * 3, 12, 26);
             var innerRadius = HungryBladesRadius * 0.54f + memory.Level * 0.050f;
             var outerRadius = HungryBladesRadius * 1.08f + memory.Level * 0.18f;
             var ringPulse = 0.50f + Mathf.Sin(memory.VisualTimer * 4.8f) * 0.06f;
@@ -1309,31 +1307,41 @@ namespace Lethe.PrototypeV1
                 outerRadius * ringPulse,
                 new Color(0.44f, 0.92f, 1f, 0.18f + memory.Level * 0.016f),
                 0.28f);
-            SpawnPromptSprite(
-                "KalmuriCrescentPackAura",
-                KalmuriCrescentPackSprite(),
-                () => MakeRingSprite("KalmuriCrescentPackAura", Color.white, 180),
-                player.position,
-                Quaternion.Euler(0f, 0f, memory.VisualTimer * -52f),
-                outerRadius * (2.32f + memory.Level * 0.030f),
-                outerRadius * 0.70f,
-                new Color(0.74f, 0.98f, 1f, 0.50f + memory.Level * 0.035f),
-                0.30f);
-            if (memory.Level >= 3)
+            var predatorCount = Mathf.Clamp(2 + memory.Level / 2, 2, 4);
+            for (int i = 0; i < predatorCount; i++)
             {
+                var angle = memory.VisualTimer * -88f + i * 360f / predatorCount;
+                var dir = Quaternion.Euler(0f, 0f, angle) * Vector3.right;
+                var pos = player.position + dir * (outerRadius * 0.38f);
                 SpawnPromptSprite(
-                    "KalmuriCrescentPackAuraCounter",
-                    KalmuriCrescentPackSprite(),
-                    () => MakeRingSprite("KalmuriCrescentPackAuraCounter", Color.white, 180),
-                    player.position,
-                    Quaternion.Euler(0f, 0f, memory.VisualTimer * 42f + 180f),
-                    outerRadius * 2.08f,
-                    outerRadius * 0.60f,
-                    new Color(0.54f, 0.90f, 1f, 0.22f + memory.Level * 0.020f),
-                    0.26f);
+                    "KalmuriPredatorOrbit",
+                    KalmuriPredatorBiteSprite(),
+                    () => MakeImpactDiamondSprite("KalmuriPredatorOrbit", Color.white),
+                    pos,
+                    Quaternion.Euler(0f, 0f, angle),
+                    1.08f + memory.Level * 0.13f,
+                    0.50f + memory.Level * 0.045f,
+                    new Color(0.76f, 1f, 1f, 0.58f + memory.Level * 0.034f),
+                    0.32f);
             }
 
-            bladeCount = Mathf.Clamp(5 + memory.Level * 2, 7, 15);
+            if (memory.Level >= 3)
+            {
+                var angle = memory.VisualTimer * 112f + 180f;
+                var dir = Quaternion.Euler(0f, 0f, angle) * Vector3.right;
+                SpawnPromptSprite(
+                    "KalmuriPredatorOrbitCounter",
+                    KalmuriPredatorBiteSprite(),
+                    () => MakeImpactDiamondSprite("KalmuriPredatorOrbitCounter", Color.white),
+                    player.position + dir * (innerRadius * 0.36f),
+                    Quaternion.Euler(0f, 0f, angle + 180f),
+                    0.96f + memory.Level * 0.10f,
+                    0.46f + memory.Level * 0.035f,
+                    new Color(0.56f, 0.94f, 1f, 0.38f + memory.Level * 0.024f),
+                    0.24f);
+            }
+
+            var bladeCount = Mathf.Clamp(3 + memory.Level, 4, 8);
             for (int i = 0; i < bladeCount; i++)
             {
                 var outer = i % 3 != 1;
@@ -1342,16 +1350,16 @@ namespace Lethe.PrototypeV1
                 var arc = outer ? 20f + memory.Level * 1.7f : -16f - memory.Level * 1.2f;
                 var scale = (outer ? 0.20f : 0.15f) + memory.Level * 0.017f + (i % 3) * 0.007f;
                 var color = outer
-                    ? new Color(0.78f, 1f, 1f, 0.96f)
-                    : new Color(0.50f, 0.92f, 1f, 0.64f);
+                    ? new Color(0.78f, 1f, 1f, 0.72f)
+                    : new Color(0.50f, 0.92f, 1f, 0.46f);
                 SpawnOrbitingKalmuriBlade("KalmuriSwarmBlade", player.position, ring, angle, angle + arc, scale, color, outer ? 0.34f : 0.26f);
             }
 
-            var leadCount = Mathf.Clamp(3 + memory.Level / 2, 3, 5);
+            var leadCount = Mathf.Clamp(1 + memory.Level / 2, 1, 3);
             for (int i = 0; i < leadCount; i++)
             {
                 var angle = memory.VisualTimer * 280f + i * 360f / leadCount + 12f;
-                SpawnOrbitingKalmuriBlade("KalmuriSwarmLeadBlade", player.position, outerRadius * 1.06f, angle, angle + 32f, 0.28f + memory.Level * 0.018f, new Color(0.92f, 1f, 1f, 0.98f), 0.36f);
+                SpawnOrbitingKalmuriBlade("KalmuriSwarmLeadBlade", player.position, outerRadius * 1.06f, angle, angle + 32f, 0.26f + memory.Level * 0.016f, new Color(0.92f, 1f, 1f, 0.74f), 0.34f);
             }
         }
 
@@ -1370,10 +1378,20 @@ namespace Lethe.PrototypeV1
                 () => MakeImpactDiamondSprite("KalmuriPredatorBite", Color.white),
                 center + (Vector3)(toTarget * 0.08f),
                 Quaternion.Euler(0f, 0f, baseAngle),
-                0.96f + levelValue * 0.11f,
-                0.46f + levelValue * 0.035f,
-                new Color(0.74f, 1f, 1f, 0.74f),
-                0.24f);
+                1.20f + levelValue * 0.16f,
+                0.54f + levelValue * 0.045f,
+                new Color(0.82f, 1f, 1f, 0.92f),
+                0.30f);
+            SpawnPromptSprite(
+                "KalmuriPredatorBiteAfterimage",
+                KalmuriPredatorBiteSprite(),
+                () => MakeImpactDiamondSprite("KalmuriPredatorBiteAfterimage", Color.white),
+                center - (Vector3)(toTarget * 0.12f),
+                Quaternion.Euler(0f, 0f, baseAngle + 4f),
+                0.92f + levelValue * 0.10f,
+                0.38f + levelValue * 0.030f,
+                new Color(0.48f, 0.94f, 1f, 0.42f),
+                0.20f);
             SpawnEchoWoundSlash("KalmuriBiteCut", center, toTarget, new Color(0.72f, 1f, 1f, 0.76f), 0.58f + levelValue * 0.04f, 0.18f);
             for (int i = 0; i < bladeCount; i++)
             {
@@ -1531,10 +1549,23 @@ namespace Lethe.PrototypeV1
                 () => MakeImpactDiamondSprite("KalmuriEchoPredatorBite", Color.white),
                 origin + (Vector3)(f * (isHeavy ? 0.10f : 0.06f)),
                 Quaternion.Euler(0f, 0f, baseAngle),
-                isHeavy ? 1.42f : 1.02f + level * 0.08f,
-                isHeavy ? 0.58f : 0.44f,
-                isHeavy ? new Color(0.90f, 1f, 1f, 0.84f) : new Color(0.70f, 1f, 1f, 0.68f),
-                isHeavy ? 0.30f : 0.24f);
+                isHeavy ? 1.72f : 1.20f + level * 0.12f,
+                isHeavy ? 0.66f : 0.50f,
+                isHeavy ? new Color(0.94f, 1f, 1f, 0.92f) : new Color(0.76f, 1f, 1f, 0.86f),
+                isHeavy ? 0.34f : 0.30f);
+            if (level >= 3)
+            {
+                SpawnPromptSprite(
+                    "KalmuriEchoPredatorBiteSide",
+                    KalmuriPredatorBiteSprite(),
+                    () => MakeImpactDiamondSprite("KalmuriEchoPredatorBiteSide", Color.white),
+                    origin + (Vector3)(f * 0.08f + side * (hitIndex % 2 == 0 ? 0.14f : -0.14f)),
+                    Quaternion.Euler(0f, 0f, baseAngle + (hitIndex % 2 == 0 ? 11f : -11f)),
+                    isHeavy ? 1.22f : 0.94f + level * 0.08f,
+                    isHeavy ? 0.48f : 0.40f,
+                    new Color(0.48f, 0.94f, 1f, isHeavy ? 0.52f : 0.44f),
+                    isHeavy ? 0.24f : 0.20f);
+            }
             SpawnEchoWoundSlash("KalmuriEchoCutTrace", origin, f, new Color(0.70f, 1f, 1f, isHeavy ? 0.70f : 0.56f), isHeavy ? 0.94f : 0.68f, isHeavy ? 0.28f : 0.20f);
             SpawnKalmuriEchoBarrage(origin, f, side, baseAngle, level, isHeavy);
 
@@ -2508,16 +2539,21 @@ namespace Lethe.PrototypeV1
             if (id == V1MemoryId.HungryBlades)
             {
                 SpawnTransientSprite("MemoryGain_KalmuriRing", MakeRingSprite("MemoryGain_KalmuriRing", Color.white, 160), player.position, Quaternion.identity, 0.82f + levelValue * 0.06f, new Color(0.48f, 0.96f, 1f, 0.42f), 0.42f);
-                SpawnPromptSprite(
-                    "MemoryGain_KalmuriCrescentPack",
-                    KalmuriCrescentPackSprite(),
-                    () => MakeRingSprite("MemoryGain_KalmuriCrescentPack", Color.white, 180),
-                    player.position,
-                    Quaternion.Euler(0f, 0f, elapsed * 95f),
-                    2.05f + levelValue * 0.16f,
-                    0.92f + levelValue * 0.06f,
-                    new Color(0.68f, 0.98f, 1f, 0.72f),
-                    0.48f);
+                for (int i = 0; i < 3; i++)
+                {
+                    var angle = elapsed * 95f + i * 120f;
+                    var dir = Quaternion.Euler(0f, 0f, angle) * Vector3.right;
+                    SpawnPromptSprite(
+                        "MemoryGain_KalmuriPredatorBite",
+                        KalmuriPredatorBiteSprite(),
+                        () => MakeImpactDiamondSprite("MemoryGain_KalmuriPredatorBite", Color.white),
+                        player.position + dir * (0.16f + i * 0.04f),
+                        Quaternion.Euler(0f, 0f, angle),
+                        1.18f + levelValue * 0.13f,
+                        0.54f + levelValue * 0.040f,
+                        new Color(0.72f, 1f, 1f, 0.76f),
+                        0.48f);
+                }
                 for (int i = 0; i < 12; i++)
                 {
                     var angle = elapsed * 120f + i * 30f;
@@ -3707,7 +3743,7 @@ namespace Lethe.PrototypeV1
 
         Sprite EchoTransformSprite(V1MemoryId id) => id switch
         {
-            V1MemoryId.HungryBlades => KalmuriCrescentPackSprite() ?? LoadSprite(KalmuriEchoSlashPath),
+            V1MemoryId.HungryBlades => KalmuriPredatorBiteSprite(),
             V1MemoryId.BloodReflection => LoadSprite("Assets/_dev/Art/Sprites/Echoes/Blood/spr_blood_bloom_01.png"),
             _ => EchoVfxSprite(id)
         };
@@ -3806,11 +3842,6 @@ namespace Lethe.PrototypeV1
         {
             return LoadSprite(KalmuriOrbitBladePath)
                 ?? MakeBladeSprite("kalmuri-fallback", new Color(0.75f, 1f, 1f), new Color(0.10f, 0.22f, 0.28f), 22, 82, false);
-        }
-
-        Sprite KalmuriCrescentPackSprite()
-        {
-            return LoadSprite(KalmuriCrescentPackCandidatePath);
         }
 
         Sprite KalmuriPredatorBiteSprite()

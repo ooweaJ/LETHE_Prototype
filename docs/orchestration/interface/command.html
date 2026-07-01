@@ -36,7 +36,7 @@
       <div class="grid">
         <article>
           <h2>Codex에게 지금 지시할 말</h2>
-          <textarea id="prompt-next" readonly>Dev_Prototype_v1에서 새 칼무리 C/D 런타임 VFX를 직접 플레이 기준으로 확인해줘. C는 굶주린 칼무리 상시 오라, D는 적중 bite 프레임으로 적용된 상태야. +1/+3/+5에서 적과 플레이어를 가리는지, D가 실제로 물어뜯는 느낌인지, 쌍검 phantom strike가 너무 작게 느껴지는지도 같이 봐줘. 새 콘텐츠는 추가하지 말고, 문제가 있으면 C 알파/빈도, D 크기, 쌍검 phantom 크기 중 하나만 좁게 조정해줘.</textarea>
+          <textarea id="prompt-next" readonly>Dev_Prototype_v1에서 칼무리 D 단독 VFX를 직접 플레이 기준으로 확인해줘. C 오라는 런타임에서 제거했고, D가 상시 orbit, 적중 bite, 칼무리 잔향 follow-up, 기억 획득 피드백에 모두 적용된 상태야. +1/+3/+5에서 D가 충분히 물어뜯는 느낌인지, 적과 플레이어를 가리지는 않는지, 쌍검 phantom strike가 여전히 너무 작게 느껴지는지도 같이 봐줘. 새 콘텐츠는 추가하지 말고, 문제가 있으면 D 크기/알파/빈도 또는 쌍검 phantom 크기 중 하나만 좁게 조정해줘.</textarea>
           <button type="button" data-copy-target="prompt-next">프롬프트 복사</button>
         </article>
 
@@ -53,8 +53,8 @@
         <article>
           <h2>완료 기준</h2>
           <ul>
-            <li>칼무리 C/D 직접 플레이 판단 기록</li>
-            <li>필요 시 한 축만 조정</li>
+            <li>칼무리 D-only 직접 플레이 판단 기록</li>
+            <li>필요 시 D 또는 쌍검 크기 하나만 조정</li>
             <li>Unity compile error 0</li>
             <li>보고서와 상태 문서 갱신</li>
           </ul>

@@ -39,7 +39,7 @@
       <header>
         <div>
           <p class="eyebrow">LETHE 프로젝트 대시보드</p>
-          <h1>칼무리 C/D 런타임 적용 완료</h1>
+          <h1>칼무리 D 단독 VFX 적용 완료</h1>
         </div>
         <span class="badge">Dev_Prototype_v1</span>
       </header>
@@ -47,8 +47,8 @@
       <section class="metrics" aria-label="핵심 상태">
         <div class="metric green">
           <span>현재 단계</span>
-          <strong>굶주린 칼무리 VFX 플레이 가능</strong>
-          <small>C는 오라, D는 bite 프레임</small>
+          <strong>굶주린 칼무리 D-only 플레이 가능</strong>
+          <small>D가 상시/적중/잔향/획득 피드백을 담당</small>
         </div>
         <div class="metric blue">
           <span>쌍검 확인</span>
@@ -63,15 +63,15 @@
         <div class="metric green">
           <span>다음 판단</span>
           <strong>jaewoo 직접 플레이</strong>
-          <small>+1/+3/+5 시야와 손맛 확인</small>
+          <small>+1/+3/+5에서 D 체감 확인</small>
         </div>
       </section>
 
       <section class="hero">
         <h2>현재 결론</h2>
         <p>
-          6/30에 만든 칼무리 후보 스프라이트를 실제 런타임으로 옮겼다.
-          이제 후보 프리뷰를 고르는 단계가 아니라 `Dev_Prototype_v1`에서 직접 플레이하며 C 오라와 D bite 조합이 충분히 굶주린 칼무리처럼 읽히는지 판단하면 된다.
+          C/D 혼합에서 D 단독으로 전환했다. 이제 `Dev_Prototype_v1`에서 굶주린 칼무리가
+          원형 오라보다 물어뜯고 달려드는 칼무리로 먼저 읽히는지 직접 플레이로 판단하면 된다.
         </p>
       </section>
 
@@ -79,10 +79,10 @@
         <article class="panel">
           <h2>다음 확인</h2>
           <ul>
-            <li>C 오라가 +1에서도 너무 약하지 않은가</li>
-            <li>+3/+5에서 C 레이어가 적과 플레이어를 가리지 않는가</li>
-            <li>D bite가 적중 순간에 제대로 몰려드는가</li>
-            <li>쌍검 phantom strike가 너무 작으면 별도 조정할지 판단</li>
+            <li>D orbit이 +1에서도 충분히 보이는가</li>
+            <li>+3/+5에서 D가 적과 플레이어를 가리지 않는가</li>
+            <li>적중 bite와 잔향 bite가 실제로 물어뜯는 느낌인가</li>
+            <li>쌍검 phantom strike는 별도 조정이 필요한가</li>
           </ul>
         </article>
         <article class="panel">
@@ -90,8 +90,8 @@
           <ul>
             <li><code>dotnet build Assembly-CSharp</code>: 오류 0</li>
             <li>Unity compile error count: <code>0</code></li>
+            <li>Unity console error count: <code>0</code></li>
             <li><code>LETHE/V1 Smoke/M2 Loop</code>: PASS</li>
-            <li>보고서 생성/check 통과</li>
           </ul>
         </article>
         <article class="panel">
@@ -105,7 +105,7 @@
         </article>
       </section>
 
-      <footer>기준: 2026-07-01 | 승격 금지: <code>Assets/_dev</code> 검증 전 <code>Assets/Lethe</code> 이동 없음</footer>
+      <footer>기준: 2026-07-01 | 승격 금지: <code>Assets/_dev</code> 검증 중, <code>Assets/Lethe</code> 이동 없음</footer>
     </main>
   </body>
 </html>

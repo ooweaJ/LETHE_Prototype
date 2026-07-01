@@ -1,5 +1,30 @@
 # LETHE TEST
 
+# 2026-07-01 Kalmuri D-Only Runtime Follow-up
+
+- Purpose:
+  - Respond to jaewoo feedback: "D is not felt; do D only."
+- Applied target:
+  - Removed C / Crescent Pack from actual Hungry Blades runtime usage.
+  - D / Predator Bite is now used for the active player-side Hungry Blades orbit, enemy-side bite hit, Kalmuri echo follow-up, echo transform sprite, and Hungry Blades memory-gain feedback.
+  - Supporting orbit blades remain but are fewer and dimmer so D is the main visual read.
+  - Active and echo bite frames were enlarged/brightened for stronger bite/lunge readability.
+- Commands / checks:
+  - `rg -n "KalmuriCrescentPack|CrescentPack|candidate_c" LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - Unity MCP compile error check.
+  - Unity MCP console error check.
+  - Unity `LETHE/V1 Smoke/M2 Loop`.
+  - Editor log check for `[V1QA] PASS`.
+- Results:
+  - No C runtime references remain in `V1GameManager.cs`.
+  - Runtime build passed with 7 legacy v0/debug warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity console error count before smoke: `0`.
+  - M2 Loop QA logged `[V1QA] PASS`, with `HungryBlades:5`, `BloodReflection:5`, `storm=True`, and live enemies `10`.
+- Limitation:
+  - This is a D-only runtime feel pass, not a balance/stat change. Direct jaewoo play remains the visual readability gate.
+
 # 2026-07-01 Kalmuri C/D Runtime Wiring
 
 - Purpose:

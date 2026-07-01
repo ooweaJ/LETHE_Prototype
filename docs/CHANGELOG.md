@@ -2,6 +2,17 @@
 
 # 2026-07-01
 
+- Switched Hungry Blades / Kalmuri runtime VFX to D-only after jaewoo feedback that D was not noticeable enough:
+  - Removed runtime use of C / Crescent Pack from active aura, memory gain, and echo transform feedback.
+  - D / Predator Bite is now the main player-side orbit read, enemy-side bite frame, Kalmuri echo follow-up impact, and Hungry Blades memory-gain burst.
+  - Reduced supporting orbit blade count/alpha so the D bite silhouette is not buried under small blade noise.
+  - Enlarged and brightened D bite frames on active Hungry Blades hits and Kalmuri echo follow-ups.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity MCP compile error count: `0`.
+  - Unity console error count: `0`.
+  - Unity `LETHE/V1 Smoke/M2 Loop`: `[V1QA] PASS`.
+
 - Wired the Kalmuri C/D candidate sprites into `Dev_Prototype_v1` runtime Hungry Blades VFX:
   - C / Crescent Pack now appears as the active Hungry Blades aura around the player.
   - C also appears in Hungry Blades memory-gain feedback.
