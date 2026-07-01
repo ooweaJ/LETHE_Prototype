@@ -2,6 +2,21 @@
 
 Last updated: 2026-07-01
 
+## 2026-07-01 Update: Kalmuri Lunge Range / Stab Feel
+
+- Jaewoo feedback: Kalmuri blades seemed to launch only at orbit range, and the flying blades did not feel like they were stabbing.
+- Applied:
+  - Added a larger `lungeRange` separate from the visible orbit.
+  - Hungry Blades can now launch toward enemies farther than the rotating blade circle.
+  - Bite blades start from the player-side orbit and travel through the target.
+  - Per-blade damage is delayed with a short stagger so the hit follows the visual blade arrival.
+  - Added a small pierce spark on delayed impact.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity MCP compile error count: `0`.
+  - Unity MCP console error count: `0`.
+  - Unity `LETHE/V1 Smoke/M2 Loop`: `[V1QA] PASS`.
+
 ## 2026-07-01 Update: Kalmuri Outer Orbit Removal / Per-Blade Damage
 
 - Jaewoo screenshot feedback clarified that the visible problem was not only a drawn ring, but two rotating Kalmuri blade rings.

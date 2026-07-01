@@ -8,6 +8,8 @@
   - Does the original-blade living swarm read as real Kalmuri motion?
   - Confirm the outer rotating Kalmuri layer is gone and only one orbit remains.
   - Confirm each flying blade feels like it owns a damage hit.
+  - Confirm the larger lunge range makes blades launch before enemies touch the visible orbit.
+  - Confirm the new stagger/pierce spark makes the blades feel like they stab, not drift in.
   - Check irregular orbit, target lunge, bite convergence, recoil shards, echo surge, and level-up spiral.
   - Judge +1 / +3 / +5 readability without hiding enemies or the player.
   - If it still misses, name only one next lever: lunge frequency, trail alpha, blade count, or hit convergence scale.

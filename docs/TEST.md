@@ -1,5 +1,22 @@
 # LETHE TEST
 
+# 2026-07-01 Kalmuri Lunge Range / Stab Feel
+
+- Purpose:
+  - Respond to jaewoo feedback that Kalmuri blades seemed to launch only when enemies reached the rotating orbit and did not feel like they were stabbing.
+- Applied target:
+  - Added a larger `lungeRange` for Hungry Blades target acquisition.
+  - Kept the visible rotating orbit as a smaller one-ring visual.
+  - Bite blades now launch from the player-side orbit toward the target.
+  - Bite blade endpoints now pass slightly through the enemy to read as a stab.
+  - Per-blade damage is delayed by a short stagger to match the incoming blade rhythm.
+  - Added `KalmuriBladePierceSpark` on delayed impact.
+- Results:
+  - Runtime build passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity console error count: `0`.
+  - M2 Loop QA logged `[V1QA] PASS`.
+
 # 2026-07-01 Kalmuri Outer Orbit Removal / Per-Blade Damage
 
 - Purpose:

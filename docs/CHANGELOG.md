@@ -2,6 +2,18 @@
 
 # 2026-07-01
 
+- Tuned Kalmuri launch feel after jaewoo feedback that blades only launched at orbit range and did not feel like stabbing:
+  - Added a larger Hungry Blades `lungeRange` separate from the visible orbit.
+  - Active Kalmuri can now launch toward enemies farther than the rotating blade circle.
+  - Bite blades now start from the player-side orbit and travel through the target, instead of spawning near the enemy.
+  - Per-blade damage is delayed by a short stagger so impact timing follows the visual stab rhythm.
+  - Added a small `KalmuriBladePierceSpark` at delayed impact time for tactile hit confirmation.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity MCP compile error count: `0`.
+  - Unity console error count: `0`.
+  - Unity `LETHE/V1 Smoke/M2 Loop`: `[V1QA] PASS`.
+
 - Fixed Kalmuri living swarm orbit after jaewoo screenshot feedback:
   - Removed the outer orbit layer by replacing the inner/outer radius split with one active `orbitRadius`.
   - Kept one larger player-body orbit instead of two visible rotating rings.

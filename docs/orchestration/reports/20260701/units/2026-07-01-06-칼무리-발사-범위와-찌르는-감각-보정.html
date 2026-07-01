@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-01-06 - 칼무리 발사 범위와 찌르는 감각 보정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-01-06 - 칼무리 발사 범위와 찌르는 감각 보정</h1>
+      <p class="meta">Generated from 2026-07-01-06-칼무리-발사-범위와-찌르는-감각-보정.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260701/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-01-06 - 칼무리 발사 범위와 찌르는 감각 보정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 굶주린 칼무리가 보이는 회전 궤도보다 더 먼 적에게도 날아가고, 칼날이 적을 관통해 찌르는 느낌이 나도록 조정했다. 아직 <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>보이는 orbit과 별도의 더 큰 <code>lungeRange</code>를 추가했다.</li>
+<li>칼무리 발사 대상 탐색은 <code>lungeRange</code>를 사용한다.</li>
+<li>bite 칼날 시작점을 적 근처가 아니라 플레이어 주변 궤도 쪽으로 옮겼다.</li>
+<li>칼날 도착점을 적 뒤쪽으로 넘겨 찌르고 지나가게 했다.</li>
+<li>칼날별 데미지를 짧은 시간차로 지연시켜 시각적 도착 타이밍과 맞췄다.</li>
+<li>지연 데미지 순간 작은 <code>KalmuriBladePierceSpark</code>를 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy 경고 7개 / 오류 0개.</li>
+<li>Unity MCP compile error count: <code>0</code>.</li>
+<li>Unity MCP console error count: <code>0</code>.</li>
+<li>Unity <code>LETHE/V1 Smoke/M2 Loop</code>: <code>[V1QA] PASS</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>칼무리의 시각 궤도와 발사 판정 범위는 분리한다. 보이는 칼날은 몸 주변에 남아 있어도, 적이 조금 더 먼 거리에서 이미 칼날에 물리는 구조가 더 쾌감에 맞다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>발사 범위가 커져 체감 공격력이 강해질 수 있다. 현재 데미지 총량은 유지했지만, 직접 플레이에서 너무 안정적이면 발사 범위만 낮추는 쪽이 좋다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>jaewoo가 칼무리가 회전 범위에 닿아야만 날아가는 것 같고, 찌르는 감각이 약하다고 피드백했다. 발사 범위를 키우고, 칼날 시작/도착/데미지 타이밍을 조정해 실제로 꽂히는 리듬을 만들었다. 자동 QA는 통과했다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo 직접 플레이에서 발사 시작 거리, 칼날 속도, pierce spark, 데미지 피드백이 과하거나 약한지 확인한다.</p>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: 칼날이 적 근처에서 생겨서 찌르는 느낌이 약했다.</li>
+<li>방향: 플레이어 궤도에서 적을 향해 관통하는 투사체처럼 보이게 한다.</li>
+<li>행동: lunge range 확대, start/end 재배치, staggered per-blade damage, pierce spark 추가.</li>
+<li>결과: 기술 QA는 통과했고, 직접 플레이로 쾌감 판단 가능하다.</li>
+</ul>
+  </main>
+</body>
+</html>

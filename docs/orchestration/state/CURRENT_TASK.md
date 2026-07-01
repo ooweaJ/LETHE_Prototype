@@ -1,5 +1,31 @@
 # Current Task
 
+# 2026-07-01 Kalmuri Lunge Range / Stab Feel Result
+
+## Status
+
+Hungry Blades now uses a larger launch acquisition range than the visible orbit, and flying blades read more like real stab projectiles.
+
+## Applied VFX / Combat Changes
+
+- Added `lungeRange = HungryBladesRadius * 1.75 + level * 0.36`.
+- Active Kalmuri target acquisition now uses `lungeRange`.
+- Bite blades now start from the player-side orbit.
+- Bite blades now pass slightly through the enemy.
+- Per-blade damage is delayed by short staggered timings.
+- Added `KalmuriBladePierceSpark` at delayed impact.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- Unity compile error count: `0`.
+- Unity console error count: `0`.
+- Unity `LETHE/V1 Smoke/M2 Loop`: `[V1QA] PASS`.
+
+## Remaining Gate
+
+Jaewoo should check whether blades now launch early enough and feel like stabbing rather than drifting in.
+
 # 2026-07-01 Kalmuri Outer Orbit Removal / Per-Blade Damage Result
 
 ## Status

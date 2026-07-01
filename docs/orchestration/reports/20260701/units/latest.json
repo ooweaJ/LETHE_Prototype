@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260701\\index.md",
-  "generatedAt": "2026-07-01T02:39:45.330Z",
-  "unitCount": 5,
+  "generatedAt": "2026-07-01T02:47:41.243Z",
+  "unitCount": 6,
   "latest": {
-    "title": "2026-07-01-05 - 칼무리 외곽 궤도 제거와 칼날별 데미지",
-    "number": "05",
-    "markdownPath": "docs\\orchestration\\reports\\20260701\\units\\2026-07-01-05-칼무리-외곽-궤도-제거와-칼날별-데미지.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260701\\units\\2026-07-01-05-칼무리-외곽-궤도-제거와-칼날별-데미지.html"
+    "title": "2026-07-01-06 - 칼무리 발사 범위와 찌르는 감각 보정",
+    "number": "06",
+    "markdownPath": "docs\\orchestration\\reports\\20260701\\units\\2026-07-01-06-칼무리-발사-범위와-찌르는-감각-보정.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260701\\units\\2026-07-01-06-칼무리-발사-범위와-찌르는-감각-보정.html"
   }
 }
