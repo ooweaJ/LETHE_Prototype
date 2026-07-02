@@ -1,5 +1,30 @@
 # Current Task
 
+# 2026-07-02 Production Gap Audit
+
+## Status
+
+Next work should move away from "jaewoo direct validation" as the main blocker and into Codex-buildable production gaps.
+
+## Findings
+
+- The highest-value gameplay gap is echo identity, not another Kalmuri-only tuning pass.
+- `TriggerUtilityEchoes` currently handles many echo families in one weapon-hit path, so several echoes differ mostly by chance, radius, color, or target count.
+- `WeaponRuntimeSpec` already exposes `MultiSmall` vs `SingleHeavy`, so the next pass can branch behavior by weapon style without creating duplicate echo definitions.
+- `BloodBladeStorm` is the strongest weapon-specific ultimate reference; `FractureExecution`, `StasisHunt`, and `AshenOblivion` still need the same level of dual-blade/greatsword pattern split.
+- Active memories that most risk feeling passive are `BloodReflection`, `AshenShield`, `StoppedSecond`, and `OblivionBrand`.
+
+## Next Implementation
+
+Start with `docs/orchestration/state/NEXT_TASKS.md` item 1: 잔향 무기별 차별화 1차 패스.
+
+Done criteria for that first pass:
+
+- Dual blades and greatsword produce visibly different echo behavior for all 8 echo families.
+- One `EchoDefinition` per memory remains the rule; weapon-specific expression is runtime behavior, not separate content duplication.
+- VFX Matrix or a new echo matrix smoke can prove both weapon routes spawn the intended echo families.
+- `dotnet build`, Unity compile error check, and console error check pass.
+
 # 2026-07-01 Skill SFX Runtime Pass Result
 
 ## Status
