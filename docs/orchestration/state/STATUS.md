@@ -2,6 +2,24 @@
 
 Last updated: 2026-07-02
 
+## 2026-07-02 Update: Utility Ultimate Feel Tuning
+
+- Tuned non-blood ultimate feel so `FractureExecution`, `StasisHunt`, and `AshenOblivion` read closer to the `BloodBladeStorm` benchmark.
+- Applied:
+  - Shortened utility ultimate pulse intervals for both weapon patterns.
+  - `FractureExecution`: stronger greatsword stamp/cleave/verdict, faster dual execution cuts, slightly higher damage and hitstop.
+  - `StasisHunt`: stronger greatsword freeze dome/spear, faster dual hunter shots, slightly longer freeze windows.
+  - `AshenOblivion`: stronger heal, heavier greatsword guard-break lines, faster dual return/parry rhythm.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity console error count: `0`.
+  - Unity QA `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: `[V1QA] PASS`, `fracture=22`, `stasis=9`, `ashen=47`.
+  - Unity QA `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: `[V1QA] PASS`, `fracture=9`, `stasis=20`, `ashen=21`.
+  - Unity QA `LETHE/V1 QA/Blood Blade Storm`: `[V1QA] PASS`, `stormObjects=77`.
+- Next step: prepare the direct-play review checklist and final current-build handoff.
+
 ## 2026-07-02 Update: Forget / Resonance UX Compression
 
 - Tuned the forget/resonance result flow so it reads as a fast action transition before text confirmation.

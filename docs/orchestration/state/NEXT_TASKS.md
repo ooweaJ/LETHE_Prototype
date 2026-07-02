@@ -1,16 +1,6 @@
 # Next Tasks
 
-## 1. Ultimate Feel Tuning
-
-- Priority: medium
-- Problem: all four ultimate families have weapon-specific routes, but the non-blood ultimates need direct-play judgment for cadence, power, and clutter.
-- Build:
-  - Tune `FractureExecution`, `StasisHunt`, and `AshenOblivion` per weapon.
-  - Keep both `Utility Ultimate Matrix` QA menus as regression gates.
-- Done:
-  - Non-blood ultimates feel as distinct as Blood Blade Storm without becoming screen noise.
-
-## 2. Direct Play Review Prep
+## 1. Direct Play Review Prep
 
 - Priority: medium
 - Problem: automated QA proves object spawning and compilation, but final feel still needs a focused jaewoo direct-play checklist after the cleanup passes.
@@ -21,7 +11,7 @@
 - Done:
   - Jaewoo can review one current `Dev_Prototype_v1` build without extra setup.
 
-## 3. Remaining Echo / Ultimate Constant Cleanup
+## 2. Remaining Echo / Ultimate Constant Cleanup
 
 - Priority: lower
 - Problem: some repeated colors/timing constants remain in VFX helper routes after the current cleanup/dataization passes.
@@ -44,6 +34,7 @@ Completed sequence:
 - 2026-07-02: unreachable legacy utility echo fallback branch removed after Echo/Ultimate/Kalmuri QA remained PASS.
 - 2026-07-02: passive memory feel tuning implemented for BloodReflection, StoppedSecond, AshenShield, and OblivionBrand; passive/echo/forget/Kalmuri QA remained PASS.
 - 2026-07-02: forget/resonance UX compressed; Forget Resonance, Utility Ultimate Dual, and Kalmuri Perf QA remained PASS.
+- 2026-07-02: utility ultimate feel tuning implemented; Utility Ultimate Dual/Great and Blood Blade Storm QA remained PASS.
 
 QA menus passing:
 

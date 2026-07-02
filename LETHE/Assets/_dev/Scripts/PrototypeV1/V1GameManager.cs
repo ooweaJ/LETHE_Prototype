@@ -2134,7 +2134,7 @@ namespace Lethe.PrototypeV1
                 if (ultimatePulseTimer <= 0f)
                 {
                     SpawnFractureExecutionUltimate(heavy);
-                    ultimatePulseTimer = heavy ? 0.92f : 0.32f;
+                    ultimatePulseTimer = heavy ? 0.86f : 0.28f;
                 }
                 return true;
             }
@@ -2144,7 +2144,7 @@ namespace Lethe.PrototypeV1
                 if (ultimatePulseTimer <= 0f)
                 {
                     SpawnStasisHuntUltimate(heavy);
-                    ultimatePulseTimer = heavy ? 0.82f : 0.28f;
+                    ultimatePulseTimer = heavy ? 0.78f : 0.25f;
                 }
                 return true;
             }
@@ -2154,7 +2154,7 @@ namespace Lethe.PrototypeV1
                 if (ultimatePulseTimer <= 0f)
                 {
                     SpawnAshenOblivionUltimate(heavy);
-                    ultimatePulseTimer = heavy ? 1.02f : 0.44f;
+                    ultimatePulseTimer = heavy ? 0.94f : 0.38f;
                 }
                 return true;
             }
@@ -2174,31 +2174,32 @@ namespace Lethe.PrototypeV1
 
             if (heavy)
             {
-                SpawnPromptSprite("UltGreat_FractureExecutionStamp", LoadSprite(UltimateFracturePath), () => MakeRingSprite("UltGreat_FractureExecutionStamp", Color.white, 180), target.transform.position, Quaternion.identity, 3.18f, 1.22f, new Color(1f, 0.90f, 0.48f, 0.72f), 0.58f);
-                SpawnEchoWoundSlash("UltGreat_FractureExecutionCleave", target.transform.position, forward, new Color(1f, 0.94f, 0.54f, 0.72f), 1.45f, 0.48f);
-                SpawnRadialSlashLines("UltGreat_FractureExecutionVerdict", target.transform.position, forward, 5, 1.04f, new Color(1f, 0.88f, 0.46f, 0.58f), 0.46f);
+                SpawnPromptSprite("UltGreat_FractureExecutionStamp", LoadSprite(UltimateFracturePath), () => MakeRingSprite("UltGreat_FractureExecutionStamp", Color.white, 180), target.transform.position, Quaternion.identity, 3.32f, 1.30f, new Color(1f, 0.90f, 0.48f, 0.78f), 0.62f);
+                SpawnEchoWoundSlash("UltGreat_FractureExecutionCleave", target.transform.position, forward, new Color(1f, 0.94f, 0.54f, 0.80f), 1.65f, 0.54f);
+                SpawnRadialSlashLines("UltGreat_FractureExecutionVerdict", target.transform.position, forward, 6, 1.18f, new Color(1f, 0.88f, 0.46f, 0.64f), 0.50f);
                 foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(target.transform.position, e.transform.position) < 2.30f).Take(12).ToList())
                 {
                     var dir = (Vector2)(enemy.transform.position - target.transform.position);
-                    DealDamage(enemy, enemy.HealthRatio < 0.42f ? 110f : 54f, "UltGreat FractureExecution", false, dir.sqrMagnitude > 0.01f ? dir.normalized : forward, 1.20f);
+                    DealDamage(enemy, enemy.HealthRatio < 0.42f ? 118f : 60f, "UltGreat FractureExecution", false, dir.sqrMagnitude > 0.01f ? dir.normalized : forward, 1.28f);
                 }
-                hitstopTimer = Mathf.Max(hitstopTimer, 0.070f);
-                cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.24f);
-                cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.12f);
+                hitstopTimer = Mathf.Max(hitstopTimer, 0.085f);
+                cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.26f);
+                cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.14f);
                 return;
             }
 
-            SpawnPromptSprite("UltDual_FractureExecutionRing", LoadSprite(UltimateFracturePath), () => MakeRingSprite("UltDual_FractureExecutionRing", Color.white, 144), target.transform.position, Quaternion.Euler(0f, 0f, elapsed * 180f), 2.18f, 0.86f, new Color(1f, 0.96f, 0.62f, 0.58f), 0.34f);
-            var cutTargets = enemies.Where(e => e != null && e.IsAlive).OrderBy(e => e.HealthRatio).Take(6).ToList();
+            SpawnPromptSprite("UltDual_FractureExecutionRing", LoadSprite(UltimateFracturePath), () => MakeRingSprite("UltDual_FractureExecutionRing", Color.white, 144), target.transform.position, Quaternion.Euler(0f, 0f, elapsed * 200f), 2.30f, 0.90f, new Color(1f, 0.96f, 0.62f, 0.64f), 0.36f);
+            var cutTargets = enemies.Where(e => e != null && e.IsAlive).OrderBy(e => e.HealthRatio).Take(7).ToList();
             for (int i = 0; i < cutTargets.Count; i++)
             {
                 var enemy = cutTargets[i];
                 var dir = (Vector2)(enemy.transform.position - player.position);
                 if (dir.sqrMagnitude < 0.01f) dir = Quaternion.Euler(0f, 0f, i * 60f) * Vector2.up;
-                SpawnEchoWoundSlash("UltDual_FractureExecutionCut", enemy.transform.position, dir.normalized, new Color(1f, 0.96f, 0.64f, 0.62f), 0.68f, 0.30f);
-                SpawnTransientSprite("UltDual_FractureExecutionMark", MakeImpactDiamondSprite("UltDual_FractureExecutionMark", Color.white), enemy.transform.position, Quaternion.Euler(0f, 0f, elapsed * 210f + i * 37f), 0.26f, new Color(1f, 0.94f, 0.54f, 0.74f), 0.22f);
-                DealDamage(enemy, enemy.HealthRatio < 0.36f ? 72f : 30f, "UltDual FractureExecution", false, dir.normalized, 0.40f);
+                SpawnEchoWoundSlash("UltDual_FractureExecutionCut", enemy.transform.position, dir.normalized, new Color(1f, 0.96f, 0.64f, 0.70f), 0.76f, 0.32f);
+                SpawnTransientSprite("UltDual_FractureExecutionMark", MakeImpactDiamondSprite("UltDual_FractureExecutionMark", Color.white), enemy.transform.position, Quaternion.Euler(0f, 0f, elapsed * 230f + i * 37f), 0.30f, new Color(1f, 0.94f, 0.54f, 0.80f), 0.26f);
+                DealDamage(enemy, enemy.HealthRatio < 0.36f ? 78f : 34f, "UltDual FractureExecution", false, dir.normalized, 0.46f);
             }
+            hitstopTimer = Mathf.Max(hitstopTimer, 0.035f);
         }
 
         void SpawnStasisHuntUltimate(bool heavy)
@@ -2210,63 +2211,66 @@ namespace Lethe.PrototypeV1
             {
                 var focus = enemies.Where(e => e != null && e.IsAlive).OrderBy(e => Vector2.Distance(player.position, e.transform.position)).FirstOrDefault();
                 var center = focus != null ? focus.transform.position : player.position;
-                SpawnPromptSprite("UltGreat_StasisHuntDome", LoadSprite(UltimateStasisPath), () => MakeRingSprite("UltGreat_StasisHuntDome", Color.white, 180), center, Quaternion.identity, 3.95f, 1.48f, new Color(1f, 0.74f, 0.28f, 0.62f), 1.06f);
+                SpawnPromptSprite("UltGreat_StasisHuntDome", LoadSprite(UltimateStasisPath), () => MakeRingSprite("UltGreat_StasisHuntDome", Color.white, 180), center, Quaternion.identity, 4.10f, 1.54f, new Color(1f, 0.74f, 0.28f, 0.66f), 1.08f);
                 SpawnStoppedSecondField(center, 2.85f, TimeStopGold(true), 1.95f, true);
                 foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(center, e.transform.position) <= 3.15f).Take(12).ToList())
                 {
                     var dir = (Vector2)(enemy.transform.position - center);
-                    enemy.ApplyBriefFreeze(0.82f);
-                    SpawnEchoWoundSlash("UltGreat_StasisHuntFrozenCleave", enemy.transform.position, dir.sqrMagnitude > 0.01f ? dir.normalized : lastAim, new Color(0.92f, 0.84f, 1f, 0.60f), 1.05f, 0.44f);
-                    DealDamage(enemy, 48f, "UltGreat StasisHunt", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 0.82f);
+                    enemy.ApplyBriefFreeze(0.92f);
+                    SpawnEchoWoundSlash("UltGreat_StasisHuntFrozenCleave", enemy.transform.position, dir.sqrMagnitude > 0.01f ? dir.normalized : lastAim, new Color(0.92f, 0.84f, 1f, 0.66f), 1.16f, 0.48f);
+                    DealDamage(enemy, 54f, "UltGreat StasisHunt", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 0.88f);
                 }
-                SpawnTransientSpriteScaled("UltGreat_StasisHuntSpear", MakeBoxSprite("UltGreat_StasisHuntSpear", Color.white, 8, 150), center + Vector3.up * 0.15f, Quaternion.Euler(0f, 0f, elapsed * 60f), new Vector3(0.032f, 0.95f, 1f), new Color(0.86f, 0.78f, 1f, 0.72f), 0.56f);
+                SpawnTransientSpriteScaled("UltGreat_StasisHuntSpear", MakeBoxSprite("UltGreat_StasisHuntSpear", Color.white, 8, 150), center + Vector3.up * 0.15f, Quaternion.Euler(0f, 0f, elapsed * 60f), new Vector3(0.036f, 1.08f, 1f), new Color(0.86f, 0.78f, 1f, 0.78f), 0.60f);
+                hitstopTimer = Mathf.Max(hitstopTimer, 0.060f);
                 return;
             }
 
-            SpawnPromptSprite("UltDual_StasisHuntField", LoadSprite(UltimateStasisPath), () => MakeRingSprite("UltDual_StasisHuntField", Color.white, 144), player.position, Quaternion.Euler(0f, 0f, elapsed * 140f), 2.72f, 1.02f, new Color(1f, 0.78f, 0.30f, 0.56f), 0.70f);
+            SpawnPromptSprite("UltDual_StasisHuntField", LoadSprite(UltimateStasisPath), () => MakeRingSprite("UltDual_StasisHuntField", Color.white, 144), player.position, Quaternion.Euler(0f, 0f, elapsed * 150f), 2.85f, 1.06f, new Color(1f, 0.78f, 0.30f, 0.60f), 0.72f);
             SpawnStoppedSecondField(player.position, 1.92f, TimeStopGold(true), 1.34f, true);
             var shotTargets = enemies.Where(e => e != null && e.IsAlive).OrderBy(e => Vector2.Distance(player.position, e.transform.position)).Take(8).ToList();
             for (int i = 0; i < shotTargets.Count; i++)
             {
                 var enemy = shotTargets[i];
-                enemy.ApplyBriefFreeze(0.34f);
-                SpawnTransientSprite("UltDual_StasisHuntMicroClamp", MakeRingSprite("UltDual_StasisHuntMicroClamp", Color.white, 96), enemy.transform.position, Quaternion.identity, 0.48f, new Color(1f, 0.78f, 0.34f, 0.42f), 0.26f);
-                SpawnHunterOathShot(enemy, player.position, i, shotTargets.Count, 12.8f, 23f, "UltDual StasisHunt", true);
+                enemy.ApplyBriefFreeze(0.40f);
+                SpawnTransientSprite("UltDual_StasisHuntMicroClamp", MakeRingSprite("UltDual_StasisHuntMicroClamp", Color.white, 96), enemy.transform.position, Quaternion.identity, 0.52f, new Color(1f, 0.78f, 0.34f, 0.46f), 0.28f);
+                SpawnHunterOathShot(enemy, player.position, i, shotTargets.Count, 13.6f, 26f, "UltDual StasisHunt", true);
             }
         }
 
         void SpawnAshenOblivionUltimate(bool heavy)
         {
-            HealPlayer(heavy ? 6.4f : 3.8f);
+            HealPlayer(heavy ? 7.2f : 4.3f);
             PlaySfx("ashen", heavy ? 0.78f : 0.58f, 0.18f);
             PlaySfx("brand", heavy ? 0.56f : 0.50f, 0.18f);
 
             if (heavy)
             {
-                SpawnPromptSprite("UltGreat_AshenOblivionWave", LoadSprite(UltimateAshenOblivionPath), () => MakeRingSprite("UltGreat_AshenOblivionWave", Color.white, 180), player.position, Quaternion.identity, 4.22f, 1.58f, new Color(0.78f, 0.68f, 1f, 0.64f), 0.90f);
-                SpawnTransientSprite("UltGreat_AshenOblivionGuardBreak", MakeRingSprite("UltGreat_AshenOblivionGuardBreak", Color.white, 180), player.position, Quaternion.Euler(0f, 0f, elapsed * -72f), 2.08f, new Color(0.88f, 0.92f, 1f, 0.46f), 0.68f);
+                SpawnPromptSprite("UltGreat_AshenOblivionWave", LoadSprite(UltimateAshenOblivionPath), () => MakeRingSprite("UltGreat_AshenOblivionWave", Color.white, 180), player.position, Quaternion.identity, 4.40f, 1.66f, new Color(0.78f, 0.68f, 1f, 0.70f), 0.94f);
+                SpawnTransientSprite("UltGreat_AshenOblivionGuardBreak", MakeRingSprite("UltGreat_AshenOblivionGuardBreak", Color.white, 180), player.position, Quaternion.Euler(0f, 0f, elapsed * -80f), 2.22f, new Color(0.88f, 0.92f, 1f, 0.52f), 0.72f);
+                SpawnRadialSlashLines("UltGreat_AshenOblivionGuardBreakLine", player.position, lastAim, 6, 1.05f, new Color(0.86f, 0.76f, 1f, 0.58f), 0.48f);
                 foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 4.15f).Take(14).ToList())
                 {
                     var dir = (Vector2)(enemy.transform.position - player.position);
                     SpawnEchoLink("UltGreat_AshenOblivionBreakBrand", player.position, enemy.transform.position, new Color(0.76f, 0.52f, 1f, 0.38f), 0.42f, 0.020f);
-                    DealDamage(enemy, 54f, "UltGreat AshenOblivion", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 1.45f);
+                    DealDamage(enemy, 60f, "UltGreat AshenOblivion", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 1.55f);
                 }
                 cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.20f);
                 cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.095f);
                 return;
             }
 
-            SpawnPromptSprite("UltDual_AshenOblivionGuard", LoadSprite(UltimateAshenOblivionPath), () => MakeRingSprite("UltDual_AshenOblivionGuard", Color.white, 150), player.position, Quaternion.Euler(0f, 0f, elapsed * 150f), 2.78f, 1.08f, new Color(0.82f, 0.72f, 1f, 0.52f), 0.54f);
-            SpawnTransientSprite("UltDual_AshenOblivionReturnRing", MakeRingSprite("UltDual_AshenOblivionReturnRing", Color.white, 128), player.position, Quaternion.Euler(0f, 0f, elapsed * -180f), 1.16f, new Color(0.90f, 0.96f, 1f, 0.40f), 0.40f);
-            var targets = enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 3.45f).OrderBy(e => Vector2.Distance(player.position, e.transform.position)).Take(8).ToList();
+            SpawnPromptSprite("UltDual_AshenOblivionGuard", LoadSprite(UltimateAshenOblivionPath), () => MakeRingSprite("UltDual_AshenOblivionGuard", Color.white, 150), player.position, Quaternion.Euler(0f, 0f, elapsed * 165f), 2.90f, 1.12f, new Color(0.82f, 0.72f, 1f, 0.58f), 0.58f);
+            SpawnTransientSprite("UltDual_AshenOblivionReturnRing", MakeRingSprite("UltDual_AshenOblivionReturnRing", Color.white, 128), player.position, Quaternion.Euler(0f, 0f, elapsed * -200f), 1.24f, new Color(0.90f, 0.96f, 1f, 0.44f), 0.44f);
+            var targets = enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 3.65f).OrderBy(e => Vector2.Distance(player.position, e.transform.position)).Take(9).ToList();
             for (int i = 0; i < targets.Count; i++)
             {
                 var enemy = targets[i];
                 var dir = (Vector2)(enemy.transform.position - player.position);
-                SpawnRadialSlashLines("UltDual_AshenOblivionParryLine", enemy.transform.position, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 3, 0.44f, new Color(0.86f, 0.78f, 1f, 0.46f), 0.26f);
-                SpawnEchoLink("UltDual_AshenOblivionReturnBrand", enemy.transform.position, player.position, new Color(0.80f, 0.58f, 1f, 0.34f), 0.30f, 0.014f);
-                DealDamage(enemy, 30f, "UltDual AshenOblivion", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 0.62f);
+                SpawnRadialSlashLines("UltDual_AshenOblivionParryLine", enemy.transform.position, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 4, 0.52f, new Color(0.86f, 0.78f, 1f, 0.52f), 0.30f);
+                SpawnEchoLink("UltDual_AshenOblivionReturnBrand", enemy.transform.position, player.position, new Color(0.80f, 0.58f, 1f, 0.38f), 0.34f, 0.016f);
+                DealDamage(enemy, 34f, "UltDual AshenOblivion", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 0.68f);
             }
+            hitstopTimer = Mathf.Max(hitstopTimer, 0.035f);
         }
 
         void UpdateUtilityUltimate(WeaponRuntimeSpec weapon, float dt)

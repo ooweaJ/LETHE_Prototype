@@ -2,6 +2,9 @@
 
 # 2026-07-02
 
+- Tuned utility ultimate feel:
+  - Sharpened `FractureExecution`, `StasisHunt`, and `AshenOblivion` cadence, hitstop, damage, and weapon-specific VFX beats.
+  - Verified Utility Ultimate Matrix Dual/Great and Blood Blade Storm QA.
 - Compressed the forget/resonance UX flow:
   - Shortened the readable overlay.
   - Tightened `EchoTransform`, `ForgetFlow`, resonance, awaken, and ultimate-ready cue timing.

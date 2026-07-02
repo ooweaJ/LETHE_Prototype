@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-02-13 - 유틸리티 궁극 체감 튜닝</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-02-13 - 유틸리티 궁극 체감 튜닝</h1>
+      <p class="meta">Generated from 2026-07-02-13-유틸리티-궁극-체감-튜닝.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260702/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-02-13 - 유틸리티 궁극 체감 튜닝</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 <code>_dev</code> 검증 단계이며, 네 궁극 축은 모두 자동 QA로 확인 가능하다. 이번 작업은 새 궁극을 추가하지 않고 <code>FractureExecution</code>, <code>StasisHunt</code>, <code>AshenOblivion</code>이 <code>BloodBladeStorm</code>에 비해 덜 밋밋하게 느껴지는 부분을 보강했다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>유틸리티 궁극 pulse interval을 줄여 발동 리듬을 조금 더 빠르게 했다.</li>
+<li><code>FractureExecution</code>: 대검 stamp/cleave/verdict를 키우고, 쌍검 execution cut 수와 피해/히트스톱을 올렸다.</li>
+<li><code>StasisHunt</code>: 대검 freeze dome/spear와 freeze window를 강화하고, 쌍검 hunter shot 속도/피해를 올렸다.</li>
+<li><code>AshenOblivion</code>: 회복량, 대검 guard-break line, 쌍검 return/parry 리듬을 강화했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, 기존 경고 7개, 오류 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 통과, 기존 경고 7개, 오류 0개.</li>
+<li>Unity compile error count: <code>0</code>.</li>
+<li>Unity console error count: <code>0</code>.</li>
+<li>Utility Ultimate Matrix Dual Blades: <code>[V1QA] PASS</code>, <code>fracture=22</code>, <code>stasis=9</code>, <code>ashen=47</code>.</li>
+<li>Utility Ultimate Matrix Greatsword: <code>[V1QA] PASS</code>, <code>fracture=9</code>, <code>stasis=20</code>, <code>ashen=21</code>.</li>
+<li>Blood Blade Storm: <code>[V1QA] PASS</code>, <code>stormObjects=77</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>궁극 보강은 화면을 새로 덮는 방식보다 무기별 cadence와 hitstop, 판정감으로 구분하는 쪽이 낫다. 피의 칼폭풍은 기준점으로 유지하고, 나머지 궁극은 각자 다른 리듬을 갖게 했다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>쌍검 <code>AshenOblivion</code> 카운트가 <code>34 -&gt; 47</code>로 늘었다. QA는 통과하지만, 직접 플레이에서 잿빛/보라 계열이 화면 피로를 만들지 확인해야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>검증 포인트는 &quot;비혈액 궁극이 피의 칼폭풍만큼 구분되는가&quot;다. 자동 QA는 모두 PASS했으며, 다음 판단은 실제 전투에서 궁극이 강하지만 과도하지 않은지 보는 것이다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>직접 플레이 리뷰 준비로 넘어간다. 체크리스트와 현재 빌드 요약을 정리해서 jaewoo가 한 번에 볼 수 있게 만든다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 비혈액 궁극이 기능은 있으나 피의 칼폭풍보다 체감 구분이 약했다.</li>
+<li>방향: 새 시스템보다 기존 무기별 궁극 리듬과 임팩트를 강화한다.</li>
+<li>행동: interval, damage, hitstop, VFX scale/lifetime을 조정했다.</li>
+<li>결과: 유틸 궁극 쌍검/대검과 피의 칼폭풍 QA가 모두 PASS했다.</li>
+</ul>
+  </main>
+</body>
+</html>

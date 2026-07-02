@@ -1,5 +1,33 @@
 # Current Task
 
+# 2026-07-02 Utility Ultimate Feel Tuning Result
+
+## Status
+
+Non-blood utility ultimates now have sharper cadence and impact without adding a new system. `BloodBladeStorm` remains the benchmark and still passes after the changes.
+
+## Applied Changes
+
+- Reduced utility ultimate pulse intervals.
+- `FractureExecution`: stronger greatsword stamp/cleave/verdict, faster dual execution cuts, higher hitstop and damage.
+- `StasisHunt`: stronger greatsword freeze dome/spear, faster dual hunter shots, longer freeze windows.
+- `AshenOblivion`: stronger heal, heavier greatsword guard-break line, faster dual return/parry rhythm.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- Unity compile error count: `0`.
+- Unity console error count: `0`.
+- Unity QA:
+  - `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: `[V1QA] PASS`, `fracture=22`, `stasis=9`, `ashen=47`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: `[V1QA] PASS`, `fracture=9`, `stasis=20`, `ashen=21`.
+  - `LETHE/V1 QA/Blood Blade Storm`: `[V1QA] PASS`, `stormObjects=77`.
+
+## Next Implementation
+
+Prepare the direct-play review checklist and current-build handoff so jaewoo can judge whether `_dev` is close to promotion quality.
+
 # 2026-07-02 Forget / Resonance UX Compression Result
 
 ## Status
