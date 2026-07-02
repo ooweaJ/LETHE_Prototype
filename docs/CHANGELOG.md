@@ -2,6 +2,10 @@
 
 # 2026-07-02
 
+- Compressed the forget/resonance UX flow:
+  - Shortened the readable overlay.
+  - Tightened `EchoTransform`, `ForgetFlow`, resonance, awaken, and ultimate-ready cue timing.
+  - Verified Forget Resonance Flow, Utility Ultimate Dual, and Kalmuri Perf Matrix QA.
 - Tuned passive memory feel for the current slice:
   - Made `BloodReflection`, `StoppedSecond`, `AshenShield`, and `OblivionBrand` fire with clearer cadence, radius, damage, and +5 action beats.
   - Verified Passive Memory Matrix, Echo Matrix Dual, Forget Resonance Flow, and Kalmuri Perf Matrix QA.

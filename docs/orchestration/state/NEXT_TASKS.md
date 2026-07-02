@@ -1,16 +1,6 @@
 # Next Tasks
 
-## 1. Forget / Resonance UX Tuning
-
-- Priority: medium-high
-- Problem: the compressed forget/resonance flow is visible and testable, but direct play still needs to judge overlay length, VFX timing, and ultimate bridge clutter.
-- Build:
-  - Tune `ForgetFlow_*` scale, lifetime, placement, and text density.
-  - Keep `LETHE/V1 QA/Forget Resonance Flow` as the regression gate.
-- Done:
-  - Forgetting reads first as an action transition, then as text confirmation.
-
-## 2. Ultimate Feel Tuning
+## 1. Ultimate Feel Tuning
 
 - Priority: medium
 - Problem: all four ultimate families have weapon-specific routes, but the non-blood ultimates need direct-play judgment for cadence, power, and clutter.
@@ -20,7 +10,7 @@
 - Done:
   - Non-blood ultimates feel as distinct as Blood Blade Storm without becoming screen noise.
 
-## 3. Direct Play Review Prep
+## 2. Direct Play Review Prep
 
 - Priority: medium
 - Problem: automated QA proves object spawning and compilation, but final feel still needs a focused jaewoo direct-play checklist after the cleanup passes.
@@ -31,7 +21,7 @@
 - Done:
   - Jaewoo can review one current `Dev_Prototype_v1` build without extra setup.
 
-## 4. Remaining Echo / Ultimate Constant Cleanup
+## 3. Remaining Echo / Ultimate Constant Cleanup
 
 - Priority: lower
 - Problem: some repeated colors/timing constants remain in VFX helper routes after the current cleanup/dataization passes.
@@ -53,6 +43,7 @@ Completed sequence:
 - 2026-07-02: utility echo tuning migrated to `_dev/Data/Echoes/UtilityEcho_Tuning.asset`.
 - 2026-07-02: unreachable legacy utility echo fallback branch removed after Echo/Ultimate/Kalmuri QA remained PASS.
 - 2026-07-02: passive memory feel tuning implemented for BloodReflection, StoppedSecond, AshenShield, and OblivionBrand; passive/echo/forget/Kalmuri QA remained PASS.
+- 2026-07-02: forget/resonance UX compressed; Forget Resonance, Utility Ultimate Dual, and Kalmuri Perf QA remained PASS.
 
 QA menus passing:
 

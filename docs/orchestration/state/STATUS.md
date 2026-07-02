@@ -2,6 +2,25 @@
 
 Last updated: 2026-07-02
 
+## 2026-07-02 Update: Forget / Resonance UX Compression
+
+- Tuned the forget/resonance result flow so it reads as a fast action transition before text confirmation.
+- Applied:
+  - Shortened the readable result overlay to a compact `memory lost -> echo gained -> resonance start -> return` format.
+  - Rebuilt `EchoTransform` as a shorter core burst with named shards.
+  - Pulled `ForgetFlow` memory/echo positions closer to the player and shortened flow lifetimes.
+  - Tightened resonance target, awaken stamp, and ultimate-ready bridge timing.
+  - Made `SpawnUltimateReadyCue` smaller, shorter, and lower on screen.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity console error count: `0`.
+  - Unity QA `LETHE/V1 QA/Forget Resonance Flow`: `[V1QA] PASS`, `forgetFlow=15`, `echoTransform=14`, `ultimateReady=3`.
+  - Unity QA `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: `[V1QA] PASS`, `fracture=19`, `stasis=9`, `ashen=34`.
+  - Unity QA `LETHE/V1 QA/Kalmuri Perf Matrix`: `[V1QA] PASS`, `totalKalmuri=374`.
+- Next step: tune the non-blood ultimate feel for cadence, power, and clutter.
+
 ## 2026-07-02 Update: Passive Memory Feel Tuning
 
 - Tuned passive-feeling memories so they read more like active combat beats before forgetting.

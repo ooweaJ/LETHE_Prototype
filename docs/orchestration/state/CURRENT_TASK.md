@@ -1,5 +1,34 @@
 # Current Task
 
+# 2026-07-02 Forget / Resonance UX Compression Result
+
+## Status
+
+Forget/resonance now reads more like a quick action transition. The result overlay is shorter, the transform VFX is tighter, and the ultimate-ready cue is less screen-dominating.
+
+## Applied Changes
+
+- Shortened readable forget result overlay text.
+- Rebuilt `EchoTransform` into a smaller core burst with named shards.
+- Pulled `ForgetFlow` memory and echo symbols closer to the player.
+- Shortened memory-to-echo, resonance, awaken, and ultimate bridge lifetimes.
+- Reduced `UltimateReady` ring size/lifetime and lowered the floating text.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- Unity compile error count: `0`.
+- Unity console error count: `0`.
+- Unity QA:
+  - `LETHE/V1 QA/Forget Resonance Flow`: `[V1QA] PASS`, `forgetFlow=15`, `echoTransform=14`, `ultimateReady=3`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: `[V1QA] PASS`, `fracture=19`, `stasis=9`, `ashen=34`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: `[V1QA] PASS`, `totalKalmuri=374`.
+
+## Next Implementation
+
+Move to ultimate feel tuning: sharpen `FractureExecution`, `StasisHunt`, and `AshenOblivion` cadence/power without adding screen clutter.
+
 # 2026-07-02 Passive Memory Feel Tuning Result
 
 ## Status

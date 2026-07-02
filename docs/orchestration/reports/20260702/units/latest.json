@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260702\\index.md",
-  "generatedAt": "2026-07-02T07:54:32.365Z",
-  "unitCount": 11,
+  "generatedAt": "2026-07-02T08:00:57.991Z",
+  "unitCount": 12,
   "latest": {
-    "title": "2026-07-02-11 - 패시브 기억 체감 튜닝",
-    "number": "11",
-    "markdownPath": "docs\\orchestration\\reports\\20260702\\units\\2026-07-02-11-패시브-기억-체감-튜닝.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260702\\units\\2026-07-02-11-패시브-기억-체감-튜닝.html"
+    "title": "2026-07-02-12 - 망각/공명 UX 압축",
+    "number": "12",
+    "markdownPath": "docs\\orchestration\\reports\\20260702\\units\\2026-07-02-12-망각-공명-ux-압축.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260702\\units\\2026-07-02-12-망각-공명-ux-압축.html"
   }
 }

@@ -3053,14 +3053,15 @@ namespace Lethe.PrototypeV1
 
         void ConfigureForgetOverlayReadable(MemoryState forgotten, int echoLevel, int rawEchoLevel)
         {
-            var resonanceBonus = Mathf.FloorToInt(echoLevel / 2f);
-            overlayTitle = "망각 결과";
+            var resonanceStart = Mathf.Max(1, 1 + Mathf.FloorToInt(echoLevel / 2f));
+            var awaken = echoLevel >= MaxEchoLevel ? " 각성" : string.Empty;
+            var overflow = rawEchoLevel > MaxEchoLevel ? $"\nOverflow Echo +{rawEchoLevel - MaxEchoLevel}: ultimate charge" : string.Empty;
+            overlayTitle = "망각 -> 잔향";
             overlayBody =
-                $"사라진 기억: {MemoryName(forgotten.Id)} +{forgotten.Level}\n" +
-                $"남은 잔향: {EchoName(forgotten.Id)} +{echoLevel}{(echoLevel >= MaxEchoLevel ? " 각성" : "")}\n" +
-                (rawEchoLevel > MaxEchoLevel ? $"초과 잔향 +{rawEchoLevel - MaxEchoLevel}: 궁극 준비 가속\n" : "") +
-                $"공명 목표: 다시 획득하면 +{Mathf.Max(1, 1 + resonanceBonus)}부터 시작\n" +
-                "Space로 전투 복귀";
+                $"{MemoryName(forgotten.Id)} +{forgotten.Level} 소멸\n" +
+                $"{EchoName(forgotten.Id)} +{echoLevel}{awaken}{overflow}\n" +
+                $"공명 재획득 시작 +{resonanceStart}\n" +
+                "Space: 전투 복귀";
         }
 
         void SpawnMemoryGainVfx(V1MemoryId id, int levelValue)
@@ -3106,13 +3107,14 @@ namespace Lethe.PrototypeV1
         void SpawnEchoTransformVfx(V1MemoryId id)
         {
             var color = id == V1MemoryId.BloodReflection ? new Color(1f, 0.1f, 0.18f, 0.95f) : new Color(0.58f, 0.95f, 1f, 0.95f);
-            SpawnTransientSprite("EchoTransformOuter", MakeRingSprite("EchoTransformOuter", Color.white, 180), player.position, Quaternion.identity, 1.32f, new Color(color.r, color.g, color.b, 0.52f), 0.70f);
-            SpawnTransientSprite("EchoTransformCore", MakeImpactDiamondSprite("EchoTransformCore", Color.white), player.position + Vector3.up * 0.14f, Quaternion.Euler(0f, 0f, 45f), 0.42f, new Color(color.r, color.g, color.b, 0.78f), 0.46f);
-            for (int i = 0; i < 16; i++)
+            SpawnTransientSprite("EchoTransformOuter", MakeRingSprite("EchoTransformOuter", Color.white, 180), player.position, Quaternion.identity, 1.18f, new Color(color.r, color.g, color.b, 0.48f), 0.54f);
+            SpawnTransientSprite("EchoTransformCore", MakeImpactDiamondSprite("EchoTransformCore", Color.white), player.position + Vector3.up * 0.12f, Quaternion.Euler(0f, 0f, 45f), 0.48f, new Color(color.r, color.g, color.b, 0.86f), 0.42f);
+            var shard = MakeImpactDiamondSprite("EchoTransformShard", Color.white);
+            for (int i = 0; i < 12; i++)
             {
-                var angle = i * 22.5f;
-                var pos = player.position + Quaternion.Euler(0f, 0f, angle) * Vector3.right * (1.05f + i * 0.035f);
-                SpawnTransientSprite("망각 변환", null, pos, Quaternion.Euler(0f, 0f, angle), 0.16f + i * 0.014f, color, 0.70f);
+                var angle = i * 30f + elapsed * 28f;
+                var pos = player.position + Quaternion.Euler(0f, 0f, angle) * Vector3.right * (0.72f + i * 0.035f);
+                SpawnTransientSprite("EchoTransformShard", shard, pos, Quaternion.Euler(0f, 0f, angle + 45f), 0.10f + i * 0.008f, new Color(color.r, color.g, color.b, 0.64f), 0.50f);
             }
         }
 
@@ -3120,33 +3122,34 @@ namespace Lethe.PrototypeV1
         {
             var echoColor = id == V1MemoryId.BloodReflection ? new Color(1f, 0.12f, 0.20f, 0.88f) : new Color(0.62f, 0.96f, 1f, 0.86f);
             var memoryColor = new Color(1f, 0.82f, 0.62f, 0.72f);
-            var left = player.position + Vector3.left * 0.74f + Vector3.up * 0.28f;
-            var right = player.position + Vector3.right * 0.78f + Vector3.up * 0.28f;
+            var left = player.position + Vector3.left * 0.58f + Vector3.up * 0.24f;
+            var right = player.position + Vector3.right * 0.62f + Vector3.up * 0.24f;
             var resonanceBonus = Mathf.FloorToInt(echoLevel / 2f);
 
-            SpawnPromptSprite("ForgetFlowLostMemory", MemoryVfxSprite(id), () => MakeImpactDiamondSprite("ForgetFlowLostMemory", Color.white), left, Quaternion.Euler(0f, 0f, -22f), 0.92f, 0.55f, memoryColor, 0.70f);
-            SpawnTransientSprite("ForgetFlowBreakRing", MakeRingSprite("ForgetFlowBreakRing", Color.white, 128), left, Quaternion.identity, 0.68f + memoryLevel * 0.04f, new Color(1f, 0.62f, 0.42f, 0.42f), 0.62f);
-            SpawnPromptSprite("ForgetFlowGainedEcho", EchoVfxSprite(id), () => MakeRingSprite("ForgetFlowGainedEcho", Color.white, 132), right, Quaternion.Euler(0f, 0f, elapsed * 80f), 0.96f, 0.60f, echoColor, 0.78f);
-            SpawnEchoLink("ForgetFlowMemoryToEcho", left, right, new Color(echoColor.r, echoColor.g, echoColor.b, 0.58f), 0.52f, 0.026f);
-            SpawnTransientSprite("ForgetFlowEchoLevelRing", MakeRingSprite("ForgetFlowEchoLevelRing", Color.white, 160), right, Quaternion.Euler(0f, 0f, elapsed * -90f), 0.84f + echoLevel * 0.035f, new Color(echoColor.r, echoColor.g, echoColor.b, 0.42f), 0.66f);
+            SpawnPromptSprite("ForgetFlowLostMemory", MemoryVfxSprite(id), () => MakeImpactDiamondSprite("ForgetFlowLostMemory", Color.white), left, Quaternion.Euler(0f, 0f, -24f), 0.78f, 0.48f, memoryColor, 0.54f);
+            SpawnTransientSprite("ForgetFlowBreakRing", MakeRingSprite("ForgetFlowBreakRing", Color.white, 128), left, Quaternion.identity, 0.56f + memoryLevel * 0.035f, new Color(1f, 0.62f, 0.42f, 0.44f), 0.46f);
+            SpawnPromptSprite("ForgetFlowGainedEcho", EchoVfxSprite(id), () => MakeRingSprite("ForgetFlowGainedEcho", Color.white, 132), right, Quaternion.Euler(0f, 0f, elapsed * 92f), 0.86f, 0.54f, echoColor, 0.60f);
+            SpawnEchoLink("ForgetFlowMemoryToEcho", left, right, new Color(echoColor.r, echoColor.g, echoColor.b, 0.64f), 0.42f, 0.034f);
+            SpawnEchoLink("ForgetFlowActionThread", left + Vector3.down * 0.12f, right + Vector3.down * 0.12f, new Color(1f, 0.94f, 0.64f, 0.44f), 0.34f, 0.020f);
+            SpawnTransientSprite("ForgetFlowEchoLevelRing", MakeRingSprite("ForgetFlowEchoLevelRing", Color.white, 160), right, Quaternion.Euler(0f, 0f, elapsed * -110f), 0.72f + echoLevel * 0.030f, new Color(echoColor.r, echoColor.g, echoColor.b, 0.44f), 0.52f);
 
             if (resonanceBonus > 0)
             {
-                var target = player.position + Vector3.up * 1.08f;
-                SpawnTransientSprite("ForgetFlowResonanceTarget", MakeRingSprite("ForgetFlowResonanceTarget", Color.white, 144), target, Quaternion.identity, 0.58f + resonanceBonus * 0.08f, new Color(0.92f, 0.74f, 1f, 0.54f), 0.72f);
-                SpawnEchoLink("ForgetFlowResonanceThread", right, target, new Color(0.90f, 0.62f, 1f, 0.46f), 0.58f, 0.018f + resonanceBonus * 0.003f);
-                SpawnFloatingText(target + Vector3.up * 0.34f, $"공명 +{resonanceBonus}", new Color(0.92f, 0.74f, 1f));
+                var target = player.position + Vector3.up * 0.92f;
+                SpawnTransientSprite("ForgetFlowResonanceTarget", MakeRingSprite("ForgetFlowResonanceTarget", Color.white, 144), target, Quaternion.identity, 0.48f + resonanceBonus * 0.06f, new Color(0.92f, 0.74f, 1f, 0.52f), 0.50f);
+                SpawnEchoLink("ForgetFlowResonanceThread", right, target, new Color(0.90f, 0.62f, 1f, 0.44f), 0.42f, 0.016f + resonanceBonus * 0.002f);
+                SpawnFloatingText(target + Vector3.up * 0.22f, $"공명 +{resonanceBonus}", new Color(0.92f, 0.74f, 1f));
             }
 
             if (echoLevel >= MaxEchoLevel)
             {
-                SpawnTransientSprite("ForgetFlowAwakenStamp", MakeImpactDiamondSprite("ForgetFlowAwakenStamp", Color.white), right + Vector3.up * 0.12f, Quaternion.Euler(0f, 0f, 45f), 0.54f, new Color(1f, 0.96f, 0.62f, 0.84f), 0.48f);
-                SpawnRadialSlashLines("ForgetFlowAwakenBurst", right, (Vector2)(right - player.position), 6, 0.72f, new Color(1f, 0.94f, 0.58f, 0.58f), 0.44f);
+                SpawnTransientSprite("ForgetFlowAwakenStamp", MakeImpactDiamondSprite("ForgetFlowAwakenStamp", Color.white), right + Vector3.up * 0.10f, Quaternion.Euler(0f, 0f, 45f), 0.48f, new Color(1f, 0.96f, 0.62f, 0.84f), 0.42f);
+                SpawnRadialSlashLines("ForgetFlowAwakenBurst", right, (Vector2)(right - player.position), 5, 0.62f, new Color(1f, 0.94f, 0.58f, 0.56f), 0.38f);
             }
 
             if (rawEchoLevel > MaxEchoLevel || AnyUltimateReady)
             {
-                SpawnTransientSprite("ForgetFlowUltimateBridge", MakeRingSprite("ForgetFlowUltimateBridge", Color.white, 180), player.position, Quaternion.Euler(0f, 0f, elapsed * 70f), 1.42f, new Color(1f, 0.30f, 0.42f, 0.34f), 0.72f);
+                SpawnTransientSprite("ForgetFlowUltimateBridge", MakeRingSprite("ForgetFlowUltimateBridge", Color.white, 180), player.position, Quaternion.Euler(0f, 0f, elapsed * 84f), 1.25f, new Color(1f, 0.30f, 0.42f, 0.30f), 0.56f);
             }
         }
 
@@ -3160,12 +3163,12 @@ namespace Lethe.PrototypeV1
                     : FractureExecutionReady
                         ? new Color(1f, 0.94f, 0.50f, 0.82f)
                         : new Color(0.80f, 0.66f, 1f, 0.78f);
-            SpawnTransientSprite("UltimateReadyOuter", MakeRingSprite("UltimateReadyOuter", Color.white, 180), player.position, Quaternion.identity, 1.65f, new Color(color.r, color.g, color.b, 0.54f), 0.86f);
-            SpawnTransientSprite("UltimateReadyInner", MakeRingSprite("UltimateReadyInner", Color.white, 144), player.position, Quaternion.Euler(0f, 0f, elapsed * 120f), 0.92f, new Color(1f, 1f, 1f, 0.34f), 0.62f);
-            SpawnTransientSprite("UltimateReadyCore", MakeImpactDiamondSprite("UltimateReadyCore", Color.white), player.position + Vector3.up * 0.20f, Quaternion.Euler(0f, 0f, 45f), 0.54f, color, 0.48f);
-            SpawnFloatingText(player.position + Vector3.up * 1.50f, UltimateReadyName(), color);
-            cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.22f);
-            cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.085f);
+            SpawnTransientSprite("UltimateReadyOuter", MakeRingSprite("UltimateReadyOuter", Color.white, 180), player.position, Quaternion.identity, 1.48f, new Color(color.r, color.g, color.b, 0.50f), 0.62f);
+            SpawnTransientSprite("UltimateReadyInner", MakeRingSprite("UltimateReadyInner", Color.white, 144), player.position, Quaternion.Euler(0f, 0f, elapsed * 140f), 0.80f, new Color(1f, 1f, 1f, 0.32f), 0.46f);
+            SpawnTransientSprite("UltimateReadyCore", MakeImpactDiamondSprite("UltimateReadyCore", Color.white), player.position + Vector3.up * 0.16f, Quaternion.Euler(0f, 0f, 45f), 0.50f, color, 0.42f);
+            SpawnFloatingText(player.position + Vector3.up * 1.25f, $"궁극 준비: {UltimateReadyName()}", color);
+            cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.18f);
+            cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.075f);
         }
 
         void SetEcho(V1MemoryId id, int levelValue)
