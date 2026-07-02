@@ -2,6 +2,9 @@
 
 # 2026-07-02
 
+- Tuned passive memory feel for the current slice:
+  - Made `BloodReflection`, `StoppedSecond`, `AshenShield`, and `OblivionBrand` fire with clearer cadence, radius, damage, and +5 action beats.
+  - Verified Passive Memory Matrix, Echo Matrix Dual, Forget Resonance Flow, and Kalmuri Perf Matrix QA.
 - Removed the unreachable legacy utility echo fallback branch:
   - Simplified `V1GameManager.TriggerUtilityEchoes` to a null guard plus current per-echo handler dispatch.
   - Verified Echo Matrix Dual/Great, Utility Ultimate Matrix Dual/Great, and Kalmuri Perf Matrix QA after the cleanup.

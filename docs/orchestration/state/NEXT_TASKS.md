@@ -1,31 +1,8 @@
 # Next Tasks
 
-## 1. Echo / Ultimate Runtime Cleanup
-
-- Priority: highest
-- Problem: utility echo tuning now lives in `_dev/Data`, but repeated color, radius, damage, timing, and compatibility fallback constants still remain across echo/ultimate runtime paths.
-- Build:
-  - Move remaining repeated echo/ultimate effect constants into compact specs.
-  - Remove any remaining disabled or unreachable legacy utility echo/ultimate branches only after QA proves the data route is stable.
-  - Keep Echo Matrix and Utility Ultimate Matrix QA passing for both weapons.
-- Done:
-  - `V1GameManager` echo/ultimate sections are shorter.
-  - Repeated effect constants have one clear spec/data access point.
-  - No disabled compatibility branches remain in the cleaned routes.
-
-## 2. Passive Memory Feel Tuning
+## 1. Forget / Resonance UX Tuning
 
 - Priority: medium-high
-- Problem: `BloodReflection`, `AshenShield`, `StoppedSecond`, and `OblivionBrand` now have stronger action beats, but cadence/damage/readability still need play-feel tuning.
-- Build:
-  - Tune pulse intervals, damage, radius, and opacity one memory at a time.
-  - Keep `LETHE/V1 QA/Passive Memory Matrix` as a regression gate.
-- Done:
-  - All four memories feel useful before forgetting without overwhelming base weapon readability.
-
-## 3. Forget / Resonance UX Tuning
-
-- Priority: medium
 - Problem: the compressed forget/resonance flow is visible and testable, but direct play still needs to judge overlay length, VFX timing, and ultimate bridge clutter.
 - Build:
   - Tune `ForgetFlow_*` scale, lifetime, placement, and text density.
@@ -33,7 +10,7 @@
 - Done:
   - Forgetting reads first as an action transition, then as text confirmation.
 
-## 4. Ultimate Feel Tuning
+## 2. Ultimate Feel Tuning
 
 - Priority: medium
 - Problem: all four ultimate families have weapon-specific routes, but the non-blood ultimates need direct-play judgment for cadence, power, and clutter.
@@ -43,7 +20,7 @@
 - Done:
   - Non-blood ultimates feel as distinct as Blood Blade Storm without becoming screen noise.
 
-## 5. Direct Play Review Prep
+## 3. Direct Play Review Prep
 
 - Priority: medium
 - Problem: automated QA proves object spawning and compilation, but final feel still needs a focused jaewoo direct-play checklist after the cleanup passes.
@@ -53,6 +30,16 @@
   - Avoid broad new systems before direct play.
 - Done:
   - Jaewoo can review one current `Dev_Prototype_v1` build without extra setup.
+
+## 4. Remaining Echo / Ultimate Constant Cleanup
+
+- Priority: lower
+- Problem: some repeated colors/timing constants remain in VFX helper routes after the current cleanup/dataization passes.
+- Build:
+  - Compact only the constants that clearly repeat or block tuning.
+  - Avoid broad churn before direct play.
+- Done:
+  - Code stays readable without delaying feel validation.
 
 Completed sequence:
 
@@ -65,6 +52,7 @@ Completed sequence:
 - 2026-07-02: utility echo tuning moved into a serializable manager table with default fallback.
 - 2026-07-02: utility echo tuning migrated to `_dev/Data/Echoes/UtilityEcho_Tuning.asset`.
 - 2026-07-02: unreachable legacy utility echo fallback branch removed after Echo/Ultimate/Kalmuri QA remained PASS.
+- 2026-07-02: passive memory feel tuning implemented for BloodReflection, StoppedSecond, AshenShield, and OblivionBrand; passive/echo/forget/Kalmuri QA remained PASS.
 
 QA menus passing:
 

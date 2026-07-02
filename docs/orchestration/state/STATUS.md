@@ -2,6 +2,25 @@
 
 Last updated: 2026-07-02
 
+## 2026-07-02 Update: Passive Memory Feel Tuning
+
+- Tuned passive-feeling memories so they read more like active combat beats before forgetting.
+- Applied:
+  - `BloodReflection`: faster cadence, wider pulse radius, higher +5 cap, stronger bloom, and an awakened draw thread back to the player.
+  - `StoppedSecond`: shorter cadence, wider time field, stronger aftercut, longer +5 freeze reach.
+  - `AshenShield`: faster guard pulse, larger counter radius, stronger counter damage, clearer +5 guard wave.
+  - `OblivionBrand`: faster cadence, four +5 brands, stronger fork links, and target-centered awakened seals.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity console error count: `0`.
+  - Unity QA `LETHE/V1 QA/Passive Memory Matrix`: `[V1QA] PASS`, `blood=17`, `ash=6`, `stopped=8`, `oblivion=36`.
+  - Unity QA `LETHE/V1 QA/Echo Matrix Dual Blades`: `[V1QA] PASS`, `total=240`.
+  - Unity QA `LETHE/V1 QA/Forget Resonance Flow`: `[V1QA] PASS`, `forgetFlow=15`, `echoTransform=2`, `ultimateReady=3`.
+  - Unity QA `LETHE/V1 QA/Kalmuri Perf Matrix`: `[V1QA] PASS`, `totalKalmuri=374`.
+- Next step: tune forget/resonance UX timing and presentation, then revisit non-blood ultimate feel.
+
 ## 2026-07-02 Update: Utility Echo Legacy Fallback Removal
 
 - Removed an unreachable legacy fallback branch from `V1GameManager.TriggerUtilityEchoes`.

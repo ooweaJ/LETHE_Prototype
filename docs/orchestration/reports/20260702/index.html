@@ -218,6 +218,13 @@
           <p>Dev_Prototype_v1은 _dev 검증 단계에 있으며, 유틸리티 에코 튜닝은 _dev/Data/Echoes/UtilityEcho_Tuning.asset을 1차 경로로 사용한다. 이번 작업은 새 기능 추가가 아니라, 이미 쓰이지 않는 오래된 fallback 코드를 제거한 런타임 정리 작업이다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-02-11</span>
+          <h2><a href="#unit-2026-07-02-11" data-unit-link="unit-2026-07-02-11">패시브 기억 체감 튜닝</a></h2>
+          <p>Dev_Prototype_v1은 _dev 검증 단계이며, 이번 작업은 새 기억을 추가하지 않고 기존 패시브 성향 기억 네 개의 체감만 조정했다. 목표는 잊혀지기 전에도 &quot;그냥 수치 버프&quot;가 아니라 전투 중 한 번씩 읽히는 행동처럼 보이게 만드는 것이다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -622,6 +629,45 @@
 <li>방향: 동작이 검증된 현재 경로만 남겨 유지보수 표면을 줄인다.</li>
 <li>행동: legacy branch를 제거하고 null guard와 handler dispatch만 남겼다.</li>
 <li>결과: 주요 QA가 모두 PASS했고, 다음 데이터화/튜닝 작업을 진행하기 쉬운 구조가 됐다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-02-11" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-02-11 - 패시브 기억 체감 튜닝</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 <code>_dev</code> 검증 단계이며, 이번 작업은 새 기억을 추가하지 않고 기존 패시브 성향 기억 네 개의 체감만 조정했다. 목표는 잊혀지기 전에도 &quot;그냥 수치 버프&quot;가 아니라 전투 중 한 번씩 읽히는 행동처럼 보이게 만드는 것이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>BloodReflection</code>: 발동 간격을 줄이고 범위와 +5 대상 수를 늘렸다. +5에서는 적에서 플레이어로 피가 당겨지는 draw thread를 추가했다.</li>
+<li><code>StoppedSecond</code>: 발동 간격을 줄이고 시간 정지 반경, aftercut, +5 freeze reach를 키웠다.</li>
+<li><code>AshenShield</code>: 방패 펄스 간격을 줄이고 counter radius/damage, +5 guard wave를 강화했다.</li>
+<li><code>OblivionBrand</code>: 낙인 간격을 줄이고 +5 낙인 수를 4개로 늘렸으며, fork link와 awakened seal을 더 선명하게 했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, 기존 경고 7개, 오류 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 통과, 기존 경고 7개, 오류 0개.</li>
+<li>Unity compile error count: <code>0</code>.</li>
+<li>Unity console error count: <code>0</code>.</li>
+<li>Passive Memory Matrix: <code>[V1QA] PASS</code>, <code>blood=17</code>, <code>ash=6</code>, <code>stopped=8</code>, <code>oblivion=36</code>.</li>
+<li>Echo Matrix Dual Blades: <code>[V1QA] PASS</code>, <code>total=240</code>.</li>
+<li>Forget Resonance Flow: <code>[V1QA] PASS</code>, <code>forgetFlow=15</code>, <code>echoTransform=2</code>, <code>ultimateReady=3</code>.</li>
+<li>Kalmuri Perf Matrix: <code>[V1QA] PASS</code>, <code>totalKalmuri=374</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>패시브 기억은 완전히 조용한 수치 효과보다, 낮은 빈도의 작은 액션으로 읽히는 쪽이 현재 LETHE slice에 더 맞다. 단, 화면을 덮는 새 시스템은 만들지 않고 cadence/radius/VFX density만 조절했다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>자동 QA는 스폰과 오류를 확인하지만, 실제 플레이에서 네 패시브가 동시에 있을 때 화면 밀도가 피곤한지는 직접 플레이로 다시 봐야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>검증 포인트는 &quot;패시브 기억이 잊혀지기 전에도 체감되는가&quot;다. 자동 QA는 네 기억 모두 양수 카운트와 회귀 PASS를 보였지만, 최종 판단은 직접 플레이에서 전투 리듬과 화면 피로도를 같이 봐야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>다음은 망각/공명 UX 튜닝이다. 텍스트보다 액션 전환이 먼저 읽히도록 overlay 길이, 배치, VFX timing을 조정한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 일부 기억이 패시브처럼 묻혀 잊기 전 재미가 약했다.</li>
+<li>방향: 새 시스템을 늘리지 않고 기존 기억의 cadence와 시각/타격 비트를 강화한다.</li>
+<li>행동: 네 기억의 발동 주기, 범위, 피해, +5 연출을 조정했다.</li>
+<li>결과: 자동 QA가 모두 PASS했고, 패시브 기억이 전투 중 더 자주 읽히는 상태가 됐다.</li>
 </ul>
     </article>
       </div>

@@ -1,5 +1,34 @@
 # Current Task
 
+# 2026-07-02 Passive Memory Feel Tuning Result
+
+## Status
+
+Passive-feeling memories now have stronger readable combat beats before they are forgotten into echoes. The work stayed inside `Dev_Prototype_v1` and did not add new systems or promote content out of `_dev`.
+
+## Applied Changes
+
+- `BloodReflection`: faster pulse cadence, wider radius, +5 cap increased to seven targets, stronger bloom, and awakened draw thread.
+- `StoppedSecond`: faster field cadence, wider freeze radius, stronger aftercut, and longer +5 freeze reach.
+- `AshenShield`: faster guard pulse, larger counter radius, stronger counter damage, and clearer +5 guard wave.
+- `OblivionBrand`: faster mark cadence, four +5 brands, stronger fork links, and awakened seals centered on branded targets.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- Unity compile error count: `0`.
+- Unity console error count: `0`.
+- Unity QA:
+  - `LETHE/V1 QA/Passive Memory Matrix`: `[V1QA] PASS`, `blood=17`, `ash=6`, `stopped=8`, `oblivion=36`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: `[V1QA] PASS`, `total=240`.
+  - `LETHE/V1 QA/Forget Resonance Flow`: `[V1QA] PASS`, `forgetFlow=15`, `echoTransform=2`, `ultimateReady=3`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: `[V1QA] PASS`, `totalKalmuri=374`.
+
+## Next Implementation
+
+Move to forget/resonance UX tuning: shorten or clarify the flow so forgetting reads as an action transition first and a text confirmation second.
+
 # 2026-07-02 Utility Echo Legacy Fallback Removal Result
 
 ## Status
