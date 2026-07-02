@@ -2,6 +2,27 @@
 
 Last updated: 2026-07-02
 
+## 2026-07-02 Update: Utility Echo Legacy Fallback Removal
+
+- Removed an unreachable legacy fallback branch from `V1GameManager.TriggerUtilityEchoes`.
+- The utility echo trigger route now exits safely on a null enemy and then dispatches only to the current per-echo handlers:
+  - `TriggerShatterEcho`
+  - `TriggerExecutionEcho`
+  - `TriggerHunterEcho`
+  - `TriggerStoppedEcho`
+  - `TriggerAshenEcho`
+  - `TriggerOblivionEcho`
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity QA `LETHE/V1 QA/Echo Matrix Dual Blades`: `[V1QA] PASS`, `total=240`.
+  - Unity QA `LETHE/V1 QA/Echo Matrix Greatsword`: `[V1QA] PASS`, `total=221`.
+  - Unity QA `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: `[V1QA] PASS`, `fracture=19`, `stasis=9`, `ashen=34`.
+  - Unity QA `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: `[V1QA] PASS`, `fracture=8`, `stasis=22`, `ashen=16`.
+  - Unity QA `LETHE/V1 QA/Kalmuri Perf Matrix`: `[V1QA] PASS`, `totalKalmuri=374`.
+- Next step: continue the same cleanup direction by compacting remaining repeated effect constants, then move to passive memory feel tuning.
+
 ## 2026-07-02 Update: Utility Echo Tuning Data Asset Migration
 
 - Moved utility echo tuning one step farther out of `V1GameManager` and into `_dev/Data`.

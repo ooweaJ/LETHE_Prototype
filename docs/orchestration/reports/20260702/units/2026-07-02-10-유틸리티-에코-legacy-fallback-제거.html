@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-02-10 - 유틸리티 에코 legacy fallback 제거</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-02-10 - 유틸리티 에코 legacy fallback 제거</h1>
+      <p class="meta">Generated from 2026-07-02-10-유틸리티-에코-legacy-fallback-제거.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260702/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-02-10 - 유틸리티 에코 legacy fallback 제거</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 <code>_dev</code> 검증 단계에 있으며, 유틸리티 에코 튜닝은 <code>_dev/Data/Echoes/UtilityEcho_Tuning.asset</code>을 1차 경로로 사용한다. 이번 작업은 새 기능 추가가 아니라, 이미 쓰이지 않는 오래된 fallback 코드를 제거한 런타임 정리 작업이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>V1GameManager.TriggerUtilityEchoes</code> 안에 남아 있던 오래된 inline fallback 분기를 제거했다.</li>
+<li><code>enemy == null</code>일 때 즉시 반환하도록 안전 가드를 명확히 했다.</li>
+<li>현재 경로는 <code>TriggerShatterEcho</code>, <code>TriggerExecutionEcho</code>, <code>TriggerHunterEcho</code>, <code>TriggerStoppedEcho</code>, <code>TriggerAshenEcho</code>, <code>TriggerOblivionEcho</code>만 호출한다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, 기존 경고 7개, 오류 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 통과, 기존 경고 7개, 오류 0개.</li>
+<li>Unity compile error count: <code>0</code>.</li>
+<li>Echo Matrix Dual Blades: <code>[V1QA] PASS</code>, <code>total=240</code>.</li>
+<li>Echo Matrix Greatsword: <code>[V1QA] PASS</code>, <code>total=221</code>.</li>
+<li>Utility Ultimate Matrix Dual Blades: <code>[V1QA] PASS</code>, <code>fracture=19</code>, <code>stasis=9</code>, <code>ashen=34</code>.</li>
+<li>Utility Ultimate Matrix Greatsword: <code>[V1QA] PASS</code>, <code>fracture=8</code>, <code>stasis=22</code>, <code>ashen=16</code>.</li>
+<li>Kalmuri Perf Matrix: <code>[V1QA] PASS</code>, <code>totalKalmuri=374</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>유틸리티 에코는 이제 asset table과 개별 handler 경로가 기준이다. 예전처럼 <code>TriggerUtilityEchoes</code> 안에서 모든 에코를 직접 다시 구현하던 fallback은 유지 가치보다 혼동과 null 위험이 커서 제거했다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>MCP polling이 일부 QA 실행에서 <code>fetch failed</code>를 냈지만, Unity 콘솔에는 각 QA의 PASS 로그가 정상적으로 남았다. 기능 리스크는 낮고, 남은 리스크는 반복되는 궁극/VFX 상수들이 아직 manager 안에 많다는 점이다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>검증 포인트는 &quot;legacy fallback 제거 후 에코/궁극 발동량이 유지되는가&quot;였다. 쌍검/대검 에코 매트릭스, 쌍검/대검 유틸 궁극 매트릭스, 칼무리 perf가 모두 PASS라서 동작 보존은 확인됐다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>남은 echo/ultimate cleanup에서 반복 색상, 반경, 타이밍, 데미지 상수를 compact spec으로 더 모은다. 그 다음에는 패시브 기억 체감 튜닝으로 넘어간다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 과거 fallback 코드가 새 handler 경로와 함께 남아 있어 런타임 코드가 길고 위험해졌다.</li>
+<li>방향: 동작이 검증된 현재 경로만 남겨 유지보수 표면을 줄인다.</li>
+<li>행동: legacy branch를 제거하고 null guard와 handler dispatch만 남겼다.</li>
+<li>결과: 주요 QA가 모두 PASS했고, 다음 데이터화/튜닝 작업을 진행하기 쉬운 구조가 됐다.</li>
+</ul>
+  </main>
+</body>
+</html>

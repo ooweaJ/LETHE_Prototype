@@ -2,6 +2,9 @@
 
 # 2026-07-02
 
+- Removed the unreachable legacy utility echo fallback branch:
+  - Simplified `V1GameManager.TriggerUtilityEchoes` to a null guard plus current per-echo handler dispatch.
+  - Verified Echo Matrix Dual/Great, Utility Ultimate Matrix Dual/Great, and Kalmuri Perf Matrix QA after the cleanup.
 - Moved utility echo tuning to a `_dev/Data` ScriptableObject asset:
   - Added `V1UtilityEchoTuningTable`.
   - Added `Assets/_dev/Data/Echoes/UtilityEcho_Tuning.asset`.

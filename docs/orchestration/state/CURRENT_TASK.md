@@ -1,5 +1,39 @@
 # Current Task
 
+# 2026-07-02 Utility Echo Legacy Fallback Removal Result
+
+## Status
+
+The current utility echo trigger path is now cleaner and safer. `TriggerUtilityEchoes` no longer carries the old inline fallback implementation that was unreachable after the newer per-echo handlers were introduced.
+
+## Applied Changes
+
+- Removed the legacy inline utility echo fallback branch from `V1GameManager.TriggerUtilityEchoes`.
+- Added an explicit null-enemy guard.
+- Kept current behavior routed through the existing per-echo handlers:
+  - `TriggerShatterEcho`
+  - `TriggerExecutionEcho`
+  - `TriggerHunterEcho`
+  - `TriggerStoppedEcho`
+  - `TriggerAshenEcho`
+  - `TriggerOblivionEcho`
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- Unity compile error count: `0`.
+- Unity QA:
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: `[V1QA] PASS`, `total=240`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: `[V1QA] PASS`, `total=221`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: `[V1QA] PASS`, `fracture=19`, `stasis=9`, `ashen=34`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: `[V1QA] PASS`, `fracture=8`, `stasis=22`, `ashen=16`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: `[V1QA] PASS`, `totalKalmuri=374`.
+
+## Next Implementation
+
+Continue the remaining highest-priority cleanup: compact repeated echo/ultimate effect constants, then move into passive memory feel tuning once the runtime routes are short enough.
+
 # 2026-07-02 Utility Echo Tuning Data Asset Migration Result
 
 ## Status

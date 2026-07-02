@@ -6,7 +6,7 @@
 - Problem: utility echo tuning now lives in `_dev/Data`, but repeated color, radius, damage, timing, and compatibility fallback constants still remain across echo/ultimate runtime paths.
 - Build:
   - Move remaining repeated echo/ultimate effect constants into compact specs.
-  - Remove disabled or unreachable legacy utility echo/ultimate branches only after QA proves the data route is stable.
+  - Remove any remaining disabled or unreachable legacy utility echo/ultimate branches only after QA proves the data route is stable.
   - Keep Echo Matrix and Utility Ultimate Matrix QA passing for both weapons.
 - Done:
   - `V1GameManager` echo/ultimate sections are shorter.
@@ -64,6 +64,7 @@ Completed sequence:
 - 2026-07-02: first echo tuning spec / QA counter cleanup pass implemented.
 - 2026-07-02: utility echo tuning moved into a serializable manager table with default fallback.
 - 2026-07-02: utility echo tuning migrated to `_dev/Data/Echoes/UtilityEcho_Tuning.asset`.
+- 2026-07-02: unreachable legacy utility echo fallback branch removed after Echo/Ultimate/Kalmuri QA remained PASS.
 
 QA menus passing:
 

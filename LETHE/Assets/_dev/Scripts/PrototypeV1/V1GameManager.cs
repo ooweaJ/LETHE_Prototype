@@ -1577,86 +1577,13 @@ namespace Lethe.PrototypeV1
 
         void TriggerUtilityEchoes(V1Enemy enemy, Vector2 forward, int hitIndex, WeaponRuntimeSpec weapon)
         {
-            if (enemy != null)
-            {
-                TriggerShatterEcho(enemy, forward, hitIndex, weapon, false);
-                TriggerExecutionEcho(enemy, forward, hitIndex, weapon, false);
-                TriggerHunterEcho(enemy, forward, hitIndex, weapon, false);
-                TriggerStoppedEcho(enemy, forward, hitIndex, weapon, false);
-                TriggerAshenEcho(enemy, forward, hitIndex, weapon, false);
-                TriggerOblivionEcho(enemy, forward, hitIndex, weapon, false);
-                return;
-            }
-
-            var shatterLevel = EchoLevel(V1MemoryId.ShatterWave);
-            if (shatterLevel > 0 && (shatterLevel >= 2 || hitIndex == 0) && UnityEngine.Random.value < 0.26f + shatterLevel * 0.09f)
-            {
-                var radius = 1.00f + shatterLevel * 0.12f;
-                SpawnShatterEchoScar(enemy.transform.position, forward, radius, 0.54f);
-                SpawnShatterWaveField(enemy.transform.position, radius, 1.14f, true);
-                foreach (var target in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(enemy.transform.position, e.transform.position) <= radius + e.TouchRadius).Take(5).ToList())
-                {
-                    var dir = (Vector2)(target.transform.position - enemy.transform.position);
-                    DealDamage(target, weapon.Damage * (0.10f + shatterLevel * 0.025f), "파문 잔향", false, dir.sqrMagnitude > 0.01f ? dir.normalized : forward, 0.25f);
-                }
-            }
-
-            var executionLevel = EchoLevel(V1MemoryId.ExecutionFlash);
-            if (executionLevel > 0 && enemy.HealthRatio <= 0.22f + executionLevel * 0.025f)
-            {
-                PlaySfx("execution", 0.48f, 0.08f);
-                SpawnPromptSprite("ExecutionEcho", EchoVfxSprite(V1MemoryId.ExecutionFlash), () => MakeImpactDiamondSprite("ExecutionEcho", Color.white), enemy.transform.position, Quaternion.identity, 1.82f, 0.78f, new Color(1f, 0.92f, 0.58f, 0.98f), 0.52f);
-                SpawnTransientSprite("ExecutionEchoHalo", MakeRingSprite("ExecutionEchoHalo", Color.white, 132), enemy.transform.position, Quaternion.identity, 0.72f, new Color(1f, 0.90f, 0.44f, 0.46f), 0.36f);
-                SpawnEchoWoundSlash("ExecutionEchoCutLine", enemy.transform.position, forward, new Color(1f, 0.96f, 0.50f, 0.82f), 1.18f, 0.38f);
-                SpawnExecutionFlashBurst(enemy.transform.position, 0.92f, 0.44f);
-                DealDamage(enemy, weapon.Damage * (0.18f + executionLevel * 0.05f), "처형 잔향", false);
-            }
-
-            var hunterLevel = EchoLevel(V1MemoryId.HunterOath);
-            if (hunterLevel > 0 && hitIndex == 0 && UnityEngine.Random.value < 0.36f + hunterLevel * 0.09f)
-            {
-                var targets = enemies
-                    .Where(e => e != null && e.IsAlive && e != enemy)
-                    .OrderBy(e => Vector2.Distance(enemy.transform.position, e.transform.position))
-                    .Take(1 + hunterLevel / 4)
-                    .ToList();
-                SpawnTransientSprite("HunterEchoOriginMark", MakeRingSprite("HunterEchoOriginMark", Color.white, 112), enemy.transform.position, Quaternion.Euler(0f, 0f, elapsed * 90f), 0.46f, new Color(0.74f, 1f, 0.38f, 0.54f), 0.42f);
-                for (int i = 0; i < targets.Count; i++)
-                {
-                    SpawnEchoLink("HunterEchoAimLine", enemy.transform.position, targets[i].transform.position, new Color(0.72f, 1f, 0.36f, 0.42f), 0.40f, 0.020f);
-                    SpawnHunterOathShot(targets[i], enemy.transform.position, i, targets.Count, 9.2f + hunterLevel * 0.25f, weapon.Damage * (0.22f + hunterLevel * 0.055f), HunterEchoSource, true);
-                }
-            }
-
-            var stoppedLevel = EchoLevel(V1MemoryId.StoppedSecond);
-            if (stoppedLevel > 0 && hitIndex == 0 && UnityEngine.Random.value < 0.34f + stoppedLevel * 0.065f)
-            {
-                PlaySfx("stopped", 0.40f, 0.12f);
-                enemy.ApplyBriefFreeze(0.28f + stoppedLevel * 0.060f);
-                SpawnStoppedEchoClamp(enemy.transform.position, 0.74f + stoppedLevel * 0.055f, 1.12f);
-                SpawnStoppedSecondField(enemy.transform.position, 1.36f + stoppedLevel * 0.16f, TimeStopGold(false), 1.48f, false);
-            }
-
-            var ashLevel = EchoLevel(V1MemoryId.AshenShield);
-            if (ashLevel > 0 && hitIndex == 0 && UnityEngine.Random.value < 0.30f + ashLevel * 0.055f)
-            {
-                HealPlayer(0.28f + ashLevel * 0.12f);
-                PlaySfx("ashen", 0.30f, 0.18f);
-                SpawnTransientSprite("AshenEchoHitSeal", MakeRingSprite("AshenEchoHitSeal", Color.white, 112), enemy.transform.position, Quaternion.Euler(0f, 0f, elapsed * -90f), 0.42f, new Color(0.82f, 0.88f, 0.94f, 0.48f), 0.42f);
-                SpawnEchoLink("AshenEchoReturnThread", enemy.transform.position, player.position, new Color(0.84f, 0.90f, 1f, 0.32f), 0.34f, 0.016f);
-                SpawnPromptSprite("AshenEcho", EchoVfxSprite(V1MemoryId.AshenShield), () => MakeRingSprite("AshenEcho", Color.white, 112), player.position, Quaternion.identity, 1.26f, 0.52f, new Color(0.78f, 0.86f, 0.92f, 0.52f), 0.54f);
-                SpawnTransientSprite("AshenEchoGuard", MakeRingSprite("AshenEchoGuard", Color.white, 144), player.position, Quaternion.Euler(0f, 0f, elapsed * -120f), 0.58f, new Color(0.86f, 0.92f, 1f, 0.32f), 0.42f);
-            }
-
-            var oblivionLevel = EchoLevel(V1MemoryId.OblivionBrand);
-            if (oblivionLevel > 0 && UnityEngine.Random.value < 0.34f + oblivionLevel * 0.065f)
-            {
-                PlaySfx("brand", 0.36f, 0.10f);
-                SpawnPromptSprite("OblivionEcho", EchoVfxSprite(V1MemoryId.OblivionBrand), () => MakeRingSprite("OblivionEcho", Color.white, 112), enemy.transform.position, Quaternion.identity, 1.52f, 0.74f, new Color(0.76f, 0.46f, 1f, 0.76f), 0.72f);
-                SpawnTransientSprite("OblivionEchoSlash", MakeImpactDiamondSprite("OblivionEchoSlash", Color.white), enemy.transform.position + Vector3.up * 0.08f, Quaternion.Euler(0f, 0f, elapsed * 140f), 0.34f, new Color(0.96f, 0.72f, 1f, 0.72f), 0.34f);
-                SpawnOblivionEchoBrand(enemy.transform.position, forward, 0.64f);
-                DealDamage(enemy, weapon.Damage * (0.16f + oblivionLevel * 0.042f), "낙인 잔향", false);
-            }
+            if (enemy == null) return;
+            TriggerShatterEcho(enemy, forward, hitIndex, weapon, false);
+            TriggerExecutionEcho(enemy, forward, hitIndex, weapon, false);
+            TriggerHunterEcho(enemy, forward, hitIndex, weapon, false);
+            TriggerStoppedEcho(enemy, forward, hitIndex, weapon, false);
+            TriggerAshenEcho(enemy, forward, hitIndex, weapon, false);
+            TriggerOblivionEcho(enemy, forward, hitIndex, weapon, false);
         }
 
         bool IsHeavyEchoWeapon(WeaponRuntimeSpec weapon) => weapon.EchoProcStyle == V1EchoProcStyle.SingleHeavy;

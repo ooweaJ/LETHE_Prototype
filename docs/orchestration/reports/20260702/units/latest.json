@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260702\\index.md",
-  "generatedAt": "2026-07-02T07:35:48.248Z",
-  "unitCount": 9,
+  "generatedAt": "2026-07-02T07:46:26.633Z",
+  "unitCount": 10,
   "latest": {
-    "title": "2026-07-02-09 - 에코 튜닝 데이터 자산 이전",
-    "number": "09",
-    "markdownPath": "docs\\orchestration\\reports\\20260702\\units\\2026-07-02-09-에코-튜닝-데이터-자산-이전.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260702\\units\\2026-07-02-09-에코-튜닝-데이터-자산-이전.html"
+    "title": "2026-07-02-10 - 유틸리티 에코 legacy fallback 제거",
+    "number": "10",
+    "markdownPath": "docs\\orchestration\\reports\\20260702\\units\\2026-07-02-10-유틸리티-에코-legacy-fallback-제거.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260702\\units\\2026-07-02-10-유틸리티-에코-legacy-fallback-제거.html"
   }
 }
