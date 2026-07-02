@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260702\\index.md",
-  "generatedAt": "2026-07-02T01:15:25.553Z",
-  "unitCount": 3,
+  "generatedAt": "2026-07-02T01:21:44.642Z",
+  "unitCount": 4,
   "latest": {
-    "title": "2026-07-02-03 - 패시브 기억 보강 구현",
-    "number": "03",
-    "markdownPath": "docs\\orchestration\\reports\\20260702\\units\\2026-07-02-03-패시브-기억-보강-구현.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260702\\units\\2026-07-02-03-패시브-기억-보강-구현.html"
+    "title": "2026-07-02-04 - 망각/공명 UX 제작 패스",
+    "number": "04",
+    "markdownPath": "docs\\orchestration\\reports\\20260702\\units\\2026-07-02-04-망각-공명-ux-제작-패스.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260702\\units\\2026-07-02-04-망각-공명-ux-제작-패스.html"
   }
 }

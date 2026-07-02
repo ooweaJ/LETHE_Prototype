@@ -2,6 +2,22 @@
 
 Last updated: 2026-07-02
 
+## 2026-07-02 Update: Forget / Resonance UX Pass
+
+- Implemented the third production-gap sequence item in `Dev_Prototype_v1`: forgetting and resonance now have a compressed action/VFX transition instead of relying only on text.
+- Applied:
+  - Added readable Korean forget-result overlay copy after the legacy overlay setup.
+  - Added `ForgetFlow_*` VFX for lost memory, memory break, gained echo, memory-to-echo bridge, resonance target/thread, +5 awaken stamp/burst, and ultimate bridge.
+  - Added `DebugRunForgetResonanceFlow()`.
+  - Added `LETHE/V1 QA/Forget Resonance Flow`.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity console error count: `0`.
+  - Unity QA `LETHE/V1 QA/Forget Resonance Flow`: `[V1QA] PASS`, `forgetFlow=15`, `echoTransform=2`, `ultimateReady=3`, `hungryEcho=5`, `bloodEcho=5`.
+- Next step: expand the remaining three ultimate families with weapon-specific dual-blade/greatsword patterns.
+
 ## 2026-07-02 Update: Passive Memory Reinforcement Pass
 
 - Implemented the second production-gap sequence item in `Dev_Prototype_v1`: active memories that previously felt too passive now have clearer independent action beats.

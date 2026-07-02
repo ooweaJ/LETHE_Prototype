@@ -1,20 +1,8 @@
 # Next Tasks
 
-## 1. 망각/공명 UX 제작 패스
+## 1. 4궁극 무기별 패턴 확장
 
 - Priority: highest
-- Problem: forgetting and resonance are mechanically wired, but the player-facing meaning can still feel like a status update instead of a dramatic build shift.
-- Build:
-  - Strengthen the result overlay and HUD for lost memory, gained echo, current resonance target, and +5 awakening.
-  - Add short transition cues that show "memory became echo" through VFX/action before text.
-  - Add a debug path that forces memory -> forget -> echo -> resonance target without needing a long run.
-- Done:
-  - A compressed flow shows the loss, echo grant, resonance next target, and +5 goal clearly.
-  - Console errors remain 0.
-
-## 2. 4궁극 무기별 패턴 확장
-
-- Priority: high
 - Problem: `BloodBladeStorm` has the clearest dual/greatsword split; the other three ultimates are still closer to large periodic utility effects.
 - Build:
   - Extend `FractureExecution`, `StasisHunt`, and `AshenOblivion` with dual-blade and greatsword patterns.
@@ -24,9 +12,9 @@
   - Utility ultimate smoke shows all four ultimate families with distinct weapon rhythm.
   - Blood Blade Storm remains the benchmark, not the only polished ultimate.
 
-## 3. 에코 데이터화와 QA 카운터 정리
+## 2. 에코 데이터화와 QA 카운터 정리
 
-- Priority: medium
+- Priority: medium-high
 - Problem: weapon data is in `_dev/Data`, but many echo proc values and VFX knobs still live inside `V1GameManager`.
 - Build:
   - Move echo chance/radius/damage/timing/readability knobs toward data or small specs.
@@ -36,7 +24,7 @@
   - Tuning echo timing/scale no longer requires editing one large manager path.
   - QA can prove every echo family spawned for both weapons.
 
-## 4. 에코 차별화 후속 정리
+## 3. 에코 차별화 후속 정리
 
 - Priority: medium
 - Problem: the first weapon-specific echo pass is playable and testable, but some old fallback code still exists in the manager until the next cleanup/data pass.
@@ -47,7 +35,7 @@
 - Done:
   - `V1GameManager` echo section is shorter and no disabled compatibility branches remain.
 
-## 5. 패시브 기억 밸런스/체감 튜닝
+## 4. 패시브 기억 밸런스/체감 튜닝
 
 - Priority: medium
 - Problem: `BloodReflection`, `AshenShield`, `StoppedSecond`, and `OblivionBrand` now have stronger action beats, but their cadence/damage/readability still need play-feel tuning after direct review.
@@ -57,13 +45,25 @@
 - Done:
   - All four memories feel useful before forgetting without overwhelming base weapon readability.
 
+## 5. 망각/공명 UX 체감 튜닝
+
+- Priority: medium
+- Problem: the compressed forget/resonance flow is now visible and testable, but direct play still needs to judge whether the overlay, VFX timing, and ultimate bridge are too busy.
+- Build:
+  - Tune `ForgetFlow_*` scale, lifetime, placement, and text density.
+  - Keep `LETHE/V1 QA/Forget Resonance Flow` as the regression gate.
+- Done:
+  - Forgetting reads first as an action transition, then as text confirmation.
+
 Completed sequence:
 
 - 2026-07-02: weapon-specific echo pass implemented.
 - 2026-07-02: passive-feeling active memory reinforcement implemented.
+- 2026-07-02: forgetting / resonance UX flow implemented.
 - QA menus passing:
   - `LETHE/V1 QA/Echo Matrix Dual Blades`
   - `LETHE/V1 QA/Echo Matrix Greatsword`
   - `LETHE/V1 QA/Passive Memory Matrix`
+  - `LETHE/V1 QA/Forget Resonance Flow`
 
 Keep this file short. Detailed history belongs in `docs/TASK.md`, `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, or evidence files.

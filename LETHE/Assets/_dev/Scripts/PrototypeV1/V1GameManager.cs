@@ -2890,8 +2890,10 @@ namespace Lethe.PrototypeV1
                 "다음: 잃은 기억은 되돌아오지 않고, 남은 잔향으로 다음 구간을 이어갑니다.\n" +
                 "Space로 전투 복귀";
             ConfigureForgetOverlay(forgotten, after, raw);
+            ConfigureForgetOverlayReadable(forgotten, after, raw);
             resultOverlay = true;
             SpawnEchoTransformVfx(forgotten.Id);
+            SpawnForgetResonanceFlowVfx(forgotten.Id, forgotten.Level, after, raw);
             if (after >= MaxEchoLevel && AnyUltimateReady)
             {
                 SpawnUltimateReadyCue();
@@ -2909,6 +2911,18 @@ namespace Lethe.PrototypeV1
                 $"남은 잔향: {EchoName(forgotten.Id)} +{echoLevel}{(echoLevel >= MaxEchoLevel ? " 각성" : "")}\n" +
                 (rawEchoLevel > MaxEchoLevel ? $"초과 잔향 +{rawEchoLevel - MaxEchoLevel}: 궁극 준비 가속\n" : "") +
                 "다음: 기억 재획득 없이 잔향만 남기고 바로 전투로 돌아갑니다.\n" +
+                "Space로 전투 복귀";
+        }
+
+        void ConfigureForgetOverlayReadable(MemoryState forgotten, int echoLevel, int rawEchoLevel)
+        {
+            var resonanceBonus = Mathf.FloorToInt(echoLevel / 2f);
+            overlayTitle = "망각 결과";
+            overlayBody =
+                $"사라진 기억: {MemoryName(forgotten.Id)} +{forgotten.Level}\n" +
+                $"남은 잔향: {EchoName(forgotten.Id)} +{echoLevel}{(echoLevel >= MaxEchoLevel ? " 각성" : "")}\n" +
+                (rawEchoLevel > MaxEchoLevel ? $"초과 잔향 +{rawEchoLevel - MaxEchoLevel}: 궁극 준비 가속\n" : "") +
+                $"공명 목표: 다시 획득하면 +{Mathf.Max(1, 1 + resonanceBonus)}부터 시작\n" +
                 "Space로 전투 복귀";
         }
 
@@ -2962,6 +2976,40 @@ namespace Lethe.PrototypeV1
                 var angle = i * 22.5f;
                 var pos = player.position + Quaternion.Euler(0f, 0f, angle) * Vector3.right * (1.05f + i * 0.035f);
                 SpawnTransientSprite("망각 변환", null, pos, Quaternion.Euler(0f, 0f, angle), 0.16f + i * 0.014f, color, 0.70f);
+            }
+        }
+
+        void SpawnForgetResonanceFlowVfx(V1MemoryId id, int memoryLevel, int echoLevel, int rawEchoLevel)
+        {
+            var echoColor = id == V1MemoryId.BloodReflection ? new Color(1f, 0.12f, 0.20f, 0.88f) : new Color(0.62f, 0.96f, 1f, 0.86f);
+            var memoryColor = new Color(1f, 0.82f, 0.62f, 0.72f);
+            var left = player.position + Vector3.left * 0.74f + Vector3.up * 0.28f;
+            var right = player.position + Vector3.right * 0.78f + Vector3.up * 0.28f;
+            var resonanceBonus = Mathf.FloorToInt(echoLevel / 2f);
+
+            SpawnPromptSprite("ForgetFlowLostMemory", MemoryVfxSprite(id), () => MakeImpactDiamondSprite("ForgetFlowLostMemory", Color.white), left, Quaternion.Euler(0f, 0f, -22f), 0.92f, 0.55f, memoryColor, 0.70f);
+            SpawnTransientSprite("ForgetFlowBreakRing", MakeRingSprite("ForgetFlowBreakRing", Color.white, 128), left, Quaternion.identity, 0.68f + memoryLevel * 0.04f, new Color(1f, 0.62f, 0.42f, 0.42f), 0.62f);
+            SpawnPromptSprite("ForgetFlowGainedEcho", EchoVfxSprite(id), () => MakeRingSprite("ForgetFlowGainedEcho", Color.white, 132), right, Quaternion.Euler(0f, 0f, elapsed * 80f), 0.96f, 0.60f, echoColor, 0.78f);
+            SpawnEchoLink("ForgetFlowMemoryToEcho", left, right, new Color(echoColor.r, echoColor.g, echoColor.b, 0.58f), 0.52f, 0.026f);
+            SpawnTransientSprite("ForgetFlowEchoLevelRing", MakeRingSprite("ForgetFlowEchoLevelRing", Color.white, 160), right, Quaternion.Euler(0f, 0f, elapsed * -90f), 0.84f + echoLevel * 0.035f, new Color(echoColor.r, echoColor.g, echoColor.b, 0.42f), 0.66f);
+
+            if (resonanceBonus > 0)
+            {
+                var target = player.position + Vector3.up * 1.08f;
+                SpawnTransientSprite("ForgetFlowResonanceTarget", MakeRingSprite("ForgetFlowResonanceTarget", Color.white, 144), target, Quaternion.identity, 0.58f + resonanceBonus * 0.08f, new Color(0.92f, 0.74f, 1f, 0.54f), 0.72f);
+                SpawnEchoLink("ForgetFlowResonanceThread", right, target, new Color(0.90f, 0.62f, 1f, 0.46f), 0.58f, 0.018f + resonanceBonus * 0.003f);
+                SpawnFloatingText(target + Vector3.up * 0.34f, $"공명 +{resonanceBonus}", new Color(0.92f, 0.74f, 1f));
+            }
+
+            if (echoLevel >= MaxEchoLevel)
+            {
+                SpawnTransientSprite("ForgetFlowAwakenStamp", MakeImpactDiamondSprite("ForgetFlowAwakenStamp", Color.white), right + Vector3.up * 0.12f, Quaternion.Euler(0f, 0f, 45f), 0.54f, new Color(1f, 0.96f, 0.62f, 0.84f), 0.48f);
+                SpawnRadialSlashLines("ForgetFlowAwakenBurst", right, (Vector2)(right - player.position), 6, 0.72f, new Color(1f, 0.94f, 0.58f, 0.58f), 0.44f);
+            }
+
+            if (rawEchoLevel > MaxEchoLevel || AnyUltimateReady)
+            {
+                SpawnTransientSprite("ForgetFlowUltimateBridge", MakeRingSprite("ForgetFlowUltimateBridge", Color.white, 180), player.position, Quaternion.Euler(0f, 0f, elapsed * 70f), 1.42f, new Color(1f, 0.30f, 0.42f, 0.34f), 0.72f);
             }
         }
 
@@ -3252,6 +3300,29 @@ namespace Lethe.PrototypeV1
 
             SpawnFloatingText(player.position + Vector3.up * 1.48f, "Passive Memory Matrix", new Color(0.86f, 0.94f, 1f));
             Log("Debug passive memory matrix");
+            return DebugSnapshot();
+        }
+
+        public string DebugRunForgetResonanceFlow()
+        {
+            EnsureRunStarted();
+            SetDebugWeapon(V1WeaponId.DualBlades);
+            EnsureReviewEnemies(16);
+            activeMemories.Clear();
+            echoLevels.Clear();
+            echoOnlyDebugMode = false;
+            bloodStormWasReady = false;
+            bloodStormBurstTimer = 0f;
+            ultimatePulseTimer = 0f;
+
+            activeMemories.Add(new MemoryState(V1MemoryId.HungryBlades, MaxMemoryLevel));
+            activeMemories.Add(new MemoryState(V1MemoryId.BloodReflection, 3));
+            activeMemories.Add(new MemoryState(V1MemoryId.AshenShield, 2));
+            echoLevels[V1MemoryId.BloodReflection] = MaxEchoLevel;
+
+            SpawnFloatingText(player.position + Vector3.up * 1.56f, "Forget -> Echo -> Resonance", new Color(0.92f, 0.76f, 1f));
+            ForgetHighestMemory();
+            Log("Debug forget resonance flow");
             return DebugSnapshot();
         }
 

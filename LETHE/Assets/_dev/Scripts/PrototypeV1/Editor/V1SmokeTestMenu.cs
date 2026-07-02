@@ -87,6 +87,13 @@ namespace Lethe.PrototypeV1.Editor
             StartRunner();
         }
 
+        [MenuItem("LETHE/V1 QA/Forget Resonance Flow")]
+        public static void QaForgetResonanceFlow()
+        {
+            SavePending(new PendingSmoke(SmokeMode.ForgetResonanceFlow, V1WeaponId.DualBlades));
+            StartRunner();
+        }
+
         [MenuItem("LETHE/V1 QA/Blood Blade Storm")]
         public static void QaBloodBladeStorm()
         {
@@ -200,6 +207,12 @@ namespace Lethe.PrototypeV1.Editor
                 return;
             }
 
+            if (smoke.Mode == SmokeMode.ForgetResonanceFlow)
+            {
+                manager.DebugRunForgetResonanceFlow();
+                return;
+            }
+
             BeginRun(manager, smoke.WeaponId);
             AdvanceStartSmoke(manager, 2.1f);
         }
@@ -296,6 +309,17 @@ namespace Lethe.PrototypeV1.Editor
                     }
                     return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
 
+                case SmokeMode.ForgetResonanceFlow:
+                    var forgetFlow = CountObjects("ForgetFlow");
+                    var echoTransform = CountObjects("EchoTransform");
+                    var ultimateReady = CountObjects("UltimateReady");
+                    details += $" | forgetFlow={forgetFlow} echoTransform={echoTransform} ultimateReady={ultimateReady} hungryEcho={EchoLevel(manager, V1MemoryId.HungryBlades)} bloodEcho={EchoLevel(manager, V1MemoryId.BloodReflection)}";
+                    if (resultOverlay && manager.BloodBladeStormReady && forgetFlow >= 8 && echoTransform > 0 && ultimateReady > 0)
+                    {
+                        return SmokeResult.Pass;
+                    }
+                    return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
+
                 default:
                     return SmokeResult.Fail;
             }
@@ -330,6 +354,7 @@ namespace Lethe.PrototypeV1.Editor
             VfxMatrix,
             EchoMatrix,
             PassiveMemoryMatrix,
+            ForgetResonanceFlow,
             BloodBladeStorm
         }
 
@@ -359,9 +384,11 @@ namespace Lethe.PrototypeV1.Editor
                         ? $"Echo Matrix {WeaponId}"
                         : Mode == SmokeMode.PassiveMemoryMatrix
                             ? "Passive Memory Matrix"
-                            : Mode == SmokeMode.BloodBladeStorm
-                                ? "Blood Blade Storm"
-                                : $"{WeaponId}";
+                            : Mode == SmokeMode.ForgetResonanceFlow
+                                ? "Forget Resonance Flow"
+                                : Mode == SmokeMode.BloodBladeStorm
+                                    ? "Blood Blade Storm"
+                                    : $"{WeaponId}";
         }
 
         static void SpawnAllMemoryEchoPreviews(V1GameManager manager)

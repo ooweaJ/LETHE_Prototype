@@ -1,5 +1,41 @@
 # Current Task
 
+# 2026-07-02 Forget / Resonance UX Pass Result
+
+## Status
+
+The third sequence item, forgetting / resonance UX production pass, is implemented in `Dev_Prototype_v1`.
+
+## Applied Changes
+
+- Added readable Korean forget-result overlay copy after the legacy overlay setup.
+- Added `ForgetFlow_*` transition VFX:
+  - lost memory marker,
+  - memory break ring,
+  - gained echo marker,
+  - memory-to-echo bridge line,
+  - echo level ring,
+  - resonance target/thread,
+  - +5 awaken stamp/burst,
+  - ultimate bridge when a completed pair is ready.
+- Added debug method `DebugRunForgetResonanceFlow()`.
+- Added Unity QA menu:
+  - `LETHE/V1 QA/Forget Resonance Flow`
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- Unity compile error count: `0`.
+- Unity console error count: `0`.
+- Unity QA:
+  - `LETHE/V1 QA/Forget Resonance Flow`: `[V1QA] PASS`
+  - Object counts/state: `forgetFlow=15`, `echoTransform=2`, `ultimateReady=3`, `hungryEcho=5`, `bloodEcho=5`, `storm=True`, `result=True`.
+
+## Next Implementation
+
+Continue with `docs/orchestration/state/NEXT_TASKS.md` item 1: four ultimate weapon-pattern expansion.
+
 # 2026-07-02 Passive Memory Reinforcement Result
 
 ## Status
