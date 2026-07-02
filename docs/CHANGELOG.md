@@ -2,6 +2,9 @@
 
 # 2026-07-02
 
+- Prepared direct-play review handoff:
+  - Added `docs/orchestration/review_prompts/2026-07-02-dev-prototype-v1-direct-play-review.md`.
+  - Captured current QA evidence and GO/ITERATE/NO-GO decision questions for jaewoo.
 - Tuned utility ultimate feel:
   - Sharpened `FractureExecution`, `StasisHunt`, and `AshenOblivion` cadence, hitstop, damage, and weapon-specific VFX beats.
   - Verified Utility Ultimate Matrix Dual/Great and Blood Blade Storm QA.

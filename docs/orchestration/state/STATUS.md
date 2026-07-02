@@ -2,6 +2,19 @@
 
 Last updated: 2026-07-02
 
+## 2026-07-02 Update: Direct Play Review Prep
+
+- Prepared the current `Dev_Prototype_v1` for jaewoo direct-play review after the July 2 cleanup/tuning sequence.
+- Added review handoff:
+  - `docs/orchestration/review_prompts/2026-07-02-dev-prototype-v1-direct-play-review.md`
+- The handoff includes:
+  - scene/setup instructions,
+  - latest automated QA evidence,
+  - review questions for base weapons, Kalmuri, passive memories, echo identity, forget/resonance, ultimates, audio, performance, and readability,
+  - `GO / ITERATE / NO-GO` decision format,
+  - Codex next action mapping after review.
+- Current gate: automated QA is green; final promotion/iteration decision now needs direct play feel judgment.
+
 ## 2026-07-02 Update: Utility Ultimate Feel Tuning
 
 - Tuned non-blood ultimate feel so `FractureExecution`, `StasisHunt`, and `AshenOblivion` read closer to the `BloodBladeStorm` benchmark.

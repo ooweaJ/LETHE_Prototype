@@ -1,5 +1,34 @@
 # Current Task
 
+# 2026-07-02 Direct Play Review Prep Result
+
+## Status
+
+The current `_dev` slice is ready for jaewoo direct-play review. Automated QA is green, but promotion should wait for human feel judgment.
+
+## Added Handoff
+
+- `docs/orchestration/review_prompts/2026-07-02-dev-prototype-v1-direct-play-review.md`
+
+## Review Scope
+
+- Base weapon feel for dual blades and greatsword.
+- Kalmuri +5 density after optimization.
+- Passive memory readability before forgetting.
+- Echo identity by VFX/action, not text.
+- Forget/resonance transition timing.
+- Blood Blade Storm versus the three utility ultimates.
+- Audio fatigue.
+- Performance and VFX clutter.
+
+## Decision Gate
+
+Use the prompt's output format:
+
+- `GO`: prepare `_dev` to `Assets/Lethe` promotion plan.
+- `ITERATE`: fix only the top 1-2 feel issues.
+- `NO-GO`: write a focused rework plan before adding more content.
+
 # 2026-07-02 Utility Ultimate Feel Tuning Result
 
 ## Status

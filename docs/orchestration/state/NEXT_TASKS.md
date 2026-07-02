@@ -1,15 +1,15 @@
 # Next Tasks
 
-## 1. Direct Play Review Prep
+## 1. Jaewoo Direct Play Review
 
 - Priority: medium
-- Problem: automated QA proves object spawning and compilation, but final feel still needs a focused jaewoo direct-play checklist after the cleanup passes.
+- Problem: automated QA proves object spawning and compilation, but final GO/ITERATE/NO-GO depends on jaewoo feel judgment.
 - Build:
-  - Keep the review prompt/checklist current.
-  - Preserve one-click QA menus for all major routes.
-  - Avoid broad new systems before direct play.
+  - Play `Assets/_dev/Scenes/Dev_Prototype_v1.unity`.
+  - Use `docs/orchestration/review_prompts/2026-07-02-dev-prototype-v1-direct-play-review.md`.
+  - Judge base weapons, Kalmuri, passive memories, echoes, forget/resonance, ultimates, audio, performance, and clutter.
 - Done:
-  - Jaewoo can review one current `Dev_Prototype_v1` build without extra setup.
+  - Review returns `GO`, `ITERATE`, or `NO-GO` with top issues.
 
 ## 2. Remaining Echo / Ultimate Constant Cleanup
 
@@ -35,6 +35,7 @@ Completed sequence:
 - 2026-07-02: passive memory feel tuning implemented for BloodReflection, StoppedSecond, AshenShield, and OblivionBrand; passive/echo/forget/Kalmuri QA remained PASS.
 - 2026-07-02: forget/resonance UX compressed; Forget Resonance, Utility Ultimate Dual, and Kalmuri Perf QA remained PASS.
 - 2026-07-02: utility ultimate feel tuning implemented; Utility Ultimate Dual/Great and Blood Blade Storm QA remained PASS.
+- 2026-07-02: direct-play review checklist prepared at `docs/orchestration/review_prompts/2026-07-02-dev-prototype-v1-direct-play-review.md`.
 
 QA menus passing:
 
