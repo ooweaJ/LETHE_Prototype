@@ -1,5 +1,47 @@
 # Current Task
 
+# 2026-07-02 Echo Tuning Spec / QA Counter Cleanup Result
+
+## Status
+
+The first pass of echo dataization cleanup is implemented in `Dev_Prototype_v1`. Values are not yet moved to ScriptableObject assets, but repeated tuning formulas are now centralized behind compact helper/spec functions.
+
+## Applied Changes
+
+- Added utility echo tuning helpers in `V1GameManager`:
+  - `ShouldTriggerEcho`
+  - `EchoProcChance`
+  - `EchoRadius`
+  - `EchoTargetLimit`
+  - `EchoDamageMultiplier`
+  - `EchoFreezeSeconds`
+  - `ExecutionHealthThreshold`
+- Rewired weapon-specific utility echoes to use the helpers for proc checks, radius, damage, freeze duration, and target limits.
+- Added reusable QA count structures/helpers in `V1SmokeTestMenu`:
+  - count metrics,
+  - count limits,
+  - positive-count checks,
+  - max-limit checks,
+  - shared count formatting.
+- Refactored Echo Matrix, Passive Memory Matrix, Kalmuri Perf Matrix, and Utility Ultimate Matrix pass checks to use the shared helpers.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors after retrying a transient DLL lock.
+- Unity compile error count: `0`.
+- Unity console error count: `0`.
+- Unity QA:
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: `[V1QA] PASS`, `total=240`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: `[V1QA] PASS`, `total=223`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: `[V1QA] PASS`, `fracture=19`, `stasis=9`, `ashen=34`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: `[V1QA] PASS`, `fracture=8`, `stasis=26`, `ashen=16`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: `[V1QA] PASS`, `totalKalmuri=374`.
+
+## Next Implementation
+
+Continue the dataization sequence by moving these compact helper/spec values toward a small serializable spec table or `_dev/Data` assets, then remove old fallback echo branches once the data route is stable.
+
 # 2026-07-02 Kalmuri Performance Optimization Result
 
 ## Status

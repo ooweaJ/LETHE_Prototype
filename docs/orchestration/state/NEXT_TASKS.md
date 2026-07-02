@@ -3,7 +3,7 @@
 ## 1. 에코 데이터화와 QA 카운터 정리
 
 - Priority: highest
-- Problem: weapon data is in `_dev/Data`, but many echo proc values, ultimate values, and VFX knobs still live inside `V1GameManager`.
+- Problem: the first compact helper/spec pass is done, but echo proc values, ultimate values, and VFX knobs still ultimately live inside `V1GameManager` instead of `_dev/Data`.
 - Build:
   - Move echo chance/radius/damage/timing/readability knobs toward data or compact specs.
   - Keep deterministic echo and ultimate matrix smoke for dual blades and greatsword.
@@ -60,6 +60,7 @@ Completed sequence:
 - 2026-07-02: forgetting / resonance UX flow implemented.
 - 2026-07-02: non-blood utility ultimates weapon-pattern pass implemented.
 - 2026-07-02: Kalmuri performance optimization implemented; perf matrix final count `totalKalmuri=374` from first measured fail `690`.
+- 2026-07-02: first echo tuning spec / QA counter cleanup pass implemented.
 - QA menus passing:
   - `LETHE/V1 QA/Echo Matrix Dual Blades`
   - `LETHE/V1 QA/Echo Matrix Greatsword`

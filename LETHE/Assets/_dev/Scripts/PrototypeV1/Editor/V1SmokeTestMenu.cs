@@ -315,44 +315,53 @@ namespace Lethe.PrototypeV1.Editor
 
                 case SmokeMode.EchoMatrix:
                     var prefix = smoke.WeaponId == V1WeaponId.Greatsword ? "EchoGreat_" : "EchoDual_";
-                    var prefixObjects = CountObjects(prefix);
-                    var kalmuri = CountObjects($"{prefix}Kalmuri");
-                    var blood = CountObjects($"{prefix}Blood");
-                    var execution = CountObjects($"{prefix}Execution");
-                    var hunter = CountObjects($"{prefix}Hunter");
-                    var shatter = CountObjects($"{prefix}Shatter");
-                    var stopped = CountObjects($"{prefix}Stopped");
-                    var ashen = CountObjects($"{prefix}Ashen");
-                    var oblivion = CountObjects($"{prefix}Oblivion");
-                    details += $" | prefix={prefix} total={prefixObjects} K={kalmuri} B={blood} Ex={execution} H={hunter} Sh={shatter} St={stopped} A={ashen} O={oblivion}";
-                    if (prefixObjects >= 12 && kalmuri > 0 && blood > 0 && execution > 0 && hunter > 0 && shatter > 0 && stopped > 0 && ashen > 0 && oblivion > 0)
+                    var echoCounts = new[]
+                    {
+                        CountMetric("total", prefix),
+                        CountMetric("K", $"{prefix}Kalmuri"),
+                        CountMetric("B", $"{prefix}Blood"),
+                        CountMetric("Ex", $"{prefix}Execution"),
+                        CountMetric("H", $"{prefix}Hunter"),
+                        CountMetric("Sh", $"{prefix}Shatter"),
+                        CountMetric("St", $"{prefix}Stopped"),
+                        CountMetric("A", $"{prefix}Ashen"),
+                        CountMetric("O", $"{prefix}Oblivion")
+                    };
+                    details += $" | prefix={prefix} {FormatCounts(echoCounts)}";
+                    if (echoCounts[0].Value >= 12 && AllPositive(echoCounts, 1))
                     {
                         return SmokeResult.Pass;
                     }
                     return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
 
                 case SmokeMode.PassiveMemoryMatrix:
-                    var bloodMemory = CountObjects("MemoryBloodReflection");
-                    var ashMemory = CountObjects("MemoryAshenShield");
-                    var stoppedMemory = CountObjects("MemoryStoppedSecond");
-                    var oblivionMemory = CountObjects("MemoryOblivionBrand");
-                    details += $" | passiveMemory blood={bloodMemory} ash={ashMemory} stopped={stoppedMemory} oblivion={oblivionMemory}";
-                    if (bloodMemory > 0 && ashMemory > 0 && stoppedMemory > 0 && oblivionMemory > 0)
+                    var passiveCounts = new[]
+                    {
+                        CountMetric("blood", "MemoryBloodReflection"),
+                        CountMetric("ash", "MemoryAshenShield"),
+                        CountMetric("stopped", "MemoryStoppedSecond"),
+                        CountMetric("oblivion", "MemoryOblivionBrand")
+                    };
+                    details += $" | passiveMemory {FormatCounts(passiveCounts)}";
+                    if (AllPositive(passiveCounts, 0))
                     {
                         return SmokeResult.Pass;
                     }
                     return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
 
                 case SmokeMode.KalmuriPerfMatrix:
-                    var orbit = CountObjects("KalmuriLivingOrbitBlade");
-                    var bite = CountObjects("KalmuriBiteDiveBlade");
-                    var biteReturn = CountObjects("KalmuriBiteReturnShard");
-                    var hunting = CountObjects("KalmuriHuntingLunge");
-                    var echoSurge = CountObjects("KalmuriEchoSurgeBlade") + CountObjects("KalmuriEchoHeavySurgeBlade");
-                    var echoBarrage = CountObjects("KalmuriEchoBarrage");
-                    var totalKalmuri = CountObjects("Kalmuri");
-                    details += $" | orbit={orbit} bite={bite} return={biteReturn} hunting={hunting} echoSurge={echoSurge} echoBarrage={echoBarrage} totalKalmuri={totalKalmuri}";
-                    if (age >= 2.0 && orbit <= 60 && bite <= 130 && biteReturn <= 45 && hunting <= 20 && echoSurge <= 70 && echoBarrage <= 60 && totalKalmuri <= 420)
+                    var kalmuriLimits = new[]
+                    {
+                        CountLimit("orbit", "KalmuriLivingOrbitBlade", 60),
+                        CountLimit("bite", "KalmuriBiteDiveBlade", 130),
+                        CountLimit("return", "KalmuriBiteReturnShard", 45),
+                        CountLimit("hunting", "KalmuriHuntingLunge", 20),
+                        new ObjectCountLimit("echoSurge", CountObjects("KalmuriEchoSurgeBlade") + CountObjects("KalmuriEchoHeavySurgeBlade"), 70),
+                        CountLimit("echoBarrage", "KalmuriEchoBarrage", 60),
+                        CountLimit("totalKalmuri", "Kalmuri", 420)
+                    };
+                    details += $" | {FormatLimits(kalmuriLimits)}";
+                    if (age >= 2.0 && AllWithin(kalmuriLimits))
                     {
                         return SmokeResult.Pass;
                     }
@@ -371,11 +380,14 @@ namespace Lethe.PrototypeV1.Editor
 
                 case SmokeMode.UtilityUltimateMatrix:
                     var ultPrefix = smoke.WeaponId == V1WeaponId.Greatsword ? "UltGreat_" : "UltDual_";
-                    var fracture = CountObjects($"{ultPrefix}FractureExecution");
-                    var stasis = CountObjects($"{ultPrefix}StasisHunt");
-                    var ashenUlt = CountObjects($"{ultPrefix}AshenOblivion");
-                    details += $" | ultPrefix={ultPrefix} fracture={fracture} stasis={stasis} ashen={ashenUlt}";
-                    if (fracture > 0 && stasis > 0 && ashenUlt > 0)
+                    var ultimateCounts = new[]
+                    {
+                        CountMetric("fracture", $"{ultPrefix}FractureExecution"),
+                        CountMetric("stasis", $"{ultPrefix}StasisHunt"),
+                        CountMetric("ashen", $"{ultPrefix}AshenOblivion")
+                    };
+                    details += $" | ultPrefix={ultPrefix} {FormatCounts(ultimateCounts)}";
+                    if (AllPositive(ultimateCounts, 0))
                     {
                         return SmokeResult.Pass;
                     }
@@ -517,6 +529,56 @@ namespace Lethe.PrototypeV1.Editor
             return count;
         }
 
+        static ObjectCountMetric CountMetric(string label, string namePart)
+        {
+            return new ObjectCountMetric(label, CountObjects(namePart));
+        }
+
+        static ObjectCountLimit CountLimit(string label, string namePart, int max)
+        {
+            return new ObjectCountLimit(label, CountObjects(namePart), max);
+        }
+
+        static string FormatCounts(ObjectCountMetric[] counts)
+        {
+            var text = string.Empty;
+            for (int i = 0; i < counts.Length; i++)
+            {
+                if (i > 0) text += " ";
+                text += $"{counts[i].Label}={counts[i].Value}";
+            }
+            return text;
+        }
+
+        static string FormatLimits(ObjectCountLimit[] limits)
+        {
+            var text = string.Empty;
+            for (int i = 0; i < limits.Length; i++)
+            {
+                if (i > 0) text += " ";
+                text += $"{limits[i].Label}={limits[i].Value}";
+            }
+            return text;
+        }
+
+        static bool AllPositive(ObjectCountMetric[] counts, int startIndex)
+        {
+            for (int i = startIndex; i < counts.Length; i++)
+            {
+                if (counts[i].Value <= 0) return false;
+            }
+            return true;
+        }
+
+        static bool AllWithin(ObjectCountLimit[] limits)
+        {
+            for (int i = 0; i < limits.Length; i++)
+            {
+                if (limits[i].Value > limits[i].Max) return false;
+            }
+            return true;
+        }
+
         static void DestroyObjectsContaining(string namePart)
         {
             foreach (var transform in UnityEngine.Object.FindObjectsByType<Transform>(FindObjectsSortMode.None))
@@ -528,6 +590,32 @@ namespace Lethe.PrototypeV1.Editor
 
                 transform.gameObject.SetActive(false);
                 UnityEngine.Object.Destroy(transform.gameObject);
+            }
+        }
+
+        readonly struct ObjectCountMetric
+        {
+            public readonly string Label;
+            public readonly int Value;
+
+            public ObjectCountMetric(string label, int value)
+            {
+                Label = label;
+                Value = value;
+            }
+        }
+
+        readonly struct ObjectCountLimit
+        {
+            public readonly string Label;
+            public readonly int Value;
+            public readonly int Max;
+
+            public ObjectCountLimit(string label, int value, int max)
+            {
+                Label = label;
+                Value = value;
+                Max = max;
             }
         }
 

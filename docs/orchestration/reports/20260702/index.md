@@ -290,3 +290,51 @@
 - 방향: 판타지는 유지하되 수량 중심 연출을 크기, 리듬, 타격감 중심으로 바꿨다.
 - 행동: 칼무리 스폰 수, 수명, 후속 잔향, +5 발사 쿨다운을 조정하고 전용 QA를 추가했다.
 - 결과: 스트레스 QA에서 활성 칼무리 계열 오브젝트가 `690 -> 374`로 감소했고 자동 QA가 통과했다.
+
+# 2026-07-02-07 - 에코 튜닝 spec / QA 카운터 정리
+
+## 1. 현재 빌드 상태
+
+`Dev_Prototype_v1`에서 에코 데이터화의 첫 정리 단계를 적용했다. 아직 ScriptableObject나 `_dev/Data`로 완전히 이관한 것은 아니고, 먼저 `V1GameManager` 안에 흩어진 수식을 compact helper/spec 함수로 모았다.
+
+## 2. 오늘 바뀐 것
+
+- 에코 발동 확률, 반경, 타깃 제한, 데미지 배율, 정지 시간, 처형 체력 조건을 helper 함수로 모았다.
+- `Shatter`, `Hunter`, `Stopped`, `Ashen`, `Oblivion`, `Execution` 에코 경로가 이 helper를 쓰게 바뀌었다.
+- QA 매트릭스의 오브젝트 카운터를 공통 metric/limit helper로 정리했다.
+- Echo Matrix, Passive Memory Matrix, Kalmuri Perf Matrix, Utility Ultimate Matrix의 카운트 출력과 pass 조건이 같은 포맷을 쓰게 됐다.
+
+## 3. 테스트 결과와 근거
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: 통과, 기존 경고 7개, 오류 0개.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: 재시도 후 통과, 경고 0개, 오류 0개. 첫 시도는 Unity/dotnet DLL 파일 락이었다.
+- Unity compile error count: `0`.
+- Unity console error count: `0`.
+- Echo Matrix Dual Blades: `[V1QA] PASS`, `total=240`.
+- Echo Matrix Greatsword: `[V1QA] PASS`, `total=223`.
+- Utility Ultimate Matrix Dual Blades: `[V1QA] PASS`, `fracture=19`, `stasis=9`, `ashen=34`.
+- Utility Ultimate Matrix Greatsword: `[V1QA] PASS`, `fracture=8`, `stasis=26`, `ashen=16`.
+- Kalmuri Perf Matrix: `[V1QA] PASS`, `totalKalmuri=374`.
+
+## 4. 결정한 것
+
+바로 데이터 에셋을 새로 크게 만들기보다, 먼저 흩어진 수식을 중간 spec 함수로 모으는 방식을 선택했다. 이렇게 해야 동작을 유지한 채 다음 `_dev/Data` 이관의 범위를 작게 자를 수 있다.
+
+## 5. 문제 또는 리스크
+
+아직 진짜 데이터화는 끝나지 않았다. 수치가 한곳으로 모였지만 여전히 `V1GameManager` 내부에 있으므로, 다음 단계에서 serializable table이나 ScriptableObject로 옮겨야 한다.
+
+## 6. GPT/Claude 인계 요약
+
+검증 포인트는 "이번 정리가 플레이 동작을 바꾸지 않았는가"이다. 자동 QA는 모두 PASS했고, 다음 판단은 helper/spec 값을 어떤 데이터 구조로 옮기는 것이 가장 덜 복잡한지다.
+
+## 7. 다음 Codex 작업
+
+다음은 helper/spec 값을 `_dev/Data` 쪽 serializable spec 또는 compact table로 옮기는 것이다. 그 다음 안정화되면 남은 old fallback echo branch를 제거한다.
+
+## 8. 포트폴리오 메모: 문제, 방향, 행동, 결과
+
+- 문제: 에코와 궁극 튜닝 수치가 큰 manager 파일 안에 흩어져 있어 변경 비용이 커지고 있었다.
+- 방향: 동작은 유지하면서 수치 접근 지점을 먼저 한곳으로 모았다.
+- 행동: 런타임 helper/spec 함수와 QA count metric/limit helper를 만들고 matrix QA에 연결했다.
+- 결과: 주요 에코/궁극/Kalmuri QA가 모두 PASS했고, 다음 데이터 이관을 위한 중간 구조가 생겼다.

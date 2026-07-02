@@ -1,5 +1,18 @@
 # LETHE CHANGELOG
 
+# 2026-07-02
+
+- Added the first echo dataization cleanup pass:
+  - Centralized repeated utility echo tuning formulas for proc chance, radius, target limit, damage multiplier, freeze duration, and execution threshold behind compact helper/spec functions.
+  - Refactored Echo Matrix, Passive Memory Matrix, Kalmuri Perf Matrix, and Utility Ultimate Matrix object-count checks to use shared QA count helpers.
+  - Preserved current behavior while preparing the next move toward `_dev/Data` or serializable tuning tables.
+- Verification:
+  - Runtime build passed with 7 legacy warnings and 0 errors.
+  - Editor build passed with 0 warnings and 0 errors after retrying a transient Unity/dotnet DLL lock.
+  - Unity compile error count: `0`.
+  - Unity console error count: `0`.
+  - Echo Matrix Dual/Great, Utility Ultimate Matrix Dual/Great, and Kalmuri Perf Matrix all logged `[V1QA] PASS`.
+
 # 2026-07-01
 
 - Added original runtime-generated SFX for the current skill set after jaewoo requested skill-appropriate sounds:

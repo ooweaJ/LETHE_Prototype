@@ -2,6 +2,26 @@
 
 Last updated: 2026-07-02
 
+## 2026-07-02 Update: Echo Tuning Spec / QA Counter Cleanup Pass
+
+- Implemented the first echo dataization cleanup pass in `Dev_Prototype_v1`.
+- Applied:
+  - Moved repeated utility echo proc chance, radius, target limit, damage multiplier, freeze duration, and execution threshold formulas into compact helper/spec functions in `V1GameManager`.
+  - Kept current behavior stable while making future echo tuning easier to find and adjust.
+  - Refactored `V1SmokeTestMenu` matrix object counting into reusable count metric/limit helpers.
+  - Echo, passive, Kalmuri perf, and utility ultimate QA output now use the shared counter formatting.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors after retrying a transient Unity/dotnet DLL lock.
+  - Unity compile error count: `0`.
+  - Unity console error count: `0`.
+  - Unity QA `LETHE/V1 QA/Echo Matrix Dual Blades`: `[V1QA] PASS`, `total=240`.
+  - Unity QA `LETHE/V1 QA/Echo Matrix Greatsword`: `[V1QA] PASS`, `total=223`.
+  - Unity QA `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: `[V1QA] PASS`, `fracture=19`, `stasis=9`, `ashen=34`.
+  - Unity QA `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: `[V1QA] PASS`, `fracture=8`, `stasis=26`, `ashen=16`.
+  - Unity QA `LETHE/V1 QA/Kalmuri Perf Matrix`: `[V1QA] PASS`, `totalKalmuri=374`.
+- Next step: move the compact helper/spec values out of `V1GameManager` toward data assets or small serializable spec tables.
+
 ## 2026-07-02 Update: Kalmuri Performance Optimization
 
 - Optimized `Hungry Blades / Kalmuri` for multi-enemy lag risk in `Dev_Prototype_v1`.

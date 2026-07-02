@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260702\\index.md",
-  "generatedAt": "2026-07-02T02:21:23.074Z",
-  "unitCount": 6,
+  "generatedAt": "2026-07-02T04:45:40.328Z",
+  "unitCount": 7,
   "latest": {
-    "title": "2026-07-02-06 - 굶주린 칼무리 성능 최적화",
-    "number": "06",
-    "markdownPath": "docs\\orchestration\\reports\\20260702\\units\\2026-07-02-06-굶주린-칼무리-성능-최적화.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260702\\units\\2026-07-02-06-굶주린-칼무리-성능-최적화.html"
+    "title": "2026-07-02-07 - 에코 튜닝 spec / QA 카운터 정리",
+    "number": "07",
+    "markdownPath": "docs\\orchestration\\reports\\20260702\\units\\2026-07-02-07-에코-튜닝-spec-qa-카운터-정리.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260702\\units\\2026-07-02-07-에코-튜닝-spec-qa-카운터-정리.html"
   }
 }
