@@ -16,6 +16,7 @@ namespace Lethe.PrototypeV1
     {
         public WeaponDefinition dualBladesDefinition;
         public WeaponDefinition greatswordDefinition;
+        public V1UtilityEchoTuningTable utilityEchoTuningTable;
         public Font koreanFont;
         public V1SpriteCatalogEntry[] sprites = Array.Empty<V1SpriteCatalogEntry>();
 

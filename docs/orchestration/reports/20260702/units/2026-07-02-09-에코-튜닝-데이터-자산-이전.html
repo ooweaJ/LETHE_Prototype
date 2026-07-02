@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-02-09 - 에코 튜닝 데이터 자산 이전</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-02-09 - 에코 튜닝 데이터 자산 이전</h1>
+      <p class="meta">Generated from 2026-07-02-09-에코-튜닝-데이터-자산-이전.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260702/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-02-09 - 에코 튜닝 데이터 자산 이전</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 여전히 <code>_dev</code> 검증 단계다. 이번 작업으로 유틸리티 에코 튜닝값은 매니저 내부가 아니라 <code>_dev/Data/Echoes/UtilityEcho_Tuning.asset</code>에서 우선 읽히게 됐다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>V1UtilityEchoTuningTable</code> ScriptableObject 타입을 추가했다.</li>
+<li><code>UtilityEcho_Tuning.asset</code>에 처형, 사냥, 파쇄, 정지, 잿빛, 망각 계열 에코 튜닝값 6개를 옮겼다.</li>
+<li><code>V1_ContentCatalog.asset</code>, <code>V1ContentCatalog</code>, <code>V1SceneBuilder</code>, <code>V1GameManager</code>를 연결했다.</li>
+<li>런타임 lookup 순서는 데이터 자산, 매니저 직렬화 fallback, 정적 기본값, 안전 fallback 순서가 됐다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>Unity compile error count: <code>0</code>.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 재시도 후 통과, 기존 경고 7개, 오류 0개. 첫 시도는 병렬 빌드로 인한 DLL 파일 락이었다.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 통과, 기존 경고 7개, 오류 0개.</li>
+<li>Echo Matrix Dual Blades: <code>[V1QA] PASS</code>, <code>total=240</code>.</li>
+<li>Echo Matrix Greatsword: <code>[V1QA] PASS</code>, <code>total=221</code>.</li>
+<li>Utility Ultimate Matrix Dual Blades: <code>[V1QA] PASS</code>, <code>fracture=19</code>, <code>stasis=9</code>, <code>ashen=34</code>.</li>
+<li>Utility Ultimate Matrix Greatsword: <code>[V1QA] PASS</code>, <code>fracture=8</code>, <code>stasis=22</code>, <code>ashen=16</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>유틸리티 에코 튜닝은 <code>_dev/Data</code> 자산을 1차 source로 두고, 기존 매니저 직렬화 테이블과 정적 기본값은 회귀 방지 fallback으로 남긴다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>궁극/VFX 쪽 상수는 아직 완전히 데이터화되지 않았다. 다음 정리에서는 반복 상수를 compact spec으로 모으되, QA 매트릭스를 하나씩 통과시키며 줄여야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>검토 포인트는 &quot;데이터 자산 이전 후 에코 발동/대상 수/동결/피해 감각이 바뀌지 않았는가&quot;다. 자동 QA는 쌍검/대검 에코와 유틸 궁극 모두 PASS다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>에코/궁극 런타임 정리로 넘어가 반복되는 색상, 반경, 피해, 타이밍 상수를 compact spec으로 모은다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 튜닝값이 매니저 코드에 남아 있어 디자이너/개발자가 빠르게 조정하기 어려웠다.</li>
+<li>방향: 기존 동작을 유지하면서 <code>_dev/Data</code> 자산을 1차 튜닝 경로로 만든다.</li>
+<li>행동: ScriptableObject와 asset을 추가하고 catalog/scene builder/runtime을 연결했다.</li>
+<li>결과: 유틸리티 에코 튜닝이 데이터 자산화됐고, 주요 QA가 모두 통과했다.</li>
+</ul>
+  </main>
+</body>
+</html>

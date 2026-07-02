@@ -2,6 +2,24 @@
 
 Last updated: 2026-07-02
 
+## 2026-07-02 Update: Utility Echo Tuning Data Asset Migration
+
+- Moved utility echo tuning one step farther out of `V1GameManager` and into `_dev/Data`.
+- Applied:
+  - Added `V1UtilityEchoTuningTable` ScriptableObject.
+  - Added `Assets/_dev/Data/Echoes/UtilityEcho_Tuning.asset` with the six utility echo tuning specs.
+  - Connected `V1_ContentCatalog.asset` and `V1SceneBuilder` to the tuning table asset.
+  - `V1GameManager` now reads utility echo specs from the asset first, then falls back to the serialized manager table and static defaults.
+- Verification:
+  - Unity compile error count: `0`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors after retrying a transient DLL lock from a parallel build.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity QA `LETHE/V1 QA/Echo Matrix Dual Blades`: `[V1QA] PASS`, `total=240`.
+  - Unity QA `LETHE/V1 QA/Echo Matrix Greatsword`: `[V1QA] PASS`, `total=221`.
+  - Unity QA `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: `[V1QA] PASS`, `fracture=19`, `stasis=9`, `ashen=34`.
+  - Unity QA `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: `[V1QA] PASS`, `fracture=8`, `stasis=22`, `ashen=16`.
+- Next step: continue echo/ultimate runtime cleanup by moving remaining repeated effect constants and unreachable compatibility paths into compact specs.
+
 ## 2026-07-02 Update: Utility Echo Serializable Tuning Table
 
 - Continued the echo dataization path in `Dev_Prototype_v1`.

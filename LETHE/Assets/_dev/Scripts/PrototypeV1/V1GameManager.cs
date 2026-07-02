@@ -224,6 +224,7 @@ namespace Lethe.PrototypeV1
         [SerializeField] V1ContentCatalog contentCatalog;
         [SerializeField] WeaponDefinition dualBladesDefinition;
         [SerializeField] WeaponDefinition greatswordDefinition;
+        [SerializeField] V1UtilityEchoTuningTable utilityEchoTuningTable;
         [SerializeField] UtilityEchoTuningSpec[] utilityEchoTuningSpecs = DefaultUtilityEchoTuningSpecTable.ToArray();
 
         readonly List<V1Enemy> enemies = new();
@@ -1677,6 +1678,11 @@ namespace Lethe.PrototypeV1
 
         UtilityEchoTuningSpec EchoTuning(V1MemoryId id)
         {
+            if (utilityEchoTuningTable != null && utilityEchoTuningTable.TryGetSpec(id, out var assetSpec))
+            {
+                return assetSpec;
+            }
+
             var specs = utilityEchoTuningSpecs;
             if (specs != null)
             {
@@ -4898,6 +4904,7 @@ namespace Lethe.PrototypeV1
             if (contentCatalog == null) return;
             dualBladesDefinition ??= contentCatalog.dualBladesDefinition;
             greatswordDefinition ??= contentCatalog.greatswordDefinition;
+            utilityEchoTuningTable ??= contentCatalog.utilityEchoTuningTable;
         }
 
         void EnsureStyles()

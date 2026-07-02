@@ -1,0 +1,153 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99ca8b3bceb59094d893aaf4354d43b2, type: 3}
+  m_Name: UtilityEcho_Tuning
+  m_EditorClassIdentifier: Assembly-CSharp::Lethe.PrototypeV1.V1UtilityEchoTuningTable
+  specs:
+  - id: 2
+    firstHitOnly: 0
+    firstHitGateLiftLevel: 0
+    procChanceBase: 1
+    procChancePerLevel: 0
+    lightRadiusBase: 1
+    lightRadiusPerLevel: 0
+    heavyRadiusBase: 1
+    heavyRadiusPerLevel: 0
+    lightTargetLimit: 1
+    heavyTargetLimit: 1
+    lightTargetPerLevelDivisor: 0
+    heavyTargetPerLevelDivisor: 0
+    lightDamageBase: 0
+    lightDamagePerLevel: 0
+    heavyDamageBase: 0
+    heavyDamagePerLevel: 0
+    lightFreezeBase: 0
+    lightFreezePerLevel: 0
+    heavyFreezeBase: 0
+    heavyFreezePerLevel: 0
+    executionHealthBase: 0.22
+    executionHealthPerLevel: 0.025
+  - id: 3
+    firstHitOnly: 1
+    firstHitGateLiftLevel: 0
+    procChanceBase: 0.36
+    procChancePerLevel: 0.09
+    lightRadiusBase: 1
+    lightRadiusPerLevel: 0
+    heavyRadiusBase: 1
+    heavyRadiusPerLevel: 0
+    lightTargetLimit: 1
+    heavyTargetLimit: 1
+    lightTargetPerLevelDivisor: 3
+    heavyTargetPerLevelDivisor: 0
+    lightDamageBase: 0.22
+    lightDamagePerLevel: 0.055
+    heavyDamageBase: 0.22
+    heavyDamagePerLevel: 0.055
+    lightFreezeBase: 0
+    lightFreezePerLevel: 0
+    heavyFreezeBase: 0
+    heavyFreezePerLevel: 0
+    executionHealthBase: 0
+    executionHealthPerLevel: 0
+  - id: 4
+    firstHitOnly: 1
+    firstHitGateLiftLevel: 2
+    procChanceBase: 0.26
+    procChancePerLevel: 0.09
+    lightRadiusBase: 1
+    lightRadiusPerLevel: 0.12
+    heavyRadiusBase: 1.34
+    heavyRadiusPerLevel: 0.2
+    lightTargetLimit: 5
+    heavyTargetLimit: 9
+    lightTargetPerLevelDivisor: 0
+    heavyTargetPerLevelDivisor: 0
+    lightDamageBase: 0.1
+    lightDamagePerLevel: 0.025
+    heavyDamageBase: 0.15
+    heavyDamagePerLevel: 0.038
+    lightFreezeBase: 0
+    lightFreezePerLevel: 0
+    heavyFreezeBase: 0
+    heavyFreezePerLevel: 0
+    executionHealthBase: 0
+    executionHealthPerLevel: 0
+  - id: 5
+    firstHitOnly: 1
+    firstHitGateLiftLevel: 0
+    procChanceBase: 0.34
+    procChancePerLevel: 0.065
+    lightRadiusBase: 0.84
+    lightRadiusPerLevel: 0.055
+    heavyRadiusBase: 1.78
+    heavyRadiusPerLevel: 0.2
+    lightTargetLimit: 3
+    heavyTargetLimit: 8
+    lightTargetPerLevelDivisor: 0
+    heavyTargetPerLevelDivisor: 0
+    lightDamageBase: 0.03
+    lightDamagePerLevel: 0.01
+    heavyDamageBase: 0.07
+    heavyDamagePerLevel: 0.018
+    lightFreezeBase: 0.24
+    lightFreezePerLevel: 0.045
+    heavyFreezeBase: 0.52
+    heavyFreezePerLevel: 0.07
+    executionHealthBase: 0
+    executionHealthPerLevel: 0
+  - id: 6
+    firstHitOnly: 1
+    firstHitGateLiftLevel: 0
+    procChanceBase: 0.3
+    procChancePerLevel: 0.055
+    lightRadiusBase: 0.42
+    lightRadiusPerLevel: 0
+    heavyRadiusBase: 1.95
+    heavyRadiusPerLevel: 0.12
+    lightTargetLimit: 1
+    heavyTargetLimit: 8
+    lightTargetPerLevelDivisor: 0
+    heavyTargetPerLevelDivisor: 0
+    lightDamageBase: 0.045
+    lightDamagePerLevel: 0.012
+    heavyDamageBase: 0.08
+    heavyDamagePerLevel: 0.018
+    lightFreezeBase: 0
+    lightFreezePerLevel: 0
+    heavyFreezeBase: 0
+    heavyFreezePerLevel: 0
+    executionHealthBase: 0
+    executionHealthPerLevel: 0
+  - id: 7
+    firstHitOnly: 0
+    firstHitGateLiftLevel: 0
+    procChanceBase: 0.34
+    procChancePerLevel: 0.065
+    lightRadiusBase: 0.64
+    lightRadiusPerLevel: 0
+    heavyRadiusBase: 1.18
+    heavyRadiusPerLevel: 0.12
+    lightTargetLimit: 1
+    heavyTargetLimit: 7
+    lightTargetPerLevelDivisor: 0
+    heavyTargetPerLevelDivisor: 0
+    lightDamageBase: 0.16
+    lightDamagePerLevel: 0.042
+    heavyDamageBase: 0.13
+    heavyDamagePerLevel: 0.036
+    lightFreezeBase: 0
+    lightFreezePerLevel: 0
+    heavyFreezeBase: 0
+    heavyFreezePerLevel: 0
+    executionHealthBase: 0
+    executionHealthPerLevel: 0

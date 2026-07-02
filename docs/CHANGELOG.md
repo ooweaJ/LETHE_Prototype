@@ -2,6 +2,11 @@
 
 # 2026-07-02
 
+- Moved utility echo tuning to a `_dev/Data` ScriptableObject asset:
+  - Added `V1UtilityEchoTuningTable`.
+  - Added `Assets/_dev/Data/Echoes/UtilityEcho_Tuning.asset`.
+  - Connected the asset through `V1_ContentCatalog.asset`, scene builder, and `V1GameManager`.
+  - Verified Echo Matrix and Utility Ultimate Matrix QA for both weapons.
 - Added a serializable utility echo tuning table:
   - Moved utility echo proc chance, first-hit gating, radius, target limit, damage multiplier, freeze duration, and execution threshold reads through `UtilityEchoTuningSpec`.
   - Kept static default values and fallback lookup so existing scenes preserve behavior if serialized data is empty.

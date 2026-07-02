@@ -52,6 +52,8 @@ namespace Lethe.PrototypeV1.Editor
                 AssetDatabase.LoadAssetAtPath<Lethe.Dev.WeaponDefinition>("Assets/_dev/Data/Weapons/Weapon_DualBlades.asset");
             serialized.FindProperty("greatswordDefinition").objectReferenceValue =
                 AssetDatabase.LoadAssetAtPath<Lethe.Dev.WeaponDefinition>("Assets/_dev/Data/Weapons/Weapon_Greatsword.asset");
+            serialized.FindProperty("utilityEchoTuningTable").objectReferenceValue =
+                AssetDatabase.LoadAssetAtPath<V1UtilityEchoTuningTable>("Assets/_dev/Data/Echoes/UtilityEcho_Tuning.asset");
             serialized.ApplyModifiedPropertiesWithoutUndo();
         }
 

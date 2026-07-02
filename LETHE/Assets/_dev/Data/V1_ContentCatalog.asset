@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Lethe.PrototypeV1.V1ContentCatalog
   dualBladesDefinition: {fileID: 11400000, guid: a57b50950a9e3a947b9a7d291b1e731d, type: 2}
   greatswordDefinition: {fileID: 11400000, guid: 0dbb86180703b844f921db8d2de44566, type: 2}
+  utilityEchoTuningTable: {fileID: 11400000, guid: b4a3c2d1e0f94771a8326de5aa0f1012, type: 2}
   koreanFont: {fileID: 12800000, guid: 64f2a49a986ee1c499a1cf8f5e46fa99, type: 3}
   sprites:
   - id: Assets/_dev/Art/Sprites/Characters/Player/sheet_player_v1_4dir.png

@@ -383,3 +383,49 @@
 - 방향: 동작은 유지하면서 수치 접근 지점을 데이터 구조로 모은다.
 - 행동: 직렬화 테이블과 기본 fallback을 추가하고 QA 매트릭스로 검증했다.
 - 결과: 기능 변화 없이 다음 ScriptableObject 이전을 위한 안전한 중간 구조가 생겼다.
+
+# 2026-07-02-09 - 에코 튜닝 데이터 자산 이전
+
+## 1. 현재 빌드 상태
+
+`Dev_Prototype_v1`은 여전히 `_dev` 검증 단계다. 이번 작업으로 유틸리티 에코 튜닝값은 매니저 내부가 아니라 `_dev/Data/Echoes/UtilityEcho_Tuning.asset`에서 우선 읽히게 됐다.
+
+## 2. 오늘 바뀐 것
+
+- `V1UtilityEchoTuningTable` ScriptableObject 타입을 추가했다.
+- `UtilityEcho_Tuning.asset`에 처형, 사냥, 파쇄, 정지, 잿빛, 망각 계열 에코 튜닝값 6개를 옮겼다.
+- `V1_ContentCatalog.asset`, `V1ContentCatalog`, `V1SceneBuilder`, `V1GameManager`를 연결했다.
+- 런타임 lookup 순서는 데이터 자산, 매니저 직렬화 fallback, 정적 기본값, 안전 fallback 순서가 됐다.
+
+## 3. 테스트 결과와 근거
+
+- Unity compile error count: `0`.
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: 재시도 후 통과, 기존 경고 7개, 오류 0개. 첫 시도는 병렬 빌드로 인한 DLL 파일 락이었다.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: 통과, 기존 경고 7개, 오류 0개.
+- Echo Matrix Dual Blades: `[V1QA] PASS`, `total=240`.
+- Echo Matrix Greatsword: `[V1QA] PASS`, `total=221`.
+- Utility Ultimate Matrix Dual Blades: `[V1QA] PASS`, `fracture=19`, `stasis=9`, `ashen=34`.
+- Utility Ultimate Matrix Greatsword: `[V1QA] PASS`, `fracture=8`, `stasis=22`, `ashen=16`.
+
+## 4. 결정한 것
+
+유틸리티 에코 튜닝은 `_dev/Data` 자산을 1차 source로 두고, 기존 매니저 직렬화 테이블과 정적 기본값은 회귀 방지 fallback으로 남긴다.
+
+## 5. 문제 또는 리스크
+
+궁극/VFX 쪽 상수는 아직 완전히 데이터화되지 않았다. 다음 정리에서는 반복 상수를 compact spec으로 모으되, QA 매트릭스를 하나씩 통과시키며 줄여야 한다.
+
+## 6. GPT/Claude 인계 요약
+
+검토 포인트는 "데이터 자산 이전 후 에코 발동/대상 수/동결/피해 감각이 바뀌지 않았는가"다. 자동 QA는 쌍검/대검 에코와 유틸 궁극 모두 PASS다.
+
+## 7. 다음 Codex 작업
+
+에코/궁극 런타임 정리로 넘어가 반복되는 색상, 반경, 피해, 타이밍 상수를 compact spec으로 모은다.
+
+## 8. 포트폴리오 메모: 문제, 방향, 행동, 결과
+
+- 문제: 튜닝값이 매니저 코드에 남아 있어 디자이너/개발자가 빠르게 조정하기 어려웠다.
+- 방향: 기존 동작을 유지하면서 `_dev/Data` 자산을 1차 튜닝 경로로 만든다.
+- 행동: ScriptableObject와 asset을 추가하고 catalog/scene builder/runtime을 연결했다.
+- 결과: 유틸리티 에코 튜닝이 데이터 자산화됐고, 주요 QA가 모두 통과했다.

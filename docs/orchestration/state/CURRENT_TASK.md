@@ -1,5 +1,49 @@
 # Current Task
 
+# 2026-07-02 Utility Echo Tuning Data Asset Migration Result
+
+## Status
+
+Utility echo tuning is now backed by `_dev/Data` in `Dev_Prototype_v1`. The manager still keeps safe serialized/static fallback values, but the primary runtime route is a ScriptableObject asset.
+
+## Applied Changes
+
+- Added `V1UtilityEchoTuningTable` ScriptableObject.
+- Added data asset:
+  - `Assets/_dev/Data/Echoes/UtilityEcho_Tuning.asset`
+- Moved the six utility echo tuning specs into that asset:
+  - `ExecutionFlash`
+  - `HunterOath`
+  - `ShatterWave`
+  - `StoppedSecond`
+  - `AshenShield`
+  - `OblivionBrand`
+- Connected the asset through:
+  - `V1_ContentCatalog.asset`
+  - `V1ContentCatalog`
+  - `V1SceneBuilder`
+  - `V1GameManager`
+- Runtime lookup order is now:
+  - asset table,
+  - serialized manager table,
+  - static default table,
+  - safe fallback spec.
+
+## Verification
+
+- Unity compile error count: `0`.
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors after retrying a transient DLL lock from a parallel build.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- Unity QA:
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: `[V1QA] PASS`, `total=240`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: `[V1QA] PASS`, `total=221`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: `[V1QA] PASS`, `fracture=19`, `stasis=9`, `ashen=34`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: `[V1QA] PASS`, `fracture=8`, `stasis=22`, `ashen=16`.
+
+## Next Implementation
+
+Continue with echo/ultimate runtime cleanup: move remaining repeated effect constants into compact specs and remove unreachable compatibility/fallback branches only after each QA matrix proves stable.
+
 # 2026-07-02 Utility Echo Serializable Tuning Table Result
 
 ## Status
