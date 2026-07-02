@@ -66,6 +66,20 @@ namespace Lethe.PrototypeV1.Editor
             StartRunner();
         }
 
+        [MenuItem("LETHE/V1 QA/Echo Matrix Dual Blades")]
+        public static void QaEchoMatrixDualBlades()
+        {
+            SavePending(new PendingSmoke(SmokeMode.EchoMatrix, V1WeaponId.DualBlades));
+            StartRunner();
+        }
+
+        [MenuItem("LETHE/V1 QA/Echo Matrix Greatsword")]
+        public static void QaEchoMatrixGreatsword()
+        {
+            SavePending(new PendingSmoke(SmokeMode.EchoMatrix, V1WeaponId.Greatsword));
+            StartRunner();
+        }
+
         [MenuItem("LETHE/V1 QA/Blood Blade Storm")]
         public static void QaBloodBladeStorm()
         {
@@ -167,6 +181,12 @@ namespace Lethe.PrototypeV1.Editor
                 return;
             }
 
+            if (smoke.Mode == SmokeMode.EchoMatrix)
+            {
+                manager.DebugRunEchoMatrix(smoke.WeaponId);
+                return;
+            }
+
             BeginRun(manager, smoke.WeaponId);
             AdvanceStartSmoke(manager, 2.1f);
         }
@@ -233,6 +253,24 @@ namespace Lethe.PrototypeV1.Editor
                     }
                     return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
 
+                case SmokeMode.EchoMatrix:
+                    var prefix = smoke.WeaponId == V1WeaponId.Greatsword ? "EchoGreat_" : "EchoDual_";
+                    var prefixObjects = CountObjects(prefix);
+                    var kalmuri = CountObjects($"{prefix}Kalmuri");
+                    var blood = CountObjects($"{prefix}Blood");
+                    var execution = CountObjects($"{prefix}Execution");
+                    var hunter = CountObjects($"{prefix}Hunter");
+                    var shatter = CountObjects($"{prefix}Shatter");
+                    var stopped = CountObjects($"{prefix}Stopped");
+                    var ashen = CountObjects($"{prefix}Ashen");
+                    var oblivion = CountObjects($"{prefix}Oblivion");
+                    details += $" | prefix={prefix} total={prefixObjects} K={kalmuri} B={blood} Ex={execution} H={hunter} Sh={shatter} St={stopped} A={ashen} O={oblivion}";
+                    if (prefixObjects >= 12 && kalmuri > 0 && blood > 0 && execution > 0 && hunter > 0 && shatter > 0 && stopped > 0 && ashen > 0 && oblivion > 0)
+                    {
+                        return SmokeResult.Pass;
+                    }
+                    return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
+
                 default:
                     return SmokeResult.Fail;
             }
@@ -265,6 +303,7 @@ namespace Lethe.PrototypeV1.Editor
             StartWeapon,
             M2Loop,
             VfxMatrix,
+            EchoMatrix,
             BloodBladeStorm
         }
 
@@ -290,9 +329,11 @@ namespace Lethe.PrototypeV1.Editor
                 ? "M2 Loop"
                 : Mode == SmokeMode.VfxMatrix
                     ? "VFX Matrix"
-                    : Mode == SmokeMode.BloodBladeStorm
-                        ? "Blood Blade Storm"
-                        : $"{WeaponId}";
+                    : Mode == SmokeMode.EchoMatrix
+                        ? $"Echo Matrix {WeaponId}"
+                        : Mode == SmokeMode.BloodBladeStorm
+                            ? "Blood Blade Storm"
+                            : $"{WeaponId}";
         }
 
         static void SpawnAllMemoryEchoPreviews(V1GameManager manager)

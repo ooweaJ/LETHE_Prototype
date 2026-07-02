@@ -1,5 +1,41 @@
 # Current Task
 
+# 2026-07-02 Weapon-Specific Echo Pass Result
+
+## Status
+
+The first sequence item, weapon-specific echo differentiation, is implemented in `Dev_Prototype_v1`.
+
+## Applied Changes
+
+- Added dual-blade and greatsword echo behavior branches while preserving one echo definition per memory.
+- Added `EchoDual_` and `EchoGreat_` runtime object families so QA can inspect the actual weapon-specific echo route.
+- Blood echo now branches into fast bleed-stack wounds for dual blades and heavier cleave/pool spread for greatsword.
+- Utility echoes now branch by weapon style:
+  - Shatter: dual ripple vs greatsword fracture cleave.
+  - Execution: dual chain cuts vs greatsword execution stamp.
+  - Hunter: dual fan shots vs greatsword spear-like tracking hit.
+  - Stopped: dual micro clamp vs greatsword stasis dome.
+  - Ashen: dual parry return vs greatsword counter-wave.
+  - Oblivion: dual brand stacks vs greatsword brand detonation.
+- Added Unity QA menu items:
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`
+  - `LETHE/V1 QA/Echo Matrix Greatsword`
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+- Unity compile error count: `0`.
+- Unity console error count: `0`.
+- Unity QA:
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: `[V1QA] PASS`, `EchoDual_ total=240`, all 8 echo families counted.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: `[V1QA] PASS`, `EchoGreat_ total=221`, all 8 echo families counted.
+
+## Next Implementation
+
+Continue with `docs/orchestration/state/NEXT_TASKS.md` item 1: 패시브화 기억 보강.
+
 # 2026-07-02 Production Gap Audit
 
 ## Status

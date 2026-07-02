@@ -1460,11 +1460,23 @@ namespace Lethe.PrototypeV1
                 }
             }
 
+            TriggerBloodEchoAccent(enemy, forward, bloodLevel, hitIndex, weapon, false);
             TriggerUtilityEchoes(enemy, forward, hitIndex, weapon);
         }
 
         void TriggerUtilityEchoes(V1Enemy enemy, Vector2 forward, int hitIndex, WeaponRuntimeSpec weapon)
         {
+            if (enemy != null)
+            {
+                TriggerShatterEcho(enemy, forward, hitIndex, weapon, false);
+                TriggerExecutionEcho(enemy, forward, hitIndex, weapon, false);
+                TriggerHunterEcho(enemy, forward, hitIndex, weapon, false);
+                TriggerStoppedEcho(enemy, forward, hitIndex, weapon, false);
+                TriggerAshenEcho(enemy, forward, hitIndex, weapon, false);
+                TriggerOblivionEcho(enemy, forward, hitIndex, weapon, false);
+                return;
+            }
+
             var shatterLevel = EchoLevel(V1MemoryId.ShatterWave);
             if (shatterLevel > 0 && (shatterLevel >= 2 || hitIndex == 0) && UnityEngine.Random.value < 0.26f + shatterLevel * 0.09f)
             {
@@ -1533,6 +1545,244 @@ namespace Lethe.PrototypeV1
                 SpawnTransientSprite("OblivionEchoSlash", MakeImpactDiamondSprite("OblivionEchoSlash", Color.white), enemy.transform.position + Vector3.up * 0.08f, Quaternion.Euler(0f, 0f, elapsed * 140f), 0.34f, new Color(0.96f, 0.72f, 1f, 0.72f), 0.34f);
                 SpawnOblivionEchoBrand(enemy.transform.position, forward, 0.64f);
                 DealDamage(enemy, weapon.Damage * (0.16f + oblivionLevel * 0.042f), "낙인 잔향", false);
+            }
+        }
+
+        bool IsHeavyEchoWeapon(WeaponRuntimeSpec weapon) => weapon.EchoProcStyle == V1EchoProcStyle.SingleHeavy;
+
+        Vector2 EchoForward(Vector2 forward)
+        {
+            if (forward.sqrMagnitude > 0.01f) return forward.normalized;
+            if (lastAim.sqrMagnitude > 0.01f) return lastAim.normalized;
+            return Vector2.up;
+        }
+
+        void TriggerBloodEchoAccent(V1Enemy enemy, Vector2 forward, int levelValue, int hitIndex, WeaponRuntimeSpec weapon, bool force)
+        {
+            if (enemy == null || !enemy.IsAlive || levelValue <= 0) return;
+            var heavy = IsHeavyEchoWeapon(weapon);
+            var f = EchoForward(forward);
+            if (heavy)
+            {
+                var radius = 1.02f + levelValue * 0.12f;
+                SpawnTransientSprite("EchoGreat_BloodCleavePool", MakeRingSprite("EchoGreat_BloodCleavePool", Color.white, 144), enemy.transform.position, Quaternion.Euler(0f, 0f, elapsed * -80f), radius, new Color(1f, 0.08f, 0.14f, 0.34f), 0.44f);
+                SpawnEchoWoundSlash("EchoGreat_BloodCleaveWound", enemy.transform.position + Vector3.up * 0.04f, f, new Color(1f, 0.10f, 0.18f, 0.78f), 1.22f, 0.42f);
+                foreach (var target in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(enemy.transform.position, e.transform.position) <= radius + e.TouchRadius).Take(6).ToList())
+                {
+                    var dir = (Vector2)(target.transform.position - enemy.transform.position);
+                    target.BloodMarked = true;
+                    target.MarkTimer = Mathf.Max(target.MarkTimer, 1.9f);
+                    DealDamage(target, weapon.Damage * (0.035f + levelValue * 0.010f), "Blood Echo Great", false, dir.sqrMagnitude > 0.01f ? dir.normalized : f, 0.12f);
+                }
+            }
+            else
+            {
+                var side = new Vector2(-f.y, f.x);
+                SpawnTransientSprite("EchoDual_BloodMarkPulse", MakeRingSprite("EchoDual_BloodMarkPulse", Color.white, 96), enemy.transform.position, Quaternion.identity, 0.34f + levelValue * 0.018f, new Color(1f, 0.10f, 0.18f, 0.34f), 0.20f);
+                for (int i = 0; i < Mathf.Min(4, 1 + levelValue / 2); i++)
+                {
+                    var offset = side * ((i - 1.5f) * 0.10f) + f * (0.05f * i);
+                    SpawnEchoWoundSlash("EchoDual_BloodNeedleStack", enemy.transform.position + (Vector3)offset, f, new Color(1f, 0.16f, 0.22f, 0.48f), 0.44f + i * 0.08f, 0.20f);
+                }
+                DealDamage(enemy, weapon.Damage * (0.020f + levelValue * 0.006f), "Blood Echo Dual", false, f, 0.04f);
+            }
+
+            if (levelValue >= 5 && (force || UnityEngine.Random.value < 0.12f))
+            {
+                BloodBloom(enemy, levelValue);
+            }
+        }
+
+        void TriggerShatterEcho(V1Enemy enemy, Vector2 forward, int hitIndex, WeaponRuntimeSpec weapon, bool force)
+        {
+            var levelValue = EchoLevel(V1MemoryId.ShatterWave);
+            if (levelValue <= 0) return;
+            var heavy = IsHeavyEchoWeapon(weapon);
+            var f = EchoForward(forward);
+            if (!force && !((levelValue >= 2 || hitIndex == 0) && UnityEngine.Random.value < 0.26f + levelValue * 0.09f)) return;
+
+            var radius = heavy ? 1.34f + levelValue * 0.20f : 1.00f + levelValue * 0.12f;
+            SpawnTransientSprite(heavy ? "EchoGreat_ShatterCleaveTell" : "EchoDual_ShatterRippleTell", MakeRingSprite("ShatterEchoTell", Color.white, heavy ? 168 : 112), enemy.transform.position, Quaternion.identity, heavy ? radius * 1.02f : radius * 0.72f, new Color(0.54f, 0.92f, 1f, heavy ? 0.48f : 0.34f), heavy ? 0.34f : 0.22f);
+            SpawnShatterEchoScar(enemy.transform.position, f, radius, heavy ? 0.72f : 0.54f);
+            SpawnShatterWaveField(enemy.transform.position, radius, heavy ? 1.32f : 1.14f, true);
+            if (heavy)
+            {
+                SpawnRadialSlashLines("EchoGreat_ShatterFracture", enemy.transform.position, f, 3, radius * 0.82f, new Color(0.72f, 0.98f, 1f, 0.64f), 0.46f);
+                hitstopTimer = Mathf.Max(hitstopTimer, 0.032f);
+                cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.11f);
+                cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.052f);
+            }
+            foreach (var target in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(enemy.transform.position, e.transform.position) <= radius + e.TouchRadius).Take(heavy ? 9 : 5).ToList())
+            {
+                var dir = (Vector2)(target.transform.position - enemy.transform.position);
+                DealDamage(target, weapon.Damage * (heavy ? 0.15f + levelValue * 0.038f : 0.10f + levelValue * 0.025f), heavy ? "Shatter Echo Great" : "Shatter Echo Dual", false, dir.sqrMagnitude > 0.01f ? dir.normalized : f, heavy ? 0.62f : 0.25f);
+            }
+        }
+
+        void TriggerExecutionEcho(V1Enemy enemy, Vector2 forward, int hitIndex, WeaponRuntimeSpec weapon, bool force)
+        {
+            var levelValue = EchoLevel(V1MemoryId.ExecutionFlash);
+            if (levelValue <= 0) return;
+            var heavy = IsHeavyEchoWeapon(weapon);
+            var f = EchoForward(forward);
+            if (!force && enemy.HealthRatio > 0.22f + levelValue * 0.025f) return;
+
+            PlaySfx("execution", heavy ? 0.68f : 0.48f, heavy ? 0.14f : 0.08f);
+            SpawnPromptSprite(heavy ? "EchoGreat_ExecutionStamp" : "EchoDual_ExecutionChain", EchoVfxSprite(V1MemoryId.ExecutionFlash), () => MakeImpactDiamondSprite("ExecutionEcho", Color.white), enemy.transform.position, Quaternion.identity, heavy ? 2.34f : 1.82f, heavy ? 1.02f : 0.78f, new Color(1f, 0.92f, 0.58f, 0.98f), heavy ? 0.66f : 0.52f);
+            SpawnTransientSprite(heavy ? "EchoGreat_ExecutionHalo" : "EchoDual_ExecutionHalo", MakeRingSprite("ExecutionEchoHalo", Color.white, heavy ? 168 : 132), enemy.transform.position, Quaternion.identity, heavy ? 1.02f : 0.72f, new Color(1f, 0.90f, 0.44f, heavy ? 0.58f : 0.46f), heavy ? 0.46f : 0.36f);
+            if (heavy)
+            {
+                SpawnRadialSlashLines("EchoGreat_ExecutionCrack", enemy.transform.position, f, 4, 1.18f + levelValue * 0.08f, new Color(1f, 0.96f, 0.50f, 0.76f), 0.44f);
+                foreach (var target in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(enemy.transform.position, e.transform.position) <= 1.20f + levelValue * 0.08f).Take(6).ToList())
+                {
+                    DealDamage(target, weapon.Damage * (target.HealthRatio < 0.36f ? 0.34f + levelValue * 0.065f : 0.15f + levelValue * 0.035f), "Execution Echo Great", false);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    var rotated = Quaternion.Euler(0f, 0f, i * 38f) * (Vector3)f;
+                    SpawnEchoWoundSlash("EchoDual_ExecutionChainCut", enemy.transform.position + (Vector3)(f * (i * 0.05f)), (Vector2)rotated, new Color(1f, 0.96f, 0.50f, 0.78f - i * 0.10f), 0.86f + i * 0.14f, 0.30f);
+                }
+                SpawnExecutionFlashBurst(enemy.transform.position, 0.92f, 0.44f);
+                DealDamage(enemy, weapon.Damage * (0.18f + levelValue * 0.05f), "Execution Echo Dual", false);
+            }
+        }
+
+        void TriggerHunterEcho(V1Enemy enemy, Vector2 forward, int hitIndex, WeaponRuntimeSpec weapon, bool force)
+        {
+            var levelValue = EchoLevel(V1MemoryId.HunterOath);
+            if (levelValue <= 0) return;
+            var heavy = IsHeavyEchoWeapon(weapon);
+            if (!force && !(hitIndex == 0 && UnityEngine.Random.value < 0.36f + levelValue * 0.09f)) return;
+
+            var targets = enemies
+                .Where(e => e != null && e.IsAlive && e != enemy)
+                .OrderBy(e => Vector2.Distance(enemy.transform.position, e.transform.position))
+                .Take(heavy ? 1 : 1 + levelValue / 3)
+                .ToList();
+            if (force && targets.Count == 0) targets.Add(enemy);
+            SpawnTransientSprite(heavy ? "EchoGreat_HunterSpearLock" : "EchoDual_HunterFanLock", MakeRingSprite("HunterEchoOriginMark", Color.white, heavy ? 148 : 112), enemy.transform.position, Quaternion.Euler(0f, 0f, elapsed * (heavy ? -55f : 90f)), heavy ? 0.68f : 0.46f, new Color(0.74f, 1f, 0.38f, heavy ? 0.66f : 0.54f), heavy ? 0.58f : 0.42f);
+            for (int i = 0; i < targets.Count; i++)
+            {
+                SpawnEchoLink(heavy ? "EchoGreat_HunterSpearLine" : "EchoDual_HunterAimLine", enemy.transform.position, targets[i].transform.position, new Color(0.72f, 1f, 0.36f, heavy ? 0.58f : 0.42f), heavy ? 0.58f : 0.40f, heavy ? 0.032f : 0.020f);
+                if (heavy) SpawnHunterGreatEchoSpear(targets[i], enemy.transform.position, levelValue, weapon);
+                else SpawnHunterOathShot(targets[i], enemy.transform.position, i, targets.Count, 9.2f + levelValue * 0.25f, weapon.Damage * (0.22f + levelValue * 0.055f), HunterEchoSource, true);
+            }
+        }
+
+        void TriggerStoppedEcho(V1Enemy enemy, Vector2 forward, int hitIndex, WeaponRuntimeSpec weapon, bool force)
+        {
+            var levelValue = EchoLevel(V1MemoryId.StoppedSecond);
+            if (levelValue <= 0) return;
+            var heavy = IsHeavyEchoWeapon(weapon);
+            var f = EchoForward(forward);
+            if (!force && !(hitIndex == 0 && UnityEngine.Random.value < 0.34f + levelValue * 0.065f)) return;
+
+            PlaySfx("stopped", heavy ? 0.58f : 0.40f, heavy ? 0.18f : 0.12f);
+            var radius = heavy ? 1.78f + levelValue * 0.20f : 0.84f + levelValue * 0.055f;
+            SpawnTransientSprite(heavy ? "EchoGreat_StoppedDome" : "EchoDual_StoppedMicroTick", MakeRingSprite("StoppedEchoWeaponTell", Color.white, heavy ? 180 : 96), enemy.transform.position, Quaternion.identity, radius * (heavy ? 0.95f : 0.72f), new Color(1f, 0.76f, 0.22f, heavy ? 0.48f : 0.34f), heavy ? 0.54f : 0.26f);
+            SpawnStoppedEchoClamp(enemy.transform.position, heavy ? 1.00f + levelValue * 0.08f : 0.74f + levelValue * 0.055f, heavy ? 1.36f : 1.12f);
+            SpawnStoppedSecondField(enemy.transform.position, heavy ? radius : 1.36f + levelValue * 0.16f, TimeStopGold(heavy), heavy ? 1.70f : 1.48f, heavy);
+            foreach (var target in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(enemy.transform.position, e.transform.position) <= radius + e.TouchRadius).Take(heavy ? 8 : 3).ToList())
+            {
+                var dir = (Vector2)(target.transform.position - enemy.transform.position);
+                target.ApplyBriefFreeze(heavy ? 0.52f + levelValue * 0.07f : 0.24f + levelValue * 0.045f);
+                DealDamage(target, weapon.Damage * (heavy ? 0.070f + levelValue * 0.018f : 0.030f + levelValue * 0.010f), heavy ? "Stopped Echo Great" : "Stopped Echo Dual", false, dir.sqrMagnitude > 0.01f ? dir.normalized : f, 0.08f);
+            }
+        }
+
+        void TriggerAshenEcho(V1Enemy enemy, Vector2 forward, int hitIndex, WeaponRuntimeSpec weapon, bool force)
+        {
+            var levelValue = EchoLevel(V1MemoryId.AshenShield);
+            if (levelValue <= 0) return;
+            var heavy = IsHeavyEchoWeapon(weapon);
+            var f = EchoForward(forward);
+            if (!force && !(hitIndex == 0 && UnityEngine.Random.value < 0.30f + levelValue * 0.055f)) return;
+
+            HealPlayer((heavy ? 0.48f : 0.28f) + levelValue * (heavy ? 0.16f : 0.12f));
+            PlaySfx("ashen", heavy ? 0.46f : 0.30f, heavy ? 0.24f : 0.18f);
+            SpawnTransientSprite(heavy ? "EchoGreat_AshenGuardSeal" : "EchoDual_AshenParrySeal", MakeRingSprite("AshenEchoHitSeal", Color.white, heavy ? 156 : 112), enemy.transform.position, Quaternion.Euler(0f, 0f, elapsed * (heavy ? 70f : -90f)), heavy ? 0.72f : 0.42f, new Color(0.82f, 0.88f, 0.94f, heavy ? 0.60f : 0.48f), heavy ? 0.56f : 0.42f);
+            SpawnEchoLink(heavy ? "EchoGreat_AshenCounterThread" : "EchoDual_AshenReturnThread", enemy.transform.position, player.position, new Color(0.84f, 0.90f, 1f, heavy ? 0.44f : 0.32f), heavy ? 0.48f : 0.34f, heavy ? 0.026f : 0.016f);
+            SpawnPromptSprite(heavy ? "EchoGreat_AshenCounterWave" : "EchoDual_AshenGuard", EchoVfxSprite(V1MemoryId.AshenShield), () => MakeRingSprite("AshenEcho", Color.white, 112), player.position, Quaternion.identity, heavy ? 1.86f : 1.26f, heavy ? 0.76f : 0.52f, new Color(0.78f, 0.86f, 0.92f, heavy ? 0.64f : 0.52f), heavy ? 0.70f : 0.54f);
+            SpawnTransientSprite(heavy ? "EchoGreat_AshenShieldBreakRing" : "EchoDual_AshenParryGuard", MakeRingSprite("AshenEchoGuard", Color.white, heavy ? 180 : 144), player.position, Quaternion.Euler(0f, 0f, elapsed * -120f), heavy ? 1.12f : 0.58f, new Color(0.86f, 0.92f, 1f, heavy ? 0.42f : 0.32f), heavy ? 0.58f : 0.42f);
+            if (heavy)
+            {
+                foreach (var target in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) <= 1.95f + levelValue * 0.12f).Take(8).ToList())
+                {
+                    var dir = (Vector2)(target.transform.position - player.position);
+                    DealDamage(target, weapon.Damage * (0.08f + levelValue * 0.018f), "Ashen Echo Great", false, dir.sqrMagnitude > 0.01f ? dir.normalized : f, 0.42f);
+                }
+            }
+            else
+            {
+                DealDamage(enemy, weapon.Damage * (0.045f + levelValue * 0.012f), "Ashen Echo Dual", false, f, 0.10f);
+            }
+        }
+
+        void TriggerOblivionEcho(V1Enemy enemy, Vector2 forward, int hitIndex, WeaponRuntimeSpec weapon, bool force)
+        {
+            var levelValue = EchoLevel(V1MemoryId.OblivionBrand);
+            if (levelValue <= 0) return;
+            var heavy = IsHeavyEchoWeapon(weapon);
+            var f = EchoForward(forward);
+            if (!force && UnityEngine.Random.value >= 0.34f + levelValue * 0.065f) return;
+
+            PlaySfx("brand", heavy ? 0.52f : 0.36f, heavy ? 0.16f : 0.10f);
+            SpawnPromptSprite(heavy ? "EchoGreat_OblivionDetonation" : "EchoDual_OblivionBrandStack", EchoVfxSprite(V1MemoryId.OblivionBrand), () => MakeRingSprite("OblivionEcho", Color.white, 112), enemy.transform.position, Quaternion.identity, heavy ? 2.05f : 1.52f, heavy ? 1.02f : 0.74f, new Color(0.76f, 0.46f, 1f, heavy ? 0.86f : 0.76f), heavy ? 0.86f : 0.72f);
+            SpawnTransientSprite(heavy ? "EchoGreat_OblivionCoreBreak" : "EchoDual_OblivionSlash", MakeImpactDiamondSprite("OblivionEchoSlash", Color.white), enemy.transform.position + Vector3.up * 0.08f, Quaternion.Euler(0f, 0f, elapsed * 140f), heavy ? 0.52f : 0.34f, new Color(0.96f, 0.72f, 1f, heavy ? 0.86f : 0.72f), heavy ? 0.44f : 0.34f);
+            SpawnOblivionEchoBrand(enemy.transform.position, f, heavy ? 0.82f : 0.64f);
+            if (heavy)
+            {
+                SpawnRadialSlashLines("EchoGreat_OblivionBrandBurst", enemy.transform.position, f, 5, 0.92f + levelValue * 0.08f, new Color(0.86f, 0.48f, 1f, 0.62f), 0.46f);
+                foreach (var target in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(enemy.transform.position, e.transform.position) <= 1.18f + levelValue * 0.12f).Take(7).ToList())
+                {
+                    var dir = (Vector2)(target.transform.position - enemy.transform.position);
+                    DealDamage(target, weapon.Damage * (0.13f + levelValue * 0.036f), "Oblivion Echo Great", false, dir.sqrMagnitude > 0.01f ? dir.normalized : f, 0.24f);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < Mathf.Min(4, 1 + levelValue / 2); i++)
+                {
+                    SpawnTransientSprite("EchoDual_OblivionStackPip", MakeImpactDiamondSprite("EchoDual_OblivionStackPip", Color.white), enemy.transform.position + Quaternion.Euler(0f, 0f, i * 90f + elapsed * 60f) * Vector3.right * 0.22f, Quaternion.Euler(0f, 0f, 45f + i * 30f), 0.16f, new Color(0.92f, 0.64f, 1f, 0.58f), 0.30f);
+                }
+                DealDamage(enemy, weapon.Damage * (0.16f + levelValue * 0.042f), "Oblivion Echo Dual", false);
+            }
+        }
+
+        void SpawnHunterGreatEchoSpear(V1Enemy target, Vector3 origin, int levelValue, WeaponRuntimeSpec weapon)
+        {
+            if (target == null || !target.IsAlive) return;
+            PlaySfx("hunter", 0.42f, 0.10f);
+            var toTarget = (Vector2)(target.transform.position - origin);
+            var forward = toTarget.sqrMagnitude > 0.01f ? toTarget.normalized : Vector2.up;
+            var angle = Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg - 90f;
+            var go = new GameObject("EchoGreat_HunterSpear");
+            go.transform.position = origin - (Vector3)(forward * 0.22f);
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = EchoVfxSprite(V1MemoryId.HunterOath) ?? MakeCrescentSlashSprite("EchoGreat_HunterSpear", Color.white, false);
+            go.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+            go.transform.localScale = Vector3.one * (sr.sprite != null && sr.sprite.bounds.size.x > 2f ? ScaleSpriteToWorldWidth(sr.sprite, 1.24f) : 0.24f);
+            sr.color = new Color(0.84f, 1f, 0.48f, 0.94f);
+            sr.sortingOrder = 45;
+            go.AddComponent<V1Projectile>().Configure(this, target, 6.8f + levelValue * 0.20f, weapon.Damage * (0.34f + levelValue * 0.075f), HunterEchoSource);
+        }
+
+        void SpawnRadialSlashLines(string name, Vector3 center, Vector2 forward, int count, float length, Color color, float lifetime)
+        {
+            var f = EchoForward(forward);
+            var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg - 90f;
+            var line = MakeBoxSprite(name, Color.white, 7, 132);
+            for (int i = 0; i < count; i++)
+            {
+                var spread = count <= 1 ? 0f : (i - (count - 1) * 0.5f) * (92f / Mathf.Max(1, count - 1));
+                var rotation = Quaternion.Euler(0f, 0f, baseAngle + spread);
+                var dir = rotation * Vector3.up;
+                var pos = center + dir * (0.04f * Mathf.Abs(i - (count - 1) * 0.5f));
+                var alpha = Mathf.Clamp01(color.a * (1f - i * 0.055f));
+                SpawnTransientSpriteScaled(name, line, pos, rotation, new Vector3(0.026f + count * 0.002f, length * (0.84f + i * 0.035f), 1f), new Color(color.r, color.g, color.b, alpha), lifetime * (1f - i * 0.035f));
             }
         }
 
@@ -2836,6 +3086,45 @@ namespace Lethe.PrototypeV1
             weaponAnimTimer = 0f;
             SpawnFloatingText(player.position + Vector3.up * 1.32f, weaponId == V1WeaponId.Greatsword ? "GS VFX Review" : "DB VFX Review", new Color(0.78f, 0.96f, 1f));
             Log(weaponId == V1WeaponId.Greatsword ? "Debug greatsword integrated review" : "Debug dual-blade integrated review");
+        }
+
+        public string DebugRunEchoMatrix(V1WeaponId weaponId)
+        {
+            EnsureRunStarted();
+            SetDebugWeapon(weaponId);
+            EnsureReviewEnemies(18);
+            activeMemories.Clear();
+            echoLevels.Clear();
+            foreach (var id in AllEchoIds)
+            {
+                echoLevels[id] = MaxEchoLevel;
+            }
+            echoOnlyDebugMode = true;
+            bloodStormWasReady = false;
+            bloodStormBurstTimer = 0f;
+            ultimatePulseTimer = 0f;
+
+            var weapon = CurrentWeaponSpec();
+            var live = enemies.Where(e => e != null && e.IsAlive).Take(8).ToList();
+            for (int i = 0; i < live.Count; i++)
+            {
+                var enemy = live[i];
+                var dir = (Vector2)(enemy.transform.position - player.position);
+                if (dir.sqrMagnitude < 0.01f) dir = (Vector2)(Quaternion.Euler(0f, 0f, i * 45f) * Vector3.up);
+                SpawnTransientSprite(weaponId == V1WeaponId.Greatsword ? "EchoGreat_KalmuriMatrixMarker" : "EchoDual_KalmuriMatrixMarker", MakeRingSprite("KalmuriMatrixMarker", Color.white, 112), enemy.transform.position, Quaternion.identity, weaponId == V1WeaponId.Greatsword ? 0.72f : 0.48f, new Color(0.66f, 1f, 1f, weaponId == V1WeaponId.Greatsword ? 0.48f : 0.34f), 0.32f);
+                TriggerKalmuriEcho(enemy, dir.normalized, MaxEchoLevel, i, weapon);
+                TriggerBloodEchoAccent(enemy, dir.normalized, MaxEchoLevel, i, weapon, true);
+                TriggerShatterEcho(enemy, dir.normalized, i, weapon, true);
+                TriggerExecutionEcho(enemy, dir.normalized, i, weapon, true);
+                TriggerHunterEcho(enemy, dir.normalized, i, weapon, true);
+                TriggerStoppedEcho(enemy, dir.normalized, i, weapon, true);
+                TriggerAshenEcho(enemy, dir.normalized, i, weapon, true);
+                TriggerOblivionEcho(enemy, dir.normalized, i, weapon, true);
+            }
+            UpdatePendingKalmuriFollowups(0.5f);
+            SpawnFloatingText(player.position + Vector3.up * 1.44f, weaponId == V1WeaponId.Greatsword ? "Echo Matrix: Great" : "Echo Matrix: Dual", new Color(0.74f, 0.98f, 1f));
+            Log(weaponId == V1WeaponId.Greatsword ? "Debug echo matrix greatsword" : "Debug echo matrix dual blades");
+            return DebugSnapshot();
         }
 
         void EnsureReviewEnemies(int targetCount)
