@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>2026-07-02-02 - 잔향 무기별 차별화 1차 구현</title>
+  <title>2026-07-02-02 - 에코 무기별 차별화 1차 구현</title>
   <style>
     :root {
       color-scheme: light;
@@ -116,50 +116,49 @@
 <body>
   <header>
     <div class="header-inner">
-      <h1>2026-07-02-02 - 잔향 무기별 차별화 1차 구현</h1>
-      <p class="meta">Generated from 2026-07-02-02-잔향-무기별-차별화-1차-구현.md</p>
+      <h1>2026-07-02-02 - 에코 무기별 차별화 1차 구현</h1>
+      <p class="meta">Generated from 2026-07-02-02-에코-무기별-차별화-1차-구현.md</p>
     </div>
   </header>
   <main>
     <p class="back-link"><a href="/api/projects/lethe/reports/20260702/index.html">날짜 리포트로 돌아가기</a></p>
-    <h1>2026-07-02-02 - 잔향 무기별 차별화 1차 구현</h1>
+    <h1>2026-07-02-02 - 에코 무기별 차별화 1차 구현</h1>
 <h2>1. 현재 빌드 상태</h2>
-<p><code>Dev_Prototype_v1</code>에서 잔향 8종이 쌍검/대검에 따라 다른 런타임 패턴을 만들도록 1차 구현했다. <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않는다.</p>
+<p><code>Dev_Prototype_v1</code>에서 에코 8종이 쌍검/대검에 따라 다른 효과와 패턴을 만들도록 1차 구현했다. <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</p>
 <h2>2. 오늘 바뀐 것</h2>
 <ul>
-<li>잔향 런타임 오브젝트 이름을 <code>EchoDual_*</code> / <code>EchoGreat_*</code> 계열로 분리했다.</li>
-<li>쌍검은 빠른 연쇄, 작은 스택, 다중 타격 중심으로 만들었다.</li>
-<li>대검은 큰 범위, 느린 강타, 폭발/장판 중심으로 만들었다.</li>
-<li><code>BloodReflection</code> 잔향도 무기별로 갈랐다.</li>
-<li>6개 유틸리티 잔향도 무기별로 갈랐다.</li>
+<li>에코 오브젝트 계열을 <code>EchoDual_*</code> / <code>EchoGreat_*</code>로 분리했다.</li>
+<li>쌍검은 빠른 연쇄, 작은 중첩, 다중 타격 중심으로 만들었다.</li>
+<li>대검은 큰 범위, 무거운 각인, 폭발/장판 중심으로 만들었다.</li>
+<li><code>BloodReflection</code> 에코와 6개 유틸리티 에코를 무기별로 갈랐다.</li>
 <li>Unity QA 메뉴를 추가했다:</li>
 <li><code>LETHE/V1 QA/Echo Matrix Dual Blades</code></li>
 <li><code>LETHE/V1 QA/Echo Matrix Greatsword</code></li>
 </ul>
 <h2>3. 테스트 결과와 근거</h2>
 <ul>
-<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy 경고 7개 / 오류 0개.</li>
-<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 통과, 경고 0개 / 오류 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, 기존 경고 7개, 오류 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 통과, 경고 0개, 오류 0개.</li>
 <li>Unity compile error count: <code>0</code>.</li>
 <li>Unity console error count: <code>0</code>.</li>
 <li>Unity QA:</li>
-<li>쌍검 Echo Matrix: <code>[V1QA] PASS</code>, <code>EchoDual_ total=240</code>, 8잔향 모두 카운트.</li>
-<li>대검 Echo Matrix: <code>[V1QA] PASS</code>, <code>EchoGreat_ total=221</code>, 8잔향 모두 카운트.</li>
+<li>쌍검 Echo Matrix: <code>[V1QA] PASS</code>, <code>EchoDual_ total=240</code>, 8개 에코 모두 카운트.</li>
+<li>대검 Echo Matrix: <code>[V1QA] PASS</code>, <code>EchoGreat_ total=221</code>, 8개 에코 모두 카운트.</li>
 </ul>
 <h2>4. 결정한 것</h2>
-<p>잔향은 별도 정의 16개로 늘리지 않는다. <code>EchoDefinition</code>은 8개를 유지하고, 무기별 표현은 런타임 행동과 VFX 리듬으로 갈라낸다.</p>
+<p>에코 정의를 16개로 늘리지 않고, <code>EchoDefinition</code>은 8개를 유지한다. 무기별 차이는 런타임 행동과 VFX 리듬으로 만든다.</p>
 <h2>5. 문제 또는 리스크</h2>
-<p>이번 패스는 체감 차이를 먼저 만든 1차 구현이다. 값과 반복 코드는 아직 <code>V1GameManager</code>에 남아 있으므로, 뒤쪽 데이터화/정리 패스에서 더 줄여야 한다.</p>
+<p>이번 패스는 체감 차이를 먼저 만든 1차 구현이다. 수치와 반복 코드는 아직 <code>V1GameManager</code> 안에 남아 있으므로 후속 데이터화가 필요하다.</p>
 <h2>6. GPT/Claude 인계 요약</h2>
-<p>잔향 무기별 차별화는 기술적으로 들어갔다. 다음 리뷰 포인트는 &quot;쌍검은 잔향이 빠르게 몰아치는가&quot;, &quot;대검은 잔향이 한 번에 크게 터지는가&quot;, &quot;각 잔향의 정체성이 색만 다른 효과가 아니라 행동으로 구분되는가&quot;다.</p>
+<p>검토 포인트는 &quot;쌍검 에코는 빠르게 몰아치고, 대검 에코는 한 번에 크게 찍는가&quot;이다. 색만 다른 효과가 아니라 행동 차이로 구분되는지 봐야 한다.</p>
 <h2>7. 다음 Codex 작업</h2>
-<p>다음 차례는 <code>패시브화 기억 보강</code>이다. 우선 대상은 <code>BloodReflection</code>, <code>AshenShield</code>, <code>StoppedSecond</code>, <code>OblivionBrand</code>이며, 각 기억이 +1/+3/+5에서 독립적인 행동을 보이게 만든다.</p>
+<p>다음은 <code>패시브화 기억 보강</code>이다. 우선 대상은 <code>BloodReflection</code>, <code>AshenShield</code>, <code>StoppedSecond</code>, <code>OblivionBrand</code>다.</p>
 <h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
 <ul>
-<li>문제: 잔향 8종은 있었지만 무기별 빌드 감각이 충분히 갈라지지 않았다.</li>
-<li>방향: 쌍검은 연쇄/스택, 대검은 강타/범위/폭발로 같은 잔향을 다르게 표현한다.</li>
-<li>행동: 런타임 분기와 Echo Matrix QA를 추가했다.</li>
-<li>결과: 8잔향 모두 쌍검/대검 경로에서 스폰과 카운트가 검증됐다.</li>
+<li>문제: 에코 8종이 있었지만 무기별 빌드 감각이 충분히 갈라지지 않았다.</li>
+<li>방향: 쌍검은 연쇄/중첩, 대검은 강타/범위/폭발로 표현한다.</li>
+<li>행동: 무기별 런타임 분기와 Echo Matrix QA를 추가했다.</li>
+<li>결과: 8에코 모두 쌍검/대검 경로에서 스폰과 카운트가 검증됐다.</li>
 </ul>
   </main>
 </body>

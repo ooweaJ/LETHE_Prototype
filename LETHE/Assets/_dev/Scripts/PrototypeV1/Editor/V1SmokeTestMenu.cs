@@ -80,6 +80,13 @@ namespace Lethe.PrototypeV1.Editor
             StartRunner();
         }
 
+        [MenuItem("LETHE/V1 QA/Passive Memory Matrix")]
+        public static void QaPassiveMemoryMatrix()
+        {
+            SavePending(new PendingSmoke(SmokeMode.PassiveMemoryMatrix, V1WeaponId.DualBlades));
+            StartRunner();
+        }
+
         [MenuItem("LETHE/V1 QA/Blood Blade Storm")]
         public static void QaBloodBladeStorm()
         {
@@ -187,6 +194,12 @@ namespace Lethe.PrototypeV1.Editor
                 return;
             }
 
+            if (smoke.Mode == SmokeMode.PassiveMemoryMatrix)
+            {
+                manager.DebugRunPassiveMemoryMatrix();
+                return;
+            }
+
             BeginRun(manager, smoke.WeaponId);
             AdvanceStartSmoke(manager, 2.1f);
         }
@@ -271,6 +284,18 @@ namespace Lethe.PrototypeV1.Editor
                     }
                     return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
 
+                case SmokeMode.PassiveMemoryMatrix:
+                    var bloodMemory = CountObjects("MemoryBloodReflection");
+                    var ashMemory = CountObjects("MemoryAshenShield");
+                    var stoppedMemory = CountObjects("MemoryStoppedSecond");
+                    var oblivionMemory = CountObjects("MemoryOblivionBrand");
+                    details += $" | passiveMemory blood={bloodMemory} ash={ashMemory} stopped={stoppedMemory} oblivion={oblivionMemory}";
+                    if (bloodMemory > 0 && ashMemory > 0 && stoppedMemory > 0 && oblivionMemory > 0)
+                    {
+                        return SmokeResult.Pass;
+                    }
+                    return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
+
                 default:
                     return SmokeResult.Fail;
             }
@@ -304,6 +329,7 @@ namespace Lethe.PrototypeV1.Editor
             M2Loop,
             VfxMatrix,
             EchoMatrix,
+            PassiveMemoryMatrix,
             BloodBladeStorm
         }
 
@@ -331,9 +357,11 @@ namespace Lethe.PrototypeV1.Editor
                     ? "VFX Matrix"
                     : Mode == SmokeMode.EchoMatrix
                         ? $"Echo Matrix {WeaponId}"
-                        : Mode == SmokeMode.BloodBladeStorm
-                            ? "Blood Blade Storm"
-                            : $"{WeaponId}";
+                        : Mode == SmokeMode.PassiveMemoryMatrix
+                            ? "Passive Memory Matrix"
+                            : Mode == SmokeMode.BloodBladeStorm
+                                ? "Blood Blade Storm"
+                                : $"{WeaponId}";
         }
 
         static void SpawnAllMemoryEchoPreviews(V1GameManager manager)

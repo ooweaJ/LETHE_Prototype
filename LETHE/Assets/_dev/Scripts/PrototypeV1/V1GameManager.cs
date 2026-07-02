@@ -1061,6 +1061,7 @@ namespace Lethe.PrototypeV1
             var blood = activeMemories.FirstOrDefault(m => m.Id == V1MemoryId.BloodReflection);
             if (blood != null)
             {
+                UpdateBloodReflectionAction(blood, dt);
                 foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && e.BloodMarked).ToList())
                 {
                     DealDamage(enemy, (0.8f + blood.Level * 0.25f) * dt, "피의 반사", false);
@@ -1084,6 +1085,57 @@ namespace Lethe.PrototypeV1
 
             var oblivion = activeMemories.FirstOrDefault(m => m.Id == V1MemoryId.OblivionBrand);
             if (oblivion != null) UpdateOblivionBrand(oblivion, dt);
+        }
+
+        void UpdateBloodReflectionAction(MemoryState memory, float dt)
+        {
+            memory.TickTimer -= dt;
+            if (memory.TickTimer > 0f) return;
+            memory.TickTimer = Mathf.Max(0.72f, 1.65f - memory.Level * 0.13f);
+
+            var anchor = enemies
+                .Where(e => e != null && e.IsAlive)
+                .OrderByDescending(e => e.BloodMarked ? 1 : 0)
+                .ThenBy(e => Vector2.Distance(player.position, e.transform.position))
+                .FirstOrDefault();
+            var center = anchor != null ? anchor.transform.position : player.position;
+            var radius = 1.15f + memory.Level * 0.14f;
+            var cap = memory.Level >= 5 ? 6 : memory.Level >= 3 ? 4 : 2;
+
+            PlaySfx("blood_mark", 0.42f, 0.16f);
+            SpawnTransientSprite("MemoryBloodReflectionPulse", MakeRingSprite("MemoryBloodReflectionPulse", Color.white, 132), center, Quaternion.identity, 0.62f + memory.Level * 0.055f, new Color(1f, 0.10f, 0.18f, 0.48f), 0.38f);
+            SpawnPromptSprite("MemoryBloodReflectionBloom", MemoryVfxSprite(V1MemoryId.BloodReflection), () => MakeRingSprite("MemoryBloodReflectionBloom", Color.white, 128), center + Vector3.up * 0.05f, Quaternion.Euler(0f, 0f, elapsed * -70f), 1.28f + memory.Level * 0.12f, 0.58f, new Color(1f, 0.16f, 0.24f, 0.62f), 0.52f);
+
+            var victims = enemies
+                .Where(e => e != null && e.IsAlive && Vector2.Distance(center, e.transform.position) <= radius + e.TouchRadius)
+                .OrderBy(e => Vector2.Distance(center, e.transform.position))
+                .Take(cap)
+                .ToList();
+            if (victims.Count == 0)
+            {
+                HealPlayer(0.35f + memory.Level * 0.08f);
+                return;
+            }
+
+            foreach (var target in victims)
+            {
+                target.BloodMarked = true;
+                target.MarkTimer = Mathf.Max(target.MarkTimer, 2.0f + memory.Level * 0.18f);
+                var dir = (Vector2)(target.transform.position - center);
+                DealDamage(target, 4.2f + memory.Level * 1.9f, "BloodReflection active pulse", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, memory.Level >= 3 ? 0.18f : 0.04f);
+                SpawnBloodThread(target.transform.position, 0.45f + memory.Level * 0.10f, memory.Level);
+                if (memory.Level >= 3)
+                {
+                    SpawnEchoLink("MemoryBloodReflectionThread", target.transform.position, player.position, new Color(1f, 0.12f, 0.18f, 0.38f), 0.30f, 0.018f + memory.Level * 0.002f);
+                }
+            }
+
+            HealPlayer(0.55f + victims.Count * (0.12f + memory.Level * 0.035f));
+            if (memory.Level >= 5 && anchor != null)
+            {
+                SpawnRadialSlashLines("MemoryBloodReflectionAwakenLash", anchor.transform.position, (Vector2)(anchor.transform.position - player.position), 5, 0.92f, new Color(1f, 0.12f, 0.18f, 0.62f), 0.42f);
+                BloodBloom(anchor, memory.Level);
+            }
         }
 
         void UpdateExecutionFlash(MemoryState memory, float dt)
@@ -1273,11 +1325,24 @@ namespace Lethe.PrototypeV1
             var freezeDuration = Mathf.Min(1.0f, 0.55f + memory.Level * 0.10f);
             PlaySfx("stopped", 0.62f, 0.20f);
             SpawnStoppedSecondField(center, radius, TimeStopGold(true), 1.75f, true);
+            SpawnTransientSprite("MemoryStoppedSecondBeat", MakeRingSprite("MemoryStoppedSecondBeat", Color.white, 160), center, Quaternion.Euler(0f, 0f, elapsed * -110f), radius * 0.82f, new Color(1f, 0.78f, 0.24f, 0.44f), 0.52f);
+            if (memory.Level >= 3)
+            {
+                SpawnRadialSlashLines("MemoryStoppedSecondAftercut", center, (Vector2)(center - player.position), 4, 0.72f + memory.Level * 0.08f, new Color(1f, 0.82f, 0.32f, 0.56f), 0.38f);
+            }
             foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(center, e.transform.position) <= radius + e.TouchRadius).Take(10).ToList())
             {
                 var dir = (Vector2)(enemy.transform.position - center);
                 DealDamage(enemy, 5f + memory.Level * 2.1f, "멈춘 1초", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 0.75f);
                 enemy.ApplyBriefFreeze(freezeDuration);
+            }
+            if (memory.Level >= 5)
+            {
+                SpawnTransientSprite("MemoryStoppedSecondAwakenDome", MakeRingSprite("MemoryStoppedSecondAwakenDome", Color.white, 180), center, Quaternion.identity, radius * 1.14f, new Color(1f, 0.72f, 0.18f, 0.34f), 0.72f);
+                foreach (var extra in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(center, e.transform.position) <= radius * 1.28f + e.TouchRadius).Take(14).ToList())
+                {
+                    extra.ApplyBriefFreeze(0.34f);
+                }
             }
         }
 
@@ -1289,6 +1354,20 @@ namespace Lethe.PrototypeV1
             PlaySfx("ashen", 0.36f, 0.42f);
             SpawnPromptSprite("AshenShield", MemoryVfxSprite(V1MemoryId.AshenShield), () => MakeRingSprite("AshenShield", Color.white, 128), player.position, Quaternion.identity, 1.66f + memory.Level * 0.11f, 0.70f + memory.Level * 0.052f, new Color(0.72f, 0.80f, 0.86f, 0.46f), 0.52f);
             SpawnTransientSprite("AshenShieldCore", MakeRingSprite("AshenShieldCore", Color.white, 96), player.position, Quaternion.Euler(0f, 0f, elapsed * -80f), 0.42f + memory.Level * 0.035f, new Color(0.90f, 0.96f, 1f, 0.30f), 0.30f);
+            if (memory.Level >= 3)
+            {
+                SpawnRadialSlashLines("MemoryAshenShieldCounterLine", player.position, lastAim, 4, 0.62f + memory.Level * 0.06f, new Color(0.84f, 0.92f, 1f, 0.48f), 0.34f);
+                foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) <= 1.52f + memory.Level * 0.10f).Take(6).ToList())
+                {
+                    var dir = (Vector2)(enemy.transform.position - player.position);
+                    DealDamage(enemy, 3.0f + memory.Level * 1.25f, "AshenShield counter", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 0.35f);
+                }
+            }
+            if (memory.Level >= 5)
+            {
+                SpawnTransientSprite("MemoryAshenShieldAwakenWave", MakeRingSprite("MemoryAshenShieldAwakenWave", Color.white, 180), player.position, Quaternion.identity, 1.65f, new Color(0.88f, 0.96f, 1f, 0.42f), 0.62f);
+                HealPlayer(0.55f);
+            }
         }
 
         void UpdateOblivionBrand(MemoryState memory, float dt)
@@ -1302,6 +1381,20 @@ namespace Lethe.PrototypeV1
                 PlaySfx("brand", 0.46f, 0.12f);
                 SpawnPromptSprite("OblivionBrand", MemoryVfxSprite(V1MemoryId.OblivionBrand), () => MakeRingSprite("OblivionBrand", Color.white, 96), enemy.transform.position + Vector3.up * 0.10f, Quaternion.identity, 1.18f, 0.54f, new Color(0.70f, 0.42f, 1f, 0.68f), 0.48f);
                 SpawnTransientSprite("OblivionBrandSlash", MakeImpactDiamondSprite("OblivionBrandSlash", Color.white), enemy.transform.position + Vector3.up * 0.10f, Quaternion.Euler(0f, 0f, elapsed * 120f), 0.26f, new Color(0.92f, 0.68f, 1f, 0.70f), 0.22f);
+                SpawnEchoLink("MemoryOblivionBrandTether", enemy.transform.position, player.position, new Color(0.78f, 0.34f, 1f, 0.42f), 0.30f, 0.020f);
+                if (memory.Level >= 3)
+                {
+                    SpawnRadialSlashLines("MemoryOblivionBrandFork", enemy.transform.position, (Vector2)(enemy.transform.position - player.position), 3, 0.64f + memory.Level * 0.05f, new Color(0.84f, 0.42f, 1f, 0.54f), 0.34f);
+                    foreach (var linked in enemies.Where(e => e != null && e.IsAlive && e != enemy && Vector2.Distance(enemy.transform.position, e.transform.position) <= 1.28f + memory.Level * 0.12f).Take(3).ToList())
+                    {
+                        SpawnEchoLink("MemoryOblivionBrandForkLink", enemy.transform.position, linked.transform.position, new Color(0.76f, 0.30f, 1f, 0.36f), 0.24f, 0.014f);
+                        DealDamage(linked, 2.6f + memory.Level * 1.15f, "OblivionBrand fork", false);
+                    }
+                }
+                if (memory.Level >= 5)
+                {
+                    SpawnTransientSprite("MemoryOblivionBrandAwakenSeal", MakeRingSprite("MemoryOblivionBrandAwakenSeal", Color.white, 180), player.position, Quaternion.Euler(0f, 0f, elapsed * 100f), 1.32f, new Color(0.70f, 0.22f, 1f, 0.38f), 0.58f);
+                }
                 DealDamage(enemy, 6f + memory.Level * 2.8f, "망각의 낙인", false);
             }
         }
@@ -3124,6 +3217,41 @@ namespace Lethe.PrototypeV1
             UpdatePendingKalmuriFollowups(0.5f);
             SpawnFloatingText(player.position + Vector3.up * 1.44f, weaponId == V1WeaponId.Greatsword ? "Echo Matrix: Great" : "Echo Matrix: Dual", new Color(0.74f, 0.98f, 1f));
             Log(weaponId == V1WeaponId.Greatsword ? "Debug echo matrix greatsword" : "Debug echo matrix dual blades");
+            return DebugSnapshot();
+        }
+
+        public string DebugRunPassiveMemoryMatrix()
+        {
+            EnsureRunStarted();
+            SetDebugWeapon(V1WeaponId.DualBlades);
+            EnsureReviewEnemies(20);
+            activeMemories.Clear();
+            echoLevels.Clear();
+            echoOnlyDebugMode = false;
+            bloodStormWasReady = false;
+            bloodStormBurstTimer = 0f;
+            ultimatePulseTimer = 0f;
+
+            var blood = new MemoryState(V1MemoryId.BloodReflection, MaxMemoryLevel);
+            var ash = new MemoryState(V1MemoryId.AshenShield, MaxMemoryLevel);
+            var stopped = new MemoryState(V1MemoryId.StoppedSecond, MaxMemoryLevel);
+            var oblivion = new MemoryState(V1MemoryId.OblivionBrand, MaxMemoryLevel);
+            activeMemories.Add(blood);
+            activeMemories.Add(ash);
+            activeMemories.Add(stopped);
+            activeMemories.Add(oblivion);
+
+            blood.TickTimer = 0f;
+            ash.VisualTimer = 0f;
+            stopped.TickTimer = 0f;
+            oblivion.TickTimer = 0f;
+            UpdateBloodReflectionAction(blood, 2f);
+            UpdateAshenShield(ash, 2f);
+            UpdateStoppedSecond(stopped, 5f);
+            UpdateOblivionBrand(oblivion, 3f);
+
+            SpawnFloatingText(player.position + Vector3.up * 1.48f, "Passive Memory Matrix", new Color(0.86f, 0.94f, 1f));
+            Log("Debug passive memory matrix");
             return DebugSnapshot();
         }
 

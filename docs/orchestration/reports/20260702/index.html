@@ -146,20 +146,27 @@
     <nav><a href="/api/projects/lethe/reports/index.html">전체 리포트 목록</a></nav>
     <p class="eyebrow">20260702 개발 기록</p>
     <h1>2026-07-02 개발 리포트</h1>
-    <p class="intro">Dev_Prototype_v1은 쌍검/대검, 기억 8종, 잔향 8종, 궁극 4종, 기술별 프로토타입 사운드까지 들어간 상태다. 아직 _dev 검증 단계이며 Assets/Lethe 승격은 하지 않는다.</p>
+    <p class="intro">Dev_Prototype_v1은 쌍검/대검, 기억 8종, 에코 8종, 궁극 4종이 들어간 _dev 검증 단계다. 아직 Assets/Lethe 승격은 하지 않았다.</p>
     <ul id="unit-list">
       <li>
         <article class="unit-card">
           <span class="number">2026-07-02-01</span>
-          <h2><a href="#unit-2026-07-02-01" data-unit-link="unit-2026-07-02-01">다음 제작 과제 재정렬</a></h2>
-          <p>Dev_Prototype_v1은 쌍검/대검, 기억 8종, 잔향 8종, 궁극 4종, 기술별 프로토타입 사운드까지 들어간 상태다. 아직 _dev 검증 단계이며 Assets/Lethe 승격은 하지 않는다.</p>
+          <h2><a href="#unit-2026-07-02-01" data-unit-link="unit-2026-07-02-01">다음 시작 과제 재정렬</a></h2>
+          <p>Dev_Prototype_v1은 쌍검/대검, 기억 8종, 에코 8종, 궁극 4종이 들어간 _dev 검증 단계다. 아직 Assets/Lethe 승격은 하지 않았다.</p>
         </article>
       </li>
 <li>
         <article class="unit-card">
           <span class="number">2026-07-02-02</span>
-          <h2><a href="#unit-2026-07-02-02" data-unit-link="unit-2026-07-02-02">잔향 무기별 차별화 1차 구현</a></h2>
-          <p>Dev_Prototype_v1에서 잔향 8종이 쌍검/대검에 따라 다른 런타임 패턴을 만들도록 1차 구현했다. _dev 검증 단계이며 Assets/Lethe 승격은 하지 않는다.</p>
+          <h2><a href="#unit-2026-07-02-02" data-unit-link="unit-2026-07-02-02">에코 무기별 차별화 1차 구현</a></h2>
+          <p>Dev_Prototype_v1에서 에코 8종이 쌍검/대검에 따라 다른 효과와 패턴을 만들도록 1차 구현했다. _dev 검증 단계이며 Assets/Lethe 승격은 하지 않았다.</p>
+        </article>
+      </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-02-03</span>
+          <h2><a href="#unit-2026-07-02-03" data-unit-link="unit-2026-07-02-03">패시브 기억 보강 구현</a></h2>
+          <p>Dev_Prototype_v1에서 피의 반사, 재의 방패, 멈춘 1초, 망각의 낙인이 더 이상 단순 패시브처럼만 보이지 않도록 1차 보강했다. 아직 _dev 검증 단계이며 Assets/Lethe 승격은 하지 않았다.</p>
         </article>
       </li>
     </ul>
@@ -172,88 +179,116 @@
         </div>
         <article class="unit-detail" id="unit-2026-07-02-01" hidden>
       <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
-      <h1>2026-07-02-01 - 다음 제작 과제 재정렬</h1>
+      <h1>2026-07-02-01 - 다음 시작 과제 재정렬</h1>
 <h2>1. 현재 빌드 상태</h2>
-<p><code>Dev_Prototype_v1</code>은 쌍검/대검, 기억 8종, 잔향 8종, 궁극 4종, 기술별 프로토타입 사운드까지 들어간 상태다. 아직 <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않는다.</p>
+<p><code>Dev_Prototype_v1</code>은 쌍검/대검, 기억 8종, 에코 8종, 궁극 4종이 들어간 <code>_dev</code> 검증 단계다. 아직 <code>Assets/Lethe</code> 승격은 하지 않았다.</p>
 <h2>2. 오늘 바뀐 것</h2>
 <ul>
-<li>다음 작업 목록을 jaewoo 직접 검증 중심에서 Codex 제작 중심으로 바꿨다.</li>
-<li>최우선 과제를 <code>잔향 무기별 차별화 1차 패스</code>로 정했다.</li>
-<li><code>CURRENT_TASK.md</code>에 현재 부족분 진단과 다음 구현 완료 기준을 추가했다.</li>
-<li>오늘 devlog에 분석 근거를 기록했다.</li>
+<li>jaewoo 직접 검증만 기다리는 흐름에서 Codex가 만들 수 있는 생산 격차를 다시 골랐다.</li>
+<li>우선순위를 <code>에코 무기별 차별화</code>, <code>패시브화 기억 보강</code>, <code>망각/공명 UX</code>, <code>4궁극 무기별 패턴</code>, <code>에코 데이터화/정리</code>로 재정렬했다.</li>
+<li><code>CURRENT_TASK.md</code>와 <code>NEXT_TASKS.md</code>를 다음 구현 중심으로 갱신했다.</li>
 </ul>
 <h2>3. 테스트 결과와 근거</h2>
 <ul>
-<li>코드 변경은 없어서 Unity 빌드 테스트는 실행하지 않았다.</li>
-<li>정적 확인 근거:</li>
-<li><code>V1GameManager.cs</code>의 <code>TriggerUtilityEchoes</code>가 여러 유틸리티 잔향을 한 무기 타격 경로에서 처리한다.</li>
-<li><code>WeaponRuntimeSpec</code>에는 이미 <code>MultiSmall</code> / <code>SingleHeavy</code> 구분이 있어 무기별 잔향 행동 분기가 가능하다.</li>
-<li><code>UpdateUtilityUltimate</code>의 비혈풍 궁극 3종은 <code>BloodBladeStorm</code>보다 무기별 패턴 차이가 약하다.</li>
-<li>VFX Matrix QA는 존재하지만 쌍검/대검별 잔향 차이까지 증명하는 구조는 아직 부족하다.</li>
+<li>코드 변경 전 분석 작업이라 Unity 빌드 테스트는 실행하지 않았다.</li>
+<li>근거:</li>
+<li><code>TriggerUtilityEchoes</code>가 여러 유틸리티 에코를 한 경로에서 처리하고 있었다.</li>
+<li><code>WeaponRuntimeSpec</code>에는 이미 <code>MultiSmall</code> / <code>SingleHeavy</code> 구분이 있어 무기별 에코 분기가 가능했다.</li>
+<li><code>BloodReflection</code>, <code>AshenShield</code>, <code>StoppedSecond</code>, <code>OblivionBrand</code>는 작동하지만 플레이어에게는 패시브처럼 느껴질 위험이 컸다.</li>
 </ul>
 <h2>4. 결정한 것</h2>
-<p>다음 제작 우선순위는 잔향 무기별 차별화다. 쌍검은 작고 빠른 연쇄/스택 감각, 대검은 느리고 큰 범위/폭발 감각으로 같은 잔향도 다른 전투 행동처럼 읽히게 만든다.</p>
+<p>다음 구현은 에코를 새로 늘리는 것이 아니라, 같은 에코가 쌍검과 대검에서 다른 전투 문법으로 보이게 만드는 쪽부터 진행한다.</p>
 <h2>5. 문제 또는 리스크</h2>
-<ul>
-<li>잔향이 많아질수록 <code>V1GameManager</code> 한 곳에 확률, 반경, 데미지, VFX 값이 쌓이는 구조가 유지보수 리스크다.</li>
-<li><code>BloodReflection</code>, <code>AshenShield</code>, <code>StoppedSecond</code>, <code>OblivionBrand</code>는 기능은 있지만 플레이어가 &quot;내가 뭔가 발동했다&quot;고 느끼기 약할 수 있다.</li>
-<li>비혈풍 궁극 3종은 큰 효과는 있지만 무기별 리듬 차이가 아직 약하다.</li>
-</ul>
+<p><code>V1GameManager</code>에 전투 수치와 VFX 값이 많이 모여 있어, 차별화가 진행될수록 후속 데이터화와 정리가 필요하다.</p>
 <h2>6. GPT/Claude 인계 요약</h2>
-<p>다음 리뷰나 기획 판단은 &quot;잔향이 무기별로 정말 다른 플레이를 만드는가&quot;에 집중하면 된다. 새 잔향을 늘리는 방향이 아니라, 기존 8종을 쌍검/대검 문법으로 다르게 표현하는 것이 우선이다.</p>
+<p>기획 리뷰는 &quot;에코가 무기별로 정말 다른 플레이를 만드는가&quot;와 &quot;기억이 망각되기 전에 충분히 행동으로 읽히는가&quot;를 봐야 한다.</p>
 <h2>7. 다음 Codex 작업</h2>
-<p>1. <code>TriggerUtilityEchoes</code>를 무기별 패턴으로 분리한다.</p>
-<p>2. 쌍검/대검 각각 8잔향이 다른 오브젝트 이름과 VFX 리듬을 만들게 한다.</p>
-<p>3. 필요하면 Echo Matrix smoke를 쌍검/대검 두 경로로 확장한다.</p>
-<p>4. <code>dotnet build</code>, Unity compile error check, console error check를 통과시킨다.</p>
+<p>무기별 에코 차별화 1차 구현을 시작한다.</p>
 <h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
 <ul>
-<li>문제: 잔향 시스템은 수량상 구현됐지만, 일부는 같은 온힛 효과의 색/크기 변형처럼 느껴질 위험이 있다.</li>
-<li>방향: 무기별 전투 문법을 잔향에도 적용해 쌍검과 대검의 빌드 경험을 분리한다.</li>
-<li>행동: 다음 작업 목록과 현재 작업 문서를 제작 가능한 과제 중심으로 재정렬했다.</li>
-<li>결과: 다음 세션은 검증 요청 없이 바로 잔향 무기별 차별화 구현으로 들어갈 수 있다.</li>
+<li>문제: 기능은 많지만 일부 효과가 같은 색/반경/확률 차이처럼 느껴질 수 있었다.</li>
+<li>방향: 무기별 전투 문법을 에코 표현에도 적용한다.</li>
+<li>행동: 다음 구현 목록과 완료 기준을 재정렬했다.</li>
+<li>결과: 검증 요청 없이 바로 만들 수 있는 순차 구현 계획이 생겼다.</li>
 </ul>
     </article>
 <article class="unit-detail" id="unit-2026-07-02-02" hidden>
       <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
-      <h1>2026-07-02-02 - 잔향 무기별 차별화 1차 구현</h1>
+      <h1>2026-07-02-02 - 에코 무기별 차별화 1차 구현</h1>
 <h2>1. 현재 빌드 상태</h2>
-<p><code>Dev_Prototype_v1</code>에서 잔향 8종이 쌍검/대검에 따라 다른 런타임 패턴을 만들도록 1차 구현했다. <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않는다.</p>
+<p><code>Dev_Prototype_v1</code>에서 에코 8종이 쌍검/대검에 따라 다른 효과와 패턴을 만들도록 1차 구현했다. <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</p>
 <h2>2. 오늘 바뀐 것</h2>
 <ul>
-<li>잔향 런타임 오브젝트 이름을 <code>EchoDual_*</code> / <code>EchoGreat_*</code> 계열로 분리했다.</li>
-<li>쌍검은 빠른 연쇄, 작은 스택, 다중 타격 중심으로 만들었다.</li>
-<li>대검은 큰 범위, 느린 강타, 폭발/장판 중심으로 만들었다.</li>
-<li><code>BloodReflection</code> 잔향도 무기별로 갈랐다.</li>
-<li>6개 유틸리티 잔향도 무기별로 갈랐다.</li>
+<li>에코 오브젝트 계열을 <code>EchoDual_*</code> / <code>EchoGreat_*</code>로 분리했다.</li>
+<li>쌍검은 빠른 연쇄, 작은 중첩, 다중 타격 중심으로 만들었다.</li>
+<li>대검은 큰 범위, 무거운 각인, 폭발/장판 중심으로 만들었다.</li>
+<li><code>BloodReflection</code> 에코와 6개 유틸리티 에코를 무기별로 갈랐다.</li>
 <li>Unity QA 메뉴를 추가했다:</li>
 <li><code>LETHE/V1 QA/Echo Matrix Dual Blades</code></li>
 <li><code>LETHE/V1 QA/Echo Matrix Greatsword</code></li>
 </ul>
 <h2>3. 테스트 결과와 근거</h2>
 <ul>
-<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, legacy 경고 7개 / 오류 0개.</li>
-<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 통과, 경고 0개 / 오류 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, 기존 경고 7개, 오류 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 통과, 경고 0개, 오류 0개.</li>
 <li>Unity compile error count: <code>0</code>.</li>
 <li>Unity console error count: <code>0</code>.</li>
 <li>Unity QA:</li>
-<li>쌍검 Echo Matrix: <code>[V1QA] PASS</code>, <code>EchoDual_ total=240</code>, 8잔향 모두 카운트.</li>
-<li>대검 Echo Matrix: <code>[V1QA] PASS</code>, <code>EchoGreat_ total=221</code>, 8잔향 모두 카운트.</li>
+<li>쌍검 Echo Matrix: <code>[V1QA] PASS</code>, <code>EchoDual_ total=240</code>, 8개 에코 모두 카운트.</li>
+<li>대검 Echo Matrix: <code>[V1QA] PASS</code>, <code>EchoGreat_ total=221</code>, 8개 에코 모두 카운트.</li>
 </ul>
 <h2>4. 결정한 것</h2>
-<p>잔향은 별도 정의 16개로 늘리지 않는다. <code>EchoDefinition</code>은 8개를 유지하고, 무기별 표현은 런타임 행동과 VFX 리듬으로 갈라낸다.</p>
+<p>에코 정의를 16개로 늘리지 않고, <code>EchoDefinition</code>은 8개를 유지한다. 무기별 차이는 런타임 행동과 VFX 리듬으로 만든다.</p>
 <h2>5. 문제 또는 리스크</h2>
-<p>이번 패스는 체감 차이를 먼저 만든 1차 구현이다. 값과 반복 코드는 아직 <code>V1GameManager</code>에 남아 있으므로, 뒤쪽 데이터화/정리 패스에서 더 줄여야 한다.</p>
+<p>이번 패스는 체감 차이를 먼저 만든 1차 구현이다. 수치와 반복 코드는 아직 <code>V1GameManager</code> 안에 남아 있으므로 후속 데이터화가 필요하다.</p>
 <h2>6. GPT/Claude 인계 요약</h2>
-<p>잔향 무기별 차별화는 기술적으로 들어갔다. 다음 리뷰 포인트는 &quot;쌍검은 잔향이 빠르게 몰아치는가&quot;, &quot;대검은 잔향이 한 번에 크게 터지는가&quot;, &quot;각 잔향의 정체성이 색만 다른 효과가 아니라 행동으로 구분되는가&quot;다.</p>
+<p>검토 포인트는 &quot;쌍검 에코는 빠르게 몰아치고, 대검 에코는 한 번에 크게 찍는가&quot;이다. 색만 다른 효과가 아니라 행동 차이로 구분되는지 봐야 한다.</p>
 <h2>7. 다음 Codex 작업</h2>
-<p>다음 차례는 <code>패시브화 기억 보강</code>이다. 우선 대상은 <code>BloodReflection</code>, <code>AshenShield</code>, <code>StoppedSecond</code>, <code>OblivionBrand</code>이며, 각 기억이 +1/+3/+5에서 독립적인 행동을 보이게 만든다.</p>
+<p>다음은 <code>패시브화 기억 보강</code>이다. 우선 대상은 <code>BloodReflection</code>, <code>AshenShield</code>, <code>StoppedSecond</code>, <code>OblivionBrand</code>다.</p>
 <h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
 <ul>
-<li>문제: 잔향 8종은 있었지만 무기별 빌드 감각이 충분히 갈라지지 않았다.</li>
-<li>방향: 쌍검은 연쇄/스택, 대검은 강타/범위/폭발로 같은 잔향을 다르게 표현한다.</li>
-<li>행동: 런타임 분기와 Echo Matrix QA를 추가했다.</li>
-<li>결과: 8잔향 모두 쌍검/대검 경로에서 스폰과 카운트가 검증됐다.</li>
+<li>문제: 에코 8종이 있었지만 무기별 빌드 감각이 충분히 갈라지지 않았다.</li>
+<li>방향: 쌍검은 연쇄/중첩, 대검은 강타/범위/폭발로 표현한다.</li>
+<li>행동: 무기별 런타임 분기와 Echo Matrix QA를 추가했다.</li>
+<li>결과: 8에코 모두 쌍검/대검 경로에서 스폰과 카운트가 검증됐다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-02-03" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-02-03 - 패시브 기억 보강 구현</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에서 <code>피의 반사</code>, <code>재의 방패</code>, <code>멈춘 1초</code>, <code>망각의 낙인</code>이 더 이상 단순 패시브처럼만 보이지 않도록 1차 보강했다. 아직 <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>BloodReflection</code>: 주기적 혈반 폭발, 대상 표식, 피해, 회복, +3 연결선, +5 각성 베기/피꽃 피드백을 추가했다.</li>
+<li><code>AshenShield</code>: +3 반격선과 주변 반격 피해, +5 각성 방패 파동과 소량 회복을 추가했다.</li>
+<li><code>StoppedSecond</code>: 시간 박동 링, +3 잔상 베기, +5 확장 정지 돔을 추가했다.</li>
+<li><code>OblivionBrand</code>: 대상 연결선, +3 분기 낙인 링크와 확산 피해, +5 각성 봉인을 추가했다.</li>
+<li><code>LETHE/V1 QA/Passive Memory Matrix</code> 메뉴를 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, 기존 경고 7개, 오류 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 통과, 경고 0개, 오류 0개.</li>
+<li>최종 에디터 빌드 재확인: 통과, 경고 0개, 오류 0개.</li>
+<li>Unity compile error count: <code>0</code>.</li>
+<li>Unity console error count: <code>0</code>.</li>
+<li>Unity QA <code>LETHE/V1 QA/Passive Memory Matrix</code>: <code>[V1QA] PASS</code>, <code>blood=13</code>, <code>ash=5</code>, <code>stopped=6</code>, <code>oblivion=24</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>기억 4종은 수치만 키우지 않고, +1 기본 행동, +3 연결/반격/잔상/분기, +5 각성 피드백으로 읽히게 한다. 플레이어가 망각 전에 기억의 정체를 한 번은 체감해야 한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>이번 패스는 자동 QA로 스폰과 에러를 확인한 단계다. 실제 플레이에서는 빈도, 피해량, 화면 밀도, 사운드 반복감이 과할 수 있어 다음 직접 리뷰 뒤 튜닝이 필요하다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>검토 포인트는 &quot;기억이 패시브 설명문이 아니라 전투 행동으로 느껴지는가&quot;이다. 특히 <code>망각의 낙인</code>은 보라색 선/분기 링크가 충분히 낙인답게 읽히는지, <code>재의 방패</code>는 방어 기억인지 공격 기억인지 혼란스럽지 않은지 봐야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>다음은 <code>망각/공명 UX 제작 패스</code>다. 기억 상실, 에코 획득, 공명 목표, +5 각성을 텍스트보다 먼저 VFX/행동 전환으로 보여주는 압축 디버그 플로우를 만든다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 일부 기억이 유용해도 플레이어 눈에는 자동 상태효과처럼 느껴질 위험이 있었다.</li>
+<li>방향: 각 기억에 독립 발동 타이밍과 단계별 행동 언어를 준다.</li>
+<li>행동: 4종 기억의 +1/+3/+5 피드백과 전용 QA 매트릭스를 추가했다.</li>
+<li>결과: 네 기억 모두 자동 QA에서 오브젝트 생성과 콘솔 무오류가 검증됐다.</li>
 </ul>
     </article>
       </div>

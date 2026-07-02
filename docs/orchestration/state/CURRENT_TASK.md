@@ -1,5 +1,48 @@
 # Current Task
 
+# 2026-07-02 Passive Memory Reinforcement Result
+
+## Status
+
+The second sequence item, passive-feeling active memory reinforcement, is implemented in `Dev_Prototype_v1`.
+
+## Applied Changes
+
+- Strengthened `BloodReflection` as an active pulse instead of only a mark/heal passive:
+  - periodic blood bloom action,
+  - nearby victim marking and damage,
+  - +3 player tether threads,
+  - +5 awakened lash and blood bloom burst.
+- Strengthened `AshenShield`:
+  - existing shield pulse remains,
+  - +3 counter slash lines and nearby counter damage,
+  - +5 awakened shield wave and small recovery.
+- Strengthened `StoppedSecond`:
+  - added a visible memory beat ring,
+  - +3 aftercut lines,
+  - +5 wider freeze dome extension.
+- Strengthened `OblivionBrand`:
+  - added player-to-target brand tether,
+  - +3 fork links and splash damage to nearby enemies,
+  - +5 awakened seal feedback.
+- Added Unity QA menu:
+  - `LETHE/V1 QA/Passive Memory Matrix`
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+- Final editor build after cleanup: passed with 0 warnings and 0 errors.
+- Unity compile error count: `0`.
+- Unity console error count: `0`.
+- Unity QA:
+  - `LETHE/V1 QA/Passive Memory Matrix`: `[V1QA] PASS`
+  - Object counts: `blood=13`, `ash=5`, `stopped=6`, `oblivion=24`.
+
+## Next Implementation
+
+Continue with `docs/orchestration/state/NEXT_TASKS.md` item 1: forgetting / resonance UX production pass.
+
 # 2026-07-02 Weapon-Specific Echo Pass Result
 
 ## Status

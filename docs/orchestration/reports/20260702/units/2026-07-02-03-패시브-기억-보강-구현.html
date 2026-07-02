@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-02-03 - 패시브 기억 보강 구현</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-02-03 - 패시브 기억 보강 구현</h1>
+      <p class="meta">Generated from 2026-07-02-03-패시브-기억-보강-구현.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260702/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-02-03 - 패시브 기억 보강 구현</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에서 <code>피의 반사</code>, <code>재의 방패</code>, <code>멈춘 1초</code>, <code>망각의 낙인</code>이 더 이상 단순 패시브처럼만 보이지 않도록 1차 보강했다. 아직 <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>BloodReflection</code>: 주기적 혈반 폭발, 대상 표식, 피해, 회복, +3 연결선, +5 각성 베기/피꽃 피드백을 추가했다.</li>
+<li><code>AshenShield</code>: +3 반격선과 주변 반격 피해, +5 각성 방패 파동과 소량 회복을 추가했다.</li>
+<li><code>StoppedSecond</code>: 시간 박동 링, +3 잔상 베기, +5 확장 정지 돔을 추가했다.</li>
+<li><code>OblivionBrand</code>: 대상 연결선, +3 분기 낙인 링크와 확산 피해, +5 각성 봉인을 추가했다.</li>
+<li><code>LETHE/V1 QA/Passive Memory Matrix</code> 메뉴를 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, 기존 경고 7개, 오류 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 통과, 경고 0개, 오류 0개.</li>
+<li>최종 에디터 빌드 재확인: 통과, 경고 0개, 오류 0개.</li>
+<li>Unity compile error count: <code>0</code>.</li>
+<li>Unity console error count: <code>0</code>.</li>
+<li>Unity QA <code>LETHE/V1 QA/Passive Memory Matrix</code>: <code>[V1QA] PASS</code>, <code>blood=13</code>, <code>ash=5</code>, <code>stopped=6</code>, <code>oblivion=24</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>기억 4종은 수치만 키우지 않고, +1 기본 행동, +3 연결/반격/잔상/분기, +5 각성 피드백으로 읽히게 한다. 플레이어가 망각 전에 기억의 정체를 한 번은 체감해야 한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>이번 패스는 자동 QA로 스폰과 에러를 확인한 단계다. 실제 플레이에서는 빈도, 피해량, 화면 밀도, 사운드 반복감이 과할 수 있어 다음 직접 리뷰 뒤 튜닝이 필요하다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>검토 포인트는 &quot;기억이 패시브 설명문이 아니라 전투 행동으로 느껴지는가&quot;이다. 특히 <code>망각의 낙인</code>은 보라색 선/분기 링크가 충분히 낙인답게 읽히는지, <code>재의 방패</code>는 방어 기억인지 공격 기억인지 혼란스럽지 않은지 봐야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>다음은 <code>망각/공명 UX 제작 패스</code>다. 기억 상실, 에코 획득, 공명 목표, +5 각성을 텍스트보다 먼저 VFX/행동 전환으로 보여주는 압축 디버그 플로우를 만든다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 일부 기억이 유용해도 플레이어 눈에는 자동 상태효과처럼 느껴질 위험이 있었다.</li>
+<li>방향: 각 기억에 독립 발동 타이밍과 단계별 행동 언어를 준다.</li>
+<li>행동: 4종 기억의 +1/+3/+5 피드백과 전용 QA 매트릭스를 추가했다.</li>
+<li>결과: 네 기억 모두 자동 QA에서 오브젝트 생성과 콘솔 무오류가 검증됐다.</li>
+</ul>
+  </main>
+</body>
+</html>

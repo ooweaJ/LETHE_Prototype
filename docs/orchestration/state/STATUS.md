@@ -1,6 +1,24 @@
 # Status
 
-Last updated: 2026-07-01
+Last updated: 2026-07-02
+
+## 2026-07-02 Update: Passive Memory Reinforcement Pass
+
+- Implemented the second production-gap sequence item in `Dev_Prototype_v1`: active memories that previously felt too passive now have clearer independent action beats.
+- Applied:
+  - `BloodReflection` now periodically blooms, marks nearby victims, deals active pulse damage, creates +3 tether threads, and adds +5 awakened lash/bloom feedback.
+  - `AshenShield` now adds +3 counter lines/counter damage and a +5 awakened shield wave with small recovery.
+  - `StoppedSecond` now adds a memory beat ring, +3 aftercut lines, and a +5 wider freeze dome extension.
+  - `OblivionBrand` now adds player-to-target tethering, +3 fork links/splash damage, and +5 awakened seal feedback.
+  - Added `LETHE/V1 QA/Passive Memory Matrix`.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Final editor build after cleanup: passed with 0 warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity console error count: `0`.
+  - Unity QA `LETHE/V1 QA/Passive Memory Matrix`: `[V1QA] PASS`, `blood=13`, `ash=5`, `stopped=6`, `oblivion=24`.
+- Next step: build the forgetting/resonance UX production pass so memory loss, echo gain, resonance target, and +5 awakening read as an action transition before text.
 
 ## 2026-07-01 Update: Skill SFX Runtime Pass
 

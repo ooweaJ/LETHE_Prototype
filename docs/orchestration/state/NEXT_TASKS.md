@@ -1,20 +1,8 @@
 # Next Tasks
 
-## 1. 패시브화 기억 보강
+## 1. 망각/공명 UX 제작 패스
 
 - Priority: highest
-- Problem: several active memories are useful but still feel passive because they pulse, mark, or heal without a strong independent action read.
-- Build:
-  - Focus first on `BloodReflection`, `AshenShield`, `StoppedSecond`, and `OblivionBrand`.
-  - Give each active memory a clear +1/+3/+5 action beat independent of basic weapon hits.
-  - Make +5 feel like a behavior change, not only larger numbers.
-- Done:
-  - Memory-only debug for the four memories creates obvious action VFX and damage/defense/heal events.
-  - The active memory loop can be understood before it is forgotten into an echo.
-
-## 2. 망각/공명 UX 제작 패스
-
-- Priority: high
 - Problem: forgetting and resonance are mechanically wired, but the player-facing meaning can still feel like a status update instead of a dramatic build shift.
 - Build:
   - Strengthen the result overlay and HUD for lost memory, gained echo, current resonance target, and +5 awakening.
@@ -24,9 +12,9 @@
   - A compressed flow shows the loss, echo grant, resonance next target, and +5 goal clearly.
   - Console errors remain 0.
 
-## 3. 4궁극 무기별 패턴 확장
+## 2. 4궁극 무기별 패턴 확장
 
-- Priority: medium-high
+- Priority: high
 - Problem: `BloodBladeStorm` has the clearest dual/greatsword split; the other three ultimates are still closer to large periodic utility effects.
 - Build:
   - Extend `FractureExecution`, `StasisHunt`, and `AshenOblivion` with dual-blade and greatsword patterns.
@@ -36,7 +24,7 @@
   - Utility ultimate smoke shows all four ultimate families with distinct weapon rhythm.
   - Blood Blade Storm remains the benchmark, not the only polished ultimate.
 
-## 4. 잔향 데이터화와 QA 하네스 정리
+## 3. 에코 데이터화와 QA 카운터 정리
 
 - Priority: medium
 - Problem: weapon data is in `_dev/Data`, but many echo proc values and VFX knobs still live inside `V1GameManager`.
@@ -48,7 +36,7 @@
   - Tuning echo timing/scale no longer requires editing one large manager path.
   - QA can prove every echo family spawned for both weapons.
 
-## 5. 잔향 차별화 후속 정리
+## 4. 에코 차별화 후속 정리
 
 - Priority: medium
 - Problem: the first weapon-specific echo pass is playable and testable, but some old fallback code still exists in the manager until the next cleanup/data pass.
@@ -59,10 +47,23 @@
 - Done:
   - `V1GameManager` echo section is shorter and no disabled compatibility branches remain.
 
-Completed first sequence:
+## 5. 패시브 기억 밸런스/체감 튜닝
 
-- 2026-07-02: 잔향 무기별 차별화 1차 패스 implemented.
-- Dual blades and greatsword now spawn separate `EchoDual_` / `EchoGreat_` behavior families for all 8 echoes.
-- `LETHE/V1 QA/Echo Matrix Dual Blades` and `LETHE/V1 QA/Echo Matrix Greatsword` pass.
+- Priority: medium
+- Problem: `BloodReflection`, `AshenShield`, `StoppedSecond`, and `OblivionBrand` now have stronger action beats, but their cadence/damage/readability still need play-feel tuning after direct review.
+- Build:
+  - Tune pulse intervals, damage, radius, and opacity one memory at a time.
+  - Keep the `LETHE/V1 QA/Passive Memory Matrix` smoke as a regression gate.
+- Done:
+  - All four memories feel useful before forgetting without overwhelming base weapon readability.
+
+Completed sequence:
+
+- 2026-07-02: weapon-specific echo pass implemented.
+- 2026-07-02: passive-feeling active memory reinforcement implemented.
+- QA menus passing:
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`
+  - `LETHE/V1 QA/Echo Matrix Greatsword`
+  - `LETHE/V1 QA/Passive Memory Matrix`
 
 Keep this file short. Detailed history belongs in `docs/TASK.md`, `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, or evidence files.
