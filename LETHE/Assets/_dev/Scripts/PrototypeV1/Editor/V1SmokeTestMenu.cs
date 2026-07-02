@@ -94,6 +94,20 @@ namespace Lethe.PrototypeV1.Editor
             StartRunner();
         }
 
+        [MenuItem("LETHE/V1 QA/Utility Ultimate Matrix Dual Blades")]
+        public static void QaUtilityUltimateMatrixDualBlades()
+        {
+            SavePending(new PendingSmoke(SmokeMode.UtilityUltimateMatrix, V1WeaponId.DualBlades));
+            StartRunner();
+        }
+
+        [MenuItem("LETHE/V1 QA/Utility Ultimate Matrix Greatsword")]
+        public static void QaUtilityUltimateMatrixGreatsword()
+        {
+            SavePending(new PendingSmoke(SmokeMode.UtilityUltimateMatrix, V1WeaponId.Greatsword));
+            StartRunner();
+        }
+
         [MenuItem("LETHE/V1 QA/Blood Blade Storm")]
         public static void QaBloodBladeStorm()
         {
@@ -213,6 +227,12 @@ namespace Lethe.PrototypeV1.Editor
                 return;
             }
 
+            if (smoke.Mode == SmokeMode.UtilityUltimateMatrix)
+            {
+                manager.DebugRunUtilityUltimateMatrix(smoke.WeaponId);
+                return;
+            }
+
             BeginRun(manager, smoke.WeaponId);
             AdvanceStartSmoke(manager, 2.1f);
         }
@@ -320,6 +340,18 @@ namespace Lethe.PrototypeV1.Editor
                     }
                     return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
 
+                case SmokeMode.UtilityUltimateMatrix:
+                    var ultPrefix = smoke.WeaponId == V1WeaponId.Greatsword ? "UltGreat_" : "UltDual_";
+                    var fracture = CountObjects($"{ultPrefix}FractureExecution");
+                    var stasis = CountObjects($"{ultPrefix}StasisHunt");
+                    var ashenUlt = CountObjects($"{ultPrefix}AshenOblivion");
+                    details += $" | ultPrefix={ultPrefix} fracture={fracture} stasis={stasis} ashen={ashenUlt}";
+                    if (fracture > 0 && stasis > 0 && ashenUlt > 0)
+                    {
+                        return SmokeResult.Pass;
+                    }
+                    return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
+
                 default:
                     return SmokeResult.Fail;
             }
@@ -355,6 +387,7 @@ namespace Lethe.PrototypeV1.Editor
             EchoMatrix,
             PassiveMemoryMatrix,
             ForgetResonanceFlow,
+            UtilityUltimateMatrix,
             BloodBladeStorm
         }
 
@@ -386,9 +419,11 @@ namespace Lethe.PrototypeV1.Editor
                             ? "Passive Memory Matrix"
                             : Mode == SmokeMode.ForgetResonanceFlow
                                 ? "Forget Resonance Flow"
-                                : Mode == SmokeMode.BloodBladeStorm
-                                    ? "Blood Blade Storm"
-                                    : $"{WeaponId}";
+                                : Mode == SmokeMode.UtilityUltimateMatrix
+                                    ? $"Utility Ultimate Matrix {WeaponId}"
+                                    : Mode == SmokeMode.BloodBladeStorm
+                                        ? "Blood Blade Storm"
+                                        : $"{WeaponId}";
         }
 
         static void SpawnAllMemoryEchoPreviews(V1GameManager manager)

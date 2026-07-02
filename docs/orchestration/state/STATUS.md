@@ -2,6 +2,25 @@
 
 Last updated: 2026-07-02
 
+## 2026-07-02 Update: Utility Ultimate Weapon Pattern Pass
+
+- Implemented the fourth production-gap sequence item in `Dev_Prototype_v1`: the three non-blood ultimate families now have dual-blade and greatsword routes.
+- Applied:
+  - Added `UltDual_*` / `UltGreat_*` runtime object families.
+  - `FractureExecution`: dual-blade rapid execution cuts vs greatsword execution stamp/cleave/verdict burst.
+  - `StasisHunt`: dual-blade micro clamps and fast hunter shots vs greatsword target-centered stasis dome/frozen cleaves/spear read.
+  - `AshenOblivion`: dual-blade parry/return-brand loop vs greatsword guard-break wave and heavy brand links.
+  - Added `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`.
+  - Added `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after a retry. First attempt hit a transient DLL lock from Unity/dotnet concurrency.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity console error count: `0`.
+  - Dual utility ultimate matrix: `[V1QA] PASS`, `fracture=19`, `stasis=9`, `ashen=34`.
+  - Greatsword utility ultimate matrix: `[V1QA] PASS`, `fracture=8`, `stasis=22`, `ashen=16`.
+- Next step: reduce manager-side hardcoded echo/ultimate knobs into compact data/spec structures while preserving deterministic QA.
+
 ## 2026-07-02 Update: Forget / Resonance UX Pass
 
 - Implemented the third production-gap sequence item in `Dev_Prototype_v1`: forgetting and resonance now have a compressed action/VFX transition instead of relying only on text.

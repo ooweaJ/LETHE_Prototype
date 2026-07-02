@@ -1,5 +1,42 @@
 # Current Task
 
+# 2026-07-02 Utility Ultimate Weapon Pattern Result
+
+## Status
+
+The fourth sequence item, weapon-specific utility ultimate expansion, is implemented in `Dev_Prototype_v1`.
+
+## Applied Changes
+
+- Added weapon-specific utility ultimate runtime paths while preserving `BloodBladeStorm` as the benchmark.
+- Added `UltDual_*` and `UltGreat_*` object families for the three non-blood ultimates.
+- `FractureExecution`:
+  - Dual blades: rapid low-HP execution cuts and marks.
+  - Greatsword: large execution stamp, cleave, verdict burst, and heavier damage/knockback.
+- `StasisHunt`:
+  - Dual blades: small stasis field, micro clamps, and many fast hunter shots.
+  - Greatsword: target-centered stasis dome, frozen cleaves, spear read, longer freeze.
+- `AshenOblivion`:
+  - Dual blades: guard return ring, parry lines, and returning brand links.
+  - Greatsword: large ash/brand wave, guard-break ring, and heavy brand links.
+- Added Unity QA menu items:
+  - `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`
+  - `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after a retry. First attempt hit a transient DLL file lock from Unity/dotnet concurrency.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- Unity compile error count: `0`.
+- Unity console error count: `0`.
+- Unity QA:
+  - `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: `[V1QA] PASS`, `fracture=19`, `stasis=9`, `ashen=34`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: `[V1QA] PASS`, `fracture=8`, `stasis=22`, `ashen=16`.
+
+## Next Implementation
+
+Continue with `docs/orchestration/state/NEXT_TASKS.md` item 1: echo dataization and QA counter cleanup.
+
 # 2026-07-02 Forget / Resonance UX Pass Result
 
 ## Status
