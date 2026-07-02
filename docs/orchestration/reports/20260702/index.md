@@ -338,3 +338,48 @@
 - 방향: 동작은 유지하면서 수치 접근 지점을 먼저 한곳으로 모았다.
 - 행동: 런타임 helper/spec 함수와 QA count metric/limit helper를 만들고 matrix QA에 연결했다.
 - 결과: 주요 에코/궁극/Kalmuri QA가 모두 PASS했고, 다음 데이터 이관을 위한 중간 구조가 생겼다.
+# 2026-07-02-08 - 에코 튜닝 직렬화 테이블 적용
+
+## 1. 현재 빌드 상태
+
+`Dev_Prototype_v1`은 `_dev` 검증 단계에 있고, 이번 작업은 에코 수치 접근을 데이터화하기 위한 중간 단계다. 아직 `Assets/Lethe` 승격은 하지 않았다.
+
+## 2. 오늘 바뀐 것
+
+- `V1GameManager`에 직렬화 가능한 `UtilityEchoTuningSpec[]` 테이블을 추가했다.
+- 처형, 사냥, 파쇄, 정지, 잿빛, 망각 계열 에코의 확률, 첫 타 조건, 반경, 대상 수, 피해 배율, 동결 시간, 처형 체력 조건을 테이블에서 읽게 바꿨다.
+- 테이블이 비어 있거나 일부 항목이 빠져도 기존 기본값으로 동작하도록 fallback을 남겼다.
+
+## 3. 테스트 결과와 근거
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: 통과, 기존 경고 7개, 오류 0개.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: 통과, 기존 경고 7개, 오류 0개.
+- Unity compile error count: `0`.
+- Echo Matrix Dual Blades: `[V1QA] PASS`, `total=240`.
+- Echo Matrix Greatsword: `[V1QA] PASS`, `total=219`.
+- Utility Ultimate Matrix Dual Blades: `[V1QA] PASS`, `fracture=19`, `stasis=9`, `ashen=34`.
+- Utility Ultimate Matrix Greatsword: `[V1QA] PASS`, `fracture=8`, `stasis=26`, `ashen=16`.
+- Kalmuri Perf Matrix: `[V1QA] PASS`, 현재 smoke run 기준 `totalKalmuri=0`.
+
+## 4. 결정한 것
+
+바로 ScriptableObject로 크게 쪼개기보다, 먼저 런타임 내부에서 안전한 직렬화 테이블을 만들고 기존 동작을 유지하는 경로를 선택했다. 이렇게 해야 다음 `_dev/Data` 이전 때 실수 범위가 작다.
+
+## 5. 문제 또는 리스크
+
+테이블은 아직 `V1GameManager` 안에 있으므로 진짜 데이터 자산화는 끝나지 않았다. 다음 단계에서 `_dev/Data` asset으로 옮기고, 궁극/VFX 수치도 같은 방식으로 정리해야 한다.
+
+## 6. GPT/Claude 인계 요약
+
+리뷰 포인트는 "테이블 이전 후 기존 에코 발동 감각이 바뀌지 않았는가"다. 자동 QA는 모두 PASS지만, 대검 에코 총합처럼 확률 카운트는 소폭 흔들릴 수 있다.
+
+## 7. 다음 Codex 작업
+
+`UtilityEchoTuningSpec`을 `_dev/Data` ScriptableObject/data contract로 옮기고, `V1GameManager`는 그 자산을 읽는 쪽으로 줄인다.
+
+## 8. 포트폴리오 메모: 문제, 방향, 행동, 결과
+
+- 문제: 에코 튜닝 수치가 큰 매니저 코드 안에 모여 있어 변경 비용과 회귀 위험이 컸다.
+- 방향: 동작은 유지하면서 수치 접근 지점을 데이터 구조로 모은다.
+- 행동: 직렬화 테이블과 기본 fallback을 추가하고 QA 매트릭스로 검증했다.
+- 결과: 기능 변화 없이 다음 ScriptableObject 이전을 위한 안전한 중간 구조가 생겼다.

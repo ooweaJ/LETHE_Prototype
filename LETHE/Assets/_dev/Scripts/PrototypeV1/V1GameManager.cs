@@ -210,11 +210,21 @@ namespace Lethe.PrototypeV1
             V1MemoryId.AshenShield,
             V1MemoryId.OblivionBrand
         };
+        static readonly UtilityEchoTuningSpec[] DefaultUtilityEchoTuningSpecTable =
+        {
+            new(V1MemoryId.ExecutionFlash, false, 0, 1f, 0f, 1f, 0f, 1f, 0f, 1, 1, 0, 0, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0.22f, 0.025f),
+            new(V1MemoryId.HunterOath, true, 0, 0.36f, 0.09f, 1f, 0f, 1f, 0f, 1, 1, 3, 0, 0.22f, 0.055f, 0.22f, 0.055f, 0f, 0f, 0f, 0f, 0f, 0f),
+            new(V1MemoryId.ShatterWave, true, 2, 0.26f, 0.09f, 1.00f, 0.12f, 1.34f, 0.20f, 5, 9, 0, 0, 0.10f, 0.025f, 0.15f, 0.038f, 0f, 0f, 0f, 0f, 0f, 0f),
+            new(V1MemoryId.StoppedSecond, true, 0, 0.34f, 0.065f, 0.84f, 0.055f, 1.78f, 0.20f, 3, 8, 0, 0, 0.030f, 0.010f, 0.070f, 0.018f, 0.24f, 0.045f, 0.52f, 0.07f, 0f, 0f),
+            new(V1MemoryId.AshenShield, true, 0, 0.30f, 0.055f, 0.42f, 0f, 1.95f, 0.12f, 1, 8, 0, 0, 0.045f, 0.012f, 0.08f, 0.018f, 0f, 0f, 0f, 0f, 0f, 0f),
+            new(V1MemoryId.OblivionBrand, false, 0, 0.34f, 0.065f, 0.64f, 0f, 1.18f, 0.12f, 1, 7, 0, 0, 0.16f, 0.042f, 0.13f, 0.036f, 0f, 0f, 0f, 0f, 0f, 0f)
+        };
 
         [Header("Data")]
         [SerializeField] V1ContentCatalog contentCatalog;
         [SerializeField] WeaponDefinition dualBladesDefinition;
         [SerializeField] WeaponDefinition greatswordDefinition;
+        [SerializeField] UtilityEchoTuningSpec[] utilityEchoTuningSpecs = DefaultUtilityEchoTuningSpecTable.ToArray();
 
         readonly List<V1Enemy> enemies = new();
         readonly List<V1XpOrb> xpOrbs = new();
@@ -1660,54 +1670,41 @@ namespace Lethe.PrototypeV1
         bool ShouldTriggerEcho(V1MemoryId id, int levelValue, int hitIndex, bool force)
         {
             if (force) return true;
-            var firstHitOnly = id is V1MemoryId.HunterOath or V1MemoryId.StoppedSecond or V1MemoryId.AshenShield;
-            if (firstHitOnly && hitIndex != 0) return false;
-            if (id == V1MemoryId.ShatterWave && !(levelValue >= 2 || hitIndex == 0)) return false;
-            return UnityEngine.Random.value < EchoProcChance(id, levelValue);
+            var spec = EchoTuning(id);
+            if (spec.RequiresFirstHit(levelValue) && hitIndex != 0) return false;
+            return UnityEngine.Random.value < spec.ProcChance(levelValue);
         }
 
-        float EchoProcChance(V1MemoryId id, int levelValue) => id switch
+        UtilityEchoTuningSpec EchoTuning(V1MemoryId id)
         {
-            V1MemoryId.ShatterWave => 0.26f + levelValue * 0.09f,
-            V1MemoryId.HunterOath => 0.36f + levelValue * 0.09f,
-            V1MemoryId.StoppedSecond => 0.34f + levelValue * 0.065f,
-            V1MemoryId.AshenShield => 0.30f + levelValue * 0.055f,
-            V1MemoryId.OblivionBrand => 0.34f + levelValue * 0.065f,
-            _ => 1f
-        };
+            var specs = utilityEchoTuningSpecs;
+            if (specs != null)
+            {
+                for (int i = 0; i < specs.Length; i++)
+                {
+                    if (specs[i].Id == id) return specs[i];
+                }
+            }
 
-        float EchoRadius(V1MemoryId id, int levelValue, bool heavy) => id switch
-        {
-            V1MemoryId.ShatterWave => heavy ? 1.34f + levelValue * 0.20f : 1.00f + levelValue * 0.12f,
-            V1MemoryId.StoppedSecond => heavy ? 1.78f + levelValue * 0.20f : 0.84f + levelValue * 0.055f,
-            V1MemoryId.AshenShield => heavy ? 1.95f + levelValue * 0.12f : 0.42f,
-            V1MemoryId.OblivionBrand => heavy ? 1.18f + levelValue * 0.12f : 0.64f,
-            _ => 1f
-        };
+            for (int i = 0; i < DefaultUtilityEchoTuningSpecTable.Length; i++)
+            {
+                if (DefaultUtilityEchoTuningSpecTable[i].Id == id) return DefaultUtilityEchoTuningSpecTable[i];
+            }
 
-        int EchoTargetLimit(V1MemoryId id, int levelValue, bool heavy) => id switch
-        {
-            V1MemoryId.ShatterWave => heavy ? 9 : 5,
-            V1MemoryId.HunterOath => heavy ? 1 : 1 + levelValue / 3,
-            V1MemoryId.StoppedSecond => heavy ? 8 : 3,
-            V1MemoryId.AshenShield => heavy ? 8 : 1,
-            V1MemoryId.OblivionBrand => heavy ? 7 : 1,
-            _ => 1
-        };
+            return UtilityEchoTuningSpec.Fallback(id);
+        }
 
-        float EchoDamageMultiplier(V1MemoryId id, int levelValue, bool heavy) => id switch
-        {
-            V1MemoryId.ShatterWave => heavy ? 0.15f + levelValue * 0.038f : 0.10f + levelValue * 0.025f,
-            V1MemoryId.HunterOath => 0.22f + levelValue * 0.055f,
-            V1MemoryId.StoppedSecond => heavy ? 0.070f + levelValue * 0.018f : 0.030f + levelValue * 0.010f,
-            V1MemoryId.AshenShield => heavy ? 0.08f + levelValue * 0.018f : 0.045f + levelValue * 0.012f,
-            V1MemoryId.OblivionBrand => heavy ? 0.13f + levelValue * 0.036f : 0.16f + levelValue * 0.042f,
-            _ => 0f
-        };
+        float EchoProcChance(V1MemoryId id, int levelValue) => EchoTuning(id).ProcChance(levelValue);
 
-        float EchoFreezeSeconds(int levelValue, bool heavy) => heavy ? 0.52f + levelValue * 0.07f : 0.24f + levelValue * 0.045f;
+        float EchoRadius(V1MemoryId id, int levelValue, bool heavy) => EchoTuning(id).Radius(levelValue, heavy);
 
-        float ExecutionHealthThreshold(int levelValue) => 0.22f + levelValue * 0.025f;
+        int EchoTargetLimit(V1MemoryId id, int levelValue, bool heavy) => EchoTuning(id).TargetLimit(levelValue, heavy);
+
+        float EchoDamageMultiplier(V1MemoryId id, int levelValue, bool heavy) => EchoTuning(id).DamageMultiplier(levelValue, heavy);
+
+        float EchoFreezeSeconds(int levelValue, bool heavy) => EchoTuning(V1MemoryId.StoppedSecond).FreezeSeconds(levelValue, heavy);
+
+        float ExecutionHealthThreshold(int levelValue) => EchoTuning(V1MemoryId.ExecutionFlash).ExecutionHealthThreshold(levelValue);
 
         void TriggerBloodEchoAccent(V1Enemy enemy, Vector2 forward, int levelValue, int hitIndex, WeaponRuntimeSpec weapon, bool force)
         {
@@ -5261,6 +5258,129 @@ namespace Lethe.PrototypeV1
             V1MemoryId.OblivionBrand => "낙인 잔향",
             _ => id.ToString()
         };
+
+        [Serializable]
+        public struct UtilityEchoTuningSpec
+        {
+            public V1MemoryId id;
+            public bool firstHitOnly;
+            public int firstHitGateLiftLevel;
+            public float procChanceBase;
+            public float procChancePerLevel;
+            public float lightRadiusBase;
+            public float lightRadiusPerLevel;
+            public float heavyRadiusBase;
+            public float heavyRadiusPerLevel;
+            public int lightTargetLimit;
+            public int heavyTargetLimit;
+            public int lightTargetPerLevelDivisor;
+            public int heavyTargetPerLevelDivisor;
+            public float lightDamageBase;
+            public float lightDamagePerLevel;
+            public float heavyDamageBase;
+            public float heavyDamagePerLevel;
+            public float lightFreezeBase;
+            public float lightFreezePerLevel;
+            public float heavyFreezeBase;
+            public float heavyFreezePerLevel;
+            public float executionHealthBase;
+            public float executionHealthPerLevel;
+
+            public V1MemoryId Id => id;
+
+            public UtilityEchoTuningSpec(
+                V1MemoryId id,
+                bool firstHitOnly,
+                int firstHitGateLiftLevel,
+                float procChanceBase,
+                float procChancePerLevel,
+                float lightRadiusBase,
+                float lightRadiusPerLevel,
+                float heavyRadiusBase,
+                float heavyRadiusPerLevel,
+                int lightTargetLimit,
+                int heavyTargetLimit,
+                int lightTargetPerLevelDivisor,
+                int heavyTargetPerLevelDivisor,
+                float lightDamageBase,
+                float lightDamagePerLevel,
+                float heavyDamageBase,
+                float heavyDamagePerLevel,
+                float lightFreezeBase,
+                float lightFreezePerLevel,
+                float heavyFreezeBase,
+                float heavyFreezePerLevel,
+                float executionHealthBase,
+                float executionHealthPerLevel)
+            {
+                this.id = id;
+                this.firstHitOnly = firstHitOnly;
+                this.firstHitGateLiftLevel = firstHitGateLiftLevel;
+                this.procChanceBase = procChanceBase;
+                this.procChancePerLevel = procChancePerLevel;
+                this.lightRadiusBase = lightRadiusBase;
+                this.lightRadiusPerLevel = lightRadiusPerLevel;
+                this.heavyRadiusBase = heavyRadiusBase;
+                this.heavyRadiusPerLevel = heavyRadiusPerLevel;
+                this.lightTargetLimit = lightTargetLimit;
+                this.heavyTargetLimit = heavyTargetLimit;
+                this.lightTargetPerLevelDivisor = lightTargetPerLevelDivisor;
+                this.heavyTargetPerLevelDivisor = heavyTargetPerLevelDivisor;
+                this.lightDamageBase = lightDamageBase;
+                this.lightDamagePerLevel = lightDamagePerLevel;
+                this.heavyDamageBase = heavyDamageBase;
+                this.heavyDamagePerLevel = heavyDamagePerLevel;
+                this.lightFreezeBase = lightFreezeBase;
+                this.lightFreezePerLevel = lightFreezePerLevel;
+                this.heavyFreezeBase = heavyFreezeBase;
+                this.heavyFreezePerLevel = heavyFreezePerLevel;
+                this.executionHealthBase = executionHealthBase;
+                this.executionHealthPerLevel = executionHealthPerLevel;
+            }
+
+            public static UtilityEchoTuningSpec Fallback(V1MemoryId id)
+            {
+                return new UtilityEchoTuningSpec(id, false, 0, 1f, 0f, 1f, 0f, 1f, 0f, 1, 1, 0, 0, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f);
+            }
+
+            public bool RequiresFirstHit(int levelValue)
+            {
+                return firstHitOnly && (firstHitGateLiftLevel <= 0 || levelValue < firstHitGateLiftLevel);
+            }
+
+            public float ProcChance(int levelValue)
+            {
+                return procChanceBase + levelValue * procChancePerLevel;
+            }
+
+            public float Radius(int levelValue, bool heavy)
+            {
+                return heavy ? heavyRadiusBase + levelValue * heavyRadiusPerLevel : lightRadiusBase + levelValue * lightRadiusPerLevel;
+            }
+
+            public int TargetLimit(int levelValue, bool heavy)
+            {
+                var limit = heavy ? heavyTargetLimit : lightTargetLimit;
+                var divisor = heavy ? heavyTargetPerLevelDivisor : lightTargetPerLevelDivisor;
+                if (divisor > 0) limit += levelValue / divisor;
+                return Mathf.Max(1, limit);
+            }
+
+            public float DamageMultiplier(int levelValue, bool heavy)
+            {
+                return heavy ? heavyDamageBase + levelValue * heavyDamagePerLevel : lightDamageBase + levelValue * lightDamagePerLevel;
+            }
+
+            public float FreezeSeconds(int levelValue, bool heavy)
+            {
+                return heavy ? heavyFreezeBase + levelValue * heavyFreezePerLevel : lightFreezeBase + levelValue * lightFreezePerLevel;
+            }
+
+            public float ExecutionHealthThreshold(int levelValue)
+            {
+                return executionHealthBase + levelValue * executionHealthPerLevel;
+            }
+        }
 
         sealed class MemoryState
         {

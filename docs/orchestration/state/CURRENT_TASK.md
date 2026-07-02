@@ -1,5 +1,47 @@
 # Current Task
 
+# 2026-07-02 Utility Echo Serializable Tuning Table Result
+
+## Status
+
+The next echo dataization step is implemented in `Dev_Prototype_v1`. Utility echo tuning still lives inside `V1GameManager`, but the values now flow through a serializable tuning table instead of scattered helper formulas.
+
+## Applied Changes
+
+- Added `UtilityEchoTuningSpec[] utilityEchoTuningSpecs` as a serialized field on `V1GameManager`.
+- Added a static default tuning table for:
+  - `ExecutionFlash`
+  - `HunterOath`
+  - `ShatterWave`
+  - `StoppedSecond`
+  - `AshenShield`
+  - `OblivionBrand`
+- Added safe fallback lookup so an empty or partially missing serialized table still preserves previous behavior.
+- Moved utility echo tuning access through table methods:
+  - proc chance,
+  - first-hit gating,
+  - light/heavy radius,
+  - light/heavy target limits,
+  - light/heavy damage multiplier,
+  - light/heavy freeze duration,
+  - execution health threshold.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- Unity compile error count: `0`.
+- Unity QA:
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: `[V1QA] PASS`, `total=240`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: `[V1QA] PASS`, `total=219`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: `[V1QA] PASS`, `fracture=19`, `stasis=9`, `ashen=34`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: `[V1QA] PASS`, `fracture=8`, `stasis=26`, `ashen=16`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: `[V1QA] PASS`, `totalKalmuri=0` in the current post-optimization smoke run.
+
+## Next Implementation
+
+Move the serializable utility echo table into `_dev/Data` as a dedicated ScriptableObject/data contract, then apply the same data path to remaining ultimate and VFX timing constants.
+
 # 2026-07-02 Echo Tuning Spec / QA Counter Cleanup Result
 
 ## Status

@@ -2,6 +2,10 @@
 
 # 2026-07-02
 
+- Added a serializable utility echo tuning table:
+  - Moved utility echo proc chance, first-hit gating, radius, target limit, damage multiplier, freeze duration, and execution threshold reads through `UtilityEchoTuningSpec`.
+  - Kept static default values and fallback lookup so existing scenes preserve behavior if serialized data is empty.
+  - Verified Echo Matrix, Utility Ultimate Matrix, and Kalmuri Perf Matrix QA after the migration.
 - Added the first echo dataization cleanup pass:
   - Centralized repeated utility echo tuning formulas for proc chance, radius, target limit, damage multiplier, freeze duration, and execution threshold behind compact helper/spec functions.
   - Refactored Echo Matrix, Passive Memory Matrix, Kalmuri Perf Matrix, and Utility Ultimate Matrix object-count checks to use shared QA count helpers.

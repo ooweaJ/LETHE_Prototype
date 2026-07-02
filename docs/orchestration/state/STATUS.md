@@ -2,6 +2,25 @@
 
 Last updated: 2026-07-02
 
+## 2026-07-02 Update: Utility Echo Serializable Tuning Table
+
+- Continued the echo dataization path in `Dev_Prototype_v1`.
+- Applied:
+  - Added a serializable `UtilityEchoTuningSpec[]` table to `V1GameManager`.
+  - Moved utility echo proc chance, first-hit gating, radius, target limit, damage multiplier, freeze duration, and execution threshold values behind that table.
+  - Kept a static default table and safe fallback so existing scenes still run if the serialized field is empty or missing an entry.
+  - Preserved the current one-echo-definition rule; this is a tuning-data access cleanup, not new content.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity QA `LETHE/V1 QA/Echo Matrix Dual Blades`: `[V1QA] PASS`, `total=240`.
+  - Unity QA `LETHE/V1 QA/Echo Matrix Greatsword`: `[V1QA] PASS`, `total=219`.
+  - Unity QA `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: `[V1QA] PASS`, `fracture=19`, `stasis=9`, `ashen=34`.
+  - Unity QA `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: `[V1QA] PASS`, `fracture=8`, `stasis=26`, `ashen=16`.
+  - Unity QA `LETHE/V1 QA/Kalmuri Perf Matrix`: `[V1QA] PASS`, `totalKalmuri=0` in the current post-optimization smoke run.
+- Next step: move the serializable utility echo table toward `_dev/Data` ScriptableObject assets or a dedicated data contract, then repeat the same treatment for remaining ultimate/VFX constants.
+
 ## 2026-07-02 Update: Echo Tuning Spec / QA Counter Cleanup Pass
 
 - Implemented the first echo dataization cleanup pass in `Dev_Prototype_v1`.

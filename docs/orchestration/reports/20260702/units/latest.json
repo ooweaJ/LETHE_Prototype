@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260702\\index.md",
-  "generatedAt": "2026-07-02T04:45:40.328Z",
-  "unitCount": 7,
+  "generatedAt": "2026-07-02T05:53:59.164Z",
+  "unitCount": 8,
   "latest": {
-    "title": "2026-07-02-07 - 에코 튜닝 spec / QA 카운터 정리",
-    "number": "07",
-    "markdownPath": "docs\\orchestration\\reports\\20260702\\units\\2026-07-02-07-에코-튜닝-spec-qa-카운터-정리.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260702\\units\\2026-07-02-07-에코-튜닝-spec-qa-카운터-정리.html"
+    "title": "2026-07-02-08 - 에코 튜닝 직렬화 테이블 적용",
+    "number": "08",
+    "markdownPath": "docs\\orchestration\\reports\\20260702\\units\\2026-07-02-08-에코-튜닝-직렬화-테이블-적용.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260702\\units\\2026-07-02-08-에코-튜닝-직렬화-테이블-적용.html"
   }
 }
