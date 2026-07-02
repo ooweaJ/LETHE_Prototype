@@ -1,5 +1,39 @@
 # Current Task
 
+# 2026-07-02 Kalmuri Performance Optimization Result
+
+## Status
+
+The user-reported multi-enemy lag risk for `Hungry Blades / Kalmuri` has been optimized and a dedicated QA gate now exists.
+
+## Applied Changes
+
+- Lowered the +5 visual swarm from many small blades to fewer, larger, clearer blades.
+- Reduced Kalmuri bite tick rate, +5 target fan-out, bite blade count, return shard count, echo surge count, and echo barrage count.
+- Added a short cooldown to +5 awakened Kalmuri launch projectiles so dense hit chains no longer create a projectile/ring burst every hit.
+- Shortened several helper ring/flash/cut lifetimes.
+- Added `DebugRunKalmuriPerfMatrix()`.
+- Added Unity QA menu:
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- Unity compile error count: `0`.
+- Unity console error count: `0`.
+- Unity QA:
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: `[V1QA] PASS`
+  - Object counts: `orbit=44`, `bite=72`, `return=24`, `hunting=14`, `echoSurge=64`, `echoBarrage=32`, `totalKalmuri=374`.
+- Baseline comparison:
+  - First measured fail: `totalKalmuri=690`.
+  - Intermediate fails: `450`, `434`.
+  - Final pass: `374`.
+
+## Next Implementation
+
+Direct-play the +5 Kalmuri feel to confirm the lower count still feels like a strong blade swarm, then continue `docs/orchestration/state/NEXT_TASKS.md` item 1: echo dataization and QA counter cleanup.
+
 # 2026-07-02 Utility Ultimate Weapon Pattern Result
 
 ## Status

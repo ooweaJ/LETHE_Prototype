@@ -87,6 +87,13 @@ namespace Lethe.PrototypeV1.Editor
             StartRunner();
         }
 
+        [MenuItem("LETHE/V1 QA/Kalmuri Perf Matrix")]
+        public static void QaKalmuriPerfMatrix()
+        {
+            SavePending(new PendingSmoke(SmokeMode.KalmuriPerfMatrix, V1WeaponId.DualBlades));
+            StartRunner();
+        }
+
         [MenuItem("LETHE/V1 QA/Forget Resonance Flow")]
         public static void QaForgetResonanceFlow()
         {
@@ -221,6 +228,13 @@ namespace Lethe.PrototypeV1.Editor
                 return;
             }
 
+            if (smoke.Mode == SmokeMode.KalmuriPerfMatrix)
+            {
+                DestroyObjectsContaining("Kalmuri");
+                manager.DebugRunKalmuriPerfMatrix();
+                return;
+            }
+
             if (smoke.Mode == SmokeMode.ForgetResonanceFlow)
             {
                 manager.DebugRunForgetResonanceFlow();
@@ -329,6 +343,21 @@ namespace Lethe.PrototypeV1.Editor
                     }
                     return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
 
+                case SmokeMode.KalmuriPerfMatrix:
+                    var orbit = CountObjects("KalmuriLivingOrbitBlade");
+                    var bite = CountObjects("KalmuriBiteDiveBlade");
+                    var biteReturn = CountObjects("KalmuriBiteReturnShard");
+                    var hunting = CountObjects("KalmuriHuntingLunge");
+                    var echoSurge = CountObjects("KalmuriEchoSurgeBlade") + CountObjects("KalmuriEchoHeavySurgeBlade");
+                    var echoBarrage = CountObjects("KalmuriEchoBarrage");
+                    var totalKalmuri = CountObjects("Kalmuri");
+                    details += $" | orbit={orbit} bite={bite} return={biteReturn} hunting={hunting} echoSurge={echoSurge} echoBarrage={echoBarrage} totalKalmuri={totalKalmuri}";
+                    if (age >= 2.0 && orbit <= 60 && bite <= 130 && biteReturn <= 45 && hunting <= 20 && echoSurge <= 70 && echoBarrage <= 60 && totalKalmuri <= 420)
+                    {
+                        return SmokeResult.Pass;
+                    }
+                    return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
+
                 case SmokeMode.ForgetResonanceFlow:
                     var forgetFlow = CountObjects("ForgetFlow");
                     var echoTransform = CountObjects("EchoTransform");
@@ -386,6 +415,7 @@ namespace Lethe.PrototypeV1.Editor
             VfxMatrix,
             EchoMatrix,
             PassiveMemoryMatrix,
+            KalmuriPerfMatrix,
             ForgetResonanceFlow,
             UtilityUltimateMatrix,
             BloodBladeStorm
@@ -417,13 +447,15 @@ namespace Lethe.PrototypeV1.Editor
                         ? $"Echo Matrix {WeaponId}"
                         : Mode == SmokeMode.PassiveMemoryMatrix
                             ? "Passive Memory Matrix"
-                            : Mode == SmokeMode.ForgetResonanceFlow
-                                ? "Forget Resonance Flow"
-                                : Mode == SmokeMode.UtilityUltimateMatrix
-                                    ? $"Utility Ultimate Matrix {WeaponId}"
-                                    : Mode == SmokeMode.BloodBladeStorm
-                                        ? "Blood Blade Storm"
-                                        : $"{WeaponId}";
+                            : Mode == SmokeMode.KalmuriPerfMatrix
+                                ? "Kalmuri Perf Matrix"
+                                : Mode == SmokeMode.ForgetResonanceFlow
+                                    ? "Forget Resonance Flow"
+                                    : Mode == SmokeMode.UtilityUltimateMatrix
+                                        ? $"Utility Ultimate Matrix {WeaponId}"
+                                        : Mode == SmokeMode.BloodBladeStorm
+                                            ? "Blood Blade Storm"
+                                            : $"{WeaponId}";
         }
 
         static void SpawnAllMemoryEchoPreviews(V1GameManager manager)
@@ -483,6 +515,20 @@ namespace Lethe.PrototypeV1.Editor
                 }
             }
             return count;
+        }
+
+        static void DestroyObjectsContaining(string namePart)
+        {
+            foreach (var transform in UnityEngine.Object.FindObjectsByType<Transform>(FindObjectsSortMode.None))
+            {
+                if (transform == null || !transform.name.Contains(namePart, StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                transform.gameObject.SetActive(false);
+                UnityEngine.Object.Destroy(transform.gameObject);
+            }
         }
 
         static void AdvanceStartSmoke(V1GameManager manager, float seconds)

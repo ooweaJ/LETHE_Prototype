@@ -2,6 +2,25 @@
 
 Last updated: 2026-07-02
 
+## 2026-07-02 Update: Kalmuri Performance Optimization
+
+- Optimized `Hungry Blades / Kalmuri` for multi-enemy lag risk in `Dev_Prototype_v1`.
+- Applied:
+  - Reduced +5 orbit blade cap from 22-era density down to a capped 12 visible orbit blades.
+  - Reduced +5 bite cadence and per-target blade count while increasing individual blade scale/damage compensation.
+  - Limited bite target fan-out from 4-5 style crowd bursts to 3 focused targets at +5.
+  - Reduced return shards, echo surge blades, echo barrage blades, and short-lived ring/flash lifetimes.
+  - Added a short awakened launch cooldown so +5 Kalmuri projectiles do not spawn on every dense hit.
+  - Added `LETHE/V1 QA/Kalmuri Perf Matrix` with object-count gates for orbit, bite, return, hunting, echo surge, echo barrage, and total Kalmuri objects.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity console error count: `0`.
+  - Unity QA `LETHE/V1 QA/Kalmuri Perf Matrix`: `[V1QA] PASS`, `orbit=44`, `bite=72`, `return=24`, `hunting=14`, `echoSurge=64`, `echoBarrage=32`, `totalKalmuri=374`.
+  - Earlier failing baseline in the same stress scenario was `totalKalmuri=690`, then `450/434` during tuning; final pass reduced active counted Kalmuri objects by about 46% from the first measured fail.
+- Next step: direct-play the +5 feel to confirm the lower count still reads as a strong blade swarm, then continue echo dataization / QA counter cleanup.
+
 ## 2026-07-02 Update: Utility Ultimate Weapon Pattern Pass
 
 - Implemented the fourth production-gap sequence item in `Dev_Prototype_v1`: the three non-blood ultimate families now have dual-blade and greatsword routes.

@@ -59,6 +59,7 @@ Completed sequence:
 - 2026-07-02: passive-feeling active memory reinforcement implemented.
 - 2026-07-02: forgetting / resonance UX flow implemented.
 - 2026-07-02: non-blood utility ultimates weapon-pattern pass implemented.
+- 2026-07-02: Kalmuri performance optimization implemented; perf matrix final count `totalKalmuri=374` from first measured fail `690`.
 - QA menus passing:
   - `LETHE/V1 QA/Echo Matrix Dual Blades`
   - `LETHE/V1 QA/Echo Matrix Greatsword`
@@ -66,5 +67,6 @@ Completed sequence:
   - `LETHE/V1 QA/Forget Resonance Flow`
   - `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`
   - `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`
 
 Keep this file short. Detailed history belongs in `docs/TASK.md`, `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, or evidence files.

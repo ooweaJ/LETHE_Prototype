@@ -90,6 +90,10 @@ namespace Lethe.PrototypeV1
         const float FastDeficitSeconds = 6f;
         const float HungryBladesRadius = 86f / PixelsPerUnit;
         const float HungryBladesDps = 28f;
+        const int KalmuriOrbitBladeCap = 12;
+        const int KalmuriBiteTargetCap = 3;
+        const int KalmuriBiteBladeCap = 4;
+        const int KalmuriMaxPendingFollowups = 10;
         const int MaxMemoryLevel = 5;
         const int MaxEchoLevel = 5;
         const int MaxActiveMemories = 3;
@@ -270,6 +274,7 @@ namespace Lethe.PrototypeV1
         float cameraShakeAmount;
         float ultimatePulseTimer;
         float bloodStormBurstTimer;
+        float kalmuriAwakenLaunchCooldown;
         int level = 1;
         int xp;
         int nextXp = 8;
@@ -421,6 +426,7 @@ namespace Lethe.PrototypeV1
             UpdateWeaponVisuals(dt);
             UpdateWeapon(dt);
             UpdateActiveMemories(dt);
+            kalmuriAwakenLaunchCooldown = Mathf.Max(0f, kalmuriAwakenLaunchCooldown - dt);
             if (!echoOnlyDebugMode)
             {
                 UpdateEchoUltimate(dt);
@@ -1414,19 +1420,19 @@ namespace Lethe.PrototypeV1
 
             memory.TickTimer -= dt;
             if (memory.TickTimer > 0f) return;
-            memory.TickTimer = 0.16f;
+            memory.TickTimer = 0.28f;
 
-            var targetLimit = 4;
+            var targetLimit = memory.Level >= 5 ? 3 : memory.Level >= 3 ? 2 : 2;
             var lungeRange = HungryBladesRadius * 1.75f + memory.Level * 0.36f;
             var hits = enemies
                 .Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) <= lungeRange)
                 .OrderBy(e => Vector2.Distance(player.position, e.transform.position))
-                .Take(8)
+                .Take(memory.Level >= 5 ? KalmuriBiteTargetCap : memory.Level >= 3 ? 3 : 2)
                 .ToList();
             for (int i = 0; i < hits.Count; i++)
             {
                 var mul = i < targetLimit ? 1f : 0.55f;
-                var totalDamage = HungryBladesDps * 0.18f * (1f + (memory.Level - 1) * 0.16f) * mul;
+                var totalDamage = HungryBladesDps * 0.27f * (1f + (memory.Level - 1) * 0.16f) * mul;
                 SpawnHungryBladeBite(hits[i], memory.Level, i, totalDamage);
             }
         }
@@ -1436,16 +1442,16 @@ namespace Lethe.PrototypeV1
             memory.VisualTimer += dt * (2.15f + memory.Level * 0.26f);
             memory.VisualSpawnTimer -= dt;
             if (memory.VisualSpawnTimer > 0f) return;
-            memory.VisualSpawnTimer = Mathf.Max(0.056f, 0.100f - memory.Level * 0.007f);
+            memory.VisualSpawnTimer = Mathf.Max(0.120f, 0.170f - memory.Level * 0.007f);
             var orbitRadius = HungryBladesRadius * 0.78f + memory.Level * 0.080f;
 
             var focusTargets = enemies
                 .Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) <= HungryBladesRadius * 1.75f + memory.Level * 0.36f)
                 .OrderBy(e => Vector2.Distance(player.position, e.transform.position))
-                .Take(memory.Level >= 5 ? 3 : memory.Level >= 3 ? 2 : 1)
+                .Take(memory.Level >= 5 ? 2 : 1)
                 .ToList();
 
-            var bladeCount = Mathf.Clamp(7 + memory.Level * 3, 10, 22);
+            var bladeCount = Mathf.Clamp(6 + memory.Level, 7, KalmuriOrbitBladeCap);
             for (int i = 0; i < bladeCount; i++)
             {
                 var lane = i % 4;
@@ -1454,14 +1460,14 @@ namespace Lethe.PrototypeV1
                 var angle = memory.VisualTimer * speed + i * 360f / bladeCount + lane * 23f;
                 var startRadius = orbitRadius + wobble;
                 var arc = (lane % 2 == 0 ? 40f : -34f) + Mathf.Sin(memory.VisualTimer + i) * 8f;
-                var scale = 0.19f + memory.Level * 0.013f + lane * 0.006f;
-                var alpha = 0.74f - lane * 0.045f;
-                SpawnOrbitingKalmuriBlade("KalmuriLivingOrbitBlade", player.position, startRadius, angle, angle + arc, scale, new Color(0.74f, 0.98f, 1f, alpha), 0.28f);
+                var scale = 0.22f + memory.Level * 0.018f + lane * 0.006f;
+                var alpha = 0.80f - lane * 0.042f;
+                SpawnOrbitingKalmuriBlade("KalmuriLivingOrbitBlade", player.position, startRadius, angle, angle + arc, scale, new Color(0.74f, 0.98f, 1f, alpha), 0.22f);
             }
 
             if (focusTargets.Count > 0)
             {
-                var lungeCount = Mathf.Clamp(1 + memory.Level / 2, 1, 3);
+                var lungeCount = Mathf.Clamp(1 + memory.Level / 3, 1, 2);
                 for (int i = 0; i < lungeCount; i++)
                 {
                     var target = focusTargets[i % focusTargets.Count];
@@ -1474,12 +1480,12 @@ namespace Lethe.PrototypeV1
                     var start = player.position + orbitDir * (orbitRadius * (0.72f + i * 0.06f)) + (Vector3)(side * Mathf.Sin(seed * 0.05f) * 0.12f);
                     var end = targetPos - (Vector3)(toTarget * (0.14f + i * 0.03f)) + (Vector3)(side * ((i - (lungeCount - 1) * 0.5f) * 0.10f));
                     var color = new Color(0.84f, 1f, 1f, 0.82f - i * 0.10f);
-                    SpawnKalmuriDiveBlade("KalmuriHuntingLunge", start, end, 0.25f + memory.Level * 0.018f, color, 0.24f, 0.13f);
+                    SpawnKalmuriDiveBlade("KalmuriHuntingLunge", start, end, 0.27f + memory.Level * 0.018f, color, 0.18f, 0.11f);
 
-                    if (memory.Level >= 4)
+                    if (memory.Level >= 4 && i == 0)
                     {
                         var recoil = player.position + Quaternion.Euler(0f, 0f, seed + 78f) * Vector3.right * (orbitRadius * 0.42f);
-                        SpawnKalmuriDiveBlade("KalmuriHuntingRecoil", end, recoil, 0.17f + memory.Level * 0.010f, new Color(0.44f, 0.90f, 1f, 0.38f), 0.18f, 0.11f);
+                        SpawnKalmuriDiveBlade("KalmuriHuntingRecoil", end, recoil, 0.18f + memory.Level * 0.010f, new Color(0.44f, 0.90f, 1f, 0.38f), 0.12f, 0.08f);
                     }
                 }
             }
@@ -1493,14 +1499,14 @@ namespace Lethe.PrototypeV1
             if (toTarget.sqrMagnitude < 0.01f) toTarget = lastAim.sqrMagnitude > 0.01f ? lastAim.normalized : Vector2.up;
             var side = new Vector2(-toTarget.y, toTarget.x);
             var baseAngle = Mathf.Atan2(toTarget.y, toTarget.x) * Mathf.Rad2Deg;
-            var bladeCount = Mathf.Clamp(5 + levelValue, 6, 10);
+            var bladeCount = Mathf.Clamp(3 + levelValue / 3, 4, KalmuriBiteBladeCap);
             var damagePerBlade = totalDamage / bladeCount;
             var launchRadius = HungryBladesRadius * 0.78f + levelValue * 0.080f;
-            var scale = 0.15f + levelValue * 0.016f;
+            var scale = 0.21f + levelValue * 0.020f;
             PlaySfx("kalmuri_lunge", 0.58f, 0.055f);
-            SpawnTransientSprite("KalmuriBiteHalo", MakeRingSprite("KalmuriBiteHalo", Color.white, 136), center, Quaternion.identity, 0.42f + levelValue * 0.040f, new Color(0.56f, 0.96f, 1f, 0.36f), 0.20f);
-            SpawnEchoWoundSlash("KalmuriBiteCut", center, toTarget, new Color(0.80f, 1f, 1f, 0.86f), 0.72f + levelValue * 0.055f, 0.18f);
-            SpawnEchoWoundSlash("KalmuriBiteCrossCut", center + (Vector3)(side * 0.04f), side, new Color(0.58f, 0.94f, 1f, 0.50f), 0.46f + levelValue * 0.035f, 0.14f);
+            SpawnTransientSprite("KalmuriBiteHalo", MakeRingSprite("KalmuriBiteHalo", Color.white, 136), center, Quaternion.identity, 0.42f + levelValue * 0.040f, new Color(0.56f, 0.96f, 1f, 0.36f), 0.14f);
+            SpawnEchoWoundSlash("KalmuriBiteCut", center, toTarget, new Color(0.80f, 1f, 1f, 0.86f), 0.72f + levelValue * 0.055f, 0.12f);
+            SpawnEchoWoundSlash("KalmuriBiteCrossCut", center + (Vector3)(side * 0.04f), side, new Color(0.58f, 0.94f, 1f, 0.50f), 0.46f + levelValue * 0.035f, 0.10f);
             for (int i = 0; i < bladeCount; i++)
             {
                 var bladeIndex = i - (bladeCount - 1) * 0.5f;
@@ -1511,13 +1517,13 @@ namespace Lethe.PrototypeV1
                 var start = player.position + launchDir * (launchRadius + (i % 3) * 0.055f) + (Vector3)(side * spread * 0.25f);
                 var end = center + (Vector3)(toTarget * (0.26f + (i % 2) * 0.06f)) - (Vector3)(side * spread * 0.16f);
                 var sweep = 0.070f + (i % 4) * 0.008f;
-                SpawnKalmuriDiveBlade("KalmuriBiteDiveBlade", start, end, scale + (i % 3) * 0.012f, new Color(0.86f, 1f, 1f, 0.92f), 0.24f, sweep);
+                SpawnKalmuriDiveBlade("KalmuriBiteDiveBlade", start, end, scale + (i % 3) * 0.012f, new Color(0.86f, 1f, 1f, 0.92f), 0.18f, sweep);
                 StartCoroutine(DealDamageDelayed(target, damagePerBlade, "굶주린 칼무리", false, toTarget, i == 0 ? 0.06f : 0f, 0.035f + i * 0.012f));
 
-                if (i < 3 && levelValue >= 3)
+                if (i == 0 && levelValue >= 3)
                 {
                     var recoil = center + (Vector3)(toTarget * 0.18f) + (Vector3)(side * (spread * 1.30f + (i - 1) * 0.16f));
-                    SpawnKalmuriDiveBlade("KalmuriBiteReturnShard", end, recoil, scale * 0.78f, new Color(0.46f, 0.90f, 1f, 0.42f), 0.16f, 0.09f);
+                    SpawnKalmuriDiveBlade("KalmuriBiteReturnShard", end, recoil, scale * 0.72f, new Color(0.46f, 0.90f, 1f, 0.42f), 0.12f, 0.08f);
                 }
             }
         }
@@ -1531,9 +1537,10 @@ namespace Lethe.PrototypeV1
                 if (UnityEngine.Random.value <= chance)
                 {
                     TriggerKalmuriEcho(enemy, forward, kalmuriLevel, hitIndex, weapon);
-                    if (kalmuriLevel >= 5)
+                    if (kalmuriLevel >= 5 && kalmuriAwakenLaunchCooldown <= 0f)
                     {
                         LaunchKalmuriBlade(enemy);
+                        kalmuriAwakenLaunchCooldown = 0.35f;
                     }
                 }
             }
@@ -1882,6 +1889,7 @@ namespace Lethe.PrototypeV1
         void TriggerKalmuriEcho(V1Enemy center, Vector2 forward, int level, int hitIndex, WeaponRuntimeSpec weapon)
         {
             if (center == null) return;
+            if (pendingKalmuriFollowups.Count >= KalmuriMaxPendingFollowups) return;
             var delay = weapon.FollowupBaseDelay + Mathf.Min(hitIndex, 2) * weapon.FollowupStagger;
             pendingKalmuriFollowups.Add(new PendingKalmuriFollowup(center.transform.position, forward.normalized, level, hitIndex, weapon, delay));
         }
@@ -1916,21 +1924,21 @@ namespace Lethe.PrototypeV1
             var ringScale = Mathf.Clamp(radius * 1.08f, 0.48f, isHeavy ? 1.08f : 0.82f);
             var ringColor = isHeavy ? new Color(0.92f, 0.98f, 1f, 0.58f) : new Color(0.58f, 0.96f, 1f, 0.50f);
             PlaySfx(isHeavy ? "kalmuri_echo_heavy" : "kalmuri_echo", isHeavy ? 0.82f : 0.58f, isHeavy ? 0.10f : 0.055f);
-            SpawnTransientSprite("KalmuriEchoRange", MakeRingSprite("KalmuriEchoRange", Color.white, 128), origin, Quaternion.identity, ringScale, ringColor, isHeavy ? 0.30f : 0.22f);
-            SpawnTransientSprite("KalmuriEchoFlash", MakeRingSprite("KalmuriEchoFlash", Color.white, 96), origin, Quaternion.Euler(0f, 0f, baseAngle), Mathf.Clamp(radius * 0.55f, 0.30f, 0.60f), new Color(0.86f, 1f, 1f, 0.42f), isHeavy ? 0.22f : 0.16f);
-            SpawnEchoWoundSlash("KalmuriEchoCutTrace", origin, f, new Color(0.78f, 1f, 1f, isHeavy ? 0.82f : 0.64f), isHeavy ? 1.18f : 0.82f, isHeavy ? 0.30f : 0.22f);
-            var surgeCount = isHeavy ? Mathf.Clamp(7 + level, 8, 12) : Mathf.Clamp(4 + level, 5, 10);
+            SpawnTransientSprite("KalmuriEchoRange", MakeRingSprite("KalmuriEchoRange", Color.white, 128), origin, Quaternion.identity, ringScale, ringColor, isHeavy ? 0.22f : 0.16f);
+            SpawnTransientSprite("KalmuriEchoFlash", MakeRingSprite("KalmuriEchoFlash", Color.white, 96), origin, Quaternion.Euler(0f, 0f, baseAngle), Mathf.Clamp(radius * 0.55f, 0.30f, 0.60f), new Color(0.86f, 1f, 1f, 0.42f), isHeavy ? 0.16f : 0.12f);
+            SpawnEchoWoundSlash("KalmuriEchoCutTrace", origin, f, new Color(0.78f, 1f, 1f, isHeavy ? 0.82f : 0.64f), isHeavy ? 1.18f : 0.82f, isHeavy ? 0.22f : 0.16f);
+            var surgeCount = isHeavy ? Mathf.Clamp(4 + level / 4, 5, 5) : Mathf.Clamp(3 + level / 3, 4, 4);
             for (int i = 0; i < surgeCount; i++)
             {
                 var spread = (i - (surgeCount - 1) * 0.5f) * (isHeavy ? 0.13f : 0.10f);
                 var lane = i % 3;
                 var start = origin - (Vector3)(f * (isHeavy ? 0.62f : 0.46f) + side * spread * 1.35f);
                 var end = origin + (Vector3)(f * (isHeavy ? 0.30f : 0.20f) + side * (spread * 0.22f + Mathf.Sin(i * 1.7f + hitIndex) * 0.05f));
-                var scale = (isHeavy ? 0.24f : 0.17f) + level * (isHeavy ? 0.012f : 0.010f) + lane * 0.010f;
+                var scale = (isHeavy ? 0.27f : 0.20f) + level * (isHeavy ? 0.012f : 0.010f) + lane * 0.010f;
                 var color = isHeavy
                     ? new Color(0.92f, 1f, 1f, 0.92f - lane * 0.06f)
                     : new Color(0.78f, 1f, 1f, 0.78f - lane * 0.06f);
-                SpawnKalmuriDiveBlade(isHeavy ? "KalmuriEchoHeavySurgeBlade" : "KalmuriEchoSurgeBlade", start, end, scale, color, isHeavy ? 0.30f : 0.22f, isHeavy ? 0.15f : 0.11f);
+                SpawnKalmuriDiveBlade(isHeavy ? "KalmuriEchoHeavySurgeBlade" : "KalmuriEchoSurgeBlade", start, end, scale, color, isHeavy ? 0.18f : 0.12f, isHeavy ? 0.12f : 0.08f);
             }
             SpawnKalmuriEchoBarrage(origin, f, side, baseAngle, level, isHeavy);
 
@@ -1956,7 +1964,7 @@ namespace Lethe.PrototypeV1
             var targets = enemies
                 .Where(e => e != null && e.IsAlive && Vector2.Distance(origin, e.transform.position) <= radius + e.TouchRadius)
                 .OrderBy(e => Vector2.Distance(origin, e.transform.position))
-                .Take(isHeavy ? 6 : level >= 5 ? 5 : 3)
+                .Take(isHeavy ? 4 : level >= 5 ? 3 : 2)
                 .ToList();
 
             for (int i = 0; i < targets.Count; i++)
@@ -1969,9 +1977,9 @@ namespace Lethe.PrototypeV1
 
         void SpawnKalmuriEchoBarrage(Vector3 origin, Vector2 forward, Vector2 side, float baseAngle, int levelValue, bool isHeavy)
         {
-            var bladeCount = isHeavy ? Mathf.Clamp(5 + levelValue, 6, 10) : Mathf.Clamp(3 + levelValue, 4, 8);
-            var scale = isHeavy ? 0.21f : 0.155f + levelValue * 0.012f;
-            var lifetime = isHeavy ? 0.32f : 0.24f;
+            var bladeCount = isHeavy ? Mathf.Clamp(4 + levelValue / 4, 5, 5) : Mathf.Clamp(3 + levelValue / 3, 4, 4);
+            var scale = isHeavy ? 0.23f : 0.170f + levelValue * 0.012f;
+            var lifetime = isHeavy ? 0.20f : 0.14f;
             var color = isHeavy ? new Color(0.96f, 1f, 1f, 0.90f) : new Color(0.74f, 0.98f, 1f, 0.84f);
             for (int i = 0; i < bladeCount; i++)
             {
@@ -2352,7 +2360,7 @@ namespace Lethe.PrototypeV1
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = LoadSprite(KalmuriLaunchBladePath) ?? MakeBoxSprite("launch", Color.cyan, 16, 64);
             sr.sortingOrder = 45;
-            SpawnTransientSprite("KalmuriAwakenLaunch", MakeRingSprite("KalmuriAwakenLaunch", Color.white, 120), first.transform.position, Quaternion.identity, 0.52f, new Color(0.68f, 1f, 1f, 0.48f), 0.32f);
+            SpawnTransientSprite("KalmuriAwakenLaunch", MakeRingSprite("KalmuriAwakenLaunch", Color.white, 120), first.transform.position, Quaternion.identity, 0.52f, new Color(0.68f, 1f, 1f, 0.48f), 0.20f);
             go.AddComponent<V1Projectile>().Configure(this, target, 9.2f, 20f, "칼무리 각성");
         }
 
@@ -3445,6 +3453,41 @@ namespace Lethe.PrototypeV1
 
             SpawnFloatingText(player.position + Vector3.up * 1.48f, "Passive Memory Matrix", new Color(0.86f, 0.94f, 1f));
             Log("Debug passive memory matrix");
+            return DebugSnapshot();
+        }
+
+        public string DebugRunKalmuriPerfMatrix()
+        {
+            EnsureRunStarted();
+            SetDebugWeapon(V1WeaponId.DualBlades);
+            EnsureReviewEnemies(32);
+            activeMemories.Clear();
+            echoLevels.Clear();
+            echoOnlyDebugMode = false;
+            pendingKalmuriFollowups.Clear();
+
+            var hungry = new MemoryState(V1MemoryId.HungryBlades, MaxMemoryLevel);
+            activeMemories.Add(hungry);
+            for (int i = 0; i < 4; i++)
+            {
+                hungry.TickTimer = 0f;
+                hungry.VisualSpawnTimer = 0f;
+                UpdateHungryBlades(hungry, 0.22f);
+            }
+
+            echoLevels[V1MemoryId.HungryBlades] = MaxEchoLevel;
+            var weapon = CurrentWeaponSpec();
+            var live = enemies.Where(e => e != null && e.IsAlive).Take(8).ToList();
+            for (int i = 0; i < live.Count; i++)
+            {
+                var dir = (Vector2)(live[i].transform.position - player.position);
+                if (dir.sqrMagnitude < 0.01f) dir = Quaternion.Euler(0f, 0f, i * 45f) * Vector2.up;
+                TriggerKalmuriEcho(live[i], dir.normalized, MaxEchoLevel, i, weapon);
+            }
+            UpdatePendingKalmuriFollowups(0.5f);
+
+            SpawnFloatingText(player.position + Vector3.up * 1.48f, "Kalmuri Perf Matrix", new Color(0.74f, 0.98f, 1f));
+            Log("Debug Kalmuri perf matrix");
             return DebugSnapshot();
         }
 
