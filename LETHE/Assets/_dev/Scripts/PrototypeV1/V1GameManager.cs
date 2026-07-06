@@ -136,6 +136,13 @@ namespace Lethe.PrototypeV1
         const string EnemySplitterSheetPath = "Assets/_dev/Art/Sprites/Enemies/Splitter/sheet_enemy_splitter_4dir.png";
         const string EnemyVoidPriestSheetPath = "Assets/_dev/Art/Sprites/Enemies/VoidPriest/sheet_enemy_voidpriest_4dir.png";
         const string BossGatekeeperPath = "Assets/_dev/Art/Sprites/Enemies/Bosses/spr_boss_gatekeeper_01.png";
+        static readonly string[] BossGatekeeperRankPaths =
+        {
+            BossGatekeeperPath,
+            "Assets/_dev/Art/Sprites/Enemies/Bosses/spr_boss_gatekeeper_02.png",
+            "Assets/_dev/Art/Sprites/Enemies/Bosses/spr_boss_gatekeeper_03.png",
+            "Assets/_dev/Art/Sprites/Enemies/Bosses/spr_boss_gatekeeper_04.png"
+        };
         const string ArenaBackdropPath = "Assets/_dev/Art/Sprites/Map/spr_lethe_terrain_backdrop_01.png";
         static readonly string[] ArenaFloorTilePaths =
         {
@@ -4881,9 +4888,15 @@ namespace Lethe.PrototypeV1
                 V1EnemyKind.DriftingEye => LoadSheetFrame(EnemyEyeSheetPath, 4, 8, 0, 0) ?? MakeEyeSprite("drifting_eye", EnemyColor(kind), 88),
                 V1EnemyKind.SplitOne => LoadSheetFrame(EnemySplitterSheetPath, 4, 8, 0, 0) ?? MakeSplitterSprite("split_one", EnemyColor(kind), 88),
                 V1EnemyKind.VoidPriest => LoadSheetFrame(EnemyVoidPriestSheetPath, 4, 8, 0, 0) ?? MakePriestSprite("void_priest", EnemyColor(kind), 88),
-                V1EnemyKind.Gatekeeper => MakeGatekeeperSprite($"gatekeeper_rank_{Mathf.Clamp(bossSpawnIndex, 0, 3)}", GatekeeperAccentColor(Mathf.Clamp(bossSpawnIndex, 0, 3), 1f), 144, Mathf.Clamp(bossSpawnIndex, 0, 3)),
+                V1EnemyKind.Gatekeeper => GatekeeperBodySprite(Mathf.Clamp(bossSpawnIndex, 0, 3)),
                 _ => MakeCircleSprite(kind.ToString(), EnemyColor(kind), 72)
             };
+        }
+
+        Sprite GatekeeperBodySprite(int rank)
+        {
+            var sprite = LoadSprite(BossGatekeeperRankPaths[Mathf.Clamp(rank, 0, BossGatekeeperRankPaths.Length - 1)]);
+            return sprite ?? LoadSprite(BossGatekeeperPath) ?? MakeGatekeeperSprite($"gatekeeper_rank_{rank}", GatekeeperAccentColor(rank, 1f), 144, rank);
         }
 
         Color EnemyColor(V1EnemyKind kind) => kind switch
@@ -4963,18 +4976,22 @@ namespace Lethe.PrototypeV1
             for (int x = 0; x < size; x++)
             {
                 var p = new Vector2(x, y) - center;
-                var archWidth = rank switch { 1 => 0.38f, 2 => 0.32f, 3 => 0.42f, _ => 0.34f };
-                var archHeight = rank switch { 1 => 0.38f, 2 => 0.46f, 3 => 0.44f, _ => 0.42f };
-                var arch = Mathf.Clamp01(1f - Mathf.Abs(p.x) / (size * archWidth)) * Mathf.Clamp01(1f - Mathf.Abs(p.y) / (size * archHeight));
-                var hollow = Mathf.Clamp01(1f - Mathf.Abs(p.x) / (size * 0.18f)) * Mathf.Clamp01(1f - Mathf.Abs(p.y + size * 0.02f) / (size * 0.28f));
-                var horns = Mathf.Abs(p.y - size * 0.24f) < size * 0.05f && Mathf.Abs(p.x) > size * (0.20f + rank * 0.015f) && Mathf.Abs(p.x) < size * (0.42f + rank * 0.010f) ? 1f : 0f;
-                var crown = rank >= 1 && Mathf.Abs(p.y - size * 0.34f) < size * 0.045f && Mathf.Abs(p.x) < size * (0.12f + rank * 0.035f) ? 1f : 0f;
-                var verticalScar = rank >= 2 && Mathf.Abs(p.x + Mathf.Sin(p.y * 0.11f) * size * 0.035f) < size * 0.020f && Mathf.Abs(p.y) < size * 0.36f ? 1f : 0f;
-                var sideFangs = rank >= 3 && Mathf.Abs(Mathf.Abs(p.x) - size * 0.30f) < size * 0.025f && p.y < size * 0.22f && p.y > -size * 0.32f ? 1f : 0f;
-                var alpha = Mathf.Clamp01(arch - hollow * 0.75f + horns + crown + sideFangs * 0.8f);
-                var hot = Color.Lerp(color, new Color(1f, 0.90f, 0.52f, 1f), Mathf.Clamp01(crown + verticalScar * 0.8f));
+                var door = Mathf.Abs(p.x) < size * 0.30f && p.y > -size * 0.35f && p.y < size * 0.34f ? 1f : 0f;
+                var roof = p.y > size * 0.18f && p.y < size * 0.46f && Mathf.Abs(p.x) < Mathf.Lerp(size * 0.06f, size * 0.33f, Mathf.InverseLerp(size * 0.46f, size * 0.18f, p.y)) ? 1f : 0f;
+                var lower = p.y < -size * 0.20f && p.y > -size * 0.42f && Mathf.Abs(p.x) < Mathf.Lerp(size * 0.37f, size * 0.18f, Mathf.InverseLerp(-size * 0.42f, -size * 0.20f, p.y)) ? 1f : 0f;
+                var outline = Mathf.Max(door, Mathf.Max(roof, lower));
+                var faceHole = Mathf.Abs(p.x) < size * 0.18f && p.y > -size * 0.07f && p.y < size * 0.17f ? 1f : 0f;
+                var sideHorns = Mathf.Abs(p.y - size * 0.18f) < size * 0.09f && Mathf.Abs(p.x) > size * 0.31f && Mathf.Abs(p.x) < size * 0.46f ? 1f : 0f;
+                var crown = rank >= 3 && p.y > size * 0.34f && Mathf.Abs(p.x) < size * 0.24f && Mathf.Abs(Mathf.Sin((p.x + size * 0.2f) * 0.09f)) > 0.55f ? 1f : 0f;
+                var ring = rank == 2 && Mathf.Abs(p.magnitude - size * 0.27f) < size * 0.022f ? 1f : 0f;
+                var slash = rank >= 1 && Mathf.Abs(p.x + p.y * 0.55f) < size * 0.018f && Mathf.Abs(p.y) < size * 0.27f ? 1f : 0f;
+                var alpha = Mathf.Clamp01(outline + sideHorns + crown + ring * 0.85f);
+                var hot = Color.Lerp(new Color(0.18f, 0.18f, 0.20f, 1f), color, Mathf.Clamp01(sideHorns + crown + ring + slash));
                 var c = alpha <= 0f ? Color.clear : new Color(hot.r, hot.g, hot.b, Mathf.Clamp01(alpha));
-                if (verticalScar > 0f && arch > 0.12f) c = new Color(1f, 0.22f, 0.08f, 0.96f);
+                if (outline > 0f && faceHole > 0f) c = new Color(0.03f, 0.035f, 0.045f, 0.98f);
+                var eye = faceHole > 0f && Mathf.Abs(Mathf.Abs(p.x) - size * 0.085f) < size * 0.028f && Mathf.Abs(p.y - size * 0.045f) < size * 0.024f;
+                var core = Mathf.Abs(p.x) < size * 0.030f && p.y > -size * 0.22f && p.y < -size * 0.02f;
+                if (eye || core || (slash > 0f && outline > 0.1f)) c = new Color(color.r, color.g, color.b, 0.98f);
                 tex.SetPixel(x, y, c);
             }
             tex.Apply();

@@ -1,5 +1,36 @@
 # Current Task
 
+# 2026-07-06 Gatekeeper Sprite Repair Result
+
+## Status
+
+The Gatekeeper visual regression has been repaired in `Dev_Prototype_v1`. The previous rank-based procedural body read as a soft blob/slime, so the boss now uses authored angular gate/mask PNG sprites first.
+
+## Applied Changes
+
+- Replaced `spr_boss_gatekeeper_01.png` with a sharper gate/mask body.
+- Added:
+  - `spr_boss_gatekeeper_02.png`
+  - `spr_boss_gatekeeper_03.png`
+  - `spr_boss_gatekeeper_04.png`
+- Added `BossGatekeeperRankPaths`.
+- Changed `EnemySprite(Gatekeeper)` to call `GatekeeperBodySprite(rank)`.
+- `GatekeeperBodySprite(rank)` now loads rank-specific PNGs before falling back.
+- Reworked the procedural `MakeGatekeeperSprite()` fallback so it keeps an angular gate/mask silhouette instead of a rounded body.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on standalone rerun.
+- Unity compile error count: `0`.
+- Unity QA:
+  - `LETHE/V1 QA/Gatekeeper Pattern Matrix`: `[V1QA] PASS`, `boss=4`, `meteor=15`, `cone=4`, `ring=3`.
+  - `LETHE/V1 QA/M2 Loop`: `[V1QA] PASS`, `hungryEcho=5`, `bloodEcho=5`, `storm=True`.
+
+## Next Implementation
+
+Directly inspect the four boss bodies in scene. If the shape still feels too cheap, the next pass should be dedicated art direction only, not combat tuning.
+
 # 2026-07-06 Enemy Soft Separation Result
 
 ## Status

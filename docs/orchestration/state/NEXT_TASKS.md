@@ -1,6 +1,16 @@
 # Next Tasks
 
-## 1. Dense Wave / Enemy Separation Direct Review
+## 1. Gatekeeper Body Visual Review
+
+- Priority: high
+- Problem: jaewoo rejected the previous boss body as visually degraded; four authored Gatekeeper body sprites have now replaced the blob-like procedural body.
+- Build:
+  - Run `LETHE/V1 QA/Gatekeeper Pattern Matrix` or play to the first Gatekeeper.
+  - Judge whether the boss reads as a deliberate gate/mask boss rather than a placeholder.
+- Done:
+  - Review returns whether to keep the new bodies or do one dedicated boss art pass.
+
+## 2. Dense Wave / Enemy Separation Direct Review
 
 - Priority: high
 - Problem: enemies now use soft separation instead of perfect overlap, but the feel needs human judgment.
@@ -11,7 +21,7 @@
 - Done:
   - Review returns whether to tune separation padding, normal-enemy multiplier, boss-space multiplier, or DriftingEye standing separation.
 
-## 2. Gatekeeper Pattern Direct Review
+## 3. Gatekeeper Pattern Direct Review
 
 - Priority: high
 - Problem: the first boss now has telegraphed patterns and no longer receives healer support, but the feel still needs human judgment.
@@ -22,7 +32,7 @@
 - Done:
   - Review returns whether to tune telegraph timing, danger size, boss HP/guard uptime, or sprite polish.
 
-## 3. Jaewoo Full Direct Play Review
+## 4. Jaewoo Full Direct Play Review
 
 - Priority: medium
 - Problem: automated QA proves object spawning and compilation, but final GO/ITERATE/NO-GO depends on jaewoo feel judgment.
@@ -33,7 +43,7 @@
 - Done:
   - Review returns `GO`, `ITERATE`, or `NO-GO` with top issues.
 
-## 4. Remaining Echo / Ultimate Constant Cleanup
+## 5. Remaining Echo / Ultimate Constant Cleanup
 
 - Priority: lower
 - Problem: some repeated colors/timing constants remain in VFX helper routes after the current cleanup/dataization passes.
@@ -45,6 +55,7 @@
 
 Completed sequence:
 
+- 2026-07-06: Gatekeeper body visual repair implemented; four boss PNGs now load by rank, Pattern Matrix and M2 Loop QA passed.
 - 2026-07-06: enemy soft separation implemented; Enemy Separation Matrix and M2 Loop QA passed.
 - 2026-07-06: Gatekeeper heal exclusion and telegraphed boss-pattern pass implemented; Pattern Matrix and M2 Loop QA passed.
 - 2026-07-02: weapon-specific echo pass implemented.

@@ -1,5 +1,35 @@
 # LETHE TEST
 
+# 2026-07-06 Gatekeeper Sprite Repair Pass
+
+- Purpose:
+  - Respond to jaewoo feedback that the boss visual had degraded into a low-effort blob/slime-like silhouette.
+  - Restore Gatekeeper as an angular gate/mask boss with rank-specific body sprites.
+- Applied target:
+  - Replaced the previous generated first boss PNG with a sharper gate/mask sprite.
+  - Added rank-specific boss body sprites:
+    - `Assets/_dev/Art/Sprites/Enemies/Bosses/spr_boss_gatekeeper_01.png`
+    - `Assets/_dev/Art/Sprites/Enemies/Bosses/spr_boss_gatekeeper_02.png`
+    - `Assets/_dev/Art/Sprites/Enemies/Bosses/spr_boss_gatekeeper_03.png`
+    - `Assets/_dev/Art/Sprites/Enemies/Bosses/spr_boss_gatekeeper_04.png`
+  - Updated `V1GameManager.EnemySprite(Gatekeeper)` to load these authored PNGs before using procedural fallback.
+  - Tightened the fallback procedural Gatekeeper body to stay angular and mask-like if asset loading fails.
+- Commands / checks:
+  - Unity `AssetDatabase.Refresh()`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
+  - Unity compile error check.
+  - Unity `LETHE/V1 QA/Gatekeeper Pattern Matrix`.
+  - Unity `LETHE/V1 QA/M2 Loop`.
+- Results:
+  - Runtime build passed with 7 existing legacy warnings and 0 errors.
+  - Editor build passed with 0 warnings and 0 errors on standalone rerun.
+  - Unity compile error count: `0`.
+  - Gatekeeper Pattern Matrix: `[V1QA] PASS`, `boss=4`, `meteor=15`, `cone=4`, `ring=3`.
+  - M2 Loop: `[V1QA] PASS`, `hungryEcho=5`, `bloodEcho=5`, `storm=True`.
+- Limitation:
+  - Automated QA confirms asset import, code safety, and pattern runtime. Final boss visual quality still needs direct visual judgment in scene.
+
 # 2026-07-06 Enemy Soft Separation Pass
 
 - Purpose:

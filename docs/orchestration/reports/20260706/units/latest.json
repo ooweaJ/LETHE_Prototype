@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260706\\index.md",
-  "generatedAt": "2026-07-06T02:06:14.971Z",
-  "unitCount": 2,
+  "generatedAt": "2026-07-06T03:29:08.809Z",
+  "unitCount": 3,
   "latest": {
-    "title": "2026-07-06-02 - 잡몹 겹침 완화 소프트 분리 구현",
-    "number": "02",
-    "markdownPath": "docs\\orchestration\\reports\\20260706\\units\\2026-07-06-02-잡몹-겹침-완화-소프트-분리-구현.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260706\\units\\2026-07-06-02-잡몹-겹침-완화-소프트-분리-구현.html"
+    "title": "2026-07-06-03 - 문지기 보스 외형 퇴화 복구",
+    "number": "03",
+    "markdownPath": "docs\\orchestration\\reports\\20260706\\units\\2026-07-06-03-문지기-보스-외형-퇴화-복구.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260706\\units\\2026-07-06-03-문지기-보스-외형-퇴화-복구.html"
   }
 }

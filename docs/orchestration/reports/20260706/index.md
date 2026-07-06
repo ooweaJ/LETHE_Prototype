@@ -94,3 +94,49 @@ jaewoo가 밀집 웨이브를 플레이한 뒤 너무 느슨하거나 여전히 
 - 방향: 생존류 압박감은 유지하고, 읽기 어려운 겹침만 줄인다.
 - 행동: 적 리스트 기반 소프트 분리와 전용 QA 매트릭스를 추가했다.
 - 결과: QA에서 의도적으로 겹친 14마리의 overlap pair가 `91 -> 4`로 줄었고, 기존 M2 루프도 유지됐다.
+
+# 2026-07-06-03 - 문지기 보스 외형 퇴화 복구
+
+## 1. 현재 빌드 상태
+
+`Dev_Prototype_v1`에서 문지기 보스 본체 스프라이트를 다시 손봤다. 직전 패스의 절차형 보스 본체가 너무 둥글고 단순해서 슬라임처럼 읽히는 문제가 있었고, 이번에는 각진 철문/가면 실루엣의 PNG 본체 4종을 우선 로드하도록 바꿨다.
+
+## 2. 오늘 바뀐 것
+
+- `spr_boss_gatekeeper_01.png`를 더 각진 문지기 본체로 교체했다.
+- `spr_boss_gatekeeper_02.png`, `03.png`, `04.png`를 추가했다.
+- `V1GameManager`에 `BossGatekeeperRankPaths`를 추가했다.
+- 보스 스프라이트는 순번별 PNG를 먼저 로드하고, 실패할 때만 fallback을 쓰도록 바꿨다.
+- fallback 절차형 스프라이트도 둥근 덩어리가 아니라 각진 관문/가면 형태가 되도록 고쳤다.
+
+## 3. 테스트 결과와 근거
+
+- Unity `AssetDatabase.Refresh()`로 새 PNG와 `.meta` import 확인.
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: 기존 레거시 경고 7, 오류 0.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: 단독 재실행 기준 경고 0, 오류 0.
+- Unity compile error count: `0`.
+- Unity QA `Gatekeeper Pattern Matrix`: `[V1QA] PASS`, `boss=4`, `meteor=15`, `cone=4`, `ring=3`.
+- Unity QA `M2 Loop`: `[V1QA] PASS`, `hungryEcho=5`, `bloodEcho=5`, `storm=True`.
+
+## 4. 결정한 것
+
+보스 본체는 패턴 구분용 절차형 fallback으로 때우지 않는다. 본체는 최소한 별도 PNG 에셋을 우선하고, fallback은 로드 실패 대비용으로만 둔다.
+
+## 5. 문제 또는 리스크
+
+자동 QA는 스프라이트 import와 런타임 안전성만 확인한다. 최종적으로 이 보스가 충분히 성의 있고 위협적으로 보이는지는 직접 눈으로 다시 판단해야 한다.
+
+## 6. GPT/Claude 인계 요약
+
+문지기 보스 외형 퇴화는 인정하고 수리했다. 이제 네 순번 보스는 별도 PNG 본체를 로드한다. 다음 리뷰는 전투 수치보다 보스 실루엣, 위압감, 패턴과 이미지의 일치감을 봐야 한다.
+
+## 7. 다음 Codex 작업
+
+jaewoo가 새 문지기 본체 4종을 보고도 부족하다고 판단하면, 다음은 전투 코드가 아니라 보스 아트 전용 패스로 진행한다.
+
+## 8. 포트폴리오 메모: 문제, 방향, 행동, 결과
+
+- 문제: 보스가 성의 없는 둥근 placeholder처럼 보였다.
+- 방향: 문지기라는 컨셉이 보이는 각진 가면/관문 실루엣을 되살린다.
+- 행동: 순번별 PNG 보스 본체 4종을 만들고 코드 로드 순서를 에셋 우선으로 바꿨다.
+- 결과: 빌드와 Unity QA는 통과했고, 다음 판단은 직접 시각 리뷰로 넘어간다.

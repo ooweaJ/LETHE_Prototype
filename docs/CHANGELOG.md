@@ -2,6 +2,21 @@
 
 # 2026-07-06
 
+- Repaired the Gatekeeper boss visual regression after jaewoo feedback:
+  - Replaced the degraded rounded procedural boss body with four authored PNG Gatekeeper body sprites.
+  - `EnemySprite(Gatekeeper)` now loads rank-specific boss body assets first:
+    - `spr_boss_gatekeeper_01.png`
+    - `spr_boss_gatekeeper_02.png`
+    - `spr_boss_gatekeeper_03.png`
+    - `spr_boss_gatekeeper_04.png`
+  - The fallback procedural sprite was also tightened back into an angular gate/mask silhouette instead of a soft blob.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on standalone rerun.
+  - Unity compile error count: `0`.
+  - Unity QA `Gatekeeper Pattern Matrix`: `[V1QA] PASS`, `boss=4`, `meteor=15`, `cone=4`, `ring=3`.
+  - Unity QA `M2 Loop`: `[V1QA] PASS`, `hungryEcho=5`, `bloodEcho=5`, `storm=True`.
+
 - Added soft enemy separation in `Dev_Prototype_v1`:
   - Enemies now compute a lightweight neighbor push against nearby live enemies.
   - The push is soft and movement-scaled, so enemy pressure still stacks like a survivor-style swarm without collapsing into one unreadable blob.

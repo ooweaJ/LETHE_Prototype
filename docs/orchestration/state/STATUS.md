@@ -2,6 +2,22 @@
 
 Last updated: 2026-07-06
 
+## 2026-07-06 Update: Gatekeeper Sprite Repair Pass
+
+- Responded to jaewoo feedback that the revised boss body looked like a degraded blob/slime instead of a deliberate boss.
+- Applied:
+  - Replaced the rounded procedural-looking boss body with authored PNG Gatekeeper sprites.
+  - Added four rank-specific body sprites under `Assets/_dev/Art/Sprites/Enemies/Bosses/`.
+  - `V1GameManager` now loads rank-specific boss PNGs first and only uses procedural fallback if asset loading fails.
+  - The procedural fallback was tightened back into an angular gate/mask silhouette.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on standalone rerun.
+  - Unity compile error count: `0`.
+  - Unity QA `LETHE/V1 QA/Gatekeeper Pattern Matrix`: `[V1QA] PASS`, `boss=4`, `meteor=15`, `cone=4`, `ring=3`.
+  - Unity QA `LETHE/V1 QA/M2 Loop`: `[V1QA] PASS`, `hungryEcho=5`, `bloodEcho=5`, `storm=True`.
+- Next step: jaewoo should visually judge the four Gatekeeper bodies in the pattern matrix or in direct play before any further boss tuning.
+
 ## 2026-07-06 Update: Enemy Soft Separation Pass
 
 - Responded to jaewoo's question about whether normal enemies should overlap like Vampire Survivors.
