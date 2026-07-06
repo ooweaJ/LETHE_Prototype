@@ -1,5 +1,29 @@
 # LETHE CHANGELOG
 
+# 2026-07-06
+
+- Fixed the first Gatekeeper feeling like it could recover forever:
+  - `VoidPriest` no longer heals `Gatekeeper`.
+  - The boss still has guard damage reduction, but healer adds can no longer restore boss HP.
+- Reworked Gatekeeper boss patterns:
+  - Added red delayed telegraphs before boss damage.
+  - Gate 1 uses meteor circles.
+  - Gate 2 adds cone slash pressure.
+  - Gate 3 adds ring burst pressure.
+  - Gate 4 combines cone and paired meteor pressure.
+- Added rank-based Gatekeeper fallback sprite variants:
+  - Different color accents, crown/scar/fang details, and pattern sigils by boss rank.
+- Added QA:
+  - `DebugRunGatekeeperPatternMatrix()`
+  - `LETHE/V1 QA/Gatekeeper Pattern Matrix`
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors on standalone rerun.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity QA `Gatekeeper Pattern Matrix`: `[V1QA] PASS`, `boss=4`, `meteor=15`, `cone=4`, `ring=3`.
+  - Unity QA `M2 Loop`: `[V1QA] PASS`, `hungryEcho=5`, `bloodEcho=5`, `storm=True`.
+  - Unity console error count after QA: `0`.
+
 # 2026-07-02
 
 - Prepared direct-play review handoff:

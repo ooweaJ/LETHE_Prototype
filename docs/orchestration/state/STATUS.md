@@ -1,6 +1,29 @@
 # Status
 
-Last updated: 2026-07-02
+Last updated: 2026-07-06
+
+## 2026-07-06 Update: Gatekeeper Heal Fix / Telegraph Pattern Pass
+
+- Responded to jaewoo direct-play feedback that the first Gatekeeper felt like it would not die after boss spawn and continued add pressure.
+- Confirmed the boss did not have a dedicated self-heal, but `VoidPriest` was healing all nearby enemies including `Gatekeeper`.
+- Applied:
+  - `VoidPriest` no longer heals `Gatekeeper`.
+  - Gatekeeper attacks now use red telegraphs before damage resolves.
+  - Added rank-based boss pattern identity:
+    - Gate 1: meteor circle under/near the player.
+    - Gate 2: cone slash plus occasional meteor.
+    - Gate 3: ring burst plus meteor.
+    - Gate 4: cone plus paired meteor pressure.
+  - Gatekeeper procedural sprites now vary by rank/color/sigil instead of all fallback bosses sharing one concept silhouette.
+  - Added Unity QA menu `LETHE/V1 QA/Gatekeeper Pattern Matrix`.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors on standalone rerun; parallel run showed only the existing 7 legacy warnings before retry.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity QA `LETHE/V1 QA/Gatekeeper Pattern Matrix`: `[V1QA] PASS`, `boss=4`, `meteor=15`, `cone=4`, `ring=3`.
+  - Unity QA `LETHE/V1 QA/M2 Loop`: `[V1QA] PASS`, `hungryEcho=5`, `bloodEcho=5`, `storm=True`.
+  - Unity console error count after QA: `0`.
+- Next step: jaewoo should replay the first Gatekeeper and judge whether the red danger zones are readable, fair, and visually matched to the boss.
 
 ## 2026-07-02 Update: Direct Play Review Prep
 

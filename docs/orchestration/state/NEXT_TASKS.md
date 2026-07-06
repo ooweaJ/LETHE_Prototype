@@ -1,6 +1,17 @@
 # Next Tasks
 
-## 1. Jaewoo Direct Play Review
+## 1. Gatekeeper Pattern Direct Review
+
+- Priority: high
+- Problem: the first boss now has telegraphed patterns and no longer receives healer support, but the feel still needs human judgment.
+- Build:
+  - Play `Assets/_dev/Scenes/Dev_Prototype_v1.unity`.
+  - Reach the first Gatekeeper around 150 seconds.
+  - Judge red danger-zone readability, fairness, boss HP/TTK, guard feel, and whether the boss sprite/pattern concept reads better.
+- Done:
+  - Review returns whether to tune telegraph timing, danger size, boss HP/guard uptime, or sprite polish.
+
+## 2. Jaewoo Full Direct Play Review
 
 - Priority: medium
 - Problem: automated QA proves object spawning and compilation, but final GO/ITERATE/NO-GO depends on jaewoo feel judgment.
@@ -11,7 +22,7 @@
 - Done:
   - Review returns `GO`, `ITERATE`, or `NO-GO` with top issues.
 
-## 2. Remaining Echo / Ultimate Constant Cleanup
+## 3. Remaining Echo / Ultimate Constant Cleanup
 
 - Priority: lower
 - Problem: some repeated colors/timing constants remain in VFX helper routes after the current cleanup/dataization passes.
@@ -23,6 +34,7 @@
 
 Completed sequence:
 
+- 2026-07-06: Gatekeeper heal exclusion and telegraphed boss-pattern pass implemented; Pattern Matrix and M2 Loop QA passed.
 - 2026-07-02: weapon-specific echo pass implemented.
 - 2026-07-02: passive-feeling active memory reinforcement implemented.
 - 2026-07-02: forgetting / resonance UX flow implemented.

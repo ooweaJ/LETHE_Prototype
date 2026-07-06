@@ -1,5 +1,33 @@
 # LETHE TEST
 
+# 2026-07-06 Gatekeeper Heal Fix / Telegraph Pattern Pass
+
+- Purpose:
+  - Fix jaewoo's first-boss observation that the boss felt unkillable after add spawns.
+  - Replace the previous vague boss pulse with readable red danger-zone attacks.
+- Applied target:
+  - `VoidPriest` healing now skips `Gatekeeper`.
+  - Gatekeeper pattern rank now branches into meteor circle, cone slash, ring burst, and combined late-gate pressure.
+  - Each pattern shows a red telegraph before delayed damage.
+  - Gatekeeper fallback sprites now vary by rank with different color/sigil/crack shapes.
+  - Added `LETHE/V1 QA/Gatekeeper Pattern Matrix`.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
+  - Unity compile error check.
+  - Unity `LETHE/V1 QA/Gatekeeper Pattern Matrix`.
+  - Unity `LETHE/V1 QA/M2 Loop`.
+  - Unity console error check.
+- Results:
+  - Runtime build passed with 0 warnings and 0 errors on standalone rerun.
+  - Editor build passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Gatekeeper Pattern Matrix: `[V1QA] PASS`, `boss=4`, `meteor=15`, `cone=4`, `ring=3`.
+  - M2 Loop: `[V1QA] PASS`, `hungryEcho=5`, `bloodEcho=5`, `storm=True`.
+  - Unity console error count after QA: `0`.
+- Limitation:
+  - Automated QA confirms object creation and runtime safety. Jaewoo direct play still needs to judge whether the telegraphs are fair, readable, and exciting.
+
 # 2026-07-01 Skill SFX Runtime Pass
 
 - Purpose:

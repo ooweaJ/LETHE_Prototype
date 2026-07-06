@@ -1,5 +1,38 @@
 # Current Task
 
+# 2026-07-06 Gatekeeper Pattern Feedback Result
+
+## Status
+
+The user-reported first-boss issue has been addressed in `Dev_Prototype_v1`. The boss no longer receives `VoidPriest` healing, and Gatekeepers now use visible red danger telegraphs before pattern damage.
+
+## Applied Changes
+
+- Excluded `Gatekeeper` from `VoidPriest` healing targets.
+- Replaced the old immediate Gatekeeper pulse with delayed red telegraph patterns:
+  - meteor circle,
+  - cone slash,
+  - ring burst,
+  - late-gate combined cone/meteor pressure.
+- Added rank-based procedural Gatekeeper sprite variants and pattern sigils so the four boss appearances no longer read as the exact same fallback concept.
+- Added `DebugRunGatekeeperPatternMatrix()`.
+- Added Unity QA menu:
+  - `LETHE/V1 QA/Gatekeeper Pattern Matrix`
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors on standalone rerun.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- Unity compile error count: `0`.
+- Unity QA:
+  - `LETHE/V1 QA/Gatekeeper Pattern Matrix`: `[V1QA] PASS`, `boss=4`, `meteor=15`, `cone=4`, `ring=3`.
+  - `LETHE/V1 QA/M2 Loop`: `[V1QA] PASS`, `hungryEcho=5`, `bloodEcho=5`, `storm=True`.
+- Unity console error count after QA: `0`.
+
+## Next Implementation
+
+Direct-play the first Gatekeeper again. If it still feels unfair or visually weak, make exactly one narrow pass: telegraph timing, telegraph size, boss HP/guard uptime, or boss sprite polish.
+
 # 2026-07-02 Direct Play Review Prep Result
 
 ## Status

@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-06-01 - 문지기 회복 차단과 보스 패턴 예고 구현</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-06-01 - 문지기 회복 차단과 보스 패턴 예고 구현</h1>
+      <p class="meta">Generated from 2026-07-06-01-문지기-회복-차단과-보스-패턴-예고-구현.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260706/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-06-01 - 문지기 회복 차단과 보스 패턴 예고 구현</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에서 첫 문지기 보스가 힐러 잡몹에게 회복받던 문제를 차단했고, 보스 공격은 빨간 범위 예고 후 피해가 들어가는 구조로 바뀌었다. 아직 <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>VoidPriest</code>가 <code>Gatekeeper</code>를 회복하지 못하게 했다.</li>
+<li>문지기 패턴을 즉발 파문에서 빨간 예고 범위 기반 공격으로 바꿨다.</li>
+<li>보스 순번별 패턴을 나눴다:</li>
+<li>1번째: 플레이어 발밑 메테오 원형 범위.</li>
+<li>2번째: 부채꼴 절단 + 메테오.</li>
+<li>3번째: 보스 중심 링 폭발 + 메테오.</li>
+<li>4번째: 부채꼴 + 양쪽 메테오 복합 압박.</li>
+<li>보스 fallback 스프라이트도 순번별 색, 문양, 균열 형태가 다르게 보이도록 절차형으로 분기했다.</li>
+<li><code>LETHE/V1 QA/Gatekeeper Pattern Matrix</code> QA 메뉴를 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 단독 재실행 기준 경고 0, 오류 0.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 기존 레거시 경고 7, 오류 0.</li>
+<li>Unity compile error count: <code>0</code>.</li>
+<li>Unity QA <code>Gatekeeper Pattern Matrix</code>: <code>[V1QA] PASS</code>, <code>boss=4</code>, <code>meteor=15</code>, <code>cone=4</code>, <code>ring=3</code>.</li>
+<li>Unity QA <code>M2 Loop</code>: <code>[V1QA] PASS</code>, <code>hungryEcho=5</code>, <code>bloodEcho=5</code>, <code>storm=True</code>.</li>
+<li>Unity console error count after QA: <code>0</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>보스 회복은 의도 기믹이 아니라 힐러 타겟 필터 누락으로 보고 차단했다. 보스 난이도는 숨겨진 회복이 아니라, 빨간 예고 범위를 보고 피하는 패턴으로 만든다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>자동 QA는 패턴 오브젝트 생성과 런타임 안정성만 확인한다. 실제로 빨간 원/부채꼴이 충분히 빨리 읽히는지, 피할 시간이 적당한지, 첫 보스 TTK가 납득되는지는 직접 플레이로 다시 봐야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>문지기 보스는 이제 힐러에게 회복받지 않는다. 보스 공격은 메테오, 부채꼴, 링 폭발의 빨간 예고 후 지연 피해 방식으로 바뀌었다. 다음 리뷰는 수치보다 &quot;읽고 피할 수 있는가&quot;와 &quot;보스별 컨셉이 구분되는가&quot;를 봐야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo가 첫 문지기를 다시 플레이한 뒤, 한 가지 축만 골라 조정한다: 예고 시간, 범위 크기, 보스 HP/가드 지속, 또는 보스 스프라이트 폴리시.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 첫 보스가 잡몹과 함께 나오면 죽지 않는 것처럼 느껴졌다.</li>
+<li>방향: 숨겨진 회복을 제거하고, 보스 난이도를 명확한 예고 패턴으로 만든다.</li>
+<li>행동: 힐러의 보스 회복을 막고, 빨간 범위 예고형 보스 패턴과 순번별 스프라이트 차이를 구현했다.</li>
+<li>결과: 빌드와 Unity QA가 통과했고, 다음 판단은 직접 플레이 감각 검증으로 넘어간다.</li>
+</ul>
+  </main>
+</body>
+</html>

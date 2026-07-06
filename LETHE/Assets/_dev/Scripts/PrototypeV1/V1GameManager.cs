@@ -2541,32 +2541,111 @@ namespace Lethe.PrototypeV1
             if (gatekeeper == null || player == null || deathOverlay) return;
             var rank = GatekeeperPatternRank;
             var center = gatekeeper.transform.position;
-            var pulseRadius = 1.65f + rank * 0.22f;
-            var lineCount = 8 + rank * 2;
-            var color = new Color(1f, 0.24f, 0.16f, 0.62f);
-            SpawnTransientSprite("GatekeeperPulseOuter", MakeRingSprite("GatekeeperPulseOuter", Color.white, 180), center, Quaternion.identity, pulseRadius, color, 0.54f);
-            SpawnTransientSprite("GatekeeperPulseInner", MakeRingSprite("GatekeeperPulseInner", Color.white, 132), center, Quaternion.Euler(0f, 0f, elapsed * -120f), pulseRadius * 0.58f, new Color(1f, 0.70f, 0.36f, 0.46f), 0.46f);
-            SpawnTransientSprite("GatekeeperGuardCore", MakeImpactDiamondSprite("GatekeeperGuardCore", Color.white), center + Vector3.up * 0.18f, Quaternion.Euler(0f, 0f, 45f), 0.42f, new Color(1f, 0.92f, 0.52f, 0.76f), 0.40f);
-
-            var line = MakeBoxSprite("GatekeeperPulseLine", Color.white, 7, 128);
-            for (int i = 0; i < lineCount; i++)
-            {
-                var angle = patternStep * 17f + i * 360f / lineCount;
-                var dir = Quaternion.Euler(0f, 0f, angle) * Vector3.right;
-                var pos = center + dir * (pulseRadius * 0.34f);
-                SpawnTransientSpriteScaled("GatekeeperPulseSpoke", line, pos, Quaternion.Euler(0f, 0f, angle - 90f), new Vector3(0.026f, pulseRadius * 0.56f, 1f), new Color(1f, 0.52f, 0.24f, 0.42f), 0.42f);
-            }
-
+            SpawnTransientSprite("GatekeeperGuardCore", GatekeeperSigilSprite(rank), center + Vector3.up * 0.18f, Quaternion.Euler(0f, 0f, 45f), 0.44f + rank * 0.04f, GatekeeperAccentColor(rank, 0.78f), 0.46f);
             var toPlayer = (Vector2)(player.position - center);
-            if (toPlayer.magnitude <= pulseRadius + 0.34f)
-            {
-                var dir = toPlayer.sqrMagnitude > 0.01f ? toPlayer.normalized : lastAim.normalized;
-                playerMoveVelocity += dir * (1.25f + rank * 0.22f);
-                DamagePlayer(8.5f + rank * 2.2f, "문지기 파문");
-            }
+            var forward = toPlayer.sqrMagnitude > 0.01f ? toPlayer.normalized : lastAim.normalized;
 
+            if (rank <= 0)
+            {
+                GatekeeperMeteorTell(player.position, 1.12f, 0.78f, 13f, patternStep, rank);
+            }
+            else if (rank == 1)
+            {
+                GatekeeperConeTell(center, forward, 3.35f, 82f, 0.68f, 16f, rank);
+                if (patternStep % 2 == 0)
+                {
+                    GatekeeperMeteorTell(player.position + (Vector3)(forward * 0.55f), 0.92f, 0.72f, 11f, patternStep, rank);
+                }
+            }
+            else if (rank == 2)
+            {
+                GatekeeperRingTell(center, 2.15f, 0.74f, 18f, rank);
+                GatekeeperMeteorTell(player.position, 0.98f, 0.70f, 13f, patternStep, rank);
+            }
+            else
+            {
+                GatekeeperConeTell(center, forward, 3.85f, 96f, 0.62f, 18f, rank);
+                var side = new Vector2(-forward.y, forward.x);
+                GatekeeperMeteorTell(player.position + (Vector3)(side * 0.72f), 0.98f, 0.68f, 13f, patternStep, rank);
+                GatekeeperMeteorTell(player.position - (Vector3)(side * 0.72f), 0.98f, 0.74f, 13f, patternStep + 1, rank);
+            }
             cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.12f);
             cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.045f + rank * 0.012f);
+        }
+
+        void GatekeeperMeteorTell(Vector3 target, float radius, float warningSeconds, float damage, int patternStep, int rank)
+        {
+            if (player == null) return;
+            target.z = 0f;
+            var color = GatekeeperTelegraphColor(rank, 0.38f);
+            SpawnTransientSprite("GatekeeperMeteorTellFill", MakeDiscSprite("GatekeeperMeteorTellFill", Color.white, 160), target, Quaternion.identity, radius, color, warningSeconds);
+            SpawnTransientSprite("GatekeeperMeteorTellRing", MakeRingSprite("GatekeeperMeteorTellRing", Color.white, 180), target, Quaternion.Euler(0f, 0f, patternStep * 19f), radius, GatekeeperTelegraphColor(rank, 0.82f), warningSeconds);
+            SpawnTransientSprite("GatekeeperMeteorTellCore", GatekeeperMeteorSprite(rank), target + Vector3.up * 0.08f, Quaternion.Euler(0f, 0f, patternStep * 37f), 0.28f, GatekeeperAccentColor(rank, 0.70f), warningSeconds * 0.84f);
+            StartCoroutine(ResolveGatekeeperMeteor(target, radius, warningSeconds, damage, rank));
+        }
+
+        IEnumerator ResolveGatekeeperMeteor(Vector3 center, float radius, float delay, float damage, int rank)
+        {
+            yield return new WaitForSeconds(delay);
+            if (player == null || deathOverlay) yield break;
+            SpawnTransientSprite("GatekeeperMeteorImpact", GatekeeperMeteorSprite(rank), center, Quaternion.identity, radius * 0.92f, GatekeeperAccentColor(rank, 0.82f), 0.24f);
+            SpawnTransientSprite("GatekeeperMeteorImpactRing", MakeRingSprite("GatekeeperMeteorImpactRing", Color.white, 180), center, Quaternion.identity, radius * 1.05f, new Color(1f, 0.18f, 0.08f, 0.64f), 0.22f);
+            var toPlayer = (Vector2)(player.position - center);
+            if (toPlayer.magnitude <= radius)
+            {
+                var dir = toPlayer.sqrMagnitude > 0.01f ? toPlayer.normalized : Vector2.up;
+                playerMoveVelocity += dir * (1.05f + rank * 0.18f);
+                DamagePlayer(damage, "Gatekeeper meteor");
+            }
+        }
+
+        void GatekeeperConeTell(Vector3 center, Vector2 forward, float radius, float arcDegrees, float warningSeconds, float damage, int rank)
+        {
+            if (player == null) return;
+            forward = forward.sqrMagnitude > 0.01f ? forward.normalized : Vector2.up;
+            var angle = Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg - 90f;
+            var color = GatekeeperTelegraphColor(rank, 0.34f);
+            var pos = center + (Vector3)(forward * radius * 0.42f);
+            SpawnTransientSprite("GatekeeperConeTellFill", MakeSectorSprite("GatekeeperConeTellFill", Color.white, 176, arcDegrees), pos, Quaternion.Euler(0f, 0f, angle), radius, color, warningSeconds);
+            SpawnTransientSpriteScaled("GatekeeperConeTellCenterLine", MakeBoxSprite("GatekeeperConeTellCenterLine", Color.white, 8, 150), center + (Vector3)(forward * radius * 0.45f), Quaternion.Euler(0f, 0f, angle), new Vector3(0.030f, radius * 0.56f, 1f), GatekeeperTelegraphColor(rank, 0.78f), warningSeconds);
+            StartCoroutine(ResolveGatekeeperCone(center, forward, radius, arcDegrees, warningSeconds, damage, rank));
+        }
+
+        IEnumerator ResolveGatekeeperCone(Vector3 center, Vector2 forward, float radius, float arcDegrees, float delay, float damage, int rank)
+        {
+            yield return new WaitForSeconds(delay);
+            if (player == null || deathOverlay) yield break;
+            var angle = Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg - 90f;
+            SpawnTransientSprite("GatekeeperConeSlash", GatekeeperCleaveSprite(rank), center + (Vector3)(forward * radius * 0.48f), Quaternion.Euler(0f, 0f, angle), radius * 0.82f, GatekeeperAccentColor(rank, 0.84f), 0.24f);
+            var toPlayer = (Vector2)(player.position - center);
+            if (toPlayer.magnitude <= radius && Vector2.Angle(forward, toPlayer) <= arcDegrees * 0.5f)
+            {
+                var dir = toPlayer.sqrMagnitude > 0.01f ? toPlayer.normalized : forward;
+                playerMoveVelocity += dir * (1.35f + rank * 0.22f);
+                DamagePlayer(damage, "Gatekeeper cone");
+            }
+        }
+
+        void GatekeeperRingTell(Vector3 center, float radius, float warningSeconds, float damage, int rank)
+        {
+            SpawnTransientSprite("GatekeeperRingTellFill", MakeDiscSprite("GatekeeperRingTellFill", Color.white, 180), center, Quaternion.identity, radius, GatekeeperTelegraphColor(rank, 0.26f), warningSeconds);
+            SpawnTransientSprite("GatekeeperRingTellOuter", MakeRingSprite("GatekeeperRingTellOuter", Color.white, 180), center, Quaternion.identity, radius, GatekeeperTelegraphColor(rank, 0.84f), warningSeconds);
+            SpawnTransientSprite("GatekeeperRingTellInner", MakeRingSprite("GatekeeperRingTellInner", Color.white, 132), center, Quaternion.Euler(0f, 0f, elapsed * -120f), radius * 0.52f, GatekeeperAccentColor(rank, 0.48f), warningSeconds);
+            StartCoroutine(ResolveGatekeeperRing(center, radius, warningSeconds, damage, rank));
+        }
+
+        IEnumerator ResolveGatekeeperRing(Vector3 center, float radius, float delay, float damage, int rank)
+        {
+            yield return new WaitForSeconds(delay);
+            if (player == null || deathOverlay) yield break;
+            SpawnTransientSprite("GatekeeperRingImpact", MakeRingSprite("GatekeeperRingImpact", Color.white, 180), center, Quaternion.identity, radius * 1.06f, GatekeeperAccentColor(rank, 0.82f), 0.26f);
+            var toPlayer = (Vector2)(player.position - center);
+            if (toPlayer.magnitude <= radius)
+            {
+                var dir = toPlayer.sqrMagnitude > 0.01f ? toPlayer.normalized : Vector2.up;
+                playerMoveVelocity += dir * (1.50f + rank * 0.16f);
+                DamagePlayer(damage, "Gatekeeper ring");
+            }
         }
 
         void AddEnemyRoleMarker(Transform target, V1EnemyKind kind)
@@ -3535,6 +3614,30 @@ namespace Lethe.PrototypeV1
 
             SpawnFloatingText(player.position + Vector3.up * 1.48f, weaponId == V1WeaponId.Greatsword ? "Ultimate Matrix: Great" : "Ultimate Matrix: Dual", new Color(1f, 0.84f, 0.48f));
             Log(weaponId == V1WeaponId.Greatsword ? "Debug utility ultimate matrix greatsword" : "Debug utility ultimate matrix dual blades");
+            return DebugSnapshot();
+        }
+
+        public string DebugRunGatekeeperPatternMatrix()
+        {
+            EnsureRunStarted();
+            echoOnlyDebugMode = false;
+            var origin = player.position + Vector3.up * 3.8f;
+            for (int rank = 0; rank < 4; rank++)
+            {
+                gatekeeperKills = rank;
+                bossSpawnIndex = rank;
+                var offset = new Vector3((rank - 1.5f) * 2.25f, rank % 2 == 0 ? 0f : 0.95f, 0f);
+                SpawnEnemy(V1EnemyKind.Gatekeeper, origin + offset);
+                var gatekeeper = enemies.LastOrDefault(e => e != null && e.IsAlive && e.Kind == V1EnemyKind.Gatekeeper);
+                if (gatekeeper != null)
+                {
+                    GatekeeperPatternPulse(gatekeeper, rank + 1);
+                }
+            }
+            gatekeeperKills = 0;
+            bossSpawnIndex = 0;
+            SpawnFloatingText(player.position + Vector3.up * 1.52f, "Gatekeeper Pattern Matrix", new Color(1f, 0.56f, 0.32f));
+            Log("Debug gatekeeper pattern matrix");
             return DebugSnapshot();
         }
 
@@ -4684,7 +4787,7 @@ namespace Lethe.PrototypeV1
                 V1EnemyKind.DriftingEye => LoadSheetFrame(EnemyEyeSheetPath, 4, 8, 0, 0) ?? MakeEyeSprite("drifting_eye", EnemyColor(kind), 88),
                 V1EnemyKind.SplitOne => LoadSheetFrame(EnemySplitterSheetPath, 4, 8, 0, 0) ?? MakeSplitterSprite("split_one", EnemyColor(kind), 88),
                 V1EnemyKind.VoidPriest => LoadSheetFrame(EnemyVoidPriestSheetPath, 4, 8, 0, 0) ?? MakePriestSprite("void_priest", EnemyColor(kind), 88),
-                V1EnemyKind.Gatekeeper => LoadSheetFrame(BossGatekeeperPath, 1, 1, 0, 0) ?? MakeGatekeeperSprite("gatekeeper", EnemyColor(kind), 144),
+                V1EnemyKind.Gatekeeper => MakeGatekeeperSprite($"gatekeeper_rank_{Mathf.Clamp(bossSpawnIndex, 0, 3)}", GatekeeperAccentColor(Mathf.Clamp(bossSpawnIndex, 0, 3), 1f), 144, Mathf.Clamp(bossSpawnIndex, 0, 3)),
                 _ => MakeCircleSprite(kind.ToString(), EnemyColor(kind), 72)
             };
         }
@@ -4758,7 +4861,7 @@ namespace Lethe.PrototypeV1
             return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
         }
 
-        static Sprite MakeGatekeeperSprite(string name, Color color, int size)
+        static Sprite MakeGatekeeperSprite(string name, Color color, int size, int rank = 0)
         {
             var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { name = name };
             var center = new Vector2(size * 0.5f, size * 0.5f);
@@ -4766,15 +4869,64 @@ namespace Lethe.PrototypeV1
             for (int x = 0; x < size; x++)
             {
                 var p = new Vector2(x, y) - center;
-                var arch = Mathf.Clamp01(1f - Mathf.Abs(p.x) / (size * 0.34f)) * Mathf.Clamp01(1f - Mathf.Abs(p.y) / (size * 0.42f));
+                var archWidth = rank switch { 1 => 0.38f, 2 => 0.32f, 3 => 0.42f, _ => 0.34f };
+                var archHeight = rank switch { 1 => 0.38f, 2 => 0.46f, 3 => 0.44f, _ => 0.42f };
+                var arch = Mathf.Clamp01(1f - Mathf.Abs(p.x) / (size * archWidth)) * Mathf.Clamp01(1f - Mathf.Abs(p.y) / (size * archHeight));
                 var hollow = Mathf.Clamp01(1f - Mathf.Abs(p.x) / (size * 0.18f)) * Mathf.Clamp01(1f - Mathf.Abs(p.y + size * 0.02f) / (size * 0.28f));
-                var horns = Mathf.Abs(p.y - size * 0.24f) < size * 0.05f && Mathf.Abs(p.x) > size * 0.22f && Mathf.Abs(p.x) < size * 0.42f ? 1f : 0f;
-                var alpha = Mathf.Clamp01(arch - hollow * 0.75f + horns);
-                var c = alpha <= 0f ? Color.clear : new Color(color.r, color.g, color.b, Mathf.Clamp01(alpha));
+                var horns = Mathf.Abs(p.y - size * 0.24f) < size * 0.05f && Mathf.Abs(p.x) > size * (0.20f + rank * 0.015f) && Mathf.Abs(p.x) < size * (0.42f + rank * 0.010f) ? 1f : 0f;
+                var crown = rank >= 1 && Mathf.Abs(p.y - size * 0.34f) < size * 0.045f && Mathf.Abs(p.x) < size * (0.12f + rank * 0.035f) ? 1f : 0f;
+                var verticalScar = rank >= 2 && Mathf.Abs(p.x + Mathf.Sin(p.y * 0.11f) * size * 0.035f) < size * 0.020f && Mathf.Abs(p.y) < size * 0.36f ? 1f : 0f;
+                var sideFangs = rank >= 3 && Mathf.Abs(Mathf.Abs(p.x) - size * 0.30f) < size * 0.025f && p.y < size * 0.22f && p.y > -size * 0.32f ? 1f : 0f;
+                var alpha = Mathf.Clamp01(arch - hollow * 0.75f + horns + crown + sideFangs * 0.8f);
+                var hot = Color.Lerp(color, new Color(1f, 0.90f, 0.52f, 1f), Mathf.Clamp01(crown + verticalScar * 0.8f));
+                var c = alpha <= 0f ? Color.clear : new Color(hot.r, hot.g, hot.b, Mathf.Clamp01(alpha));
+                if (verticalScar > 0f && arch > 0.12f) c = new Color(1f, 0.22f, 0.08f, 0.96f);
                 tex.SetPixel(x, y, c);
             }
             tex.Apply();
             return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        Color GatekeeperAccentColor(int rank, float alpha)
+        {
+            var c = rank switch
+            {
+                1 => new Color(1f, 0.34f, 0.18f, alpha),
+                2 => new Color(0.92f, 0.16f, 0.36f, alpha),
+                3 => new Color(1f, 0.58f, 0.12f, alpha),
+                _ => new Color(1f, 0.24f, 0.16f, alpha)
+            };
+            return c;
+        }
+
+        Color GatekeeperTelegraphColor(int rank, float alpha)
+        {
+            var c = GatekeeperAccentColor(rank, alpha);
+            c.r = Mathf.Max(c.r, 0.95f);
+            c.g *= 0.72f;
+            c.b *= 0.72f;
+            return c;
+        }
+
+        Sprite GatekeeperSigilSprite(int rank)
+        {
+            return rank switch
+            {
+                1 => MakeSectorSprite("gatekeeper_sigil_fan", Color.white, 96, 86f),
+                2 => MakeRingSprite("gatekeeper_sigil_ring", Color.white, 132),
+                3 => MakeGatekeeperSprite("gatekeeper_sigil_crown", GatekeeperAccentColor(rank, 1f), 112, rank),
+                _ => MakeImpactDiamondSprite("gatekeeper_sigil_meteor", Color.white)
+            };
+        }
+
+        Sprite GatekeeperMeteorSprite(int rank)
+        {
+            return MakeGatekeeperMeteorSprite($"gatekeeper_meteor_{rank}", Color.white, 96, rank);
+        }
+
+        Sprite GatekeeperCleaveSprite(int rank)
+        {
+            return MakeSectorSprite($"gatekeeper_cleave_{rank}", Color.white, 176, rank >= 3 ? 106f : 88f);
         }
 
         Sprite LoadSprite(string path)
@@ -4982,6 +5134,74 @@ namespace Lethe.PrototypeV1
                 var glow = Mathf.Clamp01(1f - Mathf.Abs(d - radius) / 11f) * 0.20f;
                 var alpha = Mathf.Max(ring * 0.78f, glow);
                 tex.SetPixel(x, y, alpha <= 0f ? Color.clear : new Color(color.r, color.g, color.b, alpha));
+            }
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        static Sprite MakeDiscSprite(string name, Color color, int size)
+        {
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { name = name };
+            var center = new Vector2(size * 0.5f, size * 0.5f);
+            var radius = size * 0.39f;
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                var d = Vector2.Distance(new Vector2(x, y), center);
+                var fill = Mathf.Clamp01((radius - d) / 5.5f);
+                var edge = Mathf.Clamp01(1f - Mathf.Abs(d - radius) / 3.2f);
+                var alpha = Mathf.Max(fill * 0.38f, edge * 0.88f);
+                tex.SetPixel(x, y, alpha <= 0f ? Color.clear : new Color(color.r, color.g, color.b, alpha));
+            }
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        static Sprite MakeSectorSprite(string name, Color color, int size, float arcDegrees)
+        {
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { name = name };
+            var center = new Vector2(size * 0.5f, size * 0.18f);
+            var radius = size * 0.76f;
+            var halfArc = arcDegrees * 0.5f;
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                var p = new Vector2(x, y) - center;
+                if (p.y < 0f)
+                {
+                    tex.SetPixel(x, y, Color.clear);
+                    continue;
+                }
+                var distance = p.magnitude;
+                var angle = Mathf.Abs(Mathf.Atan2(p.x, p.y) * Mathf.Rad2Deg);
+                var insideArc = Mathf.Clamp01((halfArc - angle) / 2.8f);
+                var insideRadius = Mathf.Clamp01((radius - distance) / 4.8f);
+                var edge = Mathf.Max(
+                    Mathf.Clamp01(1f - Mathf.Abs(angle - halfArc) / 2.4f),
+                    Mathf.Clamp01(1f - Mathf.Abs(distance - radius) / 3.2f));
+                var alpha = insideArc * insideRadius * 0.30f + edge * insideRadius * 0.62f;
+                tex.SetPixel(x, y, alpha <= 0f ? Color.clear : new Color(color.r, color.g, color.b, Mathf.Clamp01(alpha)));
+            }
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.18f), 100f);
+        }
+
+        static Sprite MakeGatekeeperMeteorSprite(string name, Color color, int size, int rank)
+        {
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { name = name };
+            var center = new Vector2(size * 0.5f, size * 0.52f);
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                var p = new Vector2(x, y) - center;
+                var diamond = Mathf.Clamp01(1f - (Mathf.Abs(p.x) + Mathf.Abs(p.y)) / (size * (0.34f + rank * 0.015f)));
+                var inner = Mathf.Clamp01(1f - p.magnitude / (size * 0.20f));
+                var tail = p.y > 0f && Mathf.Abs(p.x + Mathf.Sin(p.y * 0.13f) * size * 0.055f) < size * (0.055f + rank * 0.008f) ? Mathf.Clamp01(1f - p.y / (size * 0.46f)) : 0f;
+                var crack = rank >= 2 && Mathf.Abs(p.x - p.y * 0.28f) < size * 0.020f && diamond > 0.10f ? 1f : 0f;
+                var alpha = Mathf.Clamp01(diamond + inner * 0.45f + tail * 0.65f);
+                var c = alpha <= 0f ? Color.clear : new Color(color.r, color.g, color.b, alpha);
+                if (crack > 0f) c = new Color(1f, 0.20f, 0.08f, 0.95f);
+                tex.SetPixel(x, y, c);
             }
             tex.Apply();
             return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
@@ -5753,7 +5973,7 @@ namespace Lethe.PrototypeV1
                     healTimer = 1.4f;
                     foreach (var enemy in FindObjectsByType<V1Enemy>(FindObjectsSortMode.None))
                     {
-                        if (enemy != this && enemy.IsAlive && Vector2.Distance(transform.position, enemy.transform.position) < 2.2f)
+                        if (enemy != this && enemy.IsAlive && enemy.Kind != V1EnemyKind.Gatekeeper && Vector2.Distance(transform.position, enemy.transform.position) < 2.2f)
                         {
                             enemy.Heal(3.5f);
                         }

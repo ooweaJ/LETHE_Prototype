@@ -122,6 +122,13 @@ namespace Lethe.PrototypeV1.Editor
             StartRunner();
         }
 
+        [MenuItem("LETHE/V1 QA/Gatekeeper Pattern Matrix")]
+        public static void QaGatekeeperPatternMatrix()
+        {
+            SavePending(new PendingSmoke(SmokeMode.GatekeeperPatternMatrix, V1WeaponId.DualBlades));
+            StartRunner();
+        }
+
         static void BeginStartWeaponSmoke(V1WeaponId weaponId)
         {
             SavePending(new PendingSmoke(SmokeMode.StartWeapon, weaponId));
@@ -244,6 +251,12 @@ namespace Lethe.PrototypeV1.Editor
             if (smoke.Mode == SmokeMode.UtilityUltimateMatrix)
             {
                 manager.DebugRunUtilityUltimateMatrix(smoke.WeaponId);
+                return;
+            }
+
+            if (smoke.Mode == SmokeMode.GatekeeperPatternMatrix)
+            {
+                manager.DebugRunGatekeeperPatternMatrix();
                 return;
             }
 
@@ -393,6 +406,21 @@ namespace Lethe.PrototypeV1.Editor
                     }
                     return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
 
+                case SmokeMode.GatekeeperPatternMatrix:
+                    var gatekeeperCounts = new[]
+                    {
+                        CountMetric("boss", "Enemy_Gatekeeper"),
+                        CountMetric("meteor", "GatekeeperMeteorTell"),
+                        CountMetric("cone", "GatekeeperConeTell"),
+                        CountMetric("ring", "GatekeeperRingTell")
+                    };
+                    details += $" | gatekeeperPattern {FormatCounts(gatekeeperCounts)}";
+                    if (gatekeeperCounts[0].Value >= 4 && gatekeeperCounts[1].Value > 0 && gatekeeperCounts[2].Value > 0 && gatekeeperCounts[3].Value > 0)
+                    {
+                        return SmokeResult.Pass;
+                    }
+                    return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
+
                 default:
                     return SmokeResult.Fail;
             }
@@ -430,7 +458,8 @@ namespace Lethe.PrototypeV1.Editor
             KalmuriPerfMatrix,
             ForgetResonanceFlow,
             UtilityUltimateMatrix,
-            BloodBladeStorm
+            BloodBladeStorm,
+            GatekeeperPatternMatrix
         }
 
         enum SmokeResult
@@ -467,7 +496,9 @@ namespace Lethe.PrototypeV1.Editor
                                         ? $"Utility Ultimate Matrix {WeaponId}"
                                         : Mode == SmokeMode.BloodBladeStorm
                                             ? "Blood Blade Storm"
-                                            : $"{WeaponId}";
+                                            : Mode == SmokeMode.GatekeeperPatternMatrix
+                                                ? "Gatekeeper Pattern Matrix"
+                                                : $"{WeaponId}";
         }
 
         static void SpawnAllMemoryEchoPreviews(V1GameManager manager)
