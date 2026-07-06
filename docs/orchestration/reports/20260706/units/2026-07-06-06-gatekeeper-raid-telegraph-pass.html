@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-06-06 - Gatekeeper Raid Telegraph Pass</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-06-06 - Gatekeeper Raid Telegraph Pass</h1>
+      <p class="meta">Generated from 2026-07-06-06-gatekeeper-raid-telegraph-pass.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260706/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-06-06 - Gatekeeper Raid Telegraph Pass</h1>
+<h2>1. Current Build State</h2>
+<p><code>Dev_Prototype_v1</code> now has simple raid-style Gatekeeper telegraphs in code. Local C# runtime/editor builds pass. Unity QA rerun is pending because AnkleBreaker Unity MCP still returns <code>Transport closed</code>.</p>
+<h2>2. Changed Today</h2>
+<ul>
+<li>Added <code>V1RaidTelegraphFill</code>.</li>
+<li>Gatekeeper meteor, cone, and ring tells now show a danger boundary, filling red zone, and impact flash.</li>
+<li>Gatekeeper warning windows now clamp to at least <code>0.92s</code>.</li>
+<li>Transient sprite pooling now disables stale raid-fill components when objects are reused.</li>
+</ul>
+<h2>3. Test Result / Evidence</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: passed, 7 existing legacy warnings, 0 errors.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: passed, 0 warnings, 0 errors after standalone rerun.</li>
+<li>Unity QA is pending because MCP transport is closed.</li>
+</ul>
+<h2>4. Decision</h2>
+<p>Boss patterns should communicate through action/VFX first: red zone, fill, then impact. This is the baseline for future Gatekeeper mechanics.</p>
+<h2>5. Risk</h2>
+<p>The code is build-safe, but final timing/readability needs direct visual judgment in Unity once MCP recovers.</p>
+<h2>6. GPT/Claude Handoff</h2>
+<p>The Gatekeeper pattern language is now closer to raid telegraphs. Review should focus on fill timing, impact clarity, and whether cone/circle/ring zones feel fair.</p>
+<h2>7. Next Codex Work</h2>
+<p>Retry <code>Gatekeeper Pattern Matrix</code> and <code>Gatekeeper Jump</code>, then tune warning duration or impact brightness if needed.</p>
+<h2>8. Portfolio Note</h2>
+<ul>
+<li>Problem: boss patterns looked like static red shapes, not raid mechanics.</li>
+<li>Direction: use a simple readable telegraph grammar.</li>
+<li>Action: implemented danger boundary, filling zone, and impact flash.</li>
+<li>Result: local builds pass; Unity QA is pending due MCP transport.</li>
+</ul>
+  </main>
+</body>
+</html>

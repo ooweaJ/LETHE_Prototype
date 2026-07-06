@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-06-07 - Dense Dual-Blade VFX Churn Pass</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-06-07 - Dense Dual-Blade VFX Churn Pass</h1>
+      <p class="meta">Generated from 2026-07-06-07-dense-dual-blade-vfx-churn-pass.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260706/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-06-07 - Dense Dual-Blade VFX Churn Pass</h1>
+<h2>1. Current Build State</h2>
+<p><code>Dev_Prototype_v1</code> now has a focused dense dual-blade performance pass in code. Local C# runtime/editor builds pass. Final Unity QA rerun is pending because AnkleBreaker Unity MCP transport closed after <code>Assets/Refresh</code>.</p>
+<h2>2. Changed Today</h2>
+<ul>
+<li>Added dense dual-blade echo/slash throttles.</li>
+<li>Added lighter dense Kalmuri follow-ups that remember dense state when scheduled.</li>
+<li>Suppressed dense Blood Reflection bloom/accent spam while keeping mark readability.</li>
+<li>Changed dense utility echoes to rotate one utility family per primary hit.</li>
+<li>Replaced VoidPriest heal target lookup with manager-list targeting.</li>
+<li>Added <code>LETHE/V1 QA/Dense Dual Blades Perf Matrix</code>.</li>
+</ul>
+<h2>3. Test Result / Evidence</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: passed, 7 existing legacy warnings, 0 errors.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: passed, 7 existing legacy warnings, 0 errors.</li>
+<li>Unity compile error count before MCP closure: <code>0</code>.</li>
+<li>Dense QA reproduced the problem before final throttle:</li>
+<li><code>954 transient / 506 activeVfx / 947.64ms</code></li>
+<li><code>550 transient / 307 activeVfx / 561.77ms</code></li>
+<li><code>627 transient / 361 activeVfx / 644.39ms</code></li>
+</ul>
+<h2>4. Decision</h2>
+<p>Do not add more VFX volume to dual blades until the dense matrix passes. The next move is measurement and churn reduction, not spectacle.</p>
+<h2>5. Risk</h2>
+<p>The latest code is build-verified but not yet Unity-QA-verified after the final throttle because MCP transport is closed.</p>
+<h2>6. GPT/Claude Handoff</h2>
+<p>Dense dual-blade lag is now an explicit QA target. If final QA still fails, inspect Kalmuri follow-up object count, Blood mark/accent count, and utility echo fan-out first.</p>
+<h2>7. Next Codex Work</h2>
+<p>Retry Dense Dual Blades Perf Matrix, then rerun Void Priest Heal Matrix and M2 Loop.</p>
+<h2>8. Portfolio Note</h2>
+<ul>
+<li>Problem: dense dual-blade combat produced too much transient VFX and felt laggy.</li>
+<li>Direction: measure dense combat as a QA matrix and throttle the repeated VFX families.</li>
+<li>Action: added dense echo/slash/Kalmuri/Blood/utility throttles and manager-side healer targeting.</li>
+<li>Result: local builds pass and QA baseline is documented; final Unity QA rerun remains pending due MCP transport.</li>
+</ul>
+  </main>
+</body>
+</html>

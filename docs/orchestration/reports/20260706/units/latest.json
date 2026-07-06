@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260706\\index.md",
-  "generatedAt": "2026-07-06T05:39:37.283Z",
-  "unitCount": 5,
+  "generatedAt": "2026-07-06T08:17:17.426Z",
+  "unitCount": 10,
   "latest": {
-    "title": "2026-07-06-05 - 보스 즉시 점프 디버그와 다음 개선 정리",
-    "number": "05",
-    "markdownPath": "docs\\orchestration\\reports\\20260706\\units\\2026-07-06-05-보스-즉시-점프-디버그와-다음-개선-정리.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260706\\units\\2026-07-06-05-보스-즉시-점프-디버그와-다음-개선-정리.html"
+    "title": "2026-07-06-10 - MCP QA Recovery and Dense Dual-Blade Final Pass",
+    "number": "10",
+    "markdownPath": "docs\\orchestration\\reports\\20260706\\units\\2026-07-06-10-mcp-qa-recovery-and-dense-dual-blade-final-pass.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260706\\units\\2026-07-06-10-mcp-qa-recovery-and-dense-dual-blade-final-pass.html"
   }
 }

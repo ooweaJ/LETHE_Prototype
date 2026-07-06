@@ -1,78 +1,70 @@
 # Next Tasks
 
-## 1. Dense Dual-Blade Performance / VFX Churn Pass
+## 1. Direct-Play Visual Review
 
 - Priority: high
-- Problem: jaewoo felt lag when dual blades attack into many enemies. The likely risk is dense hit-triggered transient VFX plus repeated enemy queries.
+- Problem: automated QA is green, but jaewoo still needs to judge feel/readability in actual play.
 - Build:
-  - Add a dense dual-blade QA/perf matrix with object-count and timing-risk metrics.
-  - Reduce or pool the worst repeated transient VFX families.
-  - Replace expensive whole-scene enemy scans where practical, starting with VoidPriest healing.
-  - Keep effect readability while lowering object churn.
+  - Play `Dev_Prototype_v1` with dual blades and greatsword.
+  - Use `F6` / F12 `Boss` to inspect the first Gatekeeper quickly.
+  - Judge Kalmuri clamp/rip, utility echo state marks, Gatekeeper raid telegraphs, healer VFX, and dense dual-blade feel.
 - Done:
-  - Dense dual-blade waves no longer hitch noticeably and QA stays under object-count limits.
+  - Review returns concrete tune targets: keep, brighten, shrink, slow down, rebalance, or redesign.
 
-## 2. VFX Identity / Echo Readability Pass
+## 2. Kalmuri Clamp/Rip Visual Polish
 
 - Priority: high
-- Problem: VFX identity is still low. Memories/echoes pass QA but do not read as different enough in actual combat.
+- Problem: Kalmuri automated perf is safe, but the new clamp/rip action still needs direct visual approval.
 - Build:
-  - Add clearer monster-state marks for Shatter, Stopped, Ashen, Hunter, Execution, and Oblivion.
-  - Make each state visually distinct before adding raw damage or screen-filling effects.
-  - Add contribution metrics for damage/heal/control, not only object counts.
+  - Check +1/+3/+5 scale in normal and dense fights.
+  - If too subtle, tune scale/alpha/lifetime without reintroducing moving trail spam.
+  - If too noisy, reduce support flashes before reducing the main clamp/rip read.
 - Done:
-  - Direct play can identify what each memory/echo is doing before reading text.
+  - Jaewoo can identify Hungry Blades / Kalmuri by action, not by label.
 
-## 3. Hungry Blades / Kalmuri Echo Visual Redesign
+## 3. Gatekeeper Raid Telegraph Feel Tune
 
 - Priority: high
-- Problem: jaewoo still feels the Kalmuri echo visual does not fit the concept. More cyan blade clutter is not enough.
+- Problem: Gatekeeper pattern QA passes, but visual timing/fairness still needs player judgment.
 - Build:
-  - Reframe Kalmuri echo around a recognizable blade action: hunt, pierce, clamp, rip, or return.
-  - Reduce generic rings and make the echo different from the active memory orbit.
-  - Verify +1/+3/+5 scale without overloading dense fights.
+  - Review meteor, cone, and ring as `red zone -> fill -> bang`.
+  - Tune only warning duration, fill alpha, impact flash, or danger-zone size if needed.
 - Done:
-  - Jaewoo can look at the effect and say it matches "칼무리" without relying on labels.
+  - The first boss feels readable, fair, and more like a simple raid encounter.
 
-## 4. Gatekeeper Jump / Boss Pattern Direct Review
+## 4. Dense Dual-Blade Feel Check
 
 - Priority: high
-- Problem: the new `F6`/`Boss` debug jump works technically, but the boss pattern and body still need direct feel judgment.
+- Problem: Dense Dual Blades Perf Matrix now passes, but the aggressive VFX throttle may make dense hits feel too quiet.
 - Build:
-  - Press `F6` or use the F12 `Boss` button.
-  - Judge red danger-zone readability, TTK, guard feel, add pressure, and boss body quality.
+  - Play dense waves with dual blades, Kalmuri, Blood, and utility echoes.
+  - If too quiet, add one cheap accent family back under the QA budget.
+  - If still hitchy in direct play, profile non-VFX costs next.
 - Done:
-  - Review returns one narrow boss adjustment: telegraph timing, danger size, HP/guard, add pressure, or art polish.
+  - Dense dual-blade combat feels responsive and still readable.
 
 ## 5. Healer / Enemy Separation Direct Review
 
 - Priority: high
-- Problem: VoidPriest healing and enemy separation are technically fixed, but they need dense-wave direct play judgment.
+- Problem: VoidPriest healing and enemy separation pass automated QA, but dense-wave feel still needs direct judgment.
 - Build:
   - Test dense waves with multiple priests and mixed enemies.
-  - Check whether heal source/readability, killability, and soft separation all feel fair.
+  - Check heal source/readability, killability, soft separation, and crowd pressure.
 - Done:
   - Review returns whether to tune heal amount, priest frequency, receiver lockout, separation padding, or enemy cap.
 
 Completed sequence:
 
-- 2026-07-06: Gatekeeper jump debug implemented; `F6`, F12 `Boss`, and `LETHE/V1 QA/Gatekeeper Jump` now work.
+- 2026-07-06: MCP QA recovered on LETHE port `7890`; Echo, Gatekeeper, Dense Dual, Kalmuri, VoidPriest, and M2 QA passed after final dense optimization.
+- 2026-07-06: Kalmuri echo clamp/rip visual redesign implemented and local builds passed.
+- 2026-07-06: utility echo monster-state marks implemented and Echo Matrix QA passed for dual blades and greatsword.
+- 2026-07-06: Gatekeeper raid telegraph fill/bang pass implemented and Pattern/Jump QA passed.
+- 2026-07-06: dense dual-blade VFX churn throttles implemented; final matrix now passes at `hits=30`, `suppressed=25`, `transient=64`, `activeVfx=42`, `ms=55.73`.
+- 2026-07-06: Gatekeeper jump debug implemented; `F6`, F12 `Boss`, and `LETHE/V1 QA/Gatekeeper Jump` work.
 - 2026-07-06: VoidPriest heal stacking/readability pass implemented; heal matrix, M2, Echo Matrix Dual, Passive Memory Matrix, and Utility Ultimate Dual QA passed.
 - 2026-07-06: Gatekeeper body visual repair implemented; four boss PNGs now load by rank, Pattern Matrix and M2 Loop QA passed.
 - 2026-07-06: enemy soft separation implemented; Enemy Separation Matrix and M2 Loop QA passed.
 - 2026-07-06: Gatekeeper heal exclusion and telegraphed boss-pattern pass implemented; Pattern Matrix and M2 Loop QA passed.
-- 2026-07-02: weapon-specific echo pass implemented.
-- 2026-07-02: passive-feeling active memory reinforcement implemented.
-- 2026-07-02: forgetting / resonance UX flow implemented.
-- 2026-07-02: non-blood utility ultimates weapon-pattern pass implemented.
-- 2026-07-02: Kalmuri performance optimization implemented; perf matrix final count `totalKalmuri=374` from first measured fail `690`.
-- 2026-07-02: first echo tuning spec / QA counter cleanup pass implemented.
-- 2026-07-02: utility echo tuning moved into a serializable manager table with default fallback.
-- 2026-07-02: utility echo tuning migrated to `_dev/Data/Echoes/UtilityEcho_Tuning.asset`.
-- 2026-07-02: unreachable legacy utility echo fallback branch removed after Echo/Ultimate/Kalmuri QA remained PASS.
-- 2026-07-02: passive memory feel tuning implemented for BloodReflection, StoppedSecond, AshenShield, and OblivionBrand; passive/echo/forget/Kalmuri QA remained PASS.
-- 2026-07-02: forget/resonance UX compressed; Forget Resonance, Utility Ultimate Dual, and Kalmuri Perf QA remained PASS.
-- 2026-07-02: utility ultimate feel tuning implemented; Utility Ultimate Dual/Great and Blood Blade Storm QA remained PASS.
 - 2026-07-02: direct-play review checklist prepared at `docs/orchestration/review_prompts/2026-07-02-dev-prototype-v1-direct-play-review.md`.
 
 QA menus passing:
@@ -87,5 +79,8 @@ QA menus passing:
 - `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`
 - `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`
 - `LETHE/V1 QA/Kalmuri Perf Matrix`
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`
+- `LETHE/V1 QA/Void Priest Heal Matrix`
+- `LETHE/V1 QA/M2 Loop`
 
 Keep this file short. Detailed history belongs in `docs/TASK.md`, `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, or evidence files.

@@ -94,6 +94,13 @@ namespace Lethe.PrototypeV1.Editor
             StartRunner();
         }
 
+        [MenuItem("LETHE/V1 QA/Dense Dual Blades Perf Matrix")]
+        public static void QaDenseDualBladesPerfMatrix()
+        {
+            SavePending(new PendingSmoke(SmokeMode.DenseDualBladesPerfMatrix, V1WeaponId.DualBlades));
+            StartRunner();
+        }
+
         [MenuItem("LETHE/V1 QA/Forget Resonance Flow")]
         public static void QaForgetResonanceFlow()
         {
@@ -263,6 +270,15 @@ namespace Lethe.PrototypeV1.Editor
                 return;
             }
 
+            if (smoke.Mode == SmokeMode.DenseDualBladesPerfMatrix)
+            {
+                DestroyObjectsContaining("Kalmuri");
+                DestroyObjectsContaining("EchoDual_");
+                DestroyObjectsContaining("WeaponHitConfirm");
+                manager.DebugRunDenseDualBladePerfMatrix();
+                return;
+            }
+
             if (smoke.Mode == SmokeMode.ForgetResonanceFlow)
             {
                 manager.DebugRunForgetResonanceFlow();
@@ -379,8 +395,18 @@ namespace Lethe.PrototypeV1.Editor
                         CountMetric("A", $"{prefix}Ashen"),
                         CountMetric("O", $"{prefix}Oblivion")
                     };
-                    details += $" | prefix={prefix} {FormatCounts(echoCounts)}";
-                    if (echoCounts[0].Value >= 12 && AllPositive(echoCounts, 1))
+                    var echoStateCounts = new[]
+                    {
+                        CountMetric("state", "EchoState_"),
+                        CountMetric("stateEx", "EchoState_ExecutionFlash"),
+                        CountMetric("stateH", "EchoState_HunterOath"),
+                        CountMetric("stateSh", "EchoState_ShatterWave"),
+                        CountMetric("stateSt", "EchoState_StoppedSecond"),
+                        CountMetric("stateA", "EchoState_AshenShield"),
+                        CountMetric("stateO", "EchoState_OblivionBrand")
+                    };
+                    details += $" | prefix={prefix} {FormatCounts(echoCounts)} | {FormatCounts(echoStateCounts)}";
+                    if (echoCounts[0].Value >= 12 && AllPositive(echoCounts, 1) && echoStateCounts[0].Value >= 6 && AllPositive(echoStateCounts, 1))
                     {
                         return SmokeResult.Pass;
                     }
@@ -414,6 +440,19 @@ namespace Lethe.PrototypeV1.Editor
                     };
                     details += $" | {FormatLimits(kalmuriLimits)}";
                     if (age >= 2.0 && AllWithin(kalmuriLimits))
+                    {
+                        return SmokeResult.Pass;
+                    }
+                    return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
+
+                case SmokeMode.DenseDualBladesPerfMatrix:
+                    var denseHits = Field<int>(manager, "debugDenseDualBladeHits");
+                    var denseSuppressed = Field<int>(manager, "debugDenseDualBladeEchoesSuppressed");
+                    var denseTransient = Field<int>(manager, "debugTransientSpriteSpawnCount");
+                    var denseMs = Field<float>(manager, "debugDenseDualBladeMs");
+                    var activeDenseVfx = CountObjects("Kalmuri") + CountObjects("EchoDual_") + CountObjects("BloodEcho") + CountObjects("WeaponHitConfirm") + CountObjects("DualBladePhantom");
+                    details += $" | denseDual hits={denseHits} suppressed={denseSuppressed} transient={denseTransient} activeVfx={activeDenseVfx} ms={denseMs:0.00}";
+                    if (denseHits >= 18 && denseSuppressed >= 8 && denseTransient <= 520 && activeDenseVfx <= 420 && denseMs <= 90f)
                     {
                         return SmokeResult.Pass;
                     }
@@ -525,6 +564,7 @@ namespace Lethe.PrototypeV1.Editor
             EchoMatrix,
             PassiveMemoryMatrix,
             KalmuriPerfMatrix,
+            DenseDualBladesPerfMatrix,
             ForgetResonanceFlow,
             UtilityUltimateMatrix,
             BloodBladeStorm,
@@ -562,21 +602,23 @@ namespace Lethe.PrototypeV1.Editor
                             ? "Passive Memory Matrix"
                             : Mode == SmokeMode.KalmuriPerfMatrix
                                 ? "Kalmuri Perf Matrix"
-                                : Mode == SmokeMode.ForgetResonanceFlow
-                                    ? "Forget Resonance Flow"
-                                    : Mode == SmokeMode.UtilityUltimateMatrix
-                                        ? $"Utility Ultimate Matrix {WeaponId}"
-                                        : Mode == SmokeMode.BloodBladeStorm
-                                            ? "Blood Blade Storm"
-                                            : Mode == SmokeMode.GatekeeperPatternMatrix
-                                                ? "Gatekeeper Pattern Matrix"
-                                                : Mode == SmokeMode.GatekeeperJump
-                                                    ? "Gatekeeper Jump"
-                                                    : Mode == SmokeMode.EnemySeparationMatrix
-                                                        ? "Enemy Separation Matrix"
-                                                        : Mode == SmokeMode.VoidPriestHealMatrix
-                                                            ? "Void Priest Heal Matrix"
-                                                            : $"{WeaponId}";
+                                : Mode == SmokeMode.DenseDualBladesPerfMatrix
+                                    ? "Dense Dual Blades Perf Matrix"
+                                    : Mode == SmokeMode.ForgetResonanceFlow
+                                        ? "Forget Resonance Flow"
+                                        : Mode == SmokeMode.UtilityUltimateMatrix
+                                            ? $"Utility Ultimate Matrix {WeaponId}"
+                                            : Mode == SmokeMode.BloodBladeStorm
+                                                ? "Blood Blade Storm"
+                                                : Mode == SmokeMode.GatekeeperPatternMatrix
+                                                    ? "Gatekeeper Pattern Matrix"
+                                                    : Mode == SmokeMode.GatekeeperJump
+                                                        ? "Gatekeeper Jump"
+                                                        : Mode == SmokeMode.EnemySeparationMatrix
+                                                            ? "Enemy Separation Matrix"
+                                                            : Mode == SmokeMode.VoidPriestHealMatrix
+                                                                ? "Void Priest Heal Matrix"
+                                                                : $"{WeaponId}";
         }
 
         static void SpawnAllMemoryEchoPreviews(V1GameManager manager)

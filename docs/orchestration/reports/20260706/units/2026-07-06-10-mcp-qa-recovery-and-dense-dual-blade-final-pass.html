@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-06-10 - MCP QA Recovery and Dense Dual-Blade Final Pass</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-06-10 - MCP QA Recovery and Dense Dual-Blade Final Pass</h1>
+      <p class="meta">Generated from 2026-07-06-10-mcp-qa-recovery-and-dense-dual-blade-final-pass.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260706/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-06-10 - MCP QA Recovery and Dense Dual-Blade Final Pass</h1>
+<h2>1. Current Build State</h2>
+<p><code>Dev_Prototype_v1</code> is now automated-QA green again through AnkleBreaker Unity MCP on <code>LETHE</code> port <code>7890</code>. The remaining gate is direct play feel review, not blocked QA.</p>
+<h2>2. Changed Today</h2>
+<ul>
+<li>Recovered Unity MCP QA access on port <code>7890</code>.</li>
+<li>Finished the pending Echo, Gatekeeper, Dense Dual-Blade, Kalmuri, VoidPriest, and M2 QA reruns.</li>
+<li>Fixed the remaining Dense Dual-Blade Perf Matrix failure.</li>
+<li>Dense dual-blade VFX now keeps primary slash only in high-density fights.</li>
+<li>Dense Kalmuri now uses two clamp blades plus one rip line, skipping range ring, moving trails, and extra slash entries.</li>
+<li>Added generated sprite caching for repeated circle/ring/box/impact-diamond sprites.</li>
+</ul>
+<h2>3. Test Result / Evidence</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: passed, 0 warnings, 0 errors.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: passed, 0 warnings, 0 errors.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Unity console errors after final QA: <code>0</code>.</li>
+<li>Echo Matrix Dual Blades: PASS, <code>total=240</code>, <code>state=73</code>.</li>
+<li>Echo Matrix Greatsword: PASS, <code>total=223</code>, <code>state=69</code>.</li>
+<li>Gatekeeper Pattern Matrix: PASS, <code>boss=4</code>, <code>meteor=20</code>, <code>cone=6</code>, <code>ring=3</code>.</li>
+<li>Gatekeeper Jump: PASS, <code>boss=1</code>, <code>liveEnemies=15</code>.</li>
+<li>Dense Dual Blades Perf Matrix: PASS, <code>hits=30</code>, <code>suppressed=25</code>, <code>transient=64</code>, <code>activeVfx=42</code>, <code>ms=55.73</code>.</li>
+<li>Kalmuri Perf Matrix: PASS, <code>totalKalmuri=0</code>.</li>
+<li>Void Priest Heal Matrix: PASS, <code>attempts=12</code>, <code>accepted=4</code>, <code>vfx=16</code>.</li>
+<li>M2 Loop: PASS, <code>hungryEcho=5</code>, <code>bloodEcho=5</code>.</li>
+</ul>
+<h2>4. Decision</h2>
+<p>The build is ready for direct-play feel review. Do not add another system before judging whether the current VFX, boss patterns, healer readability, and dense dual-blade feel are actually satisfying.</p>
+<h2>5. Risk</h2>
+<p>The dense throttle is intentionally aggressive. It passes performance QA, but jaewoo should check whether dense dual blades now feel too quiet.</p>
+<h2>6. GPT/Claude Handoff</h2>
+<p>Automated QA is green. Review should focus on player perception: Kalmuri concept read, non-blood echo identity, Gatekeeper raid pattern readability, healer fairness, and dense combat responsiveness.</p>
+<h2>7. Next Codex Work</h2>
+<p>After direct play, tune only the specific feel targets that fail review. Likely knobs are Kalmuri scale/alpha/lifetime, Gatekeeper warning/fill timing, dense dual-blade cheap accents, and VoidPriest heal cadence/amount.</p>
+<h2>8. Portfolio Note</h2>
+<ul>
+<li>Problem: MCP QA was blocked, and dense dual-blade combat still failed the performance matrix.</li>
+<li>Direction: recover QA, measure, then reduce repeated VFX generation instead of guessing.</li>
+<li>Action: restored MCP QA flow, cached generated sprites, and made dense Kalmuri/dual-slash VFX cheaper.</li>
+<li>Result: Dense matrix improved from <code>transient=711</code>, <code>ms=570.01</code> fail to <code>transient=64</code>, <code>ms=55.73</code> PASS.</li>
+</ul>
+  </main>
+</body>
+</html>

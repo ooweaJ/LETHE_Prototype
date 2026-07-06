@@ -2,6 +2,77 @@
 
 # 2026-07-06
 
+- Recovered pending Unity MCP QA on `LETHE` port `7890` and finished the Dense Dual-Blade final pass:
+  - Dense dual-blade weapon slash VFX now keeps only the primary slash in high-density fights.
+  - Dense Kalmuri echo follow-ups now skip support range rings, moving dive trails, and extra slash entries.
+  - Dense Kalmuri keeps a minimal clamp/rip read: two clamp blades plus one rip line.
+  - Added generated sprite caching for repeated circle/ring/box/impact-diamond procedural sprites.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity console error count after final QA: `0`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: `[V1QA] PASS`, `total=240`, `state=73`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: `[V1QA] PASS`, `total=223`, `state=69`.
+  - `LETHE/V1 QA/Gatekeeper Pattern Matrix`: `[V1QA] PASS`, `boss=4`, `meteor=20`, `cone=6`, `ring=3`.
+  - `LETHE/V1 QA/Gatekeeper Jump`: `[V1QA] PASS`, `boss=1`, `liveEnemies=15`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: `[V1QA] PASS`, `hits=30`, `suppressed=25`, `transient=64`, `activeVfx=42`, `ms=55.73`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: `[V1QA] PASS`, `totalKalmuri=0`.
+  - `LETHE/V1 QA/Void Priest Heal Matrix`: `[V1QA] PASS`, `attempts=12`, `accepted=4`, `vfx=16`.
+  - `LETHE/V1 QA/M2 Loop`: `[V1QA] PASS`, `hungryEcho=5`, `bloodEcho=5`.
+
+- Reworked Hungry Blades / Kalmuri echo readability:
+  - Added `SpawnKalmuriEchoClampRip()`.
+  - Kalmuri echo follow-ups now use converging clamp blades plus a rip slash as the primary visual phrase.
+  - The previous range/flash/cut visuals were reduced so they support the action instead of reading as generic cyan clutter.
+  - Dense dual-blade Kalmuri follow-ups now skip the old surge blade loop and keep the lighter clamp/rip shape.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - Unity QA rerun is pending because AnkleBreaker Unity MCP still returns `Transport closed`.
+
+- Added monster-state readability marks for non-blood utility echoes:
+  - Added `V1Enemy.ApplyEchoStateMark()`.
+  - Added `V1EnemyStateBadge`, a short-lived marker that pulses/rotates above affected enemies.
+  - Enemies now receive a temporary echo-state tint when marked by utility echoes.
+  - `ExecutionFlash`, `HunterOath`, `ShatterWave`, `StoppedSecond`, `AshenShield`, and `OblivionBrand` now leave distinct enemy-state marks.
+  - Echo Matrix QA now counts `EchoState_*` markers and requires all six utility state mark families.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Unity QA rerun is pending because AnkleBreaker Unity MCP still returns `Transport closed`.
+
+- Improved Gatekeeper boss patterns toward simple raid-game telegraphs:
+  - Added `V1RaidTelegraphFill` so danger-zone fills visibly grow during the warning window.
+  - Gatekeeper meteor, cone, and ring tells now use a `boundary -> filling red zone -> impact flash` rhythm.
+  - Warning windows clamp to at least `0.92s` so the player can read the fill before the hit.
+  - Meteor/ring/cone impacts now add a short bright flash plus red bang/shock ring when damage resolves.
+  - Transient sprite pooling now disables stale raid-fill components when objects are reused for other VFX.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on standalone rerun after a parallel DLL lock.
+  - Unity QA rerun is pending because AnkleBreaker Unity MCP still returns `Transport closed`.
+
+- Added a dense dual-blade VFX/performance pass:
+  - Added dense-wave throttles for dual-blade secondary hit echo triggering and slash VFX.
+  - Dense Kalmuri follow-ups now carry the dense state from scheduling time and use a lighter follow-up: fewer surge blades, no extra flash/barrage, and fewer follow-up slash entries.
+  - Dense Blood Reflection keeps the mark/pulse read but suppresses extra bloom/accent spam.
+  - Dense utility echoes rotate one utility family per primary hit instead of stacking several utility echo families on the same dense hit.
+  - Added debug counters for transient sprite spawns, dense dual-blade hits, suppressed echoes, and stress milliseconds.
+  - Added QA:
+    - `DebugRunDenseDualBladePerfMatrix()`
+    - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`
+  - Replaced VoidPriest heal target lookup with manager-list targeting through `FindVoidPriestHealTargets()` to avoid repeated whole-scene scans.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - Unity compile error count before MCP transport closure: `0`.
+  - Dense QA established failing baselines and improvement:
+    - `954 transient / 506 activeVfx / 947.64ms`
+    - then `550 transient / 307 activeVfx / 561.77ms`
+    - then `627 transient / 361 activeVfx / 644.39ms`
+  - Final Unity QA rerun after the last throttle is pending because AnkleBreaker Unity MCP transport closed while the `LETHE` editor process remained alive.
+
 - Added a direct Gatekeeper debug jump:
   - `F6` now starts the run if needed and jumps directly into a first Gatekeeper review state.
   - The F12 debug panel now includes a `Boss` button.

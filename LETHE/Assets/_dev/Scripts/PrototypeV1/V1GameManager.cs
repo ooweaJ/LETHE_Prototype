@@ -94,6 +94,10 @@ namespace Lethe.PrototypeV1
         const int KalmuriBiteTargetCap = 3;
         const int KalmuriBiteBladeCap = 4;
         const int KalmuriMaxPendingFollowups = 10;
+        const int DenseDualBladeThrottleEnemyCount = 24;
+        const int DenseDualBladeEchoHitLimit = 1;
+        const int DenseDualBladeSlashHitLimit = 1;
+        const int DenseDualBladeKalmuriSurgeLimit = 2;
         const int MaxMemoryLevel = 5;
         const int MaxEchoLevel = 5;
         const int MaxActiveMemories = 3;
@@ -244,6 +248,7 @@ namespace Lethe.PrototypeV1
         readonly List<PendingKalmuriFollowup> pendingKalmuriFollowups = new();
         readonly Dictionary<V1MemoryId, int> echoLevels = new();
         readonly Dictionary<string, Sprite> spriteCache = new();
+        static readonly Dictionary<string, Sprite> generatedSpriteCache = new();
         readonly Stack<GameObject> transientSpritePool = new();
         readonly Stack<GameObject> floatingTextPool = new();
         readonly Stack<GameObject> damageNumberPool = new();
@@ -310,6 +315,10 @@ namespace Lethe.PrototypeV1
         int debugSeparationOverlapAfter;
         int debugVoidPriestHealAttempts;
         int debugVoidPriestHealAccepted;
+        int debugTransientSpriteSpawnCount;
+        int debugDenseDualBladeHits;
+        int debugDenseDualBladeEchoesSuppressed;
+        float debugDenseDualBladeMs;
         bool reviewBloodGranted;
         bool reviewHungryBoosted;
         bool reviewBloodBoosted;
@@ -1022,7 +1031,14 @@ namespace Lethe.PrototypeV1
                 DealDamage(hit.Enemy, weapon.Damage * damageMul, weapon.DisplayName, true, hit.Dir.normalized, knock);
                 if (weapon.EchoProcStyle != V1EchoProcStyle.SingleHeavy || hitIndex == 0)
                 {
-                    TriggerWeaponEchoes(hit.Enemy, forward, hitIndex, weapon);
+                    if (ShouldTriggerWeaponEchoForHit(weapon, hitIndex))
+                    {
+                        TriggerWeaponEchoes(hit.Enemy, forward, hitIndex, weapon);
+                    }
+                    else
+                    {
+                        debugDenseDualBladeEchoesSuppressed++;
+                    }
                 }
                 hitIndex++;
             }
@@ -1066,6 +1082,23 @@ namespace Lethe.PrototypeV1
                 .ThenBy(x => x.Dir.sqrMagnitude)
                 .Select(x => x.Enemy)
                 .FirstOrDefault();
+        }
+
+        int CountLiveEnemies() => enemies.Count(e => e != null && e.IsAlive);
+
+        bool DenseDualBladeVfxThrottle(WeaponRuntimeSpec weapon)
+        {
+            return weapon.Id == V1WeaponId.DualBlades && CountLiveEnemies() >= DenseDualBladeThrottleEnemyCount;
+        }
+
+        bool ShouldTriggerWeaponEchoForHit(WeaponRuntimeSpec weapon, int hitIndex)
+        {
+            return !DenseDualBladeVfxThrottle(weapon) || hitIndex < DenseDualBladeEchoHitLimit;
+        }
+
+        bool ShouldSpawnWeaponSlashForHit(WeaponRuntimeSpec weapon, int hitIndex)
+        {
+            return !DenseDualBladeVfxThrottle(weapon) || hitIndex < DenseDualBladeSlashHitLimit;
         }
 
         List<WeaponHit> CollectWeaponHits(WeaponRuntimeSpec weapon, Vector2 forward)
@@ -1291,6 +1324,15 @@ namespace Lethe.PrototypeV1
             var line = MakeBoxSprite(name, Color.white, 7, 118);
             SpawnTransientSpriteScaled(name, line, center, Quaternion.Euler(0f, 0f, angle), new Vector3(0.026f, length, 1f), color, lifetime);
             SpawnTransientSpriteScaled($"{name}_cross", line, center, Quaternion.Euler(0f, 0f, angle + 72f), new Vector3(0.018f, length * 0.46f, 1f), new Color(color.r, color.g, color.b, color.a * 0.68f), lifetime * 0.82f);
+        }
+
+        void SpawnEchoWoundLine(string name, Vector3 center, Vector2 forward, Color color, float length, float lifetime)
+        {
+            var f = forward.sqrMagnitude > 0.01f ? forward.normalized : lastAim.normalized;
+            if (f.sqrMagnitude < 0.01f) f = Vector2.up;
+            var angle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg - 90f;
+            var line = MakeBoxSprite(name, Color.white, 7, 118);
+            SpawnTransientSpriteScaled(name, line, center, Quaternion.Euler(0f, 0f, angle), new Vector3(0.022f, length, 1f), color, lifetime);
         }
 
         void SpawnShatterEchoScar(Vector3 center, Vector2 forward, float radius, float lifetime)
@@ -1578,29 +1620,92 @@ namespace Lethe.PrototypeV1
             {
                 enemy.BloodMarked = true;
                 enemy.MarkTimer = 2.2f + bloodLevel * 0.25f;
+                var denseSecondary = DenseDualBladeVfxThrottle(weapon) && hitIndex > 0;
+                if (!denseSecondary)
+                {
                 PlaySfx("blood_mark", 0.34f, 0.08f);
                 SpawnTransientSprite("BloodEchoPulse", MakeRingSprite("BloodEchoPulse", Color.white, 128), enemy.transform.position, Quaternion.identity, 0.38f + bloodLevel * 0.025f, new Color(1f, 0.10f, 0.18f, 0.42f), 0.28f);
                 SpawnEchoWoundSlash("BloodEchoWound", enemy.transform.position + Vector3.up * 0.04f, forward, new Color(1f, 0.10f, 0.18f, 0.62f), 0.72f, 0.30f);
                 SpawnTransientSprite("혈반", LoadSprite("Assets/_dev/Art/Sprites/Echoes/Blood/spr_blood_mark_01.png"), enemy.transform.position + Vector3.up * 0.2f, Quaternion.identity, 0.33f, new Color(1f, 0.18f, 0.25f, 0.9f), 0.35f);
-                if (bloodLevel >= 5 && UnityEngine.Random.value < 0.42f)
+                if (!DenseDualBladeVfxThrottle(weapon) && bloodLevel >= 5 && UnityEngine.Random.value < 0.42f)
                 {
                     BloodBloom(enemy, bloodLevel);
                 }
+                }
             }
 
-            TriggerBloodEchoAccent(enemy, forward, bloodLevel, hitIndex, weapon, false);
-            TriggerUtilityEchoes(enemy, forward, hitIndex, weapon);
+            var denseDualBlade = DenseDualBladeVfxThrottle(weapon);
+            if (!denseDualBlade)
+            {
+                TriggerBloodEchoAccent(enemy, forward, bloodLevel, hitIndex, weapon, false);
+                TriggerUtilityEchoes(enemy, forward, hitIndex, weapon);
+            }
+            else if (hitIndex == 0)
+            {
+                TriggerUtilityEchoes(enemy, forward, hitIndex, weapon);
+            }
         }
 
         void TriggerUtilityEchoes(V1Enemy enemy, Vector2 forward, int hitIndex, WeaponRuntimeSpec weapon)
         {
             if (enemy == null) return;
+            if (DenseDualBladeVfxThrottle(weapon))
+            {
+                var bucket = Mathf.Abs(Mathf.FloorToInt(elapsed * 11f) + hitIndex) % 3;
+                if (bucket == 0)
+                {
+                    TriggerExecutionEcho(enemy, forward, hitIndex, weapon, false);
+                }
+                else if (bucket == 1)
+                {
+                    TriggerShatterEcho(enemy, forward, hitIndex, weapon, false);
+                }
+                else
+                {
+                    TriggerAshenEcho(enemy, forward, hitIndex, weapon, false);
+                }
+                return;
+            }
             TriggerShatterEcho(enemy, forward, hitIndex, weapon, false);
             TriggerExecutionEcho(enemy, forward, hitIndex, weapon, false);
             TriggerHunterEcho(enemy, forward, hitIndex, weapon, false);
             TriggerStoppedEcho(enemy, forward, hitIndex, weapon, false);
             TriggerAshenEcho(enemy, forward, hitIndex, weapon, false);
             TriggerOblivionEcho(enemy, forward, hitIndex, weapon, false);
+        }
+
+        void MarkEnemyEchoState(V1Enemy enemy, V1MemoryId id, float lifetime, float scaleMul = 1f)
+        {
+            if (enemy == null || !enemy.IsAlive) return;
+            enemy.ApplyEchoStateMark(id, EchoStateMarkSprite(id), EchoStateMarkColor(id, 0.92f), lifetime, scaleMul);
+        }
+
+        Sprite EchoStateMarkSprite(V1MemoryId id)
+        {
+            return id switch
+            {
+                V1MemoryId.ExecutionFlash => MakeImpactDiamondSprite("EchoStateExecution", Color.white),
+                V1MemoryId.HunterOath => MakeRingSprite("EchoStateHunter", Color.white, 96),
+                V1MemoryId.ShatterWave => MakeImpactDiamondSprite("EchoStateShatter", Color.white),
+                V1MemoryId.StoppedSecond => MakeRingSprite("EchoStateStopped", Color.white, 120),
+                V1MemoryId.AshenShield => MakeRingSprite("EchoStateAshen", Color.white, 96),
+                V1MemoryId.OblivionBrand => MakeImpactDiamondSprite("EchoStateOblivion", Color.white),
+                _ => MakeCircleSprite("EchoStateDefault", Color.white, 48)
+            };
+        }
+
+        Color EchoStateMarkColor(V1MemoryId id, float alpha)
+        {
+            return id switch
+            {
+                V1MemoryId.ExecutionFlash => new Color(1f, 0.92f, 0.42f, alpha),
+                V1MemoryId.HunterOath => new Color(0.68f, 1f, 0.32f, alpha),
+                V1MemoryId.ShatterWave => new Color(0.46f, 0.94f, 1f, alpha),
+                V1MemoryId.StoppedSecond => new Color(1f, 0.74f, 0.24f, alpha),
+                V1MemoryId.AshenShield => new Color(0.82f, 0.90f, 1f, alpha),
+                V1MemoryId.OblivionBrand => new Color(0.82f, 0.44f, 1f, alpha),
+                _ => new Color(1f, 1f, 1f, alpha)
+            };
         }
 
         bool IsHeavyEchoWeapon(WeaponRuntimeSpec weapon) => weapon.EchoProcStyle == V1EchoProcStyle.SingleHeavy;
@@ -1660,6 +1765,7 @@ namespace Lethe.PrototypeV1
         {
             if (enemy == null || !enemy.IsAlive || levelValue <= 0) return;
             var heavy = IsHeavyEchoWeapon(weapon);
+            var denseDualBlade = DenseDualBladeVfxThrottle(weapon);
             var f = EchoForward(forward);
             if (heavy)
             {
@@ -1686,7 +1792,7 @@ namespace Lethe.PrototypeV1
                 DealDamage(enemy, weapon.Damage * (0.020f + levelValue * 0.006f), "Blood Echo Dual", false, f, 0.04f);
             }
 
-            if (levelValue >= 5 && (force || UnityEngine.Random.value < 0.12f))
+            if (!denseDualBlade && levelValue >= 5 && (force || UnityEngine.Random.value < 0.12f))
             {
                 BloodBloom(enemy, levelValue);
             }
@@ -1714,6 +1820,7 @@ namespace Lethe.PrototypeV1
             foreach (var target in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(enemy.transform.position, e.transform.position) <= radius + e.TouchRadius).Take(EchoTargetLimit(V1MemoryId.ShatterWave, levelValue, heavy)).ToList())
             {
                 var dir = (Vector2)(target.transform.position - enemy.transform.position);
+                MarkEnemyEchoState(target, V1MemoryId.ShatterWave, heavy ? 1.55f : 1.05f, heavy ? 1.16f : 0.92f);
                 DealDamage(target, weapon.Damage * EchoDamageMultiplier(V1MemoryId.ShatterWave, levelValue, heavy), heavy ? "Shatter Echo Great" : "Shatter Echo Dual", false, dir.sqrMagnitude > 0.01f ? dir.normalized : f, heavy ? 0.62f : 0.25f);
             }
         }
@@ -1734,6 +1841,7 @@ namespace Lethe.PrototypeV1
                 SpawnRadialSlashLines("EchoGreat_ExecutionCrack", enemy.transform.position, f, 4, 1.18f + levelValue * 0.08f, new Color(1f, 0.96f, 0.50f, 0.76f), 0.44f);
                 foreach (var target in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(enemy.transform.position, e.transform.position) <= 1.20f + levelValue * 0.08f).Take(6).ToList())
                 {
+                    MarkEnemyEchoState(target, V1MemoryId.ExecutionFlash, 1.15f, heavy ? 1.16f : 0.96f);
                     DealDamage(target, weapon.Damage * (target.HealthRatio < 0.36f ? 0.34f + levelValue * 0.065f : 0.15f + levelValue * 0.035f), "Execution Echo Great", false);
                 }
             }
@@ -1745,6 +1853,7 @@ namespace Lethe.PrototypeV1
                     SpawnEchoWoundSlash("EchoDual_ExecutionChainCut", enemy.transform.position + (Vector3)(f * (i * 0.05f)), (Vector2)rotated, new Color(1f, 0.96f, 0.50f, 0.78f - i * 0.10f), 0.86f + i * 0.14f, 0.30f);
                 }
                 SpawnExecutionFlashBurst(enemy.transform.position, 0.92f, 0.44f);
+                MarkEnemyEchoState(enemy, V1MemoryId.ExecutionFlash, 1.05f, 0.96f);
                 DealDamage(enemy, weapon.Damage * (0.18f + levelValue * 0.05f), "Execution Echo Dual", false);
             }
         }
@@ -1765,6 +1874,7 @@ namespace Lethe.PrototypeV1
             SpawnTransientSprite(heavy ? "EchoGreat_HunterSpearLock" : "EchoDual_HunterFanLock", MakeRingSprite("HunterEchoOriginMark", Color.white, heavy ? 148 : 112), enemy.transform.position, Quaternion.Euler(0f, 0f, elapsed * (heavy ? -55f : 90f)), heavy ? 0.68f : 0.46f, new Color(0.74f, 1f, 0.38f, heavy ? 0.66f : 0.54f), heavy ? 0.58f : 0.42f);
             for (int i = 0; i < targets.Count; i++)
             {
+                MarkEnemyEchoState(targets[i], V1MemoryId.HunterOath, heavy ? 1.45f : 1.15f, heavy ? 1.08f : 0.92f);
                 SpawnEchoLink(heavy ? "EchoGreat_HunterSpearLine" : "EchoDual_HunterAimLine", enemy.transform.position, targets[i].transform.position, new Color(0.72f, 1f, 0.36f, heavy ? 0.58f : 0.42f), heavy ? 0.58f : 0.40f, heavy ? 0.032f : 0.020f);
                 if (heavy) SpawnHunterGreatEchoSpear(targets[i], enemy.transform.position, levelValue, weapon);
                 else SpawnHunterOathShot(targets[i], enemy.transform.position, i, targets.Count, 9.2f + levelValue * 0.25f, weapon.Damage * EchoDamageMultiplier(V1MemoryId.HunterOath, levelValue, heavy), HunterEchoSource, true);
@@ -1787,6 +1897,7 @@ namespace Lethe.PrototypeV1
             foreach (var target in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(enemy.transform.position, e.transform.position) <= radius + e.TouchRadius).Take(EchoTargetLimit(V1MemoryId.StoppedSecond, levelValue, heavy)).ToList())
             {
                 var dir = (Vector2)(target.transform.position - enemy.transform.position);
+                MarkEnemyEchoState(target, V1MemoryId.StoppedSecond, heavy ? 1.90f : 1.45f, heavy ? 1.08f : 0.94f);
                 target.ApplyBriefFreeze(EchoFreezeSeconds(levelValue, heavy));
                 DealDamage(target, weapon.Damage * EchoDamageMultiplier(V1MemoryId.StoppedSecond, levelValue, heavy), heavy ? "Stopped Echo Great" : "Stopped Echo Dual", false, dir.sqrMagnitude > 0.01f ? dir.normalized : f, 0.08f);
             }
@@ -1811,11 +1922,13 @@ namespace Lethe.PrototypeV1
                 foreach (var target in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) <= EchoRadius(V1MemoryId.AshenShield, levelValue, heavy)).Take(EchoTargetLimit(V1MemoryId.AshenShield, levelValue, heavy)).ToList())
                 {
                     var dir = (Vector2)(target.transform.position - player.position);
+                    MarkEnemyEchoState(target, V1MemoryId.AshenShield, 1.35f, heavy ? 1.12f : 0.94f);
                     DealDamage(target, weapon.Damage * EchoDamageMultiplier(V1MemoryId.AshenShield, levelValue, heavy), "Ashen Echo Great", false, dir.sqrMagnitude > 0.01f ? dir.normalized : f, 0.42f);
                 }
             }
             else
             {
+                MarkEnemyEchoState(enemy, V1MemoryId.AshenShield, 1.05f, 0.92f);
                 DealDamage(enemy, weapon.Damage * EchoDamageMultiplier(V1MemoryId.AshenShield, levelValue, heavy), "Ashen Echo Dual", false, f, 0.10f);
             }
         }
@@ -1838,6 +1951,7 @@ namespace Lethe.PrototypeV1
                 foreach (var target in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(enemy.transform.position, e.transform.position) <= EchoRadius(V1MemoryId.OblivionBrand, levelValue, heavy)).Take(EchoTargetLimit(V1MemoryId.OblivionBrand, levelValue, heavy)).ToList())
                 {
                     var dir = (Vector2)(target.transform.position - enemy.transform.position);
+                    MarkEnemyEchoState(target, V1MemoryId.OblivionBrand, heavy ? 1.70f : 1.20f, heavy ? 1.12f : 0.96f);
                     DealDamage(target, weapon.Damage * EchoDamageMultiplier(V1MemoryId.OblivionBrand, levelValue, heavy), "Oblivion Echo Great", false, dir.sqrMagnitude > 0.01f ? dir.normalized : f, 0.24f);
                 }
             }
@@ -1847,6 +1961,7 @@ namespace Lethe.PrototypeV1
                 {
                     SpawnTransientSprite("EchoDual_OblivionStackPip", MakeImpactDiamondSprite("EchoDual_OblivionStackPip", Color.white), enemy.transform.position + Quaternion.Euler(0f, 0f, i * 90f + elapsed * 60f) * Vector3.right * 0.22f, Quaternion.Euler(0f, 0f, 45f + i * 30f), 0.16f, new Color(0.92f, 0.64f, 1f, 0.58f), 0.30f);
                 }
+                MarkEnemyEchoState(enemy, V1MemoryId.OblivionBrand, 1.20f, 0.96f);
                 DealDamage(enemy, weapon.Damage * EchoDamageMultiplier(V1MemoryId.OblivionBrand, levelValue, heavy), "Oblivion Echo Dual", false);
             }
         }
@@ -1890,7 +2005,7 @@ namespace Lethe.PrototypeV1
             if (center == null) return;
             if (pendingKalmuriFollowups.Count >= KalmuriMaxPendingFollowups) return;
             var delay = weapon.FollowupBaseDelay + Mathf.Min(hitIndex, 2) * weapon.FollowupStagger;
-            pendingKalmuriFollowups.Add(new PendingKalmuriFollowup(center.transform.position, forward.normalized, level, hitIndex, weapon, delay));
+            pendingKalmuriFollowups.Add(new PendingKalmuriFollowup(center.transform.position, forward.normalized, level, hitIndex, weapon, delay, DenseDualBladeVfxThrottle(weapon)));
         }
 
         void UpdatePendingKalmuriFollowups(float dt)
@@ -1906,27 +2021,38 @@ namespace Lethe.PrototypeV1
                 }
 
                 pendingKalmuriFollowups.RemoveAt(i);
-                ResolveKalmuriFollowup(followup.Origin, followup.Forward, followup.Level, followup.HitIndex, followup.Weapon);
+                ResolveKalmuriFollowup(followup.Origin, followup.Forward, followup.Level, followup.HitIndex, followup.Weapon, followup.DenseDualBlade);
             }
         }
 
-        void ResolveKalmuriFollowup(Vector3 origin, Vector2 forward, int level, int hitIndex, WeaponRuntimeSpec weapon)
+        void ResolveKalmuriFollowup(Vector3 origin, Vector2 forward, int level, int hitIndex, WeaponRuntimeSpec weapon, bool denseDualBlade)
         {
             var isHeavy = weapon.EchoProcStyle == V1EchoProcStyle.SingleHeavy;
-            var burstCount = isHeavy ? 1 : Mathf.Clamp(1 + level / 2, 1, 3);
+            var burstCount = denseDualBlade ? 1 : isHeavy ? 1 : Mathf.Clamp(1 + level / 2, 1, 3);
             var radius = (0.44f + level * 0.045f) * weapon.EchoSizeScale * (1f + WeaponStat.AreaMul * 0.55f);
             var damage = weapon.Damage * (0.22f + level * 0.045f) * weapon.EchoDamageScale * (1f + WeaponStat.EchoAmp);
             var f = forward.sqrMagnitude > 0.01f ? forward.normalized : lastAim.normalized;
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
             var side = new Vector2(-f.y, f.x).normalized;
             var entries = weapon.VfxProfile != null ? weapon.VfxProfile.kalmuriFollowupSlashes : Array.Empty<SlashVfxEntry>();
-            var ringScale = Mathf.Clamp(radius * 1.08f, 0.48f, isHeavy ? 1.08f : 0.82f);
-            var ringColor = isHeavy ? new Color(0.92f, 0.98f, 1f, 0.58f) : new Color(0.58f, 0.96f, 1f, 0.50f);
+            var ringScale = Mathf.Clamp(radius * 0.88f, 0.42f, isHeavy ? 0.92f : 0.66f);
+            var ringColor = isHeavy ? new Color(0.92f, 0.98f, 1f, 0.34f) : new Color(0.58f, 0.96f, 1f, 0.24f);
             PlaySfx(isHeavy ? "kalmuri_echo_heavy" : "kalmuri_echo", isHeavy ? 0.82f : 0.58f, isHeavy ? 0.10f : 0.055f);
-            SpawnTransientSprite("KalmuriEchoRange", MakeRingSprite("KalmuriEchoRange", Color.white, 128), origin, Quaternion.identity, ringScale, ringColor, isHeavy ? 0.22f : 0.16f);
-            SpawnTransientSprite("KalmuriEchoFlash", MakeRingSprite("KalmuriEchoFlash", Color.white, 96), origin, Quaternion.Euler(0f, 0f, baseAngle), Mathf.Clamp(radius * 0.55f, 0.30f, 0.60f), new Color(0.86f, 1f, 1f, 0.42f), isHeavy ? 0.16f : 0.12f);
-            SpawnEchoWoundSlash("KalmuriEchoCutTrace", origin, f, new Color(0.78f, 1f, 1f, isHeavy ? 0.82f : 0.64f), isHeavy ? 1.18f : 0.82f, isHeavy ? 0.22f : 0.16f);
+            if (!denseDualBlade)
+            {
+                SpawnTransientSprite("KalmuriEchoRange", MakeRingSprite("KalmuriEchoRange", Color.white, 128), origin, Quaternion.identity, ringScale, ringColor, isHeavy ? 0.18f : 0.12f);
+            }
+            SpawnKalmuriEchoClampRip(origin, f, side, level, hitIndex, isHeavy, denseDualBlade);
+            if (!denseDualBlade)
+            {
+                SpawnTransientSprite("KalmuriEchoFlash", MakeRingSprite("KalmuriEchoFlash", Color.white, 96), origin, Quaternion.Euler(0f, 0f, baseAngle), Mathf.Clamp(radius * 0.42f, 0.26f, 0.48f), new Color(0.86f, 1f, 1f, 0.26f), isHeavy ? 0.14f : 0.10f);
+            }
+            if (!denseDualBlade)
+            {
+                SpawnEchoWoundSlash("KalmuriEchoCutTrace", origin, f, new Color(0.78f, 1f, 1f, isHeavy ? 0.58f : 0.36f), isHeavy ? 1.02f : 0.58f, isHeavy ? 0.18f : 0.10f);
+            }
             var surgeCount = isHeavy ? Mathf.Clamp(4 + level / 4, 5, 5) : Mathf.Clamp(3 + level / 3, 4, 4);
+            if (denseDualBlade) surgeCount = 0;
             for (int i = 0; i < surgeCount; i++)
             {
                 var spread = (i - (surgeCount - 1) * 0.5f) * (isHeavy ? 0.13f : 0.10f);
@@ -1939,17 +2065,23 @@ namespace Lethe.PrototypeV1
                     : new Color(0.78f, 1f, 1f, 0.78f - lane * 0.06f);
                 SpawnKalmuriDiveBlade(isHeavy ? "KalmuriEchoHeavySurgeBlade" : "KalmuriEchoSurgeBlade", start, end, scale, color, isHeavy ? 0.18f : 0.12f, isHeavy ? 0.12f : 0.08f);
             }
-            SpawnKalmuriEchoBarrage(origin, f, side, baseAngle, level, isHeavy);
-
-            for (int i = 0; i < burstCount; i++)
+            if (!denseDualBlade)
             {
-                var offset = isHeavy ? Vector2.zero : side * ((i - (burstCount - 1) * 0.5f) * 0.18f);
-                var pos = origin + (Vector3)(f * (isHeavy ? 0.04f : 0.12f + i * 0.06f) + offset);
-                foreach (var entry in entries)
+                SpawnKalmuriEchoBarrage(origin, f, side, baseAngle, level, isHeavy);
+            }
+
+            if (!denseDualBlade)
+            {
+                for (int i = 0; i < burstCount; i++)
                 {
-                    if (entry == null) continue;
-                    var angle = baseAngle + (isHeavy ? 0f : (i - 1) * 18f + hitIndex * 7f);
-                    SpawnSlashEntry(entry, pos, pos, f, angle, true, i);
+                    var offset = isHeavy ? Vector2.zero : side * ((i - (burstCount - 1) * 0.5f) * 0.18f);
+                    var pos = origin + (Vector3)(f * (isHeavy ? 0.04f : 0.12f + i * 0.06f) + offset);
+                    foreach (var entry in entries)
+                    {
+                        if (entry == null) continue;
+                        var angle = baseAngle + (isHeavy ? 0f : (i - 1) * 18f + hitIndex * 7f);
+                        SpawnSlashEntry(entry, pos, pos, f, angle, true, i);
+                    }
                 }
             }
 
@@ -1971,6 +2103,57 @@ namespace Lethe.PrototypeV1
                 var toTarget = (Vector2)(targets[i].transform.position - origin);
                 var mul = i == 0 ? 1f : 0.55f;
                 DealDamage(targets[i], damage * mul, "칼무리 잔향", true, toTarget.sqrMagnitude > 0.01f ? toTarget.normalized : f, 0.28f);
+            }
+        }
+
+        void SpawnKalmuriEchoClampRip(Vector3 origin, Vector2 forward, Vector2 side, int levelValue, int hitIndex, bool isHeavy, bool denseDualBlade)
+        {
+            var f = forward.sqrMagnitude > 0.01f ? forward.normalized : lastAim.normalized;
+            if (f.sqrMagnitude < 0.01f) f = Vector2.up;
+            var s = side.sqrMagnitude > 0.01f ? side.normalized : new Vector2(-f.y, f.x);
+            var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
+            var lifetime = isHeavy ? 0.26f : 0.18f;
+            var width = (isHeavy ? 0.56f : 0.40f) + levelValue * (isHeavy ? 0.018f : 0.012f);
+            var depth = isHeavy ? 0.44f : 0.32f;
+            var overrun = isHeavy ? 0.18f : 0.12f;
+            var scale = (isHeavy ? 0.30f : 0.21f) + levelValue * (isHeavy ? 0.011f : 0.008f);
+            var color = isHeavy ? new Color(0.95f, 1f, 1f, 0.94f) : new Color(0.78f, 1f, 1f, 0.82f);
+            var pairCount = denseDualBlade ? 1 : isHeavy ? 2 : Mathf.Clamp(1 + levelValue / 4, 1, 2);
+
+            if (denseDualBlade)
+            {
+                SpawnKalmuriBlade("KalmuriEchoClampBlade", origin + (Vector3)(s * 0.16f + f * 0.02f), baseAngle + 122f, scale * 0.90f, new Color(color.r, color.g, color.b, 0.72f), lifetime * 0.72f);
+                SpawnKalmuriBlade("KalmuriEchoClampBlade", origin - (Vector3)(s * 0.16f - f * 0.02f), baseAngle - 122f, scale * 0.90f, new Color(color.r, color.g, color.b, 0.72f), lifetime * 0.72f);
+                SpawnEchoWoundLine("KalmuriEchoRipTrace", origin + (Vector3)(f * 0.03f), f, new Color(0.92f, 1f, 1f, 0.52f), 0.66f, 0.10f);
+                return;
+            }
+
+            if (!denseDualBlade)
+            {
+                SpawnTransientSprite("KalmuriEchoBiteCore", MakeImpactDiamondSprite("KalmuriEchoBiteCore", Color.white), origin + (Vector3)(f * 0.03f), Quaternion.Euler(0f, 0f, baseAngle + 45f), isHeavy ? 0.38f : 0.28f, new Color(0.92f, 1f, 1f, isHeavy ? 0.58f : 0.44f), lifetime * 0.72f);
+            }
+            if (!denseDualBlade)
+            {
+                SpawnTransientSprite("KalmuriEchoBiteJawRing", MakeRingSprite("KalmuriEchoBiteJawRing", Color.white, 112), origin, Quaternion.Euler(0f, 0f, baseAngle), isHeavy ? 0.58f : 0.42f, new Color(0.76f, 1f, 1f, isHeavy ? 0.34f : 0.26f), lifetime);
+            }
+
+            for (int i = 0; i < pairCount; i++)
+            {
+                var lane = (i - (pairCount - 1) * 0.5f) * 0.14f;
+                var leftStart = origin + (Vector3)(s * (width + lane) - f * depth);
+                var rightStart = origin - (Vector3)(s * (width - lane) + f * depth);
+                var leftEnd = origin + (Vector3)(-s * 0.08f + f * overrun + s * lane * 0.30f);
+                var rightEnd = origin + (Vector3)(s * 0.08f + f * overrun + s * lane * 0.30f);
+                var bladeScale = scale + i * 0.018f;
+                var bladeColor = i == 0 ? color : new Color(color.r, color.g, color.b, color.a * 0.72f);
+                SpawnKalmuriDiveBlade(isHeavy ? "KalmuriEchoHeavyClampBlade" : "KalmuriEchoClampBlade", leftStart, leftEnd, bladeScale, bladeColor, lifetime, isHeavy ? 0.12f : 0.085f);
+                SpawnKalmuriDiveBlade(isHeavy ? "KalmuriEchoHeavyClampBlade" : "KalmuriEchoClampBlade", rightStart, rightEnd, bladeScale, bladeColor, lifetime, isHeavy ? 0.12f : 0.085f);
+            }
+
+            SpawnEchoWoundSlash("KalmuriEchoRipTrace", origin + (Vector3)(f * 0.04f), f, new Color(0.92f, 1f, 1f, isHeavy ? 0.82f : 0.62f), isHeavy ? 1.22f : 0.82f, isHeavy ? 0.24f : 0.16f);
+            if (isHeavy && !denseDualBlade)
+            {
+                SpawnEchoWoundSlash("KalmuriEchoHeavyReturnRip", origin - (Vector3)(f * 0.04f), s, new Color(0.62f, 0.96f, 1f, 0.58f), 0.86f, 0.18f);
             }
         }
 
@@ -2551,6 +2734,18 @@ namespace Lethe.PrototypeV1
             enemies.RemoveAll(e => e == null || gatekeepers.Contains(e));
         }
 
+        void ClearEnemiesForDebug()
+        {
+            foreach (var enemy in enemies.ToList())
+            {
+                if (enemy != null)
+                {
+                    Destroy(enemy.gameObject);
+                }
+            }
+            enemies.Clear();
+        }
+
         void SpawnGatekeeperWarning()
         {
             if (player == null) return;
@@ -2565,6 +2760,29 @@ namespace Lethe.PrototypeV1
         }
 
         public int GatekeeperPatternRank => Mathf.Clamp(gatekeeperKills, 0, 3);
+
+        float GatekeeperRaidWarningSeconds(float baseSeconds) => Mathf.Max(baseSeconds, 0.92f);
+
+        GameObject SpawnGatekeeperRaidFill(string name, Sprite sprite, Vector3 position, Quaternion rotation, Vector3 fullScale, Color color, float warningSeconds, float startScaleFactor)
+        {
+            var startScale = Vector3.Max(fullScale * Mathf.Clamp(startScaleFactor, 0.04f, 0.40f), Vector3.one * 0.01f);
+            var go = SpawnTransientSpriteScaled(name, sprite, position, rotation, startScale, color, warningSeconds);
+            var fill = go.GetComponent<V1RaidTelegraphFill>();
+            if (fill == null) fill = go.AddComponent<V1RaidTelegraphFill>();
+            fill.Configure(fullScale * CombatVfxVisibilityScale, color, warningSeconds);
+            return go;
+        }
+
+        void SpawnGatekeeperRaidImpact(string name, Vector3 position, Quaternion rotation, Vector3 scale, int rank, bool circular)
+        {
+            var impactSprite = circular
+                ? MakeDiscSprite($"{name}Flash", Color.white, 160)
+                : MakeSectorSprite($"{name}Flash", Color.white, 176, rank >= 3 ? 96f : 84f);
+            SpawnTransientSpriteScaled($"{name}Flash", impactSprite, position, rotation, scale * 1.04f, new Color(1f, 0.92f, 0.78f, 0.74f), 0.12f);
+            SpawnTransientSpriteScaled($"{name}RedBang", impactSprite, position, rotation, scale * 1.12f, GatekeeperTelegraphColor(rank, 0.58f), 0.18f);
+            SpawnTransientSprite($"{name}OuterShock", MakeRingSprite($"{name}OuterShock", Color.white, 180), position, rotation, Mathf.Max(scale.x, scale.y) * 1.16f, GatekeeperAccentColor(rank, 0.82f), 0.22f);
+            PlaySfx("warning", 0.42f + rank * 0.04f, 0.08f);
+        }
 
         public void GatekeeperPatternPulse(V1Enemy gatekeeper, int patternStep)
         {
@@ -2607,19 +2825,20 @@ namespace Lethe.PrototypeV1
         {
             if (player == null) return;
             target.z = 0f;
-            var color = GatekeeperTelegraphColor(rank, 0.38f);
-            SpawnTransientSprite("GatekeeperMeteorTellFill", MakeDiscSprite("GatekeeperMeteorTellFill", Color.white, 160), target, Quaternion.identity, radius, color, warningSeconds);
-            SpawnTransientSprite("GatekeeperMeteorTellRing", MakeRingSprite("GatekeeperMeteorTellRing", Color.white, 180), target, Quaternion.Euler(0f, 0f, patternStep * 19f), radius, GatekeeperTelegraphColor(rank, 0.82f), warningSeconds);
-            SpawnTransientSprite("GatekeeperMeteorTellCore", GatekeeperMeteorSprite(rank), target + Vector3.up * 0.08f, Quaternion.Euler(0f, 0f, patternStep * 37f), 0.28f, GatekeeperAccentColor(rank, 0.70f), warningSeconds * 0.84f);
-            StartCoroutine(ResolveGatekeeperMeteor(target, radius, warningSeconds, damage, rank));
+            var telegraphTime = GatekeeperRaidWarningSeconds(warningSeconds);
+            SpawnGatekeeperRaidFill("GatekeeperMeteorTellFill", MakeDiscSprite("GatekeeperMeteorTellFill", Color.white, 160), target, Quaternion.identity, Vector3.one * radius, GatekeeperTelegraphColor(rank, 0.54f), telegraphTime, 0.10f);
+            SpawnTransientSprite("GatekeeperMeteorTellRing", MakeRingSprite("GatekeeperMeteorTellRing", Color.white, 180), target, Quaternion.Euler(0f, 0f, patternStep * 19f), radius, GatekeeperTelegraphColor(rank, 0.92f), telegraphTime);
+            SpawnTransientSprite("GatekeeperMeteorTellOuterLock", MakeRingSprite("GatekeeperMeteorTellOuterLock", Color.white, 180), target, Quaternion.Euler(0f, 0f, patternStep * -31f), radius * 1.08f, GatekeeperAccentColor(rank, 0.42f), telegraphTime);
+            SpawnTransientSprite("GatekeeperMeteorTellCore", GatekeeperMeteorSprite(rank), target + Vector3.up * 0.08f, Quaternion.Euler(0f, 0f, patternStep * 37f), 0.28f, GatekeeperAccentColor(rank, 0.70f), telegraphTime * 0.92f);
+            StartCoroutine(ResolveGatekeeperMeteor(target, radius, telegraphTime, damage, rank));
         }
 
         IEnumerator ResolveGatekeeperMeteor(Vector3 center, float radius, float delay, float damage, int rank)
         {
             yield return new WaitForSeconds(delay);
             if (player == null || deathOverlay) yield break;
-            SpawnTransientSprite("GatekeeperMeteorImpact", GatekeeperMeteorSprite(rank), center, Quaternion.identity, radius * 0.92f, GatekeeperAccentColor(rank, 0.82f), 0.24f);
-            SpawnTransientSprite("GatekeeperMeteorImpactRing", MakeRingSprite("GatekeeperMeteorImpactRing", Color.white, 180), center, Quaternion.identity, radius * 1.05f, new Color(1f, 0.18f, 0.08f, 0.64f), 0.22f);
+            SpawnGatekeeperRaidImpact("GatekeeperMeteorImpact", center, Quaternion.identity, Vector3.one * radius, rank, true);
+            SpawnTransientSprite("GatekeeperMeteorImpactShard", GatekeeperMeteorSprite(rank), center, Quaternion.identity, radius * 0.92f, GatekeeperAccentColor(rank, 0.82f), 0.24f);
             var toPlayer = (Vector2)(player.position - center);
             if (toPlayer.magnitude <= radius)
             {
@@ -2634,11 +2853,12 @@ namespace Lethe.PrototypeV1
             if (player == null) return;
             forward = forward.sqrMagnitude > 0.01f ? forward.normalized : Vector2.up;
             var angle = Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg - 90f;
-            var color = GatekeeperTelegraphColor(rank, 0.34f);
+            var telegraphTime = GatekeeperRaidWarningSeconds(warningSeconds);
             var pos = center + (Vector3)(forward * radius * 0.42f);
-            SpawnTransientSprite("GatekeeperConeTellFill", MakeSectorSprite("GatekeeperConeTellFill", Color.white, 176, arcDegrees), pos, Quaternion.Euler(0f, 0f, angle), radius, color, warningSeconds);
-            SpawnTransientSpriteScaled("GatekeeperConeTellCenterLine", MakeBoxSprite("GatekeeperConeTellCenterLine", Color.white, 8, 150), center + (Vector3)(forward * radius * 0.45f), Quaternion.Euler(0f, 0f, angle), new Vector3(0.030f, radius * 0.56f, 1f), GatekeeperTelegraphColor(rank, 0.78f), warningSeconds);
-            StartCoroutine(ResolveGatekeeperCone(center, forward, radius, arcDegrees, warningSeconds, damage, rank));
+            SpawnGatekeeperRaidFill("GatekeeperConeTellFill", MakeSectorSprite("GatekeeperConeTellFill", Color.white, 176, arcDegrees), pos, Quaternion.Euler(0f, 0f, angle), Vector3.one * radius, GatekeeperTelegraphColor(rank, 0.50f), telegraphTime, 0.08f);
+            SpawnTransientSprite("GatekeeperConeTellEdge", MakeSectorSprite("GatekeeperConeTellEdge", Color.white, 176, arcDegrees), pos, Quaternion.Euler(0f, 0f, angle), radius * 1.03f, GatekeeperTelegraphColor(rank, 0.20f), telegraphTime);
+            SpawnTransientSpriteScaled("GatekeeperConeTellCenterLine", MakeBoxSprite("GatekeeperConeTellCenterLine", Color.white, 8, 150), center + (Vector3)(forward * radius * 0.45f), Quaternion.Euler(0f, 0f, angle), new Vector3(0.034f, radius * 0.60f, 1f), GatekeeperTelegraphColor(rank, 0.86f), telegraphTime);
+            StartCoroutine(ResolveGatekeeperCone(center, forward, radius, arcDegrees, telegraphTime, damage, rank));
         }
 
         IEnumerator ResolveGatekeeperCone(Vector3 center, Vector2 forward, float radius, float arcDegrees, float delay, float damage, int rank)
@@ -2646,6 +2866,7 @@ namespace Lethe.PrototypeV1
             yield return new WaitForSeconds(delay);
             if (player == null || deathOverlay) yield break;
             var angle = Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg - 90f;
+            SpawnGatekeeperRaidImpact("GatekeeperConeImpact", center + (Vector3)(forward * radius * 0.42f), Quaternion.Euler(0f, 0f, angle), Vector3.one * radius, rank, false);
             SpawnTransientSprite("GatekeeperConeSlash", GatekeeperCleaveSprite(rank), center + (Vector3)(forward * radius * 0.48f), Quaternion.Euler(0f, 0f, angle), radius * 0.82f, GatekeeperAccentColor(rank, 0.84f), 0.24f);
             var toPlayer = (Vector2)(player.position - center);
             if (toPlayer.magnitude <= radius && Vector2.Angle(forward, toPlayer) <= arcDegrees * 0.5f)
@@ -2658,17 +2879,19 @@ namespace Lethe.PrototypeV1
 
         void GatekeeperRingTell(Vector3 center, float radius, float warningSeconds, float damage, int rank)
         {
-            SpawnTransientSprite("GatekeeperRingTellFill", MakeDiscSprite("GatekeeperRingTellFill", Color.white, 180), center, Quaternion.identity, radius, GatekeeperTelegraphColor(rank, 0.26f), warningSeconds);
-            SpawnTransientSprite("GatekeeperRingTellOuter", MakeRingSprite("GatekeeperRingTellOuter", Color.white, 180), center, Quaternion.identity, radius, GatekeeperTelegraphColor(rank, 0.84f), warningSeconds);
-            SpawnTransientSprite("GatekeeperRingTellInner", MakeRingSprite("GatekeeperRingTellInner", Color.white, 132), center, Quaternion.Euler(0f, 0f, elapsed * -120f), radius * 0.52f, GatekeeperAccentColor(rank, 0.48f), warningSeconds);
-            StartCoroutine(ResolveGatekeeperRing(center, radius, warningSeconds, damage, rank));
+            var telegraphTime = GatekeeperRaidWarningSeconds(warningSeconds);
+            SpawnGatekeeperRaidFill("GatekeeperRingTellFill", MakeDiscSprite("GatekeeperRingTellFill", Color.white, 180), center, Quaternion.identity, Vector3.one * radius, GatekeeperTelegraphColor(rank, 0.40f), telegraphTime, 0.16f);
+            SpawnTransientSprite("GatekeeperRingTellOuter", MakeRingSprite("GatekeeperRingTellOuter", Color.white, 180), center, Quaternion.identity, radius, GatekeeperTelegraphColor(rank, 0.92f), telegraphTime);
+            SpawnTransientSprite("GatekeeperRingTellInner", MakeRingSprite("GatekeeperRingTellInner", Color.white, 132), center, Quaternion.Euler(0f, 0f, elapsed * -120f), radius * 0.52f, GatekeeperAccentColor(rank, 0.58f), telegraphTime);
+            StartCoroutine(ResolveGatekeeperRing(center, radius, telegraphTime, damage, rank));
         }
 
         IEnumerator ResolveGatekeeperRing(Vector3 center, float radius, float delay, float damage, int rank)
         {
             yield return new WaitForSeconds(delay);
             if (player == null || deathOverlay) yield break;
-            SpawnTransientSprite("GatekeeperRingImpact", MakeRingSprite("GatekeeperRingImpact", Color.white, 180), center, Quaternion.identity, radius * 1.06f, GatekeeperAccentColor(rank, 0.82f), 0.26f);
+            SpawnGatekeeperRaidImpact("GatekeeperRingImpact", center, Quaternion.identity, Vector3.one * radius, rank, true);
+            SpawnTransientSprite("GatekeeperRingShockwave", MakeRingSprite("GatekeeperRingShockwave", Color.white, 180), center, Quaternion.identity, radius * 1.14f, GatekeeperAccentColor(rank, 0.82f), 0.30f);
             var toPlayer = (Vector2)(player.position - center);
             if (toPlayer.magnitude <= radius)
             {
@@ -2950,6 +3173,24 @@ namespace Lethe.PrototypeV1
                 .Where(e => e != null && e.IsAlive && e != exclude)
                 .OrderBy(e => Vector2.Distance(origin, e.transform.position))
                 .FirstOrDefault();
+        }
+
+        public List<V1Enemy> FindVoidPriestHealTargets(V1Enemy priest, float radius, int targetCap)
+        {
+            if (priest == null) return new List<V1Enemy>();
+            var origin = priest.transform.position;
+            var radiusSq = radius * radius;
+            return enemies
+                .Where(e => e != null
+                    && e != priest
+                    && e.IsAlive
+                    && e.Kind != V1EnemyKind.Gatekeeper
+                    && e.HealthRatio < 0.999f
+                    && ((Vector2)(e.transform.position - origin)).sqrMagnitude < radiusSq)
+                .OrderBy(e => e.HealthRatio)
+                .ThenBy(e => ((Vector2)(e.transform.position - origin)).sqrMagnitude)
+                .Take(targetCap)
+                .ToList();
         }
 
         void SpawnHunterOathImpact(Vector3 center, float primaryDamage, bool echo)
@@ -3641,6 +3882,77 @@ namespace Lethe.PrototypeV1
 
             SpawnFloatingText(player.position + Vector3.up * 1.48f, "Kalmuri Perf Matrix", new Color(0.74f, 0.98f, 1f));
             Log("Debug Kalmuri perf matrix");
+            return DebugSnapshot();
+        }
+
+        public string DebugRunDenseDualBladePerfMatrix()
+        {
+            EnsureRunStarted();
+            SetDebugWeapon(V1WeaponId.DualBlades);
+            pausedForChoice = false;
+            resultOverlay = false;
+            refillOverlay = false;
+            deathOverlay = false;
+            fastDebugRun = true;
+            echoOnlyDebugMode = false;
+            pendingKalmuriFollowups.Clear();
+            debugTransientSpriteSpawnCount = 0;
+            debugDenseDualBladeHits = 0;
+            debugDenseDualBladeEchoesSuppressed = 0;
+            debugDenseDualBladeMs = 0f;
+
+            activeMemories.Clear();
+            activeMemories.Add(new MemoryState(V1MemoryId.HungryBlades, MaxMemoryLevel));
+            echoLevels.Clear();
+            for (int i = 0; i < AllEchoIds.Length; i++)
+            {
+                echoLevels[AllEchoIds[i]] = MaxEchoLevel;
+            }
+
+            ClearEnemiesForDebug();
+            var center = player.position;
+            for (int i = 0; i < 42; i++)
+            {
+                var lane = i % 14;
+                var row = i / 14;
+                var angle = Mathf.Lerp(-48f, 48f, lane / 13f);
+                var radius = 0.92f + row * 0.34f + (lane % 3) * 0.045f;
+                var pos = center + Quaternion.Euler(0f, 0f, angle) * Vector3.right * radius;
+                var kind = i % 13 == 0 ? V1EnemyKind.VoidPriest : i % 7 == 0 ? V1EnemyKind.SplitOne : i % 5 == 0 ? V1EnemyKind.DriftingEye : V1EnemyKind.Eroder;
+                SpawnEnemy(kind, pos);
+            }
+
+            var weapon = CurrentWeaponSpec();
+            var forward = Vector2.right;
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+            for (int cycle = 0; cycle < 5; cycle++)
+            {
+                elapsed += 0.08f;
+                var hits = CollectWeaponHits(weapon, forward);
+                debugDenseDualBladeHits += hits.Count;
+                SpawnWeaponHitVfx(weapon, hits, forward);
+                for (int i = 0; i < hits.Count; i++)
+                {
+                    var hit = hits[i];
+                    if (hit.Enemy == null || !hit.Enemy.IsAlive) continue;
+                    DealDamage(hit.Enemy, weapon.Damage * (i == 0 ? 0.28f : 0.18f), weapon.DisplayName, true, hit.Dir.normalized, i == 0 ? weapon.PrimaryKnock : weapon.SecondaryKnock);
+                    if (ShouldTriggerWeaponEchoForHit(weapon, i))
+                    {
+                        TriggerWeaponEchoes(hit.Enemy, forward, i, weapon);
+                    }
+                    else
+                    {
+                        debugDenseDualBladeEchoesSuppressed++;
+                    }
+                }
+                UpdatePendingKalmuriFollowups(0.24f);
+            }
+            UpdatePendingKalmuriFollowups(0.60f);
+            stopwatch.Stop();
+            debugDenseDualBladeMs = (float)stopwatch.Elapsed.TotalMilliseconds;
+
+            SpawnFloatingText(player.position + Vector3.up * 1.52f, $"Dense Dual {debugDenseDualBladeHits} hits / {debugTransientSpriteSpawnCount} vfx", new Color(0.74f, 0.98f, 1f));
+            Log($"Debug dense dual blade perf hits={debugDenseDualBladeHits} suppressed={debugDenseDualBladeEchoesSuppressed} transient={debugTransientSpriteSpawnCount} ms={debugDenseDualBladeMs:0.00}");
             return DebugSnapshot();
         }
 
@@ -4427,6 +4739,7 @@ namespace Lethe.PrototypeV1
 
             for (int i = 0; i < hits.Count; i++)
             {
+                if (!ShouldSpawnWeaponSlashForHit(weapon, i)) continue;
                 var primary = i == 0;
                 foreach (var entry in entries)
                 {
@@ -4930,12 +5243,15 @@ namespace Lethe.PrototypeV1
 
         GameObject SpawnTransientSpriteScaled(string name, Sprite sprite, Vector3 position, Quaternion rotation, Vector3 scale, Color color, float lifetime)
         {
+            debugTransientSpriteSpawnCount++;
             var go = RentPooled(transientSpritePool, name);
             go.transform.position = new Vector3(position.x, position.y, -0.05f);
             go.transform.rotation = rotation;
             go.transform.localScale = scale * CombatVfxVisibilityScale;
             var sweep = go.GetComponent<V1WeaponPhantomSweep>();
             if (sweep != null) sweep.enabled = false;
+            var raidFill = go.GetComponent<V1RaidTelegraphFill>();
+            if (raidFill != null) raidFill.enabled = false;
             var sr = go.GetComponent<SpriteRenderer>();
             if (sr == null) sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = sprite ?? MakeCircleSprite(name, Color.white, 48);
@@ -5331,7 +5647,25 @@ namespace Lethe.PrototypeV1
 #endif
         }
 
+        static Sprite CachedGeneratedSprite(string key, Func<Sprite> factory)
+        {
+            if (generatedSpriteCache.TryGetValue(key, out var cached) && cached != null) return cached;
+            var sprite = factory();
+            generatedSpriteCache[key] = sprite;
+            return sprite;
+        }
+
+        static string ColorKey(Color color)
+        {
+            return $"{Mathf.RoundToInt(color.r * 255f)}_{Mathf.RoundToInt(color.g * 255f)}_{Mathf.RoundToInt(color.b * 255f)}_{Mathf.RoundToInt(color.a * 255f)}";
+        }
+
         static Sprite MakeCircleSprite(string name, Color color, int size)
+        {
+            return CachedGeneratedSprite($"circle:{name}:{ColorKey(color)}:{size}", () => MakeCircleSpriteUncached(name, color, size));
+        }
+
+        static Sprite MakeCircleSpriteUncached(string name, Color color, int size)
         {
             var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { name = name };
             var center = new Vector2(size * 0.5f, size * 0.5f);
@@ -5348,6 +5682,11 @@ namespace Lethe.PrototypeV1
         }
 
         static Sprite MakeRingSprite(string name, Color color, int size)
+        {
+            return CachedGeneratedSprite($"ring:{name}:{ColorKey(color)}:{size}", () => MakeRingSpriteUncached(name, color, size));
+        }
+
+        static Sprite MakeRingSpriteUncached(string name, Color color, int size)
         {
             var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { name = name };
             var center = new Vector2(size * 0.5f, size * 0.5f);
@@ -5434,6 +5773,11 @@ namespace Lethe.PrototypeV1
         }
 
         static Sprite MakeBoxSprite(string name, Color color, int width, int height)
+        {
+            return CachedGeneratedSprite($"box:{name}:{ColorKey(color)}:{width}x{height}", () => MakeBoxSpriteUncached(name, color, width, height));
+        }
+
+        static Sprite MakeBoxSpriteUncached(string name, Color color, int width, int height)
         {
             var tex = new Texture2D(width, height, TextureFormat.RGBA32, false) { name = name };
             for (int y = 0; y < height; y++)
@@ -5579,6 +5923,11 @@ namespace Lethe.PrototypeV1
         }
 
         static Sprite MakeImpactDiamondSprite(string name, Color color)
+        {
+            return CachedGeneratedSprite($"impactDiamond:{name}:{ColorKey(color)}", () => MakeImpactDiamondSpriteUncached(name, color));
+        }
+
+        static Sprite MakeImpactDiamondSpriteUncached(string name, Color color)
         {
             const int size = 96;
             var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { name = name };
@@ -5997,9 +6346,10 @@ namespace Lethe.PrototypeV1
             public readonly int Level;
             public readonly int HitIndex;
             public readonly WeaponRuntimeSpec Weapon;
+            public readonly bool DenseDualBlade;
             public float Delay;
 
-            public PendingKalmuriFollowup(Vector3 origin, Vector2 forward, int level, int hitIndex, WeaponRuntimeSpec weapon, float delay)
+            public PendingKalmuriFollowup(Vector3 origin, Vector2 forward, int level, int hitIndex, WeaponRuntimeSpec weapon, float delay, bool denseDualBlade)
             {
                 Origin = origin;
                 Forward = forward;
@@ -6007,6 +6357,7 @@ namespace Lethe.PrototypeV1
                 HitIndex = hitIndex;
                 Weapon = weapon;
                 Delay = delay;
+                DenseDualBlade = denseDualBlade;
             }
         }
 
@@ -6087,7 +6438,9 @@ namespace Lethe.PrototypeV1
         float gatekeeperPatternTimer;
         float gatekeeperGuardTimer;
         float voidPriestHealLockout;
+        float echoStateTintTimer;
         int gatekeeperPatternStep;
+        Color echoStateTint = Color.white;
 
         public V1EnemyKind Kind { get; private set; }
         public float Hp { get; private set; }
@@ -6213,10 +6566,10 @@ namespace Lethe.PrototypeV1
                 {
                     healTimer = VoidPriestHealInterval;
                     var healed = 0;
-                    foreach (var enemy in FindObjectsByType<V1Enemy>(FindObjectsSortMode.None)
-                        .Where(e => e != null && e != this && e.IsAlive && e.Kind != V1EnemyKind.Gatekeeper && e.Hp < e.maxHp - 0.05f && Vector2.Distance(transform.position, e.transform.position) < VoidPriestHealRadius)
-                        .OrderBy(e => e.HealthRatio)
-                        .ThenBy(e => Vector2.Distance(transform.position, e.transform.position)))
+                    var healTargets = manager != null
+                        ? manager.FindVoidPriestHealTargets(this, VoidPriestHealRadius, VoidPriestHealTargetCap)
+                        : new List<V1Enemy>();
+                    foreach (var enemy in healTargets)
                     {
                         if (enemy.TryReceiveVoidPriestHeal(VoidPriestHealAmount, this))
                         {
@@ -6231,6 +6584,11 @@ namespace Lethe.PrototypeV1
             {
                 MarkTimer -= dt;
                 if (MarkTimer <= 0f) BloodMarked = false;
+            }
+            if (echoStateTintTimer > 0f)
+            {
+                echoStateTintTimer = Mathf.Max(0f, echoStateTintTimer - dt);
+                if (echoStateTintTimer <= 0f) RestoreColor();
             }
 
             UpdateHealthBar();
@@ -6260,6 +6618,32 @@ namespace Lethe.PrototypeV1
         public void ApplyBriefFreeze(float seconds)
         {
             freezeTimer = Mathf.Max(freezeTimer, seconds);
+        }
+
+        public void ApplyEchoStateMark(V1MemoryId id, Sprite sprite, Color color, float lifetime, float scaleMul)
+        {
+            if (!IsAlive) return;
+            echoStateTint = color;
+            echoStateTintTimer = Mathf.Max(echoStateTintTimer, lifetime);
+            if (sr != null) sr.color = CurrentBodyColor();
+
+            var markerName = $"EchoState_{id}";
+            var child = transform.Find(markerName);
+            var marker = child != null ? child.gameObject : new GameObject(markerName);
+            marker.transform.SetParent(transform, false);
+            marker.transform.localPosition = new Vector3(0f, Kind == V1EnemyKind.Gatekeeper ? 0.54f : 0.36f, -0.02f);
+            marker.transform.localRotation = Quaternion.identity;
+            marker.transform.localScale = Vector3.one * (Kind == V1EnemyKind.Gatekeeper ? 0.34f : 0.22f) * Mathf.Max(0.2f, scaleMul);
+
+            var markerRenderer = marker.GetComponent<SpriteRenderer>();
+            if (markerRenderer == null) markerRenderer = marker.AddComponent<SpriteRenderer>();
+            markerRenderer.sprite = sprite;
+            markerRenderer.color = color;
+            markerRenderer.sortingOrder = 52;
+
+            var badge = marker.GetComponent<V1EnemyStateBadge>();
+            if (badge == null) badge = marker.AddComponent<V1EnemyStateBadge>();
+            badge.Configure(color, lifetime, id);
         }
 
         public bool TryReceiveVoidPriestHeal(float amount, V1Enemy priest)
@@ -6298,7 +6682,17 @@ namespace Lethe.PrototypeV1
 
         void RestoreColor()
         {
-            if (sr != null) sr.color = BloodMarked ? Color.Lerp(baseColor, new Color(1f, 0.18f, 0.24f), 0.68f) : baseColor;
+            if (sr != null) sr.color = CurrentBodyColor();
+        }
+
+        Color CurrentBodyColor()
+        {
+            var color = BloodMarked ? Color.Lerp(baseColor, new Color(1f, 0.18f, 0.24f), 0.68f) : baseColor;
+            if (echoStateTintTimer > 0f)
+            {
+                color = Color.Lerp(color, new Color(echoStateTint.r, echoStateTint.g, echoStateTint.b, color.a), BloodMarked ? 0.34f : 0.48f);
+            }
+            return color;
         }
 
         void CreateHealthBar(V1EnemyKind kind)
@@ -6571,6 +6965,94 @@ namespace Lethe.PrototypeV1
                 sr.color = c;
             }
             if (age >= lifetime) manager?.ReleaseTransientSprite(this);
+        }
+    }
+
+    public sealed class V1RaidTelegraphFill : MonoBehaviour
+    {
+        SpriteRenderer sr;
+        Vector3 startScale;
+        Vector3 fullScale;
+        Color baseColor;
+        float lifetime;
+        float age;
+
+        public void Configure(Vector3 fullScale, Color baseColor, float lifetime)
+        {
+            sr = GetComponent<SpriteRenderer>();
+            startScale = transform.localScale;
+            this.fullScale = fullScale;
+            this.baseColor = baseColor;
+            this.lifetime = Mathf.Max(0.05f, lifetime);
+            age = 0f;
+            enabled = true;
+        }
+
+        void Update()
+        {
+            age += Time.deltaTime;
+            var t = Mathf.Clamp01(age / lifetime);
+            var eased = t * t * (3f - 2f * t);
+            transform.localScale = Vector3.LerpUnclamped(startScale, fullScale, eased);
+            if (sr != null)
+            {
+                var pulse = Mathf.Sin(t * Mathf.PI * 5f) * 0.08f;
+                var danger = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.62f, 1f, t));
+                sr.color = new Color(
+                    Mathf.Lerp(baseColor.r, 1f, danger * 0.35f),
+                    Mathf.Lerp(baseColor.g, 0.22f, danger * 0.55f),
+                    Mathf.Lerp(baseColor.b, 0.10f, danger * 0.55f),
+                    Mathf.Clamp01(baseColor.a + danger * 0.26f + pulse));
+            }
+        }
+    }
+
+    public sealed class V1EnemyStateBadge : MonoBehaviour
+    {
+        SpriteRenderer sr;
+        V1MemoryId id;
+        Color color;
+        Vector3 baseScale;
+        float lifetime;
+        float age;
+        float spin;
+
+        public void Configure(Color color, float lifetime, V1MemoryId id)
+        {
+            sr = GetComponent<SpriteRenderer>();
+            this.color = color;
+            this.id = id;
+            this.lifetime = Mathf.Max(0.08f, lifetime);
+            age = 0f;
+            baseScale = transform.localScale;
+            spin = id switch
+            {
+                V1MemoryId.StoppedSecond => 42f,
+                V1MemoryId.HunterOath => -96f,
+                V1MemoryId.OblivionBrand => 118f,
+                V1MemoryId.ExecutionFlash => 0f,
+                _ => 72f
+            };
+            enabled = true;
+        }
+
+        void Update()
+        {
+            age += Time.deltaTime;
+            var t = Mathf.Clamp01(age / lifetime);
+            var pulse = 1f + Mathf.Sin(age * 13f) * 0.08f;
+            transform.localScale = baseScale * pulse;
+            transform.Rotate(0f, 0f, spin * Time.deltaTime);
+            if (sr != null)
+            {
+                var c = color;
+                c.a = Mathf.Lerp(color.a, 0f, Mathf.SmoothStep(0.72f, 1f, t));
+                sr.color = c;
+            }
+            if (age >= lifetime)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 

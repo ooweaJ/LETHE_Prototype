@@ -1,5 +1,187 @@
 # Current Task
 
+# 2026-07-06 MCP QA Recovery / Dense Dual-Blade Final Pass
+
+## Status
+
+Implemented, locally build-verified, and Unity-QA-verified through AnkleBreaker Unity MCP on `LETHE` port `7890`.
+
+## Applied Changes
+
+- Dense dual-blade weapon slash VFX now keeps only the primary slash in high-density fights.
+- Dense Kalmuri follow-ups now skip:
+  - support range ring,
+  - moving dive trails,
+  - extra slash entries.
+- Dense Kalmuri keeps a minimal clamp/rip read:
+  - two clamp blades,
+  - one rip line.
+- Added generated sprite caching for repeated circle/ring/box/impact-diamond procedural sprites.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+- Unity compilation errors: `0`.
+- Unity console errors after final QA: `0`.
+- `LETHE/V1 QA/Echo Matrix Dual Blades`: `[V1QA] PASS`, `total=240`, `state=73`.
+- `LETHE/V1 QA/Echo Matrix Greatsword`: `[V1QA] PASS`, `total=223`, `state=69`.
+- `LETHE/V1 QA/Gatekeeper Pattern Matrix`: `[V1QA] PASS`, `boss=4`, `meteor=20`, `cone=6`, `ring=3`.
+- `LETHE/V1 QA/Gatekeeper Jump`: `[V1QA] PASS`, `boss=1`, `liveEnemies=15`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: `[V1QA] PASS`, `hits=30`, `suppressed=25`, `transient=64`, `activeVfx=42`, `ms=55.73`.
+- `LETHE/V1 QA/Kalmuri Perf Matrix`: `[V1QA] PASS`, `totalKalmuri=0`.
+- `LETHE/V1 QA/Void Priest Heal Matrix`: `[V1QA] PASS`, `attempts=12`, `accepted=4`, `vfx=16`.
+- `LETHE/V1 QA/M2 Loop`: `[V1QA] PASS`, `hungryEcho=5`, `bloodEcho=5`.
+
+## Remaining Gate
+
+Automated QA is now green. Direct-play review should judge:
+
+- Kalmuri clamp/rip visual quality at +1/+3/+5.
+- Gatekeeper raid telegraph readability.
+- Dense dual-blade feel after the aggressive VFX throttle.
+- VoidPriest heal readability and enemy separation feel in a real dense wave.
+
+# 2026-07-06 Kalmuri Echo Clamp/Rip Readability Pass
+
+## Status
+
+Implemented in code and locally build-verified. Unity Kalmuri visual/perf QA rerun is pending because AnkleBreaker Unity MCP still returns `Transport closed`.
+
+## Applied Changes
+
+- Added `SpawnKalmuriEchoClampRip()`.
+- Kalmuri echo follow-ups now show:
+  - two opposing clamp blades closing into the target point,
+  - a central bite/rip cue,
+  - a short wound slash after the clamp.
+- Reduced the old generic Kalmuri echo range/flash/cut visuals so they act as supporting read instead of the main concept.
+- Dense dual-blade Kalmuri follow-ups now skip the old surge blade loop and keep the lighter clamp/rip shape to avoid undoing the dense VFX churn pass.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- AnkleBreaker Unity MCP reconnect attempt still failed with `Transport closed`.
+
+## Remaining Gate
+
+Retry Unity QA when MCP routing is stable:
+
+- `LETHE/V1 QA/Kalmuri Perf Matrix`
+- direct-play check +1/+3/+5 Kalmuri echo visual scale
+- dense dual-blade check to confirm the lighter clamp/rip does not reintroduce VFX churn
+
+# 2026-07-06 Echo State Mark Readability Pass
+
+## Status
+
+Implemented in code and locally build-verified. Unity Echo Matrix rerun is pending because AnkleBreaker Unity MCP still returns `Transport closed`.
+
+## Applied Changes
+
+- Added `V1Enemy.ApplyEchoStateMark()`.
+- Added `V1EnemyStateBadge`, a short-lived pulsing/rotating marker attached to affected enemies.
+- Utility echoes now mark affected monsters:
+  - `ExecutionFlash`
+  - `HunterOath`
+  - `ShatterWave`
+  - `StoppedSecond`
+  - `AshenShield`
+  - `OblivionBrand`
+- Enemy body color now receives a temporary utility echo tint, blended with BloodMarked tint if both are active.
+- Echo Matrix QA now counts and requires `EchoState_*` objects.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+
+## Remaining Gate
+
+Retry Unity QA when MCP routing is stable:
+
+- `LETHE/V1 QA/Echo Matrix Dual Blades`
+- `LETHE/V1 QA/Echo Matrix Greatsword`
+
+Direct play should check whether non-blood echoes can now be identified from monster marks before reading text.
+
+# 2026-07-06 Gatekeeper Raid Telegraph Pass
+
+## Status
+
+Implemented in code and locally build-verified. Unity QA rerun is pending because AnkleBreaker Unity MCP still returns `Transport closed`.
+
+## Applied Changes
+
+- Added `V1RaidTelegraphFill`.
+- Gatekeeper meteor, cone, and ring patterns now read as:
+  - danger boundary appears immediately,
+  - internal red fill grows over the warning time,
+  - impact flash/bang plays when damage resolves.
+- Gatekeeper warning windows now clamp to at least `0.92s`.
+- Transient sprite pooling now disables stale `V1RaidTelegraphFill` components when reusing objects for unrelated VFX.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on standalone rerun after a parallel DLL lock.
+
+## Remaining Gate
+
+Retry Unity QA when MCP routing is stable:
+
+- `LETHE/V1 QA/Gatekeeper Pattern Matrix`
+- `LETHE/V1 QA/Gatekeeper Jump`
+
+Visually judge whether the pattern now reads like a simple raid mechanic: red zone appears, fills, then pops.
+
+# 2026-07-06 Dense Dual-Blade VFX Churn Pass
+
+## Status
+
+Implemented in code and locally build-verified. Final Unity QA rerun is pending because the AnkleBreaker Unity MCP transport closed after `Assets/Refresh`, while the `LETHE` Unity editor process remained alive.
+
+## Applied Changes
+
+- Added dense dual-blade throttles:
+  - secondary echo chains are suppressed in high live-enemy counts,
+  - secondary slash VFX is capped,
+  - dense Kalmuri follow-ups carry a scheduled dense flag,
+  - dense Kalmuri follow-ups use fewer surge blades and skip extra flash/barrage,
+  - dense Blood Reflection suppresses bloom/accent spam while keeping mark readability,
+  - dense utility echoes rotate one utility family per primary hit.
+- Added debug counters:
+  - `debugTransientSpriteSpawnCount`
+  - `debugDenseDualBladeHits`
+  - `debugDenseDualBladeEchoesSuppressed`
+  - `debugDenseDualBladeMs`
+- Added `FindVoidPriestHealTargets()` so VoidPriest healing uses the manager enemy list instead of repeated whole-scene scans.
+- Added `ClearEnemiesForDebug()`.
+- Added `DebugRunDenseDualBladePerfMatrix()`.
+- Added Unity QA menu:
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- Unity compile error count before MCP transport closure: `0`.
+- Dense QA failing baseline/progress before the final throttle:
+  - `hits=24`, `suppressed=4`, `transient=954`, `activeVfx=506`, `ms=947.64`.
+  - `hits=24`, `suppressed=10`, `transient=550`, `activeVfx=307`, `ms=561.77`.
+  - `hits=30`, `suppressed=15`, `transient=627`, `activeVfx=361`, `ms=644.39`.
+
+## Remaining Gate
+
+Retry Unity QA when MCP routing is stable:
+
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`
+- `LETHE/V1 QA/Void Priest Heal Matrix`
+- `LETHE/V1 QA/M2 Loop`
+
+If Dense QA still fails, keep tuning object churn before adding any more VFX volume.
+
 # 2026-07-06 Gatekeeper Jump Debug / VFX-Performance Triage Result
 
 ## Status
