@@ -129,6 +129,13 @@ namespace Lethe.PrototypeV1.Editor
             StartRunner();
         }
 
+        [MenuItem("LETHE/V1 QA/Gatekeeper Jump")]
+        public static void QaGatekeeperJump()
+        {
+            SavePending(new PendingSmoke(SmokeMode.GatekeeperJump, V1WeaponId.DualBlades));
+            StartRunner();
+        }
+
         [MenuItem("LETHE/V1 QA/Enemy Separation Matrix")]
         public static void QaEnemySeparationMatrix()
         {
@@ -271,6 +278,12 @@ namespace Lethe.PrototypeV1.Editor
             if (smoke.Mode == SmokeMode.GatekeeperPatternMatrix)
             {
                 manager.DebugRunGatekeeperPatternMatrix();
+                return;
+            }
+
+            if (smoke.Mode == SmokeMode.GatekeeperJump)
+            {
+                manager.DebugJumpToGatekeeper();
                 return;
             }
 
@@ -447,6 +460,15 @@ namespace Lethe.PrototypeV1.Editor
                     }
                     return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
 
+                case SmokeMode.GatekeeperJump:
+                    var jumpBosses = CountObjects("Enemy_Gatekeeper");
+                    details += $" | gatekeeperJump boss={jumpBosses} liveEnemies={liveEnemies} resultOverlay={resultOverlay}";
+                    if (jumpBosses == 1 && liveEnemies >= 8 && !resultOverlay && !refillOverlay && !deathOverlay)
+                    {
+                        return SmokeResult.Pass;
+                    }
+                    return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
+
                 case SmokeMode.EnemySeparationMatrix:
                     var before = Field<int>(manager, "debugSeparationOverlapBefore");
                     var after = Field<int>(manager, "debugSeparationOverlapAfter");
@@ -507,6 +529,7 @@ namespace Lethe.PrototypeV1.Editor
             UtilityUltimateMatrix,
             BloodBladeStorm,
             GatekeeperPatternMatrix,
+            GatekeeperJump,
             EnemySeparationMatrix,
             VoidPriestHealMatrix
         }
@@ -547,11 +570,13 @@ namespace Lethe.PrototypeV1.Editor
                                             ? "Blood Blade Storm"
                                             : Mode == SmokeMode.GatekeeperPatternMatrix
                                                 ? "Gatekeeper Pattern Matrix"
-                                                : Mode == SmokeMode.EnemySeparationMatrix
-                                                    ? "Enemy Separation Matrix"
-                                                    : Mode == SmokeMode.VoidPriestHealMatrix
-                                                        ? "Void Priest Heal Matrix"
-                                                        : $"{WeaponId}";
+                                                : Mode == SmokeMode.GatekeeperJump
+                                                    ? "Gatekeeper Jump"
+                                                    : Mode == SmokeMode.EnemySeparationMatrix
+                                                        ? "Enemy Separation Matrix"
+                                                        : Mode == SmokeMode.VoidPriestHealMatrix
+                                                            ? "Void Priest Heal Matrix"
+                                                            : $"{WeaponId}";
         }
 
         static void SpawnAllMemoryEchoPreviews(V1GameManager manager)

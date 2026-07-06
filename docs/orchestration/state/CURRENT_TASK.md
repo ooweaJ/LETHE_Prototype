@@ -1,5 +1,56 @@
 # Current Task
 
+# 2026-07-06 Gatekeeper Jump Debug / VFX-Performance Triage Result
+
+## Status
+
+The immediate debug request is implemented in `Dev_Prototype_v1`. Jaewoo can now jump directly to the first Gatekeeper from the start overlay or from the F12 debug panel, without waiting for the boss timer.
+
+## Applied Changes
+
+- Changed `F6` to call `DebugJumpToGatekeeper()`.
+- Made `F6` work from the weapon-select overlay.
+- Added a `Boss` button to the F12 debug panel.
+- Added `RemoveExistingGatekeepers()` so repeated debug jumps do not stack bosses.
+- Added `DebugJumpToGatekeeper()`:
+  - starts the run if needed,
+  - closes choice/result/refill/death overlays,
+  - uses fast debug boss values,
+  - resets Gatekeeper rank/index to the first boss,
+  - seeds an empty run with `HungryBlades:3`, `BloodReflection:2`, `StoppedSecond:1`,
+  - spawns review enemies,
+  - shows the Gatekeeper warning cue,
+  - spawns one Gatekeeper.
+- Added Unity QA menu:
+  - `LETHE/V1 QA/Gatekeeper Jump`
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+- Unity compile error count: `0`.
+- Unity QA:
+  - `LETHE/V1 QA/Gatekeeper Jump`: `[V1QA] PASS`, `boss=1`, `liveEnemies=15`, `memories=[HungryBlades:3,BloodReflection:2,StoppedSecond:1]`.
+- Unity console error count after QA: `0`.
+
+## Triage Finding
+
+The next work should not be another broad content pass. Jaewoo's current blockers are:
+
+- VFX identity is too low; effects work but do not read as different enough in play.
+- Hungry Blades / Kalmuri echo still feels visually mismatched to the intended concept.
+- Dual blades appear to lag when enemy count rises, likely from dense-hit VFX/object churn plus repeated enemy queries.
+
+## Next Implementation
+
+Make a focused dense-wave VFX/performance pass:
+
+- Profile/measure transient object counts during dual-blade dense hits.
+- Cap or pool the worst repeated VFX families before increasing spectacle.
+- Replace `VoidPriest` whole-scene heal scans with manager-side nearby enemy queries.
+- Redesign Kalmuri echo visual language around readable blade action, not more generic cyan rings.
+- Add a QA matrix that records both object count and rough frame/perf risk under dense dual-blade combat.
+
 # 2026-07-06 VoidPriest Heal / Echo-Memory Interaction Audit Result
 
 ## Status

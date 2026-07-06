@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-06-05 - 보스 즉시 점프 디버그와 다음 개선 정리</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-06-05 - 보스 즉시 점프 디버그와 다음 개선 정리</h1>
+      <p class="meta">Generated from 2026-07-06-05-보스-즉시-점프-디버그와-다음-개선-정리.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260706/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-06-05 - 보스 즉시 점프 디버그와 다음 개선 정리</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에 첫 보스로 바로 넘어가는 디버그 경로가 들어갔다. 이제 시작 화면에서도 <code>F6</code>을 누르면 런을 시작하고, F12 디버그 패널에서는 <code>Boss</code> 버튼으로 바로 문지기 보스 상태를 만들 수 있다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>F6</code>이 단순 보스 소환이 아니라 <code>DebugJumpToGatekeeper()</code>를 실행하도록 바뀌었다.</li>
+<li>시작 화면에서도 <code>F6</code>이 동작한다.</li>
+<li>F12 디버그 패널에 <code>Boss</code> 버튼을 추가했다.</li>
+<li>보스 점프는 기존 보스를 지우고, 빈 런이면 기본 리뷰 기억 <code>칼무리 3 / 혈반 2 / 정지초침 1</code>을 넣은 뒤, 주변 잡몹과 첫 문지기 보스를 즉시 만든다.</li>
+<li>Unity QA 메뉴 <code>LETHE/V1 QA/Gatekeeper Jump</code>를 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 기존 legacy 경고 7개, 오류 0.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 경고 0, 오류 0.</li>
+<li>Unity compile error count: <code>0</code>.</li>
+<li>Unity QA <code>Gatekeeper Jump</code>: <code>[V1QA] PASS</code>, <code>boss=1</code>, <code>liveEnemies=15</code>.</li>
+<li>Unity console error count after QA: <code>0</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>다음 작업은 단순 이펙트 확대가 아니라 밀집전 성능과 VFX 식별성부터 잡는다. 지금 상태에서 화면을 더 화려하게 만들면 쌍검 밀집전 렉과 효과 구분 문제가 더 커질 가능성이 높다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>VFX 식별성이 낮아서 잔향과 기억의 차이가 플레이 중에 덜 보인다.</li>
+<li>칼무리 잔향은 아직 칼무리라는 컨셉과 잘 맞지 않는다.</li>
+<li>쌍검이 많은 적을 때릴 때 렉이 느껴진다.</li>
+<li>의심 지점은 밀집 히트 VFX 오브젝트 churn, 칼무리/잔향 반복 생성량, LINQ 기반 적 검색, <code>VoidPriest</code>의 전체 씬 힐 대상 검색이다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>보스 점프 디버그는 구현 완료됐다. 다음 판단은 콘텐츠 추가보다 성능과 가독성이다. 특히 쌍검 밀집전에서 어느 VFX 계열이 많이 생성되는지 측정하고, 칼무리 잔향은 별도 컨셉 재설계가 필요하다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>1. 쌍검 밀집전 성능/오브젝트 카운트 QA를 추가한다.</p>
+<p>2. 최악의 반복 VFX 계열을 pool/cap/쿨다운으로 줄인다.</p>
+<p>3. <code>VoidPriest</code> 힐 탐색을 매번 <code>FindObjectsByType</code>로 도는 방식에서 매니저 적 리스트 기반으로 바꾼다.</p>
+<p>4. 칼무리 잔향을 “더 많은 파란 칼”이 아니라 사냥, 관통, 물어뜯기, 회수 같은 명확한 칼 동작으로 다시 잡는다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 보스를 확인하려면 시간을 기다려야 했고, 최신 직접 플레이에서 VFX 식별성/칼무리 컨셉/쌍검 렉 문제가 다시 드러났다.</li>
+<li>방향: 테스트 접근성을 먼저 열고, 다음 작업을 성능과 가독성 중심으로 좁힌다.</li>
+<li>행동: <code>F6</code>, F12 <code>Boss</code>, <code>Gatekeeper Jump</code> QA를 추가하고 다음 개선 목록을 재정렬했다.</li>
+<li>결과: 보스는 즉시 확인 가능해졌고, 다음 패스는 밀집전 성능과 칼무리 잔향 재설계로 명확해졌다.</li>
+</ul>
+  </main>
+</body>
+</html>

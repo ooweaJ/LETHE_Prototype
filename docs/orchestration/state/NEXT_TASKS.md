@@ -1,61 +1,62 @@
 # Next Tasks
 
-## 1. Non-Blood Memory / Echo Enemy-State Readability Pass
+## 1. Dense Dual-Blade Performance / VFX Churn Pass
 
 - Priority: high
-- Problem: Blood Reflection feels clearly strongest because it combines frequent VFX, DoT, healing, bloom, and ultimate progression. Other memories/echoes work but are harder to perceive as monster interactions.
+- Problem: jaewoo felt lag when dual blades attack into many enemies. The likely risk is dense hit-triggered transient VFX plus repeated enemy queries.
 - Build:
-  - Add short-lived enemy-state marks for Shatter, Stopped, Ashen, Hunter, Execution, and Oblivion.
-  - Keep object counts bounded; make state changes distinct instead of just louder.
-  - Add a QA matrix that records damage/heal/control contribution, not only object counts.
+  - Add a dense dual-blade QA/perf matrix with object-count and timing-risk metrics.
+  - Reduce or pool the worst repeated transient VFX families.
+  - Replace expensive whole-scene enemy scans where practical, starting with VoidPriest healing.
+  - Keep effect readability while lowering object churn.
 - Done:
-  - Direct play can identify what each non-blood memory and echo does before reading text.
+  - Dense dual-blade waves no longer hitch noticeably and QA stays under object-count limits.
 
-## 2. Healer Counterplay Direct Review
+## 2. VFX Identity / Echo Readability Pass
 
 - Priority: high
-- Problem: VoidPriest healing is now capped and visible, but direct play must judge whether healer-supported waves remain fair without Blood Reflection.
+- Problem: VFX identity is still low. Memories/echoes pass QA but do not read as different enough in actual combat.
 - Build:
-  - Play dense waves with 2+ VoidPriests.
-  - Check whether green heal threads make the sustain source obvious.
-  - Check whether non-blood builds can kill healer groups.
+  - Add clearer monster-state marks for Shatter, Stopped, Ashen, Hunter, Execution, and Oblivion.
+  - Make each state visually distinct before adding raw damage or screen-filling effects.
+  - Add contribution metrics for damage/heal/control, not only object counts.
 - Done:
-  - Review returns whether to tune heal amount, target cap, receiver lockout, or priest spawn frequency.
+  - Direct play can identify what each memory/echo is doing before reading text.
 
-## 3. Gatekeeper Body Visual Review
+## 3. Hungry Blades / Kalmuri Echo Visual Redesign
 
 - Priority: high
-- Problem: jaewoo rejected the previous boss body as visually degraded; four authored Gatekeeper body sprites have now replaced the blob-like procedural body.
+- Problem: jaewoo still feels the Kalmuri echo visual does not fit the concept. More cyan blade clutter is not enough.
 - Build:
-  - Run `LETHE/V1 QA/Gatekeeper Pattern Matrix` or play to the first Gatekeeper.
-  - Judge whether the boss reads as a deliberate gate/mask boss rather than a placeholder.
+  - Reframe Kalmuri echo around a recognizable blade action: hunt, pierce, clamp, rip, or return.
+  - Reduce generic rings and make the echo different from the active memory orbit.
+  - Verify +1/+3/+5 scale without overloading dense fights.
 - Done:
-  - Review returns whether to keep the new bodies or do one dedicated boss art pass.
+  - Jaewoo can look at the effect and say it matches "칼무리" without relying on labels.
 
-## 4. Dense Wave / Enemy Separation Direct Review
+## 4. Gatekeeper Jump / Boss Pattern Direct Review
 
 - Priority: high
-- Problem: enemies now use soft separation instead of perfect overlap, but the feel needs human judgment.
+- Problem: the new `F6`/`Boss` debug jump works technically, but the boss pattern and body still need direct feel judgment.
 - Build:
-  - Play `Assets/_dev/Scenes/Dev_Prototype_v1.unity`.
-  - Let a dense add wave gather around the player and first Gatekeeper.
-  - Judge whether enemies still feel threatening while no longer reading as one stacked blob.
+  - Press `F6` or use the F12 `Boss` button.
+  - Judge red danger-zone readability, TTK, guard feel, add pressure, and boss body quality.
 - Done:
-  - Review returns whether to tune separation padding, normal-enemy multiplier, boss-space multiplier, or DriftingEye standing separation.
+  - Review returns one narrow boss adjustment: telegraph timing, danger size, HP/guard, add pressure, or art polish.
 
-## 5. Gatekeeper Pattern Direct Review
+## 5. Healer / Enemy Separation Direct Review
 
 - Priority: high
-- Problem: the first boss now has telegraphed patterns and no longer receives healer support, but the feel still needs human judgment.
+- Problem: VoidPriest healing and enemy separation are technically fixed, but they need dense-wave direct play judgment.
 - Build:
-  - Play `Assets/_dev/Scenes/Dev_Prototype_v1.unity`.
-  - Reach the first Gatekeeper around 150 seconds.
-  - Judge red danger-zone readability, fairness, boss HP/TTK, guard feel, and whether the boss sprite/pattern concept reads better.
+  - Test dense waves with multiple priests and mixed enemies.
+  - Check whether heal source/readability, killability, and soft separation all feel fair.
 - Done:
-  - Review returns whether to tune telegraph timing, danger size, boss HP/guard uptime, or sprite polish.
+  - Review returns whether to tune heal amount, priest frequency, receiver lockout, separation padding, or enemy cap.
 
 Completed sequence:
 
+- 2026-07-06: Gatekeeper jump debug implemented; `F6`, F12 `Boss`, and `LETHE/V1 QA/Gatekeeper Jump` now work.
 - 2026-07-06: VoidPriest heal stacking/readability pass implemented; heal matrix, M2, Echo Matrix Dual, Passive Memory Matrix, and Utility Ultimate Dual QA passed.
 - 2026-07-06: Gatekeeper body visual repair implemented; four boss PNGs now load by rank, Pattern Matrix and M2 Loop QA passed.
 - 2026-07-06: enemy soft separation implemented; Enemy Separation Matrix and M2 Loop QA passed.
@@ -76,6 +77,7 @@ Completed sequence:
 
 QA menus passing:
 
+- `LETHE/V1 QA/Gatekeeper Jump`
 - `LETHE/V1 QA/Enemy Separation Matrix`
 - `LETHE/V1 QA/Gatekeeper Pattern Matrix`
 - `LETHE/V1 QA/Echo Matrix Dual Blades`

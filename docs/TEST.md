@@ -1,5 +1,38 @@
 # LETHE TEST
 
+# 2026-07-06 Gatekeeper Jump Debug / Future Improvement Triage
+
+- Purpose:
+  - Let jaewoo skip directly to the first Gatekeeper from debug without waiting for the 150s timer.
+  - Record the next concrete defects from direct play: low VFX identity, Kalmuri echo concept mismatch, and dual-blade dense-wave lag risk.
+- Applied target:
+  - `F6` now calls `DebugJumpToGatekeeper()` instead of only spawning a boss in the current state.
+  - Start overlay also accepts `F6`, so the boss review can begin from the first screen.
+  - F12 debug panel includes a `Boss` button.
+  - `DebugJumpToGatekeeper()`:
+    - ensures the run is started,
+    - exits blocking overlays,
+    - switches to fast debug boss values,
+    - removes any existing Gatekeeper,
+    - adds a small default review loadout if the run is empty,
+    - spawns review enemies and one Gatekeeper.
+  - Added `LETHE/V1 QA/Gatekeeper Jump`.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
+  - Unity `Assets/Refresh`
+  - Unity compile error check.
+  - Unity `LETHE/V1 QA/Gatekeeper Jump`.
+  - Unity console error check.
+- Results:
+  - Runtime build passed with 7 existing legacy warnings and 0 errors.
+  - Editor build passed with 0 warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Gatekeeper Jump QA: `[V1QA] PASS`, `boss=1`, `liveEnemies=15`, `memories=[HungryBlades:3,BloodReflection:2,StoppedSecond:1]`.
+  - Unity console error count after QA: `0`.
+- Limitation:
+  - This verifies the debug jump path and runtime safety. It does not solve the larger VFX identity or dense-wave performance issues; those are now the next implementation targets.
+
 # 2026-07-06 Void Priest Heal / Interaction Audit Pass
 
 - Purpose:

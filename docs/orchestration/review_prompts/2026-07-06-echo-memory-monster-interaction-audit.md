@@ -19,6 +19,12 @@ Jaewoo reported that stacked healer enemies make waves feel impossible to kill u
 
 ## Observed Balance / Readability Problems
 
+0. New direct-play feedback after the healer fix.
+   - VFX identity is still low; many effects exist but are not easy to distinguish during real combat.
+   - Hungry Blades / Kalmuri echo still does not visually match the intended concept.
+   - Dual blades appear to cause lag when enemy density rises.
+   - The next implementation should reduce dense-hit object churn before increasing VFX volume.
+
 1. Blood Reflection feels strongest because it covers too many jobs.
    - It marks on weapon hit.
    - It adds visible wound/pulse VFX frequently.
@@ -54,25 +60,36 @@ Jaewoo reported that stacked healer enemies make waves feel impossible to kill u
 
 ## Recommended Next Codex Passes
 
-1. Non-blood enemy-state readability pass.
+1. Dense dual-blade performance / VFX churn pass.
+   - Add a QA/perf matrix for dual blades against dense waves.
+   - Measure object counts for weapon slashes, hit sparks, Kalmuri, Blood, and utility echoes.
+   - Cap/pool the worst repeated transient families before adding more spectacle.
+   - Replace whole-scene scans where possible, especially `VoidPriest` healing via `FindObjectsByType`.
+
+2. Kalmuri echo visual redesign.
+   - Treat this as concept correction, not only size/alpha tuning.
+   - Make the echo read as a blade action: hunt, pierce, clamp, rip, or return.
+   - Reduce generic rings and distinguish echo from active memory orbit.
+
+3. Non-blood enemy-state readability pass.
    - Add persistent short-lived state markers for Shatter, Stopped, Ashen, Hunter, Execution, and Oblivion.
    - Keep object counts bounded; make each marker distinctive rather than simply more numerous.
 
-2. Healer counterplay pass.
+4. Healer counterplay pass.
    - Make VoidPriest heal target obvious.
    - Consider a "heal interrupted" or "heal denied" effect when control/damage thresholds hit priests.
    - Check if priests should expose themselves during healing.
 
-3. Memory versus Echo role split.
+5. Memory versus Echo role split.
    - Memory should feel like the active/current combat identity.
    - Echo should feel like a transformed residual effect after forgetting.
    - Avoid Blood being the only one that clearly does both.
 
-4. Ultimate route communication.
+6. Ultimate route communication.
    - Show all four ultimate pair goals in debug/review HUD or level-up language.
    - Give each ultimate pair a different monster-state signature before the ultimate fires.
 
-5. Measurement improvement.
+7. Measurement improvement.
    - Add a QA matrix that records per-family damage/heal/control counts, not only VFX object counts.
    - Use it to detect "looks loud but does little" and "does a lot but is invisible" cases.
 

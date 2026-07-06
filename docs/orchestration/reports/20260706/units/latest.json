@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260706\\index.md",
-  "generatedAt": "2026-07-06T05:25:25.833Z",
-  "unitCount": 4,
+  "generatedAt": "2026-07-06T05:39:37.283Z",
+  "unitCount": 5,
   "latest": {
-    "title": "2026-07-06-04 - 힐러 중첩 완화와 잔향/기억 상호작용 감사",
-    "number": "04",
-    "markdownPath": "docs\\orchestration\\reports\\20260706\\units\\2026-07-06-04-힐러-중첩-완화와-잔향-기억-상호작용-감사.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260706\\units\\2026-07-06-04-힐러-중첩-완화와-잔향-기억-상호작용-감사.html"
+    "title": "2026-07-06-05 - 보스 즉시 점프 디버그와 다음 개선 정리",
+    "number": "05",
+    "markdownPath": "docs\\orchestration\\reports\\20260706\\units\\2026-07-06-05-보스-즉시-점프-디버그와-다음-개선-정리.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260706\\units\\2026-07-06-05-보스-즉시-점프-디버그와-다음-개선-정리.html"
   }
 }

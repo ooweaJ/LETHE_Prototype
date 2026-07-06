@@ -2,6 +2,25 @@
 
 # 2026-07-06
 
+- Added a direct Gatekeeper debug jump:
+  - `F6` now starts the run if needed and jumps directly into a first Gatekeeper review state.
+  - The F12 debug panel now includes a `Boss` button.
+  - The debug jump clears any existing Gatekeeper, adds a basic review loadout when starting from an empty run, spawns 14 support enemies, shows the warning cue, and creates one Gatekeeper immediately.
+  - Added QA:
+    - `DebugJumpToGatekeeper()`
+    - `LETHE/V1 QA/Gatekeeper Jump`
+- Recorded the next major improvement targets from jaewoo's direct feedback:
+  - VFX identity is still too low.
+  - Hungry Blades / Kalmuri echo visuals still do not fit the intended concept.
+  - Dual-blade attacks appear to lag when enemy density rises.
+  - The next pass should profile and reduce dense-hit VFX/object churn before adding more spectacle.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity QA `Gatekeeper Jump`: `[V1QA] PASS`, `boss=1`, `liveEnemies=15`.
+  - Unity console error count after QA: `0`.
+
 - Improved `VoidPriest` healer readability and stacking balance:
   - Added green heal thread/pulse/core VFX when a priest heal succeeds.
   - Changed priest healing to a 1.05s cadence with a per-target heal lockout.

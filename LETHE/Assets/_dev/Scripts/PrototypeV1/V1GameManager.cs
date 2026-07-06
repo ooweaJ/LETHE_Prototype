@@ -384,6 +384,7 @@ namespace Lethe.PrototypeV1
                 HitstopActive = false;
                 if (KeyDown(KeyCode.Alpha1)) BeginRun(V1WeaponId.DualBlades);
                 if (KeyDown(KeyCode.Alpha2)) BeginRun(V1WeaponId.Greatsword);
+                if (KeyDown(KeyCode.F6)) DebugJumpToGatekeeper();
                 return;
             }
 
@@ -392,7 +393,7 @@ namespace Lethe.PrototypeV1
             if (KeyDown(KeyCode.F3)) ForgetHighestMemory();
             if (KeyDown(KeyCode.F4)) SetEcho(V1MemoryId.HungryBlades, 5);
             if (KeyDown(KeyCode.F5)) SetEcho(V1MemoryId.BloodReflection, 5);
-            if (KeyDown(KeyCode.F6)) SpawnGatekeeper();
+            if (KeyDown(KeyCode.F6)) DebugJumpToGatekeeper();
             if (KeyDown(KeyCode.F7)) GrantXp(nextXp);
             if (KeyDown(KeyCode.F8)) DebugRunM2Smoke();
             if (KeyDown(KeyCode.F9)) ToggleDebugWeapon();
@@ -2535,6 +2536,21 @@ namespace Lethe.PrototypeV1
             Log($"문지기 등장 {bossSpawnIndex + 1}/{BossSchedule().Length}: 망각 관문");
         }
 
+        void RemoveExistingGatekeepers()
+        {
+            var gatekeepers = enemies
+                .Where(e => e != null && e.Kind == V1EnemyKind.Gatekeeper)
+                .ToList();
+            foreach (var gatekeeper in gatekeepers)
+            {
+                if (gatekeeper != null)
+                {
+                    Destroy(gatekeeper.gameObject);
+                }
+            }
+            enemies.RemoveAll(e => e == null || gatekeepers.Contains(e));
+        }
+
         void SpawnGatekeeperWarning()
         {
             if (player == null) return;
@@ -3684,6 +3700,40 @@ namespace Lethe.PrototypeV1
             return DebugSnapshot();
         }
 
+        public string DebugJumpToGatekeeper()
+        {
+            EnsureRunStarted();
+            pausedForChoice = false;
+            resultOverlay = false;
+            refillOverlay = false;
+            deathOverlay = false;
+            GameplayPaused = false;
+            HitstopActive = false;
+            echoOnlyDebugMode = false;
+            fastDebugRun = true;
+            gatekeeperKills = 0;
+            bossSpawnIndex = 0;
+            warnedBossIndex = 0;
+            bossTimer = 9999f;
+            elapsed = Mathf.Max(elapsed, BossSchedule()[0]);
+            playerHp = Mathf.Max(playerHp, playerMaxHp * 0.82f);
+
+            if (activeMemories.Count == 0 && echoLevels.Count == 0)
+            {
+                AddMemory(V1MemoryId.HungryBlades, 3, true);
+                AddMemory(V1MemoryId.BloodReflection, 2, true);
+                AddMemory(V1MemoryId.StoppedSecond, 1, true);
+            }
+
+            RemoveExistingGatekeepers();
+            EnsureReviewEnemies(14);
+            SpawnGatekeeperWarning();
+            SpawnGatekeeper();
+            SpawnFloatingText(player.position + Vector3.up * 1.55f, "Boss Debug: Gatekeeper", new Color(1f, 0.52f, 0.30f));
+            Log("Debug gatekeeper jump");
+            return DebugSnapshot();
+        }
+
         public string DebugRunGatekeeperPatternMatrix()
         {
             EnsureRunStarted();
@@ -4068,7 +4118,12 @@ namespace Lethe.PrototypeV1
             if (GUI.Button(new Rect(Screen.width - 314, 242, 92, 28), "Echo One", buttonStyle)) DebugSetSelectedEchoOnly();
             if (GUI.Button(new Rect(Screen.width - 216, 242, 92, 28), "DB Rev", buttonStyle)) DebugIntegratedReview(V1WeaponId.DualBlades);
             if (GUI.Button(new Rect(Screen.width - 118, 242, 92, 28), "GS Rev", buttonStyle)) DebugIntegratedReview(V1WeaponId.Greatsword);
-            GUI.Label(new Rect(Screen.width - 314, 278, 292, 20), "One: selected memory/echo   Rev: all echo", smallStyle);
+            if (GUI.Button(new Rect(Screen.width - 314, 276, 92, 28), "Boss", buttonStyle)) DebugJumpToGatekeeper();
+            if (GUI.Button(new Rect(Screen.width - 216, 276, 92, 28), "Cont", buttonStyle))
+            {
+                if (resultOverlay) ContinueAfterForgetResult();
+            }
+            GUI.Label(new Rect(Screen.width - 118, 280, 92, 20), "Rev: all echo", smallStyle);
             var y = 310;
             foreach (var line in combatLog.TakeLast(3))
             {

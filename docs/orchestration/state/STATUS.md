@@ -2,6 +2,28 @@
 
 Last updated: 2026-07-06
 
+## 2026-07-06 Update: Gatekeeper Jump Debug / VFX-Performance Triage
+
+- Added a direct first-boss debug route in `Dev_Prototype_v1`.
+- Applied:
+  - `F6` now runs `DebugJumpToGatekeeper()` instead of a bare `SpawnGatekeeper()`.
+  - `F6` also works from the weapon-select overlay.
+  - The F12 debug panel now has a `Boss` button.
+  - `DebugJumpToGatekeeper()` starts the run if needed, clears blocking overlays, removes existing Gatekeepers, seeds an empty run with a small review loadout, spawns review enemies, shows the Gatekeeper warning, and spawns exactly one Gatekeeper.
+  - Added Unity QA menu `LETHE/V1 QA/Gatekeeper Jump`.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity QA `LETHE/V1 QA/Gatekeeper Jump`: `[V1QA] PASS`, `boss=1`, `liveEnemies=15`.
+  - Unity console error count after QA: `0`.
+- Triage from jaewoo feedback:
+  - VFX identity is still too low across memories/echoes.
+  - Hungry Blades / Kalmuri echo visuals still feel conceptually wrong.
+  - Dual blades appear to lag in dense enemy situations.
+  - Likely hotspots to profile next: dense hit-triggered VFX churn, Kalmuri/echo transient object counts, LINQ-heavy enemy queries, and `VoidPriest` `FindObjectsByType` healing scans.
+- Next step: run a focused dense-wave performance/readability pass before adding more effect volume.
+
 ## 2026-07-06 Update: VoidPriest Heal Fix / Echo-Memory Interaction Audit
 
 - Responded to jaewoo feedback that healer-supported waves can feel unkillable without Blood Reflection and that memory/echo/ultimate differences are not clearly felt.
