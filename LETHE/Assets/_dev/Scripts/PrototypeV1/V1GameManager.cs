@@ -308,6 +308,8 @@ namespace Lethe.PrototypeV1
         int debugEchoIndex;
         int debugSeparationOverlapBefore;
         int debugSeparationOverlapAfter;
+        int debugVoidPriestHealAttempts;
+        int debugVoidPriestHealAccepted;
         bool reviewBloodGranted;
         bool reviewHungryBoosted;
         bool reviewBloodBoosted;
@@ -2824,6 +2826,24 @@ namespace Lethe.PrototypeV1
             return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
         }
 
+        public void RecordVoidPriestHealAttempt(bool accepted)
+        {
+            debugVoidPriestHealAttempts++;
+            if (accepted) debugVoidPriestHealAccepted++;
+        }
+
+        public void SpawnVoidPriestHealVfx(Vector3 from, Vector3 to, float amount)
+        {
+            var source = from + Vector3.up * 0.18f;
+            var target = to + Vector3.up * 0.12f;
+            var green = new Color(0.34f, 1f, 0.64f, 0.72f);
+            SpawnEchoLink("VoidPriestHealThread", source, target, green, 0.34f, 0.026f);
+            SpawnTransientSprite("VoidPriestHealSourcePulse", MakeRingSprite("VoidPriestHealSourcePulse", Color.white, 112), source, Quaternion.Euler(0f, 0f, elapsed * -120f), 0.42f, new Color(0.30f, 1f, 0.62f, 0.48f), 0.34f);
+            SpawnTransientSprite("VoidPriestHealTargetPulse", MakeRingSprite("VoidPriestHealTargetPulse", Color.white, 128), target, Quaternion.identity, 0.52f, new Color(0.36f, 1f, 0.66f, 0.58f), 0.38f);
+            SpawnTransientSprite("VoidPriestHealCore", MakeImpactDiamondSprite("VoidPriestHealCore", Color.white), target, Quaternion.Euler(0f, 0f, 45f), 0.18f, new Color(0.82f, 1f, 0.70f, 0.82f), 0.26f);
+            SpawnFloatingText(target + Vector3.up * 0.32f, $"+{amount:0.#}", new Color(0.58f, 1f, 0.70f));
+        }
+
         void DealDamage(V1Enemy enemy, float amount, string source, bool weaponHit, Vector2 hitDir = default, float knockStrength = 0f)
         {
             if (enemy == null || !enemy.IsAlive) return;
@@ -3717,6 +3737,46 @@ namespace Lethe.PrototypeV1
             debugSeparationOverlapAfter = CountOverlapPairs(stack);
             SpawnFloatingText(player.position + Vector3.up * 1.44f, $"Enemy Separation {debugSeparationOverlapBefore}->{debugSeparationOverlapAfter}", new Color(0.76f, 1f, 0.82f));
             Log($"Debug enemy separation matrix {debugSeparationOverlapBefore}->{debugSeparationOverlapAfter}");
+            return DebugSnapshot();
+        }
+
+        public string DebugRunVoidPriestHealMatrix()
+        {
+            EnsureRunStarted();
+            echoOnlyDebugMode = false;
+            debugVoidPriestHealAttempts = 0;
+            debugVoidPriestHealAccepted = 0;
+
+            var priests = new List<V1Enemy>();
+            var targets = new List<V1Enemy>();
+            var center = player.position + Vector3.right * 2.7f + Vector3.down * 0.15f;
+            for (int i = 0; i < 3; i++)
+            {
+                SpawnEnemy(V1EnemyKind.VoidPriest, center + Quaternion.Euler(0f, 0f, i * 120f) * Vector3.right * 0.44f);
+                var priest = enemies.LastOrDefault(e => e != null && e.IsAlive && e.Kind == V1EnemyKind.VoidPriest);
+                if (priest != null) priests.Add(priest);
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                var kind = i % 2 == 0 ? V1EnemyKind.Eroder : V1EnemyKind.SplitOne;
+                SpawnEnemy(kind, center + Quaternion.Euler(0f, 0f, i * 90f + 45f) * Vector3.right * 0.72f);
+                var target = enemies.LastOrDefault(e => e != null && e.IsAlive && e.Kind == kind);
+                if (target == null) continue;
+                target.TakeDamage(28f, "VoidPriestHealMatrix setup", false, new Color(0.34f, 1f, 0.64f), 0.10f);
+                if (target.IsAlive) targets.Add(target);
+            }
+
+            for (int p = 0; p < priests.Count; p++)
+            {
+                for (int t = 0; t < targets.Count; t++)
+                {
+                    targets[t]?.TryReceiveVoidPriestHeal(2.4f, priests[p]);
+                }
+            }
+
+            SpawnFloatingText(player.position + Vector3.up * 1.50f, $"Priest Heal {debugVoidPriestHealAccepted}/{debugVoidPriestHealAttempts}", new Color(0.58f, 1f, 0.70f));
+            Log($"Debug void priest heal matrix accepted={debugVoidPriestHealAccepted} attempts={debugVoidPriestHealAttempts}");
             return DebugSnapshot();
         }
 
@@ -5948,6 +6008,12 @@ namespace Lethe.PrototypeV1
 
     public sealed class V1Enemy : MonoBehaviour
     {
+        const float VoidPriestHealInterval = 1.05f;
+        const float VoidPriestHealAmount = 2.4f;
+        const float VoidPriestHealRadius = 2.35f;
+        const int VoidPriestHealTargetCap = 3;
+        const float VoidPriestHealReceiverLockout = 0.95f;
+
         V1GameManager manager;
         Transform player;
         Transform healthRoot;
@@ -5965,6 +6031,7 @@ namespace Lethe.PrototypeV1
         float freezeTimer;
         float gatekeeperPatternTimer;
         float gatekeeperGuardTimer;
+        float voidPriestHealLockout;
         int gatekeeperPatternStep;
 
         public V1EnemyKind Kind { get; private set; }
@@ -6029,6 +6096,11 @@ namespace Lethe.PrototypeV1
             var toPlayer = (Vector2)(player.position - transform.position);
             var dist = toPlayer.magnitude;
             var dir = dist > 0.01f ? toPlayer / dist : Vector2.zero;
+            if (voidPriestHealLockout > 0f)
+            {
+                voidPriestHealLockout = Mathf.Max(0f, voidPriestHealLockout - dt);
+            }
+
             if (freezeTimer > 0f)
             {
                 freezeTimer -= dt;
@@ -6084,12 +6156,17 @@ namespace Lethe.PrototypeV1
                 healTimer -= dt;
                 if (healTimer <= 0f)
                 {
-                    healTimer = 1.4f;
-                    foreach (var enemy in FindObjectsByType<V1Enemy>(FindObjectsSortMode.None))
+                    healTimer = VoidPriestHealInterval;
+                    var healed = 0;
+                    foreach (var enemy in FindObjectsByType<V1Enemy>(FindObjectsSortMode.None)
+                        .Where(e => e != null && e != this && e.IsAlive && e.Kind != V1EnemyKind.Gatekeeper && e.Hp < e.maxHp - 0.05f && Vector2.Distance(transform.position, e.transform.position) < VoidPriestHealRadius)
+                        .OrderBy(e => e.HealthRatio)
+                        .ThenBy(e => Vector2.Distance(transform.position, e.transform.position)))
                     {
-                        if (enemy != this && enemy.IsAlive && enemy.Kind != V1EnemyKind.Gatekeeper && Vector2.Distance(transform.position, enemy.transform.position) < 2.2f)
+                        if (enemy.TryReceiveVoidPriestHeal(VoidPriestHealAmount, this))
                         {
-                            enemy.Heal(3.5f);
+                            healed++;
+                            if (healed >= VoidPriestHealTargetCap) break;
                         }
                     }
                 }
@@ -6128,6 +6205,27 @@ namespace Lethe.PrototypeV1
         public void ApplyBriefFreeze(float seconds)
         {
             freezeTimer = Mathf.Max(freezeTimer, seconds);
+        }
+
+        public bool TryReceiveVoidPriestHeal(float amount, V1Enemy priest)
+        {
+            if (!IsAlive || Kind == V1EnemyKind.Gatekeeper || Hp >= maxHp - 0.05f)
+            {
+                manager?.RecordVoidPriestHealAttempt(false);
+                return false;
+            }
+
+            if (voidPriestHealLockout > 0f)
+            {
+                manager?.RecordVoidPriestHealAttempt(false);
+                return false;
+            }
+
+            Heal(amount);
+            voidPriestHealLockout = VoidPriestHealReceiverLockout;
+            manager?.RecordVoidPriestHealAttempt(true);
+            manager?.SpawnVoidPriestHealVfx(priest != null ? priest.transform.position : transform.position, transform.position, amount);
+            return true;
         }
 
         void ApplySeparation(float dt, float speedMultiplier)

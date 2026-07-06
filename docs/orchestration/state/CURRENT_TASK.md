@@ -1,5 +1,53 @@
 # Current Task
 
+# 2026-07-06 VoidPriest Heal / Echo-Memory Interaction Audit Result
+
+## Status
+
+The immediate healer stacking problem has been addressed in `Dev_Prototype_v1`. VoidPriest healing is now visible and capped per receiver beat. A broader memory/echo/ultimate versus monster interaction audit has also been recorded for the next pass.
+
+## Applied Changes
+
+- Added `VoidPriest` heal VFX:
+  - source pulse,
+  - target pulse/core,
+  - heal thread,
+  - floating heal amount.
+- Changed VoidPriest healing:
+  - interval: `1.05s`,
+  - amount: `2.4`,
+  - per-priest target cap: `3`,
+  - per-target receiver lockout: `0.95s`,
+  - target priority: lowest health ratio nearby non-boss enemies.
+- Added debug counters:
+  - `debugVoidPriestHealAttempts`
+  - `debugVoidPriestHealAccepted`
+- Added `DebugRunVoidPriestHealMatrix()`.
+- Added Unity QA menu:
+  - `LETHE/V1 QA/Void Priest Heal Matrix`
+- Added audit handoff:
+  - `docs/orchestration/review_prompts/2026-07-06-echo-memory-monster-interaction-audit.md`
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on standalone rerun.
+- Unity compile error count: `0`.
+- Unity QA:
+  - `LETHE/V1 QA/Void Priest Heal Matrix`: `[V1QA] PASS`, `attempts=12`, `accepted=4`, `vfx=16`.
+  - `LETHE/V1 QA/M2 Loop`: `[V1QA] PASS`, `hungryEcho=5`, `bloodEcho=5`, `storm=True`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: `[V1QA] PASS`, `total=240`.
+  - `LETHE/V1 QA/Passive Memory Matrix`: `[V1QA] PASS`, `blood=17`, `ash=6`, `stopped=8`, `oblivion=36`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: `[V1QA] PASS`, `fracture=22`, `stasis=9`, `ashen=47`.
+
+## Audit Finding
+
+Blood Reflection currently feels strongest because it is frequent, visible, damaging, healing, and tied to the clearest ultimate route. Non-blood memories/echoes need clearer enemy-state changes and interaction payoff before broad numeric buffs.
+
+## Next Implementation
+
+Make one non-blood readability pass: add clearer monster-state marks for Shatter, Stopped, Ashen, Hunter, Execution, and Oblivion, then add a QA matrix that tracks damage/heal/control contributions rather than only object counts.
+
 # 2026-07-06 Gatekeeper Sprite Repair Result
 
 ## Status

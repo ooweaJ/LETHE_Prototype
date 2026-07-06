@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260706\\index.md",
-  "generatedAt": "2026-07-06T03:29:08.809Z",
-  "unitCount": 3,
+  "generatedAt": "2026-07-06T05:25:25.833Z",
+  "unitCount": 4,
   "latest": {
-    "title": "2026-07-06-03 - 문지기 보스 외형 퇴화 복구",
-    "number": "03",
-    "markdownPath": "docs\\orchestration\\reports\\20260706\\units\\2026-07-06-03-문지기-보스-외형-퇴화-복구.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260706\\units\\2026-07-06-03-문지기-보스-외형-퇴화-복구.html"
+    "title": "2026-07-06-04 - 힐러 중첩 완화와 잔향/기억 상호작용 감사",
+    "number": "04",
+    "markdownPath": "docs\\orchestration\\reports\\20260706\\units\\2026-07-06-04-힐러-중첩-완화와-잔향-기억-상호작용-감사.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260706\\units\\2026-07-06-04-힐러-중첩-완화와-잔향-기억-상호작용-감사.html"
   }
 }

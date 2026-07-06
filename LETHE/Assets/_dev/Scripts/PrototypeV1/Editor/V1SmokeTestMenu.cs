@@ -136,6 +136,13 @@ namespace Lethe.PrototypeV1.Editor
             StartRunner();
         }
 
+        [MenuItem("LETHE/V1 QA/Void Priest Heal Matrix")]
+        public static void QaVoidPriestHealMatrix()
+        {
+            SavePending(new PendingSmoke(SmokeMode.VoidPriestHealMatrix, V1WeaponId.DualBlades));
+            StartRunner();
+        }
+
         static void BeginStartWeaponSmoke(V1WeaponId weaponId)
         {
             SavePending(new PendingSmoke(SmokeMode.StartWeapon, weaponId));
@@ -270,6 +277,12 @@ namespace Lethe.PrototypeV1.Editor
             if (smoke.Mode == SmokeMode.EnemySeparationMatrix)
             {
                 manager.DebugRunEnemySeparationMatrix();
+                return;
+            }
+
+            if (smoke.Mode == SmokeMode.VoidPriestHealMatrix)
+            {
+                manager.DebugRunVoidPriestHealMatrix();
                 return;
             }
 
@@ -444,6 +457,17 @@ namespace Lethe.PrototypeV1.Editor
                     }
                     return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
 
+                case SmokeMode.VoidPriestHealMatrix:
+                    var attempts = Field<int>(manager, "debugVoidPriestHealAttempts");
+                    var accepted = Field<int>(manager, "debugVoidPriestHealAccepted");
+                    var healVfx = CountObjects("VoidPriestHeal");
+                    details += $" | voidPriestHeal attempts={attempts} accepted={accepted} vfx={healVfx}";
+                    if (attempts >= 8 && accepted > 0 && accepted < attempts && healVfx >= accepted)
+                    {
+                        return SmokeResult.Pass;
+                    }
+                    return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
+
                 default:
                     return SmokeResult.Fail;
             }
@@ -483,7 +507,8 @@ namespace Lethe.PrototypeV1.Editor
             UtilityUltimateMatrix,
             BloodBladeStorm,
             GatekeeperPatternMatrix,
-            EnemySeparationMatrix
+            EnemySeparationMatrix,
+            VoidPriestHealMatrix
         }
 
         enum SmokeResult
@@ -524,7 +549,9 @@ namespace Lethe.PrototypeV1.Editor
                                                 ? "Gatekeeper Pattern Matrix"
                                                 : Mode == SmokeMode.EnemySeparationMatrix
                                                     ? "Enemy Separation Matrix"
-                                                    : $"{WeaponId}";
+                                                    : Mode == SmokeMode.VoidPriestHealMatrix
+                                                        ? "Void Priest Heal Matrix"
+                                                        : $"{WeaponId}";
         }
 
         static void SpawnAllMemoryEchoPreviews(V1GameManager manager)

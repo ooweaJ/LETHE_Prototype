@@ -1,6 +1,28 @@
 # Next Tasks
 
-## 1. Gatekeeper Body Visual Review
+## 1. Non-Blood Memory / Echo Enemy-State Readability Pass
+
+- Priority: high
+- Problem: Blood Reflection feels clearly strongest because it combines frequent VFX, DoT, healing, bloom, and ultimate progression. Other memories/echoes work but are harder to perceive as monster interactions.
+- Build:
+  - Add short-lived enemy-state marks for Shatter, Stopped, Ashen, Hunter, Execution, and Oblivion.
+  - Keep object counts bounded; make state changes distinct instead of just louder.
+  - Add a QA matrix that records damage/heal/control contribution, not only object counts.
+- Done:
+  - Direct play can identify what each non-blood memory and echo does before reading text.
+
+## 2. Healer Counterplay Direct Review
+
+- Priority: high
+- Problem: VoidPriest healing is now capped and visible, but direct play must judge whether healer-supported waves remain fair without Blood Reflection.
+- Build:
+  - Play dense waves with 2+ VoidPriests.
+  - Check whether green heal threads make the sustain source obvious.
+  - Check whether non-blood builds can kill healer groups.
+- Done:
+  - Review returns whether to tune heal amount, target cap, receiver lockout, or priest spawn frequency.
+
+## 3. Gatekeeper Body Visual Review
 
 - Priority: high
 - Problem: jaewoo rejected the previous boss body as visually degraded; four authored Gatekeeper body sprites have now replaced the blob-like procedural body.
@@ -10,7 +32,7 @@
 - Done:
   - Review returns whether to keep the new bodies or do one dedicated boss art pass.
 
-## 2. Dense Wave / Enemy Separation Direct Review
+## 4. Dense Wave / Enemy Separation Direct Review
 
 - Priority: high
 - Problem: enemies now use soft separation instead of perfect overlap, but the feel needs human judgment.
@@ -21,7 +43,7 @@
 - Done:
   - Review returns whether to tune separation padding, normal-enemy multiplier, boss-space multiplier, or DriftingEye standing separation.
 
-## 3. Gatekeeper Pattern Direct Review
+## 5. Gatekeeper Pattern Direct Review
 
 - Priority: high
 - Problem: the first boss now has telegraphed patterns and no longer receives healer support, but the feel still needs human judgment.
@@ -32,29 +54,9 @@
 - Done:
   - Review returns whether to tune telegraph timing, danger size, boss HP/guard uptime, or sprite polish.
 
-## 4. Jaewoo Full Direct Play Review
-
-- Priority: medium
-- Problem: automated QA proves object spawning and compilation, but final GO/ITERATE/NO-GO depends on jaewoo feel judgment.
-- Build:
-  - Play `Assets/_dev/Scenes/Dev_Prototype_v1.unity`.
-  - Use `docs/orchestration/review_prompts/2026-07-02-dev-prototype-v1-direct-play-review.md`.
-  - Judge base weapons, Kalmuri, passive memories, echoes, forget/resonance, ultimates, audio, performance, and clutter.
-- Done:
-  - Review returns `GO`, `ITERATE`, or `NO-GO` with top issues.
-
-## 5. Remaining Echo / Ultimate Constant Cleanup
-
-- Priority: lower
-- Problem: some repeated colors/timing constants remain in VFX helper routes after the current cleanup/dataization passes.
-- Build:
-  - Compact only the constants that clearly repeat or block tuning.
-  - Avoid broad churn before direct play.
-- Done:
-  - Code stays readable without delaying feel validation.
-
 Completed sequence:
 
+- 2026-07-06: VoidPriest heal stacking/readability pass implemented; heal matrix, M2, Echo Matrix Dual, Passive Memory Matrix, and Utility Ultimate Dual QA passed.
 - 2026-07-06: Gatekeeper body visual repair implemented; four boss PNGs now load by rank, Pattern Matrix and M2 Loop QA passed.
 - 2026-07-06: enemy soft separation implemented; Enemy Separation Matrix and M2 Loop QA passed.
 - 2026-07-06: Gatekeeper heal exclusion and telegraphed boss-pattern pass implemented; Pattern Matrix and M2 Loop QA passed.

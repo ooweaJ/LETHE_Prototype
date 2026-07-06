@@ -2,6 +2,32 @@
 
 Last updated: 2026-07-06
 
+## 2026-07-06 Update: VoidPriest Heal Fix / Echo-Memory Interaction Audit
+
+- Responded to jaewoo feedback that healer-supported waves can feel unkillable without Blood Reflection and that memory/echo/ultimate differences are not clearly felt.
+- Applied:
+  - `VoidPriest` heals now show green source-to-target VFX.
+  - Priest heal cadence is now `1.05s`.
+  - Heal amount is `2.4`.
+  - Each priest pulse can heal up to 3 wounded non-boss targets.
+  - Each target has a `0.95s` priest-heal receiver lockout, so stacked priests no longer full-stack healing into the same target on the same beat.
+  - Added Unity QA menu `LETHE/V1 QA/Void Priest Heal Matrix`.
+- Added audit handoff:
+  - `docs/orchestration/review_prompts/2026-07-06-echo-memory-monster-interaction-audit.md`
+- Audit finding:
+  - Blood Reflection currently reads strongest because it combines frequent VFX, marking, DoT, healing, bloom, echo payoff, and Blood Blade Storm progression.
+  - Several non-blood memories/echoes work mechanically but are lower-count, conditional, defensive, or control-biased, so they need clearer enemy-state feedback rather than only number buffs.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on standalone rerun.
+  - Unity compile error count: `0`.
+  - Unity QA `LETHE/V1 QA/Void Priest Heal Matrix`: `[V1QA] PASS`, `attempts=12`, `accepted=4`, `vfx=16`.
+  - Unity QA `LETHE/V1 QA/M2 Loop`: `[V1QA] PASS`, `hungryEcho=5`, `bloodEcho=5`, `storm=True`.
+  - Unity QA `LETHE/V1 QA/Echo Matrix Dual Blades`: `[V1QA] PASS`, `total=240`, `K=8`, `B=56`, `Ex=64`, `H=24`, `Sh=8`, `St=8`, `A=32`, `O=40`.
+  - Unity QA `LETHE/V1 QA/Passive Memory Matrix`: `[V1QA] PASS`, `blood=17`, `ash=6`, `stopped=8`, `oblivion=36`.
+  - Unity QA `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: `[V1QA] PASS`, `fracture=22`, `stasis=9`, `ashen=47`.
+- Next step: implement a non-blood enemy-state readability pass before further raw damage tuning.
+
 ## 2026-07-06 Update: Gatekeeper Sprite Repair Pass
 
 - Responded to jaewoo feedback that the revised boss body looked like a degraded blob/slime instead of a deliberate boss.

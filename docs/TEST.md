@@ -1,5 +1,44 @@
 # LETHE TEST
 
+# 2026-07-06 Void Priest Heal / Interaction Audit Pass
+
+- Purpose:
+  - Respond to jaewoo feedback that stacked healers can make enemies feel impossible to kill without Blood Reflection.
+  - Make healer behavior visible through VFX.
+  - Begin a broader audit of memory/echo/ultimate versus monster interaction readability.
+- Applied target:
+  - `VoidPriest` heal cadence changed to `1.05s`.
+  - Heal amount changed to `2.4`.
+  - Heal target cap per priest pulse set to `3`.
+  - Non-boss targets now have a `0.95s` priest-heal receiver lockout, preventing multiple priests from stacking full healing into the same target on the same beat.
+  - Healers prioritize wounded nearby non-boss targets.
+  - Added green heal VFX:
+    - source pulse,
+    - target pulse/core,
+    - source-to-target heal thread,
+    - floating heal amount.
+  - Added `LETHE/V1 QA/Void Priest Heal Matrix`.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
+  - Unity compile error check.
+  - Unity `LETHE/V1 QA/Void Priest Heal Matrix`.
+  - Unity `LETHE/V1 QA/M2 Loop`.
+  - Unity `LETHE/V1 QA/Echo Matrix Dual Blades`.
+  - Unity `LETHE/V1 QA/Passive Memory Matrix`.
+  - Unity `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`.
+- Results:
+  - Runtime build passed with 7 existing legacy warnings and 0 errors.
+  - Editor build passed with 0 warnings and 0 errors on standalone rerun.
+  - Unity compile error count: `0`.
+  - Void Priest Heal Matrix: `[V1QA] PASS`, `attempts=12`, `accepted=4`, `vfx=16`.
+  - M2 Loop: `[V1QA] PASS`, `hungryEcho=5`, `bloodEcho=5`, `storm=True`.
+  - Echo Matrix Dual Blades: `[V1QA] PASS`, `total=240`, `K=8`, `B=56`, `Ex=64`, `H=24`, `Sh=8`, `St=8`, `A=32`, `O=40`.
+  - Passive Memory Matrix: `[V1QA] PASS`, `blood=17`, `ash=6`, `stopped=8`, `oblivion=36`.
+  - Utility Ultimate Matrix Dual Blades: `[V1QA] PASS`, `fracture=22`, `stasis=9`, `ashen=47`.
+- Limitation:
+  - QA confirms safety and object presence. It also exposes count/readability imbalance, but it does not prove final feel. Direct play should now check whether non-blood memories/echoes feel meaningful against healer-supported waves.
+
 # 2026-07-06 Gatekeeper Sprite Repair Pass
 
 - Purpose:

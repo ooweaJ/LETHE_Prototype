@@ -2,6 +2,28 @@
 
 # 2026-07-06
 
+- Improved `VoidPriest` healer readability and stacking balance:
+  - Added green heal thread/pulse/core VFX when a priest heal succeeds.
+  - Changed priest healing to a 1.05s cadence with a per-target heal lockout.
+  - Priests now prioritize the most wounded nearby non-boss enemies.
+  - Each priest pulse can heal up to 3 targets, but multiple priests can no longer stack full healing into the same target on the same beat.
+  - Added QA:
+    - `DebugRunVoidPriestHealMatrix()`
+    - `LETHE/V1 QA/Void Priest Heal Matrix`
+- Added an interaction audit for memory/echo/ultimate versus monster readability:
+  - BloodReflection currently over-communicates and over-covers damage, sustain, marks, echo, and ultimate progression.
+  - Several utility memories/echoes are functional but less perceptible because they are conditional, lower-count, or defensive/control-biased.
+  - Next tuning should prioritize making non-blood echoes produce clear monster-state changes before raw number buffs.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on standalone rerun.
+  - Unity compile error count: `0`.
+  - Unity QA `Void Priest Heal Matrix`: `[V1QA] PASS`, `attempts=12`, `accepted=4`, `vfx=16`.
+  - Unity QA `M2 Loop`: `[V1QA] PASS`, `hungryEcho=5`, `bloodEcho=5`, `storm=True`.
+  - Unity QA `Echo Matrix Dual Blades`: `[V1QA] PASS`, `total=240`.
+  - Unity QA `Passive Memory Matrix`: `[V1QA] PASS`, `blood=17`, `ash=6`, `stopped=8`, `oblivion=36`.
+  - Unity QA `Utility Ultimate Matrix Dual Blades`: `[V1QA] PASS`, `fracture=22`, `stasis=9`, `ashen=47`.
+
 - Repaired the Gatekeeper boss visual regression after jaewoo feedback:
   - Replaced the degraded rounded procedural boss body with four authored PNG Gatekeeper body sprites.
   - `EnemySprite(Gatekeeper)` now loads rank-specific boss body assets first:
