@@ -129,6 +129,13 @@ namespace Lethe.PrototypeV1.Editor
             StartRunner();
         }
 
+        [MenuItem("LETHE/V1 QA/Enemy Separation Matrix")]
+        public static void QaEnemySeparationMatrix()
+        {
+            SavePending(new PendingSmoke(SmokeMode.EnemySeparationMatrix, V1WeaponId.DualBlades));
+            StartRunner();
+        }
+
         static void BeginStartWeaponSmoke(V1WeaponId weaponId)
         {
             SavePending(new PendingSmoke(SmokeMode.StartWeapon, weaponId));
@@ -257,6 +264,12 @@ namespace Lethe.PrototypeV1.Editor
             if (smoke.Mode == SmokeMode.GatekeeperPatternMatrix)
             {
                 manager.DebugRunGatekeeperPatternMatrix();
+                return;
+            }
+
+            if (smoke.Mode == SmokeMode.EnemySeparationMatrix)
+            {
+                manager.DebugRunEnemySeparationMatrix();
                 return;
             }
 
@@ -421,6 +434,16 @@ namespace Lethe.PrototypeV1.Editor
                     }
                     return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
 
+                case SmokeMode.EnemySeparationMatrix:
+                    var before = Field<int>(manager, "debugSeparationOverlapBefore");
+                    var after = Field<int>(manager, "debugSeparationOverlapAfter");
+                    details += $" | enemySeparation before={before} after={after}";
+                    if (before > 0 && after < before)
+                    {
+                        return SmokeResult.Pass;
+                    }
+                    return age >= DefaultTimeoutSeconds ? SmokeResult.Fail : SmokeResult.Pending;
+
                 default:
                     return SmokeResult.Fail;
             }
@@ -459,7 +482,8 @@ namespace Lethe.PrototypeV1.Editor
             ForgetResonanceFlow,
             UtilityUltimateMatrix,
             BloodBladeStorm,
-            GatekeeperPatternMatrix
+            GatekeeperPatternMatrix,
+            EnemySeparationMatrix
         }
 
         enum SmokeResult
@@ -498,7 +522,9 @@ namespace Lethe.PrototypeV1.Editor
                                             ? "Blood Blade Storm"
                                             : Mode == SmokeMode.GatekeeperPatternMatrix
                                                 ? "Gatekeeper Pattern Matrix"
-                                                : $"{WeaponId}";
+                                                : Mode == SmokeMode.EnemySeparationMatrix
+                                                    ? "Enemy Separation Matrix"
+                                                    : $"{WeaponId}";
         }
 
         static void SpawnAllMemoryEchoPreviews(V1GameManager manager)

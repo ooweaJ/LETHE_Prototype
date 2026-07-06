@@ -103,6 +103,9 @@ namespace Lethe.PrototypeV1
         const float ArenaHalfWidth = 24f;
         const float ArenaHalfHeight = 16f;
         const float ArenaTileSpacing = 2.65f;
+        const float EnemySeparationPadding = 0.10f;
+        const float EnemySeparationMax = 1.15f;
+        const float EnemySeparationProbeStep = 0.22f;
         const float PlayerMoveAcceleration = 14f;
         const float PlayerMoveDeceleration = 22f;
         const float DualBladeVisualScale = 0.43f;
@@ -296,6 +299,8 @@ namespace Lethe.PrototypeV1
         int bossSpawnIndex;
         int warnedBossIndex = -1;
         int debugEchoIndex;
+        int debugSeparationOverlapBefore;
+        int debugSeparationOverlapAfter;
         bool reviewBloodGranted;
         bool reviewHungryBoosted;
         bool reviewBloodBoosted;
@@ -2777,6 +2782,41 @@ namespace Lethe.PrototypeV1
             _ => 13f
         }) / PixelsPerUnit;
 
+        public Vector2 EnemySeparationForce(V1Enemy self)
+        {
+            if (self == null || !self.IsAlive) return Vector2.zero;
+            var selfPos = (Vector2)self.transform.position;
+            var push = Vector2.zero;
+            var count = 0;
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                var other = enemies[i];
+                if (other == null || other == self || !other.IsAlive) continue;
+                var otherPos = (Vector2)other.transform.position;
+                var delta = selfPos - otherPos;
+                var minDist = self.TouchRadius + other.TouchRadius + EnemySeparationPadding;
+                var sqrDist = delta.sqrMagnitude;
+                if (sqrDist >= minDist * minDist) continue;
+
+                var dist = Mathf.Sqrt(Mathf.Max(0.0001f, sqrDist));
+                var dir = dist > 0.01f ? delta / dist : DeterministicSeparationDirection(self, other);
+                var overlap = 1f - Mathf.Clamp01(dist / minDist);
+                var weight = other.Kind == V1EnemyKind.Gatekeeper ? 1.45f : 1f;
+                push += dir * overlap * weight;
+                count++;
+            }
+
+            if (count <= 0) return Vector2.zero;
+            return Vector2.ClampMagnitude(push / Mathf.Sqrt(count), EnemySeparationMax);
+        }
+
+        Vector2 DeterministicSeparationDirection(V1Enemy self, V1Enemy other)
+        {
+            var hash = Mathf.Abs((self.GetInstanceID() * 73856093) ^ (other.GetInstanceID() * 19349663));
+            var angle = (hash % 360) * Mathf.Deg2Rad;
+            return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+        }
+
         void DealDamage(V1Enemy enemy, float amount, string source, bool weaponHit, Vector2 hitDir = default, float knockStrength = 0f)
         {
             if (enemy == null || !enemy.IsAlive) return;
@@ -3639,6 +3679,60 @@ namespace Lethe.PrototypeV1
             SpawnFloatingText(player.position + Vector3.up * 1.52f, "Gatekeeper Pattern Matrix", new Color(1f, 0.56f, 0.32f));
             Log("Debug gatekeeper pattern matrix");
             return DebugSnapshot();
+        }
+
+        public string DebugRunEnemySeparationMatrix()
+        {
+            EnsureRunStarted();
+            echoOnlyDebugMode = false;
+            var stack = new List<V1Enemy>();
+            var center = player.position + Vector3.right * 2.2f + Vector3.up * 0.35f;
+            for (int i = 0; i < 14; i++)
+            {
+                var kind = i % 5 == 0 ? V1EnemyKind.SplitOne : i % 4 == 0 ? V1EnemyKind.DriftingEye : V1EnemyKind.Eroder;
+                var jitter = Quaternion.Euler(0f, 0f, i * 137.5f) * Vector3.right * (0.025f * (i % 3));
+                SpawnEnemy(kind, center + jitter);
+                var enemy = enemies.LastOrDefault(e => e != null && e.IsAlive);
+                if (enemy != null) stack.Add(enemy);
+            }
+
+            debugSeparationOverlapBefore = CountOverlapPairs(stack);
+            for (int step = 0; step < 24; step++)
+            {
+                for (int i = 0; i < stack.Count; i++)
+                {
+                    var enemy = stack[i];
+                    if (enemy == null || !enemy.IsAlive) continue;
+                    enemy.transform.position += (Vector3)(EnemySeparationForce(enemy) * EnemySeparationProbeStep);
+                }
+            }
+
+            debugSeparationOverlapAfter = CountOverlapPairs(stack);
+            SpawnFloatingText(player.position + Vector3.up * 1.44f, $"Enemy Separation {debugSeparationOverlapBefore}->{debugSeparationOverlapAfter}", new Color(0.76f, 1f, 0.82f));
+            Log($"Debug enemy separation matrix {debugSeparationOverlapBefore}->{debugSeparationOverlapAfter}");
+            return DebugSnapshot();
+        }
+
+        int CountOverlapPairs(IReadOnlyList<V1Enemy> group)
+        {
+            var overlaps = 0;
+            for (int i = 0; i < group.Count; i++)
+            {
+                var a = group[i];
+                if (a == null || !a.IsAlive) continue;
+                for (int j = i + 1; j < group.Count; j++)
+                {
+                    var b = group[j];
+                    if (b == null || !b.IsAlive) continue;
+                    var minDist = a.TouchRadius + b.TouchRadius + EnemySeparationPadding * 0.5f;
+                    if (Vector2.Distance(a.transform.position, b.transform.position) < minDist)
+                    {
+                        overlaps++;
+                    }
+                }
+            }
+
+            return overlaps;
         }
 
         void EnsureReviewEnemies(int targetCount)
@@ -5939,6 +6033,7 @@ namespace Lethe.PrototypeV1
 
                 var gateSpeedMul = gatekeeperGuardTimer > 0f ? 0.32f : 1f;
                 transform.position += (Vector3)(dir * speed * gateSpeedMul * dt);
+                ApplySeparation(dt, gatekeeperGuardTimer > 0f ? 0.10f : 0.22f);
             }
             if (Kind == V1EnemyKind.DriftingEye)
             {
@@ -5959,10 +6054,12 @@ namespace Lethe.PrototypeV1
                         go.AddComponent<V1EnemyShot>().Configure(manager, player, 4.8f, TouchDamage * 2.1f);
                     }
                 }
+                ApplySeparation(dt, dist > stopRange ? 0.55f : 0.42f);
             }
             else if (Kind != V1EnemyKind.Gatekeeper)
             {
                 transform.position += (Vector3)(dir * speed * dt);
+                ApplySeparation(dt, Kind == V1EnemyKind.VoidPriest ? 0.62f : 0.78f);
             }
 
             if (Kind == V1EnemyKind.VoidPriest)
@@ -6014,6 +6111,14 @@ namespace Lethe.PrototypeV1
         public void ApplyBriefFreeze(float seconds)
         {
             freezeTimer = Mathf.Max(freezeTimer, seconds);
+        }
+
+        void ApplySeparation(float dt, float speedMultiplier)
+        {
+            if (manager == null || speedMultiplier <= 0f) return;
+            var separation = manager.EnemySeparationForce(this);
+            if (separation.sqrMagnitude <= 0.0001f) return;
+            transform.position += (Vector3)(separation * speed * speedMultiplier * dt);
         }
 
         void Heal(float amount)

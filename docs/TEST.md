@@ -1,5 +1,31 @@
 # LETHE TEST
 
+# 2026-07-06 Enemy Soft Separation Pass
+
+- Purpose:
+  - Respond to jaewoo's question about whether normal enemies should overlap into a single stacked mass.
+  - Keep survivor-style crowd density while preventing enemies from visually collapsing into one unreadable blob.
+- Applied target:
+  - Added `V1GameManager.EnemySeparationForce(V1Enemy self)`.
+  - Added a small movement-scaled separation nudge to `V1Enemy.Update()`.
+  - Gatekeepers receive reduced separation, while normal enemies are pushed more strongly away from the boss.
+  - DriftingEye keeps its ranged behavior but separates slightly while standing at casting range.
+  - Added `LETHE/V1 QA/Enemy Separation Matrix`.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
+  - Unity compile error check.
+  - Unity `LETHE/V1 QA/Enemy Separation Matrix`.
+  - Unity `LETHE/V1 QA/M2 Loop`.
+- Results:
+  - Runtime build passed with 0 warnings and 0 errors on standalone rerun.
+  - Editor build passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Enemy Separation Matrix: `[V1QA] PASS`, overlap pairs `91 -> 4`.
+  - M2 Loop: `[V1QA] PASS`, `hungryEcho=5`, `bloodEcho=5`, `storm=True`.
+- Limitation:
+  - Automated QA confirms separation pressure and runtime safety. Direct play still needs to judge whether the swarm feels dense enough without becoming visually muddy.
+
 # 2026-07-06 Gatekeeper Heal Fix / Telegraph Pattern Pass
 
 - Purpose:

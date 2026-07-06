@@ -1,5 +1,40 @@
 # Current Task
 
+# 2026-07-06 Enemy Soft Separation Result
+
+## Status
+
+The normal-enemy stacking issue has been addressed in `Dev_Prototype_v1` with soft separation. Enemies can still pack densely, but they now nudge away from nearby enemies instead of collapsing into a single point.
+
+## Applied Changes
+
+- Added `V1GameManager.EnemySeparationForce(V1Enemy self)`.
+- Added deterministic fallback direction for exact-position overlap cases.
+- Applied separation in `V1Enemy.Update()`:
+  - lower multiplier for `Gatekeeper`,
+  - normal multiplier for chasers/splitters,
+  - smaller but persistent separation for `VoidPriest`,
+  - ranged-position separation for `DriftingEye`.
+- Added debug counters:
+  - `debugSeparationOverlapBefore`
+  - `debugSeparationOverlapAfter`
+- Added `DebugRunEnemySeparationMatrix()`.
+- Added Unity QA menu:
+  - `LETHE/V1 QA/Enemy Separation Matrix`
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors on standalone rerun.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+- Unity compile error count: `0`.
+- Unity QA:
+  - `LETHE/V1 QA/Enemy Separation Matrix`: `[V1QA] PASS`, overlap pairs `91 -> 4`.
+  - `LETHE/V1 QA/M2 Loop`: `[V1QA] PASS`, `hungryEcho=5`, `bloodEcho=5`, `storm=True`.
+
+## Next Implementation
+
+Direct-play a dense wave around/after the first Gatekeeper. If the swarm now feels too loose or too sticky, tune only the separation padding/multipliers before adding new enemy behavior.
+
 # 2026-07-06 Gatekeeper Pattern Feedback Result
 
 ## Status

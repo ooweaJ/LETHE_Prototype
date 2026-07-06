@@ -2,6 +2,23 @@
 
 Last updated: 2026-07-06
 
+## 2026-07-06 Update: Enemy Soft Separation Pass
+
+- Responded to jaewoo's question about whether normal enemies should overlap like Vampire Survivors.
+- Applied a soft separation layer rather than hard collision:
+  - `V1GameManager.EnemySeparationForce(V1Enemy self)` calculates a small push from nearby live enemies.
+  - `V1Enemy.Update()` applies that push after the enemy's normal chase/cast movement.
+  - Gatekeepers move less from separation, while normal enemies avoid stacking tightly on the boss.
+  - DriftingEye also separates slightly while holding casting range.
+- Added Unity QA menu `LETHE/V1 QA/Enemy Separation Matrix`.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors on standalone rerun.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity QA `LETHE/V1 QA/Enemy Separation Matrix`: `[V1QA] PASS`, overlap pairs `91 -> 4`.
+  - Unity QA `LETHE/V1 QA/M2 Loop`: `[V1QA] PASS`, `hungryEcho=5`, `bloodEcho=5`, `storm=True`.
+- Next step: jaewoo should replay a dense add wave and judge whether the crowd still feels threatening without becoming a single stacked shape.
+
 ## 2026-07-06 Update: Gatekeeper Heal Fix / Telegraph Pattern Pass
 
 - Responded to jaewoo direct-play feedback that the first Gatekeeper felt like it would not die after boss spawn and continued add pressure.

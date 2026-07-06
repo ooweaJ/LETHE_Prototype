@@ -2,6 +2,21 @@
 
 # 2026-07-06
 
+- Added soft enemy separation in `Dev_Prototype_v1`:
+  - Enemies now compute a lightweight neighbor push against nearby live enemies.
+  - The push is soft and movement-scaled, so enemy pressure still stacks like a survivor-style swarm without collapsing into one unreadable blob.
+  - Gatekeepers are pushed less than normal enemies, while normal enemies give the boss extra personal space.
+  - DriftingEye also receives a small separation nudge while holding casting range.
+- Added QA:
+  - `DebugRunEnemySeparationMatrix()`
+  - `LETHE/V1 QA/Enemy Separation Matrix`
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors on standalone rerun.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - Unity QA `Enemy Separation Matrix`: `[V1QA] PASS`, overlap pairs `91 -> 4`.
+  - Unity QA `M2 Loop`: `[V1QA] PASS`, `hungryEcho=5`, `bloodEcho=5`, `storm=True`.
+
 - Fixed the first Gatekeeper feeling like it could recover forever:
   - `VoidPriest` no longer heals `Gatekeeper`.
   - The boss still has guard damage reduction, but healer adds can no longer restore boss HP.

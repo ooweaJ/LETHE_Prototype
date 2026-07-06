@@ -155,6 +155,13 @@
           <p>Dev_Prototype_v1에서 첫 문지기 보스가 힐러 잡몹에게 회복받던 문제를 차단했고, 보스 공격은 빨간 범위 예고 후 피해가 들어가는 구조로 바뀌었다. 아직 _dev 검증 단계이며 Assets/Lethe 승격은 하지 않았다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-06-02</span>
+          <h2><a href="#unit-2026-07-06-02" data-unit-link="unit-2026-07-06-02">잡몹 겹침 완화 소프트 분리 구현</a></h2>
+          <p>Dev_Prototype_v1에 잡몹 소프트 분리가 들어갔다. 적들이 완전히 서로 막히는 충돌체가 된 것은 아니고, 뱀파이어 서바이벌류처럼 촘촘히 몰려오되 한 점에 겹쳐 보이지 않도록 서로 살짝 밀어내는 방식이다. 아직 _dev 검증 단계이며 Assets/Lethe 승격은 하지 않았다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -203,6 +210,43 @@
 <li>방향: 숨겨진 회복을 제거하고, 보스 난이도를 명확한 예고 패턴으로 만든다.</li>
 <li>행동: 힐러의 보스 회복을 막고, 빨간 범위 예고형 보스 패턴과 순번별 스프라이트 차이를 구현했다.</li>
 <li>결과: 빌드와 Unity QA가 통과했고, 다음 판단은 직접 플레이 감각 검증으로 넘어간다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-06-02" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-06-02 - 잡몹 겹침 완화 소프트 분리 구현</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에 잡몹 소프트 분리가 들어갔다. 적들이 완전히 서로 막히는 충돌체가 된 것은 아니고, 뱀파이어 서바이벌류처럼 촘촘히 몰려오되 한 점에 겹쳐 보이지 않도록 서로 살짝 밀어내는 방식이다. 아직 <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>V1GameManager.EnemySeparationForce()</code>를 추가했다.</li>
+<li><code>V1Enemy.Update()</code>에서 기존 추적/사격 이동 후 작은 분리 보정을 적용했다.</li>
+<li>보스는 덜 밀리고, 잡몹은 보스 주변에서 조금 더 비켜나가도록 했다.</li>
+<li>원거리 적 <code>DriftingEye</code>도 사거리에서 멈춰 쏠 때 살짝 분리되도록 했다.</li>
+<li>QA 메뉴 <code>LETHE/V1 QA/Enemy Separation Matrix</code>를 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 단독 재실행 기준 경고 0, 오류 0.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 기존 레거시 경고 7, 오류 0.</li>
+<li>Unity compile error count: <code>0</code>.</li>
+<li>Unity QA <code>Enemy Separation Matrix</code>: <code>[V1QA] PASS</code>, overlap pair <code>91 -&gt; 4</code>.</li>
+<li>Unity QA <code>M2 Loop</code>: <code>[V1QA] PASS</code>, <code>hungryEcho=5</code>, <code>bloodEcho=5</code>, <code>storm=True</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>잡몹은 완전 충돌로 막지 않고 소프트 분리로 처리한다. 생존류 게임의 압박감은 유지하되, 여러 마리가 하나의 덩어리처럼 겹쳐 읽히는 문제만 줄이는 방향이다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>자동 QA는 겹침 감소와 런타임 안정성만 확인한다. 실제 플레이에서 몹 무리가 너무 헐거워졌는지, 반대로 아직 뭉쳐 보이는지는 직접 플레이 감각으로 다시 봐야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>잡몹 겹침은 하드 충돌 대신 소프트 분리로 완화했다. 다음 리뷰에서는 보스 패턴보다도 “무리가 여전히 위협적인가”, “한 점으로 뭉개져 보이지 않는가”, “보스 주변 잡몹 간격이 읽히는가”를 확인하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo가 밀집 웨이브를 플레이한 뒤 너무 느슨하거나 여전히 뭉친다고 느끼는 쪽에 맞춰 분리 padding, 잡몹 multiplier, 보스 주변 가중치, 원거리 적 분리량 중 하나만 좁게 조정한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 잡몹이 겹쳐 오면 전투 위협은 커져도 시각적으로 한 덩어리처럼 읽힌다.</li>
+<li>방향: 생존류 압박감은 유지하고, 읽기 어려운 겹침만 줄인다.</li>
+<li>행동: 적 리스트 기반 소프트 분리와 전용 QA 매트릭스를 추가했다.</li>
+<li>결과: QA에서 의도적으로 겹친 14마리의 overlap pair가 <code>91 -&gt; 4</code>로 줄었고, 기존 M2 루프도 유지됐다.</li>
 </ul>
     </article>
       </div>

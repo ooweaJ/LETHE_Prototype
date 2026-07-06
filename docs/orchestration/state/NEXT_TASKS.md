@@ -1,6 +1,17 @@
 # Next Tasks
 
-## 1. Gatekeeper Pattern Direct Review
+## 1. Dense Wave / Enemy Separation Direct Review
+
+- Priority: high
+- Problem: enemies now use soft separation instead of perfect overlap, but the feel needs human judgment.
+- Build:
+  - Play `Assets/_dev/Scenes/Dev_Prototype_v1.unity`.
+  - Let a dense add wave gather around the player and first Gatekeeper.
+  - Judge whether enemies still feel threatening while no longer reading as one stacked blob.
+- Done:
+  - Review returns whether to tune separation padding, normal-enemy multiplier, boss-space multiplier, or DriftingEye standing separation.
+
+## 2. Gatekeeper Pattern Direct Review
 
 - Priority: high
 - Problem: the first boss now has telegraphed patterns and no longer receives healer support, but the feel still needs human judgment.
@@ -11,7 +22,7 @@
 - Done:
   - Review returns whether to tune telegraph timing, danger size, boss HP/guard uptime, or sprite polish.
 
-## 2. Jaewoo Full Direct Play Review
+## 3. Jaewoo Full Direct Play Review
 
 - Priority: medium
 - Problem: automated QA proves object spawning and compilation, but final GO/ITERATE/NO-GO depends on jaewoo feel judgment.
@@ -22,7 +33,7 @@
 - Done:
   - Review returns `GO`, `ITERATE`, or `NO-GO` with top issues.
 
-## 3. Remaining Echo / Ultimate Constant Cleanup
+## 4. Remaining Echo / Ultimate Constant Cleanup
 
 - Priority: lower
 - Problem: some repeated colors/timing constants remain in VFX helper routes after the current cleanup/dataization passes.
@@ -34,6 +45,7 @@
 
 Completed sequence:
 
+- 2026-07-06: enemy soft separation implemented; Enemy Separation Matrix and M2 Loop QA passed.
 - 2026-07-06: Gatekeeper heal exclusion and telegraphed boss-pattern pass implemented; Pattern Matrix and M2 Loop QA passed.
 - 2026-07-02: weapon-specific echo pass implemented.
 - 2026-07-02: passive-feeling active memory reinforcement implemented.
@@ -51,6 +63,8 @@ Completed sequence:
 
 QA menus passing:
 
+- `LETHE/V1 QA/Enemy Separation Matrix`
+- `LETHE/V1 QA/Gatekeeper Pattern Matrix`
 - `LETHE/V1 QA/Echo Matrix Dual Blades`
 - `LETHE/V1 QA/Echo Matrix Greatsword`
 - `LETHE/V1 QA/Passive Memory Matrix`
