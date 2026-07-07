@@ -6,8 +6,8 @@
 - Problem: automated QA is green after the 2026-07-07 VFX action and identity passes, but jaewoo still needs to judge feel/readability in actual play.
 - Build:
   - Play `Dev_Prototype_v1` with dual blades and greatsword.
-  - Use `F6` / F12 `Boss` to inspect the first Gatekeeper quickly.
-  - Judge dual-blade guaranteed slash visibility, Gatekeeper meteor fall, Gatekeeper cone cleave, boss-hit player feedback, Kalmuri orbit -> lock -> lunge, utility echo identity bursts, enemy role symbols, healer VFX, and dense dual-blade feel.
+  - Use `F6` / F12 `Boss` to inspect the first Gatekeeper quickly; this path now uses HP `2200`, while compressed QA remains HP `180`.
+  - Judge dual-blade guaranteed slash visibility, Gatekeeper cast burst, meteor fall/impact, cone cleave, ring shock, boss-hit player feedback, Kalmuri orbit -> lock -> lunge, utility echo identity bursts, enemy role symbols, healer VFX, and dense dual-blade feel.
 - Done:
   - Review returns concrete tune targets: keep, brighten, shrink, slow down, rebalance, or redesign.
 
@@ -57,6 +57,7 @@
 
 Completed sequence:
 
+- 2026-07-07: Gatekeeper review HP and impact VFX pass implemented; F6/F12 Boss now uses review HP `2200`, fast QA keeps `180`, and Gatekeeper Pattern/Jump QA passed.
 - 2026-07-07: memory/echo/enemy identity pass implemented; utility echo identity bursts, passive memory state marks, animated enemy role symbols, and Gatekeeper sigil marker pass build/Unity QA.
 - 2026-07-07: direct feedback VFX action pass implemented; dual-blade guaranteed slashes, Gatekeeper falling meteor/charge cleave, player damage cue, Kalmuri orbit-to-lunge, and Dense QA snapshot all pass build/Unity QA.
 - 2026-07-07: Kalmuri orbit-to-lunge link tightened; the hunt lunge now starts from a reserved orbit blade endpoint and Kalmuri Perf Matrix still passes.

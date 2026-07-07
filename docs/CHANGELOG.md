@@ -2,6 +2,19 @@
 
 # 2026-07-07
 
+- Fixed Gatekeeper debug-review strength and impact readability:
+  - F6/F12 Boss review jump no longer uses the compressed QA boss HP `180`; it now uses first-boss review HP `2200`.
+  - Fast QA boss HP remains `180` so automated smoke checks stay quick.
+  - Normal run Gatekeeper HP remains `2200 / 4200 / 7600 / 12800`.
+  - Added Gatekeeper body cast burst VFX before patterns: sigil, halo, blade spine, rupture lines, and target line.
+  - Strengthened meteor, cone, and ring impact VFX with larger flash/shock, scorch/crack lines, edge snaps, and stronger camera shake.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - `LETHE/V1 QA/Gatekeeper Pattern Matrix`: `[V1QA] PASS`, `boss=4`, `meteor=20`, `cone=6`, `ring=3`.
+  - `LETHE/V1 QA/Gatekeeper Jump`: `[V1QA] PASS`, `boss=1`, `liveEnemies=15`.
+
 - Added a memory/echo/enemy identity pass:
   - Added `SpawnEchoIdentityBurst()` so each utility echo leaves a distinct monster-facing state VFX.
   - Passive memory effects now apply matching enemy state marks for ExecutionFlash, ShatterWave, StoppedSecond, AshenShield, and OblivionBrand.

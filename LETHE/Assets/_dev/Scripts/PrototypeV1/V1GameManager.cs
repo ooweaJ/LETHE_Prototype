@@ -103,6 +103,7 @@ namespace Lethe.PrototypeV1
         const int MaxActiveMemories = 3;
         const float FirstBossHp = 2200f;
         const float FastBossHp = 180f;
+        const float DebugReviewBossHp = FirstBossHp;
         const float RunSeconds = 1080f;
         const float ArenaHalfWidth = 24f;
         const float ArenaHalfHeight = 16f;
@@ -333,6 +334,7 @@ namespace Lethe.PrototypeV1
         bool refillOverlay;
         bool deathOverlay;
         bool fastDebugRun;
+        bool debugReviewBossHp;
         bool echoOnlyDebugMode;
         bool runWon;
         bool showDebugPanel;
@@ -625,6 +627,7 @@ namespace Lethe.PrototypeV1
             refillOverlay = false;
             deathOverlay = false;
             fastDebugRun = true;
+            debugReviewBossHp = false;
             echoOnlyDebugMode = false;
             runWon = false;
             gatekeeperKills = 0;
@@ -705,6 +708,7 @@ namespace Lethe.PrototypeV1
             refillOverlay = false;
             deathOverlay = false;
             fastDebugRun = true;
+            debugReviewBossHp = false;
             echoOnlyDebugMode = false;
             bossSpawnIndex = 0;
             warnedBossIndex = -1;
@@ -2871,10 +2875,30 @@ namespace Lethe.PrototypeV1
             var impactSprite = circular
                 ? MakeDiscSprite($"{name}Flash", Color.white, 160)
                 : MakeSectorSprite($"{name}Flash", Color.white, 176, rank >= 3 ? 96f : 84f);
-            SpawnTransientSpriteScaled($"{name}Flash", impactSprite, position, rotation, scale * 1.04f, new Color(1f, 0.92f, 0.78f, 0.74f), 0.12f);
-            SpawnTransientSpriteScaled($"{name}RedBang", impactSprite, position, rotation, scale * 1.12f, GatekeeperTelegraphColor(rank, 0.58f), 0.18f);
-            SpawnTransientSprite($"{name}OuterShock", MakeRingSprite($"{name}OuterShock", Color.white, 180), position, rotation, Mathf.Max(scale.x, scale.y) * 1.16f, GatekeeperAccentColor(rank, 0.82f), 0.22f);
+            var size = Mathf.Max(scale.x, scale.y);
+            SpawnTransientSpriteScaled($"{name}WhiteSnap", impactSprite, position, rotation, scale * 0.74f, new Color(1f, 0.98f, 0.88f, 0.88f), 0.08f);
+            SpawnTransientSpriteScaled($"{name}Flash", impactSprite, position, rotation, scale * 1.10f, new Color(1f, 0.92f, 0.78f, 0.82f), 0.14f);
+            SpawnTransientSpriteScaled($"{name}RedBang", impactSprite, position, rotation, scale * 1.30f, GatekeeperTelegraphColor(rank, 0.66f), 0.22f);
+            SpawnTransientSprite($"{name}OuterShock", MakeRingSprite($"{name}OuterShock", Color.white, 180), position, rotation, size * 1.34f, GatekeeperAccentColor(rank, 0.88f), 0.28f);
+            SpawnRadialSlashLines($"{name}GroundRupture", position, Vector2.up, circular ? 8 + rank : 5 + rank, size * 0.92f, GatekeeperAccentColor(rank, 0.66f), 0.24f);
+            cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.16f + rank * 0.03f);
+            cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.070f + rank * 0.012f);
             PlaySfx("warning", 0.42f + rank * 0.04f, 0.08f);
+        }
+
+        void SpawnGatekeeperCastBurst(Vector3 center, Vector2 forward, int rank, int patternStep)
+        {
+            forward = forward.sqrMagnitude > 0.01f ? forward.normalized : Vector2.up;
+            var angle = Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg - 90f;
+            var accent = GatekeeperAccentColor(rank, 0.82f);
+            SpawnTransientSprite("GatekeeperCastSigil", GatekeeperSigilSprite(rank), center + Vector3.up * 0.22f, Quaternion.Euler(0f, 0f, 45f + patternStep * 18f), 0.64f + rank * 0.08f, accent, 0.56f);
+            SpawnTransientSprite("GatekeeperCastHalo", MakeRingSprite("GatekeeperCastHalo", Color.white, 180), center, Quaternion.Euler(0f, 0f, patternStep * -28f), 0.92f + rank * 0.16f, GatekeeperTelegraphColor(rank, 0.58f), 0.52f);
+            SpawnTransientSpriteScaled("GatekeeperCastBladeSpine", MakeBoxSprite("GatekeeperCastBladeSpine", Color.white, 8, 150), center + (Vector3)(forward * (0.46f + rank * 0.04f)), Quaternion.Euler(0f, 0f, angle), new Vector3(0.034f + rank * 0.004f, 0.86f + rank * 0.16f, 1f), accent, 0.44f);
+            SpawnRadialSlashLines("GatekeeperCastRupture", center, forward, 5 + rank, 0.72f + rank * 0.14f, GatekeeperTelegraphColor(rank, 0.54f), 0.34f);
+            if (player != null)
+            {
+                SpawnEchoLink("GatekeeperCastTargetLine", center + Vector3.up * 0.14f, player.position, GatekeeperTelegraphColor(rank, 0.24f), 0.34f, 0.018f + rank * 0.003f);
+            }
         }
 
         public void GatekeeperPatternPulse(V1Enemy gatekeeper, int patternStep)
@@ -2882,9 +2906,9 @@ namespace Lethe.PrototypeV1
             if (gatekeeper == null || player == null || deathOverlay) return;
             var rank = GatekeeperPatternRank;
             var center = gatekeeper.transform.position;
-            SpawnTransientSprite("GatekeeperGuardCore", GatekeeperSigilSprite(rank), center + Vector3.up * 0.18f, Quaternion.Euler(0f, 0f, 45f), 0.44f + rank * 0.04f, GatekeeperAccentColor(rank, 0.78f), 0.46f);
             var toPlayer = (Vector2)(player.position - center);
             var forward = toPlayer.sqrMagnitude > 0.01f ? toPlayer.normalized : lastAim.normalized;
+            SpawnGatekeeperCastBurst(center, forward, rank, patternStep);
 
             if (rank <= 0)
             {
@@ -2929,14 +2953,16 @@ namespace Lethe.PrototypeV1
 
         void SpawnGatekeeperFallingMeteor(Vector3 target, float radius, float telegraphTime, int patternStep, int rank)
         {
-            var start = target + new Vector3(Mathf.Sin(patternStep * 1.7f) * 0.36f, 2.55f + rank * 0.18f, 0f);
+            var start = target + new Vector3(Mathf.Sin(patternStep * 1.7f) * 0.54f, 3.05f + rank * 0.24f, 0f);
             var end = target + Vector3.up * 0.18f;
             var delta = end - start;
             var angle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg - 90f;
             var sprite = GatekeeperMeteorSprite(rank);
             var color = GatekeeperAccentColor(rank, 0.94f);
-            SpawnEchoLink("GatekeeperMeteorFallTrail", start, target, GatekeeperAccentColor(rank, 0.42f), telegraphTime * 0.92f, 0.040f + rank * 0.006f);
-            SpawnSweepingTransientSprite("GatekeeperMeteorFallingBody", sprite, start, end, angle, angle + 24f, Mathf.Clamp(radius * 0.34f, 0.30f, 0.46f), Mathf.Clamp(radius * 0.52f, 0.44f, 0.72f), color, telegraphTime, telegraphTime * 0.88f);
+            SpawnTransientSprite("GatekeeperMeteorSpawnFlare", MakeRingSprite("GatekeeperMeteorSpawnFlare", Color.white, 132), start, Quaternion.Euler(0f, 0f, patternStep * 27f), 0.32f + rank * 0.04f, GatekeeperAccentColor(rank, 0.62f), telegraphTime * 0.50f);
+            SpawnEchoLink("GatekeeperMeteorFallTrail", start, target, GatekeeperAccentColor(rank, 0.52f), telegraphTime * 0.94f, 0.052f + rank * 0.008f);
+            SpawnEchoLink("GatekeeperMeteorFallHotLine", start + Vector3.right * 0.10f, target - Vector3.right * 0.06f, new Color(1f, 0.94f, 0.70f, 0.38f), telegraphTime * 0.82f, 0.024f + rank * 0.004f);
+            SpawnSweepingTransientSprite("GatekeeperMeteorFallingBody", sprite, start, end, angle, angle + 30f, Mathf.Clamp(radius * 0.42f, 0.38f, 0.58f), Mathf.Clamp(radius * 0.68f, 0.58f, 0.92f), color, telegraphTime, telegraphTime * 0.90f);
             SpawnTransientSprite("GatekeeperMeteorShadow", MakeDiscSprite("GatekeeperMeteorShadow", Color.white, 96), target, Quaternion.identity, Mathf.Clamp(radius * 0.30f, 0.24f, 0.42f), new Color(0.16f, 0.02f, 0.02f, 0.36f), telegraphTime);
         }
 
@@ -2945,8 +2971,10 @@ namespace Lethe.PrototypeV1
             yield return new WaitForSeconds(delay);
             if (player == null || deathOverlay) yield break;
             SpawnGatekeeperRaidImpact("GatekeeperMeteorImpact", center, Quaternion.identity, Vector3.one * radius, rank, true);
+            SpawnTransientSprite("GatekeeperMeteorGroundScorch", MakeDiscSprite("GatekeeperMeteorGroundScorch", Color.white, 128), center, Quaternion.identity, radius * 0.76f, new Color(0.24f, 0.025f, 0.018f, 0.48f), 0.42f);
             SpawnTransientSprite("GatekeeperMeteorImpactShard", GatekeeperMeteorSprite(rank), center, Quaternion.identity, radius * 0.92f, GatekeeperAccentColor(rank, 0.82f), 0.24f);
-            SpawnRadialSlashLines("GatekeeperMeteorDebris", center, Vector2.up, 7 + rank, radius * 0.84f, GatekeeperAccentColor(rank, 0.58f), 0.22f);
+            SpawnTransientSprite("GatekeeperMeteorImpactRing", MakeRingSprite("GatekeeperMeteorImpactRing", Color.white, 180), center, Quaternion.identity, radius * 1.48f, GatekeeperAccentColor(rank, 0.68f), 0.32f);
+            SpawnRadialSlashLines("GatekeeperMeteorDebris", center, Vector2.up, 10 + rank, radius * 1.02f, GatekeeperAccentColor(rank, 0.62f), 0.26f);
             var toPlayer = (Vector2)(player.position - center);
             if (toPlayer.magnitude <= radius)
             {
@@ -2978,6 +3006,7 @@ namespace Lethe.PrototypeV1
             var end = center + (Vector3)(forward * (radius * 0.78f));
             var cleave = GatekeeperCleaveSprite(rank);
             SpawnSweepingTransientSprite("GatekeeperConeChargingBlade", cleave, start, end, angle - 5f, angle + 8f, Mathf.Clamp(radius * 0.18f, 0.40f, 0.62f), Mathf.Clamp(radius * 0.40f, 0.76f, 1.08f), GatekeeperAccentColor(rank, 0.48f), telegraphTime, telegraphTime * 0.78f);
+            SpawnSweepingTransientSprite("GatekeeperConeChargingAfterblade", cleave, start - (Vector3)(side * radius * 0.08f), end + (Vector3)(side * radius * 0.06f), angle - 22f, angle + 22f, Mathf.Clamp(radius * 0.12f, 0.30f, 0.46f), Mathf.Clamp(radius * 0.58f, 0.86f, 1.28f), GatekeeperAccentColor(rank, 0.28f), telegraphTime, telegraphTime * 0.68f);
             SpawnEchoLink("GatekeeperConeChargeLine", start + (Vector3)(side * radius * 0.14f), end + (Vector3)(side * radius * 0.26f), GatekeeperAccentColor(rank, 0.34f), telegraphTime * 0.86f, 0.032f);
             SpawnEchoLink("GatekeeperConeChargeLine", start - (Vector3)(side * radius * 0.14f), end - (Vector3)(side * radius * 0.26f), GatekeeperAccentColor(rank, 0.34f), telegraphTime * 0.86f, 0.032f);
         }
@@ -2990,6 +3019,12 @@ namespace Lethe.PrototypeV1
             SpawnGatekeeperRaidImpact("GatekeeperConeImpact", center + (Vector3)(forward * radius * 0.42f), Quaternion.Euler(0f, 0f, angle), Vector3.one * radius, rank, false);
             SpawnTransientSprite("GatekeeperConeSlash", GatekeeperCleaveSprite(rank), center + (Vector3)(forward * radius * 0.48f), Quaternion.Euler(0f, 0f, angle), radius * 0.82f, GatekeeperAccentColor(rank, 0.84f), 0.24f);
             SpawnSweepingTransientSprite("GatekeeperConeSlashWave", GatekeeperCleaveSprite(rank), center + (Vector3)(forward * 0.55f), center + (Vector3)(forward * (radius * 0.78f)), angle - 4f, angle + 18f, radius * 0.28f, radius * 0.74f, GatekeeperAccentColor(rank, 0.92f), 0.28f, 0.14f);
+            var side = new Vector2(-forward.y, forward.x).normalized;
+            var leftEdge = center + (Vector3)(forward * radius * 0.84f + side * radius * 0.38f);
+            var rightEdge = center + (Vector3)(forward * radius * 0.84f - side * radius * 0.38f);
+            SpawnEchoLink("GatekeeperConeImpactEdge", center, leftEdge, GatekeeperAccentColor(rank, 0.54f), 0.22f, 0.038f);
+            SpawnEchoLink("GatekeeperConeImpactEdge", center, rightEdge, GatekeeperAccentColor(rank, 0.54f), 0.22f, 0.038f);
+            SpawnRadialSlashLines("GatekeeperConeGroundScars", center + (Vector3)(forward * radius * 0.38f), forward, 5 + rank, radius * 0.78f, GatekeeperAccentColor(rank, 0.50f), 0.24f);
             var toPlayer = (Vector2)(player.position - center);
             if (toPlayer.magnitude <= radius && Vector2.Angle(forward, toPlayer) <= arcDegrees * 0.5f)
             {
@@ -3014,6 +3049,8 @@ namespace Lethe.PrototypeV1
             if (player == null || deathOverlay) yield break;
             SpawnGatekeeperRaidImpact("GatekeeperRingImpact", center, Quaternion.identity, Vector3.one * radius, rank, true);
             SpawnTransientSprite("GatekeeperRingShockwave", MakeRingSprite("GatekeeperRingShockwave", Color.white, 180), center, Quaternion.identity, radius * 1.14f, GatekeeperAccentColor(rank, 0.82f), 0.30f);
+            SpawnTransientSprite("GatekeeperRingInnerFlash", MakeDiscSprite("GatekeeperRingInnerFlash", Color.white, 132), center, Quaternion.identity, radius * 0.56f, new Color(1f, 0.88f, 0.70f, 0.44f), 0.16f);
+            SpawnRadialSlashLines("GatekeeperRingCrackSpokes", center, Vector2.up, 12 + rank, radius * 0.92f, GatekeeperAccentColor(rank, 0.54f), 0.28f);
             var toPlayer = (Vector2)(player.position - center);
             if (toPlayer.magnitude <= radius)
             {
@@ -3163,7 +3200,7 @@ namespace Lethe.PrototypeV1
 
         float GatekeeperHp()
         {
-            if (fastDebugRun) return FastBossHp;
+            if (fastDebugRun) return debugReviewBossHp ? DebugReviewBossHp : FastBossHp;
             return bossSpawnIndex switch
             {
                 <= 0 => FirstBossHp,
@@ -3795,6 +3832,7 @@ namespace Lethe.PrototypeV1
             weaponSelectOverlay = false;
             runStarted = true;
             fastDebugRun = false;
+            debugReviewBossHp = false;
             echoOnlyDebugMode = false;
             bossSpawnIndex = 0;
             warnedBossIndex = -1;
@@ -4069,6 +4107,7 @@ namespace Lethe.PrototypeV1
             refillOverlay = false;
             deathOverlay = false;
             fastDebugRun = true;
+            debugReviewBossHp = false;
             echoOnlyDebugMode = false;
             pendingKalmuriFollowups.Clear();
             debugTransientSpriteSpawnCount = 0;
@@ -4208,6 +4247,7 @@ namespace Lethe.PrototypeV1
             HitstopActive = false;
             echoOnlyDebugMode = false;
             fastDebugRun = true;
+            debugReviewBossHp = true;
             gatekeeperKills = 0;
             bossSpawnIndex = 0;
             warnedBossIndex = 0;
@@ -4226,14 +4266,15 @@ namespace Lethe.PrototypeV1
             EnsureReviewEnemies(14);
             SpawnGatekeeperWarning();
             SpawnGatekeeper();
-            SpawnFloatingText(player.position + Vector3.up * 1.55f, "Boss Debug: Gatekeeper", new Color(1f, 0.52f, 0.30f));
-            Log("Debug gatekeeper jump");
+            SpawnFloatingText(player.position + Vector3.up * 1.55f, $"Boss Debug: Gatekeeper HP {DebugReviewBossHp:0}", new Color(1f, 0.52f, 0.30f));
+            Log($"Debug gatekeeper jump review HP {DebugReviewBossHp:0}");
             return DebugSnapshot();
         }
 
         public string DebugRunGatekeeperPatternMatrix()
         {
             EnsureRunStarted();
+            debugReviewBossHp = false;
             echoOnlyDebugMode = false;
             var origin = player.position + Vector3.up * 3.8f;
             for (int rank = 0; rank < 4; rank++)

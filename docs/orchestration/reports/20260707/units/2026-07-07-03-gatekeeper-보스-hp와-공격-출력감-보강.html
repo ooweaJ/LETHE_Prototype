@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-07-03 - Gatekeeper 보스 HP와 공격 출력감 보강</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-07-03 - Gatekeeper 보스 HP와 공격 출력감 보강</h1>
+      <p class="meta">Generated from 2026-07-07-03-gatekeeper-보스-hp와-공격-출력감-보강.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260707/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-07-03 - Gatekeeper 보스 HP와 공격 출력감 보강</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에서 F6/F12 Boss 리뷰 경로와 Gatekeeper 공격 VFX를 보강했다. 아직 <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>F6/F12 Boss가 더 이상 QA 압축 보스 HP <code>180</code>을 쓰지 않고, 첫 보스 리뷰 HP <code>2200</code>을 쓰게 분리했다.</li>
+<li>빠른 자동 QA는 그대로 HP <code>180</code>을 유지한다.</li>
+<li>실제 일반 런 Gatekeeper HP는 기존대로 <code>2200 / 4200 / 7600 / 12800</code>이다.</li>
+<li>Gatekeeper가 패턴을 쓰기 전에 몸 주변에 sigil, halo, blade spine, rupture, target line을 내도록 했다.</li>
+<li>메테오, 부채꼴, 원형 패턴의 착탄 순간에 flash, shock ring, scorch/crack, edge snap, camera shake를 더했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 기존 legacy warning 7개, error 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: warning 0개, error 0개.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li><code>LETHE/V1 QA/Gatekeeper Pattern Matrix</code>: PASS, <code>boss=4</code>, <code>meteor=20</code>, <code>cone=6</code>, <code>ring=3</code>.</li>
+<li><code>LETHE/V1 QA/Gatekeeper Jump</code>: PASS, <code>boss=1</code>, <code>liveEnemies=15</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>디버그 Boss 버튼은 빠른 QA가 아니라 직접 플레이 리뷰용으로 본다. 그래서 QA 속도와 플레이 감각을 분리한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>자동 QA는 통과했지만, 실제 체감은 jaewoo가 직접 F6/F12 Boss로 봐야 한다. 특히 메테오가 충분히 떨어지는지, 부채꼴이 실제 베기로 보이는지, 원형 폭발이 보스 공격답게 보이는지가 남은 판단 지점이다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>이번 작업은 수치 밸런스 전체 조정이 아니라 디버그 경로 분리와 공격 출력감 보강이다. 다음 판단은 &quot;보스가 빨리 죽느냐&quot;보다 &quot;HP 2200 상태에서 공격 루프를 볼 시간이 충분하고, 패턴이 레이드 공격처럼 읽히느냐&quot;에 둔다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>직접 플레이 후 약한 패턴 하나만 골라 경고 시간, 착탄 크기, 카메라 흔들림, 투사체/베기 크기를 조정한다.</p>
+<h2>8. 포트폴리오 메모</h2>
+<ul>
+<li>문제: QA용 보스 HP가 직접 리뷰 경로에 섞여 보스가 허무하게 죽는 것처럼 보였다.</li>
+<li>방향: 자동 QA와 사람 리뷰의 목적을 분리하고, 공격 패턴은 시전-위협-착탄의 순서로 읽히게 만든다.</li>
+<li>행동: 리뷰 HP 플래그와 보스 cast/impact VFX를 추가했다.</li>
+<li>결과: 빌드와 Gatekeeper QA가 통과했고, 다음 단계는 실제 플레이 감각 검증이다.</li>
+</ul>
+  </main>
+</body>
+</html>

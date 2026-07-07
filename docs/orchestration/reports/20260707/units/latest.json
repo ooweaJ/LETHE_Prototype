@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260707\\index.md",
-  "generatedAt": "2026-07-07T03:09:45.616Z",
-  "unitCount": 2,
+  "generatedAt": "2026-07-07T05:14:01.781Z",
+  "unitCount": 3,
   "latest": {
-    "title": "2026-07-07-02 - 기억/잔향/몹 역할 특색 1차 보강",
-    "number": "02",
-    "markdownPath": "docs\\orchestration\\reports\\20260707\\units\\2026-07-07-02-기억-잔향-몹-역할-특색-1차-보강.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260707\\units\\2026-07-07-02-기억-잔향-몹-역할-특색-1차-보강.html"
+    "title": "2026-07-07-03 - Gatekeeper 보스 HP와 공격 출력감 보강",
+    "number": "03",
+    "markdownPath": "docs\\orchestration\\reports\\20260707\\units\\2026-07-07-03-gatekeeper-보스-hp와-공격-출력감-보강.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260707\\units\\2026-07-07-03-gatekeeper-보스-hp와-공격-출력감-보강.html"
   }
 }

@@ -1,5 +1,32 @@
 # LETHE TEST
 
+# 2026-07-07 Gatekeeper Review HP / Impact VFX Pass
+
+- Purpose:
+  - Clarify jaewoo's feedback that the boss felt too weak: the real run boss is not HP `180`; the F6/F12 Boss debug path was using the compressed QA boss HP.
+  - Make Gatekeeper attacks feel stronger through visible cast, falling/charging attack bodies, impact shock, cracks, and camera shake.
+- Applied target:
+  - Added a separate review-boss HP path for F6/F12 Boss: compressed QA still uses `FastBossHp = 180`, while Boss review jump now uses `DebugReviewBossHp = FirstBossHp = 2200`.
+  - Kept normal run Gatekeeper HP unchanged at `2200 / 4200 / 7600 / 12800`.
+  - Added Gatekeeper cast burst around the boss body: sigil, halo, blade spine, rupture lines, and target line.
+  - Strengthened meteor fall and impact: higher falling body, hot trail, spawn flare, scorch, impact ring, debris, and stronger camera shake.
+  - Strengthened cone and ring resolve: extra afterblade, edge snap lines, ground scars, inner flash, crack spokes, and shared stronger raid impact burst.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
+  - Unity `Assets/Refresh`
+  - Unity compilation error check.
+  - Unity `LETHE/V1 QA/Gatekeeper Pattern Matrix`
+  - Unity `LETHE/V1 QA/Gatekeeper Jump`
+- Results:
+  - Runtime build passed with 7 existing legacy warnings and 0 errors.
+  - Editor build passed with 0 warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Gatekeeper Pattern Matrix: `[V1QA] PASS`, `boss=4`, `meteor=20`, `cone=6`, `ring=3`.
+  - Gatekeeper Jump: `[V1QA] PASS`, `boss=1`, `liveEnemies=15`.
+- Limitation:
+  - MCP menu calls intermittently returned `Error polling queue: fetch failed`, but console logs confirmed the QA menu results after retry/wait.
+
 # 2026-07-07 Memory/Echo/Enemy Identity Pass
 
 - Purpose:

@@ -2,6 +2,25 @@
 
 Last updated: 2026-07-07
 
+## 2026-07-07 Update: Gatekeeper Review HP / Impact VFX Pass
+
+- Clarified the boss-strength issue:
+  - real normal-run Gatekeeper HP is still `2200 / 4200 / 7600 / 12800`;
+  - compressed QA boss HP remains `180`;
+  - F6/F12 Boss review jump now uses `2200` instead of the compressed QA HP.
+- Applied:
+  - Added a separate `debugReviewBossHp` path so QA and direct-play review no longer share the same HP value.
+  - Added Gatekeeper body cast burst VFX before raid patterns.
+  - Strengthened meteor fall/impact, cone charge/cleave, and ring explosion impact with larger flashes, shock rings, crack lines, scorch/edge cues, and stronger camera shake.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Gatekeeper Pattern Matrix: `[V1QA] PASS`, `boss=4`, `meteor=20`, `cone=6`, `ring=3`.
+  - Gatekeeper Jump: `[V1QA] PASS`, `boss=1`, `liveEnemies=15`.
+- Next step:
+  - Direct-play review should judge whether the first Gatekeeper now survives long enough and whether meteor/cone/ring impacts feel like real boss attacks rather than only red zones.
+
 ## 2026-07-07 Update: Memory/Echo/Enemy Identity Pass
 
 - Identified the immediate weakness behind the feedback:

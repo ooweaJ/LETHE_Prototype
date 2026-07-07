@@ -1,5 +1,58 @@
 # Current Task
 
+# 2026-07-07 Gatekeeper Review HP / Impact VFX Pass
+
+## Status
+
+Implemented, locally build-verified, and Unity-QA-verified through AnkleBreaker Unity MCP on `LETHE` port `7890`.
+
+## Finding
+
+- The first Gatekeeper felt too weak in direct review because the F6/F12 Boss path was using compressed QA boss HP `180`.
+- The real normal-run Gatekeeper HP path is not `180`; it is currently `2200 / 4200 / 7600 / 12800`.
+- The boss pattern issue was mainly output strength: red zones existed, but the boss cast body and impact moment were not loud enough.
+
+## Applied Changes
+
+- Added `DebugReviewBossHp = FirstBossHp`.
+- Added `debugReviewBossHp` so fast QA can keep HP `180` while F6/F12 Boss review uses HP `2200`.
+- Added Gatekeeper cast burst VFX:
+  - boss sigil,
+  - halo,
+  - blade spine,
+  - rupture lines,
+  - target line.
+- Strengthened Gatekeeper meteor:
+  - higher falling body,
+  - hot fall trail,
+  - spawn flare,
+  - scorch,
+  - impact ring,
+  - more debris.
+- Strengthened cone/ring resolve:
+  - cone afterblade,
+  - edge snap lines,
+  - ground scars,
+  - ring inner flash,
+  - crack spokes,
+  - stronger shared impact flash/shock/camera shake.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+- Unity compilation errors: `0`.
+- `LETHE/V1 QA/Gatekeeper Pattern Matrix`: `[V1QA] PASS`, `boss=4`, `meteor=20`, `cone=6`, `ring=3`.
+- `LETHE/V1 QA/Gatekeeper Jump`: `[V1QA] PASS`, `boss=1`, `liveEnemies=15`.
+
+## Remaining Gate
+
+Direct-play review should judge:
+
+- Whether F6/F12 Boss now survives long enough to inspect the pattern loop.
+- Whether meteor feels like something falls and hits, not just a red circle.
+- Whether cone/ring impacts feel like a real boss attack with clear damage feedback.
+
 # 2026-07-07 Memory/Echo/Enemy Identity Pass
 
 ## Status
