@@ -9,6 +9,7 @@
   - Gatekeeper cone tells now show a charging blade/edge-line cue and a sweeping slash wave on resolve.
   - Boss hits on the player now show a red damage flash/ring, damage number, hit SFX, and small camera shake.
   - Hungry Blades / Kalmuri orbit now uses coherent circular lanes, an orbit guide, orbit-exit cue, lock line, and lunge so the motion reads as circle -> target -> attack.
+  - Kalmuri hunt now reserves an actual orbit blade slot and launches from that same orbit endpoint, so the flying blade reads as the orbiting blade peeling off.
   - Dense Dual Blades Perf Matrix now snapshots dense-specific transient counts to avoid post-test gameplay contaminating the result.
 - Verification:
   - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
@@ -17,6 +18,7 @@
   - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=62`, `activeVfx=27`, `ms=85.10`.
   - `LETHE/V1 QA/Gatekeeper Pattern Matrix`: `[V1QA] PASS`, `boss=4`, `meteor=20`, `cone=6`, `ring=3`.
   - `LETHE/V1 QA/Kalmuri Perf Matrix`: `[V1QA] PASS`, `orbit=44`, `bite=72`, `return=24`, `hunting=16`, `totalKalmuri=268`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix` after orbit-slot linking: `[V1QA] PASS`, `orbit=44`, `bite=72`, `return=24`, `hunting=16`, `totalKalmuri=270`.
 
 # 2026-07-06
 

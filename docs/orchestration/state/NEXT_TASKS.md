@@ -17,7 +17,8 @@
 - Problem: Kalmuri automated perf is safe, but the new orbit guide / orbit-exit / lock-line / lunge action still needs direct visual approval.
 - Build:
   - Check +1/+3/+5 scale in normal and dense fights.
-  - If orbit still reads as wobble, tune orbit speed/radius/arc and lunge timing before adding more sprites.
+  - Confirm that the highlighted orbit blade visibly peels off from its orbit endpoint into the lunge.
+  - If it still feels disconnected, tune release spark/lock-line timing before adding more sprites.
   - If too subtle, tune scale/alpha/lifetime without reintroducing moving trail spam.
   - If too noisy, reduce support flashes before reducing the main clamp/rip read.
 - Done:
@@ -57,6 +58,7 @@
 Completed sequence:
 
 - 2026-07-07: direct feedback VFX action pass implemented; dual-blade guaranteed slashes, Gatekeeper falling meteor/charge cleave, player damage cue, Kalmuri orbit-to-lunge, and Dense QA snapshot all pass build/Unity QA.
+- 2026-07-07: Kalmuri orbit-to-lunge link tightened; the hunt lunge now starts from a reserved orbit blade endpoint and Kalmuri Perf Matrix still passes.
 - 2026-07-06: MCP QA recovered on LETHE port `7890`; Echo, Gatekeeper, Dense Dual, Kalmuri, VoidPriest, and M2 QA passed after final dense optimization.
 - 2026-07-06: Kalmuri echo clamp/rip visual redesign implemented and local builds passed.
 - 2026-07-06: utility echo monster-state marks implemented and Echo Matrix QA passed for dual blades and greatsword.

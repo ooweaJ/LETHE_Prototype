@@ -1524,6 +1524,50 @@ namespace Lethe.PrototypeV1
                 .ToList();
 
             var bladeCount = Mathf.Clamp(6 + memory.Level, 7, KalmuriOrbitBladeCap);
+            var huntCount = focusTargets.Count > 0 ? Mathf.Clamp(1 + memory.Level / 3, 1, 2) : 0;
+            var huntSlotByBlade = new int[bladeCount];
+            for (int i = 0; i < huntSlotByBlade.Length; i++) huntSlotByBlade[i] = -1;
+            var huntTargets = new Vector3[huntCount];
+            var huntLaunches = new Vector3[huntCount];
+            var huntEnds = new Vector3[huntCount];
+            var huntColors = new Color[huntCount];
+            var huntSeeds = new float[huntCount];
+            var huntValid = new bool[huntCount];
+
+            for (int hunt = 0; hunt < huntCount; hunt++)
+            {
+                var target = focusTargets[hunt % focusTargets.Count];
+                var targetPos = target.transform.position + Vector3.up * 0.05f;
+                var toTargetFromPlayer = (Vector2)(targetPos - player.position);
+                if (toTargetFromPlayer.sqrMagnitude < 0.01f) toTargetFromPlayer = lastAim.sqrMagnitude > 0.01f ? lastAim.normalized : Vector2.up;
+                var desiredAngle = Mathf.Atan2(toTargetFromPlayer.y, toTargetFromPlayer.x) * Mathf.Rad2Deg;
+                var bestSlot = -1;
+                var bestDelta = float.MaxValue;
+                for (int slot = 0; slot < bladeCount; slot++)
+                {
+                    if (huntSlotByBlade[slot] >= 0) continue;
+                    var lane = slot % 3;
+                    var speed = 190f + memory.Level * 8f + lane * 12f;
+                    var angle = memory.VisualTimer * speed + slot * 360f / bladeCount + lane * 10f;
+                    var arc = 58f + memory.Level * 2f + lane * 4f;
+                    var launchAngle = angle + arc;
+                    var delta = Mathf.Abs(Mathf.DeltaAngle(launchAngle, desiredAngle));
+                    if (delta < bestDelta)
+                    {
+                        bestDelta = delta;
+                        bestSlot = slot;
+                    }
+                }
+
+                if (bestSlot >= 0)
+                {
+                    huntSlotByBlade[bestSlot] = hunt;
+                    huntTargets[hunt] = targetPos;
+                    huntColors[hunt] = new Color(0.84f, 1f, 1f, 0.90f - hunt * 0.10f);
+                    huntSeeds[hunt] = bestSlot * 176f + memory.VisualTimer * (190f + memory.Level * 8f);
+                }
+            }
+
             SpawnTransientSprite("KalmuriOrbitPath", MakeRingSprite("KalmuriOrbitPath", Color.white, 180), player.position, Quaternion.Euler(0f, 0f, memory.VisualTimer * 34f), orbitRadius, new Color(0.52f, 0.94f, 1f, 0.10f), 0.18f);
             for (int i = 0; i < bladeCount; i++)
             {
@@ -1534,34 +1578,41 @@ namespace Lethe.PrototypeV1
                 var arc = 58f + memory.Level * 2f + lane * 4f;
                 var scale = 0.23f + memory.Level * 0.019f + lane * 0.005f;
                 var alpha = 0.86f - lane * 0.055f;
+                var huntIndex = huntSlotByBlade[i];
+                if (huntIndex >= 0)
+                {
+                    var launchAngle = angle + arc;
+                    var launchRadius = orbitRadius + radiusLane;
+                    var launch = player.position + Quaternion.Euler(0f, 0f, launchAngle) * Vector3.right * launchRadius;
+                    var targetPos = huntTargets[huntIndex];
+                    var toTarget = ((Vector2)(targetPos - launch)).normalized;
+                    if (toTarget.sqrMagnitude < 0.01f) toTarget = lastAim.sqrMagnitude > 0.01f ? lastAim.normalized : Vector2.up;
+                    var side = new Vector2(-toTarget.y, toTarget.x);
+                    huntLaunches[huntIndex] = launch;
+                    huntEnds[huntIndex] = targetPos - (Vector3)(toTarget * (0.12f + huntIndex * 0.03f)) + (Vector3)(side * ((huntIndex - (huntCount - 1) * 0.5f) * 0.10f));
+                    huntValid[huntIndex] = true;
+                    SpawnOrbitingKalmuriBlade("KalmuriLivingOrbitBlade_Hunter", player.position, launchRadius, angle - 10f, launchAngle, scale * 1.10f, new Color(0.86f, 1f, 1f, 0.94f), 0.24f);
+                    SpawnTransientSprite("KalmuriHuntReleaseSpark", MakeImpactDiamondSprite("KalmuriHuntReleaseSpark", Color.white), launch, Quaternion.Euler(0f, 0f, launchAngle + 45f), scale * 0.58f, new Color(0.92f, 1f, 1f, 0.62f), 0.11f);
+                    continue;
+                }
+
                 SpawnOrbitingKalmuriBlade("KalmuriLivingOrbitBlade", player.position, orbitRadius + radiusLane, angle, angle + arc, scale, new Color(0.74f, 0.98f, 1f, alpha), 0.26f);
             }
 
-            if (focusTargets.Count > 0)
+            for (int i = 0; i < huntCount; i++)
             {
-                var lungeCount = Mathf.Clamp(1 + memory.Level / 3, 1, 2);
-                for (int i = 0; i < lungeCount; i++)
-                {
-                    var target = focusTargets[i % focusTargets.Count];
-                    var targetPos = target.transform.position + Vector3.up * 0.05f;
-                    var toTarget = ((Vector2)(targetPos - player.position)).normalized;
-                    if (toTarget.sqrMagnitude < 0.01f) toTarget = lastAim.sqrMagnitude > 0.01f ? lastAim.normalized : Vector2.up;
-                    var side = new Vector2(-toTarget.y, toTarget.x);
-                    var seed = memory.VisualTimer * (190f + memory.Level * 8f) + i * 176f;
-                    var orbitDir = Quaternion.Euler(0f, 0f, seed) * Vector3.right;
-                    var start = player.position + orbitDir * (orbitRadius * (1.00f + i * 0.04f));
-                    var arcMid = player.position + Quaternion.Euler(0f, 0f, seed + 34f) * Vector3.right * (orbitRadius * (1.02f + i * 0.03f));
-                    var end = targetPos - (Vector3)(toTarget * (0.12f + i * 0.03f)) + (Vector3)(side * ((i - (lungeCount - 1) * 0.5f) * 0.10f));
-                    var color = new Color(0.84f, 1f, 1f, 0.88f - i * 0.10f);
-                    SpawnOrbitingKalmuriBlade("KalmuriHuntOrbitExit", player.position, orbitRadius * (1.00f + i * 0.04f), seed - 12f, seed + 34f, 0.23f + memory.Level * 0.016f, new Color(0.72f, 0.98f, 1f, 0.58f), 0.18f);
-                    SpawnEchoLink("KalmuriHuntLockLine", arcMid, targetPos, new Color(0.62f, 0.96f, 1f, 0.38f), 0.16f, 0.022f);
-                    SpawnKalmuriDiveBlade("KalmuriHuntingLunge", arcMid, end, 0.29f + memory.Level * 0.020f, color, 0.22f, 0.14f);
+                if (!huntValid[i]) continue;
+                var launch = huntLaunches[i];
+                var targetPos = huntTargets[i];
+                var end = huntEnds[i];
+                var color = huntColors[i];
+                SpawnEchoLink("KalmuriHuntLockLine", launch, targetPos, new Color(0.62f, 0.96f, 1f, 0.46f), 0.16f, 0.024f);
+                SpawnKalmuriDiveBlade("KalmuriHuntingLunge", launch, end, 0.29f + memory.Level * 0.020f, color, 0.22f, 0.14f);
 
-                    if (memory.Level >= 4 && i == 0)
-                    {
-                        var recoil = player.position + Quaternion.Euler(0f, 0f, seed + 78f) * Vector3.right * (orbitRadius * 0.42f);
-                        SpawnKalmuriDiveBlade("KalmuriHuntingRecoil", end, recoil, 0.18f + memory.Level * 0.010f, new Color(0.44f, 0.90f, 1f, 0.38f), 0.12f, 0.08f);
-                    }
+                if (memory.Level >= 4 && i == 0)
+                {
+                    var recoil = player.position + Quaternion.Euler(0f, 0f, huntSeeds[i] + 78f) * Vector3.right * (orbitRadius * 0.42f);
+                    SpawnKalmuriDiveBlade("KalmuriHuntingRecoil", end, recoil, 0.18f + memory.Level * 0.010f, new Color(0.44f, 0.90f, 1f, 0.38f), 0.12f, 0.08f);
                 }
             }
         }

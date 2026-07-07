@@ -4,6 +4,7 @@
 
 - Purpose:
   - Respond to jaewoo's direct-play feedback that dual-blade VFX was not visible enough, Gatekeeper meteor/cone patterns looked like static red zones, player damage was hard to read, and Hungry Blades / Kalmuri orbit felt like wobble instead of circle-to-target hunting.
+  - Follow-up: fix the remaining disconnect where orbiting Kalmuri blades and flying attack blades looked like unrelated VFX.
 - Applied target:
   - Dual blades now spawn guaranteed lightweight slash cuts and a hit spark in normal density.
   - Dense dual-blade mode keeps only one cheap guaranteed cut and skips the extra spark, preserving responsiveness under crowd pressure.
@@ -11,6 +12,7 @@
   - Gatekeeper cone tells now include charging blade/edge lines before the cleave and a sweeping slash wave on resolve.
   - Boss hits on the player now add a red flash/ring, damage number, SFX, and small camera shake.
   - Hungry Blades / Kalmuri orbit now uses coherent same-direction circular lanes, an orbit guide ring, orbit-exit cue, lock line, and lunge toward the target.
+  - Kalmuri now reserves a real orbit blade slot nearest the target direction, highlights that blade as the hunter, and launches the lunge from the same orbit endpoint.
   - Dense Dual Blades Perf Matrix now snapshots dense-specific transient counts so later gameplay does not contaminate the QA result.
 - Commands / checks:
   - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
@@ -27,6 +29,7 @@
   - Dense Dual Blades Perf Matrix: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=62`, `activeVfx=27`, `ms=85.10`.
   - Gatekeeper Pattern Matrix: `[V1QA] PASS`, `boss=4`, `meteor=20`, `cone=6`, `ring=3`.
   - Kalmuri Perf Matrix: `[V1QA] PASS`, `orbit=44`, `bite=72`, `return=24`, `hunting=16`, `totalKalmuri=268`.
+  - Kalmuri orbit-to-lunge follow-up check: `[V1QA] PASS`, `orbit=44`, `bite=72`, `return=24`, `hunting=16`, `totalKalmuri=270`.
 - Limitation:
   - Automated QA confirms object creation, perf budget, and compile health. Direct play still needs to judge whether the new meteor fall, cone slash, damage cue, and orbit-to-lunge motion feel good enough.
 

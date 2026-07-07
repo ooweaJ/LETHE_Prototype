@@ -176,6 +176,7 @@
 <li>Gatekeeper 부채꼴은 차지 칼날/경계선이 나온 뒤 휘두르는 slash wave가 나오게 바꿨다.</li>
 <li>보스 패턴에 맞았을 때 플레이어 주변에 빨간 플래시/링, 피해 숫자, SFX, 짧은 카메라 흔들림이 나오게 했다.</li>
 <li>칼무리는 흔들림처럼 보이던 기존 궤도를 같은 방향 원형 궤도, 이탈 표시, 타겟 lock line, 돌진으로 바꿨다.</li>
+<li>후속으로 궤도 칼과 날아가는 칼이 따로 노는 문제를 줄이기 위해, 타겟 방향에 가장 가까운 실제 궤도 칼 슬롯을 예약하고 그 칼의 궤도 끝점에서 돌진이 시작되게 했다.</li>
 <li>Dense Dual Blades QA는 전역 VFX 누적값 대신 Dense 전용 스냅샷을 보도록 고쳤다.</li>
 </ul>
 <h2>3. 테스트 결과와 근거</h2>
@@ -186,9 +187,10 @@
 <li><code>LETHE/V1 QA/Dense Dual Blades Perf Matrix</code>: PASS, <code>hits=18</code>, <code>suppressed=15</code>, <code>transient=62</code>, <code>activeVfx=27</code>, <code>ms=85.10</code>.</li>
 <li><code>LETHE/V1 QA/Gatekeeper Pattern Matrix</code>: PASS, <code>boss=4</code>, <code>meteor=20</code>, <code>cone=6</code>, <code>ring=3</code>.</li>
 <li><code>LETHE/V1 QA/Kalmuri Perf Matrix</code>: PASS, <code>orbit=44</code>, <code>bite=72</code>, <code>return=24</code>, <code>hunting=16</code>, <code>totalKalmuri=268</code>.</li>
+<li>궤도-돌진 연결 후 <code>LETHE/V1 QA/Kalmuri Perf Matrix</code>: PASS, <code>orbit=44</code>, <code>bite=72</code>, <code>return=24</code>, <code>hunting=16</code>, <code>totalKalmuri=270</code>.</li>
 </ul>
 <h2>4. 결정한 것</h2>
-<p>쌍검은 “많이 그려서 화려하게”보다 “무조건 보이는 최소 절단선”을 우선한다. 보스 패턴은 빨간 범위 표시만으로 끝내지 않고, 범위 표시 뒤 실제 공격체가 등장하고 맞았을 때 플레이어 피격 피드백까지 이어지는 구조로 잡는다.</p>
+<p>쌍검은 “많이 그려서 화려하게”보다 “무조건 보이는 최소 절단선”을 우선한다. 보스 패턴은 빨간 범위 표시만으로 끝내지 않고, 범위 표시 뒤 실제 공격체가 등장하고 맞았을 때 플레이어 피격 피드백까지 이어지는 구조로 잡는다. 칼무리는 별도 돌진 이펙트를 추가하는 방식보다, 기존 궤도 칼 하나가 빠져나가는 방식으로 연결감을 만든다.</p>
 <h2>5. 문제 또는 리스크</h2>
 <p>자동 QA는 생성 수와 예산을 확인하지만, 실제 체감은 아직 직접 플레이 판정이 필요하다. 특히 메테오 낙하 속도, 부채꼴 slash wave의 크기, 칼무리 lock line의 밝기, 쌍검 Dense 상태의 조용함은 눈으로 보고 한 번 더 조정해야 한다.</p>
 <h2>6. GPT/Claude 인계 요약</h2>

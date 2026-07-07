@@ -20,6 +20,7 @@ Implemented, locally build-verified, and Unity-QA-verified through AnkleBreaker 
   - sweeping slash wave on hit.
 - Player damage from Gatekeeper patterns now has a red flash/ring, damage text, hit SFX, and small camera shake.
 - Hungry Blades / Kalmuri orbit now uses same-direction circular lanes, an orbit path guide, orbit-exit cue, lock line, and target lunge.
+- Follow-up: Kalmuri hunt now chooses a real orbit blade slot nearest the target, highlights it, and launches the lunge from that same orbit endpoint.
 - Dense Dual Blades Perf Matrix now uses a dense-specific transient snapshot instead of the global transient counter.
 
 ## Verification
@@ -30,6 +31,7 @@ Implemented, locally build-verified, and Unity-QA-verified through AnkleBreaker 
 - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=62`, `activeVfx=27`, `ms=85.10`.
 - `LETHE/V1 QA/Gatekeeper Pattern Matrix`: `[V1QA] PASS`, `boss=4`, `meteor=20`, `cone=6`, `ring=3`.
 - `LETHE/V1 QA/Kalmuri Perf Matrix`: `[V1QA] PASS`, `orbit=44`, `bite=72`, `return=24`, `hunting=16`, `totalKalmuri=268`.
+- `LETHE/V1 QA/Kalmuri Perf Matrix` after orbit-slot linking: `[V1QA] PASS`, `orbit=44`, `bite=72`, `return=24`, `hunting=16`, `totalKalmuri=270`.
 
 ## Remaining Gate
 

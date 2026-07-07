@@ -11,6 +11,7 @@ Last updated: 2026-07-07
   - Gatekeeper cone now shows charge blade/edge lines and a sweeping slash wave.
   - Boss damage on the player now has red flash/ring, damage text, hit SFX, and small camera shake.
   - Hungry Blades / Kalmuri now uses coherent circular lanes, an orbit guide, orbit-exit cue, lock line, and lunge toward the target.
+  - Follow-up: Kalmuri hunt now reserves the orbit blade nearest the target direction and launches from that same orbit endpoint, connecting the rotating blade to the flying blade.
   - Dense QA now reads a dedicated dense transient snapshot so the test result is not polluted by post-test gameplay.
 - Verification:
   - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
@@ -19,6 +20,7 @@ Last updated: 2026-07-07
   - Dense Dual Blades Perf Matrix: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=62`, `activeVfx=27`, `ms=85.10`.
   - Gatekeeper Pattern Matrix: `[V1QA] PASS`, `boss=4`, `meteor=20`, `cone=6`, `ring=3`.
   - Kalmuri Perf Matrix: `[V1QA] PASS`, `orbit=44`, `bite=72`, `return=24`, `hunting=16`, `totalKalmuri=268`.
+  - Kalmuri orbit-slot link follow-up: `[V1QA] PASS`, `orbit=44`, `bite=72`, `return=24`, `hunting=16`, `totalKalmuri=270`.
 - Current limitation:
   - Automated QA is green. Direct play still needs to judge whether meteor fall/cone slash/player hit read/Kalmuri orbit feel satisfying in motion.
 - Next step:
