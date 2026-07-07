@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-07 개발 리포트</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f3;
+      --paper: #ffffff;
+      --ink: #17201d;
+      --muted: #64706b;
+      --line: #dce2da;
+      --accent: #1f6b4d;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); }
+    body.panel-open { overflow: hidden; }
+    main { width: min(980px, 100%); margin: 0 auto; padding: 30px 22px 44px; }
+    nav { margin-bottom: 18px; font-size: 14px; }
+    a { color: var(--accent); font-weight: 900; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .eyebrow { margin: 0 0 8px; color: var(--accent); font-size: 13px; font-weight: 900; }
+    h1 { margin: 0 0 10px; font-size: clamp(30px, 5vw, 46px); line-height: 1.08; }
+    .intro { margin: 0 0 18px; color: var(--muted); line-height: 1.65; }
+    ul { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+    li { margin: 0; }
+    .unit-card {
+      min-height: 136px;
+      padding: 17px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+    .unit-card:focus-within,
+    .unit-card:hover,
+    .unit-card.is-active {
+      border-color: rgba(31, 107, 77, 0.55);
+      box-shadow: 0 14px 30px rgba(23, 32, 29, 0.08);
+      transform: translateY(-1px);
+    }
+    .unit-panel[hidden] { display: none; }
+    .unit-panel {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: flex;
+      justify-content: flex-end;
+      background: rgba(23, 32, 29, 0.22);
+    }
+    .unit-panel__scrim {
+      position: absolute;
+      inset: 0;
+      cursor: pointer;
+    }
+    .unit-panel__shell {
+      position: relative;
+      width: min(760px, calc(100% - 28px));
+      height: calc(100% - 28px);
+      margin: 14px;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: 0 24px 70px rgba(23, 32, 29, 0.22);
+    }
+    .unit-panel__bar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+    }
+    .unit-panel__title {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .unit-panel__close {
+      min-width: 38px;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .unit-panel__close:hover {
+      border-color: rgba(31, 107, 77, 0.55);
+      color: var(--accent);
+    }
+    .unit-detail {
+      padding: 22px;
+    }
+    .unit-detail h1 { font-size: 28px; }
+    .unit-detail h2 {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      font-size: 21px;
+    }
+    .unit-detail ul { display: block; padding-left: 22px; list-style: disc; }
+    .unit-detail li { margin-bottom: 6px; }
+    .unit-detail code {
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: #eef2f7;
+    }
+    .back-inline { margin-bottom: 16px; }
+    .number { display: block; margin-bottom: 8px; color: var(--muted); font-size: 13px; font-weight: 900; }
+    h2 { margin: 0 0 8px; font-size: 20px; line-height: 1.3; }
+    p { margin: 0; color: var(--muted); line-height: 1.6; }
+    footer { margin-top: 20px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 720px) {
+      main { padding: 24px 16px 36px; }
+      .unit-panel {
+        align-items: flex-end;
+      }
+      .unit-panel__shell {
+        width: 100%;
+        height: min(86vh, calc(100% - 18px));
+        margin: 9px;
+      }
+      .unit-detail { padding: 18px; }
+      .unit-detail h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <nav><a href="/api/projects/lethe/reports/index.html">전체 리포트 목록</a></nav>
+    <p class="eyebrow">20260707 개발 기록</p>
+    <h1>2026-07-07 개발 리포트</h1>
+    <p class="intro">Dev_Prototype_v1은 쌍검 VFX, Gatekeeper 보스 패턴, 칼무리 궤도 연출에 대한 직접 피드백 대응이 코드에 반영되었고 Unity QA까지 통과한 상태다. 아직 _dev 검증 단계이며 Assets/Lethe 승격은 하지 않았다.</p>
+    <ul id="unit-list">
+      <li>
+        <article class="unit-card">
+          <span class="number">2026-07-07-01</span>
+          <h2><a href="#unit-2026-07-07-01" data-unit-link="unit-2026-07-07-01">쌍검, 보스 패턴, 칼무리 VFX 액션성 보강</a></h2>
+          <p>Dev_Prototype_v1은 쌍검 VFX, Gatekeeper 보스 패턴, 칼무리 궤도 연출에 대한 직접 피드백 대응이 코드에 반영되었고 Unity QA까지 통과한 상태다. 아직 _dev 검증 단계이며 Assets/Lethe 승격은 하지 않았다.</p>
+        </article>
+      </li>
+    </ul>
+    <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
+      <div class="unit-panel__scrim" data-panel-close></div>
+      <div class="unit-panel__shell" role="dialog" aria-modal="true" aria-label="작업 단위 상세">
+        <div class="unit-panel__bar">
+          <p class="unit-panel__title">작업 단위 상세</p>
+          <button class="unit-panel__close" type="button" data-panel-close aria-label="패널 닫기">&times;</button>
+        </div>
+        <article class="unit-detail" id="unit-2026-07-07-01" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-07-01 - 쌍검, 보스 패턴, 칼무리 VFX 액션성 보강</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 쌍검 VFX, Gatekeeper 보스 패턴, 칼무리 궤도 연출에 대한 직접 피드백 대응이 코드에 반영되었고 Unity QA까지 통과한 상태다. 아직 <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>쌍검 공격에 항상 보이는 가벼운 절단 궤적을 추가했다.</li>
+<li>몹이 많을 때는 쌍검 보장 VFX를 1개 절단선으로 제한해 렉 위험을 낮췄다.</li>
+<li>Gatekeeper 메테오는 빨간 원만 터지는 형태가 아니라 낙하체, 낙하 궤적, 그림자, 파편, 충격으로 읽히게 바꿨다.</li>
+<li>Gatekeeper 부채꼴은 차지 칼날/경계선이 나온 뒤 휘두르는 slash wave가 나오게 바꿨다.</li>
+<li>보스 패턴에 맞았을 때 플레이어 주변에 빨간 플래시/링, 피해 숫자, SFX, 짧은 카메라 흔들림이 나오게 했다.</li>
+<li>칼무리는 흔들림처럼 보이던 기존 궤도를 같은 방향 원형 궤도, 이탈 표시, 타겟 lock line, 돌진으로 바꿨다.</li>
+<li>Dense Dual Blades QA는 전역 VFX 누적값 대신 Dense 전용 스냅샷을 보도록 고쳤다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 기존 legacy 경고 7개, 오류 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 기존 legacy 경고 7개, 오류 0개.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li><code>LETHE/V1 QA/Dense Dual Blades Perf Matrix</code>: PASS, <code>hits=18</code>, <code>suppressed=15</code>, <code>transient=62</code>, <code>activeVfx=27</code>, <code>ms=85.10</code>.</li>
+<li><code>LETHE/V1 QA/Gatekeeper Pattern Matrix</code>: PASS, <code>boss=4</code>, <code>meteor=20</code>, <code>cone=6</code>, <code>ring=3</code>.</li>
+<li><code>LETHE/V1 QA/Kalmuri Perf Matrix</code>: PASS, <code>orbit=44</code>, <code>bite=72</code>, <code>return=24</code>, <code>hunting=16</code>, <code>totalKalmuri=268</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>쌍검은 “많이 그려서 화려하게”보다 “무조건 보이는 최소 절단선”을 우선한다. 보스 패턴은 빨간 범위 표시만으로 끝내지 않고, 범위 표시 뒤 실제 공격체가 등장하고 맞았을 때 플레이어 피격 피드백까지 이어지는 구조로 잡는다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>자동 QA는 생성 수와 예산을 확인하지만, 실제 체감은 아직 직접 플레이 판정이 필요하다. 특히 메테오 낙하 속도, 부채꼴 slash wave의 크기, 칼무리 lock line의 밝기, 쌍검 Dense 상태의 조용함은 눈으로 보고 한 번 더 조정해야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>이번 패스는 수치 밸런스가 아니라 액션 가독성 개선이다. 다음 리뷰는 “VFX가 더 많아졌는가”가 아니라 “플레이어가 공격 전조, 실제 공격, 피격 결과를 순서대로 읽는가”를 봐야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo가 직접 플레이로 쌍검, F6/F12 Boss, 칼무리 +1/+3/+5, Dense wave를 확인한 뒤 한 가지 축만 골라 조정한다. 후보는 경고 시간, 공격체 크기, 칼무리 궤도 속도, Dense 쌍검 보조 accent 중 하나다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 공격 범위와 실제 공격이 분리되어 보이지 않아 보스 패턴과 칼무리 동작이 밋밋하게 읽혔다.</li>
+<li>방향: 전조 -&gt; 실제 공격체 -&gt; 피격 피드백의 3단계로 액션을 읽히게 만든다.</li>
+<li>행동: 쌍검 보장 절단선, Gatekeeper 낙하/차지/충격 VFX, 플레이어 피격 큐, 칼무리 orbit-to-lunge를 추가했다.</li>
+<li>결과: 빌드와 Unity QA가 통과했고, 다음 단계는 직접 플레이 감각 검증으로 넘어간다.</li>
+</ul>
+    </article>
+      </div>
+    </section>
+    <footer>기준: 2026-07-07</footer>
+  </main>
+  <script>
+    (() => {
+      const panel = document.getElementById('unit-detail-root');
+      const panelShell = panel?.querySelector('.unit-panel__shell');
+      const closeButton = panel?.querySelector('.unit-panel__close');
+      const details = Array.from(document.querySelectorAll('.unit-detail'));
+      const links = Array.from(document.querySelectorAll('[data-unit-link]'));
+      const setActiveCard = (id) => {
+        links.forEach((link) => {
+          const isActive = link.getAttribute('data-unit-link') === id;
+          link.closest('.unit-card')?.classList.toggle('is-active', isActive);
+        });
+      };
+      const closePanel = () => {
+        if (!panel) return;
+        panel.hidden = true;
+        document.body.classList.remove('panel-open');
+        details.forEach((detail) => { detail.hidden = true; });
+        setActiveCard('');
+        if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+      };
+      const showUnit = (id) => {
+        const target = document.getElementById(id);
+        if (!target) return;
+        if (!panel) return;
+        panel.hidden = false;
+        document.body.classList.add('panel-open');
+        details.forEach((detail) => { detail.hidden = detail !== target; });
+        setActiveCard(id);
+        if (panelShell) panelShell.scrollTop = 0;
+        if (closeButton) closeButton.focus({ preventScroll: true });
+      };
+      document.addEventListener('click', (event) => {
+        const unitLink = event.target.closest('[data-unit-link]');
+        if (unitLink) {
+          event.preventDefault();
+          const id = unitLink.getAttribute('data-unit-link');
+          history.pushState(null, '', '#' + id);
+          showUnit(id);
+          return;
+        }
+        if (event.target.closest('[data-panel-close]')) {
+          event.preventDefault();
+          closePanel();
+        }
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && panel && !panel.hidden) closePanel();
+      });
+      window.addEventListener('popstate', () => {
+        const id = location.hash.replace(/^#/, '');
+        if (id) showUnit(id);
+        else closePanel();
+      });
+      const initial = location.hash.replace(/^#/, '');
+      if (initial) showUnit(initial);
+    })();
+  </script>
+</body>
+</html>

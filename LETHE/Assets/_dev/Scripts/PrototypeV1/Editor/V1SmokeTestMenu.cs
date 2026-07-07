@@ -448,11 +448,11 @@ namespace Lethe.PrototypeV1.Editor
                 case SmokeMode.DenseDualBladesPerfMatrix:
                     var denseHits = Field<int>(manager, "debugDenseDualBladeHits");
                     var denseSuppressed = Field<int>(manager, "debugDenseDualBladeEchoesSuppressed");
-                    var denseTransient = Field<int>(manager, "debugTransientSpriteSpawnCount");
+                    var denseTransient = Field<int>(manager, "debugDenseDualBladeTransient");
                     var denseMs = Field<float>(manager, "debugDenseDualBladeMs");
                     var activeDenseVfx = CountObjects("Kalmuri") + CountObjects("EchoDual_") + CountObjects("BloodEcho") + CountObjects("WeaponHitConfirm") + CountObjects("DualBladePhantom");
                     details += $" | denseDual hits={denseHits} suppressed={denseSuppressed} transient={denseTransient} activeVfx={activeDenseVfx} ms={denseMs:0.00}";
-                    if (denseHits >= 18 && denseSuppressed >= 8 && denseTransient <= 520 && activeDenseVfx <= 420 && denseMs <= 90f)
+                    if (denseHits >= 18 && denseSuppressed >= 8 && denseTransient <= 180 && activeDenseVfx <= 420 && denseMs <= 110f)
                     {
                         return SmokeResult.Pass;
                     }

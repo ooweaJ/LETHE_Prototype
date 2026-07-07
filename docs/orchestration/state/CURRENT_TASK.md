@@ -1,5 +1,46 @@
 # Current Task
 
+# 2026-07-07 Direct Feedback VFX Action Pass
+
+## Status
+
+Implemented, locally build-verified, and Unity-QA-verified through AnkleBreaker Unity MCP on `LETHE` port `7890`.
+
+## Applied Changes
+
+- Dual blades now spawn guaranteed lightweight slash cuts even when profile VFX is throttled.
+- Dense dual-blade mode keeps one cheap guaranteed cut and skips the extra spark so dense waves remain responsive.
+- Gatekeeper meteor now reads as:
+  - red danger tell,
+  - falling meteor body/trail/shadow,
+  - impact/debris burst.
+- Gatekeeper cone now reads as:
+  - red danger tell,
+  - charge blade/edge lines,
+  - sweeping slash wave on hit.
+- Player damage from Gatekeeper patterns now has a red flash/ring, damage text, hit SFX, and small camera shake.
+- Hungry Blades / Kalmuri orbit now uses same-direction circular lanes, an orbit path guide, orbit-exit cue, lock line, and target lunge.
+- Dense Dual Blades Perf Matrix now uses a dense-specific transient snapshot instead of the global transient counter.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- Unity compilation errors: `0`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=62`, `activeVfx=27`, `ms=85.10`.
+- `LETHE/V1 QA/Gatekeeper Pattern Matrix`: `[V1QA] PASS`, `boss=4`, `meteor=20`, `cone=6`, `ring=3`.
+- `LETHE/V1 QA/Kalmuri Perf Matrix`: `[V1QA] PASS`, `orbit=44`, `bite=72`, `return=24`, `hunting=16`, `totalKalmuri=268`.
+
+## Remaining Gate
+
+Direct-play review should judge:
+
+- Whether dual blades are now visible enough without feeling noisy.
+- Whether Gatekeeper meteor feels like something falls before the hit.
+- Whether Gatekeeper cone feels like a real cleave instead of a static wedge.
+- Whether player damage from boss patterns is unmistakable.
+- Whether Kalmuri now reads as orbit -> lock -> lunge rather than wobble.
+
 # 2026-07-06 MCP QA Recovery / Dense Dual-Blade Final Pass
 
 ## Status

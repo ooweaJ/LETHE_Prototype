@@ -1,0 +1,48 @@
+> 2026-07-07 LETHE 개발 보고서
+# 2026-07-07-01 - 쌍검, 보스 패턴, 칼무리 VFX 액션성 보강
+
+## 1. 현재 빌드 상태
+
+`Dev_Prototype_v1`은 쌍검 VFX, Gatekeeper 보스 패턴, 칼무리 궤도 연출에 대한 직접 피드백 대응이 코드에 반영되었고 Unity QA까지 통과한 상태다. 아직 `_dev` 검증 단계이며 `Assets/Lethe` 승격은 하지 않았다.
+
+## 2. 오늘 바뀐 것
+
+- 쌍검 공격에 항상 보이는 가벼운 절단 궤적을 추가했다.
+- 몹이 많을 때는 쌍검 보장 VFX를 1개 절단선으로 제한해 렉 위험을 낮췄다.
+- Gatekeeper 메테오는 빨간 원만 터지는 형태가 아니라 낙하체, 낙하 궤적, 그림자, 파편, 충격으로 읽히게 바꿨다.
+- Gatekeeper 부채꼴은 차지 칼날/경계선이 나온 뒤 휘두르는 slash wave가 나오게 바꿨다.
+- 보스 패턴에 맞았을 때 플레이어 주변에 빨간 플래시/링, 피해 숫자, SFX, 짧은 카메라 흔들림이 나오게 했다.
+- 칼무리는 흔들림처럼 보이던 기존 궤도를 같은 방향 원형 궤도, 이탈 표시, 타겟 lock line, 돌진으로 바꿨다.
+- Dense Dual Blades QA는 전역 VFX 누적값 대신 Dense 전용 스냅샷을 보도록 고쳤다.
+
+## 3. 테스트 결과와 근거
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: 기존 legacy 경고 7개, 오류 0개.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: 기존 legacy 경고 7개, 오류 0개.
+- Unity compilation errors: `0`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=62`, `activeVfx=27`, `ms=85.10`.
+- `LETHE/V1 QA/Gatekeeper Pattern Matrix`: PASS, `boss=4`, `meteor=20`, `cone=6`, `ring=3`.
+- `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS, `orbit=44`, `bite=72`, `return=24`, `hunting=16`, `totalKalmuri=268`.
+
+## 4. 결정한 것
+
+쌍검은 “많이 그려서 화려하게”보다 “무조건 보이는 최소 절단선”을 우선한다. 보스 패턴은 빨간 범위 표시만으로 끝내지 않고, 범위 표시 뒤 실제 공격체가 등장하고 맞았을 때 플레이어 피격 피드백까지 이어지는 구조로 잡는다.
+
+## 5. 문제 또는 리스크
+
+자동 QA는 생성 수와 예산을 확인하지만, 실제 체감은 아직 직접 플레이 판정이 필요하다. 특히 메테오 낙하 속도, 부채꼴 slash wave의 크기, 칼무리 lock line의 밝기, 쌍검 Dense 상태의 조용함은 눈으로 보고 한 번 더 조정해야 한다.
+
+## 6. GPT/Claude 인계 요약
+
+이번 패스는 수치 밸런스가 아니라 액션 가독성 개선이다. 다음 리뷰는 “VFX가 더 많아졌는가”가 아니라 “플레이어가 공격 전조, 실제 공격, 피격 결과를 순서대로 읽는가”를 봐야 한다.
+
+## 7. 다음 Codex 작업
+
+jaewoo가 직접 플레이로 쌍검, F6/F12 Boss, 칼무리 +1/+3/+5, Dense wave를 확인한 뒤 한 가지 축만 골라 조정한다. 후보는 경고 시간, 공격체 크기, 칼무리 궤도 속도, Dense 쌍검 보조 accent 중 하나다.
+
+## 8. 포트폴리오 메모: 문제, 방향, 행동, 결과
+
+- 문제: 공격 범위와 실제 공격이 분리되어 보이지 않아 보스 패턴과 칼무리 동작이 밋밋하게 읽혔다.
+- 방향: 전조 -> 실제 공격체 -> 피격 피드백의 3단계로 액션을 읽히게 만든다.
+- 행동: 쌍검 보장 절단선, Gatekeeper 낙하/차지/충격 VFX, 플레이어 피격 큐, 칼무리 orbit-to-lunge를 추가했다.
+- 결과: 빌드와 Unity QA가 통과했고, 다음 단계는 직접 플레이 감각 검증으로 넘어간다.

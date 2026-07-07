@@ -1,5 +1,23 @@
 # LETHE CHANGELOG
 
+# 2026-07-07
+
+- Improved direct-play VFX action readability from jaewoo feedback:
+  - Dual blades now spawn guaranteed lightweight slash cuts so the weapon hit does not disappear when profile VFX is throttled.
+  - Dense dual-blade mode keeps a single cheap guaranteed cut and suppresses the extra spark to stay under the perf matrix budget.
+  - Gatekeeper meteor tells now show a falling meteor body, fall trail, target shadow, debris, and impact cue instead of only a red circle.
+  - Gatekeeper cone tells now show a charging blade/edge-line cue and a sweeping slash wave on resolve.
+  - Boss hits on the player now show a red damage flash/ring, damage number, hit SFX, and small camera shake.
+  - Hungry Blades / Kalmuri orbit now uses coherent circular lanes, an orbit guide, orbit-exit cue, lock line, and lunge so the motion reads as circle -> target -> attack.
+  - Dense Dual Blades Perf Matrix now snapshots dense-specific transient counts to avoid post-test gameplay contaminating the result.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=62`, `activeVfx=27`, `ms=85.10`.
+  - `LETHE/V1 QA/Gatekeeper Pattern Matrix`: `[V1QA] PASS`, `boss=4`, `meteor=20`, `cone=6`, `ring=3`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: `[V1QA] PASS`, `orbit=44`, `bite=72`, `return=24`, `hunting=16`, `totalKalmuri=268`.
+
 # 2026-07-06
 
 - Recovered pending Unity MCP QA on `LETHE` port `7890` and finished the Dense Dual-Blade final pass:

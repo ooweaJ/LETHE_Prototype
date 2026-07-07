@@ -3,20 +3,21 @@
 ## 1. Direct-Play Visual Review
 
 - Priority: high
-- Problem: automated QA is green, but jaewoo still needs to judge feel/readability in actual play.
+- Problem: automated QA is green after the 2026-07-07 VFX action pass, but jaewoo still needs to judge feel/readability in actual play.
 - Build:
   - Play `Dev_Prototype_v1` with dual blades and greatsword.
   - Use `F6` / F12 `Boss` to inspect the first Gatekeeper quickly.
-  - Judge Kalmuri clamp/rip, utility echo state marks, Gatekeeper raid telegraphs, healer VFX, and dense dual-blade feel.
+  - Judge dual-blade guaranteed slash visibility, Gatekeeper meteor fall, Gatekeeper cone cleave, boss-hit player feedback, Kalmuri orbit -> lock -> lunge, utility echo state marks, healer VFX, and dense dual-blade feel.
 - Done:
   - Review returns concrete tune targets: keep, brighten, shrink, slow down, rebalance, or redesign.
 
 ## 2. Kalmuri Clamp/Rip Visual Polish
 
 - Priority: high
-- Problem: Kalmuri automated perf is safe, but the new clamp/rip action still needs direct visual approval.
+- Problem: Kalmuri automated perf is safe, but the new orbit guide / orbit-exit / lock-line / lunge action still needs direct visual approval.
 - Build:
   - Check +1/+3/+5 scale in normal and dense fights.
+  - If orbit still reads as wobble, tune orbit speed/radius/arc and lunge timing before adding more sprites.
   - If too subtle, tune scale/alpha/lifetime without reintroducing moving trail spam.
   - If too noisy, reduce support flashes before reducing the main clamp/rip read.
 - Done:
@@ -27,7 +28,7 @@
 - Priority: high
 - Problem: Gatekeeper pattern QA passes, but visual timing/fairness still needs player judgment.
 - Build:
-  - Review meteor, cone, and ring as `red zone -> fill -> bang`.
+  - Review meteor, cone, and ring as `red zone -> fill/charge -> visible attack body -> bang`.
   - Tune only warning duration, fill alpha, impact flash, or danger-zone size if needed.
 - Done:
   - The first boss feels readable, fair, and more like a simple raid encounter.
@@ -55,6 +56,7 @@
 
 Completed sequence:
 
+- 2026-07-07: direct feedback VFX action pass implemented; dual-blade guaranteed slashes, Gatekeeper falling meteor/charge cleave, player damage cue, Kalmuri orbit-to-lunge, and Dense QA snapshot all pass build/Unity QA.
 - 2026-07-06: MCP QA recovered on LETHE port `7890`; Echo, Gatekeeper, Dense Dual, Kalmuri, VoidPriest, and M2 QA passed after final dense optimization.
 - 2026-07-06: Kalmuri echo clamp/rip visual redesign implemented and local builds passed.
 - 2026-07-06: utility echo monster-state marks implemented and Echo Matrix QA passed for dual blades and greatsword.

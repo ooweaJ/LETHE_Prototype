@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LETHE 다음 지시</title>
+    <title>LETHE 다음 지시문</title>
     <style>
       :root { --bg:#f7fcf8; --panel:#fff; --text:#17211c; --muted:#64706b; --line:#d9e1d7; --green:#1f6b4d; --amber:#916019; }
       * { box-sizing: border-box; }
@@ -18,7 +18,7 @@
       h2 { margin:0 0 8px; color:var(--green); font-size:15px; }
       p, li { color:#26342f; font-size:14px; line-height:1.55; }
       ul { margin:0; padding-left:18px; }
-      textarea { width:100%; min-height:170px; resize:vertical; border:1px solid var(--line); border-radius:8px; padding:10px; color:var(--text); background:#fff; font:13px/1.55 "Cascadia Code", "SFMono-Regular", Consolas, monospace; }
+      textarea { width:100%; min-height:190px; resize:vertical; border:1px solid var(--line); border-radius:8px; padding:10px; color:var(--text); background:#fff; font:13px/1.55 "Cascadia Code", "SFMono-Regular", Consolas, monospace; }
       button { min-height:34px; margin-top:8px; border:1px solid #b9d2c3; border-radius:8px; background:var(--green); color:#fff; font-weight:900; cursor:pointer; }
       .warning { border-color:#e6d1ac; background:#fff8ec; }
       .warning h2 { color:var(--amber); }
@@ -29,14 +29,14 @@
   <body>
     <main>
       <header>
-        <h1>다음 지시</h1>
+        <h1>다음 지시문</h1>
         <a href="./index.html">대시보드</a>
       </header>
 
       <div class="grid">
         <article>
           <h2>Codex에게 지금 지시할 말</h2>
-          <textarea id="prompt-next" readonly>Dev_Prototype_v1에서 칼무리 living swarm VFX를 직접 플레이 기준으로 확인해줘. C/D 후보 이미지는 런타임에서 제거했고, 원래 칼날 스프라이트가 불규칙 orbit, target lunge, hit convergence, recoil shard, echo surge, memory spiral로 움직이는 상태야. +1/+3/+5에서 진짜 칼무리처럼 살아 움직이는지, 적과 플레이어를 가리지는 않는지, 쌍검 phantom strike가 여전히 너무 작게 느껴지는지도 같이 봐줘. 새 콘텐츠는 추가하지 말고, 문제가 있으면 lunge frequency, trail alpha, blade count, hit convergence scale, 또는 쌍검 phantom 크기 중 하나만 좁게 조정해줘.</textarea>
+          <textarea id="prompt-next" readonly>Dev_Prototype_v1을 직접 플레이 기준으로 다시 확인해줘. 쌍검 공격 VFX가 평상시와 Dense wave 모두에서 보이는지, F6/F12 Boss로 Gatekeeper 메테오가 실제로 떨어지는 공격처럼 보이는지, 부채꼴이 차지 후 베는 느낌인지, 보스 패턴에 맞았을 때 피격 피드백이 확실한지, 칼무리가 원형 궤도 -> 타겟 고정 -> 돌진으로 읽히는지 봐줘. 새 시스템은 추가하지 말고 문제가 보이면 경고 시간, 공격체 크기, 칼무리 궤도 속도, Dense 쌍검 accent 중 하나만 골라 좁게 조정해줘.</textarea>
           <button type="button" data-copy-target="prompt-next">프롬프트 복사</button>
         </article>
 
@@ -53,10 +53,10 @@
         <article>
           <h2>완료 기준</h2>
           <ul>
-            <li>칼무리 living swarm 직접 플레이 판단 기록</li>
-            <li>필요 시 lunge/trail/blade/convergence 또는 쌍검 크기 하나만 조정</li>
+            <li>직접 플레이에서 부족한 VFX/타이밍 축 하나를 특정</li>
+            <li>필요 시 좁은 조정 1회</li>
             <li>Unity compile error 0</li>
-            <li>보고서와 상태 문서 갱신</li>
+            <li>Dense, Gatekeeper, Kalmuri 관련 QA 재통과</li>
           </ul>
         </article>
 
@@ -65,8 +65,8 @@
           <ul>
             <li><a href="../state/CURRENT_TASK.md">CURRENT_TASK.md</a></li>
             <li><a href="../state/NEXT_TASKS.md">NEXT_TASKS.md</a></li>
-            <li><a href="../reports/20260701/index.html">오늘 보고서</a></li>
-            <li><a href="../devlog/2026-07-01.md">오늘 devlog</a></li>
+            <li><a href="../reports/20260707/index.html">오늘 보고서</a></li>
+            <li><a href="../devlog/2026-07-07.md">오늘 devlog</a></li>
           </ul>
         </article>
       </div>

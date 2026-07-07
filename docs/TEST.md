@@ -1,5 +1,35 @@
 # LETHE TEST
 
+# 2026-07-07 Direct Feedback VFX Action Pass
+
+- Purpose:
+  - Respond to jaewoo's direct-play feedback that dual-blade VFX was not visible enough, Gatekeeper meteor/cone patterns looked like static red zones, player damage was hard to read, and Hungry Blades / Kalmuri orbit felt like wobble instead of circle-to-target hunting.
+- Applied target:
+  - Dual blades now spawn guaranteed lightweight slash cuts and a hit spark in normal density.
+  - Dense dual-blade mode keeps only one cheap guaranteed cut and skips the extra spark, preserving responsiveness under crowd pressure.
+  - Gatekeeper meteor tells now include a falling meteor body, fall trail, target shadow, debris burst, and impact cue.
+  - Gatekeeper cone tells now include charging blade/edge lines before the cleave and a sweeping slash wave on resolve.
+  - Boss hits on the player now add a red flash/ring, damage number, SFX, and small camera shake.
+  - Hungry Blades / Kalmuri orbit now uses coherent same-direction circular lanes, an orbit guide ring, orbit-exit cue, lock line, and lunge toward the target.
+  - Dense Dual Blades Perf Matrix now snapshots dense-specific transient counts so later gameplay does not contaminate the QA result.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
+  - Unity `Assets/Refresh`
+  - Unity compilation error check.
+  - Unity `LETHE/V1 QA/Dense Dual Blades Perf Matrix`
+  - Unity `LETHE/V1 QA/Gatekeeper Pattern Matrix`
+  - Unity `LETHE/V1 QA/Kalmuri Perf Matrix`
+- Results:
+  - Runtime build passed with 7 existing legacy warnings and 0 errors.
+  - Editor build passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Dense Dual Blades Perf Matrix: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=62`, `activeVfx=27`, `ms=85.10`.
+  - Gatekeeper Pattern Matrix: `[V1QA] PASS`, `boss=4`, `meteor=20`, `cone=6`, `ring=3`.
+  - Kalmuri Perf Matrix: `[V1QA] PASS`, `orbit=44`, `bite=72`, `return=24`, `hunting=16`, `totalKalmuri=268`.
+- Limitation:
+  - Automated QA confirms object creation, perf budget, and compile health. Direct play still needs to judge whether the new meteor fall, cone slash, damage cue, and orbit-to-lunge motion feel good enough.
+
 # 2026-07-06 MCP QA Recovery / Dense Dual-Blade Final Pass
 
 - Purpose:
