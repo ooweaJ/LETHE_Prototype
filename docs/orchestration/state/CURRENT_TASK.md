@@ -1,5 +1,57 @@
 # Current Task
 
+# 2026-07-07 Memory/Echo/Enemy Identity Pass
+
+## Status
+
+Implemented, locally build-verified, and Unity-QA-verified through AnkleBreaker Unity MCP on `LETHE` port `7890`.
+
+## Finding
+
+The current weakness is less about missing mechanics and more about readability:
+
+- Blood Reflection still reads strongest because it has color, sustain, mark, DoT, and ultimate progression in one package.
+- Utility memories/echoes work, but several monster-state reads are too similar or too brief.
+- Enemy roles exist, but the role markers are static and can disappear into dense combat.
+- Gatekeeper patterns now read better, but the boss body still benefits from stronger persistent identity markers.
+
+## Applied Changes
+
+- Added `SpawnEchoIdentityBurst()`.
+- `MarkEnemyEchoState()` now also spawns family-specific monster-state bursts.
+- Passive memories now leave matching marks when they directly affect enemies:
+  - `ExecutionFlash`
+  - `ShatterWave`
+  - `StoppedSecond`
+  - `AshenShield`
+  - `OblivionBrand`
+- Hunter projectiles now mark targets on impact.
+- Added `V1EnemyRoleMarker`.
+- Added animated role symbols for:
+  - `VoidPriest`
+  - `DriftingEye`
+  - `SplitOne`
+  - `Gatekeeper`
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: standalone rerun passed with 0 warnings and 0 errors after a temporary parallel DLL lock.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- Unity compilation errors: `0`.
+- `LETHE/V1 QA/Echo Matrix Dual Blades`: `[V1QA] PASS`, `total=240`, `state=72`.
+- `LETHE/V1 QA/Echo Matrix Greatsword`: `[V1QA] PASS`, `total=223`, `state=70`.
+- `LETHE/V1 QA/Passive Memory Matrix`: `[V1QA] PASS`, `blood=17`, `ash=6`, `stopped=8`, `oblivion=37`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=114`, `activeVfx=27`, `ms=104.35`.
+- `LETHE/V1 QA/Gatekeeper Pattern Matrix`: `[V1QA] PASS`, `boss=4`, `meteor=20`, `cone=6`, `ring=3`.
+
+## Remaining Gate
+
+Direct-play review should judge:
+
+- Whether each utility echo can now be recognized by monster-state VFX before reading text.
+- Whether role markers make VoidPriest, DriftingEye, SplitOne, and Gatekeeper easier to identify.
+- Whether Dense Dual Blades still feels responsive with the extra identity bursts.
+
 # 2026-07-07 Direct Feedback VFX Action Pass
 
 ## Status

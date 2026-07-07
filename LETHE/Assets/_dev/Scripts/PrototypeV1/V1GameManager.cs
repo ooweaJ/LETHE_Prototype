@@ -1222,6 +1222,7 @@ namespace Lethe.PrototypeV1
             PlaySfx("execution", 0.72f, 0.10f);
             SpawnPromptSprite("ExecutionFlash", MemoryVfxSprite(V1MemoryId.ExecutionFlash), () => MakeImpactDiamondSprite("ExecutionFlash", Color.white), target.transform.position, Quaternion.identity, 2.18f, 0.94f, new Color(1f, 0.95f, 0.62f, 0.98f), 0.46f);
             SpawnExecutionFlashBurst(target.transform.position, 1.14f, 0.42f);
+            MarkEnemyEchoState(target, V1MemoryId.ExecutionFlash, 1.10f, 1.08f);
             DealDamage(target, 32f + memory.Level * 8.5f, "처형 섬광", false);
         }
 
@@ -1291,6 +1292,7 @@ namespace Lethe.PrototypeV1
             foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(target.transform.position, e.transform.position) <= radius + e.TouchRadius).Take(10).ToList())
             {
                 var dir = (Vector2)(enemy.transform.position - target.transform.position);
+                MarkEnemyEchoState(enemy, V1MemoryId.ShatterWave, 1.15f, 1.02f);
                 DealDamage(enemy, 10f + memory.Level * 4.0f, "파쇄의 파문", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 0.62f);
             }
         }
@@ -1410,6 +1412,7 @@ namespace Lethe.PrototypeV1
             foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(center, e.transform.position) <= radius + e.TouchRadius).Take(10).ToList())
             {
                 var dir = (Vector2)(enemy.transform.position - center);
+                MarkEnemyEchoState(enemy, V1MemoryId.StoppedSecond, 1.40f, 1.04f);
                 DealDamage(enemy, 6f + memory.Level * 2.3f, "StoppedSecond pulse", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 0.75f);
                 enemy.ApplyBriefFreeze(freezeDuration);
             }
@@ -1437,6 +1440,7 @@ namespace Lethe.PrototypeV1
                 foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) <= 1.75f + memory.Level * 0.12f).Take(7).ToList())
                 {
                     var dir = (Vector2)(enemy.transform.position - player.position);
+                    MarkEnemyEchoState(enemy, V1MemoryId.AshenShield, 1.05f, 0.98f);
                     DealDamage(enemy, 4.0f + memory.Level * 1.45f, "AshenShield counter", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 0.40f);
                 }
             }
@@ -1457,6 +1461,7 @@ namespace Lethe.PrototypeV1
             foreach (var enemy in enemies.Where(e => e != null && e.IsAlive).OrderBy(_ => UnityEngine.Random.value).Take(brandCount).ToList())
             {
                 PlaySfx("brand", 0.46f, 0.12f);
+                MarkEnemyEchoState(enemy, V1MemoryId.OblivionBrand, 1.35f, 1.02f);
                 SpawnPromptSprite("OblivionBrand", MemoryVfxSprite(V1MemoryId.OblivionBrand), () => MakeRingSprite("OblivionBrand", Color.white, 96), enemy.transform.position + Vector3.up * 0.10f, Quaternion.identity, 1.34f, 0.60f, new Color(0.70f, 0.42f, 1f, 0.78f), 0.54f);
                 SpawnTransientSprite("OblivionBrandSlash", MakeImpactDiamondSprite("OblivionBrandSlash", Color.white), enemy.transform.position + Vector3.up * 0.10f, Quaternion.Euler(0f, 0f, elapsed * 140f), 0.32f, new Color(0.92f, 0.68f, 1f, 0.78f), 0.28f);
                 SpawnEchoLink("MemoryOblivionBrandTether", enemy.transform.position, player.position, new Color(0.78f, 0.34f, 1f, 0.48f), 0.36f, 0.022f);
@@ -1734,6 +1739,7 @@ namespace Lethe.PrototypeV1
         {
             if (enemy == null || !enemy.IsAlive) return;
             enemy.ApplyEchoStateMark(id, EchoStateMarkSprite(id), EchoStateMarkColor(id, 0.92f), lifetime, scaleMul);
+            SpawnEchoIdentityBurst(enemy.transform.position, id, lifetime, scaleMul);
         }
 
         Sprite EchoStateMarkSprite(V1MemoryId id)
@@ -1762,6 +1768,37 @@ namespace Lethe.PrototypeV1
                 V1MemoryId.OblivionBrand => new Color(0.82f, 0.44f, 1f, alpha),
                 _ => new Color(1f, 1f, 1f, alpha)
             };
+        }
+
+        void SpawnEchoIdentityBurst(Vector3 center, V1MemoryId id, float lifetime, float scaleMul)
+        {
+            var scale = Mathf.Max(0.25f, scaleMul);
+            switch (id)
+            {
+                case V1MemoryId.ExecutionFlash:
+                    SpawnTransientSprite("EchoIdentity_ExecutionVerdict", MakeImpactDiamondSprite("EchoIdentity_ExecutionVerdict", Color.white), center + Vector3.up * 0.10f, Quaternion.Euler(0f, 0f, 45f), 0.34f * scale, new Color(1f, 0.94f, 0.42f, 0.82f), Mathf.Min(0.34f, lifetime));
+                    SpawnRadialSlashLines("EchoIdentity_ExecutionCrack", center, Vector2.up, 3, 0.55f * scale, new Color(1f, 0.92f, 0.42f, 0.58f), Mathf.Min(0.32f, lifetime));
+                    break;
+                case V1MemoryId.HunterOath:
+                    SpawnTransientSprite("EchoIdentity_HunterLock", MakeRingSprite("EchoIdentity_HunterLock", Color.white, 96), center, Quaternion.Euler(0f, 0f, elapsed * -120f), 0.48f * scale, new Color(0.68f, 1f, 0.32f, 0.58f), Mathf.Min(0.42f, lifetime));
+                    SpawnEchoWoundLine("EchoIdentity_HunterNeedle", center + Vector3.up * 0.03f, lastAim.sqrMagnitude > 0.01f ? lastAim : Vector2.up, new Color(0.78f, 1f, 0.38f, 0.54f), 0.62f * scale, Mathf.Min(0.34f, lifetime));
+                    break;
+                case V1MemoryId.ShatterWave:
+                    SpawnTransientSprite("EchoIdentity_ShatterCore", MakeImpactDiamondSprite("EchoIdentity_ShatterCore", Color.white), center, Quaternion.Euler(0f, 0f, elapsed * 90f), 0.28f * scale, new Color(0.46f, 0.94f, 1f, 0.66f), Mathf.Min(0.34f, lifetime));
+                    SpawnRadialSlashLines("EchoIdentity_ShatterFault", center, Vector2.up, 5, 0.58f * scale, new Color(0.54f, 0.96f, 1f, 0.50f), Mathf.Min(0.38f, lifetime));
+                    break;
+                case V1MemoryId.StoppedSecond:
+                    SpawnStoppedEchoClamp(center, 0.46f * scale, Mathf.Min(0.58f, lifetime));
+                    break;
+                case V1MemoryId.AshenShield:
+                    SpawnTransientSprite("EchoIdentity_AshenWard", MakeRingSprite("EchoIdentity_AshenWard", Color.white, 112), center, Quaternion.Euler(0f, 0f, elapsed * -70f), 0.50f * scale, new Color(0.86f, 0.94f, 1f, 0.54f), Mathf.Min(0.46f, lifetime));
+                    SpawnRadialSlashLines("EchoIdentity_AshenShard", center, Vector2.up, 4, 0.40f * scale, new Color(0.84f, 0.92f, 1f, 0.42f), Mathf.Min(0.34f, lifetime));
+                    break;
+                case V1MemoryId.OblivionBrand:
+                    SpawnOblivionEchoBrand(center, lastAim.sqrMagnitude > 0.01f ? lastAim : Vector2.up, Mathf.Min(0.56f, lifetime));
+                    SpawnTransientSprite("EchoIdentity_OblivionPip", MakeImpactDiamondSprite("EchoIdentity_OblivionPip", Color.white), center + Vector3.up * 0.14f, Quaternion.Euler(0f, 0f, elapsed * 130f), 0.20f * scale, new Color(0.92f, 0.56f, 1f, 0.66f), Mathf.Min(0.36f, lifetime));
+                    break;
+            }
         }
 
         bool IsHeavyEchoWeapon(WeaponRuntimeSpec weapon) => weapon.EchoProcStyle == V1EchoProcStyle.SingleHeavy;
@@ -2989,9 +3026,9 @@ namespace Lethe.PrototypeV1
         void AddEnemyRoleMarker(Transform target, V1EnemyKind kind)
         {
             if (target == null || kind == V1EnemyKind.Eroder) return;
-            var marker = new GameObject("RoleMarker");
+            var marker = new GameObject($"RoleMarker_{kind}");
             marker.transform.SetParent(target, false);
-            marker.transform.localPosition = new Vector3(0f, -0.06f, 0.02f);
+            marker.transform.localPosition = new Vector3(0f, kind == V1EnemyKind.Gatekeeper ? -0.12f : -0.06f, 0.02f);
             marker.transform.localRotation = Quaternion.identity;
             marker.transform.localScale = Vector3.one * (kind == V1EnemyKind.Gatekeeper ? 0.96f : 0.56f);
             var sr = marker.AddComponent<SpriteRenderer>();
@@ -3007,6 +3044,58 @@ namespace Lethe.PrototypeV1
                 _ => new Color(1f, 1f, 1f, 0.35f)
             };
             sr.sortingOrder = 14;
+
+            var pulse = marker.AddComponent<V1EnemyRoleMarker>();
+            pulse.Configure(kind, sr.color);
+
+            if (kind == V1EnemyKind.VoidPriest)
+            {
+                var cross = new GameObject("RoleMarker_VoidPriest_Cross");
+                cross.transform.SetParent(target, false);
+                cross.transform.localPosition = new Vector3(0f, 0.18f, 0.01f);
+                cross.transform.localScale = Vector3.one * 0.28f;
+                var crossRenderer = cross.AddComponent<SpriteRenderer>();
+                crossRenderer.sprite = MakeImpactDiamondSprite("role_voidpriest_cross", Color.white);
+                crossRenderer.color = new Color(0.42f, 1f, 0.68f, 0.74f);
+                crossRenderer.sortingOrder = 17;
+                cross.AddComponent<V1EnemyRoleMarker>().Configure(kind, crossRenderer.color, 1.35f);
+            }
+            else if (kind == V1EnemyKind.DriftingEye)
+            {
+                var focus = new GameObject("RoleMarker_DriftingEye_Focus");
+                focus.transform.SetParent(target, false);
+                focus.transform.localPosition = new Vector3(0f, 0.10f, 0.01f);
+                focus.transform.localScale = Vector3.one * 0.26f;
+                var focusRenderer = focus.AddComponent<SpriteRenderer>();
+                focusRenderer.sprite = MakeRingSprite("role_driftingeye_focus", Color.white, 72);
+                focusRenderer.color = new Color(0.94f, 0.54f, 1f, 0.62f);
+                focusRenderer.sortingOrder = 17;
+                focus.AddComponent<V1EnemyRoleMarker>().Configure(kind, focusRenderer.color, 1.18f);
+            }
+            else if (kind == V1EnemyKind.SplitOne)
+            {
+                var split = new GameObject("RoleMarker_SplitOne_Fracture");
+                split.transform.SetParent(target, false);
+                split.transform.localPosition = new Vector3(0f, 0.08f, 0.01f);
+                split.transform.localScale = Vector3.one * 0.24f;
+                var splitRenderer = split.AddComponent<SpriteRenderer>();
+                splitRenderer.sprite = MakeBoxSprite("role_split_fracture", Color.white, 8, 84);
+                splitRenderer.color = new Color(1f, 0.78f, 0.30f, 0.62f);
+                splitRenderer.sortingOrder = 17;
+                split.AddComponent<V1EnemyRoleMarker>().Configure(kind, splitRenderer.color, 1.22f);
+            }
+            else if (kind == V1EnemyKind.Gatekeeper)
+            {
+                var sigil = new GameObject("RoleMarker_Gatekeeper_Sigil");
+                sigil.transform.SetParent(target, false);
+                sigil.transform.localPosition = new Vector3(0f, 0.34f, 0.01f);
+                sigil.transform.localScale = Vector3.one * 0.42f;
+                var sigilRenderer = sigil.AddComponent<SpriteRenderer>();
+                sigilRenderer.sprite = GatekeeperSigilSprite(Mathf.Clamp(bossSpawnIndex, 0, 3));
+                sigilRenderer.color = GatekeeperAccentColor(Mathf.Clamp(bossSpawnIndex, 0, 3), 0.76f);
+                sigilRenderer.sortingOrder = 18;
+                sigil.AddComponent<V1EnemyRoleMarker>().Configure(kind, sigilRenderer.color, 1.10f);
+            }
         }
 
         float[] BossSchedule() => fastDebugRun ? FastBossScheduleSeconds : BossScheduleSeconds;
@@ -3248,6 +3337,7 @@ namespace Lethe.PrototypeV1
             DealDamage(enemy, damage, source, false);
             if (isHunter || isHunterEcho)
             {
+                MarkEnemyEchoState(enemy, V1MemoryId.HunterOath, isHunterEcho ? 1.20f : 1.00f, isHunterEcho ? 1.02f : 0.92f);
                 SpawnHunterOathImpact(impactPos, damage, isHunterEcho);
             }
         }
@@ -7192,6 +7282,71 @@ namespace Lethe.PrototypeV1
             if (age >= lifetime)
             {
                 Destroy(gameObject);
+            }
+        }
+    }
+
+    public sealed class V1EnemyRoleMarker : MonoBehaviour
+    {
+        SpriteRenderer sr;
+        V1EnemyKind kind;
+        Color baseColor;
+        Vector3 baseScale;
+        float age;
+        float scaleMul = 1f;
+
+        public void Configure(V1EnemyKind kind, Color color, float scaleMul = 1f)
+        {
+            sr = GetComponent<SpriteRenderer>();
+            this.kind = kind;
+            baseColor = color;
+            baseScale = transform.localScale;
+            age = 0f;
+            this.scaleMul = Mathf.Max(0.2f, scaleMul);
+        }
+
+        void Update()
+        {
+            age += Time.deltaTime;
+            var pulseSpeed = kind switch
+            {
+                V1EnemyKind.VoidPriest => 4.8f,
+                V1EnemyKind.DriftingEye => 3.2f,
+                V1EnemyKind.SplitOne => 7.8f,
+                V1EnemyKind.Gatekeeper => 2.0f,
+                _ => 3.6f
+            };
+            var pulse = Mathf.Sin(age * pulseSpeed) * 0.5f + 0.5f;
+            var scalePulse = kind switch
+            {
+                V1EnemyKind.SplitOne => 1f + pulse * 0.16f,
+                V1EnemyKind.VoidPriest => 1f + pulse * 0.10f,
+                V1EnemyKind.Gatekeeper => 1f + pulse * 0.06f,
+                _ => 1f + pulse * 0.08f
+            };
+            transform.localScale = baseScale * scaleMul * scalePulse;
+            var spin = kind switch
+            {
+                V1EnemyKind.VoidPriest => -38f,
+                V1EnemyKind.DriftingEye => 54f,
+                V1EnemyKind.SplitOne => 0f,
+                V1EnemyKind.Gatekeeper => -18f,
+                _ => 24f
+            };
+            if (Mathf.Abs(spin) > 0.01f)
+            {
+                transform.Rotate(0f, 0f, spin * Time.deltaTime);
+            }
+            else
+            {
+                transform.localRotation = Quaternion.Euler(0f, 0f, Mathf.Sin(age * 10f) * 9f);
+            }
+
+            if (sr != null)
+            {
+                var c = baseColor;
+                c.a = Mathf.Clamp01(baseColor.a * (0.62f + pulse * 0.42f));
+                sr.color = c;
             }
         }
     }

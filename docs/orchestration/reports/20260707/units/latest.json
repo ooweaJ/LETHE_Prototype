@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260707\\index.md",
-  "generatedAt": "2026-07-07T01:48:23.490Z",
-  "unitCount": 1,
+  "generatedAt": "2026-07-07T03:09:45.616Z",
+  "unitCount": 2,
   "latest": {
-    "title": "2026-07-07-01 - 쌍검, 보스 패턴, 칼무리 VFX 액션성 보강",
-    "number": "01",
-    "markdownPath": "docs\\orchestration\\reports\\20260707\\units\\2026-07-07-01-쌍검-보스-패턴-칼무리-vfx-액션성-보강.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260707\\units\\2026-07-07-01-쌍검-보스-패턴-칼무리-vfx-액션성-보강.html"
+    "title": "2026-07-07-02 - 기억/잔향/몹 역할 특색 1차 보강",
+    "number": "02",
+    "markdownPath": "docs\\orchestration\\reports\\20260707\\units\\2026-07-07-02-기억-잔향-몹-역할-특색-1차-보강.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260707\\units\\2026-07-07-02-기억-잔향-몹-역할-특색-1차-보강.html"
   }
 }

@@ -2,6 +2,22 @@
 
 # 2026-07-07
 
+- Added a memory/echo/enemy identity pass:
+  - Added `SpawnEchoIdentityBurst()` so each utility echo leaves a distinct monster-facing state VFX.
+  - Passive memory effects now apply matching enemy state marks for ExecutionFlash, ShatterWave, StoppedSecond, AshenShield, and OblivionBrand.
+  - Hunter projectiles now mark targets on hit.
+  - Enemy role markers now animate through `V1EnemyRoleMarker`.
+  - VoidPriest, DriftingEye, SplitOne, and Gatekeeper now have extra role symbols.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: standalone rerun passed with 0 warnings and 0 errors after a temporary parallel DLL lock.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: `[V1QA] PASS`, `total=240`, `state=72`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: `[V1QA] PASS`, `total=223`, `state=70`.
+  - `LETHE/V1 QA/Passive Memory Matrix`: `[V1QA] PASS`, `blood=17`, `ash=6`, `stopped=8`, `oblivion=37`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=114`, `activeVfx=27`, `ms=104.35`.
+  - `LETHE/V1 QA/Gatekeeper Pattern Matrix`: `[V1QA] PASS`, `boss=4`, `meteor=20`, `cone=6`, `ring=3`.
+
 - Improved direct-play VFX action readability from jaewoo feedback:
   - Dual blades now spawn guaranteed lightweight slash cuts so the weapon hit does not disappear when profile VFX is throttled.
   - Dense dual-blade mode keeps a single cheap guaranteed cut and suppresses the extra spark to stay under the perf matrix budget.

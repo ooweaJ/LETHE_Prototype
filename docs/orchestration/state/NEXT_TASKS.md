@@ -3,15 +3,26 @@
 ## 1. Direct-Play Visual Review
 
 - Priority: high
-- Problem: automated QA is green after the 2026-07-07 VFX action pass, but jaewoo still needs to judge feel/readability in actual play.
+- Problem: automated QA is green after the 2026-07-07 VFX action and identity passes, but jaewoo still needs to judge feel/readability in actual play.
 - Build:
   - Play `Dev_Prototype_v1` with dual blades and greatsword.
   - Use `F6` / F12 `Boss` to inspect the first Gatekeeper quickly.
-  - Judge dual-blade guaranteed slash visibility, Gatekeeper meteor fall, Gatekeeper cone cleave, boss-hit player feedback, Kalmuri orbit -> lock -> lunge, utility echo state marks, healer VFX, and dense dual-blade feel.
+  - Judge dual-blade guaranteed slash visibility, Gatekeeper meteor fall, Gatekeeper cone cleave, boss-hit player feedback, Kalmuri orbit -> lock -> lunge, utility echo identity bursts, enemy role symbols, healer VFX, and dense dual-blade feel.
 - Done:
   - Review returns concrete tune targets: keep, brighten, shrink, slow down, rebalance, or redesign.
 
-## 2. Kalmuri Clamp/Rip Visual Polish
+## 2. Utility Echo Identity Tuning
+
+- Priority: high
+- Problem: Echo Matrix passes and each family now has a monster-state burst, but direct play must decide whether the symbols are actually recognizable.
+- Build:
+  - Compare ExecutionFlash, HunterOath, ShatterWave, StoppedSecond, AshenShield, and OblivionBrand in normal and dense fights.
+  - If too noisy, reduce only the dense subset first.
+  - If too subtle, tune alpha/lifetime for one weak family at a time.
+- Done:
+  - jaewoo can name or at least visually separate each utility echo family without reading text.
+
+## 3. Kalmuri Clamp/Rip Visual Polish
 
 - Priority: high
 - Problem: Kalmuri automated perf is safe, but the new orbit guide / orbit-exit / lock-line / lunge action still needs direct visual approval.
@@ -24,7 +35,7 @@
 - Done:
   - Jaewoo can identify Hungry Blades / Kalmuri by action, not by label.
 
-## 3. Gatekeeper Raid Telegraph Feel Tune
+## 4. Gatekeeper Raid Telegraph Feel Tune
 
 - Priority: high
 - Problem: Gatekeeper pattern QA passes, but visual timing/fairness still needs player judgment.
@@ -34,29 +45,19 @@
 - Done:
   - The first boss feels readable, fair, and more like a simple raid encounter.
 
-## 4. Dense Dual-Blade Feel Check
+## 5. Dense Dual-Blade Feel Check
 
 - Priority: high
-- Problem: Dense Dual Blades Perf Matrix now passes, but the aggressive VFX throttle may make dense hits feel too quiet.
+- Problem: Dense Dual Blades Perf Matrix passes but now sits closer to the threshold after identity bursts.
 - Build:
   - Play dense waves with dual blades, Kalmuri, Blood, and utility echoes.
-  - If too quiet, add one cheap accent family back under the QA budget.
-  - If still hitchy in direct play, profile non-VFX costs next.
+  - If hitchy, reduce dense utility identity bursts before touching normal-density readability.
 - Done:
   - Dense dual-blade combat feels responsive and still readable.
 
-## 5. Healer / Enemy Separation Direct Review
-
-- Priority: high
-- Problem: VoidPriest healing and enemy separation pass automated QA, but dense-wave feel still needs direct judgment.
-- Build:
-  - Test dense waves with multiple priests and mixed enemies.
-  - Check heal source/readability, killability, soft separation, and crowd pressure.
-- Done:
-  - Review returns whether to tune heal amount, priest frequency, receiver lockout, separation padding, or enemy cap.
-
 Completed sequence:
 
+- 2026-07-07: memory/echo/enemy identity pass implemented; utility echo identity bursts, passive memory state marks, animated enemy role symbols, and Gatekeeper sigil marker pass build/Unity QA.
 - 2026-07-07: direct feedback VFX action pass implemented; dual-blade guaranteed slashes, Gatekeeper falling meteor/charge cleave, player damage cue, Kalmuri orbit-to-lunge, and Dense QA snapshot all pass build/Unity QA.
 - 2026-07-07: Kalmuri orbit-to-lunge link tightened; the hunt lunge now starts from a reserved orbit blade endpoint and Kalmuri Perf Matrix still passes.
 - 2026-07-06: MCP QA recovered on LETHE port `7890`; Echo, Gatekeeper, Dense Dual, Kalmuri, VoidPriest, and M2 QA passed after final dense optimization.

@@ -39,7 +39,7 @@
       <header>
         <div>
           <p class="eyebrow">LETHE 프로젝트 대시보드</p>
-          <h1>쌍검, 보스 패턴, 칼무리 액션성 보강 완료</h1>
+          <h1>기억/잔향/몹 역할 식별성 1차 보강 완료</h1>
         </div>
         <span class="badge">Dev_Prototype_v1 · 2026-07-07</span>
       </header>
@@ -47,32 +47,32 @@
       <section class="metrics" aria-label="핵심 상태">
         <div class="metric green">
           <span>현재 단계</span>
-          <strong>_dev 직접 피드백 대응 완료</strong>
+          <strong>_dev 식별성 보강 완료</strong>
           <small>아직 Assets/Lethe 승격 없음</small>
         </div>
         <div class="metric blue">
           <span>주요 변경</span>
-          <strong>쌍검 보장 VFX / 보스 공격체 / 칼무리 orbit-to-lunge</strong>
-          <small>전조 → 실제 공격 → 피격 피드백 구조</small>
+          <strong>잔향별 상태 burst / 기억 상태 마크 / 몹 역할 심볼</strong>
+          <small>텍스트 없이 전투 중 구분하는 방향</small>
         </div>
         <div class="metric amber">
           <span>검증</span>
           <strong>빌드와 Unity QA 통과</strong>
-          <small>Dense, Gatekeeper, Kalmuri PASS</small>
+          <small>Echo, Passive, Dense, Gatekeeper PASS</small>
         </div>
         <div class="metric green">
           <span>다음 판단</span>
           <strong>jaewoo 직접 플레이 리뷰</strong>
-          <small>보이는지, 맞는지, 쾌감이 있는지 확인</small>
+          <small>잔향/몹 역할을 눈으로 구분하는지 확인</small>
         </div>
       </section>
 
       <section class="hero">
         <h2>현재 결론</h2>
         <p>
-          빨간 범위만 보이고 끝나는 보스 패턴을 낙하체/차지/충격까지 이어지는 액션으로 보강했다.
-          쌍검은 몹이 많아도 최소 절단선이 보이게 했고, 칼무리는 원형 궤도에서 빠져나와 타겟을 물러 가는 흐름으로 바꿨다.
-          자동 QA는 통과했으므로 다음 판단은 실제 플레이 감각이다.
+          기억/잔향/몹 역할의 약점은 기능보다 식별성이었다. 그래서 잔향별로 몹 위에 남는 상태 burst를 분리하고,
+          기억 직접 효과도 같은 계열 마크를 남기게 했으며, 몹 역할 마커는 움직이는 심볼로 보강했다.
+          자동 QA는 통과했으므로 다음 판단은 실제 플레이에서 계열과 몹 역할이 텍스트 없이 읽히는지다.
         </p>
       </section>
 
@@ -80,10 +80,10 @@
         <article class="panel">
           <h2>다음 확인</h2>
           <ul>
-            <li>쌍검 VFX가 평상시와 Dense 상황 모두에서 보이는가</li>
-            <li>Gatekeeper 메테오가 실제로 떨어지는 공격처럼 보이는가</li>
-            <li>부채꼴 패턴이 차지 후 베는 느낌으로 읽히는가</li>
-            <li>칼무리가 원형 궤도 → 타겟 고정 → 돌진으로 보이는가</li>
+            <li>처형/추적/파쇄/정지/잿빛/망각 잔향이 서로 구분되는가</li>
+            <li>기억이 직접 때린 몹에도 계열 흔적이 남는가</li>
+            <li>VoidPriest, DriftingEye, SplitOne, Gatekeeper 역할 심볼이 보이는가</li>
+            <li>Dense 쌍검에서 새 identity burst가 렉을 만들지 않는가</li>
           </ul>
         </article>
         <article class="panel">
@@ -91,8 +91,10 @@
           <ul>
             <li><code>dotnet build Assembly-CSharp</code>: 오류 0</li>
             <li><code>dotnet build Assembly-CSharp-Editor</code>: 오류 0</li>
-            <li><code>Dense Dual Blades Perf Matrix</code>: PASS, 85.10ms</li>
-            <li><code>Gatekeeper Pattern Matrix</code>, <code>Kalmuri Perf Matrix</code>: PASS</li>
+            <li><code>Echo Matrix Dual/Great</code>: PASS</li>
+            <li><code>Passive Memory Matrix</code>: PASS</li>
+            <li><code>Dense Dual Blades Perf Matrix</code>: PASS, 104.35ms</li>
+            <li><code>Gatekeeper Pattern Matrix</code>: PASS</li>
           </ul>
         </article>
         <article class="panel">

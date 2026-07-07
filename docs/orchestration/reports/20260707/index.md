@@ -48,3 +48,53 @@ jaewoo가 직접 플레이로 쌍검, F6/F12 Boss, 칼무리 +1/+3/+5, Dense wav
 - 방향: 전조 -> 실제 공격체 -> 피격 피드백의 3단계로 액션을 읽히게 만든다.
 - 행동: 쌍검 보장 절단선, Gatekeeper 낙하/차지/충격 VFX, 플레이어 피격 큐, 칼무리 orbit-to-lunge를 추가했다.
 - 결과: 빌드와 Unity QA가 통과했고, 다음 단계는 직접 플레이 감각 검증으로 넘어간다.
+
+# 2026-07-07-02 - 기억/잔향/몹 역할 특색 1차 보강
+
+## 1. 현재 빌드 상태
+
+`Dev_Prototype_v1`은 기억/잔향/몹 역할의 식별성 1차 보강이 들어간 상태다. 이번 작업도 `_dev` 검증 단계이며 `Assets/Lethe` 승격은 하지 않았다.
+
+## 2. 오늘 바뀐 것
+
+- 부족한 부분을 “기능 부재”보다 “몹에게 남는 상태 문법과 역할 신호가 약함”으로 판단했다.
+- 잔향 상태 마크에 `SpawnEchoIdentityBurst()`를 붙여 각 계열이 다른 짧은 VFX를 남기게 했다.
+- 처형은 금빛 판결/균열, 추적은 초록 lock/needle, 파쇄는 청색 fracture/fault, 정지는 시계 clamp/tick, 잿빛은 ward/shard, 망각은 보라 brand/seal로 분리했다.
+- 기억이 직접 적에게 피해나 제어를 줄 때도 같은 계열 상태 마크를 남기게 했다.
+- 추적자 투사체가 적에게 맞을 때 HunterOath 상태 마크를 남기게 했다.
+- 몹 역할 마커에 `V1EnemyRoleMarker` 애니메이션을 붙였다.
+- VoidPriest, DriftingEye, SplitOne, Gatekeeper에 추가 역할 심볼을 얹었다.
+
+## 3. 테스트 결과와 근거
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: 단독 재실행 기준 경고 0개, 오류 0개.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: 기존 legacy 경고 7개, 오류 0개.
+- Unity compilation errors: `0`.
+- `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=240`, `state=72`.
+- `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=223`, `state=70`.
+- `LETHE/V1 QA/Passive Memory Matrix`: PASS, `blood=17`, `ash=6`, `stopped=8`, `oblivion=37`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=114`, `activeVfx=27`, `ms=104.35`.
+- `LETHE/V1 QA/Gatekeeper Pattern Matrix`: PASS, `boss=4`, `meteor=20`, `cone=6`, `ring=3`.
+
+## 4. 결정한 것
+
+잔향 특색은 텍스트 설명보다 몹 위에 남는 상태 변화로 먼저 읽히게 한다. 몹은 체력/속도 차이만으로 구분하지 않고, 역할 심볼과 움직이는 마커로 빠르게 알아보게 만든다.
+
+## 5. 문제 또는 리스크
+
+Dense 쌍검 QA는 통과했지만 `ms=104.35`로 기준 `110ms`에 가까워졌다. 직접 플레이에서 렉이 느껴지면 일반 상황 VFX를 줄이기보다 Dense 상황의 utility identity burst부터 줄이는 것이 맞다.
+
+## 6. GPT/Claude 인계 요약
+
+이번 패스는 기억/잔향/몹 역할을 숫자 버프로 강하게 만드는 작업이 아니라, 전투 중 눈으로 구분되는 VFX 언어를 늘린 작업이다. 다음 리뷰는 “각 잔향을 텍스트 없이 구분할 수 있는가”와 “몹 역할을 밀도 높은 상황에서도 빨리 알아볼 수 있는가”를 봐야 한다.
+
+## 7. 다음 Codex 작업
+
+jaewoo 직접 플레이 후 가장 약한 계열 하나만 골라 조정한다. 후보는 utility echo 한 계열의 alpha/lifetime, Dense 전용 identity burst 억제, VoidPriest/DriftingEye/SplitOne 역할 심볼 크기, Gatekeeper sigil 밝기다.
+
+## 8. 포트폴리오 메모: 문제, 방향, 행동, 결과
+
+- 문제: 기억/잔향/몹 역할이 기능적으로는 있어도 전투 중 비슷하게 보였다.
+- 방향: 몹 위 상태 마크와 역할 심볼을 통해 텍스트 없이 구분하게 만든다.
+- 행동: 잔향별 identity burst, 기억 직접 효과 상태 마크, 적 역할 애니메이션 마커를 추가했다.
+- 결과: 주요 Echo/Passive/Dense/Gatekeeper QA가 통과했고, 다음은 직접 플레이 식별성 검증이다.

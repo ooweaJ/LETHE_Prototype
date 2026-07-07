@@ -1,5 +1,44 @@
 # LETHE TEST
 
+# 2026-07-07 Memory/Echo/Enemy Identity Pass
+
+- Purpose:
+  - Respond to jaewoo's feedback that memories, echoes, monsters, and bosses still lack distinctive identity and VFX strength.
+  - Identify the immediate gap: many effects function, but the monster-facing state read is too similar across echo families, and enemy role markers are mostly static.
+- Applied target:
+  - Added `SpawnEchoIdentityBurst()` behind `MarkEnemyEchoState()` so each utility echo leaves a different short monster-state VFX:
+    - ExecutionFlash: gold verdict diamond and crack lines.
+    - HunterOath: green lock ring and needle line.
+    - ShatterWave: cyan fracture core and fault lines.
+    - StoppedSecond: gold clock clamp/ticks.
+    - AshenShield: pale ward ring and shield shards.
+    - OblivionBrand: purple brand seal and pip.
+  - Passive memory hits now also apply matching enemy state marks for ExecutionFlash, ShatterWave, StoppedSecond, AshenShield, and OblivionBrand.
+  - Hunter projectiles now mark targets on hit.
+  - Enemy role markers now animate via `V1EnemyRoleMarker`.
+  - VoidPriest, DriftingEye, SplitOne, and Gatekeeper now get extra role symbols so their role reads faster in dense fights.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
+  - Unity `Assets/Refresh`
+  - Unity compilation error check.
+  - Unity `LETHE/V1 QA/Echo Matrix Dual Blades`
+  - Unity `LETHE/V1 QA/Echo Matrix Greatsword`
+  - Unity `LETHE/V1 QA/Passive Memory Matrix`
+  - Unity `LETHE/V1 QA/Dense Dual Blades Perf Matrix`
+  - Unity `LETHE/V1 QA/Gatekeeper Pattern Matrix`
+- Results:
+  - Runtime build standalone rerun passed with 0 warnings and 0 errors after a temporary parallel DLL lock.
+  - Editor build passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Echo Matrix Dual Blades: `[V1QA] PASS`, `total=240`, `state=72`, all six utility state families present.
+  - Echo Matrix Greatsword: `[V1QA] PASS`, `total=223`, `state=70`, all six utility state families present.
+  - Passive Memory Matrix: `[V1QA] PASS`, `blood=17`, `ash=6`, `stopped=8`, `oblivion=37`.
+  - Dense Dual Blades Perf Matrix: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=114`, `activeVfx=27`, `ms=104.35`.
+  - Gatekeeper Pattern Matrix: `[V1QA] PASS`, `boss=4`, `meteor=20`, `cone=6`, `ring=3`.
+- Limitation:
+  - Dense Dual Blades remains within budget but closer to the `110ms` QA threshold after identity bursts. Direct play should verify whether the added identity VFX is worth the extra cost.
+
 # 2026-07-07 Direct Feedback VFX Action Pass
 
 - Purpose:

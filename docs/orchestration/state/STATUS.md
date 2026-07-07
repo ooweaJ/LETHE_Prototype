@@ -2,6 +2,39 @@
 
 Last updated: 2026-07-07
 
+## 2026-07-07 Update: Memory/Echo/Enemy Identity Pass
+
+- Identified the immediate weakness behind the feedback:
+  - memories and echoes have functional effects, but several families still leave similar-looking monster feedback;
+  - enemy roles exist, but role markers are mostly static and easy to miss in dense fights;
+  - Gatekeeper has stronger patterns now, but boss identity around the body can still be louder.
+- Applied:
+  - Added `SpawnEchoIdentityBurst()` behind enemy echo-state marks.
+  - Utility echoes now leave distinct short monster-state VFX:
+    - ExecutionFlash: gold verdict/crack.
+    - HunterOath: green lock/needle.
+    - ShatterWave: cyan fracture/fault.
+    - StoppedSecond: clock clamp/ticks.
+    - AshenShield: pale ward/shards.
+    - OblivionBrand: purple brand/seal.
+  - Passive memory hits now also apply matching enemy state marks for ExecutionFlash, ShatterWave, StoppedSecond, AshenShield, and OblivionBrand.
+  - Hunter projectiles now mark targets on hit.
+  - Enemy role markers now pulse/rotate through `V1EnemyRoleMarker`.
+  - VoidPriest, DriftingEye, SplitOne, and Gatekeeper now get additional role symbols.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: standalone rerun passed with 0 warnings and 0 errors after a temporary parallel DLL lock.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Echo Matrix Dual Blades: `[V1QA] PASS`, `total=240`, `state=72`.
+  - Echo Matrix Greatsword: `[V1QA] PASS`, `total=223`, `state=70`.
+  - Passive Memory Matrix: `[V1QA] PASS`, `blood=17`, `ash=6`, `stopped=8`, `oblivion=37`.
+  - Dense Dual Blades Perf Matrix: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=114`, `activeVfx=27`, `ms=104.35`.
+  - Gatekeeper Pattern Matrix: `[V1QA] PASS`, `boss=4`, `meteor=20`, `cone=6`, `ring=3`.
+- Current limitation:
+  - Dense Dual Blades is still passing but closer to the `110ms` threshold because of the new identity bursts. Direct play should decide whether to keep all bursts or reduce the dense subset.
+- Next step:
+  - Direct-play check whether each echo family can be recognized by monster state before reading text, and whether enemy role symbols help in dense waves.
+
 ## 2026-07-07 Update: Direct Feedback VFX Action Pass
 
 - Responded to jaewoo's direct-play feedback that dual-blade VFX was not visible enough, Gatekeeper meteor/cone patterns lacked actual attack bodies, player damage was hard to read, and Hungry Blades / Kalmuri looked like wobble rather than orbit-to-target hunting.

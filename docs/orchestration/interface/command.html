@@ -36,7 +36,7 @@
       <div class="grid">
         <article>
           <h2>Codex에게 지금 지시할 말</h2>
-          <textarea id="prompt-next" readonly>Dev_Prototype_v1을 직접 플레이 기준으로 다시 확인해줘. 쌍검 공격 VFX가 평상시와 Dense wave 모두에서 보이는지, F6/F12 Boss로 Gatekeeper 메테오가 실제로 떨어지는 공격처럼 보이는지, 부채꼴이 차지 후 베는 느낌인지, 보스 패턴에 맞았을 때 피격 피드백이 확실한지, 칼무리가 원형 궤도 -> 타겟 고정 -> 돌진으로 읽히는지 봐줘. 새 시스템은 추가하지 말고 문제가 보이면 경고 시간, 공격체 크기, 칼무리 궤도 속도, Dense 쌍검 accent 중 하나만 골라 좁게 조정해줘.</textarea>
+          <textarea id="prompt-next" readonly>Dev_Prototype_v1을 직접 플레이 기준으로 다시 확인해줘. 기억/잔향 쪽은 처형, 추적, 파쇄, 정지, 잿빛, 망각이 몹 위 상태 VFX만 보고도 서로 구분되는지 봐줘. 몹 쪽은 VoidPriest, DriftingEye, SplitOne, Gatekeeper 역할 심볼이 dense wave에서 보이는지 봐줘. Dense 쌍검에서 새 identity burst 때문에 렉이나 과한 번쩍임이 생기면 일반 VFX를 줄이지 말고 Dense 상황의 utility identity burst부터 하나씩 줄여줘. 새 시스템은 추가하지 말고 가장 약한 계열 하나만 골라 alpha/lifetime/scale을 좁게 조정해줘.</textarea>
           <button type="button" data-copy-target="prompt-next">프롬프트 복사</button>
         </article>
 
@@ -53,10 +53,10 @@
         <article>
           <h2>완료 기준</h2>
           <ul>
-            <li>직접 플레이에서 부족한 VFX/타이밍 축 하나를 특정</li>
+            <li>직접 플레이에서 가장 약한 기억/잔향/몹 역할 축 하나를 특정</li>
             <li>필요 시 좁은 조정 1회</li>
             <li>Unity compile error 0</li>
-            <li>Dense, Gatekeeper, Kalmuri 관련 QA 재통과</li>
+            <li>Echo, Passive, Dense, Gatekeeper 관련 QA 재통과</li>
           </ul>
         </article>
 
