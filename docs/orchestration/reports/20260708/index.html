@@ -183,6 +183,13 @@
           <p>Dev_Prototype_v1의 F12 K1~K4 칼무리 프리뷰가 다시 수정됐다. 첫 버전은 전부 비슷한 청록 칼날로 보여서 비교 도구로 부족했고, 이번 수정은 색과 형태부터 다르게 갈랐다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-08-06</span>
+          <h2><a href="#unit-2026-07-08-06" data-unit-link="unit-2026-07-08-06">칼무리 프리뷰 고HP 더미 적용</a></h2>
+          <p>Dev_Prototype_v1의 F12 칼무리 프리뷰가 다시 보강됐다. 이제 K1~K4를 누르면 고HP 더미가 생성되고, 화면에 최신 버전 라벨이 뜬다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -378,6 +385,40 @@
 <li>방향: 후보마다 색과 실루엣을 다르게 설계한다.</li>
 <li>행동: K1~K4의 VFX 문법을 붉은 상처, 푸른 궤적, 보라 교차, 보라 표식으로 분리했다.</li>
 <li>결과: 직접 플레이에서 후보 차이를 훨씬 빠르게 구분할 수 있는 상태가 됐다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-08-06" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-08-06 - 칼무리 프리뷰 고HP 더미 적용</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 F12 칼무리 프리뷰가 다시 보강됐다. 이제 <code>K1</code>~<code>K4</code>를 누르면 고HP 더미가 생성되고, 화면에 최신 버전 라벨이 뜬다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>칼무리 프리뷰 전용 더미 적 HP를 <code>9999</code>로 올렸다.</li>
+<li>프리뷰 데미지는 <code>1</code>로 제한했다.</li>
+<li><code>K1</code>~<code>K4</code>를 누르면 <code>K Preview v2 / high HP dummies</code> 라벨이 뜨게 했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 기존 legacy warning 7개, error 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 기존 legacy warning 7개, error 0개.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Unity console errors: <code>0</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>프리뷰는 전투 밸런스가 아니라 VFX 비교 도구이므로, 더미가 죽지 않고 반복 확인 가능해야 한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>만약 <code>K Preview v2 / high HP dummies</code> 라벨이 안 뜨면 Play Mode가 이전 스크립트 어셈블리를 쓰고 있는 것이다. Play Mode를 나갔다가 다시 들어가야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>칼무리 후보 비교는 이제 고HP 더미 기준으로 봐야 한다. 최신 반영 확인 신호는 <code>K Preview v2 / high HP dummies</code> 라벨이다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo가 F12에서 <code>K1</code>~<code>K4</code>를 다시 눌러 보고, 라벨이 보이는지와 각 후보가 충분히 다르게 보이는지 판단한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 더미가 빨리 죽어 VFX를 보기 어려웠고 업데이트 적용 여부도 헷갈렸다.</li>
+<li>방향: 디버그 프리뷰를 전투가 아닌 관찰용으로 분리한다.</li>
+<li>행동: 고HP 더미, 데미지 제한, v2 라벨을 추가했다.</li>
+<li>결과: 프리뷰를 반복해서 확인할 수 있는 상태가 됐다.</li>
 </ul>
     </article>
       </div>

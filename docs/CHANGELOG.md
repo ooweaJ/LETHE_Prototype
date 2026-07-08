@@ -2,6 +2,16 @@
 
 # 2026-07-08
 
+- Improved Kalmuri concept preview reliability:
+  - K-preview dummy enemies now spawn with high HP (`9999`) so they do not die before the VFX can be inspected.
+  - K-preview damage is capped to `1` so repeated `K1` to `K4` presses remain reviewable.
+  - Added an on-screen `K Preview v2 / high HP dummies` confirmation label so stale Play Mode/code-update confusion is easier to spot.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+
 - Made Kalmuri concept preview buttons visually distinct after jaewoo noted the first preview set looked the same:
   - `K1` now uses a red/orange wound-feast read with bite ring, blood disc, and inward teeth.
   - `K2` now uses a blue trail-bloom read with long attack-ribbon afterimages and delayed rip lines.

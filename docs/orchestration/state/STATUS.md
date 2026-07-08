@@ -2,6 +2,21 @@
 
 Last updated: 2026-07-08
 
+## 2026-07-08 Update: Kalmuri Preview High-HP Dummies
+
+- Responded to jaewoo's report that the preview might not have updated and the enemies died too quickly to inspect the VFX.
+- Applied:
+  - K-preview dummy enemies now spawn with HP `9999`.
+  - K-preview damage is capped to `1`.
+  - Pressing `K1` to `K4` now shows `K Preview v2 / high HP dummies`, making it obvious whether the latest script is loaded.
+- Verification:
+  - Runtime build: passed with 7 existing legacy warnings and 0 errors.
+  - Editor build: passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+- Note:
+  - If the label does not appear in Play Mode, exit and re-enter Play Mode so Unity loads the latest assembly.
+
 ## 2026-07-08 Update: Kalmuri Concept Preview Readability Split
 
 - Responded to jaewoo's finding that the first `K1` to `K4` preview set looked effectively identical.

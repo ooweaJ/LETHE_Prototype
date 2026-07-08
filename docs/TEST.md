@@ -1,5 +1,27 @@
 # LETHE TEST
 
+# 2026-07-08 Kalmuri Preview High-HP Dummies
+
+- Purpose:
+  - Make Kalmuri concept previews easier to inspect after jaewoo reported that enemies died too quickly and the update might not be visible.
+- Applied target:
+  - K-preview enemies now spawn with HP `9999`.
+  - K-preview damage is capped to `1`.
+  - Added an on-screen `K Preview v2 / high HP dummies` label when pressing `K1` to `K4`.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
+  - Unity `Assets/Refresh`
+  - Unity compilation error check.
+  - Unity console error check.
+- Results:
+  - Runtime build passed with 7 existing legacy warnings and 0 errors.
+  - Editor build passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+- Debug instruction:
+  - If `K Preview v2 / high HP dummies` does not appear after pressing a K button, exit and re-enter Play Mode so Unity loads the latest script assembly.
+
 # 2026-07-08 Kalmuri Concept Preview Readability Split
 
 - Purpose:

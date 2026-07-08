@@ -29,6 +29,7 @@
 - Problem: The latest wound-chain still risks reading as "one blade flies out." Four alternate Kalmuri concept previews now exist and need direct selection before final implementation.
 - Build:
   - Press `F12` in Play Mode and click `K1`, `K2`, `K3`, `K4`.
+  - Confirm the `K Preview v2 / high HP dummies` label appears; if not, exit/re-enter Play Mode.
   - `K1`: red/orange wound-feast.
   - `K2`: blue trail-bloom.
   - `K3`: purple/white cross-swarm.
@@ -60,6 +61,7 @@
 Completed sequence:
 
 - 2026-07-08: memory/echo kingmaker VFX and judgment pass implemented; Execution, Hunter, Shatter, Stopped, Ashen, Oblivion, and non-blood utility ultimates now have stronger payoff behavior and QA coverage.
+- 2026-07-08: Kalmuri preview high-HP dummy update implemented; K buttons now spawn HP 9999 dummies, cap preview damage to 1, and show a v2 label.
 - 2026-07-08: Kalmuri concept preview readability split implemented; K1-K4 now use distinct colors/shapes instead of similar cyan blade swarms.
 - 2026-07-08: Kalmuri concept preview debugger added; F12 now offers K1 wound-feast, K2 trail-bloom, K3 cross-swarm, and K4 mark-frenzy samples.
 - 2026-07-08: awakened Kalmuri Echo corrected from player-body launch to wound-side echo reaction; Echo Matrix Dual/Great and Dense Dual QA passed.

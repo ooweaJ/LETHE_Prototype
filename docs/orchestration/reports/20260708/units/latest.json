@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260708\\index.md",
-  "generatedAt": "2026-07-08T06:34:50.464Z",
-  "unitCount": 5,
+  "generatedAt": "2026-07-08T06:40:49.876Z",
+  "unitCount": 6,
   "latest": {
-    "title": "2026-07-08-05 - 칼무리 콘셉트 프리뷰 식별성 분리",
-    "number": "05",
-    "markdownPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-05-칼무리-콘셉트-프리뷰-식별성-분리.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-05-칼무리-콘셉트-프리뷰-식별성-분리.html"
+    "title": "2026-07-08-06 - 칼무리 프리뷰 고HP 더미 적용",
+    "number": "06",
+    "markdownPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-06-칼무리-프리뷰-고hp-더미-적용.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-06-칼무리-프리뷰-고hp-더미-적용.html"
   }
 }

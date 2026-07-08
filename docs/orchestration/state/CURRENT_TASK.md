@@ -1,5 +1,33 @@
 # Current Task
 
+# 2026-07-08 Kalmuri Preview High-HP Dummies
+
+## Status
+
+Implemented, locally build-verified, and Unity compile/console checked.
+
+## Finding
+
+- jaewoo could not tell whether the preview update was applied.
+- K-preview enemies also died too quickly, making the VFX hard to inspect.
+
+## Applied Changes
+
+- K-preview dummy enemies now spawn with HP `9999`.
+- K-preview damage is capped to `1`.
+- Pressing `K1` to `K4` shows `K Preview v2 / high HP dummies` above the pack.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- Unity compilation errors: `0`.
+- Unity console errors: `0`.
+
+## Remaining Gate
+
+Direct play should press `F12`, then `K1` to `K4`. If the `K Preview v2 / high HP dummies` label does not appear, exit/re-enter Play Mode.
+
 # 2026-07-08 Kalmuri Concept Preview Readability Split
 
 ## Status

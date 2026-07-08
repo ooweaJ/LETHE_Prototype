@@ -3046,7 +3046,7 @@ namespace Lethe.PrototypeV1
             return Mathf.RoundToInt(Mathf.Lerp(58f, 64f, Mathf.Clamp01((elapsed - 900f) / Mathf.Max(1f, RunSeconds - 900f))));
         }
 
-        void SpawnEnemy(V1EnemyKind kind, Vector3 pos)
+        void SpawnEnemy(V1EnemyKind kind, Vector3 pos, float debugHpOverride = -1f)
         {
             var go = new GameObject($"Enemy_{kind}");
             go.transform.position = pos;
@@ -3055,7 +3055,7 @@ namespace Lethe.PrototypeV1
             sr.color = EnemyColor(kind);
             sr.sortingOrder = 15;
             var enemy = go.AddComponent<V1Enemy>();
-            enemy.Configure(this, kind, player, EnemyHp(kind), EnemySpeed(kind), EnemyDamage(kind), EnemyRadius(kind));
+            enemy.Configure(this, kind, player, debugHpOverride > 0f ? debugHpOverride : EnemyHp(kind), EnemySpeed(kind), EnemyDamage(kind), EnemyRadius(kind));
             AddEnemyRoleMarker(go.transform, kind);
             enemies.Add(enemy);
         }
@@ -4285,10 +4285,11 @@ namespace Lethe.PrototypeV1
             var result = new List<V1Enemy>();
             for (int i = 0; i < offsets.Length; i++)
             {
-                SpawnEnemy(kinds[i], center + (Vector3)offsets[i]);
+                SpawnEnemy(kinds[i], center + (Vector3)offsets[i], 9999f);
                 var enemy = enemies.LastOrDefault();
                 if (enemy != null) result.Add(enemy);
             }
+            SpawnFloatingText(center + Vector3.up * 0.92f, "K Preview v2 / high HP dummies", new Color(1f, 0.92f, 0.52f));
             return result;
         }
 
@@ -4406,7 +4407,7 @@ namespace Lethe.PrototypeV1
                 if (enemy == null || !enemy.IsAlive) continue;
                 var dir = (Vector2)(enemy.transform.position - origin);
                 if (dir.magnitude > radius + enemy.TouchRadius) continue;
-                DealDamage(enemy, damage, source, false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 0.18f);
+                DealDamage(enemy, 1f, source, false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 0.05f);
             }
             hitstopTimer = Mathf.Max(hitstopTimer, 0.035f);
             cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.08f);
