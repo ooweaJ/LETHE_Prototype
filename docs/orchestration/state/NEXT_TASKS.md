@@ -1,6 +1,24 @@
 # Next Tasks
 
-## 1. Direct-Play Kingmaker Route Review
+## 1. Kalmuri VFX Hard Reset
+
+- Priority: urgent
+- Problem: jaewoo still cannot see meaningful differences in the Kalmuri preview. The current preview keeps reading like the existing Kalmuri VFX because it reuses too much of the old blade/cyan/short-burst language.
+- Build:
+  - Stop polishing the current `K1` to `K4` implementation if it still looks unchanged.
+  - Remove or bypass the current Kalmuri preview helpers in `V1GameManager.cs`.
+  - Do not use `KalmuriBladeSprite()` or existing Kalmuri blade helper visuals for the next preview.
+  - Create four completely different silhouettes:
+    - `K1`: wound mouth / saw-tooth scar.
+    - `K2`: long ribbon trail / afterimage strip.
+    - `K3`: large geometric X/cross burst.
+    - `K4`: curse-mark seal plus chain/fork network.
+  - Keep high-HP dummies and use a new visible label: `K Preview HARD RESET`.
+  - Make previews persist around `0.8s` so jaewoo can inspect them.
+- Done:
+  - jaewoo can distinguish all four candidates immediately without explanation.
+
+## 2. Direct-Play Kingmaker Route Review
 
 - Priority: high
 - Problem: automated QA is green after the 2026-07-08 memory/echo kingmaker pass, but jaewoo still needs to judge whether non-blood routes feel rewarding in actual play.
@@ -11,7 +29,7 @@
 - Done:
   - Review returns concrete tune targets: keep, brighten, shrink, slow down, rebalance, or redesign.
 
-## 2. Utility Echo Identity Tuning
+## 3. Utility Echo Identity Tuning
 
 - Priority: high
 - Problem: Echo Matrix passes and Kalmuri now has a stronger Greatsword/Dual split, but most non-Kalmuri utility echoes still need the same weapon-personality audit.
@@ -23,22 +41,18 @@
 - Done:
   - jaewoo can name or at least visually separate each utility echo family without reading text.
 
-## 3. Kalmuri Concept Pick Review
+## 4. Kalmuri Concept Pick Review
 
 - Priority: high
-- Problem: The latest wound-chain still risks reading as "one blade flies out." Four alternate Kalmuri concept previews now exist and need direct selection before final implementation.
+- Problem: This task is blocked until the Kalmuri VFX hard reset produces previews that actually look different.
 - Build:
-  - Press `F12` in Play Mode and click `K1`, `K2`, `K3`, `K4`.
-  - Confirm the `K Preview v2 / high HP dummies` label appears; if not, exit/re-enter Play Mode.
-  - `K1`: red/orange wound-feast.
-  - `K2`: blue trail-bloom.
-  - `K3`: purple/white cross-swarm.
-  - `K4`: violet mark-frenzy.
+  - After hard reset, press `F12` in Play Mode and click the rebuilt `K1`, `K2`, `K3`, `K4`.
+  - Confirm the `K Preview HARD RESET` label appears.
   - Pick one winner or a hybrid, then Codex converts it into the actual Kalmuri Echo behavior.
 - Done:
   - Jaewoo can name the chosen Kalmuri direction and why it reads best.
 
-## 4. Gatekeeper Raid Telegraph Feel Tune
+## 5. Gatekeeper Raid Telegraph Feel Tune
 
 - Priority: high
 - Problem: Gatekeeper pattern QA passes, but visual timing/fairness still needs player judgment.
@@ -48,7 +62,7 @@
 - Done:
   - The first boss feels readable, fair, and more like a simple raid encounter.
 
-## 5. Dense Dual-Blade Feel Check
+## 6. Dense Dual-Blade Feel Check
 
 - Priority: high
 - Problem: Dense Dual Blades Perf Matrix passes at `57.58ms`, but real play still needs feel judgment because automated QA cannot prove input/visual smoothness.
@@ -60,6 +74,7 @@
 
 Completed sequence:
 
+- 2026-07-08: Kalmuri next-session direction changed to hard reset; current K1-K4 preview is not good enough because it still reads like reused old Kalmuri VFX.
 - 2026-07-08: memory/echo kingmaker VFX and judgment pass implemented; Execution, Hunter, Shatter, Stopped, Ashen, Oblivion, and non-blood utility ultimates now have stronger payoff behavior and QA coverage.
 - 2026-07-08: Kalmuri preview high-HP dummy update implemented; K buttons now spawn HP 9999 dummies, cap preview damage to 1, and show a v2 label.
 - 2026-07-08: Kalmuri concept preview readability split implemented; K1-K4 now use distinct colors/shapes instead of similar cyan blade swarms.

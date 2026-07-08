@@ -190,6 +190,13 @@
           <p>Dev_Prototype_v1의 F12 칼무리 프리뷰가 다시 보강됐다. 이제 K1~K4를 누르면 고HP 더미가 생성되고, 화면에 최신 버전 라벨이 뜬다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-08-07</span>
+          <h2><a href="#unit-2026-07-08-07" data-unit-link="unit-2026-07-08-07">칼무리 VFX 하드 리셋 인계</a></h2>
+          <p>현재 K1~K4 프리뷰는 비교 도구로 충분하지 않다. 더미 HP나 색 조정 문제가 아니라, 기존 칼무리 칼날/청록/짧은 폭발 언어를 계속 재사용해서 jaewoo가 보기에는 거의 안 바뀐 것처럼 느껴진다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -419,6 +426,45 @@
 <li>방향: 디버그 프리뷰를 전투가 아닌 관찰용으로 분리한다.</li>
 <li>행동: 고HP 더미, 데미지 제한, v2 라벨을 추가했다.</li>
 <li>결과: 프리뷰를 반복해서 확인할 수 있는 상태가 됐다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-08-07" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-08-07 - 칼무리 VFX 하드 리셋 인계</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>현재 <code>K1</code>~<code>K4</code> 프리뷰는 비교 도구로 충분하지 않다. 더미 HP나 색 조정 문제가 아니라, 기존 칼무리 칼날/청록/짧은 폭발 언어를 계속 재사용해서 jaewoo가 보기에는 거의 안 바뀐 것처럼 느껴진다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>다음 작업 방향을 문서에 고정했다.</li>
+<li>현재 <code>K1</code>~<code>K4</code> 프리뷰를 더 다듬는 대신, 칼무리 VFX를 하드 리셋하기로 했다.</li>
+<li>다음 세션에서는 기존 칼무리 스프라이트와 헬퍼를 재사용하지 않는 새 후보를 만들어야 한다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<p>이번 단위는 코드 구현이 아니라 인계/작업 방향 기록이다. 이전 검증 기준으로 현재 빌드는 컴파일 에러 0, Unity 콘솔 에러 0 상태다.</p>
+<h2>4. 결정한 것</h2>
+<p>다음 작업은 “색/수명/크기 조정”이 아니다. 기존 칼무리 VFX를 없애고 완전히 다른 실루엣으로 다시 만든다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>지금 프리뷰는 계속 기존 칼날 느낌을 끌고 와서, 플레이어가 후보 차이를 판단할 수 없다. 이 상태로 실제 잔향에 이식하면 같은 문제가 반복된다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>다음 세션은 <code>V1GameManager.cs</code>의 현재 칼무리 프리뷰 헬퍼를 삭제하거나 우회하는 것부터 시작한다. 새 후보는 <code>KalmuriBladeSprite()</code>를 쓰지 않는다. 후보 실루엣은 아래처럼 완전히 달라야 한다.</p>
+<ul>
+<li><code>K1</code>: 상처 입/톱니 검흔.</li>
+<li><code>K2</code>: 긴 리본 궤적/잔상 띠.</li>
+<li><code>K3</code>: 큰 기하학적 X/교차 폭발.</li>
+<li><code>K4</code>: 저주 표식/사슬 링크 네트워크.</li>
+</ul>
+<h2>7. 다음 Codex 작업</h2>
+<p>1. <code>docs/orchestration/state/CURRENT_TASK.md</code>의 <code>Kalmuri VFX Hard Reset Handoff</code>부터 읽는다.</p>
+<p>2. 현재 <code>DebugPreviewKalmuriWoundFeast</code>, <code>DebugPreviewKalmuriTrailBloom</code>, <code>DebugPreviewKalmuriCrossSwarm</code>, <code>DebugPreviewKalmuriMarkFrenzy</code>를 삭제하거나 새 구현으로 완전히 교체한다.</p>
+<p>3. <code>KalmuriBladeSprite()</code>와 기존 칼무리 헬퍼를 새 프리뷰 후보에서 사용하지 않는다.</p>
+<p>4. F12 프리뷰 라벨을 <code>K Preview HARD RESET</code>으로 바꾼다.</p>
+<p>5. 각 후보가 최소 0.8초 이상 남아 화면에서 비교 가능하게 한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 칼무리 프리뷰가 기존 VFX 재사용 때문에 거의 바뀌지 않은 것처럼 보였다.</li>
+<li>방향: 기존 칼날 언어를 버리고 완전히 다른 시각 문법으로 재설계한다.</li>
+<li>행동: 다음 세션용 하드 리셋 지시를 상태/작업 문서에 기록했다.</li>
+<li>결과: 집에서 이어 할 때 바로 현재 프리뷰 폐기와 새 실루엣 제작부터 시작할 수 있다.</li>
 </ul>
     </article>
       </div>

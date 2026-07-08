@@ -2,6 +2,11 @@
 
 # 2026-07-08
 
+- Recorded Kalmuri VFX hard-reset handoff:
+  - Current K1-K4 preview should be treated as failed for visual comparison.
+  - Next session should remove or bypass the current preview helpers and avoid `KalmuriBladeSprite()` / old Kalmuri helper visuals.
+  - New candidates must use completely different silhouettes: wound mouth, ribbon trail, geometric cross burst, and curse-mark network.
+
 - Improved Kalmuri concept preview reliability:
   - K-preview dummy enemies now spawn with high HP (`9999`) so they do not die before the VFX can be inspected.
   - K-preview damage is capped to `1` so repeated `K1` to `K4` presses remain reviewable.

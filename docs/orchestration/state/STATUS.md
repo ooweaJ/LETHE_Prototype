@@ -2,6 +2,25 @@
 
 Last updated: 2026-07-08
 
+## 2026-07-08 Update: Kalmuri VFX Hard Reset Handoff
+
+- jaewoo reported that Kalmuri preview VFX still appears unchanged.
+- Decision:
+  - Do not continue polishing the current K1-K4 preview.
+  - Treat the current Kalmuri preview as failed for visual comparison.
+  - Next session should hard reset the preview and stop reusing existing Kalmuri blade visuals.
+- Required next direction:
+  - Remove or bypass current Kalmuri preview helpers in `V1GameManager.cs`.
+  - Do not use `KalmuriBladeSprite()` or old Kalmuri helper visuals for new candidates.
+  - Rebuild four candidates with completely different silhouettes:
+    - wound mouth / saw-tooth scar,
+    - long ribbon trail / afterimage strip,
+    - large geometric X/cross burst,
+    - curse-mark seal plus chain/fork network.
+  - Use high-HP dummies and a clear `K Preview HARD RESET` label.
+- Reason:
+  - The issue is no longer simply color, damage, or dummy HP. The current candidates still inherit too much old Kalmuri VFX language, so jaewoo cannot judge them.
+
 ## 2026-07-08 Update: Kalmuri Preview High-HP Dummies
 
 - Responded to jaewoo's report that the preview might not have updated and the enemies died too quickly to inspect the VFX.

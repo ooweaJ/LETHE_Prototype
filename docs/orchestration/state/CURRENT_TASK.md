@@ -1,5 +1,58 @@
 # Current Task
 
+# 2026-07-08 Kalmuri VFX Hard Reset Handoff
+
+## Status
+
+Planning / next-session handoff. Do this at home before more Kalmuri tuning.
+
+## Finding
+
+- jaewoo reported that Kalmuri preview VFX still appears unchanged.
+- Current problem is not dummy HP anymore.
+- Current problem is that the preview still reuses too much of the existing Kalmuri visual language:
+  - existing blade sprite,
+  - existing cyan/echo slash habits,
+  - target-centered short bursts,
+  - old Kalmuri helper paths.
+- Therefore the next step should not be another small color/lifetime tweak.
+
+## Required Direction
+
+Hard reset Kalmuri VFX preview and then the real Kalmuri Echo.
+
+- Remove the current `K1` to `K4` preview implementation as a selection tool.
+- Do not use `KalmuriBladeSprite()` for the new preview candidates.
+- Do not reuse the existing `KalmuriEchoClampBlade`, `KalmuriEchoBarrage`, `KalmuriEchoSurgeBlade`, `KalmuriAwakenBlade`, or wound-chain projectile look for the new candidates.
+- Create new silhouettes that cannot be mistaken for the current Kalmuri:
+  - `K1`: wound mouth / saw-tooth scar, not flying blades.
+  - `K2`: long ribbon/afterimage trail, not separate blade sprites.
+  - `K3`: large geometric cross-cut burst, not orbit blades.
+  - `K4`: curse-mark network / chained seals, not more knives.
+- Keep high-HP preview dummies and v2 label or replace label with `K Preview HARD RESET`.
+
+## Next Implementation Checklist
+
+1. In `V1GameManager.cs`, isolate or delete the current Kalmuri preview helpers:
+   - `DebugPreviewKalmuriWoundFeast`
+   - `DebugPreviewKalmuriTrailBloom`
+   - `DebugPreviewKalmuriCrossSwarm`
+   - `DebugPreviewKalmuriMarkFrenzy`
+2. Build new preview helpers from generated primitive sprites or brand-new assets:
+   - discs, jagged lines, sectors, ribbons, seals, cracks, chains;
+   - avoid the existing Kalmuri blade sprite entirely.
+3. Make each candidate last at least `0.8s` for visual inspection.
+4. Make the hit area visibly readable:
+   - K1: circular wound area.
+   - K2: long weapon trail strip.
+   - K3: cross/X area.
+   - K4: marked target plus linked secondary targets.
+5. After a candidate is approved, only then convert it into real Kalmuri Echo behavior.
+
+## Remaining Gate
+
+At home, start from this task. Do not spend more time trying to polish the current K1-K4 if it still looks the same; replace the visual system.
+
 # 2026-07-08 Kalmuri Preview High-HP Dummies
 
 ## Status
