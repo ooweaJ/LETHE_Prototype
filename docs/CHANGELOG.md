@@ -2,6 +2,20 @@
 
 # 2026-07-08
 
+- Rebuilt Kalmuri K1-K4 around `굶주린 칼무리` hunger imagery:
+  - `K1`: wound feast / bite swarm.
+  - `K2`: blood-scent hunt.
+  - `K3`: feast table.
+  - `K4`: chewed trail.
+  - Replaced the previous ribbon/cross/curse candidate language with wound, scent, teeth, inward bite, and chewed scars.
+  - Dual Blades now favor many fast bite marks; Greatsword favors large wound/furrow closures.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on sequential rerun.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS, `totalKalmuri=268`.
+
 - Suppressed legacy Kalmuri awakened projectile during prototype review:
   - F12 Kalmuri prototype modes now block the old +5 `LaunchKalmuriBlade` flying VFX.
   - This keeps K1-K4 candidate review from being polluted by the previous Kalmuri blade language.

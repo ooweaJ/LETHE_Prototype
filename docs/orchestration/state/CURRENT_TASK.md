@@ -1,5 +1,40 @@
 # Current Task
 
+# 2026-07-08 Kalmuri Hunger-Fit Candidate Rebuild
+
+## Status
+
+Implemented, build-verified, and Unity console/QA checked.
+
+## Applied Changes
+
+- Rebuilt the Kalmuri K1-K4 candidates around the actual `굶주린 칼무리` image instead of generic different-looking VFX.
+- New candidate meanings:
+  - `K1`: wound feast / bite swarm. The wound opens like a mouth and teeth close inward.
+  - `K2`: blood-scent hunt. The first wound becomes a scent beacon and nearby blade echoes are pulled toward it.
+  - `K3`: feast table. Blades/teeth set a circular table around the wound and fold inward.
+  - `K4`: chewed trail. The weapon path leaves repeated bite marks and a chewed furrow.
+- Removed the previous ribbon/cross/curse conceptual reads from the candidate labels and main VFX bodies.
+- Kept weapon personality:
+  - Dual Blades: more small bite marks, pack behavior, fast closures.
+  - Greatsword: larger wound, heavier bite/furrow, fewer bigger closures.
+- Updated hit rules:
+  - `K2`: radial scent pull.
+  - `K3`: circular feast area.
+  - `K4`: forward chewed path.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on sequential rerun after an initial shared-DLL lock.
+- Unity compilation errors: `0`.
+- Unity console errors: `0`.
+- `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS, `totalKalmuri=268` from Unity console.
+
+## Remaining Gate
+
+jaewoo should direct-play `K1` to `K4` again with Dual Blades and Greatsword. This review should judge whether any candidate finally reads as `굶주린 칼무리의 잔향`; if not, discard all four and design the next set from the wound/scent/feast/trail foundation.
+
 # 2026-07-08 Kalmuri Prototype Legacy VFX Suppression
 
 ## Status

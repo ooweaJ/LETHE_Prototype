@@ -3,13 +3,12 @@
 ## 1. Kalmuri Playable Echo Pick Review
 
 - Priority: urgent
-- Problem: K1-K4 are now playable Echo prototypes, but jaewoo still needs to judge which one actually makes `굶주린 칼무리` feel fun and recognizable as an Echo.
+- Problem: K1-K4 have been rebuilt around wound/scent/feast/trail hunger language, but jaewoo still needs to judge whether any of them finally feels like `굶주린 칼무리의 잔향`.
 - Build:
   - Play `Dev_Prototype_v1`.
-  - Press `F12`, choose `K1`, then attack enemies and feel the actual Kalmuri Echo follow-up.
-  - Repeat for `K2`, `K3`, and `K4`.
-  - Test both Dual Blades and Greatsword, because each candidate keeps weapon-specific reads.
-  - Judge VFX, hit area, damage timing, hitstop/camera feel, and whether the Echo reads as a transformed Hungry Blades memory.
+  - Press `F12`, choose `K1` wound feast, then attack enemies with Dual Blades and Greatsword.
+  - Repeat for `K2` blood-scent hunt, `K3` feast table, and `K4` chewed trail.
+  - Judge VFX, hit area, damage timing, hitstop/camera feel, weapon identity, and whether the Echo reads as a transformed Hungry Blades memory.
   - Pick one winner or a hybrid direction.
 - Done:
   - jaewoo can name the chosen playable Kalmuri Echo direction and explain whether Dual/Great should keep separate silhouettes.
@@ -70,7 +69,8 @@
 
 Completed sequence:
 
-- 2026-07-08: Kalmuri K1-K4 corrected from cosmetic previews into playable Echo prototype modes; F12 K buttons now route real Hungry Blades Echo follow-ups through maw, ribbon, cross, or curse-network hit rules.
+- 2026-07-08: Kalmuri candidates rebuilt around hunger-fit imagery; K1 wound feast, K2 blood-scent hunt, K3 feast table, and K4 chewed trail replace the previous ribbon/cross/curse directions.
+- 2026-07-08: Kalmuri K1-K4 corrected from cosmetic previews into playable Echo prototype modes; F12 K buttons now route real Hungry Blades Echo follow-ups through the selected prototype.
 - 2026-07-08: Kalmuri next-session direction changed to hard reset; current K1-K4 preview is not good enough because it still reads like reused old Kalmuri VFX.
 - 2026-07-08: Kalmuri VFX hard reset implemented; K1-K4 now use hard-reset silhouettes with Dual Blades and Greatsword variants, `K Preview HARD RESET / HP 9999`, and Kalmuri Perf Matrix PASS.
 - 2026-07-08: memory/echo kingmaker VFX and judgment pass implemented; Execution, Hunter, Shatter, Stopped, Ashen, Oblivion, and non-blood utility ultimates now have stronger payoff behavior and QA coverage.

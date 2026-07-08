@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260708\\index.md",
-  "generatedAt": "2026-07-08T10:45:34.485Z",
-  "unitCount": 10,
+  "generatedAt": "2026-07-08T12:49:02.497Z",
+  "unitCount": 11,
   "latest": {
-    "title": "2026-07-08-10 - 칼무리 후보 기존 투사체 억제",
-    "number": "10",
-    "markdownPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-10-칼무리-후보-기존-투사체-억제.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-10-칼무리-후보-기존-투사체-억제.html"
+    "title": "2026-07-08-11 - 칼무리다운 잔향 후보 재구성",
+    "number": "11",
+    "markdownPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-11-칼무리다운-잔향-후보-재구성.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-11-칼무리다운-잔향-후보-재구성.html"
   }
 }

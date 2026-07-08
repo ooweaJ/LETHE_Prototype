@@ -1,5 +1,29 @@
 # LETHE TEST
 
+# 2026-07-08 Kalmuri Hunger-Fit Candidate Rebuild
+
+- Purpose:
+  - Rebuild K1-K4 around `굶주린 칼무리` imagery instead of generic different-looking VFX.
+- Applied target:
+  - `K1`: wound feast / bite swarm.
+  - `K2`: blood-scent hunt.
+  - `K3`: feast table.
+  - `K4`: chewed trail.
+  - Dual Blades use faster pack-bite reads; Greatsword uses heavier wound/furrow reads.
+  - Prototype hit rules now match the four candidate concepts.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
+  - Unity compilation error check.
+  - Unity console error check.
+  - Unity menu `LETHE/V1 QA/Kalmuri Perf Matrix`.
+- Results:
+  - Runtime build passed with existing legacy warnings and 0 errors.
+  - Editor build passed with 0 warnings and 0 errors on sequential rerun after an initial shared-DLL lock.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+  - Kalmuri Perf Matrix: PASS, `totalKalmuri=268`.
+
 # 2026-07-08 Kalmuri Prototype Legacy Projectile Suppression
 
 - Purpose:

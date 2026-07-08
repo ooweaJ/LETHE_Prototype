@@ -218,6 +218,13 @@
           <p>Dev_Prototype_v1에서 F12 K1~K4 칼무리 후보를 켠 상태에서는 기존 +5 각성 칼날 투사체가 추가로 날아가지 않게 했다. 아직 _dev 검증 단계이며 Assets/Lethe 승격은 하지 않았다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-08-11</span>
+          <h2><a href="#unit-2026-07-08-11" data-unit-link="unit-2026-07-08-11">칼무리다운 잔향 후보 재구성</a></h2>
+          <p>Dev_Prototype_v1의 F12 K1~K4 칼무리 후보를 다시 구성했다. 이번 버전은 “서로 다른 VFX”가 아니라 굶주린 칼무리라는 기억이 잔향으로 남았을 때의 이미지에 맞춘 네 가지 후보이다. 아직 _dev 검증 단계이며 Assets/Lethe 승격은 하지 않았다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -598,6 +605,45 @@
 <li>방향: 후보 리뷰 중에는 옛 칼날 언어를 차단한다.</li>
 <li>행동: 프로토타입 모드에서 +5 각성 투사체 발동을 억제했다.</li>
 <li>결과: 이제 후보 자체만 보고 판단할 수 있는 상태에 가까워졌다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-08-11" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-08-11 - 칼무리다운 잔향 후보 재구성</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 F12 K1~K4 칼무리 후보를 다시 구성했다. 이번 버전은 “서로 다른 VFX”가 아니라 <code>굶주린 칼무리</code>라는 기억이 잔향으로 남았을 때의 이미지에 맞춘 네 가지 후보이다. 아직 <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>기존 리본/십자/저주 체인 느낌의 후보를 칼무리 이미지와 맞지 않는 방향으로 보고 재구성했다.</li>
+<li><code>K1</code>: 상처 포식 / 물어뜯는 칼무리.</li>
+<li><code>K2</code>: 피냄새 추적 / 첫 상처가 냄새 표식이 되어 칼날 잔향이 끌려감.</li>
+<li><code>K3</code>: 칼무리 식탁 / 적 주변에 이빨 같은 칼날이 차려졌다가 안쪽으로 접힘.</li>
+<li><code>K4</code>: 씹힌 궤적 / 무기 궤적 위에 물린 자국과 파인 흉터가 이어짐.</li>
+<li>쌍검은 빠른 다단 물어뜯기, 대검은 큰 상처와 무거운 포식감으로 분리했다.</li>
+<li>K2/K3/K4의 실제 판정 영역도 새 컨셉에 맞게 바꿨다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 기존 legacy warning, error 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 순차 재실행 기준 warning 0개, error 0개.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Unity console errors: <code>0</code>.</li>
+<li><code>LETHE/V1 QA/Kalmuri Perf Matrix</code>: PASS, <code>totalKalmuri=268</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>칼무리는 예쁜 궤적이나 추상 표식보다 상처, 피냄새, 굶주림, 이빨, 안쪽으로 닫히는 포식감이 핵심이다. 이후 후보도 이 언어에서 벗어나면 폐기한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>아직 직접 플레이 감각은 jaewoo 판단이 필요하다. 네 후보가 모두 별로라면, 이번 구현을 최종 후보가 아니라 칼무리 언어를 찾는 다음 출발점으로 본다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>K1~K4는 이제 모두 칼무리다운 포식 언어를 공유한다. 다음 리뷰는 어떤 후보가 가장 “기억이 잔향으로 바뀌었다”는 감각을 주는지, 그리고 쌍검/대검 분리가 충분한지 보는 것이다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo가 선택하거나 탈락 이유를 주면, Codex는 선택 후보를 최종 칼무리 Echo로 정리하거나 다음 후보 세트를 다시 만든다. 동시에 혈반 외 잔향과 무기별 개성도 같은 기준으로 점검해야 한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 기존 네 후보는 칼무리보다 일반 스킬처럼 보였다.</li>
+<li>방향: 상처와 포식이라는 핵심 이미지로 후보를 다시 만든다.</li>
+<li>행동: K1~K4 VFX와 판정 의미를 wound/scent/feast/trail로 재구성했다.</li>
+<li>결과: 칼무리다운 잔향 후보를 직접 플레이로 다시 비교할 수 있는 상태가 됐다.</li>
 </ul>
     </article>
       </div>

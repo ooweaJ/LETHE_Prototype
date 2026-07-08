@@ -2,6 +2,25 @@
 
 Last updated: 2026-07-08
 
+## 2026-07-08 Update: Kalmuri Hunger-Fit Candidates Rebuilt
+
+- Rebuilt K1-K4 after jaewoo clarified that all four previous candidates still missed the `굶주린 칼무리` fantasy.
+- Applied:
+  - `K1`: wound feast / bite swarm.
+  - `K2`: blood-scent hunt.
+  - `K3`: feast table.
+  - `K4`: chewed trail.
+  - Candidate VFX now share the core Kalmuri language: wound, scent, hunger, teeth, inward bite, and chewed scars.
+  - Dual Blades emphasize fast pack bites; Greatsword emphasizes heavier wound/furrow closures.
+- Verification:
+  - Runtime build passed with existing legacy warnings and 0 errors.
+  - Editor build passed with 0 warnings and 0 errors on sequential rerun.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS, `totalKalmuri=268`.
+- Next step:
+  - Direct-play K1-K4 again and judge which one best reads as `굶주린 칼무리의 잔향`.
+
 ## 2026-07-08 Update: Kalmuri Prototype Old Projectile Suppressed
 
 - jaewoo reported that one of the Kalmuri candidates still showed an old flying VFX.
