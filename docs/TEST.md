@@ -1,5 +1,31 @@
 # LETHE TEST
 
+# 2026-07-08 Kalmuri VFX Hard Reset Preview
+
+- Purpose:
+  - Implement the requested Kalmuri hard-reset preview candidates and make `K1` to `K4` visually different for both Dual Blades and Greatsword.
+- Applied target:
+  - `K1`: wound mouth / saw-tooth scar.
+  - `K2`: ribbon trail / burial banner.
+  - `K3`: geometric X/cross burst.
+  - `K4`: curse-mark seal plus chain/fork network.
+  - Dual Blades and Greatsword now use different preview variants.
+  - Preview label changed to `K Preview HARD RESET / HP 9999`.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
+  - Unity compilation error check.
+  - Unity console error check.
+  - Unity menu `LETHE/V1 QA/Kalmuri Perf Matrix`.
+- Results:
+  - Runtime build passed with 7 existing legacy warnings and 0 errors.
+  - Editor build passed with 0 warnings and 0 errors on sequential rerun after an initial shared-DLL lock.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+  - Kalmuri Perf Matrix: PASS, `totalKalmuri=268`.
+- Debug instruction:
+  - Start/play `Dev_Prototype_v1`, press `F12`, and compare `K1` to `K4` with both Dual Blades and Greatsword.
+
 # 2026-07-08 Kalmuri Preview High-HP Dummies
 
 - Purpose:

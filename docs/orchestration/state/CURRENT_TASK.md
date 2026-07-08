@@ -1,5 +1,36 @@
 # Current Task
 
+# 2026-07-08 Kalmuri VFX Hard Reset Result
+
+## Status
+
+Implemented, locally build-verified, and Unity QA checked.
+
+## Applied Changes
+
+- Rebuilt the F12 `K1` to `K4` Kalmuri preview candidates as hard-reset silhouettes.
+- `K1` now reads as wound mouth / saw-tooth scar.
+- `K2` now reads as ribbon trail / burial banner.
+- `K3` now reads as geometric cross/X burst.
+- `K4` now reads as curse-mark seal plus chain/fork network.
+- Dual Blades and Greatsword now show different variants for all four candidates:
+  - Dual Blades: faster, thinner, multi-hit shapes.
+  - Greatsword: heavier, broader, more singular impact shapes.
+- The preview pack label is now `K Preview HARD RESET / HP 9999`.
+- The hard-reset preview helpers no longer use the old `KalmuriConcept_*` naming and avoid the old flying-blade preview silhouette.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on sequential rerun after an initial shared-DLL lock.
+- Unity compilation errors: `0`.
+- Unity console errors: `0`.
+- `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS, `totalKalmuri=268`.
+
+## Remaining Gate
+
+jaewoo should now direct-play `Dev_Prototype_v1`, press `F12`, compare `K1` to `K4` with both Dual Blades and Greatsword, and pick one winner or hybrid. After that Codex should convert the chosen visual grammar into the actual Kalmuri Echo behavior.
+
 # 2026-07-08 Kalmuri VFX Hard Reset Handoff
 
 ## Status

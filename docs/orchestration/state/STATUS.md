@@ -2,6 +2,26 @@
 
 Last updated: 2026-07-08
 
+## 2026-07-08 Update: Kalmuri VFX Hard Reset Implemented
+
+- Implemented the requested hard-reset Kalmuri preview set in `V1GameManager.cs`.
+- Applied:
+  - `K1`: wound mouth / saw-tooth scar concept.
+  - `K2`: ribbon trail / burial banner concept.
+  - `K3`: geometric X/cross burst concept.
+  - `K4`: curse-mark seal plus chain/fork network concept.
+  - Dual Blades and Greatsword now get different reads for all four candidates.
+  - The preview pack now shows `K Preview HARD RESET / HP 9999`.
+  - The rebuilt preview helpers avoid the old Kalmuri concept names and do not use the previous flying-blade preview silhouette.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on sequential rerun after an initial shared-DLL lock.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS, `totalKalmuri=268`.
+- Next step:
+  - In Play Mode, press `F12`, compare `K1` to `K4` for both Dual Blades and Greatsword, then pick one winner or a hybrid before Codex converts it into the real Kalmuri Echo behavior.
+
 ## 2026-07-08 Update: Kalmuri VFX Hard Reset Handoff
 
 - jaewoo reported that Kalmuri preview VFX still appears unchanged.

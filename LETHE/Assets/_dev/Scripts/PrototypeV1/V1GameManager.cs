@@ -4240,22 +4240,22 @@ namespace Lethe.PrototypeV1
             {
                 case 1:
                     DebugPreviewKalmuriWoundFeast(origin, f, s, targets, heavy);
-                    SpawnFloatingText(origin + Vector3.up * 0.62f, "K1 Wound Feast", new Color(1f, 0.54f, 0.34f));
+                    SpawnFloatingText(origin + Vector3.up * 0.62f, heavy ? "K1 GREAT Maw Crush" : "K1 DUAL Saw Mouth", new Color(1f, 0.54f, 0.34f));
                     Log("Debug Kalmuri concept 1 wound feast");
                     break;
                 case 2:
                     DebugPreviewKalmuriTrailBloom(origin, f, s, targets, heavy);
-                    SpawnFloatingText(origin + Vector3.up * 0.62f, "K2 Trail Bloom", new Color(0.30f, 0.90f, 1f));
+                    SpawnFloatingText(origin + Vector3.up * 0.62f, heavy ? "K2 GREAT Burial Ribbon" : "K2 DUAL Ribbon Flurry", new Color(0.30f, 0.90f, 1f));
                     Log("Debug Kalmuri concept 2 trail bloom");
                     break;
                 case 3:
                     DebugPreviewKalmuriCrossSwarm(origin, f, s, targets, heavy);
-                    SpawnFloatingText(origin + Vector3.up * 0.62f, "K3 Cross Swarm", new Color(1f, 0.76f, 1f));
+                    SpawnFloatingText(origin + Vector3.up * 0.62f, heavy ? "K3 GREAT Verdict X" : "K3 DUAL Cross Shreds", new Color(1f, 0.76f, 1f));
                     Log("Debug Kalmuri concept 3 cross swarm");
                     break;
                 default:
                     DebugPreviewKalmuriMarkFrenzy(origin, f, s, targets, heavy);
-                    SpawnFloatingText(origin + Vector3.up * 0.62f, "K4 Mark Frenzy", new Color(0.86f, 0.52f, 1f));
+                    SpawnFloatingText(origin + Vector3.up * 0.62f, heavy ? "K4 GREAT Curse Seal" : "K4 DUAL Chain Network", new Color(0.86f, 0.52f, 1f));
                     Log("Debug Kalmuri concept 4 mark frenzy");
                     break;
             }
@@ -4289,7 +4289,7 @@ namespace Lethe.PrototypeV1
                 var enemy = enemies.LastOrDefault();
                 if (enemy != null) result.Add(enemy);
             }
-            SpawnFloatingText(center + Vector3.up * 0.92f, "K Preview v2 / high HP dummies", new Color(1f, 0.92f, 0.52f));
+            SpawnFloatingText(center + Vector3.up * 0.92f, "K Preview HARD RESET / HP 9999", new Color(1f, 0.92f, 0.52f));
             return result;
         }
 
@@ -4298,26 +4298,38 @@ namespace Lethe.PrototypeV1
             var f = forward.sqrMagnitude > 0.01f ? forward.normalized : Vector2.up;
             var s = side.sqrMagnitude > 0.01f ? side.normalized : new Vector2(-f.y, f.x);
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
-            var radius = heavy ? 0.86f : 0.64f;
-            var count = heavy ? 7 : 10;
-            var tooth = MakeImpactDiamondSprite("KalmuriConcept_WoundTooth", Color.white);
-            var hot = heavy ? new Color(1f, 0.78f, 0.46f, 0.94f) : new Color(1f, 0.48f, 0.30f, 0.88f);
-            var scar = new Color(1f, 0.18f, 0.12f, heavy ? 0.58f : 0.48f);
+            var radius = heavy ? 1.08f : 0.72f;
+            var hot = heavy ? new Color(1f, 0.74f, 0.34f, 0.96f) : new Color(1f, 0.34f, 0.18f, 0.88f);
+            var wound = heavy ? new Color(0.62f, 0.035f, 0.025f, 0.44f) : new Color(0.86f, 0.02f, 0.018f, 0.34f);
+            var tooth = MakeImpactDiamondSprite("KalmuriHardReset_WoundTooth", Color.white);
+            var jaw = MakeBoxSprite("KalmuriHardReset_WoundJaw", Color.white, 10, 132);
 
-            PlaySfx("kalmuri_echo", 0.70f, 0.06f);
-            SpawnTransientSprite("KalmuriConcept_WoundFeastBloodDisc", MakeDiscSprite("KalmuriConcept_WoundFeastBloodDisc", Color.white, 132), origin, Quaternion.identity, radius * 0.42f, new Color(1f, 0.06f, 0.04f, 0.22f), 0.32f);
-            SpawnTransientSprite("KalmuriConcept_WoundFeastCore", MakeImpactDiamondSprite("KalmuriConcept_WoundFeastCore", Color.white), origin, Quaternion.Euler(0f, 0f, baseAngle + 45f), heavy ? 0.52f : 0.38f, hot, 0.30f);
-            SpawnTransientSprite("KalmuriConcept_WoundFeastBiteRing", MakeRingSprite("KalmuriConcept_WoundFeastBiteRing", Color.white, 144), origin, Quaternion.identity, radius, new Color(1f, 0.26f, 0.10f, 0.56f), 0.34f);
-            for (int i = 0; i < count; i++)
+            PlaySfx(heavy ? "kalmuri_echo_heavy" : "kalmuri_echo", heavy ? 0.86f : 0.70f, 0.06f);
+            SpawnTransientSprite("KalmuriHardReset_WoundMouthDisc", MakeDiscSprite("KalmuriHardReset_WoundMouthDisc", Color.white, 160), origin, Quaternion.identity, radius * 0.50f, wound, 0.92f);
+            SpawnTransientSprite("KalmuriHardReset_WoundMouthRing", MakeRingSprite("KalmuriHardReset_WoundMouthRing", Color.white, 180), origin, Quaternion.identity, radius, new Color(1f, 0.24f, 0.10f, heavy ? 0.72f : 0.60f), 0.88f);
+            SpawnTransientSprite("KalmuriHardReset_WoundCore", MakeImpactDiamondSprite("KalmuriHardReset_WoundCore", Color.white), origin, Quaternion.Euler(0f, 0f, baseAngle + 45f), heavy ? 0.62f : 0.36f, hot, 0.80f);
+
+            if (heavy)
             {
-                var angle = baseAngle + i * (360f / count) + (heavy ? 12f : 0f);
-                var dir = (Vector2)(Quaternion.Euler(0f, 0f, angle) * Vector3.right);
-                var start = origin + (Vector3)(dir * radius);
-                var end = origin + (Vector3)(dir * 0.06f + s * Mathf.Sin(i * 1.7f) * 0.035f);
-                SpawnSweepingTransientSprite("KalmuriConcept_WoundFeastTooth", tooth, start, end, angle + 45f, angle + 165f, heavy ? 0.28f : 0.20f, heavy ? 0.16f : 0.12f, hot, heavy ? 0.28f : 0.22f, heavy ? 0.14f : 0.10f);
+                SpawnSweepingTransientSprite("KalmuriHardReset_MawUpperJaw", jaw, origin + (Vector3)(s * 0.58f), origin + (Vector3)(s * 0.18f), baseAngle + 92f, baseAngle + 112f, 0.46f, 0.32f, hot, 0.92f, 0.34f);
+                SpawnSweepingTransientSprite("KalmuriHardReset_MawLowerJaw", jaw, origin - (Vector3)(s * 0.58f), origin - (Vector3)(s * 0.18f), baseAngle - 92f, baseAngle - 112f, 0.46f, 0.32f, hot, 0.92f, 0.34f);
+                SpawnEchoWoundSlash("KalmuriHardReset_MawCrushScar", origin, f, new Color(1f, 0.12f, 0.08f, 0.86f), 1.48f, 0.86f);
+                SpawnRadialSlashLines("KalmuriHardReset_MawCrack", origin, f, 5, 1.04f, new Color(1f, 0.58f, 0.22f, 0.58f), 0.82f);
             }
-            SpawnRadialSlashLines("KalmuriConcept_WoundFeastCuts", origin, f, heavy ? 6 : 9, heavy ? 0.96f : 0.72f, scar, 0.30f);
-            DebugDamageKalmuriPreview(targets, origin, heavy ? 0.95f : 0.72f, heavy ? 34f : 22f, "Kalmuri concept wound feast");
+            else
+            {
+                const int count = 14;
+                for (int i = 0; i < count; i++)
+                {
+                    var angle = baseAngle + i * (360f / count) + (i % 2 == 0 ? 9f : -7f);
+                    var dir = (Vector2)(Quaternion.Euler(0f, 0f, angle) * Vector3.right);
+                    var start = origin + (Vector3)(dir * radius);
+                    var end = origin + (Vector3)(dir * 0.10f + s * Mathf.Sin(i * 1.7f) * 0.045f);
+                    SpawnSweepingTransientSprite("KalmuriHardReset_SawMouthTooth", tooth, start, end, angle + 45f, angle + 170f, 0.18f, 0.10f, hot, 0.82f, 0.18f);
+                }
+                SpawnRadialSlashLines("KalmuriHardReset_SawMouthScars", origin, f, 10, 0.82f, new Color(1f, 0.10f, 0.06f, 0.58f), 0.74f);
+            }
+            DebugDamageKalmuriPreview(targets, origin, heavy ? 1.12f : 0.78f, heavy ? 34f : 22f, "Kalmuri hard reset wound mouth");
         }
 
         void DebugPreviewKalmuriTrailBloom(Vector3 origin, Vector2 forward, Vector2 side, List<V1Enemy> targets, bool heavy)
@@ -4325,49 +4337,74 @@ namespace Lethe.PrototypeV1
             var f = forward.sqrMagnitude > 0.01f ? forward.normalized : Vector2.up;
             var s = side.sqrMagnitude > 0.01f ? side.normalized : new Vector2(-f.y, f.x);
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
-            var lanes = heavy ? 4 : 7;
-            var length = heavy ? 1.56f : 1.18f;
-            var ribbon = MakeBoxSprite("KalmuriConcept_TrailRibbon", Color.white, 9, 164);
-            var color = heavy ? new Color(0.38f, 0.90f, 1f, 0.58f) : new Color(0.24f, 0.76f, 1f, 0.50f);
+            var ribbon = MakeBoxSprite("KalmuriHardReset_TrailRibbon", Color.white, 11, 180);
+            var color = heavy ? new Color(0.30f, 0.78f, 1f, 0.68f) : new Color(0.18f, 0.88f, 1f, 0.48f);
 
             PlaySfx(heavy ? "kalmuri_echo_heavy" : "kalmuri_echo", heavy ? 0.82f : 0.62f, 0.07f);
-            SpawnEchoWoundSlash("KalmuriConcept_TrailPrimeCut", origin, f, new Color(0.36f, 0.92f, 1f, heavy ? 0.88f : 0.70f), heavy ? 1.80f : 1.34f, heavy ? 0.42f : 0.30f);
-            for (int i = 0; i < lanes; i++)
+            if (heavy)
             {
-                var t = lanes <= 1 ? 0f : (i / (float)(lanes - 1) - 0.5f);
-                var pos = origin + (Vector3)(f * (t * length * 0.54f) + s * Mathf.Sin(i * 1.31f) * (heavy ? 0.10f : 0.14f));
-                var rotation = Quaternion.Euler(0f, 0f, baseAngle - 90f + t * (heavy ? 10f : 20f));
-                var height = heavy ? 0.86f - i * 0.04f : 0.62f - i * 0.028f;
-                SpawnTransientSpriteScaled("KalmuriConcept_TrailAfterRibbon", ribbon, pos, rotation, new Vector3(0.030f, Mathf.Max(0.34f, height), 1f), new Color(color.r, color.g, color.b, Mathf.Clamp01(color.a - i * 0.035f)), heavy ? 0.42f : 0.30f);
-                SpawnEchoWoundLine("KalmuriConcept_TrailScar", pos, f, new Color(0.16f, 0.88f, 1f, 0.28f), heavy ? 0.96f : 0.64f, heavy ? 0.30f : 0.22f);
+                var start = origin - (Vector3)(f * 1.05f + s * 0.18f);
+                var end = origin + (Vector3)(f * 0.86f - s * 0.10f);
+                SpawnSweepingTransientSprite("KalmuriHardReset_BurialBanner", ribbon, start, end, baseAngle - 92f, baseAngle - 72f, 0.72f, 1.02f, color, 1.02f, 0.46f);
+                SpawnTransientSpriteScaled("KalmuriHardReset_BurialBannerAfterimage", ribbon, origin - (Vector3)(f * 0.12f), Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(0.10f, 1.48f, 1f), new Color(0.70f, 0.96f, 1f, 0.34f), 0.92f);
+                SpawnEchoWoundSlash("KalmuriHardReset_BurialRip", origin + (Vector3)(f * 0.16f), f, new Color(0.74f, 1f, 1f, 0.90f), 1.92f, 0.88f);
+                SpawnEchoWoundLine("KalmuriHardReset_BurialGroundTear", origin - (Vector3)(f * 0.10f), s, new Color(0.32f, 0.92f, 1f, 0.58f), 1.20f, 0.76f);
             }
-            SpawnEchoWoundSlash("KalmuriConcept_TrailDelayedRip", origin + (Vector3)(f * 0.08f), f, new Color(0.72f, 1f, 1f, 0.82f), heavy ? 1.58f : 1.12f, heavy ? 0.36f : 0.24f);
-            DebugDamageKalmuriPreview(targets, origin, heavy ? 1.10f : 0.86f, heavy ? 38f : 24f, "Kalmuri concept trail bloom");
+            else
+            {
+                const int lanes = 9;
+                for (int i = 0; i < lanes; i++)
+                {
+                    var t = i / (float)(lanes - 1) - 0.5f;
+                    var start = origin - (Vector3)(f * (0.62f + i * 0.025f) - s * (t * 0.72f));
+                    var end = origin + (Vector3)(f * (0.58f + i * 0.018f) + s * (t * 0.42f));
+                    var alpha = Mathf.Clamp01(0.58f - i * 0.032f);
+                    SpawnSweepingTransientSprite("KalmuriHardReset_RibbonFlurryStrip", ribbon, start, end, baseAngle - 96f + t * 26f, baseAngle - 72f + t * 36f, 0.22f, 0.36f, new Color(color.r, color.g, color.b, alpha), 0.86f, 0.24f);
+                    SpawnEchoWoundLine("KalmuriHardReset_RibbonNeedleScar", origin + (Vector3)(s * t * 0.54f), f, new Color(0.40f, 0.96f, 1f, 0.30f), 0.74f, 0.66f);
+                }
+                SpawnEchoWoundSlash("KalmuriHardReset_RibbonFinalRip", origin + (Vector3)(f * 0.08f), f, new Color(0.72f, 1f, 1f, 0.82f), 1.12f, 0.72f);
+            }
+            DebugDamageKalmuriPreview(targets, origin, heavy ? 1.16f : 0.90f, heavy ? 38f : 24f, "Kalmuri hard reset ribbon trail");
         }
 
         void DebugPreviewKalmuriCrossSwarm(Vector3 origin, Vector2 forward, Vector2 side, List<V1Enemy> targets, bool heavy)
         {
             var f = forward.sqrMagnitude > 0.01f ? forward.normalized : Vector2.up;
+            var s = side.sqrMagnitude > 0.01f ? side.normalized : new Vector2(-f.y, f.x);
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
-            var count = heavy ? 6 : 8;
             var radius = heavy ? 0.92f : 0.72f;
             var colorA = heavy ? new Color(1f, 0.92f, 1f, 0.92f) : new Color(1f, 0.62f, 1f, 0.82f);
             var colorB = heavy ? new Color(0.78f, 0.72f, 1f, 0.88f) : new Color(0.58f, 0.48f, 1f, 0.76f);
+            var line = MakeBoxSprite("KalmuriHardReset_CrossBar", Color.white, 11, 168);
 
             PlaySfx("kalmuri_lunge", 0.74f, 0.08f);
-            SpawnTransientSprite("KalmuriConcept_CrossSwarmTell", MakeRingSprite("KalmuriConcept_CrossSwarmTell", Color.white, 160), origin, Quaternion.identity, radius * 0.98f, new Color(0.92f, 0.42f, 1f, 0.46f), 0.36f);
-            SpawnTransientSprite("KalmuriConcept_CrossSwarmCoreFlash", MakeDiscSprite("KalmuriConcept_CrossSwarmCoreFlash", Color.white, 120), origin, Quaternion.identity, radius * 0.28f, new Color(0.92f, 0.64f, 1f, 0.24f), 0.18f);
-            for (int i = 0; i < count; i++)
+            SpawnTransientSprite("KalmuriHardReset_CrossTell", MakeRingSprite("KalmuriHardReset_CrossTell", Color.white, 180), origin, Quaternion.identity, radius * 1.06f, new Color(0.92f, 0.42f, 1f, 0.48f), 0.90f);
+            SpawnTransientSprite("KalmuriHardReset_CrossCoreFlash", MakeDiscSprite("KalmuriHardReset_CrossCoreFlash", Color.white, 140), origin, Quaternion.identity, radius * 0.34f, new Color(0.92f, 0.64f, 1f, heavy ? 0.32f : 0.24f), 0.68f);
+            if (heavy)
             {
-                var angle = baseAngle + i * (360f / count);
-                var dir = (Vector2)(Quaternion.Euler(0f, 0f, angle) * Vector3.right);
-                var start = origin + (Vector3)(dir * radius);
-                var end = origin - (Vector3)(dir * (heavy ? 0.24f : 0.18f));
-                SpawnKalmuriDiveBlade("KalmuriConcept_CrossSwarmBlade", start, end, heavy ? 0.34f : 0.23f, i % 2 == 0 ? colorA : colorB, heavy ? 0.34f : 0.24f, heavy ? 0.16f : 0.11f);
+                SpawnTransientSpriteScaled("KalmuriHardReset_VerdictX_MainA", line, origin, Quaternion.Euler(0f, 0f, baseAngle + 45f), new Vector3(0.092f, 1.34f, 1f), colorA, 0.96f);
+                SpawnTransientSpriteScaled("KalmuriHardReset_VerdictX_MainB", line, origin, Quaternion.Euler(0f, 0f, baseAngle - 45f), new Vector3(0.092f, 1.34f, 1f), colorB, 0.96f);
+                SpawnTransientSpriteScaled("KalmuriHardReset_VerdictX_SnapA", line, origin + (Vector3)(s * 0.08f), Quaternion.Euler(0f, 0f, baseAngle + 45f), new Vector3(0.040f, 1.72f, 1f), new Color(1f, 1f, 1f, 0.62f), 0.36f);
+                SpawnTransientSpriteScaled("KalmuriHardReset_VerdictX_SnapB", line, origin - (Vector3)(s * 0.08f), Quaternion.Euler(0f, 0f, baseAngle - 45f), new Vector3(0.040f, 1.72f, 1f), new Color(1f, 0.88f, 1f, 0.54f), 0.36f);
+                SpawnRadialSlashLines("KalmuriHardReset_VerdictCornerCrack", origin, f, 4, 1.04f, new Color(0.86f, 0.60f, 1f, 0.54f), 0.72f);
             }
-            SpawnEchoWoundSlash("KalmuriConcept_CrossSwarmX", origin, f, new Color(1f, 0.88f, 1f, 0.86f), heavy ? 1.36f : 1.04f, 0.30f);
-            SpawnEchoWoundSlash("KalmuriConcept_CrossSwarmX", origin, new Vector2(-f.y, f.x), new Color(0.72f, 0.58f, 1f, 0.74f), heavy ? 1.18f : 0.88f, 0.28f);
-            DebugDamageKalmuriPreview(targets, origin, heavy ? 1.18f : 0.92f, heavy ? 42f : 26f, "Kalmuri concept cross swarm");
+            else
+            {
+                var centers = new[]
+                {
+                    origin,
+                    origin + (Vector3)(s * 0.38f + f * 0.16f),
+                    origin - (Vector3)(s * 0.38f - f * 0.12f),
+                    origin + (Vector3)(f * 0.46f)
+                };
+                for (int i = 0; i < centers.Length; i++)
+                {
+                    var scale = 0.50f + i * 0.08f;
+                    SpawnTransientSpriteScaled("KalmuriHardReset_CrossShredA", line, centers[i], Quaternion.Euler(0f, 0f, baseAngle + 44f + i * 13f), new Vector3(0.036f, scale, 1f), i % 2 == 0 ? colorA : colorB, 0.78f);
+                    SpawnTransientSpriteScaled("KalmuriHardReset_CrossShredB", line, centers[i], Quaternion.Euler(0f, 0f, baseAngle - 46f - i * 11f), new Vector3(0.030f, scale * 0.86f, 1f), i % 2 == 0 ? colorB : colorA, 0.70f);
+                }
+            }
+            DebugDamageKalmuriPreview(targets, origin, heavy ? 1.22f : 0.94f, heavy ? 42f : 26f, "Kalmuri hard reset cross burst");
         }
 
         void DebugPreviewKalmuriMarkFrenzy(Vector3 origin, Vector2 forward, Vector2 side, List<V1Enemy> targets, bool heavy)
@@ -4377,10 +4414,10 @@ namespace Lethe.PrototypeV1
             var markColor = heavy ? new Color(0.92f, 0.50f, 1f, 0.82f) : new Color(0.76f, 0.32f, 1f, 0.72f);
 
             PlaySfx("kalmuri_echo", 0.68f, 0.05f);
-            SpawnTransientSprite("KalmuriConcept_MarkSeal", MakeImpactDiamondSprite("KalmuriConcept_MarkSeal", Color.white), origin, Quaternion.Euler(0f, 0f, baseAngle + 45f), heavy ? 0.58f : 0.42f, markColor, 0.62f);
-            SpawnTransientSprite("KalmuriConcept_MarkRing", MakeRingSprite("KalmuriConcept_MarkRing", Color.white, 144), origin, Quaternion.identity, heavy ? 0.82f : 0.62f, new Color(0.72f, 0.20f, 1f, 0.54f), 0.62f);
-            SpawnTransientSprite("KalmuriConcept_MarkInnerSeal", MakeRingSprite("KalmuriConcept_MarkInnerSeal", Color.white, 96), origin, Quaternion.Euler(0f, 0f, elapsed * 110f), heavy ? 0.46f : 0.34f, new Color(1f, 0.70f, 1f, 0.46f), 0.54f);
-            SpawnRadialSlashLines("KalmuriConcept_MarkTeeth", origin, f, heavy ? 5 : 6, heavy ? 0.70f : 0.52f, new Color(0.92f, 0.58f, 1f, 0.38f), 0.42f);
+            SpawnTransientSprite("KalmuriHardReset_MarkSeal", MakeImpactDiamondSprite("KalmuriHardReset_MarkSeal", Color.white), origin, Quaternion.Euler(0f, 0f, baseAngle + 45f), heavy ? 0.66f : 0.42f, markColor, 1.02f);
+            SpawnTransientSprite("KalmuriHardReset_MarkOuterRing", MakeRingSprite("KalmuriHardReset_MarkOuterRing", Color.white, 168), origin, Quaternion.identity, heavy ? 0.96f : 0.64f, new Color(0.72f, 0.20f, 1f, heavy ? 0.62f : 0.50f), 1.00f);
+            SpawnTransientSprite("KalmuriHardReset_MarkInnerSeal", MakeRingSprite("KalmuriHardReset_MarkInnerSeal", Color.white, 112), origin, Quaternion.Euler(0f, 0f, elapsed * 110f), heavy ? 0.56f : 0.34f, new Color(1f, 0.70f, 1f, 0.48f), 0.94f);
+            SpawnRadialSlashLines(heavy ? "KalmuriHardReset_CurseSealBars" : "KalmuriHardReset_NetworkPips", origin, f, heavy ? 4 : 7, heavy ? 0.82f : 0.54f, new Color(0.92f, 0.58f, 1f, heavy ? 0.46f : 0.34f), 0.86f);
 
             var linked = targets
                 .Where(e => e != null && e.IsAlive)
@@ -4393,11 +4430,22 @@ namespace Lethe.PrototypeV1
                 var pos = linked[i].transform.position;
                 var dir = (Vector2)(pos - origin);
                 if (dir.sqrMagnitude < 0.01f) dir = f;
-                SpawnEchoLink("KalmuriConcept_MarkForkLine", origin, pos, new Color(0.86f, 0.28f, 1f, 0.56f), 0.48f, 0.030f);
-                SpawnTransientSprite("KalmuriConcept_MarkForkRing", MakeRingSprite("KalmuriConcept_MarkForkRing", Color.white, 96), pos, Quaternion.identity, heavy ? 0.36f : 0.28f, new Color(0.78f, 0.24f, 1f, 0.46f), 0.44f);
-                SpawnTransientSprite("KalmuriConcept_MarkForkSeal", MakeImpactDiamondSprite("KalmuriConcept_MarkForkSeal", Color.white), pos, Quaternion.Euler(0f, 0f, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + 45f), heavy ? 0.34f : 0.26f, new Color(1f, 0.72f, 1f, 0.72f), 0.42f);
+                var thickness = heavy ? 0.042f : 0.024f;
+                SpawnEchoLink(heavy ? "KalmuriHardReset_CurseChainHeavy" : "KalmuriHardReset_ChainForkLine", origin, pos, new Color(0.86f, 0.28f, 1f, heavy ? 0.64f : 0.50f), 0.92f, thickness);
+                if (!heavy)
+                {
+                    var mid = Vector3.Lerp(origin, pos, 0.52f);
+                    SpawnTransientSprite("KalmuriHardReset_NetworkChainPip", MakeImpactDiamondSprite("KalmuriHardReset_NetworkChainPip", Color.white), mid, Quaternion.Euler(0f, 0f, baseAngle + i * 35f), 0.16f, new Color(1f, 0.66f, 1f, 0.56f), 0.82f);
+                }
+                SpawnTransientSprite("KalmuriHardReset_MarkForkRing", MakeRingSprite("KalmuriHardReset_MarkForkRing", Color.white, 104), pos, Quaternion.identity, heavy ? 0.42f : 0.28f, new Color(0.78f, 0.24f, 1f, 0.46f), 0.86f);
+                SpawnTransientSprite("KalmuriHardReset_MarkForkSeal", MakeImpactDiamondSprite("KalmuriHardReset_MarkForkSeal", Color.white), pos, Quaternion.Euler(0f, 0f, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + 45f), heavy ? 0.40f : 0.24f, new Color(1f, 0.72f, 1f, 0.72f), 0.82f);
             }
-            DebugDamageKalmuriPreview(targets, origin, heavy ? 1.35f : 1.08f, heavy ? 32f : 20f, "Kalmuri concept mark frenzy");
+            if (heavy)
+            {
+                SpawnTransientSpriteScaled("KalmuriHardReset_CurseSealVerticalLock", MakeBoxSprite("KalmuriHardReset_CurseLock", Color.white, 9, 148), origin, Quaternion.Euler(0f, 0f, baseAngle), new Vector3(0.040f, 0.92f, 1f), new Color(1f, 0.76f, 1f, 0.54f), 0.94f);
+                SpawnTransientSpriteScaled("KalmuriHardReset_CurseSealHorizontalLock", MakeBoxSprite("KalmuriHardReset_CurseLock", Color.white, 9, 148), origin, Quaternion.Euler(0f, 0f, baseAngle + 90f), new Vector3(0.034f, 0.74f, 1f), new Color(0.84f, 0.42f, 1f, 0.48f), 0.90f);
+            }
+            DebugDamageKalmuriPreview(targets, origin, heavy ? 1.35f : 1.08f, heavy ? 32f : 20f, "Kalmuri hard reset curse mark");
         }
 
         void DebugDamageKalmuriPreview(List<V1Enemy> targets, Vector3 origin, float radius, float damage, string source)

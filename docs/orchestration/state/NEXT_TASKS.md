@@ -1,22 +1,17 @@
 # Next Tasks
 
-## 1. Kalmuri VFX Hard Reset
+## 1. Kalmuri Hard-Reset Pick Review
 
 - Priority: urgent
-- Problem: jaewoo still cannot see meaningful differences in the Kalmuri preview. The current preview keeps reading like the existing Kalmuri VFX because it reuses too much of the old blade/cyan/short-burst language.
+- Problem: the hard-reset K1-K4 previews are now implemented, but jaewoo still needs to judge which visual grammar should become the real Kalmuri Echo.
 - Build:
-  - Stop polishing the current `K1` to `K4` implementation if it still looks unchanged.
-  - Remove or bypass the current Kalmuri preview helpers in `V1GameManager.cs`.
-  - Do not use `KalmuriBladeSprite()` or existing Kalmuri blade helper visuals for the next preview.
-  - Create four completely different silhouettes:
-    - `K1`: wound mouth / saw-tooth scar.
-    - `K2`: long ribbon trail / afterimage strip.
-    - `K3`: large geometric X/cross burst.
-    - `K4`: curse-mark seal plus chain/fork network.
-  - Keep high-HP dummies and use a new visible label: `K Preview HARD RESET`.
-  - Make previews persist around `0.8s` so jaewoo can inspect them.
+  - Play `Dev_Prototype_v1`.
+  - Press `F12` and confirm the preview label reads `K Preview HARD RESET / HP 9999`.
+  - Compare `K1` wound mouth, `K2` ribbon/banner, `K3` cross/X burst, and `K4` curse-mark network.
+  - Test both Dual Blades and Greatsword, because every candidate now has weapon-specific variants.
+  - Pick one winner or a hybrid direction.
 - Done:
-  - jaewoo can distinguish all four candidates immediately without explanation.
+  - jaewoo can name the chosen Kalmuri direction and explain whether Dual/Great should keep separate silhouettes.
 
 ## 2. Direct-Play Kingmaker Route Review
 
@@ -41,16 +36,16 @@
 - Done:
   - jaewoo can name or at least visually separate each utility echo family without reading text.
 
-## 4. Kalmuri Concept Pick Review
+## 4. Real Kalmuri Echo Conversion
 
 - Priority: high
-- Problem: This task is blocked until the Kalmuri VFX hard reset produces previews that actually look different.
+- Problem: the current K1-K4 hard-reset previews are selection tools only; the chosen result still needs to replace the actual Kalmuri Echo runtime behavior.
 - Build:
-  - After hard reset, press `F12` in Play Mode and click the rebuilt `K1`, `K2`, `K3`, `K4`.
-  - Confirm the `K Preview HARD RESET` label appears.
-  - Pick one winner or a hybrid, then Codex converts it into the actual Kalmuri Echo behavior.
+  - After jaewoo picks a candidate or hybrid, convert that grammar into the real Kalmuri Echo paths.
+  - Preserve weapon identity: Dual Blades should read fast/multi-hit, Greatsword should read heavy/singular unless jaewoo decides otherwise.
+  - Keep dense dual-blade suppression safeguards before adding extra VFX.
 - Done:
-  - Jaewoo can name the chosen Kalmuri direction and why it reads best.
+  - Echo Matrix Dual/Great and Kalmuri Perf Matrix pass, and direct play no longer reads Kalmuri as an old flying-blade effect.
 
 ## 5. Gatekeeper Raid Telegraph Feel Tune
 
@@ -75,6 +70,7 @@
 Completed sequence:
 
 - 2026-07-08: Kalmuri next-session direction changed to hard reset; current K1-K4 preview is not good enough because it still reads like reused old Kalmuri VFX.
+- 2026-07-08: Kalmuri VFX hard reset implemented; K1-K4 now use hard-reset silhouettes with Dual Blades and Greatsword variants, `K Preview HARD RESET / HP 9999`, and Kalmuri Perf Matrix PASS.
 - 2026-07-08: memory/echo kingmaker VFX and judgment pass implemented; Execution, Hunter, Shatter, Stopped, Ashen, Oblivion, and non-blood utility ultimates now have stronger payoff behavior and QA coverage.
 - 2026-07-08: Kalmuri preview high-HP dummy update implemented; K buttons now spawn HP 9999 dummies, cap preview damage to 1, and show a v2 label.
 - 2026-07-08: Kalmuri concept preview readability split implemented; K1-K4 now use distinct colors/shapes instead of similar cyan blade swarms.

@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260708\\index.md",
-  "generatedAt": "2026-07-08T07:58:30.383Z",
-  "unitCount": 7,
+  "generatedAt": "2026-07-08T08:57:21.593Z",
+  "unitCount": 8,
   "latest": {
-    "title": "2026-07-08-07 - 칼무리 VFX 하드 리셋 인계",
-    "number": "07",
-    "markdownPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-07-칼무리-vfx-하드-리셋-인계.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-07-칼무리-vfx-하드-리셋-인계.html"
+    "title": "2026-07-08-08 - 칼무리 VFX 하드 리셋 구현",
+    "number": "08",
+    "markdownPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-08-칼무리-vfx-하드-리셋-구현.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-08-칼무리-vfx-하드-리셋-구현.html"
   }
 }

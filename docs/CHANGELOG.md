@@ -2,6 +2,20 @@
 
 # 2026-07-08
 
+- Implemented the requested Kalmuri VFX hard-reset preview set:
+  - `K1`: wound mouth / saw-tooth scar.
+  - `K2`: ribbon trail / burial banner.
+  - `K3`: geometric X/cross burst.
+  - `K4`: curse-mark seal plus chain/fork network.
+  - Dual Blades and Greatsword now have different preview variants for all four candidates.
+  - Preview label changed to `K Preview HARD RESET / HP 9999`.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on sequential rerun after an initial shared-DLL lock.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS, `totalKalmuri=268`.
+
 - Recorded Kalmuri VFX hard-reset handoff:
   - Current K1-K4 preview should be treated as failed for visual comparison.
   - Next session should remove or bypass the current preview helpers and avoid `KalmuriBladeSprite()` / old Kalmuri helper visuals.

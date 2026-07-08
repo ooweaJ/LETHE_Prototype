@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-08-08 - 칼무리 VFX 하드 리셋 구현</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-08-08 - 칼무리 VFX 하드 리셋 구현</h1>
+      <p class="meta">Generated from 2026-07-08-08-칼무리-vfx-하드-리셋-구현.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260708/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-08-08 - 칼무리 VFX 하드 리셋 구현</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 F12 칼무리 미리보기 <code>K1</code>부터 <code>K4</code>까지 하드 리셋 버전으로 교체했다. 아직 <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>K1</code>: 상처 입 / 톱니 흉터 방향.</li>
+<li><code>K2</code>: 리본 궤적 / 매장 깃발 방향.</li>
+<li><code>K3</code>: 기하학적 X / 십자 폭발 방향.</li>
+<li><code>K4</code>: 저주 표식 / 체인 네트워크 방향.</li>
+<li>쌍검은 빠르고 얇은 다단 히트 느낌으로, 대검은 넓고 무거운 단발 충격 느낌으로 분리했다.</li>
+<li>미리보기 라벨을 <code>K Preview HARD RESET / HP 9999</code>로 바꿔 최신 버전 적용 여부를 바로 확인할 수 있게 했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 기존 legacy warning 7개, error 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 순차 재실행 기준 warning 0개, error 0개.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Unity console errors: <code>0</code>.</li>
+<li><code>LETHE/V1 QA/Kalmuri Perf Matrix</code>: PASS, <code>totalKalmuri=268</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>이번 단계에서는 실제 칼무리 Echo를 바로 교체하지 않고, 먼저 네 개 후보를 눈으로 비교하는 선택 도구로 만든다. jaewoo가 하나를 고르거나 섞을 방향을 정하면 그때 실제 전투 동작에 이식한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>자동 QA는 컴파일과 기본 성능만 보장한다. 최종 판단은 직접 플레이에서 “칼무리답게 보이는가”, “쌍검과 대검의 차이가 바로 읽히는가”를 보고 내려야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>칼무리 후보는 이제 색만 다른 칼날 묶음이 아니라 완전히 다른 실루엣 네 개다. 다음 리뷰는 설명 없이 화면만 보고 K1-K4가 구분되는지, 그리고 쌍검/대검 분리가 유지되어야 하는지를 판단하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo가 F12에서 K1-K4를 직접 본 뒤 승자 또는 하이브리드를 지정하면, Codex는 해당 시각 문법을 실제 칼무리 Echo 런타임으로 변환한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 기존 칼무리 미리보기는 후보끼리 너무 비슷해 선택 기준이 생기지 않았다.</li>
+<li>방향: 칼날 재사용을 줄이고 상처, 리본, 십자, 표식 네 가지 서로 다른 실루엣으로 재설계한다.</li>
+<li>행동: F12 K1-K4 후보를 하드 리셋하고 쌍검/대검 변형을 각각 만들었다.</li>
+<li>결과: 빌드와 Unity QA가 통과했고, 이제 직접 플레이로 후보를 고를 수 있는 상태가 됐다.</li>
+</ul>
+  </main>
+</body>
+</html>
