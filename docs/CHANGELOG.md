@@ -2,6 +2,16 @@
 
 # 2026-07-08
 
+- Reduced the red-circle read in Dual Blades Kalmuri candidates:
+  - Dual Blades now suppresses large red rings/discs in Kalmuri candidate VFX.
+  - Replaced them with wound slashes, tooth snaps, and smaller bite/shard marks.
+  - Greatsword keeps broader wound/table silhouettes for heavy impact readability.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on sequential rerun.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+
 - Rebuilt Kalmuri K1-K4 around `굶주린 칼무리` hunger imagery:
   - `K1`: wound feast / bite swarm.
   - `K2`: blood-scent hunt.

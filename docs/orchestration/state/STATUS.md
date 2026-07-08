@@ -2,6 +2,19 @@
 
 Last updated: 2026-07-08
 
+## 2026-07-08 Update: Dual-Blade Kalmuri Red-Circle Read Reduced
+
+- jaewoo reported that Dual Blades Kalmuri reads as a red circle.
+- Applied:
+  - Reduced/suppressed large circular red markers for Dual Blades Kalmuri candidates.
+  - Replaced them with wound slashes, tooth snaps, and small bite/shard marks.
+  - Kept larger circular wound/table reads for Greatsword where heavy impact silhouettes fit better.
+- Verification:
+  - Runtime build passed with existing legacy warnings and 0 errors.
+  - Editor build passed with 0 warnings and 0 errors on sequential rerun.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+
 ## 2026-07-08 Update: Kalmuri Hunger-Fit Candidates Rebuilt
 
 - Rebuilt K1-K4 after jaewoo clarified that all four previous candidates still missed the `굶주린 칼무리` fantasy.

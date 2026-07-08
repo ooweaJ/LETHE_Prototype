@@ -4426,8 +4426,16 @@ namespace Lethe.PrototypeV1
             var jaw = MakeBoxSprite("KalmuriHardReset_WoundJaw", Color.white, 10, 132);
 
             PlaySfx(heavy ? "kalmuri_echo_heavy" : "kalmuri_echo", heavy ? 0.86f : 0.70f, 0.06f);
-            SpawnTransientSprite("KalmuriHardReset_WoundMouthDisc", MakeDiscSprite("KalmuriHardReset_WoundMouthDisc", Color.white, 160), origin, Quaternion.identity, radius * 0.50f, wound, 0.92f);
-            SpawnTransientSprite("KalmuriHardReset_WoundMouthRing", MakeRingSprite("KalmuriHardReset_WoundMouthRing", Color.white, 180), origin, Quaternion.identity, radius, new Color(1f, 0.24f, 0.10f, heavy ? 0.72f : 0.60f), 0.88f);
+            if (heavy)
+            {
+                SpawnTransientSprite("KalmuriHardReset_WoundMouthDisc", MakeDiscSprite("KalmuriHardReset_WoundMouthDisc", Color.white, 160), origin, Quaternion.identity, radius * 0.50f, wound, 0.92f);
+                SpawnTransientSprite("KalmuriHardReset_WoundMouthRing", MakeRingSprite("KalmuriHardReset_WoundMouthRing", Color.white, 180), origin, Quaternion.identity, radius, new Color(1f, 0.24f, 0.10f, 0.72f), 0.88f);
+            }
+            else
+            {
+                SpawnEchoWoundSlash("KalmuriDual_WoundOpenA", origin + (Vector3)(s * 0.05f), f, new Color(1f, 0.16f, 0.06f, 0.64f), 0.78f, 0.54f);
+                SpawnEchoWoundSlash("KalmuriDual_WoundOpenB", origin - (Vector3)(s * 0.06f), s, new Color(1f, 0.30f, 0.12f, 0.44f), 0.46f, 0.42f);
+            }
             SpawnTransientSprite("KalmuriHardReset_WoundCore", MakeImpactDiamondSprite("KalmuriHardReset_WoundCore", Color.white), origin, Quaternion.Euler(0f, 0f, baseAngle + 45f), heavy ? 0.62f : 0.36f, hot, 0.80f);
 
             if (heavy)
@@ -4464,8 +4472,15 @@ namespace Lethe.PrototypeV1
             var hot = heavy ? new Color(1f, 0.66f, 0.28f, 0.88f) : new Color(1f, 0.45f, 0.24f, 0.76f);
 
             PlaySfx(heavy ? "kalmuri_echo_heavy" : "kalmuri_echo", heavy ? 0.86f : 0.68f, 0.055f);
-            SpawnTransientSprite("KalmuriBloodScent_WoundBeacon", MakeDiscSprite("KalmuriBloodScent_WoundBeacon", Color.white, 132), origin, Quaternion.identity, heavy ? 0.52f : 0.34f, blood, 0.78f);
-            SpawnTransientSprite("KalmuriBloodScent_Pulse", MakeRingSprite("KalmuriBloodScent_Pulse", Color.white, 168), origin, Quaternion.Euler(0f, 0f, baseAngle), heavy ? 1.18f : 0.86f, new Color(1f, 0.28f, 0.10f, heavy ? 0.46f : 0.34f), 0.84f);
+            if (heavy)
+            {
+                SpawnTransientSprite("KalmuriBloodScent_WoundBeacon", MakeDiscSprite("KalmuriBloodScent_WoundBeacon", Color.white, 132), origin, Quaternion.identity, 0.52f, blood, 0.78f);
+                SpawnTransientSprite("KalmuriBloodScent_Pulse", MakeRingSprite("KalmuriBloodScent_Pulse", Color.white, 168), origin, Quaternion.Euler(0f, 0f, baseAngle), 1.18f, new Color(1f, 0.28f, 0.10f, 0.46f), 0.84f);
+            }
+            else
+            {
+                SpawnTransientSprite("KalmuriBloodScent_DualWoundShard", MakeImpactDiamondSprite("KalmuriBloodScent_DualWoundShard", Color.white), origin, Quaternion.Euler(0f, 0f, baseAngle + 45f), 0.26f, blood, 0.58f);
+            }
             SpawnEchoWoundSlash("KalmuriBloodScent_OpenWound", origin, f, new Color(1f, 0.16f, 0.08f, 0.76f), heavy ? 1.34f : 0.82f, 0.68f);
 
             var linked = targets
@@ -4501,7 +4516,14 @@ namespace Lethe.PrototypeV1
             {
                 var pos = linked[i].transform.position;
                 SpawnEchoLink("KalmuriBloodScent_SmellLine", pos, origin, new Color(1f, 0.20f, 0.08f, heavy ? 0.50f : 0.36f), 0.62f, heavy ? 0.034f : 0.020f);
-                SpawnTransientSprite("KalmuriBloodScent_SecondaryWound", MakeRingSprite("KalmuriBloodScent_SecondaryWound", Color.white, 96), pos, Quaternion.identity, heavy ? 0.36f : 0.24f, new Color(1f, 0.22f, 0.12f, 0.44f), 0.54f);
+                if (heavy)
+                {
+                    SpawnTransientSprite("KalmuriBloodScent_SecondaryWound", MakeRingSprite("KalmuriBloodScent_SecondaryWound", Color.white, 96), pos, Quaternion.identity, 0.36f, new Color(1f, 0.22f, 0.12f, 0.44f), 0.54f);
+                }
+                else
+                {
+                    SpawnTransientSprite("KalmuriBloodScent_SecondaryBite", MakeImpactDiamondSprite("KalmuriBloodScent_SecondaryBite", Color.white), pos, Quaternion.Euler(0f, 0f, baseAngle + i * 37f), 0.18f, new Color(1f, 0.24f, 0.10f, 0.46f), 0.46f);
+                }
             }
             if (previewDamage) DebugDamageKalmuriPreview(targets, origin, heavy ? 1.20f : 0.96f, heavy ? 38f : 24f, "Kalmuri blood scent hunt");
         }
@@ -4517,10 +4539,10 @@ namespace Lethe.PrototypeV1
             var hot = heavy ? new Color(1f, 0.72f, 0.28f, 0.92f) : new Color(1f, 0.54f, 0.24f, 0.78f);
 
             PlaySfx(heavy ? "kalmuri_echo_heavy" : "kalmuri_lunge", heavy ? 0.90f : 0.74f, 0.08f);
-            SpawnTransientSprite("KalmuriFeastTable_BloodPlate", MakeDiscSprite("KalmuriFeastTable_BloodPlate", Color.white, 156), origin, Quaternion.identity, radius * 0.50f, new Color(0.58f, 0.02f, 0.018f, heavy ? 0.36f : 0.26f), 0.88f);
-            SpawnTransientSprite("KalmuriFeastTable_SetRing", MakeRingSprite("KalmuriFeastTable_SetRing", Color.white, 180), origin, Quaternion.Euler(0f, 0f, baseAngle), radius, new Color(1f, 0.24f, 0.08f, heavy ? 0.62f : 0.48f), 0.94f);
             if (heavy)
             {
+                SpawnTransientSprite("KalmuriFeastTable_BloodPlate", MakeDiscSprite("KalmuriFeastTable_BloodPlate", Color.white, 156), origin, Quaternion.identity, radius * 0.50f, new Color(0.58f, 0.02f, 0.018f, 0.36f), 0.88f);
+                SpawnTransientSprite("KalmuriFeastTable_SetRing", MakeRingSprite("KalmuriFeastTable_SetRing", Color.white, 180), origin, Quaternion.Euler(0f, 0f, baseAngle), radius, new Color(1f, 0.24f, 0.08f, 0.62f), 0.94f);
                 for (int i = 0; i < 8; i++)
                 {
                     var angle = baseAngle + i * 45f;
@@ -4534,6 +4556,7 @@ namespace Lethe.PrototypeV1
             }
             else
             {
+                SpawnEchoWoundSlash("KalmuriFeastTable_DualCenterGash", origin, f, new Color(1f, 0.18f, 0.08f, 0.54f), 0.84f, 0.56f);
                 const int count = 16;
                 for (int i = 0; i < count; i++)
                 {
@@ -4581,7 +4604,7 @@ namespace Lethe.PrototypeV1
                     var offset = t - 0.5f;
                     var pos = origin + (Vector3)(f * (offset * 1.18f) + s * Mathf.Sin(i * 1.9f) * 0.16f);
                     var angle = baseAngle + Mathf.Sin(i * 0.83f) * 28f;
-                    SpawnTransientSprite("KalmuriChewedTrail_DualBiteMark", MakeRingSprite("KalmuriChewedTrail_DualBiteMark", Color.white, 88), pos, Quaternion.identity, 0.24f + (i % 2) * 0.035f, new Color(1f, 0.22f, 0.08f, 0.36f), 0.58f);
+                    SpawnTransientSprite("KalmuriChewedTrail_DualBiteMark", MakeImpactDiamondSprite("KalmuriChewedTrail_DualBiteMark", Color.white), pos, Quaternion.Euler(0f, 0f, angle + 45f), 0.16f + (i % 2) * 0.025f, new Color(1f, 0.22f, 0.08f, 0.42f), 0.50f);
                     SpawnSweepingTransientSprite("KalmuriChewedTrail_DualSnapTooth", tooth, pos + (Vector3)(s * 0.20f), pos - (Vector3)(s * 0.04f), angle + 45f, angle + 136f, 0.13f, 0.07f, hot, 0.50f, 0.12f);
                     SpawnSweepingTransientSprite("KalmuriChewedTrail_DualSnapTooth", tooth, pos - (Vector3)(s * 0.20f), pos + (Vector3)(s * 0.04f), angle - 45f, angle - 136f, 0.13f, 0.07f, hot, 0.50f, 0.12f);
                 }

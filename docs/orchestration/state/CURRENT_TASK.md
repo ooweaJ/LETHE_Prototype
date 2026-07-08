@@ -1,5 +1,28 @@
 # Current Task
 
+# 2026-07-08 Dual-Blade Kalmuri Red-Circle Read Fix
+
+## Status
+
+Implemented and build/Unity-error checked.
+
+## Applied Changes
+
+- Removed or suppressed large red circle/ring reads from Dual Blades Kalmuri candidates.
+- Dual Blades now favors short bite marks, wound slashes, tooth snaps, and small shard marks instead of readable red circular markers.
+- Greatsword keeps larger wound/table/furrow shapes where big impact silhouettes make sense.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on sequential rerun.
+- Unity compilation errors: `0`.
+- Unity console errors: `0`.
+
+## Remaining Gate
+
+Direct-play Dual Blades K1-K4 again and check whether the effect now reads as fast bite marks rather than red circles.
+
 # 2026-07-08 Kalmuri Hunger-Fit Candidate Rebuild
 
 ## Status

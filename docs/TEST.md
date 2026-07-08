@@ -1,5 +1,23 @@
 # LETHE TEST
 
+# 2026-07-08 Dual-Blade Kalmuri Red-Circle Read Fix
+
+- Purpose:
+  - Stop Dual Blades Kalmuri candidates from reading as red circles.
+- Applied target:
+  - Dual Blades Kalmuri candidates now use short wound slashes, tooth snaps, and small bite/shard marks instead of large red rings/discs.
+  - Greatsword retains larger impact silhouettes.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
+  - Unity compilation error check.
+  - Unity console error check.
+- Results:
+  - Runtime build passed with existing legacy warnings and 0 errors.
+  - Editor build passed with 0 warnings and 0 errors on sequential rerun.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+
 # 2026-07-08 Kalmuri Hunger-Fit Candidate Rebuild
 
 - Purpose:
