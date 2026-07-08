@@ -2,6 +2,16 @@
 
 Last updated: 2026-07-08
 
+## 2026-07-08 Update: Kalmuri Echo Claude Design Prompt Prepared
+
+- Added `docs/orchestration/review_prompts/2026-07-08-kalmuri-echo-identity-redesign-claude.md`.
+- Purpose:
+  - Ask Claude to redefine what `굶주린 칼무리` is as an active memory and how it should transform into `칼무리 잔향`.
+  - Shift the next Kalmuri step away from more VFX polishing and toward concept, hit rule, weapon identity, and playable candidate design.
+- Verification:
+  - `npm.cmd run report`: passed, 13 unit reports generated.
+  - `npm.cmd run report:check`: passed, 13 unit headings ok.
+
 ## 2026-07-08 Update: Dual-Blade Kalmuri Red-Circle Read Reduced
 
 - jaewoo reported that Dual Blades Kalmuri reads as a red circle.

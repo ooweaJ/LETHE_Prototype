@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260708\\index.md",
-  "generatedAt": "2026-07-08T13:47:01.580Z",
-  "unitCount": 12,
+  "generatedAt": "2026-07-08T14:16:48.314Z",
+  "unitCount": 13,
   "latest": {
-    "title": "2026-07-08-12 - 쌍검 칼무리 빨간 원 판독 수정",
-    "number": "12",
-    "markdownPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-12-쌍검-칼무리-빨간-원-판독-수정.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-12-쌍검-칼무리-빨간-원-판독-수정.html"
+    "title": "2026-07-08-13 - 칼무리 잔향 클로드 설계 프롬프트",
+    "number": "13",
+    "markdownPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-13-칼무리-잔향-클로드-설계-프롬프트.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-13-칼무리-잔향-클로드-설계-프롬프트.html"
   }
 }
