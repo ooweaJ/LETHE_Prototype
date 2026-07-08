@@ -14,9 +14,10 @@
 ## 2. Utility Echo Identity Tuning
 
 - Priority: high
-- Problem: Echo Matrix passes and each family now has a monster-state burst, but direct play must decide whether the symbols are actually recognizable.
+- Problem: Echo Matrix passes and Kalmuri now has a stronger Greatsword/Dual split, but most non-Kalmuri utility echoes still need the same weapon-personality audit.
 - Build:
   - Compare ExecutionFlash, HunterOath, ShatterWave, StoppedSecond, AshenShield, and OblivionBrand in normal and dense fights.
+  - For each echo, check whether Dual Blades reads as fast/multi-hit and Greatsword reads as heavy/few-hit, not just bigger numbers.
   - If too noisy, reduce only the dense subset first.
   - If too subtle, tune alpha/lifetime for one weak family at a time.
 - Done:
@@ -58,6 +59,7 @@
 Completed sequence:
 
 - 2026-07-08: memory/echo kingmaker VFX and judgment pass implemented; Execution, Hunter, Shatter, Stopped, Ashen, Oblivion, and non-blood utility ultimates now have stronger payoff behavior and QA coverage.
+- 2026-07-08: Kalmuri Echo weapon-identity split implemented; Greatsword Kalmuri now uses a heavy falling judgement blade while Dual Blades keeps the swarm/bite language.
 - 2026-07-07: Gatekeeper review HP and impact VFX pass implemented; F6/F12 Boss now uses review HP `2200`, fast QA keeps `180`, and Gatekeeper Pattern/Jump QA passed.
 - 2026-07-07: memory/echo/enemy identity pass implemented; utility echo identity bursts, passive memory state marks, animated enemy role symbols, and Gatekeeper sigil marker pass build/Unity QA.
 - 2026-07-07: direct feedback VFX action pass implemented; dual-blade guaranteed slashes, Gatekeeper falling meteor/charge cleave, player damage cue, Kalmuri orbit-to-lunge, and Dense QA snapshot all pass build/Unity QA.

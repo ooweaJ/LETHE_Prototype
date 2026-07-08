@@ -2297,6 +2297,12 @@ namespace Lethe.PrototypeV1
             var f = forward.sqrMagnitude > 0.01f ? forward.normalized : lastAim.normalized;
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
             var side = new Vector2(-f.y, f.x).normalized;
+            if (isHeavy)
+            {
+                ResolveGreatswordKalmuriFollowup(origin, f, side, baseAngle, level, damage);
+                return;
+            }
+
             var entries = weapon.VfxProfile != null ? weapon.VfxProfile.kalmuriFollowupSlashes : Array.Empty<SlashVfxEntry>();
             var ringScale = Mathf.Clamp(radius * 0.88f, 0.42f, isHeavy ? 0.92f : 0.66f);
             var ringColor = isHeavy ? new Color(0.92f, 0.98f, 1f, 0.34f) : new Color(0.58f, 0.96f, 1f, 0.24f);
@@ -2367,6 +2373,51 @@ namespace Lethe.PrototypeV1
                 var mul = i == 0 ? 1f : 0.55f;
                 DealDamage(targets[i], damage * mul, "칼무리 잔향", true, toTarget.sqrMagnitude > 0.01f ? toTarget.normalized : f, 0.28f);
             }
+        }
+
+        void ResolveGreatswordKalmuriFollowup(Vector3 origin, Vector2 forward, Vector2 side, float baseAngle, int level, float damage)
+        {
+            var f = forward.sqrMagnitude > 0.01f ? forward.normalized : lastAim.normalized;
+            if (f.sqrMagnitude < 0.01f) f = Vector2.up;
+            var s = side.sqrMagnitude > 0.01f ? side.normalized : new Vector2(-f.y, f.x);
+            var radius = (0.72f + level * 0.085f) * (1f + WeaponStat.AreaMul * 0.55f);
+            var dropStart = origin - (Vector3)(f * (0.78f + level * 0.035f)) + Vector3.up * (0.86f + level * 0.035f);
+            var bitePoint = origin + (Vector3)(f * 0.16f);
+            var exit = origin + (Vector3)(f * (0.58f + level * 0.055f));
+            var bladeScale = 0.42f + level * 0.026f;
+            var hot = new Color(0.96f, 1f, 1f, 0.94f);
+            var ghost = new Color(0.48f, 0.92f, 1f, 0.36f);
+
+            PlaySfx("kalmuri_echo_heavy", 0.90f, 0.08f);
+            SpawnTransientSprite("EchoGreat_KalmuriJudgementTell", MakeRingSprite("EchoGreat_KalmuriJudgementTell", Color.white, 160), bitePoint, Quaternion.Euler(0f, 0f, baseAngle), radius * 0.82f, new Color(0.72f, 0.98f, 1f, 0.30f), 0.28f);
+            SpawnEchoLink("EchoGreat_KalmuriDropLine", dropStart, bitePoint, new Color(0.82f, 1f, 1f, 0.42f), 0.26f, 0.034f);
+            SpawnKalmuriDiveBlade("EchoGreat_KalmuriFallingGreatBlade", dropStart, bitePoint, bladeScale, hot, 0.36f, 0.18f);
+            SpawnKalmuriDiveBlade("EchoGreat_KalmuriGroundRipBlade", bitePoint - (Vector3)(f * 0.04f), exit, bladeScale * 0.82f, ghost, 0.26f, 0.13f);
+            SpawnEchoWoundSlash("EchoGreat_KalmuriExecutionRift", bitePoint, f, new Color(0.90f, 1f, 1f, 0.84f), 1.42f + level * 0.10f, 0.28f);
+            SpawnEchoWoundSlash("EchoGreat_KalmuriCrossRift", bitePoint + (Vector3)(s * 0.08f), s, new Color(0.56f, 0.94f, 1f, 0.52f), 0.84f + level * 0.055f, 0.22f);
+            SpawnRadialSlashLines("EchoGreat_KalmuriGroundTeeth", bitePoint, f, 5, 0.70f + level * 0.06f, new Color(0.74f, 0.98f, 1f, 0.48f), 0.30f);
+            SpawnTransientSprite("EchoGreat_KalmuriImpactCore", MakeImpactDiamondSprite("EchoGreat_KalmuriImpactCore", Color.white), bitePoint, Quaternion.Euler(0f, 0f, baseAngle + 45f), 0.44f + level * 0.024f, new Color(0.94f, 1f, 1f, 0.72f), 0.22f);
+
+            var targets = enemies
+                .Where(e => e != null && e.IsAlive)
+                .Select(e => new { Enemy = e, Dir = (Vector2)(e.transform.position - bitePoint) })
+                .Where(x => x.Dir.magnitude <= radius + x.Enemy.TouchRadius)
+                .Where(x => x.Dir.sqrMagnitude <= 0.001f || Vector2.Angle(f, x.Dir.normalized) <= 62f)
+                .OrderBy(x => Mathf.Abs(Vector2.SignedAngle(f, x.Dir.sqrMagnitude > 0.001f ? x.Dir.normalized : f)))
+                .ThenBy(x => x.Dir.sqrMagnitude)
+                .Take(5)
+                .ToList();
+
+            for (int i = 0; i < targets.Count; i++)
+            {
+                var dir = targets[i].Dir.sqrMagnitude > 0.01f ? targets[i].Dir.normalized : f;
+                var mul = i == 0 ? 1.35f : 0.78f;
+                DealDamage(targets[i].Enemy, damage * mul, "Kalmuri Greatsword judgement", true, dir, i == 0 ? 0.82f : 0.44f);
+            }
+
+            hitstopTimer = Mathf.Max(hitstopTimer, 0.060f);
+            cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.14f);
+            cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.070f);
         }
 
         void SpawnKalmuriEchoClampRip(Vector3 origin, Vector2 forward, Vector2 side, int levelValue, int hitIndex, bool isHeavy, bool denseDualBlade)

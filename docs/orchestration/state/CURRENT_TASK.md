@@ -12,6 +12,10 @@ Turn the approved memory/echo/ultimate reward design into playable VFX and hitbo
 
 ## Applied Changes
 
+- Weapon identity follow-up:
+  - Split Greatsword Kalmuri Echo out of the shared Kalmuri clamp/bite follow-up.
+  - Dual Blades Kalmuri Echo remains a fast swarm/bite pattern.
+  - Greatsword Kalmuri Echo now uses a heavy falling judgement blade, drop line, ground rip, execution rift, and impact core.
 - ExecutionFlash:
   - Added near-threshold execution forecast VFX before the actual kill window.
   - Fracture Execution now marks both Execution and Oblivion states and deals stronger low-HP payoff damage.
@@ -43,6 +47,10 @@ Turn the approved memory/echo/ultimate reward design into playable VFX and hitbo
 - `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: PASS, `fracture=28`, `stasis=11`, `ashen=47`.
 - `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: PASS, `fracture=49`, `stasis=22`, `ashen=14`.
 - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=45`, `activeVfx=26`, `ms=57.58`.
+- Weapon identity follow-up:
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=335`, `K=136`, `state=58`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=230`, `K=8`, `state=85`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=94`, `activeVfx=30`, `ms=87.85`.
 
 ## Remaining Gate
 
@@ -53,6 +61,7 @@ Direct-play review should judge:
 - Whether StoppedSecond and ShatterWave feel like damage-control hybrids instead of only passive utility.
 - Whether non-blood ultimates are worth choosing beside Blood Blade Storm.
 - Whether dense dual blades still feel responsive after the added VFX.
+- Whether Greatsword Kalmuri now feels like a heavy judgement blade instead of the same swarm effect as Dual Blades.
 
 # 2026-07-07 Gatekeeper Review HP / Impact VFX Pass
 

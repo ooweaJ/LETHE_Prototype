@@ -155,6 +155,13 @@
           <p>Dev_Prototype_v1에 기억/잔향/궁극 잔향의 왕귀형 보상과 VFX 판정을 1차 구현했다. 아직 _dev 검증 단계이며 Assets/Lethe 승격은 하지 않았다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-08-02</span>
+          <h2><a href="#unit-2026-07-08-02" data-unit-link="unit-2026-07-08-02">칼무리 잔향 무기별 개성 분리</a></h2>
+          <p>Dev_Prototype_v1에서 칼무리 잔향의 쌍검/대검 분기를 다시 잡았다. 쌍검은 빠른 사냥떼, 대검은 큰 판결검이 내려찍는 방향이다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -206,6 +213,42 @@
 <li>방향: 약한 기억도 잔향/궁극 단계에서 강하게 변형되는 왕귀 구조를 만든다.</li>
 <li>행동: 처형, 추적, 파쇄, 정지, 잿빛, 망각의 판정과 VFX를 보강하고 비혈반 궁극을 상향했다.</li>
 <li>결과: 주요 Unity QA가 모두 통과했고, 이제 직접 플레이로 손맛과 선택지를 평가할 수 있는 상태가 됐다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-08-02" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-08-02 - 칼무리 잔향 무기별 개성 분리</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에서 칼무리 잔향의 쌍검/대검 분기를 다시 잡았다. 쌍검은 빠른 사냥떼, 대검은 큰 판결검이 내려찍는 방향이다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>대검 칼무리 잔향을 기존 공통 클램프/물어뜯기 패턴에서 분리했다.</li>
+<li>대검은 낙하하는 큰 칼날, 낙하선, 지면 찢기, 처형 균열, 충격 코어를 사용한다.</li>
+<li>쌍검 칼무리는 기존처럼 빠른 칼날 군집/물어뜯기 언어를 유지했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 단독 재실행 기준 warning 0개, error 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 기존 legacy warning 7개, error 0개.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Echo Matrix Greatsword: PASS, <code>total=335</code>, <code>K=136</code>, <code>state=58</code>.</li>
+<li>Echo Matrix Dual Blades: PASS, <code>total=230</code>, <code>K=8</code>, <code>state=85</code>.</li>
+<li>Dense Dual Blades Perf Matrix: PASS, <code>hits=18</code>, <code>suppressed=15</code>, <code>transient=94</code>, <code>activeVfx=30</code>, <code>ms=87.85</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>잔향은 무기와 무관한 동일 효과가 아니라, 같은 잔향이라도 무기 성격을 보존해야 한다. 칼무리부터 쌍검은 빠르고 여럿, 대검은 적고 무겁게 갈라냈다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>대검 칼무리 카운트가 크게 늘었다. 직접 플레이에서 통쾌하면 유지하고, 화면을 너무 덮으면 낙하선/지면 이빨 수를 줄이는 쪽이 맞다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>이번 수정은 칼무리 하나만 무기별 액션 문법을 분리한 사례다. 다음에는 처형, 추적, 정지, 잿빛 같은 유틸 잔향도 같은 기준으로 쌍검/대검 개성을 점검해야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo가 대검 칼무리의 낙하검 연출을 확인한 뒤, 너무 과하면 VFX 수를 줄이고 약하면 충격/히트스톱을 더 조정한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 같은 잔향이 무기만 바뀌어도 거의 같은 화면 언어로 보였다.</li>
+<li>방향: 잔향의 정체성은 유지하되 무기별 액션 문법을 다르게 만든다.</li>
+<li>행동: 대검 칼무리 잔향을 낙하 판결검/지면 균열 패턴으로 분리했다.</li>
+<li>결과: 대검/쌍검 Echo Matrix와 Dense 쌍검 성능 QA가 모두 통과했다.</li>
 </ul>
     </article>
       </div>

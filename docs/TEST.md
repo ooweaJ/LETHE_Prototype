@@ -5,6 +5,7 @@
 - Purpose:
   - Convert the approved memory/echo/ultimate reward design into playable VFX and hitbox behavior.
   - Reduce the gap where Blood Reflection felt like the only route with strong feedback and payoff.
+  - Follow up jaewoo's concern that echoes should preserve weapon identity instead of feeling identical across Dual Blades and Greatsword.
 - Applied target:
   - ExecutionFlash now has near-threshold forecast VFX and stronger Fracture Execution payoff.
   - HunterOath prioritizes higher-threat targets before distance.
@@ -14,6 +15,7 @@
   - OblivionBrand gains +5 detonation/spread and stronger echo rupture/spread.
   - Fracture Execution, Stasis Hunt, and Ashen Oblivion were buffed so non-blood ultimates have stronger payoff.
   - Dense Dual Blades benchmark damage was lowered so the perf matrix measures hit/echo suppression instead of kill-chain aftermath.
+  - Greatsword Kalmuri Echo was split from the shared clamp/bite follow-up into a heavy falling judgement blade and ground-rip pattern.
 - Commands / checks:
   - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
   - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
@@ -37,6 +39,10 @@
   - Utility Ultimate Matrix Dual Blades: `[V1QA] PASS`, `fracture=28`, `stasis=11`, `ashen=47`.
   - Utility Ultimate Matrix Greatsword: `[V1QA] PASS`, `fracture=49`, `stasis=22`, `ashen=14`.
   - Dense Dual Blades Perf Matrix: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=45`, `activeVfx=26`, `ms=57.58`.
+  - Weapon identity follow-up:
+    - Echo Matrix Greatsword: `[V1QA] PASS`, `total=335`, `K=136`, `state=58`.
+    - Echo Matrix Dual Blades: `[V1QA] PASS`, `total=230`, `K=8`, `state=85`.
+    - Dense Dual Blades Perf Matrix: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=94`, `activeVfx=30`, `ms=87.85`.
 - Limitation:
   - MCP menu calls intermittently returned `Error polling queue: fetch failed`, but console logs confirmed the QA results after wait/retry.
   - Automated QA does not replace direct feel review for payoff, readability, and satisfaction.

@@ -11,6 +11,9 @@
   - OblivionBrand now detonates/spreads at +5 and gains stronger echo rupture/spread behavior.
   - Fracture Execution, Stasis Hunt, and Ashen Oblivion were buffed with stronger damage/VFX beats so Blood Blade Storm is no longer the only high-hype ultimate.
   - Dense Dual Blades QA damage was lowered in the benchmark path so the test measures dense hit/echo suppression rather than kill-chain aftermath.
+- Split Kalmuri Echo by weapon identity:
+  - Dual Blades Kalmuri Echo keeps the fast swarm/bite language.
+  - Greatsword Kalmuri Echo no longer reuses the same clamp/bite follow-up; it now uses a heavy falling judgement blade, drop line, ground rip, execution rift, and impact core.
 - Verification:
   - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
   - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
@@ -22,6 +25,10 @@
   - `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: `[V1QA] PASS`, `fracture=28`, `stasis=11`, `ashen=47`.
   - `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: `[V1QA] PASS`, `fracture=49`, `stasis=22`, `ashen=14`.
   - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=45`, `activeVfx=26`, `ms=57.58`.
+  - Kalmuri weapon split follow-up:
+    - `LETHE/V1 QA/Echo Matrix Greatsword`: `[V1QA] PASS`, `total=335`, `K=136`, `state=58`.
+    - `LETHE/V1 QA/Echo Matrix Dual Blades`: `[V1QA] PASS`, `total=230`, `K=8`, `state=85`.
+    - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=94`, `activeVfx=30`, `ms=87.85`.
 
 # 2026-07-07
 

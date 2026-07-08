@@ -5,6 +5,11 @@ Last updated: 2026-07-08
 ## 2026-07-08 Update: Memory/Echo Kingmaker VFX and Judgment Pass
 
 - Implemented the approved reward-shape direction so non-blood routes can have stronger late-growth payoff instead of Blood Reflection being the only obvious high-value route.
+- Follow-up weapon identity correction:
+  - Confirmed jaewoo's concern that many echoes still branch by numbers more than by weapon personality.
+  - Split Greatsword Kalmuri Echo out of the shared clamp/bite follow-up.
+  - Dual Blades Kalmuri Echo remains a fast swarm/bite language.
+  - Greatsword Kalmuri Echo now uses a heavy falling judgement blade, drop line, ground-rip blade, execution rift, and impact core.
 - Applied:
   - ExecutionFlash now has a pre-execute forecast for near-threshold targets and stronger execution/oblivion interaction in Fracture Execution.
   - HunterOath now prioritizes higher-threat targets before distance, so elites/healers/boss-like threats are more likely to be selected.
@@ -25,6 +30,10 @@ Last updated: 2026-07-08
   - Utility Ultimate Matrix Dual Blades: `[V1QA] PASS`, `fracture=28`, `stasis=11`, `ashen=47`.
   - Utility Ultimate Matrix Greatsword: `[V1QA] PASS`, `fracture=49`, `stasis=22`, `ashen=14`.
   - Dense Dual Blades Perf Matrix: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=45`, `activeVfx=26`, `ms=57.58`.
+  - Weapon identity follow-up:
+    - Echo Matrix Greatsword: `[V1QA] PASS`, `total=335`, `K=136`, `state=58`.
+    - Echo Matrix Dual Blades: `[V1QA] PASS`, `total=230`, `K=8`, `state=85`.
+    - Dense Dual Blades Perf Matrix: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=94`, `activeVfx=30`, `ms=87.85`.
 - Current limitation:
   - Automated QA confirms coverage, object counts, compile safety, and dense budget. Direct play still needs to judge whether the new non-blood routes actually feel rewarding and readable in motion.
 - Next step:

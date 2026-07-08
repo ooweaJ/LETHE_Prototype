@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260708\\index.md",
-  "generatedAt": "2026-07-08T02:56:47.178Z",
-  "unitCount": 1,
+  "generatedAt": "2026-07-08T04:52:41.763Z",
+  "unitCount": 2,
   "latest": {
-    "title": "2026-07-08-01 - 기억/잔향 왕귀 VFX와 판정 보강",
-    "number": "01",
-    "markdownPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-01-기억-잔향-왕귀-vfx와-판정-보강.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-01-기억-잔향-왕귀-vfx와-판정-보강.html"
+    "title": "2026-07-08-02 - 칼무리 잔향 무기별 개성 분리",
+    "number": "02",
+    "markdownPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-02-칼무리-잔향-무기별-개성-분리.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-02-칼무리-잔향-무기별-개성-분리.html"
   }
 }
