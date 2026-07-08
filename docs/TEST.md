@@ -1,5 +1,33 @@
 # LETHE TEST
 
+# 2026-07-08 Kalmuri Concept Preview Debugger
+
+- Purpose:
+  - Let jaewoo compare four Kalmuri Echo concept candidates directly in the same build before choosing the final direction.
+  - Avoid prematurely committing one design after the previous "single blade flies out" read still felt wrong.
+- Applied target:
+  - F12 debug panel now includes `K1`, `K2`, `K3`, and `K4`.
+  - `K1`: wound-feast, multiple blades collapse into the hit wound.
+  - `K2`: trail-bloom, attack trail afterimages multiply into delayed cuts.
+  - `K3`: cross-swarm, blades spawn around the target and cross-cut inward.
+  - `K4`: mark-frenzy, a hungry scar mark forks into nearby enemies.
+  - Each button clears/rebuilds the same small enemy pack in front of the player for consistent visual comparison.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
+  - Unity `Assets/Refresh`
+  - Unity console error check.
+- Results:
+  - Runtime build passed with 0 warnings and 0 errors on sequential rerun.
+  - Editor build passed with 7 existing legacy warnings and 0 errors.
+  - Unity console errors: `0`.
+  - Unity `EditorApplication.isCompiling` stayed `true` longer than expected after refresh, so direct in-editor button click testing is still pending.
+- Debug instructions:
+  - Start/play `Dev_Prototype_v1`.
+  - Press `F12`.
+  - Use `K1`/`K2`/`K3`/`K4` in the debug panel.
+  - Compare shape, readability, and Kalmuri identity before choosing which concept becomes real gameplay.
+
 # 2026-07-08 Kalmuri Wound-Reaction Correction
 
 - Purpose:

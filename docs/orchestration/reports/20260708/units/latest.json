@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260708\\index.md",
-  "generatedAt": "2026-07-08T05:32:07.947Z",
-  "unitCount": 3,
+  "generatedAt": "2026-07-08T05:50:38.919Z",
+  "unitCount": 4,
   "latest": {
-    "title": "2026-07-08-03 - 칼무리 잔향 상처 반응 수정",
-    "number": "03",
-    "markdownPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-03-칼무리-잔향-상처-반응-수정.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-03-칼무리-잔향-상처-반응-수정.html"
+    "title": "2026-07-08-04 - 칼무리 콘셉트 프리뷰 디버거",
+    "number": "04",
+    "markdownPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-04-칼무리-콘셉트-프리뷰-디버거.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-04-칼무리-콘셉트-프리뷰-디버거.html"
   }
 }

@@ -2,6 +2,24 @@
 
 Last updated: 2026-07-08
 
+## 2026-07-08 Update: Kalmuri Concept Preview Debugger
+
+- Added direct comparison tools for jaewoo's Kalmuri redesign candidates.
+- Applied:
+  - F12 debug panel now includes `K1`, `K2`, `K3`, and `K4`.
+  - `K1`: wound-feast, multiple blades collapse into the hit wound.
+  - `K2`: trail-bloom, attack trail afterimages multiply into delayed cuts.
+  - `K3`: cross-swarm, blades appear around the target and cut inward.
+  - `K4`: mark-frenzy, a hungry scar mark forks into nearby enemies.
+  - Each button clears/rebuilds the same small enemy pack in front of the player so visual comparison is consistent.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors on sequential rerun.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - Unity console errors: `0`.
+  - Unity `EditorApplication.isCompiling` stayed `true` longer than expected after refresh, so direct in-editor click testing is pending.
+- Next step:
+  - In Play Mode, press `F12`, click `K1` to `K4`, and pick the candidate that best reads as "Kalmuri Echo" before Codex converts it into the real combat behavior.
+
 ## 2026-07-08 Update: Kalmuri Wound-Reaction Correction
 
 - Corrected jaewoo's core Kalmuri Echo concern:

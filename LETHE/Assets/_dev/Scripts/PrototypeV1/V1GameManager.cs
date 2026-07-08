@@ -4219,6 +4219,192 @@ namespace Lethe.PrototypeV1
             Log("Debug utility VFX preview");
         }
 
+        void DebugPreviewKalmuriConcept(int concept)
+        {
+            EnsureRunStarted();
+            echoOnlyDebugMode = true;
+            activeMemories.Clear();
+            echoLevels.Clear();
+            echoLevels[V1MemoryId.HungryBlades] = MaxEchoLevel;
+            pendingKalmuriFollowups.Clear();
+
+            var f = lastAim.sqrMagnitude > 0.01f ? lastAim.normalized : Vector2.up;
+            var s = new Vector2(-f.y, f.x).normalized;
+            var targets = DebugBuildKalmuriPreviewPack(f, s);
+            if (targets.Count == 0) return;
+
+            var origin = targets[0].transform.position;
+            var weapon = CurrentWeaponSpec();
+            var heavy = weapon.Id == V1WeaponId.Greatsword;
+            switch (Mathf.Clamp(concept, 1, 4))
+            {
+                case 1:
+                    DebugPreviewKalmuriWoundFeast(origin, f, s, targets, heavy);
+                    SpawnFloatingText(origin + Vector3.up * 0.62f, "K1 Wound Feast", new Color(0.74f, 1f, 1f));
+                    Log("Debug Kalmuri concept 1 wound feast");
+                    break;
+                case 2:
+                    DebugPreviewKalmuriTrailBloom(origin, f, s, targets, heavy);
+                    SpawnFloatingText(origin + Vector3.up * 0.62f, "K2 Trail Bloom", new Color(0.74f, 1f, 1f));
+                    Log("Debug Kalmuri concept 2 trail bloom");
+                    break;
+                case 3:
+                    DebugPreviewKalmuriCrossSwarm(origin, f, s, targets, heavy);
+                    SpawnFloatingText(origin + Vector3.up * 0.62f, "K3 Cross Swarm", new Color(0.74f, 1f, 1f));
+                    Log("Debug Kalmuri concept 3 cross swarm");
+                    break;
+                default:
+                    DebugPreviewKalmuriMarkFrenzy(origin, f, s, targets, heavy);
+                    SpawnFloatingText(origin + Vector3.up * 0.62f, "K4 Mark Frenzy", new Color(0.74f, 1f, 1f));
+                    Log("Debug Kalmuri concept 4 mark frenzy");
+                    break;
+            }
+        }
+
+        List<V1Enemy> DebugBuildKalmuriPreviewPack(Vector2 forward, Vector2 side)
+        {
+            ClearEnemiesForDebug();
+            var center = player.position + (Vector3)(forward * 2.35f);
+            var offsets = new[]
+            {
+                Vector2.zero,
+                side * 0.52f + forward * 0.24f,
+                -side * 0.52f + forward * 0.18f,
+                forward * 0.78f,
+                -forward * 0.46f + side * 0.22f,
+            };
+            var kinds = new[]
+            {
+                V1EnemyKind.Eroder,
+                V1EnemyKind.DriftingEye,
+                V1EnemyKind.SplitOne,
+                V1EnemyKind.Eroder,
+                V1EnemyKind.VoidPriest,
+            };
+
+            var result = new List<V1Enemy>();
+            for (int i = 0; i < offsets.Length; i++)
+            {
+                SpawnEnemy(kinds[i], center + (Vector3)offsets[i]);
+                var enemy = enemies.LastOrDefault();
+                if (enemy != null) result.Add(enemy);
+            }
+            return result;
+        }
+
+        void DebugPreviewKalmuriWoundFeast(Vector3 origin, Vector2 forward, Vector2 side, List<V1Enemy> targets, bool heavy)
+        {
+            var f = forward.sqrMagnitude > 0.01f ? forward.normalized : Vector2.up;
+            var s = side.sqrMagnitude > 0.01f ? side.normalized : new Vector2(-f.y, f.x);
+            var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
+            var radius = heavy ? 0.78f : 0.58f;
+            var count = heavy ? 6 : 8;
+            var color = heavy ? new Color(0.92f, 1f, 1f, 0.88f) : new Color(0.70f, 1f, 1f, 0.78f);
+
+            PlaySfx("kalmuri_echo", 0.70f, 0.06f);
+            SpawnTransientSprite("KalmuriConcept_WoundFeastCore", MakeImpactDiamondSprite("KalmuriConcept_WoundFeastCore", Color.white), origin, Quaternion.Euler(0f, 0f, baseAngle + 45f), heavy ? 0.44f : 0.32f, new Color(0.92f, 1f, 1f, 0.64f), 0.26f);
+            SpawnTransientSprite("KalmuriConcept_WoundFeastRing", MakeRingSprite("KalmuriConcept_WoundFeastRing", Color.white, 144), origin, Quaternion.identity, radius, new Color(0.62f, 1f, 1f, 0.34f), 0.28f);
+            for (int i = 0; i < count; i++)
+            {
+                var angle = baseAngle + i * (360f / count) + (heavy ? 12f : 0f);
+                var dir = (Vector2)(Quaternion.Euler(0f, 0f, angle) * Vector3.right);
+                var start = origin + (Vector3)(dir * radius);
+                var end = origin + (Vector3)(dir * 0.10f + s * Mathf.Sin(i * 1.7f) * 0.05f);
+                SpawnKalmuriDiveBlade("KalmuriConcept_WoundFeastBlade", start, end, heavy ? 0.31f : 0.22f, color, heavy ? 0.24f : 0.18f, heavy ? 0.13f : 0.09f);
+            }
+            SpawnRadialSlashLines("KalmuriConcept_WoundFeastCuts", origin, f, heavy ? 5 : 7, heavy ? 0.88f : 0.68f, new Color(0.86f, 1f, 1f, 0.42f), 0.24f);
+            DebugDamageKalmuriPreview(targets, origin, heavy ? 0.95f : 0.72f, heavy ? 34f : 22f, "Kalmuri concept wound feast");
+        }
+
+        void DebugPreviewKalmuriTrailBloom(Vector3 origin, Vector2 forward, Vector2 side, List<V1Enemy> targets, bool heavy)
+        {
+            var f = forward.sqrMagnitude > 0.01f ? forward.normalized : Vector2.up;
+            var s = side.sqrMagnitude > 0.01f ? side.normalized : new Vector2(-f.y, f.x);
+            var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
+            var lanes = heavy ? 3 : 6;
+            var length = heavy ? 1.18f : 0.82f;
+            var color = heavy ? new Color(0.96f, 1f, 1f, 0.72f) : new Color(0.66f, 1f, 1f, 0.62f);
+
+            PlaySfx(heavy ? "kalmuri_echo_heavy" : "kalmuri_echo", heavy ? 0.82f : 0.62f, 0.07f);
+            SpawnEchoWoundSlash("KalmuriConcept_TrailPrimeCut", origin, f, new Color(0.92f, 1f, 1f, heavy ? 0.82f : 0.62f), heavy ? 1.42f : 1.02f, heavy ? 0.30f : 0.20f);
+            for (int i = 0; i < lanes; i++)
+            {
+                var t = lanes <= 1 ? 0f : (i / (float)(lanes - 1) - 0.5f);
+                var pos = origin + (Vector3)(f * (t * length * 0.54f) + s * Mathf.Sin(i * 1.31f) * (heavy ? 0.10f : 0.14f));
+                var scale = heavy ? 0.30f + i * 0.018f : 0.18f + (i % 3) * 0.012f;
+                SpawnKalmuriBlade("KalmuriConcept_TrailAfterBlade", pos, baseAngle + 88f + t * (heavy ? 18f : 34f), scale, color, heavy ? 0.28f : 0.20f);
+                SpawnEchoWoundLine("KalmuriConcept_TrailScar", pos, f, new Color(0.76f, 1f, 1f, 0.34f), heavy ? 0.82f : 0.54f, heavy ? 0.24f : 0.16f);
+            }
+            SpawnKalmuriDiveBlade("KalmuriConcept_TrailDelayedRip", origin - (Vector3)(f * (heavy ? 0.72f : 0.52f)), origin + (Vector3)(f * (heavy ? 0.54f : 0.42f)), heavy ? 0.38f : 0.25f, new Color(0.90f, 1f, 1f, 0.86f), heavy ? 0.34f : 0.22f, heavy ? 0.17f : 0.11f);
+            DebugDamageKalmuriPreview(targets, origin, heavy ? 1.10f : 0.86f, heavy ? 38f : 24f, "Kalmuri concept trail bloom");
+        }
+
+        void DebugPreviewKalmuriCrossSwarm(Vector3 origin, Vector2 forward, Vector2 side, List<V1Enemy> targets, bool heavy)
+        {
+            var f = forward.sqrMagnitude > 0.01f ? forward.normalized : Vector2.up;
+            var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
+            var count = heavy ? 6 : 8;
+            var radius = heavy ? 0.92f : 0.72f;
+            var color = heavy ? new Color(0.95f, 1f, 1f, 0.90f) : new Color(0.72f, 1f, 1f, 0.82f);
+
+            PlaySfx("kalmuri_lunge", 0.74f, 0.08f);
+            SpawnTransientSprite("KalmuriConcept_CrossSwarmTell", MakeRingSprite("KalmuriConcept_CrossSwarmTell", Color.white, 160), origin, Quaternion.identity, radius * 0.92f, new Color(0.60f, 1f, 1f, 0.30f), 0.28f);
+            for (int i = 0; i < count; i++)
+            {
+                var angle = baseAngle + i * (360f / count);
+                var dir = (Vector2)(Quaternion.Euler(0f, 0f, angle) * Vector3.right);
+                var start = origin + (Vector3)(dir * radius);
+                var end = origin - (Vector3)(dir * (heavy ? 0.24f : 0.18f));
+                SpawnKalmuriDiveBlade("KalmuriConcept_CrossSwarmBlade", start, end, heavy ? 0.34f : 0.23f, color, heavy ? 0.30f : 0.20f, heavy ? 0.15f : 0.10f);
+            }
+            SpawnEchoWoundSlash("KalmuriConcept_CrossSwarmX", origin, f, new Color(0.92f, 1f, 1f, 0.74f), heavy ? 1.24f : 0.92f, 0.24f);
+            SpawnEchoWoundSlash("KalmuriConcept_CrossSwarmX", origin, new Vector2(-f.y, f.x), new Color(0.54f, 0.96f, 1f, 0.58f), heavy ? 1.08f : 0.76f, 0.22f);
+            DebugDamageKalmuriPreview(targets, origin, heavy ? 1.18f : 0.92f, heavy ? 42f : 26f, "Kalmuri concept cross swarm");
+        }
+
+        void DebugPreviewKalmuriMarkFrenzy(Vector3 origin, Vector2 forward, Vector2 side, List<V1Enemy> targets, bool heavy)
+        {
+            var f = forward.sqrMagnitude > 0.01f ? forward.normalized : Vector2.up;
+            var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
+            var markColor = heavy ? new Color(0.94f, 1f, 1f, 0.70f) : new Color(0.66f, 1f, 1f, 0.58f);
+
+            PlaySfx("kalmuri_echo", 0.68f, 0.05f);
+            SpawnTransientSprite("KalmuriConcept_MarkSeal", MakeImpactDiamondSprite("KalmuriConcept_MarkSeal", Color.white), origin, Quaternion.Euler(0f, 0f, baseAngle + 45f), heavy ? 0.46f : 0.34f, markColor, 0.48f);
+            SpawnTransientSprite("KalmuriConcept_MarkRing", MakeRingSprite("KalmuriConcept_MarkRing", Color.white, 144), origin, Quaternion.identity, heavy ? 0.72f : 0.54f, new Color(0.58f, 1f, 1f, 0.34f), 0.48f);
+            SpawnRadialSlashLines("KalmuriConcept_MarkTeeth", origin, f, heavy ? 6 : 8, heavy ? 0.82f : 0.62f, new Color(0.82f, 1f, 1f, 0.42f), 0.34f);
+
+            var linked = targets
+                .Where(e => e != null && e.IsAlive)
+                .OrderBy(e => Vector2.Distance(origin, e.transform.position))
+                .Skip(1)
+                .Take(heavy ? 2 : 3)
+                .ToList();
+            for (int i = 0; i < linked.Count; i++)
+            {
+                var pos = linked[i].transform.position;
+                var dir = (Vector2)(pos - origin);
+                if (dir.sqrMagnitude < 0.01f) dir = f;
+                SpawnEchoLink("KalmuriConcept_MarkForkLine", origin, pos, new Color(0.62f, 1f, 1f, 0.36f), 0.34f, 0.020f);
+                SpawnTransientSprite("KalmuriConcept_MarkForkSeal", MakeImpactDiamondSprite("KalmuriConcept_MarkForkSeal", Color.white), pos, Quaternion.Euler(0f, 0f, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + 45f), heavy ? 0.32f : 0.24f, new Color(0.78f, 1f, 1f, 0.58f), 0.34f);
+                SpawnKalmuriDiveBlade("KalmuriConcept_MarkForkBite", pos + (Vector3)(dir.normalized * 0.36f), pos, heavy ? 0.24f : 0.18f, new Color(0.82f, 1f, 1f, 0.76f), 0.24f, 0.11f);
+            }
+            DebugDamageKalmuriPreview(targets, origin, heavy ? 1.35f : 1.08f, heavy ? 32f : 20f, "Kalmuri concept mark frenzy");
+        }
+
+        void DebugDamageKalmuriPreview(List<V1Enemy> targets, Vector3 origin, float radius, float damage, string source)
+        {
+            foreach (var enemy in targets)
+            {
+                if (enemy == null || !enemy.IsAlive) continue;
+                var dir = (Vector2)(enemy.transform.position - origin);
+                if (dir.magnitude > radius + enemy.TouchRadius) continue;
+                DealDamage(enemy, damage, source, false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 0.18f);
+            }
+            hitstopTimer = Mathf.Max(hitstopTimer, 0.035f);
+            cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.08f);
+            cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.035f);
+        }
+
         void DebugIntegratedReview(V1WeaponId weaponId)
         {
             EnsureRunStarted();
@@ -4884,7 +5070,7 @@ namespace Lethe.PrototypeV1
                 return;
             }
 
-            GUI.Box(new Rect(Screen.width - 326, 12, 314, 406), "", panelStyle);
+            GUI.Box(new Rect(Screen.width - 326, 12, 314, 468), "", panelStyle);
             GUI.Label(new Rect(Screen.width - 314, 22, 292, 20), "Debug  F1/F2 기억  F4/F5 잔향  F8 M2", smallStyle);
             if (GUI.Button(new Rect(Screen.width - 314, 48, 92, 28), "M1", buttonStyle)) DebugRunM1Smoke();
             if (GUI.Button(new Rect(Screen.width - 216, 48, 92, 28), "M2", buttonStyle)) DebugRunM2Smoke();
@@ -4913,7 +5099,12 @@ namespace Lethe.PrototypeV1
                 if (resultOverlay) ContinueAfterForgetResult();
             }
             GUI.Label(new Rect(Screen.width - 118, 280, 92, 20), "Rev: all echo", smallStyle);
-            var y = 310;
+            GUI.Label(new Rect(Screen.width - 314, 310, 292, 20), "Kalmuri concept preview", smallStyle);
+            if (GUI.Button(new Rect(Screen.width - 314, 334, 68, 28), "K1", buttonStyle)) DebugPreviewKalmuriConcept(1);
+            if (GUI.Button(new Rect(Screen.width - 242, 334, 68, 28), "K2", buttonStyle)) DebugPreviewKalmuriConcept(2);
+            if (GUI.Button(new Rect(Screen.width - 170, 334, 68, 28), "K3", buttonStyle)) DebugPreviewKalmuriConcept(3);
+            if (GUI.Button(new Rect(Screen.width - 98, 334, 68, 28), "K4", buttonStyle)) DebugPreviewKalmuriConcept(4);
+            var y = 376;
             foreach (var line in combatLog.TakeLast(3))
             {
                 GUI.Label(new Rect(Screen.width - 314, y, 292, 20), line, smallStyle);

@@ -1,5 +1,36 @@
 # Current Task
 
+# 2026-07-08 Kalmuri Concept Preview Debugger
+
+## Status
+
+Implemented and locally build-verified. Unity console shows no errors, but the editor compilation flag stayed `true` longer than expected after refresh, so direct button click verification is pending.
+
+## Goal
+
+Give jaewoo a fast way to compare multiple Kalmuri Echo concepts before choosing the final implementation.
+
+## Applied Changes
+
+- Added F12 debug panel buttons:
+  - `K1`: wound-feast, multiple blades collapse into the hit wound.
+  - `K2`: trail-bloom, attack trail afterimages multiply into delayed cuts.
+  - `K3`: cross-swarm, blades spawn around the target and cross-cut inward.
+  - `K4`: mark-frenzy, a hungry scar mark forks into nearby enemies.
+- Each preview clears/rebuilds the same small enemy pack in front of the player so the concepts can be compared under the same layout.
+- The previews are intentionally debug samples, not final balance.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors on sequential rerun.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- Unity console errors: `0`.
+- Unity `EditorApplication.isCompiling`: remained `true` after refresh; direct click test pending.
+
+## Remaining Gate
+
+Direct play should press `F12`, compare `K1` through `K4`, and choose which visual grammar should become the real Kalmuri Echo.
+
 # 2026-07-08 Kalmuri Wound-Reaction Correction
 
 ## Status

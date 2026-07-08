@@ -23,19 +23,19 @@
 - Done:
   - jaewoo can name or at least visually separate each utility echo family without reading text.
 
-## 3. Kalmuri Wound-Reaction Direct Review
+## 3. Kalmuri Concept Pick Review
 
 - Priority: high
-- Problem: The awakened Kalmuri concept was corrected so +5 now reacts from the weapon impact/wound point rather than reading as an extra blade launched from the player body. Automated QA is safe, but direct play must judge the feel.
+- Problem: The latest wound-chain still risks reading as "one blade flies out." Four alternate Kalmuri concept previews now exist and need direct selection before final implementation.
 - Build:
-  - Check +1/+3/+5 scale in normal and dense fights.
-  - Confirm that +5 Kalmuri reads as wound burst -> scar/chain -> next target, not body launch -> detached projectile.
-  - Confirm that the highlighted orbit blade still reads for the base hunt behavior where relevant.
-  - If it still feels disconnected, tune wound burst timing, chain-line persistence, and projectile spawn offset before adding more sprites.
-  - If too subtle, tune scale/alpha/lifetime without reintroducing moving trail spam.
-  - If too noisy, reduce support flashes before reducing the main clamp/rip read.
+  - Press `F12` in Play Mode and click `K1`, `K2`, `K3`, `K4`.
+  - `K1`: wound-feast.
+  - `K2`: trail-bloom.
+  - `K3`: cross-swarm.
+  - `K4`: mark-frenzy.
+  - Pick one winner or a hybrid, then Codex converts it into the actual Kalmuri Echo behavior.
 - Done:
-  - Jaewoo can identify Hungry Blades / Kalmuri by action, not by label.
+  - Jaewoo can name the chosen Kalmuri direction and why it reads best.
 
 ## 4. Gatekeeper Raid Telegraph Feel Tune
 
@@ -60,6 +60,7 @@
 Completed sequence:
 
 - 2026-07-08: memory/echo kingmaker VFX and judgment pass implemented; Execution, Hunter, Shatter, Stopped, Ashen, Oblivion, and non-blood utility ultimates now have stronger payoff behavior and QA coverage.
+- 2026-07-08: Kalmuri concept preview debugger added; F12 now offers K1 wound-feast, K2 trail-bloom, K3 cross-swarm, and K4 mark-frenzy samples.
 - 2026-07-08: awakened Kalmuri Echo corrected from player-body launch to wound-side echo reaction; Echo Matrix Dual/Great and Dense Dual QA passed.
 - 2026-07-08: Kalmuri Echo weapon-identity split implemented; Greatsword Kalmuri now uses a heavy falling judgement blade while Dual Blades keeps the swarm/bite language.
 - 2026-07-07: Gatekeeper review HP and impact VFX pass implemented; F6/F12 Boss now uses review HP `2200`, fast QA keeps `180`, and Gatekeeper Pattern/Jump QA passed.

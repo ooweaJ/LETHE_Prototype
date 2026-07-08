@@ -169,6 +169,13 @@
           <p>Dev_Prototype_v1에서 칼무리 잔향 +5 동작을 다시 수정했다. 이제 칼이 플레이어 몸에서 추가로 발사되는 느낌이 아니라, 무기 공격이 박힌 지점에서 상처/검흔/체인이 반응하는 쪽으로 바뀌었다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-08-04</span>
+          <h2><a href="#unit-2026-07-08-04" data-unit-link="unit-2026-07-08-04">칼무리 콘셉트 프리뷰 디버거</a></h2>
+          <p>Dev_Prototype_v1에 칼무리 잔향 후보를 직접 비교하는 F12 디버그 프리뷰가 추가됐다. 아직 최종 전투안 확정이 아니라, jaewoo가 화면에서 어떤 방향이 가장 칼무리답게 읽히는지 고르는 단계다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -292,6 +299,43 @@
 <li>방향: 잔향을 플레이어 몸이 아니라 타격 지점의 상호작용으로 재정의했다.</li>
 <li>행동: 각성 칼무리 체인의 시작 위치와 VFX 언어를 상처 중심으로 바꿨다.</li>
 <li>결과: 쌍검/대검 잔향 QA와 밀집 성능 QA가 모두 통과했다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-08-04" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-08-04 - 칼무리 콘셉트 프리뷰 디버거</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에 칼무리 잔향 후보를 직접 비교하는 F12 디버그 프리뷰가 추가됐다. 아직 최종 전투안 확정이 아니라, jaewoo가 화면에서 어떤 방향이 가장 칼무리답게 읽히는지 고르는 단계다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>F12 디버그 패널에 <code>K1</code>, <code>K2</code>, <code>K3</code>, <code>K4</code> 버튼을 추가했다.</li>
+<li><code>K1</code>: 상처 포식형. 여러 칼날이 타격 상처로 모여든다.</li>
+<li><code>K2</code>: 궤적 증식형. 공격 궤적 잔상이 늦게 추가 절단으로 번진다.</li>
+<li><code>K3</code>: 군집 교차참격형. 대상 주변에서 칼들이 나타나 안쪽으로 교차 절단한다.</li>
+<li><code>K4</code>: 표식 폭주형. 굶주린 검흔 표식이 주변 적에게 갈라진다.</li>
+<li>각 버튼은 같은 더미 적 배치를 다시 만들고 해당 콘셉트만 보여줘 비교 조건을 맞춘다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 순차 재실행 기준 warning 0개, error 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 기존 legacy warning 7개, error 0개.</li>
+<li>Unity console errors: <code>0</code>.</li>
+<li>Unity <code>EditorApplication.isCompiling</code> 값이 refresh 이후 오래 <code>true</code>로 유지되어, 실제 버튼 클릭 검증은 직접 플레이에서 이어서 확인해야 한다.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>칼무리 잔향은 바로 하나로 확정하지 않고, 네 가지 화면 언어를 같은 조건에서 비교한 뒤 최종안을 고른다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>현재 프리뷰는 비교용 샘플이다. 최종 전투 판정, 밀집 최적화, 쌍검/대검 분리 적용은 선택 이후 다시 구현해야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>칼무리의 핵심 이슈는 수치가 아니라 화면 문법이다. K1~K4 중 어떤 것이 “칼무리 잔향”으로 가장 잘 읽히는지 선택한 뒤, 그 방향을 실제 잔향 로직에 이식하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo가 Play Mode에서 F12를 누르고 <code>K1</code>~<code>K4</code>를 차례로 눌러 본다. 선택 결과가 나오면 Codex가 해당 후보 또는 하이브리드를 실제 칼무리 잔향으로 변환한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 기존 칼무리 잔향이 단일 투사체처럼 보여 콘셉트가 약했다.</li>
+<li>방향: 확정 구현 전에 여러 VFX 문법을 직접 비교한다.</li>
+<li>행동: F12 디버그 패널에 네 가지 칼무리 콘셉트 프리뷰를 추가했다.</li>
+<li>결과: 이제 플레이 화면에서 후보를 비교하고 최종 방향을 고를 수 있다.</li>
 </ul>
     </article>
       </div>

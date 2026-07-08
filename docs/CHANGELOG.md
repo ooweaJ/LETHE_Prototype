@@ -2,6 +2,19 @@
 
 # 2026-07-08
 
+- Added a Kalmuri concept preview debugger:
+  - F12 debug panel now has `K1`, `K2`, `K3`, `K4` buttons.
+  - `K1`: wound-feast sample, blades gather into the hit wound.
+  - `K2`: trail-bloom sample, weapon trail afterimages multiply into delayed cuts.
+  - `K3`: cross-swarm sample, blades appear around the target and cross-cut inward.
+  - `K4`: mark-frenzy sample, a hungry scar mark forks into nearby targets.
+  - Each preview rebuilds the same small enemy pack in front of the player so jaewoo can compare the concepts under consistent conditions.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors on sequential rerun.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - Unity console errors: `0`.
+  - Unity `EditorApplication.isCompiling` stayed `true` longer than expected after refresh, so in-editor click testing of the buttons is pending.
+
 - Corrected the awakened Kalmuri Echo concept from a player-body launch into an attack-wound reaction:
   - The +5 Kalmuri chain now starts from the struck enemy/wound point instead of reading like an extra blade leaving the player after the weapon attack.
   - Added wound burst, scar, chain line, and wound-chain projectile naming so the echo reads as blades interacting at the attack point.
