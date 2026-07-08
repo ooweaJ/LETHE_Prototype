@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-08-09 - 칼무리 잔향 플레이어블 후보 정정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-08-09 - 칼무리 잔향 플레이어블 후보 정정</h1>
+      <p class="meta">Generated from 2026-07-08-09-칼무리-잔향-플레이어블-후보-정정.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260708/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-08-09 - 칼무리 잔향 플레이어블 후보 정정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에서 F12 <code>K1</code>~<code>K4</code>가 이제 단순 VFX 미리보기가 아니라 실제 칼무리 잔향 프로토타입 선택 버튼으로 동작한다. 아직 <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>jaewoo가 지적한 핵심을 반영했다: 목적은 “다르게 보이는 VFX”가 아니라 <code>굶주린 칼무리</code> 기억이 잔향으로 변했을 때의 재미와 납득감이다.</li>
+<li>F12 <code>K1</code>~<code>K4</code>를 누르면 실제 칼무리 Echo 후속타가 해당 후보 판정으로 발동된다.</li>
+<li><code>K1</code>: 상처/입이 물어뜯는 원형-입 판정.</li>
+<li><code>K2</code>: 무기 궤적을 따라 긋는 리본/띠 판정.</li>
+<li><code>K3</code>: X/십자 교차 폭발 판정.</li>
+<li><code>K4</code>: 표식에서 주변으로 이어지는 저주 체인 판정.</li>
+<li>프리뷰용 1데미지와 실제 Echo 데미지 스케일을 분리했다.</li>
+<li>디버그 UI에 <code>K real echo prototype: K#</code> 상태를 표시한다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 기존 legacy warning 7개, error 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 순차 재실행 기준 warning 0개, error 0개.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Unity console errors: <code>0</code>.</li>
+<li><code>LETHE/V1 QA/Kalmuri Perf Matrix</code>: PASS, <code>totalKalmuri=268</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>K1~K4는 더 이상 “보고 고르는 장식”이 아니다. 후보를 선택하고 실제로 적을 때려 보면서 VFX, 판정, 타격감, 무기별 어울림을 함께 판단한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>자동 QA는 기본 경로가 깨지지 않았음을 확인할 뿐, 네 후보의 재미와 정체성은 직접 플레이로 판단해야 한다. 특히 대검은 무겁고 한 방이 있어야 하고, 쌍검은 빠른 다단 감각이 살아야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>칼무리 잔향 후보는 이제 실제 전투 후속타에 연결되어 있다. 다음 리뷰는 F12에서 K1~K4를 각각 켠 뒤 쌍검/대검으로 때려 보고, <code>굶주린 칼무리</code>가 잔향으로 변했다는 감각이 가장 강한 방향을 고르는 것이다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo가 하나를 고르거나 하이브리드를 지정하면, Codex는 해당 후보를 실제 최종 칼무리 Echo로 정리하고 기본 경로에 통합한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 이전 구현은 VFX 프리뷰에 머물러 실제 잔향의 재미를 판단하기 어려웠다.</li>
+<li>방향: 후보를 실제 전투 판정과 연결해 플레이 감각으로 고를 수 있게 한다.</li>
+<li>행동: K1~K4를 실제 Echo 프로토타입 선택 모드로 연결했다.</li>
+<li>결과: 이제 플레이어가 후보별 잔향 손맛을 직접 비교할 수 있는 상태가 됐다.</li>
+</ul>
+  </main>
+</body>
+</html>

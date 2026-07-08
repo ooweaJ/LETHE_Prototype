@@ -1,17 +1,18 @@
 # Next Tasks
 
-## 1. Kalmuri Hard-Reset Pick Review
+## 1. Kalmuri Playable Echo Pick Review
 
 - Priority: urgent
-- Problem: the hard-reset K1-K4 previews are now implemented, but jaewoo still needs to judge which visual grammar should become the real Kalmuri Echo.
+- Problem: K1-K4 are now playable Echo prototypes, but jaewoo still needs to judge which one actually makes `굶주린 칼무리` feel fun and recognizable as an Echo.
 - Build:
   - Play `Dev_Prototype_v1`.
-  - Press `F12` and confirm the preview label reads `K Preview HARD RESET / HP 9999`.
-  - Compare `K1` wound mouth, `K2` ribbon/banner, `K3` cross/X burst, and `K4` curse-mark network.
-  - Test both Dual Blades and Greatsword, because every candidate now has weapon-specific variants.
+  - Press `F12`, choose `K1`, then attack enemies and feel the actual Kalmuri Echo follow-up.
+  - Repeat for `K2`, `K3`, and `K4`.
+  - Test both Dual Blades and Greatsword, because each candidate keeps weapon-specific reads.
+  - Judge VFX, hit area, damage timing, hitstop/camera feel, and whether the Echo reads as a transformed Hungry Blades memory.
   - Pick one winner or a hybrid direction.
 - Done:
-  - jaewoo can name the chosen Kalmuri direction and explain whether Dual/Great should keep separate silhouettes.
+  - jaewoo can name the chosen playable Kalmuri Echo direction and explain whether Dual/Great should keep separate silhouettes.
 
 ## 2. Direct-Play Kingmaker Route Review
 
@@ -69,6 +70,7 @@
 
 Completed sequence:
 
+- 2026-07-08: Kalmuri K1-K4 corrected from cosmetic previews into playable Echo prototype modes; F12 K buttons now route real Hungry Blades Echo follow-ups through maw, ribbon, cross, or curse-network hit rules.
 - 2026-07-08: Kalmuri next-session direction changed to hard reset; current K1-K4 preview is not good enough because it still reads like reused old Kalmuri VFX.
 - 2026-07-08: Kalmuri VFX hard reset implemented; K1-K4 now use hard-reset silhouettes with Dual Blades and Greatsword variants, `K Preview HARD RESET / HP 9999`, and Kalmuri Perf Matrix PASS.
 - 2026-07-08: memory/echo kingmaker VFX and judgment pass implemented; Execution, Hunter, Shatter, Stopped, Ashen, Oblivion, and non-blood utility ultimates now have stronger payoff behavior and QA coverage.

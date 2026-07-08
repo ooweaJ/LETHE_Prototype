@@ -1,5 +1,44 @@
 # Current Task
 
+# 2026-07-08 Kalmuri Echo Playable Prototype Correction
+
+## Status
+
+Implemented after jaewoo clarified that the goal is not cosmetic preview VFX, but four playable Hungry Blades Echo concept candidates with VFX, hit rules, and weapon fit.
+
+## Correction
+
+- Previous K1-K4 work was too shallow: it changed the F12 preview visuals but did not make the real Hungry Blades Echo feel different in play.
+- The actual need is:
+  - design the forgotten `굶주린 칼무리` memory as a fun Echo,
+  - make Dual Blades and Greatsword both feel appropriate,
+  - provide four playable examples so jaewoo can choose a direction,
+  - include VFX, hit area, damage application, hitstop/camera feel, and readable concept identity.
+
+## Applied Changes
+
+- F12 `K1` to `K4` now select a real Kalmuri Echo prototype mode, not only a preview animation.
+- After selecting a K candidate, weapon hits route `TriggerKalmuriEcho` into that selected prototype.
+- Candidate hit rules now differ:
+  - `K1`: wound-mouth / maw bite area.
+  - `K2`: weapon-trail ribbon strip.
+  - `K3`: geometric X/cross burst area.
+  - `K4`: curse-mark chain/network transfer area.
+- The debug panel now shows the active prototype: `K real echo prototype: K#`.
+- Preview-only 1 damage was separated from real Echo damage so playable prototypes use weapon/echo scaling.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors; one shared-DLL retry warning.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on sequential rerun after an initial shared-DLL lock.
+- Unity compilation errors: `0`.
+- Unity console errors: `0`.
+- `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS, `totalKalmuri=268`.
+
+## Remaining Gate
+
+Direct-play review should now press `F12`, choose `K1` to `K4`, then attack enemies with Dual Blades and Greatsword. The choice should be based on whether the memory-to-echo transformation feels hungry, readable, and fun in actual combat, not only whether the still-frame VFX looks different.
+
 # 2026-07-08 Kalmuri VFX Hard Reset Result
 
 ## Status

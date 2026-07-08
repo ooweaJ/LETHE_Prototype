@@ -1,5 +1,33 @@
 # LETHE TEST
 
+# 2026-07-08 Kalmuri Echo Playable Prototypes
+
+- Purpose:
+  - Correct K1-K4 from cosmetic Kalmuri previews into playable Hungry Blades Echo prototype modes.
+  - Let jaewoo judge concept, VFX, hit rules, and weapon fit in actual combat.
+- Applied target:
+  - F12 `K1` to `K4` now select a real Kalmuri Echo prototype.
+  - Real weapon-hit Echo follow-ups route through the selected prototype.
+  - `K1`: maw/wound bite hit area.
+  - `K2`: ribbon/trail strip hit area.
+  - `K3`: X/cross burst hit area.
+  - `K4`: curse-mark network hit area.
+  - Debug UI displays `K real echo prototype: K#`.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
+  - Unity compilation error check.
+  - Unity console error check.
+  - Unity menu `LETHE/V1 QA/Kalmuri Perf Matrix`.
+- Results:
+  - Runtime build passed with 7 existing legacy warnings and 0 errors.
+  - Editor build passed with 0 warnings and 0 errors on sequential rerun after an initial shared-DLL lock.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+  - Kalmuri Perf Matrix: PASS, `totalKalmuri=268`.
+- Debug instruction:
+  - Start/play `Dev_Prototype_v1`, press `F12`, choose `K1` to `K4`, then attack enemies with Dual Blades and Greatsword to judge the actual Echo prototypes.
+
 # 2026-07-08 Kalmuri VFX Hard Reset Preview
 
 - Purpose:

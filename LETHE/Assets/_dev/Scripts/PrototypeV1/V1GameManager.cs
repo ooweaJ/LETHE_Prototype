@@ -322,6 +322,7 @@ namespace Lethe.PrototypeV1
         int debugDenseDualBladeHits;
         int debugDenseDualBladeEchoesSuppressed;
         int debugDenseDualBladeTransient;
+        int debugKalmuriEchoConcept;
         float debugDenseDualBladeMs;
         bool debugForceDenseDualBladeThrottle;
         bool reviewBloodGranted;
@@ -2290,6 +2291,12 @@ namespace Lethe.PrototypeV1
 
         void ResolveKalmuriFollowup(Vector3 origin, Vector2 forward, int level, int hitIndex, WeaponRuntimeSpec weapon, bool denseDualBlade)
         {
+            if (debugKalmuriEchoConcept > 0)
+            {
+                ResolveKalmuriPrototypeFollowup(debugKalmuriEchoConcept, origin, forward, level, hitIndex, weapon, denseDualBlade);
+                return;
+            }
+
             var isHeavy = weapon.EchoProcStyle == V1EchoProcStyle.SingleHeavy;
             var burstCount = denseDualBlade ? 1 : isHeavy ? 1 : Mathf.Clamp(1 + level / 2, 1, 3);
             var radius = (0.44f + level * 0.045f) * weapon.EchoSizeScale * (1f + WeaponStat.AreaMul * 0.55f);
@@ -2372,6 +2379,119 @@ namespace Lethe.PrototypeV1
                 var toTarget = (Vector2)(targets[i].transform.position - origin);
                 var mul = i == 0 ? 1f : 0.55f;
                 DealDamage(targets[i], damage * mul, "칼무리 잔향", true, toTarget.sqrMagnitude > 0.01f ? toTarget.normalized : f, 0.28f);
+            }
+        }
+
+        void ResolveKalmuriPrototypeFollowup(int concept, Vector3 origin, Vector2 forward, int level, int hitIndex, WeaponRuntimeSpec weapon, bool denseDualBlade)
+        {
+            var isHeavy = weapon.EchoProcStyle == V1EchoProcStyle.SingleHeavy;
+            var f = forward.sqrMagnitude > 0.01f ? forward.normalized : lastAim.normalized;
+            if (f.sqrMagnitude < 0.01f) f = Vector2.up;
+            var s = new Vector2(-f.y, f.x).normalized;
+            var clamped = Mathf.Clamp(concept, 1, 4);
+            var baseDamage = weapon.Damage * (0.26f + level * 0.055f) * weapon.EchoDamageScale * (1f + WeaponStat.EchoAmp);
+            if (isHeavy) baseDamage *= 1.18f;
+            if (denseDualBlade) baseDamage *= 0.76f;
+
+            var targets = KalmuriPrototypeTargets(clamped, origin, f, s, level, isHeavy, denseDualBlade);
+            switch (clamped)
+            {
+                case 1:
+                    DebugPreviewKalmuriWoundFeast(origin, f, s, targets, isHeavy, false);
+                    DealKalmuriPrototypeDamage(targets, origin, f, baseDamage * (isHeavy ? 1.20f : 0.96f), isHeavy ? 0.72f : 0.42f, "Kalmuri Echo K1 Maw");
+                    break;
+                case 2:
+                    DebugPreviewKalmuriTrailBloom(origin, f, s, targets, isHeavy, false);
+                    DealKalmuriPrototypeDamage(targets, origin, f, baseDamage * (isHeavy ? 1.08f : 0.90f), isHeavy ? 0.56f : 0.34f, "Kalmuri Echo K2 Ribbon");
+                    break;
+                case 3:
+                    DebugPreviewKalmuriCrossSwarm(origin, f, s, targets, isHeavy, false);
+                    DealKalmuriPrototypeDamage(targets, origin, f, baseDamage * (isHeavy ? 1.28f : 1.02f), isHeavy ? 0.78f : 0.48f, "Kalmuri Echo K3 Cross");
+                    break;
+                default:
+                    DebugPreviewKalmuriMarkFrenzy(origin, f, s, targets, isHeavy, false);
+                    DealKalmuriPrototypeDamage(targets, origin, f, baseDamage * (isHeavy ? 1.02f : 0.86f), isHeavy ? 0.50f : 0.30f, "Kalmuri Echo K4 Mark");
+                    break;
+            }
+
+            if (!denseDualBlade && hitIndex == 0)
+            {
+                SpawnFloatingText(origin + Vector3.up * 0.58f, isHeavy ? $"K{clamped} Great Echo" : $"K{clamped} Dual Echo", new Color(1f, 0.92f, 0.52f));
+            }
+
+            hitstopTimer = Mathf.Max(hitstopTimer, isHeavy ? 0.055f : 0.032f);
+            cameraShakeTimer = Mathf.Max(cameraShakeTimer, isHeavy ? 0.12f : 0.065f);
+            cameraShakeAmount = Mathf.Max(cameraShakeAmount, isHeavy ? 0.065f : 0.032f);
+        }
+
+        List<V1Enemy> KalmuriPrototypeTargets(int concept, Vector3 origin, Vector2 forward, Vector2 side, int level, bool isHeavy, bool denseDualBlade)
+        {
+            var areaMul = 1f + WeaponStat.AreaMul * 0.55f;
+            var maxTargets = denseDualBlade ? 2 : isHeavy ? 5 : level >= 5 ? 4 : 3;
+            return enemies
+                .Where(e => e != null && e.IsAlive)
+                .Select(e =>
+                {
+                    var delta = (Vector2)(e.transform.position - origin);
+                    var x = Vector2.Dot(delta, forward);
+                    var y = Vector2.Dot(delta, side);
+                    var dist = delta.magnitude;
+                    var score = KalmuriPrototypeScore(concept, x, y, dist, e.TouchRadius, level, isHeavy, areaMul);
+                    return new { Enemy = e, Delta = delta, Score = score };
+                })
+                .Where(x => x.Score >= 0f)
+                .OrderByDescending(x => x.Score)
+                .ThenBy(x => x.Delta.sqrMagnitude)
+                .Take(maxTargets)
+                .Select(x => x.Enemy)
+                .ToList();
+        }
+
+        float KalmuriPrototypeScore(int concept, float x, float y, float dist, float touchRadius, int level, bool isHeavy, float areaMul)
+        {
+            var radiusBonus = touchRadius + level * 0.025f;
+            switch (concept)
+            {
+                case 1:
+                {
+                    var radius = (isHeavy ? 1.06f : 0.78f) * areaMul + radiusBonus;
+                    var mouthDepth = isHeavy ? 0.52f : 0.34f;
+                    if (dist > radius || x < -mouthDepth) return -1f;
+                    return radius - dist + Mathf.Max(0f, x) * 0.20f;
+                }
+                case 2:
+                {
+                    var length = (isHeavy ? 1.86f : 1.32f) * areaMul + radiusBonus;
+                    var halfWidth = (isHeavy ? 0.54f : 0.72f) * areaMul + radiusBonus;
+                    if (x < -0.34f || x > length || Mathf.Abs(y) > halfWidth) return -1f;
+                    return length - x + (halfWidth - Mathf.Abs(y)) * 1.8f;
+                }
+                case 3:
+                {
+                    var radius = (isHeavy ? 1.22f : 0.96f) * areaMul + radiusBonus;
+                    if (dist > radius) return -1f;
+                    var diagonalRead = Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(y));
+                    return radius - dist + Mathf.Max(0f, 0.44f - diagonalRead) * 1.2f;
+                }
+                default:
+                {
+                    var radius = (isHeavy ? 1.48f : 1.18f) * areaMul + radiusBonus;
+                    if (dist > radius) return -1f;
+                    return radius - dist + Mathf.Max(0f, x) * 0.10f;
+                }
+            }
+        }
+
+        void DealKalmuriPrototypeDamage(List<V1Enemy> targets, Vector3 origin, Vector2 forward, float damage, float firstImpact, string source)
+        {
+            for (int i = 0; i < targets.Count; i++)
+            {
+                var enemy = targets[i];
+                if (enemy == null || !enemy.IsAlive) continue;
+                var dir = (Vector2)(enemy.transform.position - origin);
+                var normalized = dir.sqrMagnitude > 0.01f ? dir.normalized : forward;
+                var mul = i == 0 ? 1f : Mathf.Lerp(0.72f, 0.46f, Mathf.Clamp01(i / 4f));
+                DealDamage(enemy, damage * mul, source, true, normalized, i == 0 ? firstImpact : firstImpact * 0.56f);
             }
         }
 
@@ -4222,6 +4342,7 @@ namespace Lethe.PrototypeV1
         void DebugPreviewKalmuriConcept(int concept)
         {
             EnsureRunStarted();
+            debugKalmuriEchoConcept = Mathf.Clamp(concept, 1, 4);
             echoOnlyDebugMode = true;
             activeMemories.Clear();
             echoLevels.Clear();
@@ -4236,29 +4357,30 @@ namespace Lethe.PrototypeV1
             var origin = targets[0].transform.position;
             var weapon = CurrentWeaponSpec();
             var heavy = weapon.Id == V1WeaponId.Greatsword;
-            switch (Mathf.Clamp(concept, 1, 4))
+            switch (debugKalmuriEchoConcept)
             {
                 case 1:
                     DebugPreviewKalmuriWoundFeast(origin, f, s, targets, heavy);
-                    SpawnFloatingText(origin + Vector3.up * 0.62f, heavy ? "K1 GREAT Maw Crush" : "K1 DUAL Saw Mouth", new Color(1f, 0.54f, 0.34f));
-                    Log("Debug Kalmuri concept 1 wound feast");
+                    SpawnFloatingText(origin + Vector3.up * 0.62f, heavy ? "K1 GREAT Maw Crush / PLAYABLE" : "K1 DUAL Saw Mouth / PLAYABLE", new Color(1f, 0.54f, 0.34f));
+                    Log("Debug Kalmuri playable concept 1 wound feast");
                     break;
                 case 2:
                     DebugPreviewKalmuriTrailBloom(origin, f, s, targets, heavy);
-                    SpawnFloatingText(origin + Vector3.up * 0.62f, heavy ? "K2 GREAT Burial Ribbon" : "K2 DUAL Ribbon Flurry", new Color(0.30f, 0.90f, 1f));
-                    Log("Debug Kalmuri concept 2 trail bloom");
+                    SpawnFloatingText(origin + Vector3.up * 0.62f, heavy ? "K2 GREAT Burial Ribbon / PLAYABLE" : "K2 DUAL Ribbon Flurry / PLAYABLE", new Color(0.30f, 0.90f, 1f));
+                    Log("Debug Kalmuri playable concept 2 trail bloom");
                     break;
                 case 3:
                     DebugPreviewKalmuriCrossSwarm(origin, f, s, targets, heavy);
-                    SpawnFloatingText(origin + Vector3.up * 0.62f, heavy ? "K3 GREAT Verdict X" : "K3 DUAL Cross Shreds", new Color(1f, 0.76f, 1f));
-                    Log("Debug Kalmuri concept 3 cross swarm");
+                    SpawnFloatingText(origin + Vector3.up * 0.62f, heavy ? "K3 GREAT Verdict X / PLAYABLE" : "K3 DUAL Cross Shreds / PLAYABLE", new Color(1f, 0.76f, 1f));
+                    Log("Debug Kalmuri playable concept 3 cross swarm");
                     break;
                 default:
                     DebugPreviewKalmuriMarkFrenzy(origin, f, s, targets, heavy);
-                    SpawnFloatingText(origin + Vector3.up * 0.62f, heavy ? "K4 GREAT Curse Seal" : "K4 DUAL Chain Network", new Color(0.86f, 0.52f, 1f));
-                    Log("Debug Kalmuri concept 4 mark frenzy");
+                    SpawnFloatingText(origin + Vector3.up * 0.62f, heavy ? "K4 GREAT Curse Seal / PLAYABLE" : "K4 DUAL Chain Network / PLAYABLE", new Color(0.86f, 0.52f, 1f));
+                    Log("Debug Kalmuri playable concept 4 mark frenzy");
                     break;
             }
+            SpawnFloatingText(player.position + Vector3.up * 1.18f, $"K{debugKalmuriEchoConcept} real echo prototype ON", new Color(1f, 0.92f, 0.52f));
         }
 
         List<V1Enemy> DebugBuildKalmuriPreviewPack(Vector2 forward, Vector2 side)
@@ -4293,7 +4415,7 @@ namespace Lethe.PrototypeV1
             return result;
         }
 
-        void DebugPreviewKalmuriWoundFeast(Vector3 origin, Vector2 forward, Vector2 side, List<V1Enemy> targets, bool heavy)
+        void DebugPreviewKalmuriWoundFeast(Vector3 origin, Vector2 forward, Vector2 side, List<V1Enemy> targets, bool heavy, bool previewDamage = true)
         {
             var f = forward.sqrMagnitude > 0.01f ? forward.normalized : Vector2.up;
             var s = side.sqrMagnitude > 0.01f ? side.normalized : new Vector2(-f.y, f.x);
@@ -4329,10 +4451,10 @@ namespace Lethe.PrototypeV1
                 }
                 SpawnRadialSlashLines("KalmuriHardReset_SawMouthScars", origin, f, 10, 0.82f, new Color(1f, 0.10f, 0.06f, 0.58f), 0.74f);
             }
-            DebugDamageKalmuriPreview(targets, origin, heavy ? 1.12f : 0.78f, heavy ? 34f : 22f, "Kalmuri hard reset wound mouth");
+            if (previewDamage) DebugDamageKalmuriPreview(targets, origin, heavy ? 1.12f : 0.78f, heavy ? 34f : 22f, "Kalmuri hard reset wound mouth");
         }
 
-        void DebugPreviewKalmuriTrailBloom(Vector3 origin, Vector2 forward, Vector2 side, List<V1Enemy> targets, bool heavy)
+        void DebugPreviewKalmuriTrailBloom(Vector3 origin, Vector2 forward, Vector2 side, List<V1Enemy> targets, bool heavy, bool previewDamage = true)
         {
             var f = forward.sqrMagnitude > 0.01f ? forward.normalized : Vector2.up;
             var s = side.sqrMagnitude > 0.01f ? side.normalized : new Vector2(-f.y, f.x);
@@ -4364,10 +4486,10 @@ namespace Lethe.PrototypeV1
                 }
                 SpawnEchoWoundSlash("KalmuriHardReset_RibbonFinalRip", origin + (Vector3)(f * 0.08f), f, new Color(0.72f, 1f, 1f, 0.82f), 1.12f, 0.72f);
             }
-            DebugDamageKalmuriPreview(targets, origin, heavy ? 1.16f : 0.90f, heavy ? 38f : 24f, "Kalmuri hard reset ribbon trail");
+            if (previewDamage) DebugDamageKalmuriPreview(targets, origin, heavy ? 1.16f : 0.90f, heavy ? 38f : 24f, "Kalmuri hard reset ribbon trail");
         }
 
-        void DebugPreviewKalmuriCrossSwarm(Vector3 origin, Vector2 forward, Vector2 side, List<V1Enemy> targets, bool heavy)
+        void DebugPreviewKalmuriCrossSwarm(Vector3 origin, Vector2 forward, Vector2 side, List<V1Enemy> targets, bool heavy, bool previewDamage = true)
         {
             var f = forward.sqrMagnitude > 0.01f ? forward.normalized : Vector2.up;
             var s = side.sqrMagnitude > 0.01f ? side.normalized : new Vector2(-f.y, f.x);
@@ -4404,10 +4526,10 @@ namespace Lethe.PrototypeV1
                     SpawnTransientSpriteScaled("KalmuriHardReset_CrossShredB", line, centers[i], Quaternion.Euler(0f, 0f, baseAngle - 46f - i * 11f), new Vector3(0.030f, scale * 0.86f, 1f), i % 2 == 0 ? colorB : colorA, 0.70f);
                 }
             }
-            DebugDamageKalmuriPreview(targets, origin, heavy ? 1.22f : 0.94f, heavy ? 42f : 26f, "Kalmuri hard reset cross burst");
+            if (previewDamage) DebugDamageKalmuriPreview(targets, origin, heavy ? 1.22f : 0.94f, heavy ? 42f : 26f, "Kalmuri hard reset cross burst");
         }
 
-        void DebugPreviewKalmuriMarkFrenzy(Vector3 origin, Vector2 forward, Vector2 side, List<V1Enemy> targets, bool heavy)
+        void DebugPreviewKalmuriMarkFrenzy(Vector3 origin, Vector2 forward, Vector2 side, List<V1Enemy> targets, bool heavy, bool previewDamage = true)
         {
             var f = forward.sqrMagnitude > 0.01f ? forward.normalized : Vector2.up;
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
@@ -4445,7 +4567,7 @@ namespace Lethe.PrototypeV1
                 SpawnTransientSpriteScaled("KalmuriHardReset_CurseSealVerticalLock", MakeBoxSprite("KalmuriHardReset_CurseLock", Color.white, 9, 148), origin, Quaternion.Euler(0f, 0f, baseAngle), new Vector3(0.040f, 0.92f, 1f), new Color(1f, 0.76f, 1f, 0.54f), 0.94f);
                 SpawnTransientSpriteScaled("KalmuriHardReset_CurseSealHorizontalLock", MakeBoxSprite("KalmuriHardReset_CurseLock", Color.white, 9, 148), origin, Quaternion.Euler(0f, 0f, baseAngle + 90f), new Vector3(0.034f, 0.74f, 1f), new Color(0.84f, 0.42f, 1f, 0.48f), 0.90f);
             }
-            DebugDamageKalmuriPreview(targets, origin, heavy ? 1.35f : 1.08f, heavy ? 32f : 20f, "Kalmuri hard reset curse mark");
+            if (previewDamage) DebugDamageKalmuriPreview(targets, origin, heavy ? 1.35f : 1.08f, heavy ? 32f : 20f, "Kalmuri hard reset curse mark");
         }
 
         void DebugDamageKalmuriPreview(List<V1Enemy> targets, Vector3 origin, float radius, float damage, string source)
@@ -5161,6 +5283,7 @@ namespace Lethe.PrototypeV1
             if (GUI.Button(new Rect(Screen.width - 242, 334, 68, 28), "K2", buttonStyle)) DebugPreviewKalmuriConcept(2);
             if (GUI.Button(new Rect(Screen.width - 170, 334, 68, 28), "K3", buttonStyle)) DebugPreviewKalmuriConcept(3);
             if (GUI.Button(new Rect(Screen.width - 98, 334, 68, 28), "K4", buttonStyle)) DebugPreviewKalmuriConcept(4);
+            GUI.Label(new Rect(Screen.width - 314, 366, 292, 20), debugKalmuriEchoConcept > 0 ? $"K real echo prototype: K{debugKalmuriEchoConcept}" : "K real echo prototype: default", smallStyle);
             var y = 376;
             foreach (var line in combatLog.TakeLast(3))
             {

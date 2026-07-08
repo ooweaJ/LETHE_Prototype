@@ -2,6 +2,22 @@
 
 # 2026-07-08
 
+- Corrected Kalmuri K1-K4 from cosmetic previews into playable Echo prototypes:
+  - F12 `K1` to `K4` now select a real Kalmuri Echo prototype mode.
+  - Actual weapon-hit Kalmuri Echo follow-ups route through the selected candidate.
+  - `K1`: maw/wound bite hit rules.
+  - `K2`: ribbon/trail strip hit rules.
+  - `K3`: X/cross burst hit rules.
+  - `K4`: curse-mark network hit rules.
+  - Preview-only 1 damage is separated from real Echo damage scaling.
+  - Debug UI now shows `K real echo prototype: K#`.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on sequential rerun.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS, `totalKalmuri=268`.
+
 - Implemented the requested Kalmuri VFX hard-reset preview set:
   - `K1`: wound mouth / saw-tooth scar.
   - `K2`: ribbon trail / burial banner.

@@ -2,6 +2,26 @@
 
 Last updated: 2026-07-08
 
+## 2026-07-08 Update: Kalmuri Echo Playable Prototypes
+
+- Corrected the Kalmuri work after jaewoo clarified the real target:
+  - The task is not just making four different-looking preview VFX.
+  - The task is designing how the forgotten `굶주린 칼무리` memory becomes a fun Echo, including concept, VFX, hit rules, weapon fit, and combat feel.
+- Applied:
+  - F12 `K1` to `K4` now select a real Kalmuri Echo prototype mode.
+  - After selecting a candidate, actual weapon hits route the Kalmuri Echo follow-up through that candidate.
+  - Candidate gameplay areas differ: maw bite, ribbon strip, cross burst, and curse-mark network.
+  - Dual Blades and Greatsword still use different visual reads inside each candidate.
+  - The debug panel shows `K real echo prototype: K#`.
+- Verification:
+  - Runtime build: passed with existing legacy warnings and 0 errors.
+  - Editor build: passed with 0 warnings and 0 errors on sequential rerun.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS, `totalKalmuri=268`.
+- Next step:
+  - Direct-play K1-K4 as actual Echo prototypes, not only preview effects, and choose the direction that best communicates `굶주린 칼무리의 잔향`.
+
 ## 2026-07-08 Update: Kalmuri VFX Hard Reset Implemented
 
 - Implemented the requested hard-reset Kalmuri preview set in `V1GameManager.cs`.
