@@ -1,5 +1,31 @@
 # LETHE TEST
 
+# 2026-07-08 Kalmuri Concept Preview Readability Split
+
+- Purpose:
+  - Fix the first Kalmuri concept preview set after jaewoo noted that all four buttons looked almost identical.
+  - Make each debug candidate visually separable at a glance before any final Kalmuri Echo implementation.
+- Applied target:
+  - `K1` wound-feast now uses red/orange bite ring, blood disc, inward teeth, and scar cuts.
+  - `K2` trail-bloom now uses blue attack-ribbon afterimages and long delayed rip lines instead of the same blade swarm.
+  - `K3` cross-swarm now uses purple/white radial cuts plus a clear X impact.
+  - `K4` mark-frenzy now uses violet seal/ring/fork links and removes the extra bite blade from the fork read.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
+  - Unity `Assets/Refresh`
+  - Unity compilation error check.
+  - Unity console error check.
+- Results:
+  - Runtime build passed with 7 existing legacy warnings and 0 errors; a parallel build attempt produced only a shared DLL lock, then sequential rerun confirmed no code errors.
+  - Editor build passed with 0 warnings and 0 errors on sequential rerun.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+- Debug instructions:
+  - Start/play `Dev_Prototype_v1`.
+  - Press `F12`.
+  - Compare `K1` red wound-feast, `K2` blue trail-bloom, `K3` purple cross-swarm, and `K4` violet mark-frenzy.
+
 # 2026-07-08 Kalmuri Concept Preview Debugger
 
 - Purpose:

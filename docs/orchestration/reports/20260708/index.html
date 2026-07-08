@@ -176,6 +176,13 @@
           <p>Dev_Prototype_v1에 칼무리 잔향 후보를 직접 비교하는 F12 디버그 프리뷰가 추가됐다. 아직 최종 전투안 확정이 아니라, jaewoo가 화면에서 어떤 방향이 가장 칼무리답게 읽히는지 고르는 단계다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-08-05</span>
+          <h2><a href="#unit-2026-07-08-05" data-unit-link="unit-2026-07-08-05">칼무리 콘셉트 프리뷰 식별성 분리</a></h2>
+          <p>Dev_Prototype_v1의 F12 K1~K4 칼무리 프리뷰가 다시 수정됐다. 첫 버전은 전부 비슷한 청록 칼날로 보여서 비교 도구로 부족했고, 이번 수정은 색과 형태부터 다르게 갈랐다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -336,6 +343,41 @@
 <li>방향: 확정 구현 전에 여러 VFX 문법을 직접 비교한다.</li>
 <li>행동: F12 디버그 패널에 네 가지 칼무리 콘셉트 프리뷰를 추가했다.</li>
 <li>결과: 이제 플레이 화면에서 후보를 비교하고 최종 방향을 고를 수 있다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-08-05" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-08-05 - 칼무리 콘셉트 프리뷰 식별성 분리</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 F12 <code>K1</code>~<code>K4</code> 칼무리 프리뷰가 다시 수정됐다. 첫 버전은 전부 비슷한 청록 칼날로 보여서 비교 도구로 부족했고, 이번 수정은 색과 형태부터 다르게 갈랐다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>K1</code>: 붉은/주황 상처 포식형. 상처 원반, 물어뜯는 링, 안쪽으로 수축하는 이빨, 붉은 검흔을 사용한다.</li>
+<li><code>K2</code>: 파란 궤적 증식형. 긴 공격 리본 잔상과 지연 절단선을 사용한다.</li>
+<li><code>K3</code>: 보라/흰 군집 교차참격형. 방사형으로 칼이 모이고 큰 X자 충격을 만든다.</li>
+<li><code>K4</code>: 보라 표식 폭주형. 표식 링과 주변 적으로 갈라지는 링크/보조 표식을 사용한다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 기존 legacy warning 7개, error 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: error 0개.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Unity console errors: <code>0</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>프리뷰 후보는 같은 칼날 스프라이트만 바꿔 쓰면 비교가 안 된다. 최종 후보를 고르기 전에는 색, 실루엣, 움직임, 판정 형태가 서로 다르게 보여야 한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>아직 최종 잔향 구현이 아니라 비교용 프리뷰다. jaewoo가 직접 플레이로 어느 방향이 가장 칼무리답게 읽히는지 골라야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>칼무리 후보는 이제 네 가지 화면 언어로 분리됐다. 다음 판단은 수치가 아니라 직관적 식별성, 칼무리다움, 쾌감 기준으로 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo가 <code>F12 -&gt; K1~K4</code>를 다시 눌러 보고, 마음에 드는 후보 또는 섞을 조합을 알려주면 Codex가 실제 칼무리 잔향 로직으로 이식한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 네 후보가 모두 같은 청록 칼날처럼 보여 비교가 어려웠다.</li>
+<li>방향: 후보마다 색과 실루엣을 다르게 설계한다.</li>
+<li>행동: K1~K4의 VFX 문법을 붉은 상처, 푸른 궤적, 보라 교차, 보라 표식으로 분리했다.</li>
+<li>결과: 직접 플레이에서 후보 차이를 훨씬 빠르게 구분할 수 있는 상태가 됐다.</li>
 </ul>
     </article>
       </div>

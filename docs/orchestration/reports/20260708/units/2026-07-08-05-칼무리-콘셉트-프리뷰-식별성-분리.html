@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-08-05 - 칼무리 콘셉트 프리뷰 식별성 분리</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-08-05 - 칼무리 콘셉트 프리뷰 식별성 분리</h1>
+      <p class="meta">Generated from 2026-07-08-05-칼무리-콘셉트-프리뷰-식별성-분리.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260708/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-08-05 - 칼무리 콘셉트 프리뷰 식별성 분리</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 F12 <code>K1</code>~<code>K4</code> 칼무리 프리뷰가 다시 수정됐다. 첫 버전은 전부 비슷한 청록 칼날로 보여서 비교 도구로 부족했고, 이번 수정은 색과 형태부터 다르게 갈랐다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>K1</code>: 붉은/주황 상처 포식형. 상처 원반, 물어뜯는 링, 안쪽으로 수축하는 이빨, 붉은 검흔을 사용한다.</li>
+<li><code>K2</code>: 파란 궤적 증식형. 긴 공격 리본 잔상과 지연 절단선을 사용한다.</li>
+<li><code>K3</code>: 보라/흰 군집 교차참격형. 방사형으로 칼이 모이고 큰 X자 충격을 만든다.</li>
+<li><code>K4</code>: 보라 표식 폭주형. 표식 링과 주변 적으로 갈라지는 링크/보조 표식을 사용한다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 기존 legacy warning 7개, error 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: error 0개.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Unity console errors: <code>0</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>프리뷰 후보는 같은 칼날 스프라이트만 바꿔 쓰면 비교가 안 된다. 최종 후보를 고르기 전에는 색, 실루엣, 움직임, 판정 형태가 서로 다르게 보여야 한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>아직 최종 잔향 구현이 아니라 비교용 프리뷰다. jaewoo가 직접 플레이로 어느 방향이 가장 칼무리답게 읽히는지 골라야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>칼무리 후보는 이제 네 가지 화면 언어로 분리됐다. 다음 판단은 수치가 아니라 직관적 식별성, 칼무리다움, 쾌감 기준으로 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo가 <code>F12 -&gt; K1~K4</code>를 다시 눌러 보고, 마음에 드는 후보 또는 섞을 조합을 알려주면 Codex가 실제 칼무리 잔향 로직으로 이식한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 네 후보가 모두 같은 청록 칼날처럼 보여 비교가 어려웠다.</li>
+<li>방향: 후보마다 색과 실루엣을 다르게 설계한다.</li>
+<li>행동: K1~K4의 VFX 문법을 붉은 상처, 푸른 궤적, 보라 교차, 보라 표식으로 분리했다.</li>
+<li>결과: 직접 플레이에서 후보 차이를 훨씬 빠르게 구분할 수 있는 상태가 됐다.</li>
+</ul>
+  </main>
+</body>
+</html>

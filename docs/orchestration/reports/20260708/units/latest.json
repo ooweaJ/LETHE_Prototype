@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260708\\index.md",
-  "generatedAt": "2026-07-08T05:50:38.919Z",
-  "unitCount": 4,
+  "generatedAt": "2026-07-08T06:34:50.464Z",
+  "unitCount": 5,
   "latest": {
-    "title": "2026-07-08-04 - 칼무리 콘셉트 프리뷰 디버거",
-    "number": "04",
-    "markdownPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-04-칼무리-콘셉트-프리뷰-디버거.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-04-칼무리-콘셉트-프리뷰-디버거.html"
+    "title": "2026-07-08-05 - 칼무리 콘셉트 프리뷰 식별성 분리",
+    "number": "05",
+    "markdownPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-05-칼무리-콘셉트-프리뷰-식별성-분리.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-05-칼무리-콘셉트-프리뷰-식별성-분리.html"
   }
 }

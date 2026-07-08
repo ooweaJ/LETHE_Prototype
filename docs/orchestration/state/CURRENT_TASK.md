@@ -1,5 +1,47 @@
 # Current Task
 
+# 2026-07-08 Kalmuri Concept Preview Readability Split
+
+## Status
+
+Implemented, locally build-verified, and Unity compile/console checked.
+
+## Finding
+
+- The first `K1` to `K4` debug preview set still looked too similar because all four used similar cyan Kalmuri blade sprites, short lifetimes, and nearby target-centered motion.
+- As a selection tool, that was not useful enough: jaewoo could not tell what was actually different.
+
+## Applied Changes
+
+- `K1` wound-feast:
+  - red/orange wound disc,
+  - bite ring,
+  - inward teeth,
+  - scar cuts.
+- `K2` trail-bloom:
+  - blue attack-ribbon afterimages,
+  - longer trail scars,
+  - delayed rip line.
+- `K3` cross-swarm:
+  - purple/white radial inward cuts,
+  - large X impact,
+  - brighter center flash.
+- `K4` mark-frenzy:
+  - violet seal/ring,
+  - fork links to nearby enemies,
+  - secondary seals instead of extra flying blades.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors; a parallel run briefly hit a shared DLL lock, then sequential rerun confirmed no code errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on sequential rerun.
+- Unity compilation errors: `0`.
+- Unity console errors: `0`.
+
+## Remaining Gate
+
+Direct play should press `F12`, compare the revised `K1` through `K4`, and choose a winner or hybrid.
+
 # 2026-07-08 Kalmuri Concept Preview Debugger
 
 ## Status

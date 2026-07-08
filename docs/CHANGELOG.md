@@ -2,6 +2,17 @@
 
 # 2026-07-08
 
+- Made Kalmuri concept preview buttons visually distinct after jaewoo noted the first preview set looked the same:
+  - `K1` now uses a red/orange wound-feast read with bite ring, blood disc, and inward teeth.
+  - `K2` now uses a blue trail-bloom read with long attack-ribbon afterimages and delayed rip lines.
+  - `K3` now uses a purple/white cross-swarm read with radial inward cuts and a large X impact.
+  - `K4` now uses a violet mark-frenzy read with seal/ring/fork links instead of more flying blades.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors; sequential rerun path also verified no code errors after a parallel DLL lock.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on sequential rerun.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+
 - Added a Kalmuri concept preview debugger:
   - F12 debug panel now has `K1`, `K2`, `K3`, `K4` buttons.
   - `K1`: wound-feast sample, blades gather into the hit wound.

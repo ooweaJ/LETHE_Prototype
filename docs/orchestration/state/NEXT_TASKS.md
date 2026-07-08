@@ -29,10 +29,10 @@
 - Problem: The latest wound-chain still risks reading as "one blade flies out." Four alternate Kalmuri concept previews now exist and need direct selection before final implementation.
 - Build:
   - Press `F12` in Play Mode and click `K1`, `K2`, `K3`, `K4`.
-  - `K1`: wound-feast.
-  - `K2`: trail-bloom.
-  - `K3`: cross-swarm.
-  - `K4`: mark-frenzy.
+  - `K1`: red/orange wound-feast.
+  - `K2`: blue trail-bloom.
+  - `K3`: purple/white cross-swarm.
+  - `K4`: violet mark-frenzy.
   - Pick one winner or a hybrid, then Codex converts it into the actual Kalmuri Echo behavior.
 - Done:
   - Jaewoo can name the chosen Kalmuri direction and why it reads best.
@@ -60,6 +60,7 @@
 Completed sequence:
 
 - 2026-07-08: memory/echo kingmaker VFX and judgment pass implemented; Execution, Hunter, Shatter, Stopped, Ashen, Oblivion, and non-blood utility ultimates now have stronger payoff behavior and QA coverage.
+- 2026-07-08: Kalmuri concept preview readability split implemented; K1-K4 now use distinct colors/shapes instead of similar cyan blade swarms.
 - 2026-07-08: Kalmuri concept preview debugger added; F12 now offers K1 wound-feast, K2 trail-bloom, K3 cross-swarm, and K4 mark-frenzy samples.
 - 2026-07-08: awakened Kalmuri Echo corrected from player-body launch to wound-side echo reaction; Echo Matrix Dual/Great and Dense Dual QA passed.
 - 2026-07-08: Kalmuri Echo weapon-identity split implemented; Greatsword Kalmuri now uses a heavy falling judgement blade while Dual Blades keeps the swarm/bite language.

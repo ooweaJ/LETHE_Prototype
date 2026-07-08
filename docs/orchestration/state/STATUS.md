@@ -2,6 +2,22 @@
 
 Last updated: 2026-07-08
 
+## 2026-07-08 Update: Kalmuri Concept Preview Readability Split
+
+- Responded to jaewoo's finding that the first `K1` to `K4` preview set looked effectively identical.
+- Applied:
+  - `K1` is now red/orange wound-feast: bite ring, blood disc, inward teeth, scar cuts.
+  - `K2` is now blue trail-bloom: long attack-ribbon afterimages and delayed rip lines.
+  - `K3` is now purple/white cross-swarm: radial inward cuts and a large X impact.
+  - `K4` is now violet mark-frenzy: seal/ring/fork-link network instead of another flying blade read.
+- Verification:
+  - Runtime build: passed with 7 existing legacy warnings and 0 errors; sequential rerun confirmed no code errors after one parallel DLL lock.
+  - Editor build: passed with 0 warnings and 0 errors on sequential rerun.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+- Next step:
+  - Direct play should compare the revised `K1` to `K4` and choose which visual grammar should become the real Kalmuri Echo.
+
 ## 2026-07-08 Update: Kalmuri Concept Preview Debugger
 
 - Added direct comparison tools for jaewoo's Kalmuri redesign candidates.
