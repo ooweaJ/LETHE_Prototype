@@ -23,14 +23,15 @@
 - Done:
   - jaewoo can name or at least visually separate each utility echo family without reading text.
 
-## 3. Kalmuri Clamp/Rip Visual Polish
+## 3. Kalmuri Wound-Reaction Direct Review
 
 - Priority: high
-- Problem: Kalmuri automated perf is safe, but the new orbit guide / orbit-exit / lock-line / lunge action still needs direct visual approval.
+- Problem: The awakened Kalmuri concept was corrected so +5 now reacts from the weapon impact/wound point rather than reading as an extra blade launched from the player body. Automated QA is safe, but direct play must judge the feel.
 - Build:
   - Check +1/+3/+5 scale in normal and dense fights.
-  - Confirm that the highlighted orbit blade visibly peels off from its orbit endpoint into the lunge.
-  - If it still feels disconnected, tune release spark/lock-line timing before adding more sprites.
+  - Confirm that +5 Kalmuri reads as wound burst -> scar/chain -> next target, not body launch -> detached projectile.
+  - Confirm that the highlighted orbit blade still reads for the base hunt behavior where relevant.
+  - If it still feels disconnected, tune wound burst timing, chain-line persistence, and projectile spawn offset before adding more sprites.
   - If too subtle, tune scale/alpha/lifetime without reintroducing moving trail spam.
   - If too noisy, reduce support flashes before reducing the main clamp/rip read.
 - Done:
@@ -59,6 +60,7 @@
 Completed sequence:
 
 - 2026-07-08: memory/echo kingmaker VFX and judgment pass implemented; Execution, Hunter, Shatter, Stopped, Ashen, Oblivion, and non-blood utility ultimates now have stronger payoff behavior and QA coverage.
+- 2026-07-08: awakened Kalmuri Echo corrected from player-body launch to wound-side echo reaction; Echo Matrix Dual/Great and Dense Dual QA passed.
 - 2026-07-08: Kalmuri Echo weapon-identity split implemented; Greatsword Kalmuri now uses a heavy falling judgement blade while Dual Blades keeps the swarm/bite language.
 - 2026-07-07: Gatekeeper review HP and impact VFX pass implemented; F6/F12 Boss now uses review HP `2200`, fast QA keeps `180`, and Gatekeeper Pattern/Jump QA passed.
 - 2026-07-07: memory/echo/enemy identity pass implemented; utility echo identity bursts, passive memory state marks, animated enemy role symbols, and Gatekeeper sigil marker pass build/Unity QA.

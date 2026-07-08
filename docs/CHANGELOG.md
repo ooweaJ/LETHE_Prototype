@@ -2,6 +2,18 @@
 
 # 2026-07-08
 
+- Corrected the awakened Kalmuri Echo concept from a player-body launch into an attack-wound reaction:
+  - The +5 Kalmuri chain now starts from the struck enemy/wound point instead of reading like an extra blade leaving the player after the weapon attack.
+  - Added wound burst, scar, chain line, and wound-chain projectile naming so the echo reads as blades interacting at the attack point.
+  - Dense Dual Blades now suppresses this expensive awakened wound-chain follow-up while keeping the core Kalmuri hit behavior, restoring the dense perf budget.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors after rerunning sequentially because parallel builds briefly locked the shared DLL.
+  - Unity compilation errors: `0`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: `[V1QA] PASS`, `total=230`, `K=8`, `state=86`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: `[V1QA] PASS`, `total=335`, `K=136`, `state=58`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=87`, `activeVfx=25`, `ms=80.59`.
+
 - Added a memory/echo kingmaker VFX and judgment pass:
   - ExecutionFlash now forecasts near-threshold executions and has stronger Fracture Execution interaction.
   - HunterOath now targets higher-threat enemies before generic nearby bodies.

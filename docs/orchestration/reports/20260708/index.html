@@ -162,6 +162,13 @@
           <p>Dev_Prototype_v1에서 칼무리 잔향의 쌍검/대검 분기를 다시 잡았다. 쌍검은 빠른 사냥떼, 대검은 큰 판결검이 내려찍는 방향이다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-08-03</span>
+          <h2><a href="#unit-2026-07-08-03" data-unit-link="unit-2026-07-08-03">칼무리 잔향 상처 반응 수정</a></h2>
+          <p>Dev_Prototype_v1에서 칼무리 잔향 +5 동작을 다시 수정했다. 이제 칼이 플레이어 몸에서 추가로 발사되는 느낌이 아니라, 무기 공격이 박힌 지점에서 상처/검흔/체인이 반응하는 쪽으로 바뀌었다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -249,6 +256,42 @@
 <li>방향: 잔향의 정체성은 유지하되 무기별 액션 문법을 다르게 만든다.</li>
 <li>행동: 대검 칼무리 잔향을 낙하 판결검/지면 균열 패턴으로 분리했다.</li>
 <li>결과: 대검/쌍검 Echo Matrix와 Dense 쌍검 성능 QA가 모두 통과했다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-08-03" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-08-03 - 칼무리 잔향 상처 반응 수정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에서 칼무리 잔향 +5 동작을 다시 수정했다. 이제 칼이 플레이어 몸에서 추가로 발사되는 느낌이 아니라, 무기 공격이 박힌 지점에서 상처/검흔/체인이 반응하는 쪽으로 바뀌었다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>각성 칼무리 체인의 시작점을 플레이어 위치가 아니라 맞은 적의 상처 위치로 옮겼다.</li>
+<li>상처 폭발, 검흔, 체인 라인, 상처 체인 투사체 이름과 색을 추가했다.</li>
+<li>밀집 쌍검 상황에서는 고비용 각성 체인을 억제해서 렉 회귀를 막고, 기본 칼무리 타격은 유지했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 기존 legacy warning 7개, error 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: error 0개.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Echo Matrix Dual Blades: PASS, <code>total=230</code>, <code>K=8</code>, <code>state=86</code>.</li>
+<li>Echo Matrix Greatsword: PASS, <code>total=335</code>, <code>K=136</code>, <code>state=58</code>.</li>
+<li>Dense Dual Blades Perf Matrix: PASS, <code>hits=18</code>, <code>suppressed=15</code>, <code>transient=87</code>, <code>activeVfx=25</code>, <code>ms=80.59</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>칼무리 잔향은 “몸에서 추가 칼 발사”가 아니라 “공격 지점에서 굶주린 칼들이 상처를 물고 다음 대상으로 이어지는 반응”이어야 한다. 이후 칼무리 튜닝도 이 기준을 따른다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>자동 QA는 통과했지만 실제 플레이에서 상처 반응의 타이밍, 크기, 체인 라인이 충분히 맛있는지는 직접 확인이 필요하다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>칼무리의 핵심 설계 기준이 바뀌었다. 다음 리뷰에서는 수치보다 “공격 지점에서 상호작용한다”는 느낌이 화면에서 읽히는지를 우선 판단하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo가 직접 플레이하면서 +5 칼무리가 상처 폭발 -&gt; 검흔/체인 -&gt; 다음 대상 연결로 읽히는지 확인한다. 부족하면 스프라이트 추가보다 타이밍, 알파, 체인 지속시간, 생성 위치부터 조정한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 잔향이 무기 공격과 분리된 추가 발사체처럼 보여 설계 의도가 어긋났다.</li>
+<li>방향: 잔향을 플레이어 몸이 아니라 타격 지점의 상호작용으로 재정의했다.</li>
+<li>행동: 각성 칼무리 체인의 시작 위치와 VFX 언어를 상처 중심으로 바꿨다.</li>
+<li>결과: 쌍검/대검 잔향 QA와 밀집 성능 QA가 모두 통과했다.</li>
 </ul>
     </article>
       </div>

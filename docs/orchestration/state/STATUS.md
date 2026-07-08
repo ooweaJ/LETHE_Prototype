@@ -2,6 +2,25 @@
 
 Last updated: 2026-07-08
 
+## 2026-07-08 Update: Kalmuri Wound-Reaction Correction
+
+- Corrected jaewoo's core Kalmuri Echo concern:
+  - The previous +5 behavior could read like "the weapon attack already happened, then another blade leaves the player body."
+  - Kalmuri Echo should instead feel like an echo reaction at the attack point, similar in principle to Blood Reflection reacting on the target.
+- Applied:
+  - Awakened Kalmuri wound-chain now starts from the struck enemy/wound position.
+  - Added wound burst, wound scar, chain line, and weapon-aware wound-chain projectile behavior.
+  - Dense Dual Blades suppresses the expensive awakened wound-chain follow-up while preserving the core Kalmuri echo behavior, preventing the direct-play hitch regression.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors after sequential rerun.
+  - Unity compilation errors: `0`.
+  - Echo Matrix Dual Blades: `[V1QA] PASS`, `total=230`, `K=8`, `state=86`.
+  - Echo Matrix Greatsword: `[V1QA] PASS`, `total=335`, `K=136`, `state=58`.
+  - Dense Dual Blades Perf Matrix: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=87`, `activeVfx=25`, `ms=80.59`.
+- Current limitation:
+  - Direct play still needs to judge the feel: the action is now located at the wound point, but timing/scale/color may still need one more pass.
+
 ## 2026-07-08 Update: Memory/Echo Kingmaker VFX and Judgment Pass
 
 - Implemented the approved reward-shape direction so non-blood routes can have stronger late-growth payoff instead of Blood Reflection being the only obvious high-value route.

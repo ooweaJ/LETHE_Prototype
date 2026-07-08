@@ -1715,9 +1715,9 @@ namespace Lethe.PrototypeV1
                 if (UnityEngine.Random.value <= chance)
                 {
                     TriggerKalmuriEcho(enemy, forward, kalmuriLevel, hitIndex, weapon);
-                    if (kalmuriLevel >= 5 && kalmuriAwakenLaunchCooldown <= 0f)
+                    if (kalmuriLevel >= 5 && kalmuriAwakenLaunchCooldown <= 0f && !DenseDualBladeVfxThrottle(weapon))
                     {
-                        LaunchKalmuriBlade(enemy);
+                        LaunchKalmuriBlade(enemy, forward, weapon);
                         kalmuriAwakenLaunchCooldown = 0.35f;
                     }
                 }
@@ -2870,19 +2870,32 @@ namespace Lethe.PrototypeV1
             }
         }
 
-        void LaunchKalmuriBlade(V1Enemy first)
+        void LaunchKalmuriBlade(V1Enemy first, Vector2 forward, WeaponRuntimeSpec weapon)
         {
             var target = enemies.Where(e => e != null && e.IsAlive && e != first).OrderBy(e => Vector2.Distance(first.transform.position, e.transform.position)).FirstOrDefault();
             if (target == null) return;
+            var f = forward.sqrMagnitude > 0.01f ? forward.normalized : lastAim.normalized;
+            if (f.sqrMagnitude < 0.01f) f = Vector2.up;
+            var side = new Vector2(-f.y, f.x);
+            var wound = first.transform.position + (Vector3)(f * 0.10f);
+            var heavy = weapon.Id == V1WeaponId.Greatsword;
+            var targetDir = (Vector2)(target.transform.position - wound);
+            if (targetDir.sqrMagnitude < 0.01f) targetDir = f;
+            var angle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;
             PlaySfx("kalmuri_lunge", 0.70f, 0.08f);
-            var go = new GameObject("KalmuriLaunchBlade");
-            go.transform.position = player.position;
-            go.transform.localScale = Vector3.one * 0.24f;
+            SpawnTransientSprite(heavy ? "EchoGreat_KalmuriAwakenWound" : "EchoDual_KalmuriAwakenWound", MakeImpactDiamondSprite("KalmuriAwakenWound", Color.white), wound, Quaternion.Euler(0f, 0f, angle + 45f), heavy ? 0.34f : 0.24f, new Color(0.86f, 1f, 1f, 0.68f), heavy ? 0.24f : 0.18f);
+            SpawnEchoWoundSlash(heavy ? "EchoGreat_KalmuriAwakenScar" : "EchoDual_KalmuriAwakenScar", wound, f, new Color(0.72f, 1f, 1f, heavy ? 0.62f : 0.48f), heavy ? 0.86f : 0.58f, heavy ? 0.18f : 0.12f);
+            SpawnEchoLink(heavy ? "EchoGreat_KalmuriAwakenChainLine" : "EchoDual_KalmuriAwakenChainLine", wound, target.transform.position, new Color(0.62f, 0.96f, 1f, heavy ? 0.46f : 0.34f), heavy ? 0.24f : 0.18f, heavy ? 0.026f : 0.018f);
+            var go = new GameObject(heavy ? "EchoGreat_KalmuriAwakenBlade" : "EchoDual_KalmuriAwakenBlade");
+            go.transform.position = wound + (Vector3)(side * (heavy ? 0.08f : 0.04f));
+            go.transform.rotation = Quaternion.Euler(0f, 0f, angle + 62f);
+            go.transform.localScale = Vector3.one * (heavy ? 0.32f : 0.22f);
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = LoadSprite(KalmuriLaunchBladePath) ?? MakeBoxSprite("launch", Color.cyan, 16, 64);
+            sr.color = heavy ? new Color(0.82f, 1f, 1f, 0.96f) : new Color(0.72f, 1f, 1f, 0.90f);
             sr.sortingOrder = 45;
-            SpawnTransientSprite("KalmuriAwakenLaunch", MakeRingSprite("KalmuriAwakenLaunch", Color.white, 120), first.transform.position, Quaternion.identity, 0.52f, new Color(0.68f, 1f, 1f, 0.48f), 0.20f);
-            go.AddComponent<V1Projectile>().Configure(this, target, 9.2f, 20f, "칼무리 각성");
+            SpawnTransientSprite(heavy ? "EchoGreat_KalmuriAwakenWoundBurst" : "EchoDual_KalmuriAwakenWoundBurst", MakeRingSprite("KalmuriAwakenWoundBurst", Color.white, 120), wound, Quaternion.identity, heavy ? 0.42f : 0.32f, new Color(0.68f, 1f, 1f, heavy ? 0.42f : 0.32f), heavy ? 0.18f : 0.14f);
+            go.AddComponent<V1Projectile>().Configure(this, target, heavy ? 8.4f : 10.4f, heavy ? 26f : 18f, heavy ? "Kalmuri great wound chain" : "Kalmuri wound chain");
         }
 
         void BloodBloom(V1Enemy center, int level)

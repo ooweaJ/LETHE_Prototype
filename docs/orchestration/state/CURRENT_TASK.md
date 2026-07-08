@@ -1,5 +1,35 @@
 # Current Task
 
+# 2026-07-08 Kalmuri Wound-Reaction Correction
+
+## Status
+
+Implemented, locally build-verified, and Unity-QA-verified through AnkleBreaker Unity MCP on `LETHE` port `7890`.
+
+## Finding
+
+- jaewoo correctly identified that the awakened Kalmuri Echo concept was wrong when it read as "the attack already went out, then one more blade leaves the player body."
+- Kalmuri is an echo, so the satisfying interaction should happen where the weapon hit lands: wound, scar, chain, bite, or rip at the enemy/attack point.
+
+## Applied Changes
+
+- Awakened Kalmuri wound-chain now starts from the struck enemy/wound point.
+- Added wound burst, wound scar, chain line, and wound-chain projectile behavior so the echo reads as attack-point interaction.
+- Dense Dual Blades suppresses the expensive awakened wound-chain follow-up while preserving normal Kalmuri echo hits, preventing a dense perf regression.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors after sequential rerun.
+- Unity compilation errors: `0`.
+- `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=230`, `K=8`, `state=86`.
+- `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=335`, `K=136`, `state=58`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=87`, `activeVfx=25`, `ms=80.59`.
+
+## Remaining Gate
+
+Direct-play review should judge whether +5 Kalmuri now feels like a wound-side echo reaction rather than an extra detached projectile.
+
 # 2026-07-08 Memory/Echo Kingmaker VFX and Judgment Pass
 
 ## Status

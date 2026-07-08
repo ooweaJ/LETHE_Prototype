@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260708\\index.md",
-  "generatedAt": "2026-07-08T04:52:41.763Z",
-  "unitCount": 2,
+  "generatedAt": "2026-07-08T05:32:07.947Z",
+  "unitCount": 3,
   "latest": {
-    "title": "2026-07-08-02 - 칼무리 잔향 무기별 개성 분리",
-    "number": "02",
-    "markdownPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-02-칼무리-잔향-무기별-개성-분리.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-02-칼무리-잔향-무기별-개성-분리.html"
+    "title": "2026-07-08-03 - 칼무리 잔향 상처 반응 수정",
+    "number": "03",
+    "markdownPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-03-칼무리-잔향-상처-반응-수정.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-03-칼무리-잔향-상처-반응-수정.html"
   }
 }

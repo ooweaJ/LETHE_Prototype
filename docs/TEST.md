@@ -1,5 +1,32 @@
 # LETHE TEST
 
+# 2026-07-08 Kalmuri Wound-Reaction Correction
+
+- Purpose:
+  - Respond to jaewoo's design correction that Kalmuri Echo should not look like a new blade leaving the player body after an attack.
+  - Reframe awakened Kalmuri as an echo reaction at the weapon impact/wound point, closer to Blood Reflection's target-side interaction.
+- Applied target:
+  - +5 Kalmuri wound-chain now starts from the struck enemy/wound position.
+  - Added wound burst, wound scar, chain line, and wound-chain projectile naming.
+  - Dense Dual Blades suppresses the expensive awakened wound-chain follow-up while preserving core Kalmuri hit behavior.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
+  - Unity `Assets/Refresh`
+  - Unity compilation error check.
+  - Unity `LETHE/V1 QA/Echo Matrix Dual Blades`
+  - Unity `LETHE/V1 QA/Echo Matrix Greatsword`
+  - Unity `LETHE/V1 QA/Dense Dual Blades Perf Matrix`
+- Results:
+  - Runtime build passed with 7 existing legacy warnings and 0 errors.
+  - Editor build passed with 0 warnings and 0 errors after sequential rerun; a previous parallel build attempt briefly locked the shared DLL.
+  - Unity compilation errors: `0`.
+  - Echo Matrix Dual Blades: `[V1QA] PASS`, `total=230`, `K=8`, `state=86`.
+  - Echo Matrix Greatsword: `[V1QA] PASS`, `total=335`, `K=136`, `state=58`.
+  - Dense Dual Blades Perf Matrix: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=87`, `activeVfx=25`, `ms=80.59`.
+- Limitation:
+  - Automated QA confirms object counts, coverage, and dense budget. Direct play should judge whether the wound-side Kalmuri chain now feels like a satisfying echo interaction rather than a detached projectile.
+
 # 2026-07-08 Memory/Echo Kingmaker VFX and Judgment Pass
 
 - Purpose:
