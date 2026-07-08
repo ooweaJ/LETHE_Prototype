@@ -1,5 +1,28 @@
 # LETHE CHANGELOG
 
+# 2026-07-08
+
+- Added a memory/echo kingmaker VFX and judgment pass:
+  - ExecutionFlash now forecasts near-threshold executions and has stronger Fracture Execution interaction.
+  - HunterOath now targets higher-threat enemies before generic nearby bodies.
+  - ShatterWave gains cluster/boss fracture payoff.
+  - StoppedSecond gains fracture-burst damage/VFX follow-ups.
+  - AshenShield now stores prevented/echo guard charge and releases stored radial guard waves.
+  - OblivionBrand now detonates/spreads at +5 and gains stronger echo rupture/spread behavior.
+  - Fracture Execution, Stasis Hunt, and Ashen Oblivion were buffed with stronger damage/VFX beats so Blood Blade Storm is no longer the only high-hype ultimate.
+  - Dense Dual Blades QA damage was lowered in the benchmark path so the test measures dense hit/echo suppression rather than kill-chain aftermath.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - Unity compile error count: `0`.
+  - `LETHE/V1 QA/VFX Matrix`: `[V1QA] PASS`, `previewMemory=8`, `previewEcho=8`, `fracture=1`, `stasis=1`, `ashen=1`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: `[V1QA] PASS`, `total=226`, `state=78`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: `[V1QA] PASS`, `total=207`, `state=57`.
+  - `LETHE/V1 QA/Passive Memory Matrix`: `[V1QA] PASS`, `blood=17`, `ash=6`, `stopped=8`, `oblivion=62`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: `[V1QA] PASS`, `fracture=28`, `stasis=11`, `ashen=47`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: `[V1QA] PASS`, `fracture=49`, `stasis=22`, `ashen=14`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=45`, `activeVfx=26`, `ms=57.58`.
+
 # 2026-07-07
 
 - Fixed Gatekeeper debug-review strength and impact readability:

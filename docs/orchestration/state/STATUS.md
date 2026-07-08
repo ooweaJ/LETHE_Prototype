@@ -1,6 +1,34 @@
 # Status
 
-Last updated: 2026-07-07
+Last updated: 2026-07-08
+
+## 2026-07-08 Update: Memory/Echo Kingmaker VFX and Judgment Pass
+
+- Implemented the approved reward-shape direction so non-blood routes can have stronger late-growth payoff instead of Blood Reflection being the only obvious high-value route.
+- Applied:
+  - ExecutionFlash now has a pre-execute forecast for near-threshold targets and stronger execution/oblivion interaction in Fracture Execution.
+  - HunterOath now prioritizes higher-threat targets before distance, so elites/healers/boss-like threats are more likely to be selected.
+  - ShatterWave now gains cluster/boss fracture payoff and extra fault VFX/damage where it should feel like the field is breaking.
+  - StoppedSecond now adds fracture-burst follow-ups at memory/echo/ultimate levels so time-stop routes have visible burst damage, not only control.
+  - AshenShield now stores prevented/echo guard charge and releases radial stored-guard waves, giving the passive defensive route a kingmaker payoff.
+  - OblivionBrand now detonates/spreads at +5 and interacts harder with Execution/Ashen routes.
+  - Fracture Execution, Stasis Hunt, and Ashen Oblivion were buffed with stronger weapon-specific damage beats and VFX counts so Blood Blade Storm is not the only exciting ultimate.
+  - Dense Dual Blades perf QA was corrected to measure dense hit/echo suppression instead of kill-chain aftermath.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - VFX Matrix: `[V1QA] PASS`, `previewMemory=8`, `previewEcho=8`, `fracture=1`, `stasis=1`, `ashen=1`, `missing=`.
+  - Echo Matrix Dual Blades: `[V1QA] PASS`, `total=226`, `state=78`, all utility state families present.
+  - Echo Matrix Greatsword: `[V1QA] PASS`, `total=207`, `state=57`, all utility state families present.
+  - Passive Memory Matrix: `[V1QA] PASS`, `blood=17`, `ash=6`, `stopped=8`, `oblivion=62`.
+  - Utility Ultimate Matrix Dual Blades: `[V1QA] PASS`, `fracture=28`, `stasis=11`, `ashen=47`.
+  - Utility Ultimate Matrix Greatsword: `[V1QA] PASS`, `fracture=49`, `stasis=22`, `ashen=14`.
+  - Dense Dual Blades Perf Matrix: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=45`, `activeVfx=26`, `ms=57.58`.
+- Current limitation:
+  - Automated QA confirms coverage, object counts, compile safety, and dense budget. Direct play still needs to judge whether the new non-blood routes actually feel rewarding and readable in motion.
+- Next step:
+  - jaewoo should play dual blades/greatsword with non-blood routes and judge whether Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion now have enough payoff to compete with Blood Reflection.
 
 ## 2026-07-07 Update: Gatekeeper Review HP / Impact VFX Pass
 

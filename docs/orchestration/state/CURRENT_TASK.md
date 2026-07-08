@@ -1,5 +1,59 @@
 # Current Task
 
+# 2026-07-08 Memory/Echo Kingmaker VFX and Judgment Pass
+
+## Status
+
+Implemented, locally build-verified, and Unity-QA-verified through AnkleBreaker Unity MCP on `LETHE` port `7890`.
+
+## Goal
+
+Turn the approved memory/echo/ultimate reward design into playable VFX and hitbox behavior, with special attention to routes that previously felt weaker than Blood Reflection.
+
+## Applied Changes
+
+- ExecutionFlash:
+  - Added near-threshold execution forecast VFX before the actual kill window.
+  - Fracture Execution now marks both Execution and Oblivion states and deals stronger low-HP payoff damage.
+- HunterOath:
+  - Added threat-priority targeting so VoidPriests, Gatekeepers, DriftingEyes, and SplitOnes are selected before low-value bodies when possible.
+- ShatterWave:
+  - Added cluster/boss fracture bonus logic and scar VFX so it rewards dense packs and larger threats.
+- StoppedSecond:
+  - Added stopped-fracture bursts to memory, echo, and Stasis Hunt ultimate beats.
+- AshenShield:
+  - Added stored guard charge from prevented damage and echo hits.
+  - Added stored guard release waves with radial lines, hitstop, camera shake, and AoE damage.
+- OblivionBrand:
+  - Added +5 detonation/spread behavior and echo rupture/spread follow-ups.
+- Utility ultimates:
+  - Buffed Fracture Execution, Stasis Hunt, and Ashen Oblivion damage/VFX so non-blood ultimates have visible payoff.
+- Dense QA:
+  - Lowered Dense Dual Blades benchmark-only damage so the perf matrix measures dense hit/echo suppression, not kill-chain aftermath.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- Unity compilation errors: `0`.
+- `LETHE/V1 QA/VFX Matrix`: PASS, `previewMemory=8`, `previewEcho=8`, `fracture=1`, `stasis=1`, `ashen=1`, `missing=`.
+- `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=226`, `K=8`, `B=35`, `Ex=64`, `H=24`, `Sh=8`, `St=8`, `A=32`, `O=47`, `state=78`.
+- `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=207`, `K=8`, `B=9`, `Ex=48`, `H=14`, `Sh=32`, `St=8`, `A=32`, `O=56`, `state=57`.
+- `LETHE/V1 QA/Passive Memory Matrix`: PASS, `blood=17`, `ash=6`, `stopped=8`, `oblivion=62`.
+- `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: PASS, `fracture=28`, `stasis=11`, `ashen=47`.
+- `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: PASS, `fracture=49`, `stasis=22`, `ashen=14`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=45`, `activeVfx=26`, `ms=57.58`.
+
+## Remaining Gate
+
+Direct-play review should judge:
+
+- Whether AshenShield now feels like a defensive route that can become explosive later.
+- Whether Execution/Oblivion and Ashen/Oblivion pairings have enough "kingmaker" payoff.
+- Whether StoppedSecond and ShatterWave feel like damage-control hybrids instead of only passive utility.
+- Whether non-blood ultimates are worth choosing beside Blood Blade Storm.
+- Whether dense dual blades still feel responsive after the added VFX.
+
 # 2026-07-07 Gatekeeper Review HP / Impact VFX Pass
 
 ## Status

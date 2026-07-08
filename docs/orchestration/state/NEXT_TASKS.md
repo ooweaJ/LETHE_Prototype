@@ -1,13 +1,13 @@
 # Next Tasks
 
-## 1. Direct-Play Visual Review
+## 1. Direct-Play Kingmaker Route Review
 
 - Priority: high
-- Problem: automated QA is green after the 2026-07-07 VFX action and identity passes, but jaewoo still needs to judge feel/readability in actual play.
+- Problem: automated QA is green after the 2026-07-08 memory/echo kingmaker pass, but jaewoo still needs to judge whether non-blood routes feel rewarding in actual play.
 - Build:
   - Play `Dev_Prototype_v1` with dual blades and greatsword.
   - Use `F6` / F12 `Boss` to inspect the first Gatekeeper quickly; this path now uses HP `2200`, while compressed QA remains HP `180`.
-  - Judge dual-blade guaranteed slash visibility, Gatekeeper cast burst, meteor fall/impact, cone cleave, ring shock, boss-hit player feedback, Kalmuri orbit -> lock -> lunge, utility echo identity bursts, enemy role symbols, healer VFX, and dense dual-blade feel.
+  - Judge Execution forecast, Hunter threat targeting, Shatter cluster/boss fracture, Stopped fracture burst, Ashen stored guard release, Oblivion spread/detonation, and the three non-blood utility ultimates.
 - Done:
   - Review returns concrete tune targets: keep, brighten, shrink, slow down, rebalance, or redesign.
 
@@ -48,7 +48,7 @@
 ## 5. Dense Dual-Blade Feel Check
 
 - Priority: high
-- Problem: Dense Dual Blades Perf Matrix passes but now sits closer to the threshold after identity bursts.
+- Problem: Dense Dual Blades Perf Matrix passes at `57.58ms`, but real play still needs feel judgment because automated QA cannot prove input/visual smoothness.
 - Build:
   - Play dense waves with dual blades, Kalmuri, Blood, and utility echoes.
   - If hitchy, reduce dense utility identity bursts before touching normal-density readability.
@@ -57,6 +57,7 @@
 
 Completed sequence:
 
+- 2026-07-08: memory/echo kingmaker VFX and judgment pass implemented; Execution, Hunter, Shatter, Stopped, Ashen, Oblivion, and non-blood utility ultimates now have stronger payoff behavior and QA coverage.
 - 2026-07-07: Gatekeeper review HP and impact VFX pass implemented; F6/F12 Boss now uses review HP `2200`, fast QA keeps `180`, and Gatekeeper Pattern/Jump QA passed.
 - 2026-07-07: memory/echo/enemy identity pass implemented; utility echo identity bursts, passive memory state marks, animated enemy role symbols, and Gatekeeper sigil marker pass build/Unity QA.
 - 2026-07-07: direct feedback VFX action pass implemented; dual-blade guaranteed slashes, Gatekeeper falling meteor/charge cleave, player damage cue, Kalmuri orbit-to-lunge, and Dense QA snapshot all pass build/Unity QA.

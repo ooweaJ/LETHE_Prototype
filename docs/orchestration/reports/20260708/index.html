@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-08 개발 리포트</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f3;
+      --paper: #ffffff;
+      --ink: #17201d;
+      --muted: #64706b;
+      --line: #dce2da;
+      --accent: #1f6b4d;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); }
+    body.panel-open { overflow: hidden; }
+    main { width: min(980px, 100%); margin: 0 auto; padding: 30px 22px 44px; }
+    nav { margin-bottom: 18px; font-size: 14px; }
+    a { color: var(--accent); font-weight: 900; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .eyebrow { margin: 0 0 8px; color: var(--accent); font-size: 13px; font-weight: 900; }
+    h1 { margin: 0 0 10px; font-size: clamp(30px, 5vw, 46px); line-height: 1.08; }
+    .intro { margin: 0 0 18px; color: var(--muted); line-height: 1.65; }
+    ul { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+    li { margin: 0; }
+    .unit-card {
+      min-height: 136px;
+      padding: 17px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+    .unit-card:focus-within,
+    .unit-card:hover,
+    .unit-card.is-active {
+      border-color: rgba(31, 107, 77, 0.55);
+      box-shadow: 0 14px 30px rgba(23, 32, 29, 0.08);
+      transform: translateY(-1px);
+    }
+    .unit-panel[hidden] { display: none; }
+    .unit-panel {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: flex;
+      justify-content: flex-end;
+      background: rgba(23, 32, 29, 0.22);
+    }
+    .unit-panel__scrim {
+      position: absolute;
+      inset: 0;
+      cursor: pointer;
+    }
+    .unit-panel__shell {
+      position: relative;
+      width: min(760px, calc(100% - 28px));
+      height: calc(100% - 28px);
+      margin: 14px;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: 0 24px 70px rgba(23, 32, 29, 0.22);
+    }
+    .unit-panel__bar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+    }
+    .unit-panel__title {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .unit-panel__close {
+      min-width: 38px;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .unit-panel__close:hover {
+      border-color: rgba(31, 107, 77, 0.55);
+      color: var(--accent);
+    }
+    .unit-detail {
+      padding: 22px;
+    }
+    .unit-detail h1 { font-size: 28px; }
+    .unit-detail h2 {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      font-size: 21px;
+    }
+    .unit-detail ul { display: block; padding-left: 22px; list-style: disc; }
+    .unit-detail li { margin-bottom: 6px; }
+    .unit-detail code {
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: #eef2f7;
+    }
+    .back-inline { margin-bottom: 16px; }
+    .number { display: block; margin-bottom: 8px; color: var(--muted); font-size: 13px; font-weight: 900; }
+    h2 { margin: 0 0 8px; font-size: 20px; line-height: 1.3; }
+    p { margin: 0; color: var(--muted); line-height: 1.6; }
+    footer { margin-top: 20px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 720px) {
+      main { padding: 24px 16px 36px; }
+      .unit-panel {
+        align-items: flex-end;
+      }
+      .unit-panel__shell {
+        width: 100%;
+        height: min(86vh, calc(100% - 18px));
+        margin: 9px;
+      }
+      .unit-detail { padding: 18px; }
+      .unit-detail h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <nav><a href="/api/projects/lethe/reports/index.html">전체 리포트 목록</a></nav>
+    <p class="eyebrow">20260708 개발 기록</p>
+    <h1>2026-07-08 개발 리포트</h1>
+    <p class="intro">Dev_Prototype_v1에 기억/잔향/궁극 잔향의 왕귀형 보상과 VFX 판정을 1차 구현했다. 아직 _dev 검증 단계이며 Assets/Lethe 승격은 하지 않았다.</p>
+    <ul id="unit-list">
+      <li>
+        <article class="unit-card">
+          <span class="number">2026-07-08-01</span>
+          <h2><a href="#unit-2026-07-08-01" data-unit-link="unit-2026-07-08-01">기억/잔향 왕귀 VFX와 판정 보강</a></h2>
+          <p>Dev_Prototype_v1에 기억/잔향/궁극 잔향의 왕귀형 보상과 VFX 판정을 1차 구현했다. 아직 _dev 검증 단계이며 Assets/Lethe 승격은 하지 않았다.</p>
+        </article>
+      </li>
+    </ul>
+    <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
+      <div class="unit-panel__scrim" data-panel-close></div>
+      <div class="unit-panel__shell" role="dialog" aria-modal="true" aria-label="작업 단위 상세">
+        <div class="unit-panel__bar">
+          <p class="unit-panel__title">작업 단위 상세</p>
+          <button class="unit-panel__close" type="button" data-panel-close aria-label="패널 닫기">&times;</button>
+        </div>
+        <article class="unit-detail" id="unit-2026-07-08-01" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-08-01 - 기억/잔향 왕귀 VFX와 판정 보강</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에 기억/잔향/궁극 잔향의 왕귀형 보상과 VFX 판정을 1차 구현했다. 아직 <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>처형은 즉사 직전 예고 VFX와 처형/망각 연계 폭발력을 추가했다.</li>
+<li>추적은 가까운 적만 보지 않고 보스/힐러/위협 몬스터를 우선 노리게 했다.</li>
+<li>파쇄는 밀집 몹과 보스에게 균열 보너스가 생겼다.</li>
+<li>정지는 시간 정지 후 균열 폭발이 붙어 제어만 하는 루트가 아니게 했다.</li>
+<li>잿빛 방패는 막은 피해와 잔향 타격으로 충전되고, 저장된 방어력을 파동으로 터뜨린다.</li>
+<li>망각 낙인은 +5에서 전이/폭발하는 방향으로 보강했다.</li>
+<li>피의 칼폭풍 외 궁극인 처형 균열, 정지 추적, 잿빛 망각의 피해와 VFX를 강화했다.</li>
+<li>밀집 쌍검 QA는 처치 연쇄가 아니라 실제 밀집 히트/잔향 억제를 측정하도록 정리했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 기존 legacy warning 7개, error 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 기존 legacy warning 7개, error 0개.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>VFX Matrix: PASS, <code>previewMemory=8</code>, <code>previewEcho=8</code>, <code>fracture=1</code>, <code>stasis=1</code>, <code>ashen=1</code>.</li>
+<li>Echo Matrix Dual Blades: PASS, <code>total=226</code>, <code>state=78</code>.</li>
+<li>Echo Matrix Greatsword: PASS, <code>total=207</code>, <code>state=57</code>.</li>
+<li>Passive Memory Matrix: PASS, <code>blood=17</code>, <code>ash=6</code>, <code>stopped=8</code>, <code>oblivion=62</code>.</li>
+<li>Utility Ultimate Matrix Dual Blades: PASS, <code>fracture=28</code>, <code>stasis=11</code>, <code>ashen=47</code>.</li>
+<li>Utility Ultimate Matrix Greatsword: PASS, <code>fracture=49</code>, <code>stasis=22</code>, <code>ashen=14</code>.</li>
+<li>Dense Dual Blades Perf Matrix: PASS, <code>hits=18</code>, <code>suppressed=15</code>, <code>transient=45</code>, <code>activeVfx=26</code>, <code>ms=57.58</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>혈반/피의 칼폭풍만 강하게 보상하는 구조를 피하고, 약하거나 수동적인 기억도 잔향과 궁극 잔향에서 폭발적으로 변형될 수 있게 잡았다. 특히 잿빛 방패는 방어형 기억이지만 저장 후 방출하는 공격형 보상으로 방향을 틀었다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>자동 QA는 수치와 오브젝트 존재를 확인하지만, 실제 손맛과 가시성은 직접 플레이가 최종 판단이다. 특히 잿빛 파동이 너무 약하거나 반대로 너무 공짜 딜처럼 느껴지는지 확인이 필요하다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>이번 패스는 밸런스 수치만 올린 작업이 아니라, 각 기억/잔향이 몹에게 어떤 판정을 남기고 어떤 VFX 언어로 읽히는지 보강한 작업이다. 다음 리뷰는 텍스트 설명 없이 전투 화면만 보고 루트 차이를 느낄 수 있는지에 집중하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo 직접 플레이 후 가장 약한 루트 하나를 골라 세부 조정한다. 우선 후보는 잿빛 방패 충전량/방출 반경, 정지 균열 타이밍, 망각 전이 수, 처형 예고 가시성, 비혈반 궁극 피해량이다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: Blood Reflection이 효과, 회복, VFX, 궁극 연결을 모두 가져 다른 선택지가 약해 보였다.</li>
+<li>방향: 약한 기억도 잔향/궁극 단계에서 강하게 변형되는 왕귀 구조를 만든다.</li>
+<li>행동: 처형, 추적, 파쇄, 정지, 잿빛, 망각의 판정과 VFX를 보강하고 비혈반 궁극을 상향했다.</li>
+<li>결과: 주요 Unity QA가 모두 통과했고, 이제 직접 플레이로 손맛과 선택지를 평가할 수 있는 상태가 됐다.</li>
+</ul>
+    </article>
+      </div>
+    </section>
+    <footer>기준: 2026-07-08</footer>
+  </main>
+  <script>
+    (() => {
+      const panel = document.getElementById('unit-detail-root');
+      const panelShell = panel?.querySelector('.unit-panel__shell');
+      const closeButton = panel?.querySelector('.unit-panel__close');
+      const details = Array.from(document.querySelectorAll('.unit-detail'));
+      const links = Array.from(document.querySelectorAll('[data-unit-link]'));
+      const setActiveCard = (id) => {
+        links.forEach((link) => {
+          const isActive = link.getAttribute('data-unit-link') === id;
+          link.closest('.unit-card')?.classList.toggle('is-active', isActive);
+        });
+      };
+      const closePanel = () => {
+        if (!panel) return;
+        panel.hidden = true;
+        document.body.classList.remove('panel-open');
+        details.forEach((detail) => { detail.hidden = true; });
+        setActiveCard('');
+        if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+      };
+      const showUnit = (id) => {
+        const target = document.getElementById(id);
+        if (!target) return;
+        if (!panel) return;
+        panel.hidden = false;
+        document.body.classList.add('panel-open');
+        details.forEach((detail) => { detail.hidden = detail !== target; });
+        setActiveCard(id);
+        if (panelShell) panelShell.scrollTop = 0;
+        if (closeButton) closeButton.focus({ preventScroll: true });
+      };
+      document.addEventListener('click', (event) => {
+        const unitLink = event.target.closest('[data-unit-link]');
+        if (unitLink) {
+          event.preventDefault();
+          const id = unitLink.getAttribute('data-unit-link');
+          history.pushState(null, '', '#' + id);
+          showUnit(id);
+          return;
+        }
+        if (event.target.closest('[data-panel-close]')) {
+          event.preventDefault();
+          closePanel();
+        }
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && panel && !panel.hidden) closePanel();
+      });
+      window.addEventListener('popstate', () => {
+        const id = location.hash.replace(/^#/, '');
+        if (id) showUnit(id);
+        else closePanel();
+      });
+      const initial = location.hash.replace(/^#/, '');
+      if (initial) showUnit(initial);
+    })();
+  </script>
+</body>
+</html>

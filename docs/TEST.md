@@ -1,5 +1,46 @@
 # LETHE TEST
 
+# 2026-07-08 Memory/Echo Kingmaker VFX and Judgment Pass
+
+- Purpose:
+  - Convert the approved memory/echo/ultimate reward design into playable VFX and hitbox behavior.
+  - Reduce the gap where Blood Reflection felt like the only route with strong feedback and payoff.
+- Applied target:
+  - ExecutionFlash now has near-threshold forecast VFX and stronger Fracture Execution payoff.
+  - HunterOath prioritizes higher-threat targets before distance.
+  - ShatterWave gains cluster/boss fracture payoff.
+  - StoppedSecond gains fracture-burst follow-up damage and VFX.
+  - AshenShield stores prevented/echo guard charge and releases stored radial guard waves.
+  - OblivionBrand gains +5 detonation/spread and stronger echo rupture/spread.
+  - Fracture Execution, Stasis Hunt, and Ashen Oblivion were buffed so non-blood ultimates have stronger payoff.
+  - Dense Dual Blades benchmark damage was lowered so the perf matrix measures hit/echo suppression instead of kill-chain aftermath.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
+  - Unity `Assets/Refresh`
+  - Unity compilation error check.
+  - Unity `LETHE/V1 QA/VFX Matrix`
+  - Unity `LETHE/V1 QA/Echo Matrix Dual Blades`
+  - Unity `LETHE/V1 QA/Echo Matrix Greatsword`
+  - Unity `LETHE/V1 QA/Passive Memory Matrix`
+  - Unity `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`
+  - Unity `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`
+  - Unity `LETHE/V1 QA/Dense Dual Blades Perf Matrix`
+- Results:
+  - Runtime build passed with 7 existing legacy warnings and 0 errors.
+  - Editor build passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - VFX Matrix: `[V1QA] PASS`, `previewMemory=8`, `previewEcho=8`, `fracture=1`, `stasis=1`, `ashen=1`, `missing=`.
+  - Echo Matrix Dual Blades: `[V1QA] PASS`, `total=226`, `state=78`.
+  - Echo Matrix Greatsword: `[V1QA] PASS`, `total=207`, `state=57`.
+  - Passive Memory Matrix: `[V1QA] PASS`, `blood=17`, `ash=6`, `stopped=8`, `oblivion=62`.
+  - Utility Ultimate Matrix Dual Blades: `[V1QA] PASS`, `fracture=28`, `stasis=11`, `ashen=47`.
+  - Utility Ultimate Matrix Greatsword: `[V1QA] PASS`, `fracture=49`, `stasis=22`, `ashen=14`.
+  - Dense Dual Blades Perf Matrix: `[V1QA] PASS`, `hits=18`, `suppressed=15`, `transient=45`, `activeVfx=26`, `ms=57.58`.
+- Limitation:
+  - MCP menu calls intermittently returned `Error polling queue: fetch failed`, but console logs confirmed the QA results after wait/retry.
+  - Automated QA does not replace direct feel review for payoff, readability, and satisfaction.
+
 # 2026-07-07 Gatekeeper Review HP / Impact VFX Pass
 
 - Purpose:

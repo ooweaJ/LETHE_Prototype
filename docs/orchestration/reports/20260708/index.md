@@ -1,0 +1,54 @@
+> 2026-07-08 LETHE 개발 보고서
+
+# 2026-07-08-01 - 기억/잔향 왕귀 VFX와 판정 보강
+
+## 1. 현재 빌드 상태
+
+`Dev_Prototype_v1`에 기억/잔향/궁극 잔향의 왕귀형 보상과 VFX 판정을 1차 구현했다. 아직 `_dev` 검증 단계이며 `Assets/Lethe` 승격은 하지 않았다.
+
+## 2. 오늘 바뀐 것
+
+- 처형은 즉사 직전 예고 VFX와 처형/망각 연계 폭발력을 추가했다.
+- 추적은 가까운 적만 보지 않고 보스/힐러/위협 몬스터를 우선 노리게 했다.
+- 파쇄는 밀집 몹과 보스에게 균열 보너스가 생겼다.
+- 정지는 시간 정지 후 균열 폭발이 붙어 제어만 하는 루트가 아니게 했다.
+- 잿빛 방패는 막은 피해와 잔향 타격으로 충전되고, 저장된 방어력을 파동으로 터뜨린다.
+- 망각 낙인은 +5에서 전이/폭발하는 방향으로 보강했다.
+- 피의 칼폭풍 외 궁극인 처형 균열, 정지 추적, 잿빛 망각의 피해와 VFX를 강화했다.
+- 밀집 쌍검 QA는 처치 연쇄가 아니라 실제 밀집 히트/잔향 억제를 측정하도록 정리했다.
+
+## 3. 테스트 결과와 근거
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: 기존 legacy warning 7개, error 0개.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: 기존 legacy warning 7개, error 0개.
+- Unity compilation errors: `0`.
+- VFX Matrix: PASS, `previewMemory=8`, `previewEcho=8`, `fracture=1`, `stasis=1`, `ashen=1`.
+- Echo Matrix Dual Blades: PASS, `total=226`, `state=78`.
+- Echo Matrix Greatsword: PASS, `total=207`, `state=57`.
+- Passive Memory Matrix: PASS, `blood=17`, `ash=6`, `stopped=8`, `oblivion=62`.
+- Utility Ultimate Matrix Dual Blades: PASS, `fracture=28`, `stasis=11`, `ashen=47`.
+- Utility Ultimate Matrix Greatsword: PASS, `fracture=49`, `stasis=22`, `ashen=14`.
+- Dense Dual Blades Perf Matrix: PASS, `hits=18`, `suppressed=15`, `transient=45`, `activeVfx=26`, `ms=57.58`.
+
+## 4. 결정한 것
+
+혈반/피의 칼폭풍만 강하게 보상하는 구조를 피하고, 약하거나 수동적인 기억도 잔향과 궁극 잔향에서 폭발적으로 변형될 수 있게 잡았다. 특히 잿빛 방패는 방어형 기억이지만 저장 후 방출하는 공격형 보상으로 방향을 틀었다.
+
+## 5. 문제 또는 리스크
+
+자동 QA는 수치와 오브젝트 존재를 확인하지만, 실제 손맛과 가시성은 직접 플레이가 최종 판단이다. 특히 잿빛 파동이 너무 약하거나 반대로 너무 공짜 딜처럼 느껴지는지 확인이 필요하다.
+
+## 6. GPT/Claude 인계 요약
+
+이번 패스는 밸런스 수치만 올린 작업이 아니라, 각 기억/잔향이 몹에게 어떤 판정을 남기고 어떤 VFX 언어로 읽히는지 보강한 작업이다. 다음 리뷰는 텍스트 설명 없이 전투 화면만 보고 루트 차이를 느낄 수 있는지에 집중하면 된다.
+
+## 7. 다음 Codex 작업
+
+jaewoo 직접 플레이 후 가장 약한 루트 하나를 골라 세부 조정한다. 우선 후보는 잿빛 방패 충전량/방출 반경, 정지 균열 타이밍, 망각 전이 수, 처형 예고 가시성, 비혈반 궁극 피해량이다.
+
+## 8. 포트폴리오 메모: 문제, 방향, 행동, 결과
+
+- 문제: Blood Reflection이 효과, 회복, VFX, 궁극 연결을 모두 가져 다른 선택지가 약해 보였다.
+- 방향: 약한 기억도 잔향/궁극 단계에서 강하게 변형되는 왕귀 구조를 만든다.
+- 행동: 처형, 추적, 파쇄, 정지, 잿빛, 망각의 판정과 VFX를 보강하고 비혈반 궁극을 상향했다.
+- 결과: 주요 Unity QA가 모두 통과했고, 이제 직접 플레이로 손맛과 선택지를 평가할 수 있는 상태가 됐다.

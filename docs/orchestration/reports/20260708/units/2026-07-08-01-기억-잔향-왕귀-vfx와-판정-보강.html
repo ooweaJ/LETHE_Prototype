@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-08-01 - 기억/잔향 왕귀 VFX와 판정 보강</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-08-01 - 기억/잔향 왕귀 VFX와 판정 보강</h1>
+      <p class="meta">Generated from 2026-07-08-01-기억-잔향-왕귀-vfx와-판정-보강.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260708/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-08-01 - 기억/잔향 왕귀 VFX와 판정 보강</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에 기억/잔향/궁극 잔향의 왕귀형 보상과 VFX 판정을 1차 구현했다. 아직 <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>처형은 즉사 직전 예고 VFX와 처형/망각 연계 폭발력을 추가했다.</li>
+<li>추적은 가까운 적만 보지 않고 보스/힐러/위협 몬스터를 우선 노리게 했다.</li>
+<li>파쇄는 밀집 몹과 보스에게 균열 보너스가 생겼다.</li>
+<li>정지는 시간 정지 후 균열 폭발이 붙어 제어만 하는 루트가 아니게 했다.</li>
+<li>잿빛 방패는 막은 피해와 잔향 타격으로 충전되고, 저장된 방어력을 파동으로 터뜨린다.</li>
+<li>망각 낙인은 +5에서 전이/폭발하는 방향으로 보강했다.</li>
+<li>피의 칼폭풍 외 궁극인 처형 균열, 정지 추적, 잿빛 망각의 피해와 VFX를 강화했다.</li>
+<li>밀집 쌍검 QA는 처치 연쇄가 아니라 실제 밀집 히트/잔향 억제를 측정하도록 정리했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 기존 legacy warning 7개, error 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 기존 legacy warning 7개, error 0개.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>VFX Matrix: PASS, <code>previewMemory=8</code>, <code>previewEcho=8</code>, <code>fracture=1</code>, <code>stasis=1</code>, <code>ashen=1</code>.</li>
+<li>Echo Matrix Dual Blades: PASS, <code>total=226</code>, <code>state=78</code>.</li>
+<li>Echo Matrix Greatsword: PASS, <code>total=207</code>, <code>state=57</code>.</li>
+<li>Passive Memory Matrix: PASS, <code>blood=17</code>, <code>ash=6</code>, <code>stopped=8</code>, <code>oblivion=62</code>.</li>
+<li>Utility Ultimate Matrix Dual Blades: PASS, <code>fracture=28</code>, <code>stasis=11</code>, <code>ashen=47</code>.</li>
+<li>Utility Ultimate Matrix Greatsword: PASS, <code>fracture=49</code>, <code>stasis=22</code>, <code>ashen=14</code>.</li>
+<li>Dense Dual Blades Perf Matrix: PASS, <code>hits=18</code>, <code>suppressed=15</code>, <code>transient=45</code>, <code>activeVfx=26</code>, <code>ms=57.58</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>혈반/피의 칼폭풍만 강하게 보상하는 구조를 피하고, 약하거나 수동적인 기억도 잔향과 궁극 잔향에서 폭발적으로 변형될 수 있게 잡았다. 특히 잿빛 방패는 방어형 기억이지만 저장 후 방출하는 공격형 보상으로 방향을 틀었다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>자동 QA는 수치와 오브젝트 존재를 확인하지만, 실제 손맛과 가시성은 직접 플레이가 최종 판단이다. 특히 잿빛 파동이 너무 약하거나 반대로 너무 공짜 딜처럼 느껴지는지 확인이 필요하다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>이번 패스는 밸런스 수치만 올린 작업이 아니라, 각 기억/잔향이 몹에게 어떤 판정을 남기고 어떤 VFX 언어로 읽히는지 보강한 작업이다. 다음 리뷰는 텍스트 설명 없이 전투 화면만 보고 루트 차이를 느낄 수 있는지에 집중하면 된다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo 직접 플레이 후 가장 약한 루트 하나를 골라 세부 조정한다. 우선 후보는 잿빛 방패 충전량/방출 반경, 정지 균열 타이밍, 망각 전이 수, 처형 예고 가시성, 비혈반 궁극 피해량이다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: Blood Reflection이 효과, 회복, VFX, 궁극 연결을 모두 가져 다른 선택지가 약해 보였다.</li>
+<li>방향: 약한 기억도 잔향/궁극 단계에서 강하게 변형되는 왕귀 구조를 만든다.</li>
+<li>행동: 처형, 추적, 파쇄, 정지, 잿빛, 망각의 판정과 VFX를 보강하고 비혈반 궁극을 상향했다.</li>
+<li>결과: 주요 Unity QA가 모두 통과했고, 이제 직접 플레이로 손맛과 선택지를 평가할 수 있는 상태가 됐다.</li>
+</ul>
+  </main>
+</body>
+</html>
