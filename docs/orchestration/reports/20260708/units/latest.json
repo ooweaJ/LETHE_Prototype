@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260708\\index.md",
-  "generatedAt": "2026-07-08T10:14:24.572Z",
-  "unitCount": 9,
+  "generatedAt": "2026-07-08T10:45:34.485Z",
+  "unitCount": 10,
   "latest": {
-    "title": "2026-07-08-09 - 칼무리 잔향 플레이어블 후보 정정",
-    "number": "09",
-    "markdownPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-09-칼무리-잔향-플레이어블-후보-정정.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-09-칼무리-잔향-플레이어블-후보-정정.html"
+    "title": "2026-07-08-10 - 칼무리 후보 기존 투사체 억제",
+    "number": "10",
+    "markdownPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-10-칼무리-후보-기존-투사체-억제.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260708\\units\\2026-07-08-10-칼무리-후보-기존-투사체-억제.html"
   }
 }

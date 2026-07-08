@@ -2,6 +2,15 @@
 
 # 2026-07-08
 
+- Suppressed legacy Kalmuri awakened projectile during prototype review:
+  - F12 Kalmuri prototype modes now block the old +5 `LaunchKalmuriBlade` flying VFX.
+  - This keeps K1-K4 candidate review from being polluted by the previous Kalmuri blade language.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on sequential rerun.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+
 - Corrected Kalmuri K1-K4 from cosmetic previews into playable Echo prototypes:
   - F12 `K1` to `K4` now select a real Kalmuri Echo prototype mode.
   - Actual weapon-hit Kalmuri Echo follow-ups route through the selected candidate.

@@ -1716,7 +1716,7 @@ namespace Lethe.PrototypeV1
                 if (UnityEngine.Random.value <= chance)
                 {
                     TriggerKalmuriEcho(enemy, forward, kalmuriLevel, hitIndex, weapon);
-                    if (kalmuriLevel >= 5 && kalmuriAwakenLaunchCooldown <= 0f && !DenseDualBladeVfxThrottle(weapon))
+                    if (debugKalmuriEchoConcept <= 0 && kalmuriLevel >= 5 && kalmuriAwakenLaunchCooldown <= 0f && !DenseDualBladeVfxThrottle(weapon))
                     {
                         LaunchKalmuriBlade(enemy, forward, weapon);
                         kalmuriAwakenLaunchCooldown = 0.35f;

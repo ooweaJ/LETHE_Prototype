@@ -2,6 +2,18 @@
 
 Last updated: 2026-07-08
 
+## 2026-07-08 Update: Kalmuri Prototype Old Projectile Suppressed
+
+- jaewoo reported that one of the Kalmuri candidates still showed an old flying VFX.
+- Applied:
+  - When an F12 Kalmuri prototype (`K1` to `K4`) is active, the old +5 `LaunchKalmuriBlade` awakened projectile is suppressed.
+  - The selected prototype now owns the Kalmuri Echo follow-up without an extra legacy blade flying afterward.
+- Verification:
+  - Runtime build: passed with existing legacy warnings and 0 errors.
+  - Editor build: passed with 0 warnings and 0 errors on sequential rerun after an initial shared-DLL lock.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+
 ## 2026-07-08 Update: Kalmuri Echo Playable Prototypes
 
 - Corrected the Kalmuri work after jaewoo clarified the real target:

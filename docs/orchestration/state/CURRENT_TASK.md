@@ -1,5 +1,27 @@
 # Current Task
 
+# 2026-07-08 Kalmuri Prototype Legacy VFX Suppression
+
+## Status
+
+Implemented and build/Unity-error checked.
+
+## Applied Changes
+
+- Suppressed the old +5 `LaunchKalmuriBlade` awakened projectile while an F12 Kalmuri prototype is active.
+- This prevents a selected K1-K4 candidate from being polluted by the previous flying-blade VFX.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors on sequential rerun.
+- Unity compilation errors: `0`.
+- Unity console errors: `0`.
+
+## Remaining Gate
+
+Direct-play K1-K4 again and confirm no old awakened flying blade appears on top of the selected prototype.
+
 # 2026-07-08 Kalmuri Echo Playable Prototype Correction
 
 ## Status

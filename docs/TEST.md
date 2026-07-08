@@ -1,5 +1,22 @@
 # LETHE TEST
 
+# 2026-07-08 Kalmuri Prototype Legacy Projectile Suppression
+
+- Purpose:
+  - Remove the old flying awakened Kalmuri VFX from K1-K4 prototype review.
+- Applied target:
+  - Suppress `LaunchKalmuriBlade` while an F12 Kalmuri prototype mode is active.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`
+  - Unity compilation error check.
+  - Unity console error check.
+- Results:
+  - Runtime build passed with existing legacy warnings and 0 errors.
+  - Editor build passed with 0 warnings and 0 errors on sequential rerun after an initial shared-DLL lock.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+
 # 2026-07-08 Kalmuri Echo Playable Prototypes
 
 - Purpose:
