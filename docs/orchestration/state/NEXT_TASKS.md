@@ -6,7 +6,7 @@
 - Problem: Blood, Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion Echoes now have weapon-specific mechanics, not just VFX accents. Automated QA passes, but only direct play can prove whether each weapon pair finally feels different.
 - Build:
   - Play `Dev_Prototype_v1` with both Greatsword and Dual Blades.
-  - Check Greatsword Blood Echo first: it should now read as a red half-moon blood iaido slash behind the normal Greatsword hit.
+  - Check Greatsword Blood Echo first: it should now read as two thin red half-moon blood iaido slashes at the edge of the normal Greatsword range.
   - Compare Blood, Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion Echoes one by one.
   - Judge whether Greatsword reads as fewer heavier actions: harvest arc, fissure, verdict cleave, piercing spear, clock field, bulwark wave, collapse well.
   - Judge whether Dual Blades reads as rapid chained actions: stitches, needle bounces, sentence cuts, fan shots, micro-stops, parries, brand hops.
@@ -66,6 +66,7 @@
 
 Completed sequence:
 
+- 2026-07-09: Greatsword Blood Echo crescent moved to the swing range edge and split into two thin `((` crescents. Greatsword Echo Matrix and Dense Dual QA passed.
 - 2026-07-09: Greatsword Blood Echo changed from thread/harvest behavior into red crescent blood-iaido follow-up damage. Greatsword Echo Matrix and Dense Dual QA passed.
 - 2026-07-09: utility Echo weapon mechanics correction split Blood/Execution/Hunter/Shatter/Stopped/Ashen/Oblivion into actual Greatsword vs Dual Blades target logic. Echo Matrix and Dense Dual QA passed.
 - 2026-07-09: utility Echo weapon-identity pass added distinct Greatsword/Dual Blades VFX and tuning for Blood, Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion. Echo Matrix, Dense Dual, Passive Memory, and Utility Ultimate QA passed.

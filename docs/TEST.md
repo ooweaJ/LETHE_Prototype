@@ -1,5 +1,24 @@
 # LETHE TEST
 
+# 2026-07-09 Greatsword Blood Echo Double Crescent Scale Pass
+
+- Purpose:
+  - Respond to jaewoo feedback that the Greatsword Blood Echo crescent was too small and should appear at the end of the Greatsword range as two thin half-moons.
+- Applied target:
+  - Moved the blood iaido center to the Greatsword swing tip/end range.
+  - Replaced the single crescent with two offset thin crescents: outer and inner.
+  - Enlarged the damage radius around the crescent endpoint.
+- Commands / checks:
+  - Unity compilation error check on LETHE port `7890`.
+  - Unity method `Lethe.PrototypeV1.Editor.V1SmokeTestMenu.QaEchoMatrixGreatsword()`.
+  - Unity method `Lethe.PrototypeV1.Editor.V1SmokeTestMenu.QaDenseDualBladesPerfMatrix()`.
+- Results:
+  - Unity compilation errors: `0`.
+  - Echo Matrix Greatsword: PASS, `total=368`, `K=8`, `B=27`, `Ex=64`, `H=22`, `Sh=56`, `St=16`, `A=80`, `O=95`, `state=51`.
+  - Dense Dual Blades Perf Matrix: PASS, `hits=18`, `suppressed=15`, `transient=139`, `activeVfx=75`, `ms=104.66`.
+- Notes:
+  - Direct play should check whether the two crescents now sit far enough out on the Greatsword range and read as a thin `((` slash rather than a small hit-center mark.
+
 # 2026-07-09 Greatsword Blood Echo Crescent Follow-up
 
 - Purpose:

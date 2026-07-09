@@ -1,5 +1,27 @@
 # Current Task
 
+# 2026-07-09 Greatsword Blood Echo Double Crescent Scale Pass
+
+## Status
+
+- Implemented and verified.
+
+## Applied Changes
+
+- Moved Greatsword Blood Echo VFX from the hit-center area to the Greatsword swing tip/end range.
+- Replaced the single crescent with two offset thin crescents so it reads like `((`.
+- Enlarged the endpoint damage radius to match the farther range.
+
+## Verification
+
+- Unity compilation errors: `0`.
+- `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=368`, `K=8`, `B=27`, `Ex=64`, `H=22`, `Sh=56`, `St=16`, `A=80`, `O=95`, `state=51`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=139`, `activeVfx=75`, `ms=104.66`.
+
+## Remaining Gate
+
+- Direct-play visual review: confirm the crescents are thin, double-layered, and positioned at the Greatsword range edge.
+
 # 2026-07-09 Greatsword Blood Echo Crescent Follow-up
 
 ## Status

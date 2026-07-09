@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-09-09 - 대검 혈반 잔향 이중 반달 크기 보정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-09-09 - 대검 혈반 잔향 이중 반달 크기 보정</h1>
+      <p class="meta">Generated from 2026-07-09-09-대검-혈반-잔향-이중-반달-크기-보정.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260709/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-09-09 - 대검 혈반 잔향 이중 반달 크기 보정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>대검 혈반 잔향의 혈발도 VFX가 대검 사거리 끝에 더 크게, 얇은 두 겹 반달로 나가도록 보정됐다.</li>
+<li><code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>혈발도 중심을 적 타격점 근처에서 대검 스윙 tip/end 위치로 옮겼다.</li>
+<li>단일 반달 대신 <code>EchoGreat_BloodIaidoCrescentOuter</code>, <code>EchoGreat_BloodIaidoCrescentInner</code> 두 겹을 추가했다.</li>
+<li>두 반달은 같은 방향으로 살짝 어긋나게 배치해서 <code>((</code>처럼 보이도록 했다.</li>
+<li>끝점 기준 피해 범위도 더 키웠다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>Unity 컴파일 에러: <code>0</code>.</li>
+<li><code>Echo Matrix Greatsword</code>: PASS, <code>total=368</code>, <code>K=8</code>, <code>B=27</code>, <code>Ex=64</code>, <code>H=22</code>, <code>Sh=56</code>, <code>St=16</code>, <code>A=80</code>, <code>O=95</code>, <code>state=51</code>.</li>
+<li><code>Dense Dual Blades Perf Matrix</code>: PASS, <code>hits=18</code>, <code>suppressed=15</code>, <code>transient=139</code>, <code>activeVfx=75</code>, <code>ms=104.66</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>대검 혈반은 타격점 위 작은 표식보다 사거리 끝을 긁는 큰 후속 베기가 맞다.</li>
+<li>두껍고 큰 덩어리보다 얇은 반달 두 겹이 혈발도 감성에 더 맞다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>직접 플레이에서 아직 작게 보이면 스케일을 한 번 더 키워야 한다.</li>
+<li>Dense Dual QA는 PASS지만 <code>ms=104.66</code>이라 성능 여유가 아주 넓지는 않다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<ul>
+<li>대검 혈반 잔향은 이제 대검 사거리 끝에서 얇은 빨간 반달 두 겹이 나가는 구조다.</li>
+<li>리뷰 기준은 위치가 끝자락에 충분히 닿는지, 두 겹이 <code>((</code>로 보이는지, 얇지만 존재감이 있는지다.</li>
+</ul>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo 직접 플레이 후 크기/거리/두께가 부족하면 <code>EchoGreat_BloodIaidoCrescentOuter/Inner</code> 스케일과 위치를 추가 조정한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 대검 혈반 혈발도가 작고 타격점 근처에 붙어 대검 사거리감이 약했다.</li>
+<li>방향: 대검 끝자락에서 얇은 반달 두 겹으로 긁는 형태로 바꾼다.</li>
+<li>행동: VFX 중심을 swing tip/end로 옮기고 outer/inner crescent를 추가했다.</li>
+<li>결과: 대검 Echo Matrix와 Dense Dual 회귀 QA가 PASS했다.</li>
+</ul>
+  </main>
+</body>
+</html>

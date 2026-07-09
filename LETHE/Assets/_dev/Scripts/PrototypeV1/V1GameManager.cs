@@ -2074,20 +2074,22 @@ namespace Lethe.PrototypeV1
         {
             var f = EchoForward(forward);
             var side = new Vector2(-f.y, f.x).normalized;
-            var slashCenter = enemy.transform.position + (Vector3)(f * 0.22f + side * (leftBladeLead ? -0.08f : 0.08f));
-            var swing = GreatswordSwingForTarget(enemy.transform.position, slashCenter, f, 0);
+            var swingHint = enemy.transform.position + (Vector3)(f * 0.36f + side * (leftBladeLead ? -0.08f : 0.08f));
+            var swing = GreatswordSwingForTarget(enemy.transform.position, swingHint, f, 0);
             var slashForward = swing.EndDirection.sqrMagnitude > 0.01f ? swing.EndDirection.normalized : f;
             var baseAngle = GreatswordSlashVfxBaseAngle(slashForward);
-            var arc = LoadSprite(GreatswordCleaveArcPath) ?? MakeWideCrescentSprite("EchoGreat_BloodIaidoCrescent", Color.white);
-            var radius = 1.34f + levelValue * 0.16f;
+            var slashCenter = Vector3.Lerp(swing.TipStart, swing.TipEnd, 0.86f) + (Vector3)(slashForward * 0.16f);
+            var arc = MakeWideCrescentSprite("EchoGreat_BloodIaidoThinCrescent", Color.white);
+            var radius = 1.66f + levelValue * 0.18f;
             var targets = EchoTargetsInRadius(slashCenter, radius, 8, enemy);
 
             PlaySfx("blood_mark", 0.54f, 0.12f);
-            SpawnTransientSprite("EchoGreat_BloodIaidoAfterimage", arc, slashCenter - (Vector3)(f * 0.08f), Quaternion.Euler(0f, 0f, baseAngle - 6f), 0.54f, new Color(0.48f, 0.02f, 0.05f, 0.42f), 0.46f);
-            SpawnTransientSprite("EchoGreat_BloodIaidoCrescent", arc, slashCenter, Quaternion.Euler(0f, 0f, baseAngle), 0.62f, new Color(1f, 0.06f, 0.12f, 0.86f), 0.40f);
-            SpawnTransientSprite("EchoGreat_BloodIaidoEdge", arc, slashCenter + (Vector3)(slashForward * 0.06f), Quaternion.Euler(0f, 0f, baseAngle + 4f), 0.42f, new Color(1f, 0.28f, 0.32f, 0.62f), 0.26f);
-            SpawnTransientSprite("EchoGreat_BloodIaidoImpactZone", MakeRingSprite("EchoGreat_BloodIaidoImpactZone", Color.white, 156), slashCenter, Quaternion.identity, radius * 0.74f, new Color(1f, 0.04f, 0.10f, 0.28f), 0.32f);
-            SpawnEchoWoundSlash("EchoGreat_BloodIaidoCutLine", slashCenter + (Vector3)(slashForward * 0.04f), slashForward, new Color(1f, 0.12f, 0.18f, 0.88f), 1.86f + levelValue * 0.08f, 0.42f);
+            SpawnTransientSprite("EchoGreat_BloodIaidoAfterimage", arc, slashCenter - (Vector3)(slashForward * 0.18f), Quaternion.Euler(0f, 0f, baseAngle - 5f), 0.82f, new Color(0.50f, 0.02f, 0.05f, 0.30f), 0.44f);
+            SpawnTransientSprite("EchoGreat_BloodIaidoCrescentOuter", arc, slashCenter + (Vector3)(slashForward * 0.08f), Quaternion.Euler(0f, 0f, baseAngle), 1.04f, new Color(1f, 0.04f, 0.10f, 0.82f), 0.42f);
+            SpawnTransientSprite("EchoGreat_BloodIaidoCrescentInner", arc, slashCenter - (Vector3)(slashForward * 0.18f) - (Vector3)(side * (leftBladeLead ? -0.08f : 0.08f)), Quaternion.Euler(0f, 0f, baseAngle - 2f), 0.82f, new Color(1f, 0.16f, 0.20f, 0.66f), 0.34f);
+            SpawnTransientSprite("EchoGreat_BloodIaidoEdge", arc, slashCenter + (Vector3)(slashForward * 0.22f), Quaternion.Euler(0f, 0f, baseAngle + 4f), 0.58f, new Color(1f, 0.34f, 0.36f, 0.46f), 0.24f);
+            SpawnTransientSprite("EchoGreat_BloodIaidoImpactZone", MakeRingSprite("EchoGreat_BloodIaidoImpactZone", Color.white, 156), slashCenter, Quaternion.identity, radius * 0.82f, new Color(1f, 0.04f, 0.10f, 0.22f), 0.30f);
+            SpawnEchoWoundSlash("EchoGreat_BloodIaidoCutLine", slashCenter + (Vector3)(slashForward * 0.10f), slashForward, new Color(1f, 0.12f, 0.18f, 0.78f), 2.16f + levelValue * 0.10f, 0.38f);
 
             foreach (var target in targets)
             {

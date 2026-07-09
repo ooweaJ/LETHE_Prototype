@@ -2,6 +2,20 @@
 
 Last updated: 2026-07-09
 
+## 2026-07-09 Update: Greatsword Blood Echo Double Crescent Scale Pass
+
+- jaewoo noted the Greatsword Blood Echo crescent was too small and should fire at the end of the Greatsword range as two thin half-moons.
+- Applied:
+  - Moved the blood iaido center to the Greatsword swing tip/end range.
+  - Added two thin offset crescents: `EchoGreat_BloodIaidoCrescentOuter` and `EchoGreat_BloodIaidoCrescentInner`.
+  - Enlarged the endpoint damage zone.
+- Verification:
+  - Unity compilation errors: `0`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=368`, `K=8`, `B=27`, `state=51`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=139`, `activeVfx=75`, `ms=104.66`.
+- Next step:
+  - Direct-play Greatsword Blood Echo and judge whether the two thin red crescents are now large enough and far enough out.
+
 ## 2026-07-09 Update: Greatsword Blood Echo Crescent Follow-up
 
 - jaewoo noted that Greatsword Blood Echo still felt too close to dagger/dual-blade behavior.

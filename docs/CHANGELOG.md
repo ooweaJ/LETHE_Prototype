@@ -2,6 +2,15 @@
 
 # 2026-07-09
 
+- Enlarged and repositioned Greatsword Blood Echo crescents:
+  - Moved the Blood Echo crescent from the hit center to the Greatsword swing tip/end range.
+  - Replaced the single red crescent read with two thin offset crescents, `EchoGreat_BloodIaidoCrescentOuter` and `EchoGreat_BloodIaidoCrescentInner`, so the effect reads like `((`.
+  - Increased the damage zone around the new crescent endpoint.
+- Verification:
+  - Unity compilation errors: `0`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=368`, `K=8`, `B=27`, `state=51`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=139`, `activeVfx=75`, `ms=104.66`.
+
 - Reworked Greatsword Blood Echo into a red crescent follow-up slash:
   - Greatsword Blood Echo no longer uses the blood-thread harvest read that felt too close to dagger/dual-blade stitching.
   - Added `EchoGreat_BloodIaidoCrescent`, a delayed red half-moon slash aligned to the Greatsword cleave arc.
