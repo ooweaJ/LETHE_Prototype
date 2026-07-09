@@ -1,18 +1,18 @@
 # Next Tasks
 
-## 1. Default Kalmuri Hunger Echo Direct-Play Review
+## 1. Blue Kalmuri Echo Direct-Play Review
 
 - Priority: urgent
-- Problem: the chosen K2/K1 hunger hybrid is now the default Kalmuri Echo runtime, but automated QA can only prove budget and object coverage. jaewoo still needs to judge combat feel.
+- Problem: the default Kalmuri Echo now uses blue spectral blade pulls instead of red wound circles, but automated QA can only prove budget and object coverage. jaewoo still needs to judge whether it finally feels like the original Hungry Blades memory becoming an Echo.
 - Build:
   - Play `Dev_Prototype_v1`.
   - Keep F12 Kalmuri prototype mode off so the UI shows `K real echo prototype: default`.
   - Test Hungry Blades +5 with Dual Blades in normal and dense packs.
   - Test Hungry Blades +5 with Greatsword against small packs and boss-review targets.
-  - Judge whether the effect reads as weapon-trail scent pull into wound-devouring blades, not a detached projectile.
+  - Judge whether the effect reads as blue spectral blades being pulled into the wound, not red circles or detached projectiles.
   - Tune intensity, timing, color, object count, or damage only after direct-play notes.
 - Done:
-  - jaewoo can say keep/tune/redesign for the default Kalmuri Echo and name the exact weak read if it still misses.
+  - jaewoo can say keep/tune/redesign for the blue default Kalmuri Echo and name the exact weak read if it still misses.
 
 ## 2. Direct-Play Kingmaker Route Review
 
@@ -60,6 +60,7 @@
 Completed sequence:
 
 - 2026-07-09: default Kalmuri Echo converted to the selected hunger hybrid; default route now uses weapon-trail scent pull, wound-devouring bite VFX, and +5 wound-side devour bloom. Kalmuri, Dense Dual, Echo Dual, and Echo Great QA passed.
+- 2026-07-09: default Kalmuri Echo recolored and detailed as blue Hungry Blades memory-lineage VFX; bite pieces now use Kalmuri blade sprites and QA passed again.
 - 2026-07-08: Kalmuri candidates rebuilt around hunger-fit imagery; K1 wound feast, K2 blood-scent hunt, K3 feast table, and K4 chewed trail replaced the previous ribbon/cross/curse directions.
 - 2026-07-08: Kalmuri K1-K4 corrected from cosmetic previews into playable Echo prototype modes.
 - 2026-07-08: Kalmuri old awakened projectile suppressed during prototype review.

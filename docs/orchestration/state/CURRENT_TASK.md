@@ -1,5 +1,41 @@
 # Current Task
 
+# 2026-07-09 Kalmuri Blue Memory-Lineage VFX Pass
+
+## Status
+
+Implemented, Unity-compiled, and core QA passed. Awaiting jaewoo direct-play feel review.
+
+## Applied Changes
+
+- Reworked the default Kalmuri Echo palette after jaewoo clarified the desired emotion:
+  - the original memory was blue Hungry Blades,
+  - so the Echo should feel like that blue blade memory remaining and becoming more detailed.
+- Removed the red/orange wound-pool read from Dual Blades default Kalmuri.
+- Replaced generic inward tooth/bite sprites with actual Kalmuri blade sprites.
+- Dual Blades now emphasizes:
+  - quick blue rifts,
+  - spectral blade pulls,
+  - small blue blade-bite marks.
+- Greatsword now emphasizes:
+  - blue memory pool,
+  - blue blade-wake ring,
+  - heavy spectral blade-jaw closure,
+  - blue splinter scars.
+- +5 awakened Kalmuri now uses blue spectral blade devour pulls.
+
+## Verification
+
+- Unity compilation errors: `0`.
+- `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS, `orbit=44`, `bite=72`, `return=24`, `hunting=16`, `echoSurge=0`, `echoBarrage=0`, `totalKalmuri=356`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=120`, `activeVfx=58`, `ms=86.60`.
+- `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=232`, `K=8`, `state=86`.
+- `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=207`, `K=8`, `state=58`.
+
+## Remaining Gate
+
+Direct-play with F12 Kalmuri prototype mode off. Check whether the default Kalmuri Echo now reads as a polished blue Hungry Blades Echo, not a red blood/wound effect.
+
 # 2026-07-09 Default Kalmuri Hunger Echo Runtime
 
 ## Status

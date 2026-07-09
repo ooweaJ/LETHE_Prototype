@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260709\\index.md",
-  "generatedAt": "2026-07-09T00:31:29.537Z",
-  "unitCount": 1,
+  "generatedAt": "2026-07-09T01:29:03.250Z",
+  "unitCount": 2,
   "latest": {
-    "title": "2026-07-09-01 - 기본 칼무리 잔향 굶주림 이펙트 전환",
-    "number": "01",
-    "markdownPath": "docs\\orchestration\\reports\\20260709\\units\\2026-07-09-01-기본-칼무리-잔향-굶주림-이펙트-전환.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260709\\units\\2026-07-09-01-기본-칼무리-잔향-굶주림-이펙트-전환.html"
+    "title": "2026-07-09-02 - 푸른 칼무리 기억 계열 VFX 보정",
+    "number": "02",
+    "markdownPath": "docs\\orchestration\\reports\\20260709\\units\\2026-07-09-02-푸른-칼무리-기억-계열-vfx-보정.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260709\\units\\2026-07-09-02-푸른-칼무리-기억-계열-vfx-보정.html"
   }
 }

@@ -1,5 +1,31 @@
 # LETHE TEST
 
+# 2026-07-09 Kalmuri Blue Memory-Lineage VFX Pass
+
+- Purpose:
+  - Respond to jaewoo feedback that default Kalmuri Echo should preserve the original blue Hungry Blades memory tone.
+  - Make the Echo feel more like detailed spectral blades rather than red wound circles.
+- Applied target:
+  - Default Kalmuri Echo palette moved to cyan/blue/white.
+  - Dual Blades no longer spawns the large red/orange circle-style wound pool in default Kalmuri.
+  - Inward bite pieces now use the Kalmuri blade sprite instead of generic diamond teeth.
+  - Greatsword keeps a larger blue blade-wake ring and blade-jaw closure for heavy impact.
+  - +5 awakened Kalmuri now uses blue spectral blade devour pulls.
+- Commands / checks:
+  - Unity compilation error check on LETHE port `7890`.
+  - Unity menu `LETHE/V1 QA/Kalmuri Perf Matrix`.
+  - Unity menu `LETHE/V1 QA/Dense Dual Blades Perf Matrix`.
+  - Unity menu `LETHE/V1 QA/Echo Matrix Dual Blades`.
+  - Unity menu `LETHE/V1 QA/Echo Matrix Greatsword`.
+- Results:
+  - Unity compilation errors: `0`.
+  - Kalmuri Perf Matrix: PASS, `orbit=44`, `bite=72`, `return=24`, `hunting=16`, `echoSurge=0`, `echoBarrage=0`, `totalKalmuri=356`.
+  - Dense Dual Blades Perf Matrix: PASS, `hits=18`, `suppressed=15`, `transient=120`, `activeVfx=58`, `ms=86.60`.
+  - Echo Matrix Dual Blades: PASS, `total=232`, `K=8`, `state=86`.
+  - Echo Matrix Greatsword: PASS, `total=207`, `K=8`, `state=58`.
+- Notes:
+  - Direct play should judge whether the new blue blade-pull read now clearly feels like the original Hungry Blades memory becoming an Echo.
+
 # 2026-07-09 Kalmuri Default Hunger Echo Runtime
 
 - Purpose:

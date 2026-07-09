@@ -2,6 +2,18 @@
 
 # 2026-07-09
 
+- Recolored and refined default Kalmuri Echo to preserve the original Hungry Blades memory lineage:
+  - Removed the red/orange wound-pool read from Dual Blades default Kalmuri.
+  - Shifted default Kalmuri VFX to cyan/blue/white memory-blade tones.
+  - Replaced inward bite/tooth sprites with actual Kalmuri blade sprites so the effect reads as blades being pulled into the wound.
+  - Greatsword keeps a larger blue blade-wake ring and heavy blade-jaw closure; Dual Blades focuses on quick blue rifts, blade pulls, and small blade-bite marks.
+- Verification:
+  - Unity compilation errors: `0`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS, `totalKalmuri=356`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=120`, `activeVfx=58`, `ms=86.60`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=232`, `K=8`, `state=86`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=207`, `K=8`, `state=58`.
+
 - Converted the default Kalmuri Echo runtime into a hunger-fit hybrid instead of another flying blade:
   - Default Hungry Blades Echo now uses a K2/K1 hybrid: weapon-trail scent pull plus wound-devouring bite.
   - Dual Blades read as many fast inward teeth, short gnaw scars, and quick wound bites.
