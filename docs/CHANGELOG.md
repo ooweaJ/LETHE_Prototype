@@ -2,6 +2,18 @@
 
 # 2026-07-09
 
+- Added a LETHE-style intro weapon selection screen:
+  - The first screen now uses a dark river / memory shard atmosphere instead of the old plain selection panel.
+  - The run still starts from weapon choice, not from a separate generic start button.
+  - Dual Blades and Greatsword cards explain their combat rhythm and echo direction.
+  - Number keys `1` / `2` and card clicks both start the run through the existing `BeginRun` path.
+- Verification:
+  - Unity compilation errors: `0`.
+  - Play Mode initial state: `weaponSelectOverlay=True`, `runStarted=False`, `GameplayPaused=True`.
+  - Direct selection call: `weaponSelectOverlay=False`, `runStarted=True`, `GameplayPaused=False`.
+  - `LETHE/V1 QA/Start Dual Blades`: invoked successfully.
+  - `LETHE/V1 QA/Start Greatsword`: invoked, but current QA still fails with `liveEnemies=2`; this appears to be an existing start-smoke expectation mismatch, not an intro routing failure.
+
 - Recolored and refined default Kalmuri Echo to preserve the original Hungry Blades memory lineage:
   - Removed the red/orange wound-pool read from Dual Blades default Kalmuri.
   - Shifted default Kalmuri VFX to cyan/blue/white memory-blade tones.

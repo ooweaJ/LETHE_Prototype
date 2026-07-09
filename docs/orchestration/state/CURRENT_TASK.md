@@ -1,5 +1,51 @@
 # Current Task
 
+# 2026-07-09 LETHE Intro Weapon Selection Screen
+
+## Status
+
+Implemented, Unity-compiled, and state-flow checked. Awaiting jaewoo direct visual review.
+
+## Applied Changes
+
+- Added a new LETHE-style first screen in `V1GameManager`.
+- The intro uses weapon selection rather than a generic click-to-start:
+  - `절단쌍검`: fast paired cuts, frequent echo rhythm.
+  - `장송대검`: slower heavy swings, larger echo rhythm.
+- The screen now has:
+  - dark river / lower-water background bands,
+  - cyan memory drift lines,
+  - small memory-shard glints,
+  - title/goal copy,
+  - two large clickable weapon cards.
+- Existing start controls remain:
+  - `1` starts Dual Blades,
+  - `2` starts Greatsword,
+  - clicking the matching card also starts the run.
+
+## Verification
+
+- Unity compilation errors: `0`.
+- Play Mode initial state:
+  - `weaponSelectOverlay=True`,
+  - `runStarted=False`,
+  - `GameplayPaused=True`.
+- Direct selection call:
+  - `weaponSelectOverlay=False`,
+  - `runStarted=True`,
+  - `GameplayPaused=False`.
+- `LETHE/V1 QA/Start Dual Blades`: invoked successfully.
+- `LETHE/V1 QA/Start Greatsword`: invoked but currently fails with `liveEnemies=2`; treat this as a start-smoke expectation/balance mismatch to fix separately.
+
+## Remaining Gate
+
+Direct-play inspect the intro in Game view:
+
+- Does the first screen feel like LETHE before the run begins?
+- Are the two weapon cards readable without feeling like a menu placeholder?
+- Does weapon selection feel better than a separate click-to-start page?
+- After that, fix the Greatsword start QA mismatch as its own small task.
+
 # 2026-07-09 Kalmuri Blue Memory-Lineage VFX Pass
 
 ## Status

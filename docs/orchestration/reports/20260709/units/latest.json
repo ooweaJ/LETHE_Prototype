@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260709\\index.md",
-  "generatedAt": "2026-07-09T01:29:03.250Z",
-  "unitCount": 2,
+  "generatedAt": "2026-07-09T02:28:50.705Z",
+  "unitCount": 3,
   "latest": {
-    "title": "2026-07-09-02 - 푸른 칼무리 기억 계열 VFX 보정",
-    "number": "02",
-    "markdownPath": "docs\\orchestration\\reports\\20260709\\units\\2026-07-09-02-푸른-칼무리-기억-계열-vfx-보정.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260709\\units\\2026-07-09-02-푸른-칼무리-기억-계열-vfx-보정.html"
+    "title": "2026-07-09-03 - LETHE 인트로 무기 선택 화면",
+    "number": "03",
+    "markdownPath": "docs\\orchestration\\reports\\20260709\\units\\2026-07-09-03-lethe-인트로-무기-선택-화면.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260709\\units\\2026-07-09-03-lethe-인트로-무기-선택-화면.html"
   }
 }

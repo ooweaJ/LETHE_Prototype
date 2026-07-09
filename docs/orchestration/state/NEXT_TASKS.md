@@ -1,8 +1,32 @@
 # Next Tasks
 
-## 1. Blue Kalmuri Echo Direct-Play Review
+## 1. Intro Weapon Selection Direct-Play Review
 
 - Priority: urgent
+- Problem: the new first screen now has LETHE atmosphere and weapon cards, but MCP state checks cannot prove whether it feels polished in the actual Game view.
+- Build:
+  - Enter `Dev_Prototype_v1`.
+  - Confirm the first screen shows before combat starts.
+  - Compare whether `절단쌍검` and `장송대검` cards read clearly as the first real choice.
+  - Start with click and with number keys `1` / `2`.
+  - Note whether the intro needs stronger art, less text, a start-only flow, or a more ceremonial weapon pick.
+- Done:
+  - jaewoo can say keep/tune/redesign for the intro and identify the exact weak read if it misses.
+
+## 2. Greatsword Start-Smoke QA Fix
+
+- Priority: urgent
+- Problem: `LETHE/V1 QA/Start Greatsword` invokes the run but currently fails with `liveEnemies=2` against the current start-smoke expectation.
+- Build:
+  - Inspect `V1SmokeTestMenu.AdvanceStartSmoke` and the Greatsword start route.
+  - Decide whether the QA expectation should change or the Greatsword start smoke should spawn/advance to the same threshold as Dual Blades.
+  - Keep this separate from intro visuals.
+- Done:
+  - `LETHE/V1 QA/Start Greatsword` passes from a clean Play Mode session.
+
+## 3. Blue Kalmuri Echo Direct-Play Review
+
+- Priority: high
 - Problem: the default Kalmuri Echo now uses blue spectral blade pulls instead of red wound circles, but automated QA can only prove budget and object coverage. jaewoo still needs to judge whether it finally feels like the original Hungry Blades memory becoming an Echo.
 - Build:
   - Play `Dev_Prototype_v1`.
@@ -14,7 +38,7 @@
 - Done:
   - jaewoo can say keep/tune/redesign for the blue default Kalmuri Echo and name the exact weak read if it still misses.
 
-## 2. Direct-Play Kingmaker Route Review
+## 4. Direct-Play Kingmaker Route Review
 
 - Priority: high
 - Problem: automated QA is green after the memory/echo kingmaker pass, but jaewoo still needs to judge whether non-blood routes feel rewarding in actual play.
@@ -25,7 +49,7 @@
 - Done:
   - Review returns concrete tune targets: keep, brighten, shrink, slow down, rebalance, or redesign.
 
-## 3. Utility Echo Identity Tuning
+## 5. Utility Echo Identity Tuning
 
 - Priority: high
 - Problem: most non-Kalmuri utility echoes still need the same weapon-personality audit now applied to Kalmuri.
@@ -37,28 +61,9 @@
 - Done:
   - jaewoo can name or visually separate each utility echo family without reading text.
 
-## 4. Gatekeeper Raid Telegraph Feel Tune
-
-- Priority: high
-- Problem: Gatekeeper pattern QA passes, but visual timing/fairness still needs player judgment.
-- Build:
-  - Review meteor, cone, and ring as `red zone -> fill/charge -> visible attack body -> bang`.
-  - Tune only warning duration, fill alpha, impact flash, or danger-zone size if needed.
-- Done:
-  - The first boss feels readable, fair, and more like a simple raid encounter.
-
-## 5. Dense Dual-Blade Feel Check
-
-- Priority: high
-- Problem: Dense Dual Blades Perf Matrix passes after the new Kalmuri VFX, but real play still needs feel judgment because automated QA cannot prove input/visual smoothness.
-- Build:
-  - Play dense waves with Dual Blades, Kalmuri, Blood, and utility echoes.
-  - If hitchy, reduce dense utility identity bursts before touching normal-density readability.
-- Done:
-  - Dense dual-blade combat feels responsive and still readable.
-
 Completed sequence:
 
+- 2026-07-09: LETHE-style intro weapon selection screen added; initial overlay state and selection state pass, Dual Blades start QA invokes successfully, Greatsword start QA mismatch is tracked separately.
 - 2026-07-09: default Kalmuri Echo converted to the selected hunger hybrid; default route now uses weapon-trail scent pull, wound-devouring bite VFX, and +5 wound-side devour bloom. Kalmuri, Dense Dual, Echo Dual, and Echo Great QA passed.
 - 2026-07-09: default Kalmuri Echo recolored and detailed as blue Hungry Blades memory-lineage VFX; bite pieces now use Kalmuri blade sprites and QA passed again.
 - 2026-07-08: Kalmuri candidates rebuilt around hunger-fit imagery; K1 wound feast, K2 blood-scent hunt, K3 feast table, and K4 chewed trail replaced the previous ribbon/cross/curse directions.

@@ -742,7 +742,7 @@ namespace Lethe.PrototypeV1
             EnsureStyles();
             if (weaponSelectOverlay)
             {
-                DrawWeaponSelectOverlay();
+                DrawLetheIntroOverlay();
                 return;
             }
 
@@ -5297,6 +5297,129 @@ namespace Lethe.PrototypeV1
                 V1MemoryId.OblivionBrand => new Color(0.78f, 0.48f, 1f, alpha),
                 _ => new Color(0.70f, 0.96f, 1f, alpha)
             };
+        }
+
+        void DrawLetheIntroOverlay()
+        {
+            DrawFilledRect(new Rect(0, 0, Screen.width, Screen.height), new Color(0.010f, 0.016f, 0.020f, 0.98f));
+            DrawFilledRect(new Rect(0, 0, Screen.width, Screen.height * 0.48f), new Color(0.018f, 0.035f, 0.046f, 0.76f));
+            DrawFilledRect(new Rect(0, Screen.height * 0.50f, Screen.width, Screen.height * 0.50f), new Color(0.010f, 0.080f, 0.092f, 0.30f));
+            DrawFilledRect(new Rect(0, 0, Screen.width, 4f), new Color(0.42f, 0.96f, 1f, 0.72f));
+            DrawFilledRect(new Rect(0, Screen.height - 4f, Screen.width, 4f), new Color(0.09f, 0.30f, 0.34f, 0.86f));
+
+            var drift = Mathf.Sin(Time.realtimeSinceStartup * 0.55f) * 18f;
+            for (int i = 0; i < 7; i++)
+            {
+                var y = Screen.height * (0.46f + i * 0.055f);
+                var x = -120f + drift * (i % 2 == 0 ? 1f : -0.65f);
+                var alpha = 0.06f + i * 0.018f;
+                DrawFilledRect(new Rect(x, y, Screen.width + 240f, 2f), new Color(0.35f, 0.92f, 1f, alpha));
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                var t = Time.realtimeSinceStartup * (0.18f + i * 0.013f);
+                var x = (Screen.width * (0.12f + i * 0.087f) + Mathf.Sin(t + i) * 12f) % Screen.width;
+                var y = Screen.height * (0.16f + (i % 5) * 0.11f) + Mathf.Cos(t * 1.3f) * 8f;
+                var w = 30f + (i % 3) * 12f;
+                DrawFilledRect(new Rect(x, y, w, 2f), new Color(0.62f, 0.95f, 1f, 0.08f + (i % 4) * 0.025f));
+            }
+
+            var compact = Screen.height < 560 || Screen.width < 860;
+            var width = Mathf.Min(1080f, Mathf.Max(360f, Screen.width - 56f));
+            var height = Mathf.Min(compact ? 440f : 650f, Mathf.Max(380f, Screen.height - 32f));
+            var origin = new Rect(Screen.width * 0.5f - width * 0.5f, Screen.height * 0.5f - height * 0.5f, width, height);
+            GUI.Box(origin, "", panelStyle);
+
+            DrawFilledRect(new Rect(origin.x + 24f, origin.y + 20f, origin.width - 48f, 2f), new Color(0.52f, 0.94f, 0.98f, 0.55f));
+            GUI.Label(new Rect(origin.x + 34f, origin.y + 30f, origin.width - 68f, 20f), "망각의 강 앞에서", startEyebrowStyle);
+            GUI.Label(new Rect(origin.x + 34f, origin.y + 51f, origin.width - 68f, 42f), "LETHE", titleStyle);
+            GUI.Label(
+                new Rect(origin.x + 72f, origin.y + 95f, origin.width - 144f, compact ? 30f : 52f),
+                compact
+                    ? "무기를 고르면 강을 건너 전투가 시작됩니다."
+                    : "처음 쥐는 무기가 오늘의 기억을 자릅니다. 기억은 첫 보상에서 얻고, 잊힌 기억은 잔향으로 남습니다.",
+                startBodyStyle);
+
+            var goal = new Rect(origin.x + 54f, origin.y + (compact ? 132f : 160f), origin.width - 108f, compact ? 38f : 50f);
+            DrawFilledRect(goal, new Color(0.030f, 0.066f, 0.074f, 0.82f));
+            DrawFilledRect(new Rect(goal.x, goal.y, 4f, goal.height), new Color(0.32f, 0.88f, 1f, 0.86f));
+            GUI.Label(new Rect(goal.x + 18f, goal.y + 5f, goal.width - 36f, 16f), "첫 목표", startEyebrowStyle);
+            GUI.Label(
+                new Rect(goal.x + 18f, goal.y + 22f, goal.width - 36f, 20f),
+                compact ? "XP를 모아 기억을 얻고, 잔향으로 바뀌는 순간을 확인하세요." : "XP로 기억 3칸을 채운 뒤 첫 망각에서 어떤 힘이 잔향으로 남는지 확인하세요.",
+                startFooterStyle);
+
+            var gap = 20f;
+            var cardWidth = (origin.width - 108f - gap) * 0.5f;
+            var footer = new Rect(origin.x + 54f, origin.yMax - 44f, origin.width - 108f, 28f);
+            var x0 = origin.x + 54f;
+            var x1 = x0 + cardWidth + gap;
+            var y0 = goal.yMax + (compact ? 14f : 18f);
+            var cardHeight = footer.y - y0 - 14f;
+
+            DrawIntroWeaponCard(
+                new Rect(x0, y0, cardWidth, cardHeight),
+                V1WeaponId.DualBlades,
+                "1",
+                "절단쌍검",
+                "짧게 베고 빠르게 다음 표적으로 미끄러집니다. 잔향을 자주 터뜨려 화면에 칼자국을 쌓는 무기입니다.",
+                "빠른 2연 베기 / 짧은 hitstop / 잔향 빈도 높음",
+                "칼무리와 혈반 잔향을 빠르게 쌓아 피의 칼폭풍까지 밀어붙이기 좋습니다.",
+                new Color(0.32f, 0.88f, 1f));
+            DrawIntroWeaponCard(
+                new Rect(x1, y0, cardWidth, cardHeight),
+                V1WeaponId.Greatsword,
+                "2",
+                "장송대검",
+                "느리지만 넓게 찍어 누릅니다. 한 번의 강타가 큰 잔향과 처형 타이밍으로 이어지는 무기입니다.",
+                "무거운 강타 / 긴 hitstop / 한 번 큰 잔향",
+                "파쇄, 처형, 멈춘 초처럼 큰 판정과 확정 순간을 크게 읽기 좋습니다.",
+                new Color(0.92f, 0.86f, 0.70f));
+
+            DrawFilledRect(footer, new Color(0.040f, 0.046f, 0.052f, 0.82f));
+            GUI.Label(new Rect(footer.x + 16f, footer.y + 5f, footer.width - 32f, 18f), "WASD 이동  /  공격 자동  /  숫자 1, 2 또는 카드 클릭으로 시작  /  F12 디버그", startFooterStyle);
+        }
+
+        void DrawIntroWeaponCard(Rect card, V1WeaponId weaponId, string key, string title, string body, string rhythm, string echoHint, Color accent)
+        {
+            if (GUI.Button(card, "", buttonStyle))
+            {
+                BeginRun(weaponId);
+            }
+
+            DrawFilledRect(new Rect(card.x + 8f, card.y + 8f, card.width - 16f, card.height - 16f), new Color(0.024f, 0.034f, 0.041f, 0.88f));
+            DrawFilledRect(new Rect(card.x + 14f, card.y + 14f, card.width - 28f, 4f), new Color(accent.r, accent.g, accent.b, 0.92f));
+            DrawFilledRect(new Rect(card.x + 22f, card.y + 26f, 42f, 32f), new Color(accent.r, accent.g, accent.b, 0.92f));
+            GUI.Label(new Rect(card.x + 22f, card.y + 26f, 42f, 32f), key, startKeyStyle);
+            GUI.Label(new Rect(card.x + 72f, card.y + 25f, card.width - 104f, 36f), title, startCardTitleStyle);
+
+            if (card.height < 210f)
+            {
+                DrawWeaponGlyph(new Rect(card.xMax - 88f, card.y + 64f, 60f, 42f), weaponId, accent);
+                var compactInfo = new Rect(card.x + 28f, card.y + 78f, card.width - 130f, 28f);
+                DrawFilledRect(compactInfo, new Color(accent.r, accent.g, accent.b, 0.14f));
+                var summary = weaponId == V1WeaponId.Greatsword ? "큰 판정 / 묵직한 잔향" : "빠른 연타 / 잦은 잔향";
+                GUI.Label(new Rect(compactInfo.x + 10f, compactInfo.y + 5f, compactInfo.width - 20f, 18f), summary, startFooterStyle);
+                var compactSelect = new Rect(card.x + 28f, card.yMax - 34f, card.width - 56f, 24f);
+                DrawFilledRect(compactSelect, new Color(accent.r, accent.g, accent.b, 0.16f));
+                GUI.Label(new Rect(compactSelect.x + 12f, compactSelect.y + 4f, compactSelect.width - 24f, 16f), "클릭 또는 숫자로 시작", startFooterStyle);
+                return;
+            }
+
+            var glyphRect = new Rect(card.x + 26f, card.y + 74f, card.width - 52f, 54f);
+            DrawWeaponGlyph(glyphRect, weaponId, accent);
+
+            GUI.Label(new Rect(card.x + 28f, card.y + 140f, card.width - 56f, 50f), body, startBodyStyle);
+            var rowWidth = card.width - 56f;
+            var select = new Rect(card.x + 28f, card.yMax - 42f, rowWidth, 28f);
+            var row2 = new Rect(card.x + 28f, select.y - 56f, rowWidth, 48f);
+            var row1 = new Rect(card.x + 28f, row2.y - 48f, rowWidth, 40f);
+            DrawStartInfoRow(row1, "전투 리듬", rhythm, accent);
+            DrawStartInfoRow(row2, "잔향 방향", echoHint, accent);
+
+            DrawFilledRect(select, new Color(accent.r, accent.g, accent.b, 0.16f));
+            GUI.Label(new Rect(select.x + 12f, select.y + 5f, select.width - 24f, 18f), "클릭 또는 숫자로 시작", startFooterStyle);
         }
 
         void DrawWeaponSelectOverlay()

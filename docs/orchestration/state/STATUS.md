@@ -2,6 +2,25 @@
 
 Last updated: 2026-07-09
 
+## 2026-07-09 Update: LETHE Intro Weapon Selection Screen
+
+- jaewoo asked whether the intro should be click-to-start or weapon selection.
+- Decision:
+  - Use weapon selection as the intro because the first meaningful LETHE choice is which weapon crosses the river.
+- Applied:
+  - Replaced the old weapon-select panel path with a new `DrawLetheIntroOverlay()` first screen.
+  - Added dark river, mist-line, and memory-shard background treatment.
+  - Added two weapon cards for `절단쌍검` and `장송대검`, each with rhythm and echo-direction copy.
+  - Preserved existing number-key and card-click start routing through `BeginRun`.
+- Verification:
+  - Unity compilation errors: `0`.
+  - Play Mode initial state: `weaponSelectOverlay=True`, `runStarted=False`, `GameplayPaused=True`.
+  - Direct selection call: `weaponSelectOverlay=False`, `runStarted=True`, `GameplayPaused=False`.
+  - `LETHE/V1 QA/Start Dual Blades`: invoked successfully.
+  - `LETHE/V1 QA/Start Greatsword`: currently fails with `liveEnemies=2`; track as a start-smoke expectation/balance mismatch, not an intro blocker.
+- Next step:
+  - Direct-play inspect the first screen visually, then fix the Greatsword start-smoke mismatch separately.
+
 ## 2026-07-09 Update: Kalmuri Echo Blue Memory-Lineage VFX Pass
 
 - jaewoo noted that the Kalmuri Echo should preserve the original blue Hungry Blades memory tone so the player understands it as a remaining Echo of that memory.

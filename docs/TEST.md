@@ -1,5 +1,29 @@
 # LETHE TEST
 
+# 2026-07-09 Intro Weapon Selection Screen
+
+- Purpose:
+  - Add a LETHE-style first screen that starts the run through weapon selection.
+  - Preserve the existing start route while making the opening feel more atmospheric and intentional.
+- Applied target:
+  - First screen draws a dark river/memory-shard background.
+  - Two cards present `절단쌍검` and `장송대검` with their rhythm and echo direction.
+  - Card click and number keys `1` / `2` both start the run.
+- Commands / checks:
+  - Unity compilation error check on LETHE port `7890`.
+  - Unity Play Mode initial state reflection check.
+  - Direct `BeginRun(V1WeaponId.DualBlades)` reflection check.
+  - Unity menu `LETHE/V1 QA/Start Dual Blades`.
+  - Unity menu `LETHE/V1 QA/Start Greatsword`.
+- Results:
+  - Unity compilation errors: `0`.
+  - Initial Play Mode state: `weaponSelectOverlay=True`, `runStarted=False`, `GameplayPaused=True`.
+  - After selection call: `weaponSelectOverlay=False`, `runStarted=True`, `GameplayPaused=False`.
+  - Start Dual Blades QA invoked successfully and produced a valid start snapshot.
+  - Start Greatsword QA invoked but failed with `liveEnemies=2` against the current start-smoke expectation; this is tracked as a pre-existing QA/balance-smoke mismatch, not a compile or intro-start blocker.
+- Notes:
+  - Direct visual review is still needed because MCP reflection proves state flow, not whether the intro composition feels polished on the Game view.
+
 # 2026-07-09 Kalmuri Blue Memory-Lineage VFX Pass
 
 - Purpose:
