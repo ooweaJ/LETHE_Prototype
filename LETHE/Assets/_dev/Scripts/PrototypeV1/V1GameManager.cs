@@ -1718,7 +1718,7 @@ namespace Lethe.PrototypeV1
                     TriggerKalmuriEcho(enemy, forward, kalmuriLevel, hitIndex, weapon);
                     if (debugKalmuriEchoConcept <= 0 && kalmuriLevel >= 5 && kalmuriAwakenLaunchCooldown <= 0f && !DenseDualBladeVfxThrottle(weapon))
                     {
-                        LaunchKalmuriBlade(enemy, forward, weapon);
+                        SpawnKalmuriAwakenHungerBloom(enemy, forward, weapon, kalmuriLevel);
                         kalmuriAwakenLaunchCooldown = 0.35f;
                     }
                 }
@@ -2297,6 +2297,12 @@ namespace Lethe.PrototypeV1
                 return;
             }
 
+            if (debugKalmuriEchoConcept <= 0)
+            {
+                ResolveKalmuriHungerFollowup(origin, forward, level, hitIndex, weapon, denseDualBlade);
+                return;
+            }
+
             var isHeavy = weapon.EchoProcStyle == V1EchoProcStyle.SingleHeavy;
             var burstCount = denseDualBlade ? 1 : isHeavy ? 1 : Mathf.Clamp(1 + level / 2, 1, 3);
             var radius = (0.44f + level * 0.045f) * weapon.EchoSizeScale * (1f + WeaponStat.AreaMul * 0.55f);
@@ -2379,6 +2385,110 @@ namespace Lethe.PrototypeV1
                 var toTarget = (Vector2)(targets[i].transform.position - origin);
                 var mul = i == 0 ? 1f : 0.55f;
                 DealDamage(targets[i], damage * mul, "칼무리 잔향", true, toTarget.sqrMagnitude > 0.01f ? toTarget.normalized : f, 0.28f);
+            }
+        }
+
+        void ResolveKalmuriHungerFollowup(Vector3 origin, Vector2 forward, int level, int hitIndex, WeaponRuntimeSpec weapon, bool denseDualBlade)
+        {
+            var isHeavy = weapon.EchoProcStyle == V1EchoProcStyle.SingleHeavy;
+            var f = forward.sqrMagnitude > 0.01f ? forward.normalized : lastAim.normalized;
+            if (f.sqrMagnitude < 0.01f) f = Vector2.up;
+            var side = new Vector2(-f.y, f.x).normalized;
+            var baseDamage = weapon.Damage * (0.28f + level * 0.060f) * weapon.EchoDamageScale * (1f + WeaponStat.EchoAmp);
+            if (isHeavy) baseDamage *= 1.18f;
+            if (denseDualBlade) baseDamage *= 0.72f;
+
+            var targets = KalmuriPrototypeTargets(2, origin, f, side, level, isHeavy, denseDualBlade);
+            if (targets.Count == 0)
+            {
+                targets = KalmuriPrototypeTargets(1, origin, f, side, level, isHeavy, denseDualBlade);
+            }
+
+            SpawnKalmuriHungerEchoVfx(origin, f, side, targets, level, hitIndex, isHeavy, denseDualBlade, true);
+            DealKalmuriPrototypeDamage(targets, origin, f, baseDamage, isHeavy ? 0.78f : 0.44f, isHeavy ? "Kalmuri Great Hunger Echo" : "Kalmuri Hunger Echo");
+
+            hitstopTimer = Mathf.Max(hitstopTimer, isHeavy ? 0.060f : 0.034f);
+            cameraShakeTimer = Mathf.Max(cameraShakeTimer, isHeavy ? 0.14f : 0.075f);
+            cameraShakeAmount = Mathf.Max(cameraShakeAmount, isHeavy ? 0.070f : 0.038f);
+        }
+
+        void SpawnKalmuriHungerEchoVfx(Vector3 origin, Vector2 forward, Vector2 side, List<V1Enemy> targets, int level, int hitIndex, bool isHeavy, bool denseDualBlade, bool playSound)
+        {
+            var f = forward.sqrMagnitude > 0.01f ? forward.normalized : Vector2.up;
+            var s = side.sqrMagnitude > 0.01f ? side.normalized : new Vector2(-f.y, f.x);
+            var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
+            var areaMul = 1f + WeaponStat.AreaMul * 0.55f;
+            var radius = (isHeavy ? 1.18f : 0.86f) * areaMul + level * (isHeavy ? 0.045f : 0.032f);
+            var scar = MakeBoxSprite("KalmuriHungerScar", Color.white, 8, 144);
+            var tooth = MakeImpactDiamondSprite("KalmuriHungerTooth", Color.white);
+            var blood = isHeavy ? new Color(0.72f, 0.02f, 0.00f, 0.52f) : new Color(0.92f, 0.03f, 0.02f, 0.42f);
+            var hot = isHeavy ? new Color(1f, 0.66f, 0.25f, 0.92f) : new Color(1f, 0.38f, 0.16f, 0.82f);
+            var ember = isHeavy ? new Color(1f, 0.24f, 0.07f, 0.74f) : new Color(1f, 0.18f, 0.06f, 0.58f);
+
+            if (playSound)
+            {
+                PlaySfx(isHeavy ? "kalmuri_echo_heavy" : "kalmuri_echo", isHeavy ? 0.90f : 0.72f, isHeavy ? 0.08f : 0.055f);
+            }
+
+            if (!denseDualBlade)
+            {
+                SpawnTransientSprite(isHeavy ? "KalmuriHunger_GreatWoundPool" : "KalmuriHunger_DualWoundPool", MakeDiscSprite("KalmuriHungerWoundPool", Color.white, 144), origin, Quaternion.identity, radius * (isHeavy ? 0.54f : 0.42f), blood, isHeavy ? 0.82f : 0.62f);
+                SpawnTransientSprite(isHeavy ? "KalmuriHunger_GreatScentRing" : "KalmuriHunger_DualScentRing", MakeRingSprite("KalmuriHungerScentRing", Color.white, 180), origin, Quaternion.Euler(0f, 0f, baseAngle), radius, ember, isHeavy ? 0.76f : 0.54f);
+            }
+
+            SpawnEchoWoundSlash(isHeavy ? "KalmuriHunger_GreatOpenWound" : "KalmuriHunger_DualOpenWound", origin, f, new Color(1f, 0.14f, 0.05f, isHeavy ? 0.92f : 0.70f), isHeavy ? 1.58f : 0.92f, isHeavy ? 0.78f : 0.52f);
+            SpawnTransientSprite(isHeavy ? "KalmuriHunger_GreatWoundCore" : "KalmuriHunger_DualWoundCore", tooth, origin, Quaternion.Euler(0f, 0f, baseAngle + 45f + hitIndex * 11f), isHeavy ? 0.52f : 0.30f, hot, isHeavy ? 0.72f : 0.50f);
+
+            var trailCount = denseDualBlade ? (isHeavy ? 2 : 3) : isHeavy ? 6 : 10;
+            for (int i = 0; i < trailCount; i++)
+            {
+                var t = trailCount <= 1 ? 0f : i / (float)(trailCount - 1);
+                var spread = (t - 0.5f) * (isHeavy ? 0.88f : 0.78f);
+                var jitter = Mathf.Sin((hitIndex + 1) * 1.41f + i * 1.73f) * (isHeavy ? 0.10f : 0.08f);
+                var start = origin - (Vector3)(f * (isHeavy ? 1.02f : 0.72f) - s * (spread + jitter));
+                var end = origin + (Vector3)(f * (isHeavy ? 0.15f : 0.10f) + s * spread * 0.16f);
+                var startAngle = baseAngle - 102f + spread * 16f;
+                var endAngle = baseAngle - 136f + spread * 26f;
+                var lifetime = isHeavy ? 0.72f : 0.46f;
+                var scaleY = isHeavy ? 0.28f : 0.18f;
+                SpawnSweepingTransientSprite(isHeavy ? "KalmuriHunger_GreatDrawnTrail" : "KalmuriHunger_DualDrawnTrail", scar, start, end, startAngle, endAngle, scaleY, scaleY * 0.62f, new Color(hot.r, hot.g, hot.b, Mathf.Lerp(0.50f, hot.a, 1f - t * 0.34f)), lifetime, isHeavy ? 0.32f : 0.20f);
+
+                if (!denseDualBlade || i < 4)
+                {
+                    var biteDir = (Vector2)(Quaternion.Euler(0f, 0f, baseAngle + i * (isHeavy ? 41f : 29f)) * Vector3.right);
+                    var biteStart = origin + (Vector3)(biteDir * radius * (isHeavy ? 0.54f : 0.64f));
+                    var biteEnd = origin + (Vector3)(s * spread * 0.08f + f * 0.05f);
+                    SpawnSweepingTransientSprite(isHeavy ? "KalmuriHunger_GreatInwardTooth" : "KalmuriHunger_DualInwardTooth", tooth, biteStart, biteEnd, baseAngle + 45f + i * 9f, baseAngle + 168f + i * 12f, isHeavy ? 0.20f : 0.13f, isHeavy ? 0.11f : 0.07f, hot, lifetime * 0.86f, isHeavy ? 0.22f : 0.14f);
+                }
+            }
+
+            if (isHeavy)
+            {
+                var jaw = MakeBoxSprite("KalmuriHungerGreatJaw", Color.white, 10, 150);
+                SpawnSweepingTransientSprite("KalmuriHunger_GreatUpperJaw", jaw, origin + (Vector3)(s * 0.66f), origin + (Vector3)(s * 0.20f), baseAngle + 92f, baseAngle + 118f, 0.50f, 0.34f, hot, 0.86f, 0.34f);
+                SpawnSweepingTransientSprite("KalmuriHunger_GreatLowerJaw", jaw, origin - (Vector3)(s * 0.66f), origin - (Vector3)(s * 0.20f), baseAngle - 92f, baseAngle - 118f, 0.50f, 0.34f, hot, 0.86f, 0.34f);
+                SpawnRadialSlashLines("KalmuriHunger_GreatSplinterScars", origin, f, 5, 1.10f, new Color(1f, 0.40f, 0.12f, 0.56f), 0.72f);
+            }
+            else if (!denseDualBlade)
+            {
+                SpawnRadialSlashLines("KalmuriHunger_DualGnawScars", origin, f, 8, 0.74f, new Color(1f, 0.18f, 0.06f, 0.46f), 0.54f);
+            }
+
+            var linked = targets
+                .Where(e => e != null && e.IsAlive)
+                .OrderBy(e => Vector2.Distance(origin, e.transform.position))
+                .Take(denseDualBlade ? 2 : isHeavy ? 5 : 4)
+                .ToList();
+            for (int i = 0; i < linked.Count; i++)
+            {
+                var pos = linked[i].transform.position;
+                if (Vector2.Distance(origin, pos) > 0.12f)
+                {
+                    SpawnEchoLink(isHeavy ? "KalmuriHunger_GreatScentPull" : "KalmuriHunger_DualScentPull", pos, origin, new Color(1f, 0.18f, 0.06f, isHeavy ? 0.48f : 0.34f), isHeavy ? 0.58f : 0.42f, isHeavy ? 0.030f : 0.018f);
+                }
+
+                var biteAngle = baseAngle + i * (isHeavy ? 38f : 53f);
+                SpawnTransientSprite(isHeavy ? "KalmuriHunger_GreatSecondaryBite" : "KalmuriHunger_DualSecondaryBite", tooth, pos, Quaternion.Euler(0f, 0f, biteAngle + 45f), isHeavy ? 0.26f : 0.17f, new Color(1f, 0.32f, 0.10f, isHeavy ? 0.62f : 0.48f), isHeavy ? 0.42f : 0.30f);
             }
         }
 
@@ -2986,6 +3096,51 @@ namespace Lethe.PrototypeV1
                 {
                     DealDamage(enemy, 30f, "잿빛 망각", false);
                 }
+            }
+        }
+
+        void SpawnKalmuriAwakenHungerBloom(V1Enemy first, Vector2 forward, WeaponRuntimeSpec weapon, int level)
+        {
+            if (first == null || !first.IsAlive) return;
+            var isHeavy = weapon.EchoProcStyle == V1EchoProcStyle.SingleHeavy || weapon.Id == V1WeaponId.Greatsword;
+            var f = forward.sqrMagnitude > 0.01f ? forward.normalized : lastAim.normalized;
+            if (f.sqrMagnitude < 0.01f) f = Vector2.up;
+            var side = new Vector2(-f.y, f.x).normalized;
+            var origin = first.transform.position + (Vector3)(f * 0.08f);
+            var radius = (isHeavy ? 1.28f : 1.02f) * (1f + WeaponStat.AreaMul * 0.55f) + level * 0.040f;
+            var tooth = MakeImpactDiamondSprite("KalmuriAwakenHungerTooth", Color.white);
+            var ring = MakeRingSprite("KalmuriAwakenHungerRing", Color.white, 168);
+            var hot = isHeavy ? new Color(1f, 0.72f, 0.28f, 0.92f) : new Color(1f, 0.42f, 0.16f, 0.82f);
+
+            PlaySfx("kalmuri_lunge", isHeavy ? 0.84f : 0.68f, 0.07f);
+            SpawnTransientSprite(isHeavy ? "KalmuriAwaken_GreatHungerRing" : "KalmuriAwaken_DualHungerRing", ring, origin, Quaternion.identity, radius, new Color(1f, 0.18f, 0.05f, isHeavy ? 0.62f : 0.46f), isHeavy ? 0.56f : 0.42f);
+            SpawnEchoWoundSlash(isHeavy ? "KalmuriAwaken_GreatWoundTear" : "KalmuriAwaken_DualWoundTear", origin, f, new Color(1f, 0.12f, 0.04f, isHeavy ? 0.86f : 0.64f), isHeavy ? 1.34f : 0.78f, isHeavy ? 0.50f : 0.34f);
+
+            var biteCount = isHeavy ? 7 : 10;
+            for (int i = 0; i < biteCount; i++)
+            {
+                var angle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg + i * (360f / biteCount) + Mathf.Sin(i * 1.23f + elapsed) * 10f;
+                var dir = (Vector2)(Quaternion.Euler(0f, 0f, angle) * Vector3.right);
+                var start = origin + (Vector3)(dir * radius * (isHeavy ? 0.56f : 0.66f));
+                var end = origin + (Vector3)(dir * 0.08f + side * Mathf.Sin(i * 0.87f) * 0.04f);
+                SpawnSweepingTransientSprite(isHeavy ? "KalmuriAwaken_GreatDevourTooth" : "KalmuriAwaken_DualDevourTooth", tooth, start, end, angle + 45f, angle + 176f, isHeavy ? 0.19f : 0.12f, isHeavy ? 0.10f : 0.06f, hot, isHeavy ? 0.48f : 0.34f, isHeavy ? 0.18f : 0.12f);
+            }
+
+            var damage = weapon.Damage * (isHeavy ? 0.26f : 0.18f) * weapon.EchoDamageScale * (1f + WeaponStat.EchoAmp);
+            var targets = enemies
+                .Where(e => e != null && e.IsAlive && Vector2.Distance(origin, e.transform.position) <= radius + e.TouchRadius)
+                .OrderBy(e => Vector2.Distance(origin, e.transform.position))
+                .Take(isHeavy ? 5 : 4)
+                .ToList();
+            for (int i = 0; i < targets.Count; i++)
+            {
+                var dir = (Vector2)(targets[i].transform.position - origin);
+                var normalized = dir.sqrMagnitude > 0.01f ? dir.normalized : f;
+                if (i > 0)
+                {
+                    SpawnEchoLink(isHeavy ? "KalmuriAwaken_GreatScentChain" : "KalmuriAwaken_DualScentChain", targets[i].transform.position, origin, new Color(1f, 0.16f, 0.06f, isHeavy ? 0.42f : 0.30f), isHeavy ? 0.42f : 0.30f, isHeavy ? 0.026f : 0.016f);
+                }
+                DealDamage(targets[i], damage * (i == 0 ? 1f : 0.55f), isHeavy ? "Kalmuri Great Awakened Hunger" : "Kalmuri Awakened Hunger", true, normalized, i == 0 ? (isHeavy ? 0.34f : 0.20f) : 0.10f);
             }
         }
 

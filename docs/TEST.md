@@ -1,5 +1,31 @@
 # LETHE TEST
 
+# 2026-07-09 Kalmuri Default Hunger Echo Runtime
+
+- Purpose:
+  - Replace the default Kalmuri Echo feel after jaewoo chose the hunger-fit direction.
+  - Stop default +5 Kalmuri from reading as an old detached flying blade.
+- Applied target:
+  - Default Kalmuri Echo now uses a weapon-trail scent pull into wound-devouring bites.
+  - Dual Blades use fast inward teeth, short gnaw scars, and quick pack-bite VFX.
+  - Greatsword uses a larger wound pool, jaw closure, drawn-to-wound trails, and heavy splinter scars.
+  - +5 awakened Kalmuri now creates a wound-side devour bloom instead of calling the old awakened projectile.
+- Commands / checks:
+  - Unity compilation error check on LETHE port `7890`.
+  - Unity menu `LETHE/V1 QA/Kalmuri Perf Matrix`.
+  - Unity menu `LETHE/V1 QA/Dense Dual Blades Perf Matrix`.
+  - Unity menu `LETHE/V1 QA/Echo Matrix Dual Blades`.
+  - Unity menu `LETHE/V1 QA/Echo Matrix Greatsword`.
+- Results:
+  - Unity compilation errors: `0`.
+  - Kalmuri Perf Matrix: PASS, `orbit=44`, `bite=72`, `return=24`, `hunting=16`, `echoSurge=0`, `echoBarrage=0`, `totalKalmuri=340`.
+  - Dense Dual Blades Perf Matrix: PASS, `hits=18`, `suppressed=15`, `transient=134`, `activeVfx=52`, `ms=8.56`.
+  - Echo Matrix Dual Blades: PASS, `total=231`, `K=8`, `state=87`.
+  - Echo Matrix Greatsword: PASS, `total=207`, `K=8`, `state=58`.
+- Notes:
+  - `unity_execute_menu_item` intermittently returned MCP queue `fetch failed`; bridge ping stayed healthy and retry succeeded.
+  - Direct play is still needed to judge whether the wound/scent/teeth language feels satisfying, not only budget-safe.
+
 # 2026-07-08 Dual-Blade Kalmuri Red-Circle Read Fix
 
 - Purpose:

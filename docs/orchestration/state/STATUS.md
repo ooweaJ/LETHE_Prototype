@@ -1,6 +1,24 @@
 # Status
 
-Last updated: 2026-07-08
+Last updated: 2026-07-09
+
+## 2026-07-09 Update: Default Kalmuri Hunger Echo Runtime Implemented
+
+- jaewoo asked to make the effect fit Kalmuri after the best direction was chosen as a K2/K1 hybrid.
+- Applied:
+  - Default Kalmuri Echo now uses weapon-trail scent pull plus wound-devouring bite VFX.
+  - Dual Blades use many fast inward teeth, gnaw scars, and quick pack bites.
+  - Greatsword uses a larger wound pool, jaw closure, drawn-to-wound trails, and heavy splinter scars.
+  - +5 awakened Kalmuri default play now uses a wound-side devour bloom instead of the old detached flying blade projectile.
+  - F12 K1-K4 prototypes remain available, but the default `K real echo prototype: default` route now uses the final hunger grammar.
+- Verification:
+  - Unity compilation errors: `0`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS, `totalKalmuri=340`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=134`, `activeVfx=52`, `ms=8.56`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=231`, `K=8`, `state=87`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=207`, `K=8`, `state=58`.
+- Next step:
+  - Direct-play default Kalmuri with F12 prototype mode off. Judge whether the new wound/scent/teeth read feels like `Hungry Blades Echo`, then tune intensity/timing if needed.
 
 ## 2026-07-08 Update: Kalmuri Echo Claude Design Prompt Prepared
 

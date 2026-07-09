@@ -1,5 +1,43 @@
 # Current Task
 
+# 2026-07-09 Default Kalmuri Hunger Echo Runtime
+
+## Status
+
+Implemented, Unity-compiled, and core QA passed. Awaiting jaewoo direct-play feel review.
+
+## Applied Changes
+
+- Converted the default Kalmuri Echo runtime away from the old detached flying-blade read.
+- Default Kalmuri now uses a K2/K1 hybrid:
+  - weapon-trail scent pull,
+  - wound opening,
+  - inward teeth,
+  - devouring bite/scar closure.
+- Dual Blades variant:
+  - many fast small inward teeth,
+  - short gnaw scars,
+  - quick pack-bite secondary marks.
+- Greatsword variant:
+  - larger wound pool and scent ring,
+  - heavy jaw closure,
+  - drawn-to-wound trails,
+  - splinter scars.
+- +5 awakened Kalmuri in default mode now spawns a wound-side devour bloom instead of calling the old `LaunchKalmuriBlade` projectile.
+- F12 K1-K4 prototype review modes remain available, but default mode is now the new hunger-fit runtime.
+
+## Verification
+
+- Unity compilation errors: `0`.
+- `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS, `orbit=44`, `bite=72`, `return=24`, `hunting=16`, `echoSurge=0`, `echoBarrage=0`, `totalKalmuri=340`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=134`, `activeVfx=52`, `ms=8.56`.
+- `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=231`, `K=8`, `state=87`.
+- `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=207`, `K=8`, `state=58`.
+
+## Remaining Gate
+
+Direct-play with F12 Kalmuri prototype mode off. Check whether the new default Kalmuri reads as hungry blades eating the wound, whether Dual Blades feels fast but readable, and whether Greatsword feels heavy enough.
+
 # 2026-07-08 Dual-Blade Kalmuri Red-Circle Read Fix
 
 ## Status

@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-09-01 - 기본 칼무리 잔향 굶주림 이펙트 전환</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-09-01 - 기본 칼무리 잔향 굶주림 이펙트 전환</h1>
+      <p class="meta">Generated from 2026-07-09-01-기본-칼무리-잔향-굶주림-이펙트-전환.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260709/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-09-01 - 기본 칼무리 잔향 굶주림 이펙트 전환</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 기본 칼무리 잔향이 선택 후보용 VFX가 아니라 실제 런타임 기본 효과로 교체됐다. 아직 <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>기본 칼무리 잔향을 <code>무기 궤적 -&gt; 피 냄새/상처 끌림 -&gt; 안쪽으로 뜯어먹는 칼무리</code> 구조로 바꿨다.</li>
+<li>쌍검은 빠른 이빨, 짧은 갉힘 자국, 여러 개의 작은 물어뜯기 표식으로 보이게 했다.</li>
+<li>대검은 큰 상처 웅덩이, 닫히는 턱, 상처로 빨려 들어가는 궤적, 무거운 균열 자국으로 보이게 했다.</li>
+<li>기본 +5 칼무리 각성은 더 이상 예전처럼 칼 하나가 날아가는 투사체를 만들지 않고, 맞은 지점에서 상처 포식 폭발을 만든다.</li>
+<li>F12 K1-K4 후보 모드는 남겨두었지만, 아무 후보도 켜지 않은 기본 상태가 새 칼무리 런타임이다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Kalmuri Perf Matrix: PASS, <code>totalKalmuri=340</code>.</li>
+<li>Dense Dual Blades Perf Matrix: PASS, <code>hits=18</code>, <code>suppressed=15</code>, <code>transient=134</code>, <code>activeVfx=52</code>, <code>ms=8.56</code>.</li>
+<li>Echo Matrix Dual Blades: PASS, <code>total=231</code>, <code>K=8</code>, <code>state=87</code>.</li>
+<li>Echo Matrix Greatsword: PASS, <code>total=207</code>, <code>K=8</code>, <code>state=58</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>칼무리 잔향의 기본 방향은 <code>K2 피 냄새 추적 + K1 상처 포식</code> 하이브리드로 고정했다. 핵심은 새 칼이 몸에서 튀어나가는 것이 아니라, 무기가 남긴 상처에서 칼무리들이 냄새를 맡고 몰려와 뜯어먹는 느낌이다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>자동 QA는 오브젝트 수와 기본 판정만 본다. 실제로 쌍검이 너무 잔잔한지, 대검이 충분히 묵직한지, 빨강/주황 계열이 혈반 잔향과 너무 겹치는지는 직접 플레이 평가가 필요하다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>기본 칼무리 잔향은 후보 비교 단계를 지나 실제 런타임으로 들어갔다. 다음 리뷰는 K1-K4 후보 선택이 아니라, F12 후보 모드를 끈 기본 칼무리 효과가 충분히 칼무리다운지 평가해야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo 직접 플레이 결과에 따라 이펙트 세기, 상처 유지 시간, 이빨 수, 대검 턱 닫힘 타이밍, 쌍검 밀집전 가독성을 조정한다. 문제가 없으면 다른 유틸리티 잔향에도 같은 수준의 무기별 개성을 적용한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 칼무리 잔향이 몸에서 칼 하나가 또 나가는 것처럼 보여 컨셉과 어긋났다.</li>
+<li>방향: 굶주린 칼무리는 상처와 궤적을 먹는 효과로 재정의했다.</li>
+<li>행동: 기본 잔향 VFX와 +5 각성 VFX를 상처 포식형으로 교체하고, 쌍검/대검 실루엣을 나눴다.</li>
+<li>결과: Unity 컴파일과 핵심 칼무리/밀집/무기별 Echo QA가 모두 PASS했다.</li>
+</ul>
+  </main>
+</body>
+</html>

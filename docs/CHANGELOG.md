@@ -1,5 +1,20 @@
 # LETHE CHANGELOG
 
+# 2026-07-09
+
+- Converted the default Kalmuri Echo runtime into a hunger-fit hybrid instead of another flying blade:
+  - Default Hungry Blades Echo now uses a K2/K1 hybrid: weapon-trail scent pull plus wound-devouring bite.
+  - Dual Blades read as many fast inward teeth, short gnaw scars, and quick wound bites.
+  - Greatsword reads as a larger wound pool, jaw closure, and heavy splinter scars.
+  - +5 awakened Kalmuri no longer launches the old `LaunchKalmuriBlade` projectile in default play; it now creates a wound-side devour bloom.
+  - F12 K1-K4 prototype modes remain available for comparison, but default mode now uses the new final hunger grammar.
+- Verification:
+  - Unity compilation errors: `0`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS, `orbit=44`, `bite=72`, `return=24`, `hunting=16`, `echoSurge=0`, `echoBarrage=0`, `totalKalmuri=340`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=134`, `activeVfx=52`, `ms=8.56`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=231`, `K=8`, `state=87`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=207`, `K=8`, `state=58`.
+
 # 2026-07-08
 
 - Reduced the red-circle read in Dual Blades Kalmuri candidates:
