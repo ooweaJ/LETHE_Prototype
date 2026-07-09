@@ -1,5 +1,44 @@
 # Current Task
 
+# 2026-07-09 Utility Echo Weapon-Identity VFX / Judgment Pass
+
+## Status
+
+- Implemented and verified.
+- Scope stayed in `Assets/_dev`.
+
+## Applied Changes
+
+- Expanded non-Kalmuri utility Echoes so Greatsword and Dual Blades no longer share the same read:
+  - Blood Echo: Greatsword heavy drain-axis, Dual Blades quick suture cuts.
+  - Execution Echo: Greatsword guillotine verdict, Dual Blades repeated chain/pip execution marks.
+  - Hunter Echo: Greatsword spear-shadow pursuit, Dual Blades fan needles and target pips.
+  - Shatter Echo: Greatsword fault-line fracture, Dual Blades needle ripples outside dense branch.
+  - Stopped Second Echo: Greatsword clock-hand cleave, Dual Blades tick-cut micro-pause.
+  - Ashen Shield Echo: Greatsword cracked bulwark impact, Dual Blades parry sparks outside dense branch.
+  - Oblivion Brand Echo: Greatsword collapse ring, Dual Blades stack ring.
+- Adjusted utility Echo tuning so weaker/passive memories have stronger Echo payoff:
+  - HunterOath proc and heavy-target payoff increased.
+  - ShatterWave radius/heavy damage/control space improved.
+  - StoppedSecond freeze window and heavy payoff improved.
+  - AshenShield proc/radius/damage improved.
+  - OblivionBrand proc/radius/heavy payoff improved.
+- Kept Dense Dual Blades budget safe by suppressing the most expensive secondary extras in dense branches.
+
+## Verification
+
+- Unity compilation errors: `0`.
+- `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=363`, `K=8`, `B=40`, `Ex=88`, `H=64`, `Sh=32`, `St=16`, `A=56`, `O=59`, `state=91`.
+- `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=316`, `K=8`, `B=8`, `Ex=64`, `H=20`, `Sh=48`, `St=16`, `A=80`, `O=72`, `state=56`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=104`, `activeVfx=76`, `ms=94.36`.
+- `LETHE/V1 QA/Passive Memory Matrix`: PASS, `blood=17`, `ash=6`, `stopped=8`, `oblivion=64`.
+- `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: PASS, `ultPrefix=UltDual_`, `fracture=28`, `stasis=11`, `ashen=47`.
+- `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: PASS, `ultPrefix=UltGreat_`, `fracture=49`, `stasis=22`, `ashen=14`.
+
+## Remaining Gate
+
+- Direct-play review is still needed. Automated QA proves coverage, compilation, and budget; jaewoo should judge whether each Echo family now has enough personality and whether passive memory growth paths feel worth choosing.
+
 # 2026-07-09 Kalmuri Convergence Timing and Dual Blades Visibility Pass
 
 ## Status

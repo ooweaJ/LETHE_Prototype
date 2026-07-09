@@ -2,6 +2,20 @@
 
 # 2026-07-09
 
+- Expanded utility Echo weapon-identity behavior and VFX:
+  - Blood, Execution, Hunter, Shatter, Stopped Second, Ashen Shield, and Oblivion Brand now add weapon-specific secondary reads instead of sharing the same generic Echo punctuation.
+  - Greatsword Echoes gained heavier axis drains, fault lines, guillotine cuts, spear shadows, clock hands, cracked bulwarks, and collapse rings.
+  - Dual Blades Echoes gained quicker suture cuts, fan needles, target pips, tick cuts, parry sparks, and stack rings, with dense-combat extras suppressed where needed.
+  - Utility Echo tuning now better separates weak/passive memories from their Echo payoff: Hunter, Shatter, Stopped, Ashen, and Oblivion received proc/radius/damage/control adjustments.
+- Verification:
+  - Unity compilation errors: `0`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=363`, `K=8`, `B=40`, `Ex=88`, `H=64`, `Sh=32`, `St=16`, `A=56`, `O=59`, `state=91`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=316`, `K=8`, `B=8`, `Ex=64`, `H=20`, `Sh=48`, `St=16`, `A=80`, `O=72`, `state=56`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=104`, `activeVfx=76`, `ms=94.36`.
+  - `LETHE/V1 QA/Passive Memory Matrix`: PASS, `blood=17`, `ash=6`, `stopped=8`, `oblivion=64`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: PASS, `ultPrefix=UltDual_`, `fracture=28`, `stasis=11`, `ashen=47`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: PASS, `ultPrefix=UltGreat_`, `fracture=49`, `stasis=22`, `ashen=14`.
+
 - Tuned Hungry Blades Echo convergence and Dual Blades visibility:
   - Greatsword Kalmuri Echo blade pulls now start farther out on the ring edge and sweep inward more slowly, so the gathering motion is easier to read.
   - Greatsword Kalmuri wake/rift/jaw afterimages live longer to support the heavy converging-blades fantasy.

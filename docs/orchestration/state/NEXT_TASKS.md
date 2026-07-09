@@ -1,9 +1,22 @@
 # Next Tasks
 
-## 1. Kalmuri Convergence Direct-Play Review
+## 1. Utility Echo Weapon-Identity Direct-Play Review
 
 - Priority: urgent
-- Problem: Greatsword Kalmuri Echo timing and Dual Blades Kalmuri visibility were just retuned. Automated QA passes, but only direct play can prove whether the slower ring-edge convergence reads correctly.
+- Problem: Blood, Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion Echoes now have weapon-specific VFX and tuning. Automated QA passes, but only direct play can prove whether the identity table actually feels good.
+- Build:
+  - Play `Dev_Prototype_v1` with both Greatsword and Dual Blades.
+  - Compare Blood, Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion Echoes one by one.
+  - Judge whether Greatsword reads as fewer heavier verdicts: cleave, guillotine, bulwark, collapse, fault line.
+  - Judge whether Dual Blades reads as rapid layered marks: sutures, pips, fan needles, tick cuts, stack rings.
+  - Watch dense Dual Blades specifically for clutter or frame spikes after the budget-suppression branch.
+- Done:
+  - jaewoo can name the exact Echo family and weapon pair that should be kept, enlarged, reduced, recolored, sped up, slowed down, or redesigned.
+
+## 2. Kalmuri Convergence Direct-Play Review
+
+- Priority: urgent
+- Problem: Greatsword Kalmuri Echo timing and Dual Blades Kalmuri visibility were retuned. Automated QA passes, but only direct play can prove whether the slower ring-edge convergence reads correctly.
 - Build:
   - Play `Dev_Prototype_v1` with Greatsword and Hungry Blades +5.
   - Watch whether blades visibly gather from the outer ring before impact.
@@ -11,19 +24,6 @@
   - Judge whether the blue Kalmuri Echo remains visible without becoming visual noise.
 - Done:
   - jaewoo can say keep, slow further, speed back up, brighten, enlarge, or reduce dense-only effects.
-
-## 2. Weapon-Specific Echo Direct-Play Review
-
-- Priority: urgent
-- Problem: Greatsword and Dual Blades Echo VFX were just rescaled and separated. Automated QA passes, but jaewoo needs to judge whether the feel is actually better in motion.
-- Build:
-  - Play `Dev_Prototype_v1` with both weapons.
-  - Check Kalmuri +5 with Dual Blades in dense packs.
-  - Check Kalmuri +5 with Greatsword against small packs and boss-review targets.
-  - Compare Blood, Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion Echoes by weapon.
-  - Judge whether Greatsword feels heavier and whether Dual Blades effects remain readable under rapid slashes.
-- Done:
-  - jaewoo can name the exact Echo family that still feels too small, too hidden, or too noisy.
 
 ## 3. Intro Weapon Selection Direct-Play Review
 
@@ -65,15 +65,11 @@
 
 Completed sequence:
 
+- 2026-07-09: utility Echo weapon-identity pass added distinct Greatsword/Dual Blades VFX and tuning for Blood, Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion. Echo Matrix, Dense Dual, Passive Memory, and Utility Ultimate QA passed.
 - 2026-07-09: Greatsword Kalmuri convergence slowed so blades gather from the ring edge; Dual Blades normal-pack Kalmuri visibility improved while dense branch stayed budget-safe.
 - 2026-07-09: weapon-specific Echo VFX readability pass enlarged Greatsword Echoes, clarified Dual Blades Echoes, raised Kalmuri/Echo VFX sorting, and passed Kalmuri/Dense/Echo Matrix QA.
 - 2026-07-09: LETHE-style intro weapon selection screen added; initial overlay state and selection state pass, Dual Blades start QA invokes successfully, Greatsword start QA mismatch is tracked separately.
 - 2026-07-09: default Kalmuri Echo converted to the selected hunger hybrid; default route now uses weapon-trail scent pull, wound-devouring bite VFX, and +5 wound-side devour bloom. Kalmuri, Dense Dual, Echo Dual, and Echo Great QA passed.
-- 2026-07-09: default Kalmuri Echo recolored and detailed as blue Hungry Blades memory-lineage VFX; bite pieces now use Kalmuri blade sprites and QA passed again.
-- 2026-07-08: Kalmuri candidates rebuilt around hunger-fit imagery; K1 wound feast, K2 blood-scent hunt, K3 feast table, and K4 chewed trail replaced the previous ribbon/cross/curse directions.
-- 2026-07-08: Kalmuri K1-K4 corrected from cosmetic previews into playable Echo prototype modes.
-- 2026-07-08: Kalmuri old awakened projectile suppressed during prototype review.
-- 2026-07-07: direct feedback VFX action pass implemented; dual-blade guaranteed slashes, Gatekeeper falling meteor/charge cleave, player damage cue, Kalmuri orbit-to-lunge, and Dense QA snapshot passed.
 
 QA menus currently passing:
 
@@ -88,7 +84,5 @@ QA menus currently passing:
 - `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`
 - `LETHE/V1 QA/Kalmuri Perf Matrix`
 - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`
-- `LETHE/V1 QA/Void Priest Heal Matrix`
-- `LETHE/V1 QA/M2 Loop`
 
 Keep this file short. Detailed history belongs in `docs/TASK.md`, `docs/orchestration/devlog/`, `state/DECISION_LOG.md`, or evidence files.

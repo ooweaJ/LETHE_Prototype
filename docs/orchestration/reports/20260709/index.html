@@ -183,6 +183,13 @@
           <p>Dev_Prototype_v1의 굶주린 칼무리 잔향이 한 번 더 조정됐다. 대검은 원 끝에서 칼들이 안쪽으로 모이는 움직임이 더 길게 보이도록 느려졌고, 쌍검은 일반 전투에서 푸른 칼무리 잔향이 무기 이펙트에 덜 묻히도록 커졌다. 아직 _dev 검증 단계이며 Assets/Lethe 승격은 하지 않았다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-09-06</span>
+          <h2><a href="#unit-2026-07-09-06" data-unit-link="unit-2026-07-09-06">잔향별 무기 특색 VFX/판정 보강</a></h2>
+          <p>작업 내용을 확인합니다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -388,6 +395,62 @@
 <li>방향: 대검은 외곽 수렴을 느리게, 쌍검은 일반 상황 가시성을 크게, 밀집 상황은 가볍게 분리한다.</li>
 <li>행동: 수렴 시작점, 이동 시간, 수명, 쌍검 전면 글린트, dense 전용 예산 분기를 조정했다.</li>
 <li>결과: 컴파일과 Dense Dual/Echo Matrix QA가 통과했고, 직접 플레이에서 감성 판단할 수 있는 새 기준이 생겼다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-09-06" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-09-06 - 잔향별 무기 특색 VFX/판정 보강</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li><code>Assets/_dev</code>의 <code>Dev_Prototype_v1</code>에서 일반 잔향들도 무기별 VFX와 판정 보상이 더 분리된 상태다.</li>
+<li>쌍검 밀집 상황은 중간에 예산을 넘었지만, 최종 분기는 무거운 보조 이펙트를 억제해서 다시 PASS 상태로 돌려놨다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>혈반, 처형, 사냥, 파쇄, 멈춘 초침, 잿빛 방패, 망각 낙인 잔향에 무기별 보조 VFX를 추가했다.</li>
+<li>대검은 축을 가르는 흡혈, 단두대 판결, 창 그림자 추적, 균열선, 시계바늘 절단, 방벽 균열, 붕괴 고리처럼 더 큰 한 방으로 읽히게 했다.</li>
+<li>쌍검은 봉합 절단, 연쇄 표식, 부채꼴 바늘, 타겟 핍, 틱 컷, 패링 불꽃, 중첩 고리처럼 빠르게 쌓이는 표식으로 읽히게 했다.</li>
+<li>사냥, 파쇄, 멈춘 초침, 잿빛 방패, 망각 낙인의 발동률/범위/피해/제어값을 조정해서 약하거나 수동적인 기억도 잔향 단계에서 보상이 생기게 했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>Unity 컴파일 에러: <code>0</code>.</li>
+<li><code>Echo Matrix Dual Blades</code>: PASS, <code>total=363</code>, <code>K=8</code>, <code>B=40</code>, <code>Ex=88</code>, <code>H=64</code>, <code>Sh=32</code>, <code>St=16</code>, <code>A=56</code>, <code>O=59</code>, <code>state=91</code>.</li>
+<li><code>Echo Matrix Greatsword</code>: PASS, <code>total=316</code>, <code>K=8</code>, <code>B=8</code>, <code>Ex=64</code>, <code>H=20</code>, <code>Sh=48</code>, <code>St=16</code>, <code>A=80</code>, <code>O=72</code>, <code>state=56</code>.</li>
+<li><code>Dense Dual Blades Perf Matrix</code>: PASS, <code>hits=18</code>, <code>suppressed=15</code>, <code>transient=104</code>, <code>activeVfx=76</code>, <code>ms=94.36</code>.</li>
+<li><code>Passive Memory Matrix</code>: PASS, <code>blood=17</code>, <code>ash=6</code>, <code>stopped=8</code>, <code>oblivion=64</code>.</li>
+<li><code>Utility Ultimate Matrix Dual Blades</code>: PASS, <code>ultPrefix=UltDual_</code>, <code>fracture=28</code>, <code>stasis=11</code>, <code>ashen=47</code>.</li>
+<li><code>Utility Ultimate Matrix Greatsword</code>: PASS, <code>ultPrefix=UltGreat_</code>, <code>fracture=49</code>, <code>stasis=22</code>, <code>ashen=14</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>약한 기억은 약한 잔향으로 끝나면 선택지가 죽으므로, 잔향/궁극 단계에서 더 강한 변형과 보상을 주는 방향을 유지한다.</li>
+<li>대검은 크고 느린 판결, 쌍검은 빠르게 누적되는 표식이라는 무기 문법을 다른 잔향에도 적용한다.</li>
+<li>밀집 쌍검은 모든 보조 VFX를 다 보여주기보다 핵심 피드백을 남기고 비싼 보조 효과를 줄이는 쪽이 맞다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>자동 QA는 개수, 예산, 발동 범위를 보지만 실제 쾌감은 직접 플레이 판단이 필요하다.</li>
+<li>잔향별 특색이 많아진 만큼 일부 효과는 화면에서 너무 바쁘게 느껴질 수 있다.</li>
+<li>대검 쪽은 더 커졌지만, 실제 히트 타이밍과 VFX 타이밍이 어긋나면 무거움보다 둔함으로 느껴질 수 있다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<ul>
+<li>다음 리뷰는 잔향별로 대검/쌍검을 나눠 직접 플레이해야 한다.</li>
+<li>확인 포인트는 “대검은 큰 판결”, “쌍검은 빠른 누적 표식”, “수동 기억도 잔향이 되면 왕귀 보상이 있는지”다.</li>
+<li>밀집 쌍검에서 프레임이 다시 튀면 Shatter/Execution/Ashen 보조 이펙트 억제 기준을 더 엄격하게 잡으면 된다.</li>
+</ul>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo 직접 플레이 피드백을 받아 잔향별로 너무 약한 것, 너무 과한 것, 잘 안 보이는 것을 다시 조정한다.</li>
+<li>그다음 Greatsword start-smoke QA mismatch를 별도 수정한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 잔향들이 무기와 기억 특색을 충분히 살리지 못하면 선택지가 혈반/칼무리 쪽으로 좁아진다.</li>
+<li>방향: 기억이 약하거나 수동적이어도 잔향/궁극 단계에서 폭발적인 성장 보상을 주는 구조로 바꾼다.</li>
+<li>행동: 잔향별로 대검/쌍검 VFX 문법과 판정 보상을 분리하고, 쌍검 밀집 성능 예산을 다시 맞췄다.</li>
+<li>결과: 주요 Echo Matrix, Passive Memory, Utility Ultimate, Dense Dual Blades QA가 모두 PASS했다.</li>
 </ul>
     </article>
       </div>

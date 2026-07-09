@@ -39,7 +39,7 @@ MonoBehaviour:
   - id: 3
     firstHitOnly: 1
     firstHitGateLiftLevel: 0
-    procChanceBase: 0.36
+    procChanceBase: 0.4
     procChancePerLevel: 0.09
     lightRadiusBase: 1
     lightRadiusPerLevel: 0
@@ -47,12 +47,12 @@ MonoBehaviour:
     heavyRadiusPerLevel: 0
     lightTargetLimit: 1
     heavyTargetLimit: 1
-    lightTargetPerLevelDivisor: 3
+    lightTargetPerLevelDivisor: 2
     heavyTargetPerLevelDivisor: 0
-    lightDamageBase: 0.22
-    lightDamagePerLevel: 0.055
-    heavyDamageBase: 0.22
-    heavyDamagePerLevel: 0.055
+    lightDamageBase: 0.2
+    lightDamagePerLevel: 0.052
+    heavyDamageBase: 0.28
+    heavyDamagePerLevel: 0.07
     lightFreezeBase: 0
     lightFreezePerLevel: 0
     heavyFreezeBase: 0
@@ -62,20 +62,20 @@ MonoBehaviour:
   - id: 4
     firstHitOnly: 1
     firstHitGateLiftLevel: 2
-    procChanceBase: 0.26
+    procChanceBase: 0.28
     procChancePerLevel: 0.09
-    lightRadiusBase: 1
+    lightRadiusBase: 1.08
     lightRadiusPerLevel: 0.12
-    heavyRadiusBase: 1.34
-    heavyRadiusPerLevel: 0.2
+    heavyRadiusBase: 1.48
+    heavyRadiusPerLevel: 0.22
     lightTargetLimit: 5
-    heavyTargetLimit: 9
+    heavyTargetLimit: 10
     lightTargetPerLevelDivisor: 0
     heavyTargetPerLevelDivisor: 0
-    lightDamageBase: 0.1
-    lightDamagePerLevel: 0.025
-    heavyDamageBase: 0.15
-    heavyDamagePerLevel: 0.038
+    lightDamageBase: 0.09
+    lightDamagePerLevel: 0.024
+    heavyDamageBase: 0.18
+    heavyDamagePerLevel: 0.044
     lightFreezeBase: 0
     lightFreezePerLevel: 0
     heavyFreezeBase: 0
@@ -85,43 +85,43 @@ MonoBehaviour:
   - id: 5
     firstHitOnly: 1
     firstHitGateLiftLevel: 0
-    procChanceBase: 0.34
+    procChanceBase: 0.36
     procChancePerLevel: 0.065
-    lightRadiusBase: 0.84
-    lightRadiusPerLevel: 0.055
-    heavyRadiusBase: 1.78
-    heavyRadiusPerLevel: 0.2
+    lightRadiusBase: 0.9
+    lightRadiusPerLevel: 0.06
+    heavyRadiusBase: 1.92
+    heavyRadiusPerLevel: 0.22
     lightTargetLimit: 3
     heavyTargetLimit: 8
     lightTargetPerLevelDivisor: 0
     heavyTargetPerLevelDivisor: 0
-    lightDamageBase: 0.03
+    lightDamageBase: 0.028
     lightDamagePerLevel: 0.01
-    heavyDamageBase: 0.07
-    heavyDamagePerLevel: 0.018
-    lightFreezeBase: 0.24
-    lightFreezePerLevel: 0.045
-    heavyFreezeBase: 0.52
-    heavyFreezePerLevel: 0.07
+    heavyDamageBase: 0.08
+    heavyDamagePerLevel: 0.02
+    lightFreezeBase: 0.28
+    lightFreezePerLevel: 0.05
+    heavyFreezeBase: 0.62
+    heavyFreezePerLevel: 0.08
     executionHealthBase: 0
     executionHealthPerLevel: 0
   - id: 6
     firstHitOnly: 1
     firstHitGateLiftLevel: 0
-    procChanceBase: 0.3
+    procChanceBase: 0.34
     procChancePerLevel: 0.055
-    lightRadiusBase: 0.42
+    lightRadiusBase: 0.48
     lightRadiusPerLevel: 0
-    heavyRadiusBase: 1.95
-    heavyRadiusPerLevel: 0.12
+    heavyRadiusBase: 2.08
+    heavyRadiusPerLevel: 0.14
     lightTargetLimit: 1
     heavyTargetLimit: 8
     lightTargetPerLevelDivisor: 0
     heavyTargetPerLevelDivisor: 0
-    lightDamageBase: 0.045
-    lightDamagePerLevel: 0.012
-    heavyDamageBase: 0.08
-    heavyDamagePerLevel: 0.018
+    lightDamageBase: 0.052
+    lightDamagePerLevel: 0.014
+    heavyDamageBase: 0.11
+    heavyDamagePerLevel: 0.024
     lightFreezeBase: 0
     lightFreezePerLevel: 0
     heavyFreezeBase: 0
@@ -131,20 +131,20 @@ MonoBehaviour:
   - id: 7
     firstHitOnly: 0
     firstHitGateLiftLevel: 0
-    procChanceBase: 0.34
+    procChanceBase: 0.36
     procChancePerLevel: 0.065
-    lightRadiusBase: 0.64
+    lightRadiusBase: 0.7
     lightRadiusPerLevel: 0
-    heavyRadiusBase: 1.18
-    heavyRadiusPerLevel: 0.12
+    heavyRadiusBase: 1.32
+    heavyRadiusPerLevel: 0.14
     lightTargetLimit: 1
-    heavyTargetLimit: 7
+    heavyTargetLimit: 8
     lightTargetPerLevelDivisor: 0
     heavyTargetPerLevelDivisor: 0
-    lightDamageBase: 0.16
-    lightDamagePerLevel: 0.042
-    heavyDamageBase: 0.13
-    heavyDamagePerLevel: 0.036
+    lightDamageBase: 0.15
+    lightDamagePerLevel: 0.04
+    heavyDamageBase: 0.17
+    heavyDamagePerLevel: 0.044
     lightFreezeBase: 0
     lightFreezePerLevel: 0
     heavyFreezeBase: 0

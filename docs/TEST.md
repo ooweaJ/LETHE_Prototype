@@ -1,5 +1,40 @@
 # LETHE TEST
 
+# 2026-07-09 Utility Echo Weapon-Identity VFX / Judgment Pass
+
+- Purpose:
+  - Apply the earlier memory/Echo identity table to the non-Kalmuri utility Echoes.
+  - Make Greatsword and Dual Blades Echoes use different VFX grammar and payoff rather than identical effects with different attack cadence.
+  - Keep dense Dual Blades under the current perf budget while making normal combat reads stronger.
+- Applied target:
+  - Blood Echo: Greatsword adds a heavier drain-axis read; Dual Blades adds quick suture cuts.
+  - Execution Echo: Greatsword adds guillotine-style judgment cuts; Dual Blades adds repeated chain/pip execution marks.
+  - Hunter Echo: Greatsword adds spear-shadow pursuit; Dual Blades adds fan needles and target pips.
+  - Shatter Echo: Greatsword adds fault-line fracture; Dual Blades adds needle ripples outside the dense branch.
+  - Stopped Second Echo: Greatsword adds clock-hand cleaves; Dual Blades adds tick-cut micro pauses.
+  - Ashen Shield Echo: Greatsword adds cracked bulwark impact; Dual Blades adds parry sparks outside the dense branch.
+  - Oblivion Brand Echo: Greatsword adds collapse rings; Dual Blades adds stack rings.
+  - Hunter, Shatter, Stopped, Ashen, and Oblivion tuning received proc/radius/damage/control adjustments so weaker/passive memories have stronger Echo payoff.
+- Commands / checks:
+  - Unity compilation error check on LETHE port `7890`.
+  - Unity method `Lethe.PrototypeV1.Editor.V1SmokeTestMenu.QaEchoMatrixDualBlades()`.
+  - Unity method `Lethe.PrototypeV1.Editor.V1SmokeTestMenu.QaEchoMatrixGreatsword()`.
+  - Unity method `Lethe.PrototypeV1.Editor.V1SmokeTestMenu.QaDenseDualBladesPerfMatrix()`.
+  - Unity method `Lethe.PrototypeV1.Editor.V1SmokeTestMenu.QaPassiveMemoryMatrix()`.
+  - Unity method `Lethe.PrototypeV1.Editor.V1SmokeTestMenu.QaUtilityUltimateMatrixDualBlades()`.
+  - Unity method `Lethe.PrototypeV1.Editor.V1SmokeTestMenu.QaUtilityUltimateMatrixGreatsword()`.
+- Results:
+  - Unity compilation errors: `0`.
+  - Echo Matrix Dual Blades: PASS, `total=363`, `K=8`, `B=40`, `Ex=88`, `H=64`, `Sh=32`, `St=16`, `A=56`, `O=59`, `state=91`, `stateEx=5`, `stateH=13`, `stateSh=23`, `stateSt=18`, `stateA=20`, `stateO=12`.
+  - Echo Matrix Greatsword: PASS, `total=316`, `K=8`, `B=8`, `Ex=64`, `H=20`, `Sh=48`, `St=16`, `A=80`, `O=72`, `state=56`, `stateEx=6`, `stateH=2`, `stateSh=22`, `stateSt=12`, `stateA=11`, `stateO=3`.
+  - Dense Dual Blades Perf Matrix: PASS, `hits=18`, `suppressed=15`, `transient=104`, `activeVfx=76`, `ms=94.36`.
+  - Passive Memory Matrix: PASS, `blood=17`, `ash=6`, `stopped=8`, `oblivion=64`.
+  - Utility Ultimate Matrix Dual Blades: PASS, `ultPrefix=UltDual_`, `fracture=28`, `stasis=11`, `ashen=47`.
+  - Utility Ultimate Matrix Greatsword: PASS, `ultPrefix=UltGreat_`, `fracture=49`, `stasis=22`, `ashen=14`.
+- Notes:
+  - One intermediate Dense Dual Blades QA run failed after the first VFX expansion (`transient=185`, `ms=130.84`). The dense branch now suppresses Shatter needle ripple, Execution pip extras, and Ashen parry-spark extras, bringing the final run back under budget.
+  - Direct play should now judge each Echo family one by one for taste: Greatsword should feel like fewer heavy verdicts, Dual Blades like rapid layered marks.
+
 # 2026-07-09 Kalmuri Convergence Timing and Dual Blades Visibility Pass
 
 - Purpose:
