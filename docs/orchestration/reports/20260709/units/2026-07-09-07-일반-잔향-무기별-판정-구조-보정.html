@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-09-07 - 일반 잔향 무기별 판정 구조 보정</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-09-07 - 일반 잔향 무기별 판정 구조 보정</h1>
+      <p class="meta">Generated from 2026-07-09-07-일반-잔향-무기별-판정-구조-보정.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260709/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-09-07 - 일반 잔향 무기별 판정 구조 보정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li><code>Dev_Prototype_v1</code>에서 칼무리 외 일반 잔향들도 대검/쌍검 판정 구조가 실제로 갈라진 상태다.</li>
+<li>이전 작업은 VFX와 보조 효과 차이에 가까웠고, 이번 작업은 타겟 선택과 피해 방식 자체를 무기별로 나눴다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>혈반: 대검은 전방 수확 아크와 피실 회복, 쌍검은 가까운 적을 잇는 봉합 체인.</li>
+<li>파쇄: 대검은 전방 균열선/콘 판정, 쌍검은 바늘 파쇄가 근처 적에게 튕기는 체인.</li>
+<li>처형: 대검은 전방 판결 cleave, 쌍검은 여러 적에게 빠르게 찍히는 sentence chain.</li>
+<li>추적: 대검은 관통 창 한 줄, 쌍검은 다중 팬샷과 표식 물어뜯기.</li>
+<li>정지: 대검은 큰 시계 장판, 쌍검은 짧은 마이크로 스톱 체인.</li>
+<li>잿빛: 대검은 플레이어 중심 방벽/저장파, 쌍검은 맞은 적에서 튕기는 패링 체인.</li>
+<li>망각: 대검은 붕괴장을 심는 방식, 쌍검은 낙인 스택이 가까운 적에게 전이되는 방식.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>Unity 컴파일 에러: <code>0</code>.</li>
+<li><code>Echo Matrix Dual Blades</code>: PASS, <code>total=404</code>, <code>K=8</code>, <code>B=53</code>, <code>Ex=99</code>, <code>H=64</code>, <code>Sh=45</code>, <code>St=16</code>, <code>A=54</code>, <code>O=65</code>, <code>state=82</code>.</li>
+<li><code>Echo Matrix Greatsword</code>: PASS, <code>total=376</code>, <code>K=8</code>, <code>B=34</code>, <code>Ex=64</code>, <code>H=22</code>, <code>Sh=56</code>, <code>St=16</code>, <code>A=80</code>, <code>O=96</code>, <code>state=52</code>.</li>
+<li><code>Dense Dual Blades Perf Matrix</code>: 첫 실행은 <code>ms=118.12</code>로 실패했고, 밀집 쌍검 체인 억제 후 PASS, <code>hits=18</code>, <code>suppressed=15</code>, <code>transient=109</code>, <code>activeVfx=75</code>, <code>ms=91.01</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>무기별 잔향 차이는 스프라이트 크기나 색만으로는 부족하다.</li>
+<li>대검은 공간을 크게 갈라서 판정하는 방식, 쌍검은 적 사이를 빠르게 이어가는 방식으로 잡는다.</li>
+<li>밀집 쌍검은 일반 상황의 체인 판정을 그대로 쓰면 성능이 튀므로, dense 분기에서는 핵심 1타만 남긴다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>자동 QA는 발동과 예산만 확인한다. 실제로 “다르다”고 느껴지는지는 직접 플레이 평가가 필요하다.</li>
+<li>일부 잔향은 이제 훨씬 강해졌을 수 있어, 체감이 좋으면 이후 피해량만 낮추는 식으로 조정해야 한다.</li>
+<li>대검의 전방 판정은 방향성이 강해져서 빗나가는 느낌이 생길 수 있다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<ul>
+<li>이번 작업은 이전 일반 잔향 분리 작업의 보정이다.</li>
+<li>리뷰 기준은 “대검과 쌍검이 같은 잔향을 써도 플레이 감각이 다르게 느껴지는가”다.</li>
+<li>부족하면 다음 수정은 VFX 크기가 아니라 잔향 콘셉트와 판정 방식 자체를 다시 손봐야 한다.</li>
+</ul>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo가 직접 플레이하면서 혈반/파쇄/처형/추적/정지/잿빛/망각을 무기별로 비교한다.</li>
+<li>가장 같은 느낌이 나는 잔향부터 한 개씩 더 과감하게 리디자인한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 칼무리는 무기별 차이가 컸지만 다른 잔향은 같은 효과처럼 느껴졌다.</li>
+<li>방향: 시각 차이가 아니라 타겟 선택, 범위, 체인, 제어 방식까지 무기별로 분리한다.</li>
+<li>행동: 일반 잔향 7종의 대검/쌍검 판정 구조를 각각 다시 작성하고, 밀집 쌍검 성능 분기를 추가했다.</li>
+<li>결과: Echo Matrix 양 무기와 Dense Dual 성능 QA가 PASS했고, 직접 플레이로 감성 평가할 수 있는 상태가 됐다.</li>
+</ul>
+  </main>
+</body>
+</html>

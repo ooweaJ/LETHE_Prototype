@@ -3,12 +3,12 @@
 ## 1. Utility Echo Weapon-Identity Direct-Play Review
 
 - Priority: urgent
-- Problem: Blood, Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion Echoes now have weapon-specific VFX and tuning. Automated QA passes, but only direct play can prove whether the identity table actually feels good.
+- Problem: Blood, Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion Echoes now have weapon-specific mechanics, not just VFX accents. Automated QA passes, but only direct play can prove whether each weapon pair finally feels different.
 - Build:
   - Play `Dev_Prototype_v1` with both Greatsword and Dual Blades.
   - Compare Blood, Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion Echoes one by one.
-  - Judge whether Greatsword reads as fewer heavier verdicts: cleave, guillotine, bulwark, collapse, fault line.
-  - Judge whether Dual Blades reads as rapid layered marks: sutures, pips, fan needles, tick cuts, stack rings.
+  - Judge whether Greatsword reads as fewer heavier actions: harvest arc, fissure, verdict cleave, piercing spear, clock field, bulwark wave, collapse well.
+  - Judge whether Dual Blades reads as rapid chained actions: stitches, needle bounces, sentence cuts, fan shots, micro-stops, parries, brand hops.
   - Watch dense Dual Blades specifically for clutter or frame spikes after the budget-suppression branch.
 - Done:
   - jaewoo can name the exact Echo family and weapon pair that should be kept, enlarged, reduced, recolored, sped up, slowed down, or redesigned.
@@ -65,6 +65,7 @@
 
 Completed sequence:
 
+- 2026-07-09: utility Echo weapon mechanics correction split Blood/Execution/Hunter/Shatter/Stopped/Ashen/Oblivion into actual Greatsword vs Dual Blades target logic. Echo Matrix and Dense Dual QA passed.
 - 2026-07-09: utility Echo weapon-identity pass added distinct Greatsword/Dual Blades VFX and tuning for Blood, Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion. Echo Matrix, Dense Dual, Passive Memory, and Utility Ultimate QA passed.
 - 2026-07-09: Greatsword Kalmuri convergence slowed so blades gather from the ring edge; Dual Blades normal-pack Kalmuri visibility improved while dense branch stayed budget-safe.
 - 2026-07-09: weapon-specific Echo VFX readability pass enlarged Greatsword Echoes, clarified Dual Blades Echoes, raised Kalmuri/Echo VFX sorting, and passed Kalmuri/Dense/Echo Matrix QA.

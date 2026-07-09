@@ -1,5 +1,39 @@
 # LETHE TEST
 
+# 2026-07-09 Utility Echo Weapon-Identity Mechanics Correction
+
+- Purpose:
+  - Respond to jaewoo feedback that non-Kalmuri Echoes still felt like the same VFX and same effect on both weapons.
+  - Raise the bar from weapon-specific accents to weapon-specific hit logic.
+- Applied target:
+  - Blood Greatsword: forward harvest arc, multi-target mark, blood-thread healing.
+  - Blood Dual Blades: short stitch chains through nearby targets.
+  - Shatter Greatsword: forward fissure/cone target selection.
+  - Shatter Dual Blades: needle fracture chain.
+  - Execution Greatsword: forward verdict cleave with stronger low-HP payoff.
+  - Execution Dual Blades: repeated sentence cuts across a short chain.
+  - Hunter Greatsword: one heavy piercing spear line.
+  - Hunter Dual Blades: fast multi-target fan shots plus mark bites.
+  - Stopped Greatsword: large clock-field freeze.
+  - Stopped Dual Blades: short micro-stop chain.
+  - Ashen Greatsword: player-centered bulwark/wave.
+  - Ashen Dual Blades: enemy-side parry chain.
+  - Oblivion Greatsword: collapse well.
+  - Oblivion Dual Blades: brand stacks and hops.
+  - Dense Dual Blades reduces Shatter/Execution/Ashen chains to one-target budget branches.
+- Commands / checks:
+  - Unity compilation error check on LETHE port `7890`.
+  - Unity method `Lethe.PrototypeV1.Editor.V1SmokeTestMenu.QaEchoMatrixDualBlades()`.
+  - Unity method `Lethe.PrototypeV1.Editor.V1SmokeTestMenu.QaEchoMatrixGreatsword()`.
+  - Unity method `Lethe.PrototypeV1.Editor.V1SmokeTestMenu.QaDenseDualBladesPerfMatrix()`.
+- Results:
+  - Unity compilation errors: `0`.
+  - Echo Matrix Dual Blades: PASS, `total=404`, `K=8`, `B=53`, `Ex=99`, `H=64`, `Sh=45`, `St=16`, `A=54`, `O=65`, `state=82`, `stateEx=11`, `stateH=13`, `stateSh=12`, `stateSt=11`, `stateA=20`, `stateO=15`.
+  - Echo Matrix Greatsword: PASS, `total=376`, `K=8`, `B=34`, `Ex=64`, `H=22`, `Sh=56`, `St=16`, `A=80`, `O=96`, `state=52`, `stateEx=3`, `stateH=4`, `stateSh=5`, `stateSt=19`, `stateA=13`, `stateO=8`.
+  - Dense Dual Blades Perf Matrix: first run failed at `ms=118.12`; after dense chain suppression it passed with `hits=18`, `suppressed=15`, `transient=109`, `activeVfx=75`, `ms=91.01`.
+- Notes:
+  - This is the correction pass for the prior utility Echo identity work. Direct play should now compare whether each Echo truly changes by weapon, not just whether it has a larger sprite.
+
 # 2026-07-09 Utility Echo Weapon-Identity VFX / Judgment Pass
 
 - Purpose:

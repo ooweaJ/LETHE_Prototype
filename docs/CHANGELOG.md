@@ -2,6 +2,22 @@
 
 # 2026-07-09
 
+- Corrected utility Echo weapon identity from visual accents into distinct mechanics:
+  - Previous utility Echo split was still too close to shared effects with weapon-colored accents. This pass changes actual hit logic and target selection.
+  - Blood: Greatsword now harvests a forward arc and pulls blood threads into healing; Dual Blades now stitches nearby targets through short mark chains.
+  - Shatter: Greatsword now opens a forward fissure/cone; Dual Blades now bounces needle fractures through nearby targets.
+  - Execution: Greatsword now performs a forward verdict cleave; Dual Blades now chains repeated sentence cuts across marked targets.
+  - Hunter: Greatsword now fires a heavy piercing spear line; Dual Blades keeps fast multi-target fan shots and mark bites.
+  - Stopped Second: Greatsword keeps a large clock-field freeze; Dual Blades now uses short micro-stop chains instead of the same large field.
+  - Ashen Shield: Greatsword remains a player-centered bulwark/wave; Dual Blades now parries from the struck enemy through nearby targets.
+  - Oblivion Brand: Greatsword now plants a collapse well; Dual Blades now stacks and hops brands through nearby enemies.
+  - Dense Dual Blades keeps a one-target budget branch for Shatter/Execution/Ashen after an intermediate run exceeded the frame budget.
+- Verification:
+  - Unity compilation errors: `0`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=404`, `K=8`, `B=53`, `Ex=99`, `H=64`, `Sh=45`, `St=16`, `A=54`, `O=65`, `state=82`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=376`, `K=8`, `B=34`, `Ex=64`, `H=22`, `Sh=56`, `St=16`, `A=80`, `O=96`, `state=52`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS after dense correction, `hits=18`, `suppressed=15`, `transient=109`, `activeVfx=75`, `ms=91.01`.
+
 - Expanded utility Echo weapon-identity behavior and VFX:
   - Blood, Execution, Hunter, Shatter, Stopped Second, Ashen Shield, and Oblivion Brand now add weapon-specific secondary reads instead of sharing the same generic Echo punctuation.
   - Greatsword Echoes gained heavier axis drains, fault lines, guillotine cuts, spear shadows, clock hands, cracked bulwarks, and collapse rings.

@@ -1,5 +1,36 @@
 # Current Task
 
+# 2026-07-09 Utility Echo Weapon Mechanics Correction
+
+## Status
+
+- Implemented and verified.
+- This corrects the previous utility Echo identity pass, which still felt too similar between weapons.
+
+## Applied Changes
+
+- Added shared utility target helpers for radius, cone, and short chain targeting.
+- Reworked utility Echo weapon behavior:
+  - Blood: Greatsword forward harvest arc and healing threads; Dual Blades stitch chain.
+  - Shatter: Greatsword forward fissure/cone; Dual Blades needle bounce chain.
+  - Execution: Greatsword verdict cleave; Dual Blades sentence chain.
+  - Hunter: Greatsword piercing spear line; Dual Blades fan shots and mark bites.
+  - Stopped: Greatsword clock-field freeze; Dual Blades micro-stop chain.
+  - Ashen: Greatsword bulwark/wave; Dual Blades enemy-side parry chain.
+  - Oblivion: Greatsword collapse well; Dual Blades brand stack hops.
+- Dense Dual Blades now suppresses Shatter/Execution/Ashen chains into one-target branches after an intermediate performance fail.
+
+## Verification
+
+- Unity compilation errors: `0`.
+- `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=404`, `K=8`, `B=53`, `Ex=99`, `H=64`, `Sh=45`, `St=16`, `A=54`, `O=65`, `state=82`.
+- `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=376`, `K=8`, `B=34`, `Ex=64`, `H=22`, `Sh=56`, `St=16`, `A=80`, `O=96`, `state=52`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS after dense correction, `hits=18`, `suppressed=15`, `transient=109`, `activeVfx=75`, `ms=91.01`.
+
+## Remaining Gate
+
+- Direct play should judge whether each utility Echo now feels meaningfully different by weapon. If not, the next move is deeper concept redesign per Echo family.
+
 # 2026-07-09 Utility Echo Weapon-Identity VFX / Judgment Pass
 
 ## Status

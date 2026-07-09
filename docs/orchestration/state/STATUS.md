@@ -2,6 +2,22 @@
 
 Last updated: 2026-07-09
 
+## 2026-07-09 Update: Utility Echo Weapon Mechanics Correction
+
+- jaewoo correctly noted that the non-Kalmuri Echoes still felt like mostly identical effects with similar VFX.
+- Applied:
+  - Reworked utility Echoes from visual accents into weapon-specific mechanics.
+  - Greatsword versions now favor forward arcs, fissures, verdict cleaves, spear pierce, large clock fields, bulwark waves, and collapse wells.
+  - Dual Blades versions now favor stitch chains, needle bounces, sentence cuts, fan shots, micro-stop chains, parry chains, and brand stack hops.
+  - Dense Dual Blades keeps a reduced one-target budget branch for Shatter/Execution/Ashen to preserve frame budget.
+- Verification:
+  - Unity compilation errors: `0`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=404`, `K=8`, `state=82`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=376`, `K=8`, `state=52`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=109`, `activeVfx=75`, `ms=91.01`.
+- Next step:
+  - Direct-play each utility Echo by weapon. The target read is now stronger: if it still feels samey, the next fix should adjust the base memory/Echo concept, not just sprite scale.
+
 ## 2026-07-09 Update: Utility Echo Weapon-Identity VFX / Judgment Pass
 
 - jaewoo asked to apply the memory/Echo identity table to the other Echoes too, with Greatsword and Dual Blades each getting fitting VFX and hit/effect judgment.

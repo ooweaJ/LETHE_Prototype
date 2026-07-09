@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260709\\index.md",
-  "generatedAt": "2026-07-09T04:16:23.636Z",
-  "unitCount": 6,
+  "generatedAt": "2026-07-09T07:16:36.154Z",
+  "unitCount": 7,
   "latest": {
-    "title": "2026-07-09-06 - 잔향별 무기 특색 VFX/판정 보강",
-    "number": "06",
-    "markdownPath": "docs\\orchestration\\reports\\20260709\\units\\2026-07-09-06-잔향별-무기-특색-vfx-판정-보강.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260709\\units\\2026-07-09-06-잔향별-무기-특색-vfx-판정-보강.html"
+    "title": "2026-07-09-07 - 일반 잔향 무기별 판정 구조 보정",
+    "number": "07",
+    "markdownPath": "docs\\orchestration\\reports\\20260709\\units\\2026-07-09-07-일반-잔향-무기별-판정-구조-보정.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260709\\units\\2026-07-09-07-일반-잔향-무기별-판정-구조-보정.html"
   }
 }
