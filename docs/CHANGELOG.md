@@ -2,6 +2,18 @@
 
 # 2026-07-09
 
+- Improved weapon-specific Echo VFX readability:
+  - Kalmuri Echo now renders above weapon slash VFX and uses larger blue blade pulls, rifts, and bite scars.
+  - Dense Dual Blades keeps a smaller budget-safe Kalmuri variant while preserving visible blue pulse/scar cues.
+  - Greatsword Echo VFX was enlarged across Blood, Execution, Hunter, Shatter, Stopped, Ashen, Oblivion, and Kalmuri so it reads as heavy single-impact feedback.
+  - Dual Blades Echo VFX was slightly enlarged and clarified with brighter stacked cuts, links, marks, and short pulse reads.
+- Verification:
+  - Unity compilation errors: `0`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS, `totalKalmuri=420`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=156`, `activeVfx=73`, `ms=99.50`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=232`, `K=8`, `state=87`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=231`, `K=8`, `state=59`.
+
 - Added a LETHE-style intro weapon selection screen:
   - The first screen now uses a dark river / memory shard atmosphere instead of the old plain selection panel.
   - The run still starts from weapon choice, not from a separate generic start button.

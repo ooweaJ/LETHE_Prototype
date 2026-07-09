@@ -2,6 +2,28 @@
 
 Last updated: 2026-07-09
 
+## 2026-07-09 Update: Weapon-Specific Echo VFX Readability Pass
+
+- jaewoo noted:
+  - Greatsword Echo VFX should be larger and heavier.
+  - Dual Blades Echo VFX is getting hidden by weapon slashes.
+  - Kalmuri needs better visibility.
+  - Other Echoes should also split weapon personality more clearly.
+- Applied:
+  - Kalmuri/Echo/Ultimate transient sprites now sort above ordinary weapon slash VFX.
+  - Kalmuri Echo blade pulls, blue rifts, bite scars, and trail brightness were enlarged.
+  - Dense Dual Blades keeps a smaller Kalmuri budget path but retains visible blue pulse/scar cues.
+  - Greatsword utility Echoes were enlarged into heavier stamps, cleaves, domes, seals, bursts, and rings.
+  - Dual Blades utility Echoes were clarified with brighter stacked cuts, short links, and repeated marks.
+- Verification:
+  - Unity compilation errors: `0`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS, `totalKalmuri=420`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=156`, `activeVfx=73`, `ms=99.50`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=232`, `K=8`, `state=87`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=231`, `K=8`, `state=59`.
+- Next step:
+  - Direct-play compare Dual Blades and Greatsword Echoes. If Greatsword still feels small, increase only heavy impact scale/lifetime; if Dual Blades gets noisy, reduce repeated secondary marks without shrinking Kalmuri.
+
 ## 2026-07-09 Update: LETHE Intro Weapon Selection Screen
 
 - jaewoo asked whether the intro should be click-to-start or weapon selection.

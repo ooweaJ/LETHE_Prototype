@@ -1,5 +1,31 @@
 # LETHE TEST
 
+# 2026-07-09 Weapon-Specific Echo VFX Readability Pass
+
+- Purpose:
+  - Respond to jaewoo feedback that Greatsword Echo VFX should feel bigger, Dual Blades Echo VFX should not be hidden by weapon slashes, and Kalmuri should be more visible.
+  - Give the remaining Echo families clearer Greatsword vs Dual Blades personality.
+- Applied target:
+  - Kalmuri / Echo / Ultimate transient sprites now sort above ordinary weapon slash VFX.
+  - Kalmuri Echo uses larger blade pulls, blue rifts, bite scars, and stronger trail alpha.
+  - Dense Dual Blades Kalmuri keeps a reduced object count while retaining a visible blue pulse/scar read.
+  - Greatsword utility Echoes use larger stamps, cleaves, domes, seals, fracture bursts, and heavy ring reads.
+  - Dual Blades utility Echoes use brighter stacked cuts, smaller repeated marks, and clearer short links.
+- Commands / checks:
+  - Unity compilation error check on LETHE port `7890`.
+  - Unity menu `LETHE/V1 QA/Kalmuri Perf Matrix`.
+  - Unity menu `LETHE/V1 QA/Dense Dual Blades Perf Matrix`.
+  - Unity menu `LETHE/V1 QA/Echo Matrix Dual Blades`.
+  - Unity menu `LETHE/V1 QA/Echo Matrix Greatsword`.
+- Results:
+  - Unity compilation errors: `0`.
+  - Kalmuri Perf Matrix: PASS, `orbit=44`, `bite=72`, `return=24`, `hunting=16`, `echoSurge=0`, `echoBarrage=0`, `totalKalmuri=420`.
+  - Dense Dual Blades Perf Matrix: PASS, `hits=18`, `suppressed=15`, `transient=156`, `activeVfx=73`, `ms=99.50`.
+  - Echo Matrix Dual Blades: PASS, `total=232`, `K=8`, `B=35`, `Ex=64`, `H=24`, `Sh=8`, `St=8`, `A=32`, `O=53`, `state=87`.
+  - Echo Matrix Greatsword: PASS, `total=231`, `K=8`, `B=9`, `Ex=56`, `H=14`, `Sh=40`, `St=8`, `A=32`, `O=64`, `state=59`.
+- Notes:
+  - Automated QA confirms coverage and budget. Direct play still needs to judge whether Greatsword now feels heavy enough and whether Dual Blades Kalmuri remains visible inside dense weapon slashes.
+
 # 2026-07-09 Intro Weapon Selection Screen
 
 - Purpose:

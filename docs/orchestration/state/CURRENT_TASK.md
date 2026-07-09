@@ -1,5 +1,50 @@
 # Current Task
 
+# 2026-07-09 Weapon-Specific Echo VFX Readability Pass
+
+## Status
+
+Implemented, Unity-compiled, and core Echo/Kalmuri QA passed. Awaiting jaewoo direct-play feel review.
+
+## Applied Changes
+
+- Kalmuri, Echo, and Ultimate transient VFX now sort above ordinary weapon slash VFX.
+- Kalmuri Echo visibility was increased:
+  - larger blue rifts,
+  - brighter blade-pull trails,
+  - larger Kalmuri blade cores,
+  - visible blue pulse/scar cues even in Dense Dual Blades.
+- Greatsword Echoes now read bigger and heavier:
+  - Blood: wider cleave pool and wound slash.
+  - Execution: larger stamp/halo and more verdict cracks.
+  - Hunter: larger spear lock and heavier spear projectile.
+  - Shatter: larger fracture tell, field, and crack lines.
+  - Stopped: larger dome/clamp/clock field.
+  - Ashen: larger guard seal and stored counter wave.
+  - Oblivion: larger detonation seal, core break, and burst.
+- Dual Blades Echoes now read slightly larger without turning into Greatsword:
+  - brighter stacked cuts,
+  - clearer short links,
+  - slightly bigger repeated marks,
+  - Kalmuri pulse/scar cues that survive over weapon slash VFX.
+
+## Verification
+
+- Unity compilation errors: `0`.
+- `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS, `totalKalmuri=420`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=156`, `activeVfx=73`, `ms=99.50`.
+- `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=232`, `K=8`, `state=87`.
+- `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=231`, `K=8`, `state=59`.
+
+## Remaining Gate
+
+Direct-play with both weapons:
+
+- Does Greatsword Echo now feel large and heavy enough?
+- Does Dual Blades Echo remain readable without drowning the screen?
+- Does Kalmuri stay visible through Dual Blades slash VFX?
+- If one family still feels weak, tune that family only rather than globally scaling every Echo again.
+
 # 2026-07-09 LETHE Intro Weapon Selection Screen
 
 ## Status
