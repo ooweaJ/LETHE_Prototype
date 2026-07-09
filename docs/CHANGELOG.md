@@ -2,6 +2,16 @@
 
 # 2026-07-09
 
+- Reworked Greatsword Blood Echo into a red crescent follow-up slash:
+  - Greatsword Blood Echo no longer uses the blood-thread harvest read that felt too close to dagger/dual-blade stitching.
+  - Added `EchoGreat_BloodIaidoCrescent`, a delayed red half-moon slash aligned to the Greatsword cleave arc.
+  - Damage now lands around the crescent impact zone and leaves Blood Marks, so it reads as a Greatsword-style blood iaido follow-up.
+  - Dense Dual Blades utility routing now skips the heaviest execution branch in dense mode after a regression run exceeded the frame budget.
+- Verification:
+  - Unity compilation errors: `0`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=374`, `K=8`, `B=33`, `Ex=64`, `H=22`, `Sh=56`, `St=16`, `A=80`, `O=95`, `state=49`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS after dense routing reduction, `hits=18`, `suppressed=15`, `transient=98`, `activeVfx=73`, `ms=74.56`.
+
 - Corrected utility Echo weapon identity from visual accents into distinct mechanics:
   - Previous utility Echo split was still too close to shared effects with weapon-colored accents. This pass changes actual hit logic and target selection.
   - Blood: Greatsword now harvests a forward arc and pulls blood threads into healing; Dual Blades now stitches nearby targets through short mark chains.

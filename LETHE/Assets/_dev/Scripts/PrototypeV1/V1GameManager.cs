@@ -1764,13 +1764,9 @@ namespace Lethe.PrototypeV1
                 var bucket = Mathf.Abs(Mathf.FloorToInt(elapsed * 11f) + hitIndex) % 3;
                 if (bucket == 0)
                 {
-                    TriggerExecutionEcho(enemy, forward, hitIndex, weapon, false);
-                }
-                else if (bucket == 1)
-                {
                     TriggerShatterEcho(enemy, forward, hitIndex, weapon, false);
                 }
-                else
+                else if (bucket == 1)
                 {
                     TriggerAshenEcho(enemy, forward, hitIndex, weapon, false);
                 }
@@ -2040,21 +2036,7 @@ namespace Lethe.PrototypeV1
             var f = EchoForward(forward);
             if (heavy)
             {
-                var radius = 1.34f + levelValue * 0.17f;
-                var targets = EchoTargetsInCone(enemy.transform.position - (Vector3)(f * 0.28f), f, radius * 1.55f, 46f, 7, enemy);
-                SpawnTransientSprite("EchoGreat_BloodCleavePool", MakeRingSprite("EchoGreat_BloodCleavePool", Color.white, 144), enemy.transform.position, Quaternion.Euler(0f, 0f, elapsed * -80f), radius, new Color(1f, 0.08f, 0.14f, 0.40f), 0.50f);
-                SpawnEchoWoundSlash("EchoGreat_BloodCleaveWound", enemy.transform.position + Vector3.up * 0.04f, f, new Color(1f, 0.10f, 0.18f, 0.84f), 1.55f, 0.48f);
-                SpawnEchoWoundLine("EchoGreat_BloodDrainAxis", enemy.transform.position + Vector3.up * 0.06f, f, new Color(1f, 0.06f, 0.12f, 0.72f), 1.72f, 0.54f);
-                SpawnRadialSlashLines("EchoGreat_BloodHarvestArc", enemy.transform.position + (Vector3)(f * 0.16f), f, 5, 1.18f + levelValue * 0.08f, new Color(1f, 0.10f, 0.16f, 0.62f), 0.48f);
-                foreach (var target in targets)
-                {
-                    var dir = (Vector2)(target.transform.position - enemy.transform.position);
-                    target.BloodMarked = true;
-                    target.MarkTimer = Mathf.Max(target.MarkTimer, 2.4f);
-                    SpawnEchoLink("EchoGreat_BloodHarvestThread", target.transform.position, player.position, new Color(1f, 0.10f, 0.16f, 0.34f), 0.34f, 0.020f);
-                    DealDamage(target, weapon.Damage * (0.060f + levelValue * 0.014f), "Blood Echo Great harvest", false, dir.sqrMagnitude > 0.01f ? dir.normalized : f, 0.20f);
-                }
-                HealPlayer(0.18f + targets.Count * (0.08f + levelValue * 0.018f));
+                TriggerGreatswordBloodIaido(enemy, f, levelValue, weapon);
             }
             else
             {
@@ -2086,6 +2068,40 @@ namespace Lethe.PrototypeV1
             {
                 BloodBloom(enemy, levelValue);
             }
+        }
+
+        void TriggerGreatswordBloodIaido(V1Enemy enemy, Vector2 forward, int levelValue, WeaponRuntimeSpec weapon)
+        {
+            var f = EchoForward(forward);
+            var side = new Vector2(-f.y, f.x).normalized;
+            var slashCenter = enemy.transform.position + (Vector3)(f * 0.22f + side * (leftBladeLead ? -0.08f : 0.08f));
+            var swing = GreatswordSwingForTarget(enemy.transform.position, slashCenter, f, 0);
+            var slashForward = swing.EndDirection.sqrMagnitude > 0.01f ? swing.EndDirection.normalized : f;
+            var baseAngle = GreatswordSlashVfxBaseAngle(slashForward);
+            var arc = LoadSprite(GreatswordCleaveArcPath) ?? MakeWideCrescentSprite("EchoGreat_BloodIaidoCrescent", Color.white);
+            var radius = 1.34f + levelValue * 0.16f;
+            var targets = EchoTargetsInRadius(slashCenter, radius, 8, enemy);
+
+            PlaySfx("blood_mark", 0.54f, 0.12f);
+            SpawnTransientSprite("EchoGreat_BloodIaidoAfterimage", arc, slashCenter - (Vector3)(f * 0.08f), Quaternion.Euler(0f, 0f, baseAngle - 6f), 0.54f, new Color(0.48f, 0.02f, 0.05f, 0.42f), 0.46f);
+            SpawnTransientSprite("EchoGreat_BloodIaidoCrescent", arc, slashCenter, Quaternion.Euler(0f, 0f, baseAngle), 0.62f, new Color(1f, 0.06f, 0.12f, 0.86f), 0.40f);
+            SpawnTransientSprite("EchoGreat_BloodIaidoEdge", arc, slashCenter + (Vector3)(slashForward * 0.06f), Quaternion.Euler(0f, 0f, baseAngle + 4f), 0.42f, new Color(1f, 0.28f, 0.32f, 0.62f), 0.26f);
+            SpawnTransientSprite("EchoGreat_BloodIaidoImpactZone", MakeRingSprite("EchoGreat_BloodIaidoImpactZone", Color.white, 156), slashCenter, Quaternion.identity, radius * 0.74f, new Color(1f, 0.04f, 0.10f, 0.28f), 0.32f);
+            SpawnEchoWoundSlash("EchoGreat_BloodIaidoCutLine", slashCenter + (Vector3)(slashForward * 0.04f), slashForward, new Color(1f, 0.12f, 0.18f, 0.88f), 1.86f + levelValue * 0.08f, 0.42f);
+
+            foreach (var target in targets)
+            {
+                var dir = (Vector2)(target.transform.position - slashCenter);
+                var distanceMul = Mathf.Lerp(1f, 0.62f, Mathf.Clamp01(dir.magnitude / Mathf.Max(0.01f, radius)));
+                target.BloodMarked = true;
+                target.MarkTimer = Mathf.Max(target.MarkTimer, 2.1f + levelValue * 0.12f);
+                SpawnTransientSprite("EchoGreat_BloodIaidoHitPetal", MakeImpactDiamondSprite("EchoGreat_BloodIaidoHitPetal", Color.white), target.transform.position + Vector3.up * 0.06f, Quaternion.Euler(0f, 0f, baseAngle + dir.x * 22f), 0.24f, new Color(1f, 0.10f, 0.16f, 0.72f), 0.26f);
+                DealDamage(target, weapon.Damage * (0.105f + levelValue * 0.022f) * distanceMul, "Blood Echo Great iaido", false, dir.sqrMagnitude > 0.01f ? dir.normalized : slashForward, 0.34f);
+            }
+
+            hitstopTimer = Mathf.Max(hitstopTimer, 0.030f);
+            cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.10f);
+            cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.052f);
         }
 
         void TriggerShatterEcho(V1Enemy enemy, Vector2 forward, int hitIndex, WeaponRuntimeSpec weapon, bool force)

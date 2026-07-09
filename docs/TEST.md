@@ -1,5 +1,26 @@
 # LETHE TEST
 
+# 2026-07-09 Greatsword Blood Echo Crescent Follow-up
+
+- Purpose:
+  - Respond to jaewoo feedback that Greatsword Blood Echo still felt too close to dagger/dual-blade behavior.
+  - Make Greatsword Blood Echo read as another Greatsword-style red half-moon slash after the weapon hit.
+- Applied target:
+  - Removed the Greatsword blood-thread harvest visual from the Echo accent branch.
+  - Added `EchoGreat_BloodIaidoCrescent`, `EchoGreat_BloodIaidoAfterimage`, `EchoGreat_BloodIaidoEdge`, and a red impact-zone ring.
+  - Greatsword Blood Echo now deals area damage around the crescent impact zone, applies Blood Mark, and adds hitstop/camera shake.
+  - Dense Dual Blades utility routing now skips the heaviest execution branch in dense mode to restore frame budget.
+- Commands / checks:
+  - Unity compilation error check on LETHE port `7890`.
+  - Unity method `Lethe.PrototypeV1.Editor.V1SmokeTestMenu.QaEchoMatrixGreatsword()`.
+  - Unity method `Lethe.PrototypeV1.Editor.V1SmokeTestMenu.QaDenseDualBladesPerfMatrix()`.
+- Results:
+  - Unity compilation errors: `0`.
+  - Echo Matrix Greatsword: PASS, `total=374`, `K=8`, `B=33`, `Ex=64`, `H=22`, `Sh=56`, `St=16`, `A=80`, `O=95`, `state=49`, `stateEx=2`, `stateH=5`, `stateSh=4`, `stateSt=19`, `stateA=12`, `stateO=7`.
+  - Dense Dual Blades Perf Matrix: one regression run failed at `ms=111.50`; after dense routing reduction it passed with `hits=18`, `suppressed=15`, `transient=98`, `activeVfx=73`, `ms=74.56`.
+- Notes:
+  - Direct play should now judge whether Greatsword Blood Echo reads as a blood iaido/cleave follow-up rather than a stitch, thread, or dagger-like effect.
+
 # 2026-07-09 Utility Echo Weapon-Identity Mechanics Correction
 
 - Purpose:

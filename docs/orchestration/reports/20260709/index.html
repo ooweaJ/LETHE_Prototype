@@ -197,6 +197,13 @@
           <p>작업 내용을 확인합니다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-09-08</span>
+          <h2><a href="#unit-2026-07-09-08" data-unit-link="unit-2026-07-09-08">대검 혈반 잔향 반달 혈발도 보정</a></h2>
+          <p>작업 내용을 확인합니다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -514,6 +521,58 @@
 <li>방향: 시각 차이가 아니라 타겟 선택, 범위, 체인, 제어 방식까지 무기별로 분리한다.</li>
 <li>행동: 일반 잔향 7종의 대검/쌍검 판정 구조를 각각 다시 작성하고, 밀집 쌍검 성능 분기를 추가했다.</li>
 <li>결과: Echo Matrix 양 무기와 Dense Dual 성능 QA가 PASS했고, 직접 플레이로 감성 평가할 수 있는 상태가 됐다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-09-08" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-09-08 - 대검 혈반 잔향 반달 혈발도 보정</h1>
+<h2>1. 현재 빌드 상태</h2>
+<ul>
+<li>대검 혈반 잔향이 더 이상 피실/봉합형 연출이 아니라, 대검 공격 뒤에 빨간 반달형 후속 베기가 한 번 더 긁는 형태로 바뀌었다.</li>
+<li>아직 <code>_dev</code> 검증 단계이며 <code>Assets/Lethe</code> 승격은 하지 않았다.</li>
+</ul>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>대검 혈반 잔향의 기존 피실 회복/수확 연출을 제거했다.</li>
+<li><code>EchoGreat_BloodIaidoCrescent</code> 중심의 빨간 반달형 혈발도 VFX를 추가했다.</li>
+<li>대검 cleave arc 방향을 따라 afterimage, 붉은 edge, impact-zone ring, cut-line이 같이 뜨게 했다.</li>
+<li>피해는 반달 궤적 중심 주변 범위에 들어가고, 맞은 적에게 혈반을 남긴다.</li>
+<li>Dense Dual Blades는 성능 회귀가 있어 밀집 분기에서 가장 무거운 처형 루트를 쉬게 했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>Unity 컴파일 에러: <code>0</code>.</li>
+<li><code>Echo Matrix Greatsword</code>: PASS, <code>total=374</code>, <code>K=8</code>, <code>B=33</code>, <code>Ex=64</code>, <code>H=22</code>, <code>Sh=56</code>, <code>St=16</code>, <code>A=80</code>, <code>O=95</code>, <code>state=49</code>.</li>
+<li><code>Dense Dual Blades Perf Matrix</code>: 첫 회귀 실행은 <code>ms=111.50</code>으로 실패했고, dense routing 감소 후 PASS, <code>hits=18</code>, <code>suppressed=15</code>, <code>transient=98</code>, <code>activeVfx=73</code>, <code>ms=74.56</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>대검 혈반은 실/봉합/체인보다 대검 후속 베기 문법이 맞다.</li>
+<li>쌍검 혈반은 봉합 체인으로 남기고, 대검 혈반은 반달형 혈발도처럼 분리한다.</li>
+<li>밀집 쌍검에서는 일반 상황의 모든 유틸 잔향을 다 돌리지 않고 예산 분기를 둔다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>직접 플레이에서 반달이 충분히 크고 늦게 따라오는지 확인해야 한다.</li>
+<li>혈발도 피해량은 좋아 보이면 이후 수치만 낮추면 되지만, 감성이 약하면 VFX 크기/지속시간을 먼저 조정해야 한다.</li>
+<li>Dense Dual Blades는 QA 기준은 통과했지만, 직접 전투에서는 여전히 주기적으로 확인해야 한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<ul>
+<li>이번 작업은 대검 혈반 잔향을 쌍검/단검식 봉합에서 대검식 붉은 후속 베기로 바꾼 보정이다.</li>
+<li>리뷰 기준은 “대검을 휘두른 뒤 피가 반달 궤적으로 한 박자 늦게 긁는다”로 읽히는지다.</li>
+</ul>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo가 대검 혈반 잔향을 직접 보고 반달 크기, 붉은 농도, 딜레이, 피해 범위를 평가한다.</li>
+<li>부족하면 <code>EchoGreat_BloodIaidoCrescent</code> 스케일/수명/위치와 damage radius를 조정한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 대검 혈반 잔향이 쌍검/단검처럼 보여 무기 특색이 약했다.</li>
+<li>방향: 대검 공격 이펙트 뒤에 빨간 반달형 혈발도를 붙여 무기 문법을 맞춘다.</li>
+<li>행동: 대검 혈반 전용 후속타 함수를 만들고 반달 VFX와 주변 피해 판정을 연결했다.</li>
+<li>결과: 대검 Echo Matrix와 Dense Dual 회귀 QA가 PASS했다.</li>
 </ul>
     </article>
       </div>

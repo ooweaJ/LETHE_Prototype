@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260709\\index.md",
-  "generatedAt": "2026-07-09T07:16:36.154Z",
-  "unitCount": 7,
+  "generatedAt": "2026-07-09T07:29:06.820Z",
+  "unitCount": 8,
   "latest": {
-    "title": "2026-07-09-07 - 일반 잔향 무기별 판정 구조 보정",
-    "number": "07",
-    "markdownPath": "docs\\orchestration\\reports\\20260709\\units\\2026-07-09-07-일반-잔향-무기별-판정-구조-보정.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260709\\units\\2026-07-09-07-일반-잔향-무기별-판정-구조-보정.html"
+    "title": "2026-07-09-08 - 대검 혈반 잔향 반달 혈발도 보정",
+    "number": "08",
+    "markdownPath": "docs\\orchestration\\reports\\20260709\\units\\2026-07-09-08-대검-혈반-잔향-반달-혈발도-보정.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260709\\units\\2026-07-09-08-대검-혈반-잔향-반달-혈발도-보정.html"
   }
 }

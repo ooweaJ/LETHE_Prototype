@@ -1,5 +1,31 @@
 # Current Task
 
+# 2026-07-09 Greatsword Blood Echo Crescent Follow-up
+
+## Status
+
+- Implemented and verified.
+
+## Applied Changes
+
+- Replaced the Greatsword Blood Echo harvest/thread feel with a red crescent follow-up slash.
+- Added `TriggerGreatswordBloodIaido`:
+  - uses Greatsword cleave arc geometry,
+  - spawns red crescent, afterimage, edge, impact-zone, and cut-line VFX,
+  - damages enemies around the crescent impact zone,
+  - applies Blood Mark and adds hitstop/camera shake.
+- Reduced Dense Dual Blades utility routing by skipping the heaviest execution branch in dense mode after one frame-budget regression.
+
+## Verification
+
+- Unity compilation errors: `0`.
+- `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=374`, `K=8`, `B=33`, `Ex=64`, `H=22`, `Sh=56`, `St=16`, `A=80`, `O=95`, `state=49`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS after dense routing reduction, `hits=18`, `suppressed=15`, `transient=98`, `activeVfx=73`, `ms=74.56`.
+
+## Remaining Gate
+
+- Direct play should confirm whether Greatsword Blood Echo now feels like a blood iaido / red half-moon Greatsword follow-up.
+
 # 2026-07-09 Utility Echo Weapon Mechanics Correction
 
 ## Status

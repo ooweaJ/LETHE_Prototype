@@ -2,6 +2,20 @@
 
 Last updated: 2026-07-09
 
+## 2026-07-09 Update: Greatsword Blood Echo Crescent Follow-up
+
+- jaewoo noted that Greatsword Blood Echo still felt too close to dagger/dual-blade behavior.
+- Applied:
+  - Replaced the Greatsword blood-thread harvest read with a red half-moon `EchoGreat_BloodIaidoCrescent`.
+  - The effect now follows Greatsword cleave geometry, adds afterimage/edge/impact-zone reads, and deals area damage around the crescent zone.
+  - Dense Dual Blades utility routing was reduced to skip the heaviest execution branch in dense mode after a frame-budget regression.
+- Verification:
+  - Unity compilation errors: `0`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=374`, `K=8`, `B=33`, `state=49`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=98`, `activeVfx=73`, `ms=74.56`.
+- Next step:
+  - Direct-play Greatsword Blood Echo and judge whether the red half-moon blood slash is large, delayed, and brutal enough behind the normal Greatsword hit.
+
 ## 2026-07-09 Update: Utility Echo Weapon Mechanics Correction
 
 - jaewoo correctly noted that the non-Kalmuri Echoes still felt like mostly identical effects with similar VFX.
