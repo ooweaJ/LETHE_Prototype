@@ -2434,16 +2434,28 @@ namespace Lethe.PrototypeV1
 
             if (!denseDualBlade && isHeavy)
             {
-                SpawnTransientSprite("KalmuriHunger_GreatMemoryPool", MakeDiscSprite("KalmuriHungerMemoryPool", Color.white, 144), origin, Quaternion.identity, radius * 0.62f, new Color(memoryPool.r, memoryPool.g, memoryPool.b, memoryPool.a + 0.08f), 0.82f);
-                SpawnTransientSprite("KalmuriHunger_GreatBladeWakeRing", MakeRingSprite("KalmuriHungerBladeWakeRing", Color.white, 180), origin, Quaternion.Euler(0f, 0f, baseAngle), radius * 1.02f, new Color(echoBlue.r, echoBlue.g, echoBlue.b, Mathf.Min(0.82f, echoBlue.a + 0.08f)), 0.70f);
+                SpawnTransientSprite("KalmuriHunger_GreatMemoryPool", MakeDiscSprite("KalmuriHungerMemoryPool", Color.white, 144), origin, Quaternion.identity, radius * 0.62f, new Color(memoryPool.r, memoryPool.g, memoryPool.b, memoryPool.a + 0.08f), 1.05f);
+                SpawnTransientSprite("KalmuriHunger_GreatBladeWakeRing", MakeRingSprite("KalmuriHungerBladeWakeRing", Color.white, 180), origin, Quaternion.Euler(0f, 0f, baseAngle), radius * 1.02f, new Color(echoBlue.r, echoBlue.g, echoBlue.b, Mathf.Min(0.82f, echoBlue.a + 0.08f)), 0.98f);
             }
 
-            SpawnEchoWoundSlash(isHeavy ? "KalmuriHunger_GreatBlueRift" : "KalmuriHunger_DualBlueRift", origin, f, new Color(0.62f, 1f, 1f, isHeavy ? 0.94f : 0.78f), isHeavy ? 2.05f : 1.18f, isHeavy ? 0.84f : 0.58f);
-            SpawnEchoWoundSlash(isHeavy ? "KalmuriHunger_GreatDeepCut" : "KalmuriHunger_DualDeepCut", origin + (Vector3)(s * 0.05f), s, new Color(deepBlue.r, deepBlue.g, deepBlue.b, Mathf.Min(0.64f, deepBlue.a + 0.10f)), isHeavy ? 1.12f : 0.72f, isHeavy ? 0.66f : 0.44f);
-            SpawnTransientSprite(isHeavy ? "KalmuriHunger_GreatMemoryBladeCore" : "KalmuriHunger_DualMemoryBladeCore", hungerBlade, origin, Quaternion.Euler(0f, 0f, baseAngle + 62f + hitIndex * 11f), isHeavy ? 0.46f : 0.27f, hot, isHeavy ? 0.78f : 0.56f);
+            var dualRiftAlpha = denseDualBlade ? 0.72f : 0.84f;
+            var dualRiftLength = denseDualBlade ? 1.18f : 1.34f;
+            var dualRiftLifetime = denseDualBlade ? 0.54f : 0.64f;
+            var dualDeepLength = denseDualBlade ? 0.70f : 0.82f;
+            var dualDeepLifetime = denseDualBlade ? 0.42f : 0.50f;
+            var dualCoreScale = denseDualBlade ? 0.29f : 0.34f;
+            var dualCoreLifetime = denseDualBlade ? 0.52f : 0.62f;
+            SpawnEchoWoundSlash(isHeavy ? "KalmuriHunger_GreatBlueRift" : "KalmuriHunger_DualBlueRift", origin, f, new Color(0.62f, 1f, 1f, isHeavy ? 0.94f : dualRiftAlpha), isHeavy ? 2.05f : dualRiftLength, isHeavy ? 1.02f : dualRiftLifetime);
+            SpawnEchoWoundSlash(isHeavy ? "KalmuriHunger_GreatDeepCut" : "KalmuriHunger_DualDeepCut", origin + (Vector3)(s * 0.05f), s, new Color(deepBlue.r, deepBlue.g, deepBlue.b, Mathf.Min(0.64f, deepBlue.a + 0.10f)), isHeavy ? 1.12f : dualDeepLength, isHeavy ? 0.84f : dualDeepLifetime);
+            SpawnTransientSprite(isHeavy ? "KalmuriHunger_GreatMemoryBladeCore" : "KalmuriHunger_DualMemoryBladeCore", hungerBlade, origin, Quaternion.Euler(0f, 0f, baseAngle + 62f + hitIndex * 11f), isHeavy ? 0.46f : dualCoreScale, hot, isHeavy ? 0.92f : dualCoreLifetime);
             if (!isHeavy)
             {
-                SpawnTransientSprite("HungryEcho_DualMemoryPulse", MakeRingSprite("HungryEchoDualMemoryPulse", Color.white, 128), origin, Quaternion.Euler(0f, 0f, baseAngle), denseDualBlade ? 0.50f : 0.66f, new Color(0.32f, 0.92f, 1f, denseDualBlade ? 0.34f : 0.42f), denseDualBlade ? 0.26f : 0.34f);
+                SpawnTransientSprite("HungryEcho_DualMemoryPulse", MakeRingSprite("HungryEchoDualMemoryPulse", Color.white, 128), origin, Quaternion.Euler(0f, 0f, baseAngle), denseDualBlade ? 0.54f : 0.82f, new Color(0.32f, 0.92f, 1f, denseDualBlade ? 0.36f : 0.56f), denseDualBlade ? 0.26f : 0.42f);
+                if (!denseDualBlade)
+                {
+                    SpawnTransientSprite("HungryEcho_DualFrontBladeA", hungerBlade, origin + (Vector3)(s * 0.22f + f * 0.06f), Quaternion.Euler(0f, 0f, baseAngle + 112f), 0.24f, new Color(0.76f, 1f, 1f, 0.72f), 0.42f);
+                    SpawnTransientSprite("HungryEcho_DualFrontBladeB", hungerBlade, origin - (Vector3)(s * 0.22f - f * 0.06f), Quaternion.Euler(0f, 0f, baseAngle - 112f), 0.24f, new Color(0.76f, 1f, 1f, 0.72f), 0.42f);
+                }
             }
 
             var trailCount = denseDualBlade ? (isHeavy ? 3 : 4) : isHeavy ? 7 : 11;
@@ -2452,30 +2464,30 @@ namespace Lethe.PrototypeV1
                 var t = trailCount <= 1 ? 0f : i / (float)(trailCount - 1);
                 var spread = (t - 0.5f) * (isHeavy ? 0.88f : 0.78f);
                 var jitter = Mathf.Sin((hitIndex + 1) * 1.41f + i * 1.73f) * (isHeavy ? 0.10f : 0.08f);
-                var start = origin - (Vector3)(f * (isHeavy ? 1.20f : 0.82f) - s * (spread + jitter));
+                var start = origin - (Vector3)(f * (isHeavy ? 1.36f : 0.82f) - s * (spread + jitter));
                 var end = origin + (Vector3)(f * (isHeavy ? 0.15f : 0.10f) + s * spread * 0.16f);
                 var startAngle = baseAngle - 102f + spread * 16f;
                 var endAngle = baseAngle - 136f + spread * 26f;
-                var lifetime = isHeavy ? 0.78f : 0.52f;
+                var lifetime = isHeavy ? 1.08f : 0.52f;
                 var scaleY = isHeavy ? 0.34f : 0.22f;
-                SpawnSweepingTransientSprite(isHeavy ? "KalmuriHunger_GreatBlueEdgeTrail" : "KalmuriHunger_DualBlueEdgeTrail", scar, start, end, startAngle, endAngle, scaleY, scaleY * 0.62f, new Color(hot.r, hot.g, hot.b, Mathf.Lerp(0.42f, hot.a, 1f - t * 0.34f)), lifetime, isHeavy ? 0.32f : 0.20f);
+                SpawnSweepingTransientSprite(isHeavy ? "KalmuriHunger_GreatBlueEdgeTrail" : "KalmuriHunger_DualBlueEdgeTrail", scar, start, end, startAngle, endAngle, scaleY, scaleY * 0.62f, new Color(hot.r, hot.g, hot.b, Mathf.Lerp(0.42f, hot.a, 1f - t * 0.34f)), lifetime, isHeavy ? 0.48f : 0.20f);
 
                 if (!denseDualBlade || i < 4)
                 {
                     var biteDir = (Vector2)(Quaternion.Euler(0f, 0f, baseAngle + i * (isHeavy ? 41f : 29f)) * Vector3.right);
-                    var biteStart = origin + (Vector3)(biteDir * radius * (isHeavy ? 0.62f : 0.72f));
+                    var biteStart = origin + (Vector3)(biteDir * radius * (isHeavy ? 0.86f : 0.72f));
                     var biteEnd = origin + (Vector3)(s * spread * 0.08f + f * 0.05f);
-                    SpawnSweepingTransientSprite(isHeavy ? "KalmuriHunger_GreatMemoryBladePull" : "KalmuriHunger_DualMemoryBladePull", hungerBlade, biteStart, biteEnd, AngleForBladePull(baseAngle, i, isHeavy), AngleForBladePull(baseAngle + 126f, i, isHeavy), isHeavy ? 0.32f : 0.20f, isHeavy ? 0.18f : 0.11f, hot, lifetime * 0.90f, isHeavy ? 0.26f : 0.16f);
+                    SpawnSweepingTransientSprite(isHeavy ? "KalmuriHunger_GreatMemoryBladePull" : "KalmuriHunger_DualMemoryBladePull", hungerBlade, biteStart, biteEnd, AngleForBladePull(baseAngle, i, isHeavy), AngleForBladePull(baseAngle + 126f, i, isHeavy), isHeavy ? 0.34f : 0.22f, isHeavy ? 0.18f : 0.12f, hot, lifetime * 0.94f, isHeavy ? 0.46f : 0.17f);
                 }
             }
 
             if (isHeavy)
             {
                 var jaw = MakeBoxSprite("KalmuriHungerGreatJaw", Color.white, 10, 150);
-                SpawnSweepingTransientSprite("KalmuriHunger_GreatUpperBladeJaw", hungerBlade, origin + (Vector3)(s * 0.82f), origin + (Vector3)(s * 0.22f), baseAngle + 112f, baseAngle + 142f, 0.52f, 0.32f, hot, 0.92f, 0.36f);
-                SpawnSweepingTransientSprite("KalmuriHunger_GreatLowerBladeJaw", hungerBlade, origin - (Vector3)(s * 0.82f), origin - (Vector3)(s * 0.22f), baseAngle - 112f, baseAngle - 142f, 0.52f, 0.32f, hot, 0.92f, 0.36f);
-                SpawnSweepingTransientSprite("KalmuriHunger_GreatJawAfterimage", jaw, origin, origin + (Vector3)(f * 0.12f), baseAngle + 4f, baseAngle - 22f, 0.44f, 0.24f, new Color(0.42f, 0.88f, 1f, 0.42f), 0.62f, 0.28f);
-                SpawnRadialSlashLines("KalmuriHunger_GreatBlueSplinterScars", origin, f, 6, 1.34f, new Color(0.62f, 1f, 1f, 0.60f), 0.78f);
+                SpawnSweepingTransientSprite("KalmuriHunger_GreatUpperBladeJaw", hungerBlade, origin + (Vector3)(s * 0.92f), origin + (Vector3)(s * 0.22f), baseAngle + 112f, baseAngle + 142f, 0.52f, 0.32f, hot, 1.10f, 0.52f);
+                SpawnSweepingTransientSprite("KalmuriHunger_GreatLowerBladeJaw", hungerBlade, origin - (Vector3)(s * 0.92f), origin - (Vector3)(s * 0.22f), baseAngle - 112f, baseAngle - 142f, 0.52f, 0.32f, hot, 1.10f, 0.52f);
+                SpawnSweepingTransientSprite("KalmuriHunger_GreatJawAfterimage", jaw, origin, origin + (Vector3)(f * 0.12f), baseAngle + 4f, baseAngle - 22f, 0.44f, 0.24f, new Color(0.42f, 0.88f, 1f, 0.42f), 0.82f, 0.42f);
+                SpawnRadialSlashLines("KalmuriHunger_GreatBlueSplinterScars", origin, f, 6, 1.34f, new Color(0.62f, 1f, 1f, 0.60f), 0.92f);
             }
             else
             {

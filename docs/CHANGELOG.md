@@ -2,6 +2,18 @@
 
 # 2026-07-09
 
+- Tuned Hungry Blades Echo convergence and Dual Blades visibility:
+  - Greatsword Kalmuri Echo blade pulls now start farther out on the ring edge and sweep inward more slowly, so the gathering motion is easier to read.
+  - Greatsword Kalmuri wake/rift/jaw afterimages live longer to support the heavy converging-blades fantasy.
+  - Dual Blades Kalmuri Echo gained larger non-dense blue pulse/front-blade reads so it is less buried under rapid weapon slashes.
+  - Dense Dual Blades uses a lighter rift/core/pulse branch to preserve performance after an intermediate QA run exceeded the dense budget.
+- Verification:
+  - Unity compilation errors: `0`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=12`, `transient=118`, `activeVfx=73`, `ms=87.43`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=229`, `K=8`, `state=86`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=231`, `K=8`, `state=58`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS; meaningful pre-dense-branch run in the same tuning pass reached `totalKalmuri=396`, while the final runner snapshot logged `totalKalmuri=0` at the 2s check.
+
 - Improved weapon-specific Echo VFX readability:
   - Kalmuri Echo now renders above weapon slash VFX and uses larger blue blade pulls, rifts, and bite scars.
   - Dense Dual Blades keeps a smaller budget-safe Kalmuri variant while preserving visible blue pulse/scar cues.

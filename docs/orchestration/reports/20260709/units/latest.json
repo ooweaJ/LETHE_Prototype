@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260709\\index.md",
-  "generatedAt": "2026-07-09T03:06:02.350Z",
-  "unitCount": 4,
+  "generatedAt": "2026-07-09T03:56:58.252Z",
+  "unitCount": 5,
   "latest": {
-    "title": "2026-07-09-04 - LETHE 인트로 무기 선택 화면",
-    "number": "04",
-    "markdownPath": "docs\\orchestration\\reports\\20260709\\units\\2026-07-09-04-lethe-인트로-무기-선택-화면.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260709\\units\\2026-07-09-04-lethe-인트로-무기-선택-화면.html"
+    "title": "2026-07-09-05 - 칼무리 잔향 수렴 속도와 쌍검 가시성 보정",
+    "number": "05",
+    "markdownPath": "docs\\orchestration\\reports\\20260709\\units\\2026-07-09-05-칼무리-잔향-수렴-속도와-쌍검-가시성-보정.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260709\\units\\2026-07-09-05-칼무리-잔향-수렴-속도와-쌍검-가시성-보정.html"
   }
 }

@@ -1,6 +1,18 @@
 # Next Tasks
 
-## 1. Weapon-Specific Echo Direct-Play Review
+## 1. Kalmuri Convergence Direct-Play Review
+
+- Priority: urgent
+- Problem: Greatsword Kalmuri Echo timing and Dual Blades Kalmuri visibility were just retuned. Automated QA passes, but only direct play can prove whether the slower ring-edge convergence reads correctly.
+- Build:
+  - Play `Dev_Prototype_v1` with Greatsword and Hungry Blades +5.
+  - Watch whether blades visibly gather from the outer ring before impact.
+  - Play Dual Blades with Hungry Blades +5 in normal packs and dense packs.
+  - Judge whether the blue Kalmuri Echo remains visible without becoming visual noise.
+- Done:
+  - jaewoo can say keep, slow further, speed back up, brighten, enlarge, or reduce dense-only effects.
+
+## 2. Weapon-Specific Echo Direct-Play Review
 
 - Priority: urgent
 - Problem: Greatsword and Dual Blades Echo VFX were just rescaled and separated. Automated QA passes, but jaewoo needs to judge whether the feel is actually better in motion.
@@ -13,7 +25,7 @@
 - Done:
   - jaewoo can name the exact Echo family that still feels too small, too hidden, or too noisy.
 
-## 2. Intro Weapon Selection Direct-Play Review
+## 3. Intro Weapon Selection Direct-Play Review
 
 - Priority: high
 - Problem: the new first screen now has LETHE atmosphere and weapon cards, but MCP state checks cannot prove whether it feels polished in the actual Game view.
@@ -26,7 +38,7 @@
 - Done:
   - jaewoo can say keep/tune/redesign for the intro and identify the exact weak read if it misses.
 
-## 3. Greatsword Start-Smoke QA Fix
+## 4. Greatsword Start-Smoke QA Fix
 
 - Priority: high
 - Problem: `LETHE/V1 QA/Start Greatsword` invokes the run but currently fails with `liveEnemies=2` against the current start-smoke expectation.
@@ -37,7 +49,7 @@
 - Done:
   - `LETHE/V1 QA/Start Greatsword` passes from a clean Play Mode session.
 
-## 4. Blue Kalmuri Echo Direct-Play Review
+## 5. Blue Kalmuri Echo Direct-Play Review
 
 - Priority: high
 - Problem: the default Kalmuri Echo now uses blue spectral blade pulls instead of red wound circles, but automated QA can only prove budget and object coverage. jaewoo still needs to judge whether it finally feels like the original Hungry Blades memory becoming an Echo.
@@ -51,19 +63,9 @@
 - Done:
   - jaewoo can say keep/tune/redesign for the blue default Kalmuri Echo and name the exact weak read if it still misses.
 
-## 5. Direct-Play Kingmaker Route Review
-
-- Priority: high
-- Problem: automated QA is green after the memory/echo kingmaker pass, but jaewoo still needs to judge whether non-blood routes feel rewarding in actual play.
-- Build:
-  - Play `Dev_Prototype_v1` with Dual Blades and Greatsword.
-  - Use `F6` / F12 `Boss` to inspect the first Gatekeeper quickly; this path uses review HP `2200`, while compressed QA keeps HP `180`.
-  - Judge Execution forecast, Hunter threat targeting, Shatter cluster/boss fracture, Stopped fracture burst, Ashen stored guard release, Oblivion spread/detonation, and the three non-blood utility ultimates.
-- Done:
-  - Review returns concrete tune targets: keep, brighten, shrink, slow down, rebalance, or redesign.
-
 Completed sequence:
 
+- 2026-07-09: Greatsword Kalmuri convergence slowed so blades gather from the ring edge; Dual Blades normal-pack Kalmuri visibility improved while dense branch stayed budget-safe.
 - 2026-07-09: weapon-specific Echo VFX readability pass enlarged Greatsword Echoes, clarified Dual Blades Echoes, raised Kalmuri/Echo VFX sorting, and passed Kalmuri/Dense/Echo Matrix QA.
 - 2026-07-09: LETHE-style intro weapon selection screen added; initial overlay state and selection state pass, Dual Blades start QA invokes successfully, Greatsword start QA mismatch is tracked separately.
 - 2026-07-09: default Kalmuri Echo converted to the selected hunger hybrid; default route now uses weapon-trail scent pull, wound-devouring bite VFX, and +5 wound-side devour bloom. Kalmuri, Dense Dual, Echo Dual, and Echo Great QA passed.

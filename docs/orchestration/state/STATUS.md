@@ -2,6 +2,26 @@
 
 Last updated: 2026-07-09
 
+## 2026-07-09 Update: Kalmuri Convergence Timing and Dual Blades Visibility Pass
+
+- jaewoo noted:
+  - Greatsword Kalmuri Echo is too fast.
+  - The blades should be seen gathering from the ring edge toward the center.
+  - Dual Blades Kalmuri Echo is still hard to see under rapid slash VFX.
+- Applied:
+  - Greatsword Kalmuri Echo blade pulls now start farther out and sweep inward more slowly.
+  - Greatsword blue wake, rift, jaw, afterimage, and splinter reads live longer so the convergence reads before impact.
+  - Dual Blades non-dense Kalmuri Echo gained larger blue rift/core/pulse and small foreground blade glints.
+  - Dense Dual Blades has a separate lighter rift/core/pulse branch to avoid frame spikes.
+- Verification:
+  - Unity compilation errors: `0`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=12`, `transient=118`, `activeVfx=73`, `ms=87.43`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=229`, `K=8`, `state=86`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=231`, `K=8`, `state=58`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS; meaningful same-pass visual count reached `totalKalmuri=396`, final post-QA runner snapshots logged `totalKalmuri=0`.
+- Next step:
+  - Direct-play Greatsword Hungry Blades +5 and confirm the ring-edge convergence is now readable. Then test Dual Blades in normal packs to judge whether the blue Kalmuri Echo finally survives the slash layer.
+
 ## 2026-07-09 Update: Weapon-Specific Echo VFX Readability Pass
 
 - jaewoo noted:

@@ -1,5 +1,30 @@
 # LETHE TEST
 
+# 2026-07-09 Kalmuri Convergence Timing and Dual Blades Visibility Pass
+
+- Purpose:
+  - Respond to jaewoo feedback that Greatsword Kalmuri Echo is too fast and should visibly gather blades from the ring edge.
+  - Make Dual Blades Kalmuri Echo more visible without reintroducing dense-combat frame spikes.
+- Applied target:
+  - Greatsword Kalmuri Echo ring-edge blade pulls, upper/lower jaws, and blue-edge trails now travel inward more slowly.
+  - Greatsword supporting pool/ring/rift/jaw afterimages live longer so the convergence has a readable wind-up.
+  - Dual Blades non-dense Kalmuri Echo has larger blue rift/core/pulse and two foreground blade glints.
+  - Dense Dual Blades uses a lighter rift/core/pulse branch after a rerun failed at `ms=113.48`.
+- Commands / checks:
+  - Unity compilation error check on LETHE port `7890`.
+  - Unity menu/method `LETHE/V1 QA/Dense Dual Blades Perf Matrix`.
+  - Unity menu/method `LETHE/V1 QA/Echo Matrix Dual Blades`.
+  - Unity menu/method `LETHE/V1 QA/Echo Matrix Greatsword`.
+  - Unity menu/method `LETHE/V1 QA/Kalmuri Perf Matrix`.
+- Results:
+  - Unity compilation errors: `0`.
+  - Dense Dual Blades Perf Matrix: PASS, `hits=18`, `suppressed=12`, `transient=118`, `activeVfx=73`, `ms=87.43`.
+  - Echo Matrix Dual Blades: PASS, `total=229`, `K=8`, `B=35`, `Ex=64`, `H=24`, `Sh=8`, `St=8`, `A=32`, `O=50`, `state=86`.
+  - Echo Matrix Greatsword: PASS, `total=231`, `K=8`, `B=9`, `Ex=56`, `H=14`, `Sh=40`, `St=8`, `A=32`, `O=64`, `state=58`.
+  - Kalmuri Perf Matrix: PASS. The meaningful visual-count run before the dense-only safety branch logged `totalKalmuri=396`; final runner snapshots after later QA logged `totalKalmuri=0` at the 2s check.
+- Notes:
+  - Direct play should now focus on whether Greatsword reads as blades gathering from the perimeter and whether Dual Blades Kalmuri is visible in normal packs.
+
 # 2026-07-09 Weapon-Specific Echo VFX Readability Pass
 
 - Purpose:

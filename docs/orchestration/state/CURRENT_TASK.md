@@ -1,5 +1,41 @@
 # Current Task
 
+# 2026-07-09 Kalmuri Convergence Timing and Dual Blades Visibility Pass
+
+## Status
+
+Implemented, Unity-compiled, and dense/Echo QA passed. Awaiting jaewoo direct-play feel review.
+
+## Applied Changes
+
+- Greatsword Kalmuri Echo now shows a slower ring-edge convergence:
+  - blade pulls start farther out from the circle,
+  - blue edge trails sweep inward more slowly,
+  - upper/lower blade jaws close more slowly,
+  - wake/rift/jaw afterimages live longer.
+- Dual Blades Kalmuri Echo gained clearer normal-pack visibility:
+  - larger non-dense blue rift/core/pulse,
+  - two short foreground blade glints,
+  - stronger blue read without changing the dense-object budget.
+- Dense Dual Blades uses lighter rift/core/pulse values after an intermediate run exceeded the `110ms` budget.
+
+## Verification
+
+- Unity compilation errors: `0`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=12`, `transient=118`, `activeVfx=73`, `ms=87.43`.
+- `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=229`, `K=8`, `state=86`.
+- `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=231`, `K=8`, `state=58`.
+- `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS; meaningful same-pass visual-count run logged `totalKalmuri=396`, final post-QA runner snapshots logged `totalKalmuri=0`.
+
+## Remaining Gate
+
+- Direct-play Greatsword Hungry Blades +5:
+  - Do the blades visibly gather from the perimeter?
+  - Is it slower enough without feeling sluggish?
+- Direct-play Dual Blades Hungry Blades +5:
+  - Is the blue Echo now visible in normal packs?
+  - Does dense combat stay readable rather than noisy?
+
 # 2026-07-09 Weapon-Specific Echo VFX Readability Pass
 
 ## Status
