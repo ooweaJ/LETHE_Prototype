@@ -7,6 +7,7 @@ Last updated: 2026-07-10
 - jaewoo asked to see which VFX each Echo uses by weapon.
 - Added a visual reference board with real sprite thumbnails and weapon-specific VFX notes:
   - `docs/orchestration/evidence/2026-07-10-weapon-echo-vfx-board.html`
+  - `docs/orchestration/evidence/2026-07-10-weapon-echo-vfx-map.png`
 - The board separates base Echo family imagery from weapon-specific procedural reads for Dual Blades and Greatsword.
 
 ## 2026-07-10 Update: Final Gatekeeper Boss Prototype
