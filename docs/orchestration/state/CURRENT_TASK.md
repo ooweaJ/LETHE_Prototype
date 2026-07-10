@@ -1,5 +1,35 @@
 # Current Task
 
+# 2026-07-10 Final Gatekeeper Boss Prototype
+
+## Status
+
+- Implemented and verified.
+
+## Applied Changes
+
+- Added a key-art-inspired final boss motion sprite sheet:
+  - `LETHE/Assets/_dev/Art/Sprites/Enemies/Bosses/sheet_boss_lethe_gatekeeper_final_4f.png`.
+- Added the sheet to `LETHE/Assets/_dev/Data/V1_ContentCatalog.asset`.
+- Updated `V1GameManager`:
+  - 4th Gatekeeper/final boss uses the new 4-frame sheet,
+  - final boss has separate visual scale and spawn offset,
+  - final boss gains crimson/cyan raid lane judgment and cyan shard cage mechanics,
+  - F12 debug panel now has a `Final` button.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing warnings and 0 errors.
+- Unity compilation errors: `0`.
+- Play Mode `DebugJumpToFinalGatekeeper()` succeeded.
+- Evidence:
+  - `LETHE/Assets/_dev/Evidence/lethe_final_boss_gatekeeper_screen_20260710_final.png`.
+
+## Remaining Gate
+
+- Direct-play F12 -> `Final`.
+- Judge whether the boss silhouette remains readable under Blood Blade Storm, enemy packs, and judgment lane VFX.
+
 # 2026-07-10 Project Thumbnail and Intro Key-Art Pass
 
 ## Status

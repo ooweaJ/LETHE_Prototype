@@ -113,3 +113,5 @@ MonoBehaviour:
     sprite: {fileID: 3785305220665580237, guid: 1abc24db02a83a048a5610075028e829, type: 3}
   - id: Assets/_dev/Art/Sprites/UI/spr_lethe_project_thumbnail_01.png
     sprite: {fileID: 3510281725555987951, guid: 70d4128bac8766047bb1f6b1f9bef967, type: 3}
+  - id: Assets/_dev/Art/Sprites/Enemies/Bosses/sheet_boss_lethe_gatekeeper_final_4f.png
+    sprite: {fileID: 21300000, guid: e62d6ac8841fc174fa369a7e8af16c3a, type: 3}

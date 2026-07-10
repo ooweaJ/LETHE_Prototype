@@ -158,7 +158,14 @@
 <li>
         <article class="unit-card">
           <span class="number">2026-07-10-02</span>
-          <h2><a href="#unit-2026-07-10-02" data-unit-link="unit-2026-07-10-02">포트폴리오 문서 방향 / 최종 보스 콘셉트 메모</a></h2>
+          <h2><a href="#unit-2026-07-10-02" data-unit-link="unit-2026-07-10-02">최종 보스 이미지 / 모션 / 레이드 패턴 구현</a></h2>
+          <p>Dev_Prototype_v1에서 F12 디버그 패널의 Final 버튼으로 최종 보스를 바로 확인할 수 있다. 최종 보스는 기존 4번째 문지기 랭크를 사용하지만, 본체 스프라이트/모션/패턴은 키아트 방향에 맞게 별도 확장했다.</p>
+        </article>
+      </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-10-03</span>
+          <h2><a href="#unit-2026-07-10-03" data-unit-link="unit-2026-07-10-03">포트폴리오 문서 방향 / 최종 보스 콘셉트 메모</a></h2>
           <p>Dev_Prototype_v1은 기존 플레이어블 전투/인트로 상태를 유지한다. 이번 작업은 구현 변경이 아니라 포트폴리오 공개 준비를 위한 문서 방향 정리다.</p>
         </article>
       </li>
@@ -220,7 +227,59 @@
     </article>
 <article class="unit-detail" id="unit-2026-07-10-02" hidden>
       <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
-      <h1>2026-07-10-02 - 포트폴리오 문서 방향 / 최종 보스 콘셉트 메모</h1>
+      <h1>2026-07-10-02 - 최종 보스 이미지 / 모션 / 레이드 패턴 구현</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에서 F12 디버그 패널의 <code>Final</code> 버튼으로 최종 보스를 바로 확인할 수 있다. 최종 보스는 기존 4번째 문지기 랭크를 사용하지만, 본체 스프라이트/모션/패턴은 키아트 방향에 맞게 별도 확장했다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>키아트 감성에 맞는 4프레임 최종 보스 시트를 추가했다.</li>
+<li><code>LETHE/Assets/_dev/Art/Sprites/Enemies/Bosses/sheet_boss_lethe_gatekeeper_final_4f.png</code></li>
+<li>최종 보스는 런타임에서 프레임 애니메이션을 사용한다.</li>
+<li>최종 보스만 별도 스폰 위치와 시각 스케일을 사용해 큰 본체가 화면 안에 들어오게 했다.</li>
+<li>최종 보스 전용 패턴을 추가했다.</li>
+<li>붉은 기억심판 레인.</li>
+<li>푸른 교차 심판 레인.</li>
+<li>푸른 기억 파편 감옥 원형 장판.</li>
+<li>F12 디버그 패널에 <code>Final</code> 버튼을 추가했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 기존 경고 7개, 오류 0개.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Play Mode에서 <code>DebugJumpToFinalGatekeeper()</code> 호출 성공.</li>
+<li>증거 이미지:</li>
+<li><code>LETHE/Assets/_dev/Evidence/lethe_final_boss_gatekeeper_screen_20260710_final.png</code></li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>마지막 보스는 별도 보스 타입을 새로 만들기보다, 현재 4번째 Gatekeeper 랭크를 최종 보스 랭크로 확장한다.</li>
+<li>기존 문지기 패턴은 유지하되, 최종 보스에서만 키아트의 붉은 칼날/푸른 기억 파편 문법을 얹는다.</li>
+<li>디버그는 <code>Boss</code>와 <code>Final</code>을 분리해 첫 보스 테스트와 최종 보스 테스트가 섞이지 않게 한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>Blood Blade Storm과 적이 많을 때 최종 보스 본체가 일부 가려질 수 있다.</li>
+<li>패턴은 읽히지만, 직접 플레이에서 보스 실루엣이 더 앞 레이어로 올라와야 할 수 있다.</li>
+<li>4프레임 시트는 프로토타입용이다. 최종 포트폴리오/릴리즈용으로는 더 정제된 프레임 분리와 애니메이션 타이밍 조정이 필요하다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>최종 보스는 이제 키아트 기반의 레테 관문 군주로 들어갔다. 본체는 4프레임 시트를 쓰고, 패턴은 붉은 레인/푸른 레인/푸른 파편 감옥을 기존 메테오/부채꼴 위에 얹는다. 다음 판단은 수치보다 가시성이다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo 직접 플레이 피드백에 따라 최종 보스 본체 레이어, 크기, 패턴 빈도, 데미지를 조정한다.</li>
+<li>필요하면 최종 보스 전용 체력바/이름 연출을 추가한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 기존 보스는 키아트의 최종 보스 감성과 연결되지 않았다.</li>
+<li>방향: 마지막 보스만 별도 아트/패턴 문법을 가진 보스처럼 보이게 한다.</li>
+<li>행동: 모션 시트, 최종 보스 패턴, 디버그 진입점, 검증 캡처를 추가했다.</li>
+<li>결과: 포트폴리오에서 보여줄 수 있는 &quot;키아트와 인게임 보스가 연결되는 장면&quot;이 생겼다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-10-03" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-10-03 - 포트폴리오 문서 방향 / 최종 보스 콘셉트 메모</h1>
 <h2>1. 현재 빌드 상태</h2>
 <p><code>Dev_Prototype_v1</code>은 기존 플레이어블 전투/인트로 상태를 유지한다. 이번 작업은 구현 변경이 아니라 포트폴리오 공개 준비를 위한 문서 방향 정리다.</p>
 <h2>2. 오늘 바뀐 것</h2>

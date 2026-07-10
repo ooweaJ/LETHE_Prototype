@@ -104,6 +104,7 @@ namespace Lethe.PrototypeV1
         const float FirstBossHp = 2200f;
         const float FastBossHp = 180f;
         const float DebugReviewBossHp = FirstBossHp;
+        const float DebugFinalBossHp = 12800f;
         const float RunSeconds = 1080f;
         const float ArenaHalfWidth = 24f;
         const float ArenaHalfHeight = 16f;
@@ -149,6 +150,7 @@ namespace Lethe.PrototypeV1
             "Assets/_dev/Art/Sprites/Enemies/Bosses/spr_boss_gatekeeper_03.png",
             "Assets/_dev/Art/Sprites/Enemies/Bosses/spr_boss_gatekeeper_04.png"
         };
+        const string FinalGatekeeperSheetPath = "Assets/_dev/Art/Sprites/Enemies/Bosses/sheet_boss_lethe_gatekeeper_final_4f.png";
         const string ArenaBackdropPath = "Assets/_dev/Art/Sprites/Map/spr_lethe_terrain_backdrop_01.png";
         const string IntroBackgroundPath = "Assets/_dev/Art/Sprites/UI/spr_lethe_intro_background_01.png";
         const string ProjectThumbnailPath = "Assets/_dev/Art/Sprites/UI/spr_lethe_project_thumbnail_01.png";
@@ -341,6 +343,7 @@ namespace Lethe.PrototypeV1
         bool deathOverlay;
         bool fastDebugRun;
         bool debugReviewBossHp;
+        bool debugReviewFinalBossHp;
         bool echoOnlyDebugMode;
         bool runWon;
         bool showDebugPanel;
@@ -635,6 +638,7 @@ namespace Lethe.PrototypeV1
             deathOverlay = false;
             fastDebugRun = true;
             debugReviewBossHp = false;
+            debugReviewFinalBossHp = false;
             echoOnlyDebugMode = false;
             runWon = false;
             gatekeeperKills = 0;
@@ -716,6 +720,7 @@ namespace Lethe.PrototypeV1
             deathOverlay = false;
             fastDebugRun = true;
             debugReviewBossHp = false;
+            debugReviewFinalBossHp = false;
             echoOnlyDebugMode = false;
             bossSpawnIndex = 0;
             warnedBossIndex = -1;
@@ -3564,7 +3569,7 @@ namespace Lethe.PrototypeV1
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = EnemySprite(kind);
             sr.color = EnemyColor(kind);
-            sr.sortingOrder = 15;
+            sr.sortingOrder = kind == V1EnemyKind.Gatekeeper && GatekeeperSpawnVisualRank >= 3 ? 19 : 15;
             var enemy = go.AddComponent<V1Enemy>();
             enemy.Configure(this, kind, player, debugHpOverride > 0f ? debugHpOverride : EnemyHp(kind), EnemySpeed(kind), EnemyDamage(kind), EnemyRadius(kind));
             AddEnemyRoleMarker(go.transform, kind);
@@ -3574,7 +3579,8 @@ namespace Lethe.PrototypeV1
         void SpawnGatekeeper()
         {
             if (enemies.Any(e => e != null && e.Kind == V1EnemyKind.Gatekeeper)) return;
-            SpawnEnemy(V1EnemyKind.Gatekeeper, player.position + Vector3.up * 7.2f);
+            var spawnOffset = GatekeeperSpawnVisualRank >= 3 ? 4.4f : 7.2f;
+            SpawnEnemy(V1EnemyKind.Gatekeeper, player.position + Vector3.up * spawnOffset);
             Log($"문지기 등장 {bossSpawnIndex + 1}/{BossSchedule().Length}: 망각 관문");
         }
 
@@ -3619,6 +3625,29 @@ namespace Lethe.PrototypeV1
         }
 
         public int GatekeeperPatternRank => Mathf.Clamp(gatekeeperKills, 0, 3);
+
+        public int GatekeeperSpawnVisualRank => Mathf.Clamp(bossSpawnIndex, 0, 3);
+
+        public float GatekeeperVisualScale(int rank)
+        {
+            return rank >= 3 ? 0.48f : 1.55f;
+        }
+
+        public Sprite GatekeeperRuntimeSprite(int rank, int patternStep, float guardTimer, float healthRatio)
+        {
+            rank = Mathf.Clamp(rank, 0, 3);
+            if (rank < 3) return GatekeeperBodySprite(rank);
+
+            var frame = guardTimer > 0.05f
+                ? Mathf.Clamp(1 + Mathf.FloorToInt((1.10f - guardTimer) * 3.2f), 1, 3)
+                : Mathf.FloorToInt(Time.time * (healthRatio < 0.35f ? 3.2f : 1.55f) + patternStep) % 2;
+            if (healthRatio < 0.35f && frame < 2)
+            {
+                frame = 2 + Mathf.FloorToInt(Time.time * 2.4f) % 2;
+            }
+
+            return GatekeeperBodySprite(rank, frame);
+        }
 
         float GatekeeperRaidWarningSeconds(float baseSeconds) => Mathf.Max(baseSeconds, 0.92f);
 
@@ -3695,6 +3724,11 @@ namespace Lethe.PrototypeV1
                 var side = new Vector2(-forward.y, forward.x);
                 GatekeeperMeteorTell(player.position + (Vector3)(side * 0.72f), 0.98f, 0.68f, 13f, patternStep, rank);
                 GatekeeperMeteorTell(player.position - (Vector3)(side * 0.72f), 0.98f, 0.74f, 13f, patternStep + 1, rank);
+                GatekeeperFinalMemoryJudgment(center, forward, patternStep);
+                if (patternStep % 2 == 0)
+                {
+                    GatekeeperFinalShardCage(player.position, patternStep);
+                }
             }
             cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.12f);
             cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.045f + rank * 0.012f);
@@ -3819,6 +3853,115 @@ namespace Lethe.PrototypeV1
                 var dir = toPlayer.sqrMagnitude > 0.01f ? toPlayer.normalized : Vector2.up;
                 playerMoveVelocity += dir * (1.50f + rank * 0.16f);
                 DamagePlayer(damage, "Gatekeeper ring");
+            }
+        }
+
+        void GatekeeperFinalMemoryJudgment(Vector3 center, Vector2 forward, int patternStep)
+        {
+            forward = forward.sqrMagnitude > 0.01f ? forward.normalized : Vector2.up;
+            var side = new Vector2(-forward.y, forward.x).normalized;
+            var crimson = new Color(1f, 0.08f, 0.14f, 0.54f);
+            var cyan = new Color(0.34f, 0.96f, 1f, 0.48f);
+            var mainCenter = center + (Vector3)(forward * 2.20f);
+            SpawnFinalGateLaneTell("FinalGateCrimsonJudgment", mainCenter, forward, 7.8f, 0.96f, 1.06f, 24f, crimson, "Gatekeeper final crimson judgment");
+
+            if (patternStep % 3 != 1)
+            {
+                var crossCenter = player.position + (Vector3)(side * Mathf.Sin(patternStep * 1.7f) * 0.48f);
+                crossCenter.z = 0f;
+                SpawnFinalGateLaneTell("FinalGateCyanMemoryJudgment", crossCenter, side, 6.4f, 0.68f, 0.96f, 18f, cyan, "Gatekeeper final cyan judgment");
+            }
+
+            SpawnTransientSprite("FinalGateJudgmentHalo", MakeRingSprite("FinalGateJudgmentHalo", Color.white, 180), center + Vector3.up * 0.28f, Quaternion.Euler(0f, 0f, elapsed * -72f), 1.34f, new Color(0.58f, 0.98f, 1f, 0.42f), 0.72f);
+            SpawnTransientSprite("FinalGateJudgmentCrown", GatekeeperSigilSprite(3), center + Vector3.up * 0.62f, Quaternion.Euler(0f, 0f, patternStep * 31f), 0.74f, new Color(1f, 0.18f, 0.22f, 0.70f), 0.64f);
+        }
+
+        void SpawnFinalGateLaneTell(string name, Vector3 center, Vector2 axis, float length, float width, float warningSeconds, float damage, Color color, string source)
+        {
+            if (player == null) return;
+            axis = axis.sqrMagnitude > 0.01f ? axis.normalized : Vector2.up;
+            center.z = 0f;
+            var angle = Mathf.Atan2(axis.y, axis.x) * Mathf.Rad2Deg - 90f;
+            var sprite = MakeBoxSprite($"{name}Sprite", Color.white, 8, 180);
+            var fullScale = new Vector3(width / Mathf.Max(0.01f, sprite.bounds.size.x), length / Mathf.Max(0.01f, sprite.bounds.size.y), 1f);
+            var rotation = Quaternion.Euler(0f, 0f, angle);
+            SpawnGatekeeperRaidFill($"{name}Fill", sprite, center, rotation, fullScale, color, warningSeconds, 0.05f);
+            SpawnTransientSpriteScaled($"{name}EdgeA", sprite, center + (Vector3)(new Vector2(-axis.y, axis.x) * width * 0.52f), rotation, new Vector3(fullScale.x * 0.18f, fullScale.y, 1f), new Color(color.r, color.g, color.b, 0.74f), warningSeconds);
+            SpawnTransientSpriteScaled($"{name}EdgeB", sprite, center - (Vector3)(new Vector2(-axis.y, axis.x) * width * 0.52f), rotation, new Vector3(fullScale.x * 0.18f, fullScale.y, 1f), new Color(color.r, color.g, color.b, 0.74f), warningSeconds);
+            SpawnEchoLink($"{name}MemorySpine", center - (Vector3)(axis * length * 0.43f), center + (Vector3)(axis * length * 0.43f), new Color(color.r, color.g, color.b, 0.58f), warningSeconds * 0.88f, 0.050f);
+            StartCoroutine(ResolveFinalGateLane(name, center, axis, length, width, warningSeconds, damage, color, source));
+        }
+
+        IEnumerator ResolveFinalGateLane(string name, Vector3 center, Vector2 axis, float length, float width, float delay, float damage, Color color, string source)
+        {
+            yield return new WaitForSeconds(delay);
+            if (player == null || deathOverlay) yield break;
+            axis = axis.sqrMagnitude > 0.01f ? axis.normalized : Vector2.up;
+            var side = new Vector2(-axis.y, axis.x).normalized;
+            var angle = Mathf.Atan2(axis.y, axis.x) * Mathf.Rad2Deg - 90f;
+            var sprite = MakeBoxSprite($"{name}ImpactSprite", Color.white, 8, 180);
+            var fullScale = new Vector3(width / Mathf.Max(0.01f, sprite.bounds.size.x), length / Mathf.Max(0.01f, sprite.bounds.size.y), 1f);
+            var rotation = Quaternion.Euler(0f, 0f, angle);
+            SpawnTransientSpriteScaled($"{name}WhiteImpact", sprite, center, rotation, fullScale * 1.02f, new Color(1f, 0.96f, 0.88f, 0.82f), 0.08f);
+            SpawnTransientSpriteScaled($"{name}ColorImpact", sprite, center, rotation, fullScale * 1.10f, new Color(color.r, color.g, color.b, 0.86f), 0.18f);
+            SpawnEchoLink($"{name}ImpactSplitA", center, center + (Vector3)(axis * length * 0.48f + side * width * 0.40f), new Color(color.r, color.g, color.b, 0.72f), 0.20f, 0.060f);
+            SpawnEchoLink($"{name}ImpactSplitB", center, center - (Vector3)(axis * length * 0.48f + side * width * 0.40f), new Color(color.r, color.g, color.b, 0.72f), 0.20f, 0.060f);
+            SpawnRadialSlashLines($"{name}GroundShards", center, axis, 9, Mathf.Max(width, length * 0.18f), new Color(color.r, color.g, color.b, 0.62f), 0.24f);
+
+            var delta = (Vector2)(player.position - center);
+            var along = Mathf.Abs(Vector2.Dot(delta, axis));
+            var across = Mathf.Abs(Vector2.Dot(delta, side));
+            if (along <= length * 0.5f && across <= width * 0.5f)
+            {
+                playerMoveVelocity += axis * 1.85f;
+                DamagePlayer(damage, source);
+            }
+
+            hitstopTimer = Mathf.Max(hitstopTimer, 0.042f);
+            cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.24f);
+            cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.12f);
+            PlaySfx("warning", 0.64f, 0.16f);
+        }
+
+        void GatekeeperFinalShardCage(Vector3 target, int patternStep)
+        {
+            target.z = 0f;
+            var radius = 1.54f;
+            var warningSeconds = 1.08f;
+            var cyan = new Color(0.34f, 0.96f, 1f, 0.50f);
+            SpawnGatekeeperRaidFill("FinalShardCageFill", MakeDiscSprite("FinalShardCageFill", Color.white, 160), target, Quaternion.identity, Vector3.one * radius, cyan, warningSeconds, 0.12f);
+            SpawnTransientSprite("FinalShardCageRing", MakeRingSprite("FinalShardCageRing", Color.white, 180), target, Quaternion.Euler(0f, 0f, patternStep * -22f), radius * 1.06f, new Color(0.58f, 1f, 1f, 0.92f), warningSeconds);
+            for (int i = 0; i < 4; i++)
+            {
+                var angle = patternStep * 17f + i * 90f;
+                var dir = Quaternion.Euler(0f, 0f, angle) * Vector3.right;
+                SpawnFinalFallingShard(target + dir * radius * 0.82f, angle, warningSeconds);
+            }
+            StartCoroutine(ResolveFinalShardCage(target, radius, warningSeconds, patternStep));
+        }
+
+        void SpawnFinalFallingShard(Vector3 end, float angle, float telegraphTime)
+        {
+            var start = end + new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad) * 0.28f, 2.90f, 0f);
+            var delta = end - start;
+            var fallAngle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg - 90f;
+            SpawnEchoLink("FinalShardFallTrail", start, end, new Color(0.42f, 1f, 1f, 0.42f), telegraphTime * 0.90f, 0.046f);
+            SpawnSweepingTransientSprite("FinalShardFallingBody", GatekeeperMeteorSprite(3), start, end, fallAngle, fallAngle + 24f, 0.42f, 0.68f, new Color(0.56f, 1f, 1f, 0.92f), telegraphTime, telegraphTime * 0.88f);
+        }
+
+        IEnumerator ResolveFinalShardCage(Vector3 center, float radius, float delay, int patternStep)
+        {
+            yield return new WaitForSeconds(delay);
+            if (player == null || deathOverlay) yield break;
+            var cyan = new Color(0.46f, 1f, 1f, 0.82f);
+            SpawnGatekeeperRaidImpact("FinalShardCageImpact", center, Quaternion.identity, Vector3.one * radius, 3, true);
+            SpawnTransientSprite("FinalShardCageCrystalBurst", GatekeeperMeteorSprite(3), center, Quaternion.Euler(0f, 0f, patternStep * 41f), radius * 1.05f, cyan, 0.28f);
+            SpawnRadialSlashLines("FinalShardCageSplinters", center, Vector2.up, 14, radius * 1.18f, cyan, 0.30f);
+            var toPlayer = (Vector2)(player.position - center);
+            if (toPlayer.magnitude <= radius)
+            {
+                playerMoveVelocity += (toPlayer.sqrMagnitude > 0.01f ? toPlayer.normalized : Vector2.up) * 1.55f;
+                DamagePlayer(17f, "Gatekeeper final shard cage");
             }
         }
 
@@ -3962,7 +4105,7 @@ namespace Lethe.PrototypeV1
 
         float GatekeeperHp()
         {
-            if (fastDebugRun) return debugReviewBossHp ? DebugReviewBossHp : FastBossHp;
+            if (fastDebugRun) return debugReviewFinalBossHp ? DebugFinalBossHp : debugReviewBossHp ? DebugReviewBossHp : FastBossHp;
             return bossSpawnIndex switch
             {
                 <= 0 => FirstBossHp,
@@ -4595,6 +4738,7 @@ namespace Lethe.PrototypeV1
             runStarted = true;
             fastDebugRun = false;
             debugReviewBossHp = false;
+            debugReviewFinalBossHp = false;
             echoOnlyDebugMode = false;
             bossSpawnIndex = 0;
             warnedBossIndex = -1;
@@ -5159,6 +5303,7 @@ namespace Lethe.PrototypeV1
             deathOverlay = false;
             fastDebugRun = true;
             debugReviewBossHp = false;
+            debugReviewFinalBossHp = false;
             echoOnlyDebugMode = false;
             pendingKalmuriFollowups.Clear();
             debugTransientSpriteSpawnCount = 0;
@@ -5299,6 +5444,7 @@ namespace Lethe.PrototypeV1
             echoOnlyDebugMode = false;
             fastDebugRun = true;
             debugReviewBossHp = true;
+            debugReviewFinalBossHp = false;
             gatekeeperKills = 0;
             bossSpawnIndex = 0;
             warnedBossIndex = 0;
@@ -5322,10 +5468,51 @@ namespace Lethe.PrototypeV1
             return DebugSnapshot();
         }
 
+        public string DebugJumpToFinalGatekeeper()
+        {
+            EnsureRunStarted();
+            pausedForChoice = false;
+            resultOverlay = false;
+            refillOverlay = false;
+            deathOverlay = false;
+            GameplayPaused = false;
+            HitstopActive = false;
+            echoOnlyDebugMode = false;
+            fastDebugRun = true;
+            debugReviewBossHp = false;
+            debugReviewFinalBossHp = true;
+            gatekeeperKills = 3;
+            bossSpawnIndex = 3;
+            warnedBossIndex = 3;
+            bossTimer = 9999f;
+            elapsed = Mathf.Max(elapsed, BossSchedule()[Mathf.Min(3, BossSchedule().Length - 1)]);
+            playerHp = Mathf.Max(playerHp, playerMaxHp * 0.92f);
+
+            if (!HasMemory(V1MemoryId.HungryBlades)) AddMemory(V1MemoryId.HungryBlades, 5, true);
+            if (!HasMemory(V1MemoryId.BloodReflection)) AddMemory(V1MemoryId.BloodReflection, 5, true);
+            if (!HasMemory(V1MemoryId.AshenShield)) AddMemory(V1MemoryId.AshenShield, 3, true);
+            SetEcho(V1MemoryId.HungryBlades, 5);
+            SetEcho(V1MemoryId.BloodReflection, 5);
+
+            RemoveExistingGatekeepers();
+            EnsureReviewEnemies(18);
+            SpawnGatekeeperWarning();
+            SpawnGatekeeper();
+            var gatekeeper = enemies.LastOrDefault(e => e != null && e.IsAlive && e.Kind == V1EnemyKind.Gatekeeper);
+            if (gatekeeper != null)
+            {
+                GatekeeperPatternPulse(gatekeeper, 4);
+            }
+            SpawnFloatingText(player.position + Vector3.up * 1.55f, $"Final Boss HP {DebugFinalBossHp:0}", new Color(0.56f, 1f, 1f));
+            Log($"Debug final gatekeeper jump HP {DebugFinalBossHp:0}");
+            return DebugSnapshot();
+        }
+
         public string DebugRunGatekeeperPatternMatrix()
         {
             EnsureRunStarted();
             debugReviewBossHp = false;
+            debugReviewFinalBossHp = false;
             echoOnlyDebugMode = false;
             var origin = player.position + Vector3.up * 3.8f;
             for (int rank = 0; rank < 4; rank++)
@@ -5862,10 +6049,7 @@ namespace Lethe.PrototypeV1
             if (GUI.Button(new Rect(Screen.width - 216, 242, 92, 28), "DB Rev", buttonStyle)) DebugIntegratedReview(V1WeaponId.DualBlades);
             if (GUI.Button(new Rect(Screen.width - 118, 242, 92, 28), "GS Rev", buttonStyle)) DebugIntegratedReview(V1WeaponId.Greatsword);
             if (GUI.Button(new Rect(Screen.width - 314, 276, 92, 28), "Boss", buttonStyle)) DebugJumpToGatekeeper();
-            if (GUI.Button(new Rect(Screen.width - 216, 276, 92, 28), "Cont", buttonStyle))
-            {
-                if (resultOverlay) ContinueAfterForgetResult();
-            }
+            if (GUI.Button(new Rect(Screen.width - 216, 276, 92, 28), "Final", buttonStyle)) DebugJumpToFinalGatekeeper();
             GUI.Label(new Rect(Screen.width - 118, 280, 92, 20), "Rev: all echo", smallStyle);
             GUI.Label(new Rect(Screen.width - 314, 310, 292, 20), "Kalmuri hunger echo prototypes", smallStyle);
             if (GUI.Button(new Rect(Screen.width - 314, 334, 68, 28), "K1", buttonStyle)) DebugPreviewKalmuriConcept(1);
@@ -6796,14 +6980,21 @@ namespace Lethe.PrototypeV1
                 V1EnemyKind.DriftingEye => LoadSheetFrame(EnemyEyeSheetPath, 4, 8, 0, 0) ?? MakeEyeSprite("drifting_eye", EnemyColor(kind), 88),
                 V1EnemyKind.SplitOne => LoadSheetFrame(EnemySplitterSheetPath, 4, 8, 0, 0) ?? MakeSplitterSprite("split_one", EnemyColor(kind), 88),
                 V1EnemyKind.VoidPriest => LoadSheetFrame(EnemyVoidPriestSheetPath, 4, 8, 0, 0) ?? MakePriestSprite("void_priest", EnemyColor(kind), 88),
-                V1EnemyKind.Gatekeeper => GatekeeperBodySprite(Mathf.Clamp(bossSpawnIndex, 0, 3)),
+                V1EnemyKind.Gatekeeper => GatekeeperBodySprite(GatekeeperSpawnVisualRank),
                 _ => MakeCircleSprite(kind.ToString(), EnemyColor(kind), 72)
             };
         }
 
-        Sprite GatekeeperBodySprite(int rank)
+        Sprite GatekeeperBodySprite(int rank, int frame = 0)
         {
-            var sprite = LoadSprite(BossGatekeeperRankPaths[Mathf.Clamp(rank, 0, BossGatekeeperRankPaths.Length - 1)]);
+            rank = Mathf.Clamp(rank, 0, BossGatekeeperRankPaths.Length - 1);
+            if (rank >= 3)
+            {
+                var finalFrame = LoadSheetFrame(FinalGatekeeperSheetPath, 4, 1, Mathf.Clamp(frame, 0, 3), 0);
+                if (finalFrame != null) return finalFrame;
+            }
+
+            var sprite = LoadSprite(BossGatekeeperRankPaths[rank]);
             return sprite ?? LoadSprite(BossGatekeeperPath) ?? MakeGatekeeperSprite($"gatekeeper_rank_{rank}", GatekeeperAccentColor(rank, 1f), 144, rank);
         }
 
@@ -6813,9 +7004,14 @@ namespace Lethe.PrototypeV1
             V1EnemyKind.DriftingEye => new Color(0.80f, 0.45f, 1f),
             V1EnemyKind.SplitOne => new Color(1f, 0.75f, 0.35f),
             V1EnemyKind.VoidPriest => new Color(0.35f, 1f, 0.62f),
-            V1EnemyKind.Gatekeeper => new Color(1f, 0.28f, 0.2f),
+            V1EnemyKind.Gatekeeper => GatekeeperBodyTint(GatekeeperSpawnVisualRank),
             _ => Color.white
         };
+
+        Color GatekeeperBodyTint(int rank)
+        {
+            return rank >= 3 ? Color.white : new Color(1f, 0.28f, 0.2f);
+        }
 
         static Sprite MakeEyeSprite(string name, Color color, int size)
         {
@@ -7941,6 +8137,7 @@ namespace Lethe.PrototypeV1
         float voidPriestHealLockout;
         float echoStateTintTimer;
         int gatekeeperPatternStep;
+        int gatekeeperRank;
         Color echoStateTint = Color.white;
 
         public V1EnemyKind Kind { get; private set; }
@@ -7964,11 +8161,12 @@ namespace Lethe.PrototypeV1
             this.speed = speed;
             TouchDamage = damage;
             TouchRadius = radius;
+            gatekeeperRank = kind == V1EnemyKind.Gatekeeper && manager != null ? manager.GatekeeperSpawnVisualRank : 0;
             sr = GetComponent<SpriteRenderer>();
             if (sr != null) baseColor = sr.color;
             transform.localScale = Vector3.one * (kind switch
             {
-                V1EnemyKind.Gatekeeper => 1.55f,
+                V1EnemyKind.Gatekeeper => manager != null ? manager.GatekeeperVisualScale(gatekeeperRank) : 1.55f,
                 V1EnemyKind.VoidPriest => 0.84f,
                 V1EnemyKind.SplitOne => 0.82f,
                 V1EnemyKind.DriftingEye => 0.76f,
@@ -8018,6 +8216,11 @@ namespace Lethe.PrototypeV1
 
             if (Kind == V1EnemyKind.Gatekeeper)
             {
+                if (sr != null && manager != null)
+                {
+                    sr.sprite = manager.GatekeeperRuntimeSprite(gatekeeperRank, gatekeeperPatternStep, gatekeeperGuardTimer, HealthRatio);
+                }
+
                 gatekeeperGuardTimer = Mathf.Max(0f, gatekeeperGuardTimer - dt);
                 gatekeeperPatternTimer -= dt;
                 if (gatekeeperPatternTimer <= 0f)
