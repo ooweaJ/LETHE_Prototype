@@ -169,6 +169,13 @@
           <p>Dev_Prototype_v1은 기존 플레이어블 전투/인트로 상태를 유지한다. 이번 작업은 구현 변경이 아니라 포트폴리오 공개 준비를 위한 문서 방향 정리다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-10-04</span>
+          <h2><a href="#unit-2026-07-10-04" data-unit-link="unit-2026-07-10-04">무기별 잔향 VFX 보드 정리</a></h2>
+          <p>이번 작업은 런타임 변경 없이 문서/시각 정리만 추가했다. 현재 구현된 잔향 VFX 방향을 무기별로 볼 수 있는 HTML 보드가 생겼다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -320,6 +327,46 @@
 <li>방향: 문서는 깊게, 사이트는 선명하게 구성한다.</li>
 <li>행동: 최종 보스 콘셉트를 결정 로그로 남기고, 포트폴리오 사이트 문서 구조를 별도로 정의했다.</li>
 <li>결과: LETHE를 &quot;기획형 Unity 전투 프로토타입&quot;으로 보여줄 공개 구조가 생겼다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-10-04" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-10-04 - 무기별 잔향 VFX 보드 정리</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p>이번 작업은 런타임 변경 없이 문서/시각 정리만 추가했다. 현재 구현된 잔향 VFX 방향을 무기별로 볼 수 있는 HTML 보드가 생겼다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>무기별 잔향 VFX 보드 추가:</li>
+<li><code>docs/orchestration/evidence/2026-07-10-weapon-echo-vfx-board.html</code></li>
+<li>쌍검/대검 각각의 잔향 VFX 방향을 같은 행에서 비교할 수 있게 정리했다.</li>
+<li>각 잔향 가족의 실제 스프라이트 썸네일을 함께 배치했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>HTML 내 모든 이미지 <code>src</code>가 실제 PNG 파일로 해석되는지 확인했다.</li>
+<li>코드 변경이 없어서 Unity 빌드 테스트는 생략했다.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>잔향 정리는 텍스트 표보다 이미지 보드로 관리한다.</li>
+<li>기본 잔향 이미지와 무기별 절차형 VFX를 분리해 설명한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>현재 보드는 설계/확인용이다. 실제 플레이 중 가시성은 별도 직접 플레이로 검증해야 한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>잔향 VFX는 기본 이미지 가족과 무기별 판정/연출을 분리해 봐야 한다. 쌍검은 체인/다단/작은 표식, 대검은 큰 전방 판정/반달/방벽/붕괴장 중심으로 정리했다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo가 보드를 보고 어색한 잔향을 지정하면 해당 잔향의 실제 Unity VFX 크기, 색, 판정, 지속시간을 조정한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 말로만 설명하면 무기별 잔향 차이를 파악하기 어렵다.</li>
+<li>방향: 이미지 기반 보드로 VFX 의도를 시각화한다.</li>
+<li>행동: 실제 스프라이트를 보여주는 HTML 보드를 만들었다.</li>
+<li>결과: 포트폴리오/개발 검토에서 잔향 VFX 방향을 빠르게 확인할 수 있다.</li>
 </ul>
     </article>
       </div>
