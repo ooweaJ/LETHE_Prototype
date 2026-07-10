@@ -3,13 +3,13 @@
 ## 1. Utility Echo Weapon-Identity Direct-Play Review
 
 - Priority: urgent
-- Problem: Blood, Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion Echoes now have weapon-specific mechanics, not just VFX accents. Automated QA passes, but only direct play can prove whether each weapon pair finally feels different.
+- Problem: Blood, Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion Echoes now have a second weapon-specific runtime pass, including stronger Dual Blades chain/mark VFX and Greatsword crescent/fissure/guillotine/bulwark/crater reads. `dotnet build` and Unity compilation pass, but the MCP menu runner failed with `Error polling queue: fetch failed`, so direct play is the real gate.
 - Build:
   - Play `Dev_Prototype_v1` with both Greatsword and Dual Blades.
-  - Check Greatsword Blood Echo first: it should now read as two thin red half-moon blood iaido slashes at the edge of the normal Greatsword range.
+  - Check Greatsword Blood Echo first: it should now read as a bigger double thin red half-moon blood iaido at the edge of the normal Greatsword range.
   - Compare Blood, Execution, Hunter, Shatter, Stopped, Ashen, and Oblivion Echoes one by one.
-  - Judge whether Greatsword reads as fewer heavier actions: harvest arc, fissure, verdict cleave, piercing spear, clock field, bulwark wave, collapse well.
-  - Judge whether Dual Blades reads as rapid chained actions: stitches, needle bounces, sentence cuts, fan shots, micro-stops, parries, brand hops.
+  - Judge whether Greatsword reads as fewer heavier actions: double blood crescent, forward fissure, falling guillotine, piercing spear, clock judgement, bulwark wave, collapse crater.
+  - Judge whether Dual Blades reads as rapid chained actions: blood stitches, needle ripples, sentence marks, fan shots, micro-stops, parry sparks, brand hops.
   - Watch dense Dual Blades specifically for clutter or frame spikes after the budget-suppression branch.
 - Done:
   - jaewoo can name the exact Echo family and weapon pair that should be kept, enlarged, reduced, recolored, sped up, slowed down, or redesigned.
@@ -66,6 +66,7 @@
 
 Completed sequence:
 
+- 2026-07-10: weapon-specific Echo runtime pass added stronger Dual Blades stitch/mark/fan/rune reads and Greatsword crescent/fissure/guillotine/clock/bulwark/crater reads. C# and Unity compilation pass; MCP menu execution needs retry.
 - 2026-07-10: project thumbnail and in-game intro key art added. Wide intro background is wired into `DrawLetheIntroOverlay`, UI sprites are cataloged, Game View evidence captured, Unity/C# checks passed.
 - 2026-07-09: Greatsword Blood Echo crescent moved to the swing range edge and split into two thin `((` crescents. Greatsword Echo Matrix and Dense Dual QA passed.
 - 2026-07-09: Greatsword Blood Echo changed from thread/harvest behavior into red crescent blood-iaido follow-up damage. Greatsword Echo Matrix and Dense Dual QA passed.

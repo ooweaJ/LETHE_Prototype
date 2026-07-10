@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260710\\index.md",
-  "generatedAt": "2026-07-10T06:07:17.552Z",
-  "unitCount": 4,
+  "generatedAt": "2026-07-10T06:34:56.046Z",
+  "unitCount": 5,
   "latest": {
-    "title": "2026-07-10-04 - 무기별 잔향 VFX 보드 정리",
-    "number": "04",
-    "markdownPath": "docs\\orchestration\\reports\\20260710\\units\\2026-07-10-04-무기별-잔향-vfx-보드-정리.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260710\\units\\2026-07-10-04-무기별-잔향-vfx-보드-정리.html"
+    "title": "2026-07-10-05 - 무기별 잔향 VFX 런타임 차별화",
+    "number": "05",
+    "markdownPath": "docs\\orchestration\\reports\\20260710\\units\\2026-07-10-05-무기별-잔향-vfx-런타임-차별화.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260710\\units\\2026-07-10-05-무기별-잔향-vfx-런타임-차별화.html"
   }
 }

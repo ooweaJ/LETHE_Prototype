@@ -2,6 +2,40 @@
 
 Last updated: 2026-07-10
 
+## 2026-07-10 Update: Weapon-Specific Echo VFX Runtime Pass
+
+- jaewoo approved moving from the VFX concept board into implementation and asked to judge by direct play.
+- Applied in `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`:
+  - Blood Echo:
+    - Dual Blades gained short red stitch needles and tighter suture-fan reads.
+    - Greatsword gained an additional offset double blood crescent so the `((` half-moon read is stronger at the range edge.
+  - Shatter Echo:
+    - Dual Blades gained small micro-ripple chain markers.
+    - Greatsword gained a forward wedge/fissure plate so it reads as a directional ground break.
+  - Execution Echo:
+    - Dual Blades gained sentence marks on chained targets.
+    - Greatsword gained a falling guillotine verdict blade.
+  - Hunter Echo:
+    - Dual Blades gained fan-shaped short pursuit needles.
+    - Greatsword retains long spear/pierce behavior.
+  - Stopped Echo:
+    - Greatsword gained a sweeping clock-hand judgement cut.
+  - Ashen Echo:
+    - Dual Blades gained small parry sparks around the hit target.
+    - Greatsword gained a visible forward bulwark plate and release cone.
+  - Oblivion Echo:
+    - Dual Blades gained hop-rune/brand thread reads.
+    - Greatsword gained a crater/collapse well read.
+- Added the discussion concept board:
+  - `docs/orchestration/evidence/2026-07-10-weapon-echo-vfx-concept-board.html`.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades` menu execution was attempted three times but MCP returned `Error polling queue: fetch failed`; editor state and compilation queries still worked on port `7890`.
+- Next step:
+  - Direct-play F12 -> `Echo One` / `DB Rev` / `GS Rev`, compare each Echo family by weapon, and judge which reads still feel too similar.
+
 ## 2026-07-10 Update: Weapon Echo VFX Board
 
 - jaewoo asked to see which VFX each Echo uses by weapon.

@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LETHE Weapon Echo VFX Concept Board</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #071014;
+      --panel: #101b20;
+      --panel-2: #0c171c;
+      --line: rgba(202, 229, 235, 0.18);
+      --text: #ecf7f8;
+      --muted: #9db3b9;
+      --cyan: #75efff;
+      --blue: #559cff;
+      --red: #ff4f66;
+      --white: #f4fbff;
+      --violet: #b17cff;
+      --ash: #b8c0bd;
+      --gold: #f2cf70;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 45% 0%, rgba(85, 156, 255, 0.14), transparent 34rem),
+        radial-gradient(circle at 82% 14%, rgba(255, 79, 102, 0.11), transparent 26rem),
+        linear-gradient(180deg, #08151a 0%, var(--bg) 42%, #05090d 100%);
+      color: var(--text);
+      font-family: Pretendard, "Segoe UI", system-ui, sans-serif;
+      letter-spacing: 0;
+    }
+
+    main {
+      width: min(1480px, calc(100vw - 36px));
+      margin: 0 auto;
+      padding: 28px 0 44px;
+    }
+
+    header {
+      display: grid;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 22px;
+      margin-bottom: 22px;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      font-size: clamp(28px, 4vw, 56px);
+      line-height: 1;
+      font-weight: 850;
+    }
+
+    .subtitle {
+      max-width: 980px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.65;
+    }
+
+    .rulebar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .rule {
+      border: 1px solid var(--line);
+      background: rgba(12, 23, 28, 0.86);
+      padding: 14px 16px;
+      min-height: 96px;
+    }
+
+    .rule strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+
+    .rule span {
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .board {
+      display: grid;
+      gap: 18px;
+    }
+
+    .echo {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(16, 27, 32, 0.95), rgba(8, 17, 22, 0.95));
+      padding: 16px;
+    }
+
+    .echo-head {
+      display: grid;
+      grid-template-columns: minmax(180px, 260px) 1fr;
+      gap: 14px;
+      align-items: start;
+      margin-bottom: 14px;
+    }
+
+    .echo-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 22px;
+      font-weight: 820;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 18px var(--cyan);
+      flex: none;
+    }
+
+    .intent {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .variants {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .variant {
+      position: relative;
+      overflow: hidden;
+      min-height: 270px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent),
+        var(--panel-2);
+      border: 1px solid var(--line);
+      padding: 14px;
+    }
+
+    .variant h3 {
+      font-size: 18px;
+      font-weight: 820;
+      margin-bottom: 5px;
+    }
+
+    .variant .copy {
+      color: var(--muted);
+      line-height: 1.48;
+      font-size: 13px;
+      min-height: 58px;
+    }
+
+    .stage {
+      position: relative;
+      height: 150px;
+      margin: 12px 0;
+      border: 1px solid rgba(202, 229, 235, 0.14);
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        radial-gradient(circle at 50% 55%, rgba(117, 239, 255, 0.08), transparent 42%),
+        #061014;
+      background-size: 28px 28px, 28px 28px, auto, auto;
+    }
+
+    .target {
+      position: absolute;
+      left: 50%;
+      top: 55%;
+      width: 18px;
+      height: 18px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: #dffcff;
+      box-shadow: 0 0 18px rgba(117, 239, 255, 0.75);
+      z-index: 6;
+    }
+
+    .origin {
+      position: absolute;
+      left: 17%;
+      top: 55%;
+      width: 16px;
+      height: 16px;
+      transform: translate(-50%, -50%);
+      border-radius: 3px;
+      border: 1px solid rgba(236, 247, 248, 0.8);
+      background: rgba(236, 247, 248, 0.08);
+      z-index: 6;
+    }
+
+    .judgement {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      color: #c8dadd;
+      font-size: 12px;
+    }
+
+    .pill {
+      border: 1px solid rgba(202, 229, 235, 0.16);
+      background: rgba(255, 255, 255, 0.035);
+      padding: 7px 8px;
+      min-height: 46px;
+      line-height: 1.35;
+    }
+
+    .blade {
+      position: absolute;
+      width: 54px;
+      height: 5px;
+      border-radius: 999px 8px 8px 999px;
+      background: linear-gradient(90deg, transparent, currentColor 24%, #fff 58%, currentColor);
+      color: var(--cyan);
+      box-shadow: 0 0 12px currentColor;
+      transform-origin: center;
+    }
+
+    .slash {
+      position: absolute;
+      width: 100px;
+      height: 76px;
+      border: 4px solid currentColor;
+      border-left-color: transparent;
+      border-bottom-color: transparent;
+      border-radius: 50%;
+      color: var(--cyan);
+      filter: drop-shadow(0 0 12px currentColor);
+      transform: rotate(-18deg);
+    }
+
+    .line {
+      position: absolute;
+      height: 3px;
+      border-radius: 99px;
+      background: currentColor;
+      color: var(--cyan);
+      box-shadow: 0 0 14px currentColor;
+      transform-origin: left center;
+    }
+
+    .circle {
+      position: absolute;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+      color: var(--cyan);
+      box-shadow: inset 0 0 18px rgba(117, 239, 255, 0.1), 0 0 12px currentColor;
+    }
+
+    .wedge {
+      position: absolute;
+      width: 160px;
+      height: 118px;
+      background: conic-gradient(from 318deg, currentColor 0deg, currentColor 58deg, transparent 59deg);
+      color: rgba(117, 239, 255, 0.34);
+      border-radius: 50%;
+      filter: drop-shadow(0 0 10px currentColor);
+    }
+
+    .crescent {
+      position: absolute;
+      width: 116px;
+      height: 92px;
+      border: 4px solid currentColor;
+      border-left-color: transparent;
+      border-bottom-color: transparent;
+      border-radius: 50%;
+      color: var(--red);
+      filter: drop-shadow(0 0 12px currentColor);
+    }
+
+    .mark {
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      border: 2px solid currentColor;
+      color: var(--violet);
+      transform: rotate(45deg);
+      box-shadow: 0 0 12px currentColor;
+    }
+
+    .spark {
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      color: var(--ash);
+    }
+
+    .spark::before, .spark::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 2px;
+      height: 28px;
+      background: currentColor;
+      box-shadow: 0 0 10px currentColor;
+      transform: translateX(-50%);
+    }
+
+    .spark::after { transform: translateX(-50%) rotate(90deg); }
+
+    .crack {
+      position: absolute;
+      width: 120px;
+      height: 5px;
+      background: linear-gradient(90deg, transparent, currentColor, transparent);
+      color: var(--white);
+      box-shadow: 0 0 12px currentColor;
+      transform-origin: center;
+    }
+
+    .kalmuri .dot { background: var(--cyan); box-shadow: 0 0 18px var(--cyan); }
+    .blood .dot { background: var(--red); box-shadow: 0 0 18px var(--red); }
+    .execution .dot { background: var(--white); box-shadow: 0 0 18px var(--white); }
+    .homing .dot { background: var(--gold); box-shadow: 0 0 18px var(--gold); }
+    .shock .dot { background: #8feaff; box-shadow: 0 0 18px #8feaff; }
+    .time .dot { background: #87b7ff; box-shadow: 0 0 18px #87b7ff; }
+    .ashen .dot { background: var(--ash); box-shadow: 0 0 18px var(--ash); }
+    .brand .dot { background: var(--violet); box-shadow: 0 0 18px var(--violet); }
+
+    .dual-kalmuri .blade:nth-child(1) { left: 39%; top: 25%; transform: rotate(26deg); }
+    .dual-kalmuri .blade:nth-child(2) { left: 57%; top: 27%; transform: rotate(145deg); }
+    .dual-kalmuri .blade:nth-child(3) { left: 36%; top: 65%; transform: rotate(-35deg); }
+    .dual-kalmuri .blade:nth-child(4) { left: 58%; top: 66%; transform: rotate(205deg); }
+    .dual-kalmuri .circle { left: 38%; top: 30%; width: 92px; height: 92px; color: rgba(117, 239, 255, 0.5); }
+
+    .great-kalmuri .circle { left: 40%; top: 12%; width: 126px; height: 126px; color: rgba(117, 239, 255, 0.62); }
+    .great-kalmuri .blade:nth-child(2) { left: 35%; top: 18%; transform: rotate(38deg); }
+    .great-kalmuri .blade:nth-child(3) { left: 64%; top: 22%; transform: rotate(142deg); }
+    .great-kalmuri .blade:nth-child(4) { left: 34%; top: 71%; transform: rotate(-38deg); }
+    .great-kalmuri .blade:nth-child(5) { left: 62%; top: 72%; transform: rotate(218deg); }
+    .great-kalmuri .wedge { left: 37%; top: 10%; color: rgba(117, 239, 255, 0.18); transform: rotate(-18deg); }
+
+    .dual-blood .line { color: var(--red); }
+    .dual-blood .line:nth-child(2) { left: 31%; top: 35%; width: 142px; transform: rotate(16deg); }
+    .dual-blood .line:nth-child(3) { left: 34%; top: 63%; width: 128px; transform: rotate(-18deg); }
+    .dual-blood .circle { width: 44px; height: 44px; color: rgba(255, 79, 102, 0.5); }
+    .dual-blood .circle:nth-child(4) { left: 35%; top: 30%; }
+    .dual-blood .circle:nth-child(5) { left: 58%; top: 50%; }
+
+    .great-blood .crescent:nth-child(2) { left: 47%; top: 27%; transform: rotate(18deg); }
+    .great-blood .crescent:nth-child(3) { left: 54%; top: 30%; transform: rotate(18deg) scale(1.08); opacity: 0.75; }
+    .great-blood .circle { left: 57%; top: 43%; width: 66px; height: 66px; color: rgba(255, 79, 102, 0.36); }
+
+    .dual-execution .mark { color: var(--white); width: 18px; height: 18px; }
+    .dual-execution .mark:nth-child(2) { left: 37%; top: 25%; }
+    .dual-execution .mark:nth-child(3) { left: 54%; top: 38%; }
+    .dual-execution .mark:nth-child(4) { left: 47%; top: 66%; }
+    .dual-execution .crack { color: var(--red); width: 72px; left: 43%; top: 52%; transform: rotate(-18deg); }
+
+    .great-execution .crack { color: var(--white); width: 142px; height: 7px; left: 42%; top: 50%; transform: rotate(90deg); }
+    .great-execution .circle { left: 42%; top: 15%; width: 118px; height: 118px; color: rgba(244, 251, 255, 0.45); border-radius: 0; transform: rotate(45deg); }
+
+    .dual-homing .line { color: var(--gold); width: 120px; left: 31%; top: 54%; }
+    .dual-homing .line:nth-child(2) { transform: rotate(-28deg); }
+    .dual-homing .line:nth-child(3) { transform: rotate(0deg); }
+    .dual-homing .line:nth-child(4) { transform: rotate(28deg); }
+
+    .great-homing .line { color: var(--gold); width: 210px; height: 5px; left: 24%; top: 54%; transform: rotate(-4deg); }
+    .great-homing .blade { color: var(--gold); width: 76px; left: 70%; top: 50%; transform: rotate(-4deg); }
+
+    .dual-shock .circle:nth-child(2) { left: 39%; top: 34%; width: 40px; height: 40px; color: rgba(143, 234, 255, 0.75); }
+    .dual-shock .circle:nth-child(3) { left: 50%; top: 51%; width: 52px; height: 52px; color: rgba(143, 234, 255, 0.58); }
+    .dual-shock .circle:nth-child(4) { left: 61%; top: 29%; width: 36px; height: 36px; color: rgba(143, 234, 255, 0.68); }
+
+    .great-shock .wedge { left: 30%; top: 14%; width: 220px; height: 126px; color: rgba(143, 234, 255, 0.26); transform: rotate(-12deg); }
+    .great-shock .crack { color: #8feaff; width: 180px; left: 34%; top: 58%; transform: rotate(-8deg); }
+    .great-shock .crack:nth-child(3) { top: 43%; transform: rotate(8deg); opacity: 0.7; }
+
+    .dual-time .circle { color: rgba(135, 183, 255, 0.65); }
+    .dual-time .circle:nth-child(2) { left: 37%; top: 28%; width: 36px; height: 36px; }
+    .dual-time .circle:nth-child(3) { left: 51%; top: 48%; width: 42px; height: 42px; }
+    .dual-time .line { color: #87b7ff; width: 62px; left: 48%; top: 56%; transform: rotate(-42deg); }
+
+    .great-time .circle { left: 40%; top: 11%; width: 132px; height: 132px; color: rgba(135, 183, 255, 0.6); }
+    .great-time .line { color: #87b7ff; width: 96px; left: 51%; top: 55%; transform: rotate(-55deg); height: 4px; }
+    .great-time .line:nth-child(3) { transform: rotate(26deg); opacity: 0.65; }
+
+    .dual-ashen .spark:nth-child(2) { left: 39%; top: 30%; }
+    .dual-ashen .spark:nth-child(3) { left: 57%; top: 38%; transform: rotate(35deg); }
+    .dual-ashen .spark:nth-child(4) { left: 47%; top: 66%; transform: rotate(-22deg); }
+    .dual-ashen .circle { left: 34%; top: 23%; width: 94px; height: 94px; color: rgba(184, 192, 189, 0.34); }
+
+    .great-ashen .circle { left: 22%; top: 18%; width: 54px; height: 94px; border-radius: 8px; color: rgba(184, 192, 189, 0.72); }
+    .great-ashen .wedge { left: 37%; top: 19%; width: 184px; height: 110px; color: rgba(184, 192, 189, 0.24); transform: rotate(-7deg); }
+    .great-ashen .crack { left: 43%; top: 54%; width: 134px; color: var(--ash); transform: rotate(7deg); }
+
+    .dual-brand .mark:nth-child(2) { left: 34%; top: 30%; }
+    .dual-brand .mark:nth-child(3) { left: 49%; top: 52%; }
+    .dual-brand .mark:nth-child(4) { left: 64%; top: 28%; }
+    .dual-brand .line { color: var(--violet); width: 138px; left: 38%; top: 50%; transform: rotate(-11deg); opacity: 0.7; }
+
+    .great-brand .circle { left: 41%; top: 15%; width: 122px; height: 122px; color: rgba(177, 124, 255, 0.55); }
+    .great-brand .circle:nth-child(3) { left: 47%; top: 27%; width: 76px; height: 76px; color: rgba(255, 79, 102, 0.34); }
+    .great-brand .mark { left: 52%; top: 43%; width: 42px; height: 42px; color: var(--violet); }
+
+    @media (max-width: 920px) {
+      main { width: min(100vw - 22px, 720px); }
+      .rulebar, .echo-head, .variants { grid-template-columns: 1fr; }
+      .variant { min-height: 280px; }
+      .judgement { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>LETHE 잔향 VFX 콘셉트 보드</h1>
+      <p class="subtitle">
+        목적은 각 잔향의 기본 테마는 유지하되, 실제 인게임에서 보이는 실루엣과 판정은 무기별로 완전히 다르게 읽히게 하는 것이다.
+        쌍검은 짧고 빠른 다단 연쇄, 대검은 길고 넓은 지연 강타를 기준으로 잡는다.
+      </p>
+      <section class="rulebar" aria-label="무기별 VFX 규칙">
+        <div class="rule">
+          <strong>절단쌍검 / 단검 감성</strong>
+          <span>짧은 리치, 빠른 쿨, 다단, 근접 체인. 작은 칼선과 표식이 여러 번 겹치며 적중 지점에서 튀어야 한다.</span>
+        </div>
+        <div class="rule">
+          <strong>장송대검 감성</strong>
+          <span>긴 리치, 느린 쿨, 넓은 전방 장악. 큰 반달, 균열, 방벽, 낙하지점처럼 한 번에 읽히는 큰 실루엣이 필요하다.</span>
+        </div>
+      </section>
+    </header>
+
+    <section class="board">
+      <article class="echo kalmuri">
+        <div class="echo-head">
+          <h2 class="echo-title"><span class="dot"></span>굶주린 칼무리</h2>
+          <p class="intent">푸른 기억 칼날이 잔향으로 남아 상처를 먹는다. 핵심 색은 청백, 핵심 형태는 칼날 무리와 포식이다.</p>
+        </div>
+        <div class="variants">
+          <section class="variant">
+            <h3>쌍검: 작은 칼무리 물어뜯기</h3>
+            <p class="copy">적중 지점 주변에 작은 푸른 칼들이 여러 번 붙어 씹는다. 짧은 원형 다단 판정.</p>
+            <div class="stage dual-kalmuri"><span class="origin"></span><span class="target"></span><span class="blade"></span><span class="blade"></span><span class="blade"></span><span class="blade"></span><span class="circle"></span></div>
+            <div class="judgement"><div class="pill">판정: 좁은 원형 다단</div><div class="pill">리듬: 매우 빠름</div><div class="pill">감정: 먹어치우는 잔상</div></div>
+          </section>
+          <section class="variant">
+            <h3>대검: 외곽 칼날 수렴</h3>
+            <p class="copy">대검 범위 끝에 큰 푸른 검들이 느리게 모여 닫힌다. 지연 후 큰 범위 단타.</p>
+            <div class="stage great-kalmuri"><span class="origin"></span><span class="target"></span><span class="blade"></span><span class="blade"></span><span class="blade"></span><span class="blade"></span><span class="circle"></span><span class="wedge"></span></div>
+            <div class="judgement"><div class="pill">판정: 큰 원/전방 단타</div><div class="pill">리듬: 느린 예고 후 폭발</div><div class="pill">감정: 포식문이 닫힘</div></div>
+          </section>
+        </div>
+      </article>
+
+      <article class="echo blood">
+        <div class="echo-head">
+          <h2 class="echo-title"><span class="dot"></span>혈반 잔향</h2>
+          <p class="intent">피의 반사가 무기에 남아 피를 다시 긁어낸다. 쌍검은 혈선 체인, 대검은 거대한 혈월이다.</p>
+        </div>
+        <div class="variants">
+          <section class="variant">
+            <h3>쌍검: 피실 봉합 베기</h3>
+            <p class="copy">여러 적중점이 붉은 실로 이어지고 짧은 흡혈 베기가 반복된다. 작지만 자주 회복한다.</p>
+            <div class="stage dual-blood"><span class="origin"></span><span class="target"></span><span class="line"></span><span class="line"></span><span class="circle"></span><span class="circle"></span></div>
+            <div class="judgement"><div class="pill">판정: 짧은 체인</div><div class="pill">리듬: 다단 흡혈</div><div class="pill">감정: 붉은 실로 찢음</div></div>
+          </section>
+          <section class="variant">
+            <h3>대검: 이중 혈월 발도</h3>
+            <p class="copy">대검 사거리 끝에 얇은 반달 두 겹이 지나간다. 범위 끝의 적을 크게 긁고 굵게 흡혈한다.</p>
+            <div class="stage great-blood"><span class="origin"></span><span class="target"></span><span class="crescent"></span><span class="crescent"></span><span class="circle"></span></div>
+            <div class="judgement"><div class="pill">판정: 넓은 반달</div><div class="pill">리듬: 묵직한 후속타</div><div class="pill">감정: 피의 대검 잔상</div></div>
+          </section>
+        </div>
+      </article>
+
+      <article class="echo execution">
+        <div class="echo-head">
+          <h2 class="echo-title"><span class="dot"></span>처형 잔향</h2>
+          <p class="intent">낮은 체력과 치명 조건을 시각적으로 판결한다. 쌍검은 표식 연쇄, 대검은 단두대 판결이다.</p>
+        </div>
+        <div class="variants">
+          <section class="variant">
+            <h3>쌍검: 처형 표식 연쇄</h3>
+            <p class="copy">약한 적에게 작은 하얀 표식이 찍히고 빠르게 이어 베어낸다. 처치 시 다음 표식으로 번진다.</p>
+            <div class="stage dual-execution"><span class="origin"></span><span class="target"></span><span class="mark"></span><span class="mark"></span><span class="mark"></span><span class="crack"></span></div>
+            <div class="judgement"><div class="pill">판정: 표식 대상 연쇄</div><div class="pill">리듬: 빠른 마무리</div><div class="pill">감정: 사형선고 점멸</div></div>
+          </section>
+          <section class="variant">
+            <h3>대검: 단두대 판결선</h3>
+            <p class="copy">밀집 지점에 큰 판결장이 뜨고 세로 절단선이 떨어진다. 적은 횟수지만 강한 처형감.</p>
+            <div class="stage great-execution"><span class="origin"></span><span class="target"></span><span class="crack"></span><span class="circle"></span></div>
+            <div class="judgement"><div class="pill">판정: 큰 세로 cleave</div><div class="pill">리듬: 지연 단타</div><div class="pill">감정: 내려찍는 판결</div></div>
+          </section>
+        </div>
+      </article>
+
+      <article class="echo homing">
+        <div class="echo-head">
+          <h2 class="echo-title"><span class="dot"></span>추적 잔향</h2>
+          <p class="intent">추적자의 맹세가 무기의 궤적에 남는다. 쌍검은 작은 추적칼 팬, 대검은 긴 유령창이다.</p>
+        </div>
+        <div class="variants">
+          <section class="variant">
+            <h3>쌍검: 짧은 추적칼 부채</h3>
+            <p class="copy">타격 후 작은 추적 칼날이 3~5개 퍼져 가까운 적을 문다. 빠른 락온 표식이 핵심.</p>
+            <div class="stage dual-homing"><span class="origin"></span><span class="target"></span><span class="line"></span><span class="line"></span><span class="line"></span></div>
+            <div class="judgement"><div class="pill">판정: 짧은 다중 유도</div><div class="pill">리듬: 빈번한 보조타</div><div class="pill">감정: 사냥개 같은 추적</div></div>
+          </section>
+          <section class="variant">
+            <h3>대검: 관통 유령창</h3>
+            <p class="copy">대검 끝에서 긴 창 같은 잔상이 나가 일직선을 꿰뚫는다. 적은 수를 깊게 찌른다.</p>
+            <div class="stage great-homing"><span class="origin"></span><span class="target"></span><span class="line"></span><span class="blade"></span></div>
+            <div class="judgement"><div class="pill">판정: 긴 직선 관통</div><div class="pill">리듬: 가끔 큰 보조타</div><div class="pill">감정: 묵직한 추격 투창</div></div>
+          </section>
+        </div>
+      </article>
+
+      <article class="echo shock">
+        <div class="echo-head">
+          <h2 class="echo-title"><span class="dot"></span>파문 잔향</h2>
+          <p class="intent">타격의 여파가 바닥과 적 사이로 번진다. 쌍검은 작은 파문 튕김, 대검은 전방 균열이다.</p>
+        </div>
+        <div class="variants">
+          <section class="variant">
+            <h3>쌍검: 잔물결 튕김</h3>
+            <p class="copy">작은 충격 고리가 적 사이를 짧게 튕긴다. 근접 난전에서 여러 작은 넉백을 만든다.</p>
+            <div class="stage dual-shock"><span class="origin"></span><span class="target"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span></div>
+            <div class="judgement"><div class="pill">판정: 작은 원형 연쇄</div><div class="pill">리듬: 잔잔한 다단 제어</div><div class="pill">감정: 물결이 적을 밀어냄</div></div>
+          </section>
+          <section class="variant">
+            <h3>대검: 전방 지진 균열</h3>
+            <p class="copy">대검 방향으로 바닥이 갈라지고 넓은 파문이 뻗는다. 군중을 한 번에 밀어낸다.</p>
+            <div class="stage great-shock"><span class="origin"></span><span class="target"></span><span class="wedge"></span><span class="crack"></span><span class="crack"></span></div>
+            <div class="judgement"><div class="pill">판정: 넓은 전방 파문</div><div class="pill">리듬: 느린 군중 제어</div><div class="pill">감정: 땅이 깨지는 한 방</div></div>
+          </section>
+        </div>
+      </article>
+
+      <article class="echo time">
+        <div class="echo-head">
+          <h2 class="echo-title"><span class="dot"></span>정지 잔향</h2>
+          <p class="intent">시간이 완전히 멈추기보다 타격 순간이 끊긴다. 쌍검은 미세 정지, 대검은 큰 시계장이다.</p>
+        </div>
+        <div class="variants">
+          <section class="variant">
+            <h3>쌍검: 미세 정지 절단</h3>
+            <p class="copy">맞은 적 주변에 작은 시계 고리가 번쩍이고 짧게 끊긴다. 여러 적에게 짧은 경직을 뿌린다.</p>
+            <div class="stage dual-time"><span class="origin"></span><span class="target"></span><span class="circle"></span><span class="circle"></span><span class="line"></span></div>
+            <div class="judgement"><div class="pill">판정: 짧은 정지 체인</div><div class="pill">리듬: 잦은 끊김</div><div class="pill">감정: 프레임이 잘림</div></div>
+          </section>
+          <section class="variant">
+            <h3>대검: 시계장 참격</h3>
+            <p class="copy">넓은 시계장이 생기고 바늘이 크게 돌아 베어낸다. 예고가 보이는 제어형 강타.</p>
+            <div class="stage great-time"><span class="origin"></span><span class="target"></span><span class="circle"></span><span class="line"></span><span class="line"></span></div>
+            <div class="judgement"><div class="pill">판정: 큰 정지장</div><div class="pill">리듬: 예고 후 정지</div><div class="pill">감정: 시간이 잠김</div></div>
+          </section>
+        </div>
+      </article>
+
+      <article class="echo ashen">
+        <div class="echo-head">
+          <h2 class="echo-title"><span class="dot"></span>잿빛 잔향</h2>
+          <p class="intent">수동 방어형 기억이 잔향이 되면 반격 보상이 커져야 한다. 쌍검은 패링 불꽃, 대검은 성벽이다.</p>
+        </div>
+        <div class="variants">
+          <section class="variant">
+            <h3>쌍검: 패링 불꽃 반격</h3>
+            <p class="copy">피격 또는 근접 타격 시 작은 회색 불꽃이 튀고 즉시 반격 칼선이 나온다. 빠른 방어 리듬.</p>
+            <div class="stage dual-ashen"><span class="origin"></span><span class="target"></span><span class="spark"></span><span class="spark"></span><span class="spark"></span><span class="circle"></span></div>
+            <div class="judgement"><div class="pill">판정: 근접 반격 다단</div><div class="pill">리듬: 짧은 패링</div><div class="pill">감정: 재가 튀며 받아침</div></div>
+          </section>
+          <section class="variant">
+            <h3>대검: 금 간 성벽 파동</h3>
+            <p class="copy">전방에 큰 잿빛 방벽이 생기고 축적된 힘을 넓은 파동으로 방출한다. 수동 기억의 왕귀 지점.</p>
+            <div class="stage great-ashen"><span class="origin"></span><span class="target"></span><span class="circle"></span><span class="wedge"></span><span class="crack"></span></div>
+            <div class="judgement"><div class="pill">판정: 방벽 + 전방 파동</div><div class="pill">리듬: 맞고 모아 터뜨림</div><div class="pill">감정: 버티다 되갚음</div></div>
+          </section>
+        </div>
+      </article>
+
+      <article class="echo brand">
+        <div class="echo-head">
+          <h2 class="echo-title"><span class="dot"></span>낙인 잔향</h2>
+          <p class="intent">망각의 낙인은 표식, 증폭, 붕괴가 핵심이다. 쌍검은 낙인 전이, 대검은 낙인 구덩이다.</p>
+        </div>
+        <div class="variants">
+          <section class="variant">
+            <h3>쌍검: 낙인 전이 연쇄</h3>
+            <p class="copy">보라 표식이 적 사이를 옮겨 다니며 쌓이고 작은 폭발을 만든다. 빠른 표식 누적형.</p>
+            <div class="stage dual-brand"><span class="origin"></span><span class="target"></span><span class="mark"></span><span class="mark"></span><span class="mark"></span><span class="line"></span></div>
+            <div class="judgement"><div class="pill">판정: 표식 전이</div><div class="pill">리듬: 빠른 누적 폭발</div><div class="pill">감정: 저주가 번짐</div></div>
+          </section>
+          <section class="variant">
+            <h3>대검: 낙인 붕괴 구덩이</h3>
+            <p class="copy">대검이 찍은 지점에 큰 낙인장이 열리고 적을 끌어당긴 뒤 터진다. 느리지만 전장을 바꾼다.</p>
+            <div class="stage great-brand"><span class="origin"></span><span class="target"></span><span class="circle"></span><span class="circle"></span><span class="mark"></span></div>
+            <div class="judgement"><div class="pill">판정: 큰 원형 붕괴</div><div class="pill">리듬: 지연 폭발</div><div class="pill">감정: 바닥이 먹어삼킴</div></div>
+          </section>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
