@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-10-02 - 포트폴리오 문서 방향 / 최종 보스 콘셉트 메모</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-10-02 - 포트폴리오 문서 방향 / 최종 보스 콘셉트 메모</h1>
+      <p class="meta">Generated from 2026-07-10-02-포트폴리오-문서-방향-최종-보스-콘셉트-메모.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260710/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-10-02 - 포트폴리오 문서 방향 / 최종 보스 콘셉트 메모</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>은 기존 플레이어블 전투/인트로 상태를 유지한다. 이번 작업은 구현 변경이 아니라 포트폴리오 공개 준비를 위한 문서 방향 정리다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>최종 보스는 현재 키아트와 어울리는 거대한 레테 관문/망각의 신상 콘셉트로 future memo 처리했다.</li>
+<li><code>docs/orchestration/state/DECISION_LOG.md</code>에 <code>DEC-2026-07-10-01</code>을 추가했다.</li>
+<li><code>docs/orchestration/state/PORTFOLIO_SITE_PLAN.md</code>을 추가해 포트폴리오 페이지, 기획 문서, 기술 문서의 역할을 분리했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li>코드 변경은 없어서 Unity 빌드/플레이 테스트는 생략했다.</li>
+<li>문서 근거:</li>
+<li><code>docs/orchestration/state/DECISION_LOG.md</code></li>
+<li><code>docs/orchestration/state/PORTFOLIO_SITE_PLAN.md</code></li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li>포트폴리오 사이트에는 모든 내부 문서를 그대로 올리지 않는다.</li>
+<li>공개 첫 화면은 케이스 스터디처럼 구성하고, 깊은 설명은 GDD/TDD 문서로 분리한다.</li>
+<li>최종 보스는 현재 <code>_dev</code> 구현 범위에는 넣지 않고, 키아트 기반의 미래 방향으로만 기록한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>현재 프로젝트는 문서와 구현 히스토리가 많아서 사이트에 그대로 넣으면 읽기 어렵다.</li>
+<li>포트폴리오에서는 &quot;많이 했다&quot;보다 &quot;문제를 정의하고, 설계하고, 구현하고, 검증하며 고쳤다&quot;는 흐름을 우선해야 한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>LETHE 포트폴리오는 <code>기획 의도 -&gt; 핵심 시스템 -&gt; Unity 구현 -&gt; 테스트/반복 개선 -&gt; 현재 결과</code> 순서로 압축해야 한다. GDD와 TDD는 별도 심화 자료로 두고, 사이트 본문은 사례 연구처럼 짧게 읽히게 만든다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>공개용 <code>LETHE_Game_Design_Document.md</code> 초안 작성.</li>
+<li>공개용 <code>LETHE_Technical_Design_Document.md</code> 초안 작성.</li>
+<li>두 문서를 포트폴리오 사이트용 케이스 스터디 문구로 압축.</li>
+</ul>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: LETHE는 기획부터 구현까지 진행한 프로젝트라 설명할 수 있는 내용이 많지만, 그대로 공개하면 핵심이 흐려질 수 있다.</li>
+<li>방향: 문서는 깊게, 사이트는 선명하게 구성한다.</li>
+<li>행동: 최종 보스 콘셉트를 결정 로그로 남기고, 포트폴리오 사이트 문서 구조를 별도로 정의했다.</li>
+<li>결과: LETHE를 &quot;기획형 Unity 전투 프로토타입&quot;으로 보여줄 공개 구조가 생겼다.</li>
+</ul>
+  </main>
+</body>
+</html>

@@ -2,6 +2,18 @@
 
 Last updated: 2026-07-10
 
+## 2026-07-10 Update: Portfolio Documentation Direction
+
+- jaewoo asked to memo the final boss direction from the current key art and decide how LETHE should be presented on a portfolio site.
+- Applied:
+  - Recorded `DEC-2026-07-10-01`: the final boss should become a future Lethe Gatekeeper / forgotten-god figure matching the portfolio key art.
+  - Added `docs/orchestration/state/PORTFOLIO_SITE_PLAN.md`.
+  - Recommended a portfolio case-study page supported by separate planning/GDD and technical/TDD documents.
+- Scope note:
+  - The final boss memo is future direction only. It does not change the current `_dev` implementation scope.
+- Next step:
+  - Draft public-facing `LETHE_Game_Design_Document.md` and `LETHE_Technical_Design_Document.md`, then condense both into the portfolio site case-study page.
+
 ## 2026-07-10 Update: Project Thumbnail and Intro Key-Art Pass
 
 - jaewoo asked to add a project thumbnail and an in-game intro screen that fits LETHE's mood.
