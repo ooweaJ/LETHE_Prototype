@@ -1,6 +1,23 @@
 # Status
 
-Last updated: 2026-07-09
+Last updated: 2026-07-10
+
+## 2026-07-10 Update: Project Thumbnail and Intro Key-Art Pass
+
+- jaewoo asked to add a project thumbnail and an in-game intro screen that fits LETHE's mood.
+- Applied:
+  - Generated and imported a square LETHE project thumbnail/key visual.
+  - Generated and imported a wide LETHE intro background with cyan memory-blade and crimson greatsword-echo sides.
+  - Wired the wide background into the first weapon-selection screen.
+  - Replaced the heavy intro panel feel with lighter glass panels so the key art remains visible.
+  - Added both UI images to `V1_ContentCatalog.asset`.
+- Verification:
+  - Unity compilation errors: `0`.
+  - Unity console errors after Play Mode capture: `0`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - Captured Game View evidence: `LETHE/Assets/_dev/Evidence/lethe_intro_keyart_screen_20260710.png`.
+- Next step:
+  - Direct-play the first screen and judge whether the title/card layout has enough ceremony before the run starts.
 
 ## 2026-07-09 Update: Greatsword Blood Echo Double Crescent Scale Pass
 

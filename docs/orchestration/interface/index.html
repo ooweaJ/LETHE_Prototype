@@ -5,33 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LETHE 프로젝트 대시보드</title>
     <style>
-      :root { color-scheme: light; --bg:#f6f7f3; --panel:#fff; --text:#17201d; --muted:#64706b; --line:#dce2da; --green:#1f6b4d; --blue:#285f8f; --amber:#916019; }
-      * { box-sizing: border-box; }
-      body { margin: 0; background: var(--bg); color: var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-      main { width: min(1080px, 100%); margin: 0 auto; padding: 28px 20px 36px; }
-      header { display: flex; justify-content: space-between; gap: 18px; align-items: end; margin-bottom: 16px; }
-      h1 { margin: 0; font-size: 40px; line-height: 1.05; }
-      .eyebrow { margin: 0 0 8px; color: var(--green); font-size: 13px; font-weight: 900; }
-      .badge { padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; background: #fff8ec; color: var(--amber); font-weight: 900; white-space: nowrap; }
-      .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }
-      .metric, .panel, .hero { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
-      .metric { min-height: 104px; padding: 15px; }
-      .metric span { display:block; margin-bottom: 8px; color: var(--muted); font-size: 13px; font-weight: 900; }
-      .metric strong { display:block; font-size: 18px; line-height: 1.32; }
-      .metric small { display:block; margin-top: 7px; color: var(--muted); font-size: 12px; line-height: 1.4; }
-      .green { background:#e7f3ec; } .blue { background:#e8f1f8; } .amber { background:#f8efe0; }
-      .hero { padding: 18px; margin-bottom: 14px; background: linear-gradient(180deg,#fff 0%,#f0f7f2 100%); }
-      .hero h2, .panel h2 { margin: 0 0 10px; font-size: 19px; }
-      .hero p, .panel p, li { color: var(--muted); line-height: 1.65; }
-      .hero p { margin: 0; }
-      .grid { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items:start; }
-      .panel { min-height: 166px; padding: 17px; }
-      .panel ul { margin: 0; padding-left: 19px; }
-      code { font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace; }
-      a { color: var(--green); font-weight: 900; text-decoration: none; }
-      a:hover { text-decoration: underline; }
-      footer { margin-top: 18px; color: var(--muted); font-size: 13px; }
-      @media (max-width: 900px) { header { display:block; } .metrics, .grid { grid-template-columns: 1fr; } .badge { display:inline-block; margin-top: 12px; } h1 { font-size: 32px; } }
+      :root { --bg:#f5f7f6; --panel:#fff; --text:#17201d; --muted:#66736d; --line:#dbe3df; --green:#1f6b4d; --blue:#285f8f; --red:#8b2630; }
+      * { box-sizing:border-box; }
+      body { margin:0; background:var(--bg); color:var(--text); font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      main { width:min(1080px,100%); margin:0 auto; padding:28px 20px 36px; }
+      header { display:flex; justify-content:space-between; gap:18px; align-items:end; margin-bottom:16px; }
+      h1 { margin:0; font-size:38px; line-height:1.08; }
+      h2 { margin:0 0 10px; font-size:19px; }
+      p, li { color:var(--muted); line-height:1.62; }
+      .eyebrow { margin:0 0 8px; color:var(--green); font-size:13px; font-weight:900; }
+      .badge { padding:8px 12px; border:1px solid var(--line); border-radius:999px; background:#fff; color:var(--blue); font-weight:900; white-space:nowrap; }
+      .metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:14px; }
+      .metric, .panel, .hero { border:1px solid var(--line); border-radius:8px; background:var(--panel); }
+      .metric { min-height:108px; padding:15px; }
+      .metric span { display:block; margin-bottom:8px; color:var(--muted); font-size:13px; font-weight:900; }
+      .metric strong { display:block; font-size:18px; line-height:1.32; }
+      .metric small { display:block; margin-top:7px; color:var(--muted); font-size:12px; line-height:1.4; }
+      .hero { padding:18px; margin-bottom:14px; }
+      .hero p { margin:0; }
+      .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; align-items:start; }
+      .panel { min-height:166px; padding:17px; }
+      .panel ul { margin:0; padding-left:19px; }
+      code { font-family:"Cascadia Code","SFMono-Regular",Consolas,monospace; }
+      a { color:var(--green); font-weight:900; text-decoration:none; }
+      a:hover { text-decoration:underline; }
+      @media (max-width:900px) { header { display:block; } .metrics, .grid { grid-template-columns:1fr; } .badge { display:inline-block; margin-top:12px; } h1 { font-size:31px; } }
     </style>
   </head>
   <body>
@@ -39,76 +37,95 @@
       <header>
         <div>
           <p class="eyebrow">LETHE 프로젝트 대시보드</p>
-          <h1>기억/잔향/몹 역할 식별성 1차 보강 완료</h1>
+          <h1>인트로 키아트와 프로젝트 썸네일 추가 완료</h1>
         </div>
-        <span class="badge">Dev_Prototype_v1 · 2026-07-07</span>
+        <span class="badge">Dev_Prototype_v1 · 2026-07-10</span>
       </header>
 
       <section class="metrics" aria-label="핵심 상태">
-        <div class="metric green">
+        <div class="metric">
           <span>현재 단계</span>
-          <strong>_dev 식별성 보강 완료</strong>
-          <small>아직 Assets/Lethe 승격 없음</small>
+          <strong>Unity _dev 시각 피드백 보강</strong>
+          <small>Assets/Lethe 승격 전 검증 단계</small>
         </div>
-        <div class="metric blue">
-          <span>주요 변경</span>
-          <strong>잔향별 상태 burst / 기억 상태 마크 / 몹 역할 심볼</strong>
-          <small>텍스트 없이 전투 중 구분하는 방향</small>
+        <div class="metric">
+          <span>오늘 변경</span>
+          <strong>프로젝트 썸네일, 인게임 인트로 배경</strong>
+          <small>UI 스프라이트 2종 추가 및 카탈로그 연결</small>
         </div>
-        <div class="metric amber">
+        <div class="metric">
           <span>검증</span>
-          <strong>빌드와 Unity QA 통과</strong>
-          <small>Echo, Passive, Dense, Gatekeeper PASS</small>
+          <strong>Unity/C# 오류 0</strong>
+          <small>Game View 증거 캡처 완료</small>
         </div>
-        <div class="metric green">
+        <div class="metric">
           <span>다음 판단</span>
-          <strong>jaewoo 직접 플레이 리뷰</strong>
-          <small>잔향/몹 역할을 눈으로 구분하는지 확인</small>
+          <strong>직접 플레이 인트로 감성 확인</strong>
+          <small>카드 가독성, 텍스트량, 시작 의식감</small>
         </div>
       </section>
 
       <section class="hero">
         <h2>현재 결론</h2>
         <p>
-          기억/잔향/몹 역할의 약점은 기능보다 식별성이었다. 그래서 잔향별로 몹 위에 남는 상태 burst를 분리하고,
-          기억 직접 효과도 같은 계열 마크를 남기게 했으며, 몹 역할 마커는 움직이는 심볼로 보강했다.
-          자동 QA는 통과했으므로 다음 판단은 실제 플레이에서 계열과 몹 역할이 텍스트 없이 읽히는지다.
+          첫 화면은 이제 어두운 레테의 강, 기억 파편, 좌측 청색 쌍검 흔적, 우측 적색 대검 잔향 위에 무기 선택 카드가 올라간다.
+          기능 상태는 안전하게 통과했으므로 다음 판단은 실제 플레이에서 이 화면이 충분히 게임답고 의식적으로 느껴지는지다.
         </p>
       </section>
 
       <section class="grid">
         <article class="panel">
-          <h2>다음 확인</h2>
+          <h2>최근 완료</h2>
           <ul>
-            <li>처형/추적/파쇄/정지/잿빛/망각 잔향이 서로 구분되는가</li>
-            <li>기억이 직접 때린 몹에도 계열 흔적이 남는가</li>
-            <li>VoidPriest, DriftingEye, SplitOne, Gatekeeper 역할 심볼이 보이는가</li>
-            <li>Dense 쌍검에서 새 identity burst가 렉을 만들지 않는가</li>
+            <li><code>spr_lethe_project_thumbnail_01.png</code> 추가</li>
+            <li><code>spr_lethe_intro_background_01.png</code> 추가</li>
+            <li><code>DrawLetheIntroOverlay()</code> 배경 연결</li>
+            <li><code>V1_ContentCatalog.asset</code> UI 스프라이트 연결</li>
           </ul>
         </article>
+
         <article class="panel">
           <h2>검증 근거</h2>
           <ul>
-            <li><code>dotnet build Assembly-CSharp</code>: 오류 0</li>
-            <li><code>dotnet build Assembly-CSharp-Editor</code>: 오류 0</li>
-            <li><code>Echo Matrix Dual/Great</code>: PASS</li>
-            <li><code>Passive Memory Matrix</code>: PASS</li>
-            <li><code>Dense Dual Blades Perf Matrix</code>: PASS, 104.35ms</li>
-            <li><code>Gatekeeper Pattern Matrix</code>: PASS</li>
+            <li>Unity compilation errors: 0</li>
+            <li>Unity console errors: 0</li>
+            <li><code>dotnet build</code>: 오류 0</li>
+            <li><code>lethe_intro_keyart_screen_20260710.png</code></li>
           </ul>
         </article>
+
         <article class="panel">
-          <h2>바로가기</h2>
+          <h2>다음 작업</h2>
           <ul>
-            <li><a href="./command.html">다음 지시문</a></li>
-            <li><a href="../reports/20260707/index.html">오늘 보고서</a></li>
-            <li><a href="../state/CURRENT_TASK.md">CURRENT_TASK</a></li>
-            <li><a href="../state/NEXT_TASKS.md">NEXT_TASKS</a></li>
+            <li>인트로 직접 플레이 리뷰</li>
+            <li>카드 텍스트량과 대비 확인</li>
+            <li>필요하면 제목 처리나 무기 선택 연출만 좁게 조정</li>
           </ul>
         </article>
       </section>
 
-      <footer>기준: 2026-07-07 | 작업 루트: <code>Assets/_dev</code> | 승격 금지: <code>Assets/Lethe</code></footer>
+      <section class="grid" style="margin-top:14px">
+        <article class="panel">
+          <h2>주요 링크</h2>
+          <ul>
+            <li><a href="../state/CURRENT_TASK.md">CURRENT_TASK.md</a></li>
+            <li><a href="../state/NEXT_TASKS.md">NEXT_TASKS.md</a></li>
+            <li><a href="../reports/20260710/index.html">오늘 보고서</a></li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h2>주의</h2>
+          <ul>
+            <li>새 무기, 새 기억, 상점, 메타 성장 추가 금지</li>
+            <li><code>Assets/_dev</code> 유지</li>
+            <li><code>Assets/Lethe</code> 승격 금지</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h2>증거</h2>
+          <p>Game View 캡처는 <code>LETHE/Assets/_dev/Evidence/lethe_intro_keyart_screen_20260710.png</code>에 있다.</p>
+        </article>
+      </section>
     </main>
   </body>
 </html>

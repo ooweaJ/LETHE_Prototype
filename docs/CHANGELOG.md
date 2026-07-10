@@ -1,5 +1,18 @@
 # LETHE CHANGELOG
 
+# 2026-07-10
+
+- Added LETHE project thumbnail and in-game intro key art:
+  - Generated and imported `spr_lethe_project_thumbnail_01.png` as the current project thumbnail/key visual.
+  - Generated and imported `spr_lethe_intro_background_01.png` as the in-game first-screen background.
+  - Wired the intro background into `DrawLetheIntroOverlay()` and softened the overlay/card panels so the key art remains visible behind weapon selection.
+  - Added both UI sprites to `V1_ContentCatalog.asset`.
+- Verification:
+  - Unity compilation errors: `0`.
+  - Unity console errors after Play Mode intro capture: `0`.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - Game View evidence captured at `LETHE/Assets/_dev/Evidence/lethe_intro_keyart_screen_20260710.png`.
+
 # 2026-07-09
 
 - Enlarged and repositioned Greatsword Blood Echo crescents:

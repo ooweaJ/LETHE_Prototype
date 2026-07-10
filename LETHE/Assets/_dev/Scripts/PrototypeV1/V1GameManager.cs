@@ -150,6 +150,8 @@ namespace Lethe.PrototypeV1
             "Assets/_dev/Art/Sprites/Enemies/Bosses/spr_boss_gatekeeper_04.png"
         };
         const string ArenaBackdropPath = "Assets/_dev/Art/Sprites/Map/spr_lethe_terrain_backdrop_01.png";
+        const string IntroBackgroundPath = "Assets/_dev/Art/Sprites/UI/spr_lethe_intro_background_01.png";
+        const string ProjectThumbnailPath = "Assets/_dev/Art/Sprites/UI/spr_lethe_project_thumbnail_01.png";
         static readonly string[] ArenaFloorTilePaths =
         {
             "Assets/_dev/Art/Sprites/Map/tile_lethe_terrain_01.png",
@@ -5524,9 +5526,7 @@ namespace Lethe.PrototypeV1
 
         void DrawLetheIntroOverlay()
         {
-            DrawFilledRect(new Rect(0, 0, Screen.width, Screen.height), new Color(0.010f, 0.016f, 0.020f, 0.98f));
-            DrawFilledRect(new Rect(0, 0, Screen.width, Screen.height * 0.48f), new Color(0.018f, 0.035f, 0.046f, 0.76f));
-            DrawFilledRect(new Rect(0, Screen.height * 0.50f, Screen.width, Screen.height * 0.50f), new Color(0.010f, 0.080f, 0.092f, 0.30f));
+            DrawIntroKeyArtBackground();
             DrawFilledRect(new Rect(0, 0, Screen.width, 4f), new Color(0.42f, 0.96f, 1f, 0.72f));
             DrawFilledRect(new Rect(0, Screen.height - 4f, Screen.width, 4f), new Color(0.09f, 0.30f, 0.34f, 0.86f));
 
@@ -5552,7 +5552,7 @@ namespace Lethe.PrototypeV1
             var width = Mathf.Min(1080f, Mathf.Max(360f, Screen.width - 56f));
             var height = Mathf.Min(compact ? 440f : 650f, Mathf.Max(380f, Screen.height - 32f));
             var origin = new Rect(Screen.width * 0.5f - width * 0.5f, Screen.height * 0.5f - height * 0.5f, width, height);
-            GUI.Box(origin, "", panelStyle);
+            DrawIntroGlassPanel(origin, new Color(0.006f, 0.013f, 0.016f, 0.46f), new Color(0.42f, 0.96f, 1f, 0.32f));
 
             DrawFilledRect(new Rect(origin.x + 24f, origin.y + 20f, origin.width - 48f, 2f), new Color(0.52f, 0.94f, 0.98f, 0.55f));
             GUI.Label(new Rect(origin.x + 34f, origin.y + 30f, origin.width - 68f, 20f), "망각의 강 앞에서", startEyebrowStyle);
@@ -5604,6 +5604,39 @@ namespace Lethe.PrototypeV1
             GUI.Label(new Rect(footer.x + 16f, footer.y + 5f, footer.width - 32f, 18f), "WASD 이동  /  공격 자동  /  숫자 1, 2 또는 카드 클릭으로 시작  /  F12 디버그", startFooterStyle);
         }
 
+        void DrawIntroKeyArtBackground()
+        {
+            var sprite = LoadSprite(IntroBackgroundPath);
+            if (sprite != null && sprite.texture != null)
+            {
+                var previous = GUI.color;
+                GUI.color = Color.white;
+                GUI.DrawTexture(new Rect(0f, 0f, Screen.width, Screen.height), sprite.texture, ScaleMode.ScaleAndCrop, true);
+                GUI.color = previous;
+            }
+            else
+            {
+                DrawFilledRect(new Rect(0, 0, Screen.width, Screen.height), new Color(0.010f, 0.016f, 0.020f, 0.98f));
+                DrawFilledRect(new Rect(0, 0, Screen.width, Screen.height * 0.48f), new Color(0.018f, 0.035f, 0.046f, 0.76f));
+                DrawFilledRect(new Rect(0, Screen.height * 0.50f, Screen.width, Screen.height * 0.50f), new Color(0.010f, 0.080f, 0.092f, 0.30f));
+            }
+
+            DrawFilledRect(new Rect(0, 0, Screen.width, Screen.height), new Color(0.004f, 0.008f, 0.010f, 0.28f));
+            DrawFilledRect(new Rect(0, 0, Screen.width, Screen.height * 0.28f), new Color(0.005f, 0.008f, 0.012f, 0.38f));
+            DrawFilledRect(new Rect(0, Screen.height * 0.66f, Screen.width, Screen.height * 0.34f), new Color(0.002f, 0.004f, 0.005f, 0.44f));
+            DrawFilledRect(new Rect(0, 0, Screen.width * 0.24f, Screen.height), new Color(0.004f, 0.018f, 0.020f, 0.18f));
+            DrawFilledRect(new Rect(Screen.width * 0.76f, 0, Screen.width * 0.24f, Screen.height), new Color(0.030f, 0.006f, 0.008f, 0.18f));
+        }
+
+        void DrawIntroGlassPanel(Rect rect, Color fill, Color edge)
+        {
+            DrawFilledRect(rect, fill);
+            DrawFilledRect(new Rect(rect.x, rect.y, rect.width, 2f), edge);
+            DrawFilledRect(new Rect(rect.x, rect.yMax - 2f, rect.width, 2f), new Color(edge.r * 0.6f, edge.g * 0.6f, edge.b * 0.6f, edge.a * 0.8f));
+            DrawFilledRect(new Rect(rect.x, rect.y, 2f, rect.height), new Color(edge.r, edge.g, edge.b, edge.a * 0.75f));
+            DrawFilledRect(new Rect(rect.xMax - 2f, rect.y, 2f, rect.height), new Color(0.92f, 0.18f, 0.24f, edge.a * 0.52f));
+        }
+
         void DrawIntroWeaponCard(Rect card, V1WeaponId weaponId, string key, string title, string body, string rhythm, string echoHint, Color accent)
         {
             if (GUI.Button(card, "", buttonStyle))
@@ -5611,7 +5644,7 @@ namespace Lethe.PrototypeV1
                 BeginRun(weaponId);
             }
 
-            DrawFilledRect(new Rect(card.x + 8f, card.y + 8f, card.width - 16f, card.height - 16f), new Color(0.024f, 0.034f, 0.041f, 0.88f));
+            DrawIntroGlassPanel(new Rect(card.x + 8f, card.y + 8f, card.width - 16f, card.height - 16f), new Color(0.012f, 0.022f, 0.028f, 0.78f), new Color(accent.r, accent.g, accent.b, 0.34f));
             DrawFilledRect(new Rect(card.x + 14f, card.y + 14f, card.width - 28f, 4f), new Color(accent.r, accent.g, accent.b, 0.92f));
             DrawFilledRect(new Rect(card.x + 22f, card.y + 26f, 42f, 32f), new Color(accent.r, accent.g, accent.b, 0.92f));
             GUI.Label(new Rect(card.x + 22f, card.y + 26f, 42f, 32f), key, startKeyStyle);

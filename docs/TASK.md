@@ -1,5 +1,13 @@
 # LETHE TASK
 
+## 2026-07-10 Update
+
+- [x] LETHE project thumbnail/key visual added under `_dev/Art/Sprites/UI`.
+- [x] In-game intro background key art added and wired into `Dev_Prototype_v1` weapon-selection intro.
+- [x] Intro overlay panels were softened so the key art remains visible behind the title and weapon cards.
+- [x] Game View evidence captured at `LETHE/Assets/_dev/Evidence/lethe_intro_keyart_screen_20260710.png`.
+- [x] Unity compile, Unity console, and runtime C# build checks passed.
+
 ## Current Epic
 
 `Dev_Prototype_v1 Core Prototype Complete`

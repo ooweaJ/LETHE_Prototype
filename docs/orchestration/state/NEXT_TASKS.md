@@ -29,13 +29,13 @@
 ## 3. Intro Weapon Selection Direct-Play Review
 
 - Priority: high
-- Problem: the new first screen now has LETHE atmosphere and weapon cards, but MCP state checks cannot prove whether it feels polished in the actual Game view.
+- Problem: the first screen now uses generated LETHE key art behind the weapon cards, and Game View capture confirms it renders. Direct play still needs to judge whether the ceremony, contrast, and card readability feel good.
 - Build:
   - Enter `Dev_Prototype_v1`.
-  - Confirm the first screen shows before combat starts.
+  - Confirm the first screen shows the new dark river / memory shard / cyan-blue left and crimson right key art before combat starts.
   - Compare whether `절단쌍검` and `장송대검` cards read clearly as the first real choice.
   - Start with click and with number keys `1` / `2`.
-  - Note whether the intro needs stronger art, less text, a start-only flow, or a more ceremonial weapon pick.
+  - Note whether the intro needs less text, stronger title treatment, a start-only flow, a weapon-pick animation, or more contrast behind the cards.
 - Done:
   - jaewoo can say keep/tune/redesign for the intro and identify the exact weak read if it misses.
 
@@ -66,6 +66,7 @@
 
 Completed sequence:
 
+- 2026-07-10: project thumbnail and in-game intro key art added. Wide intro background is wired into `DrawLetheIntroOverlay`, UI sprites are cataloged, Game View evidence captured, Unity/C# checks passed.
 - 2026-07-09: Greatsword Blood Echo crescent moved to the swing range edge and split into two thin `((` crescents. Greatsword Echo Matrix and Dense Dual QA passed.
 - 2026-07-09: Greatsword Blood Echo changed from thread/harvest behavior into red crescent blood-iaido follow-up damage. Greatsword Echo Matrix and Dense Dual QA passed.
 - 2026-07-09: utility Echo weapon mechanics correction split Blood/Execution/Hunter/Shatter/Stopped/Ashen/Oblivion into actual Greatsword vs Dual Blades target logic. Echo Matrix and Dense Dual QA passed.

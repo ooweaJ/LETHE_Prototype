@@ -109,3 +109,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 6c7b700156e3b5b4386f8ca2acbb0283, type: 3}
   - id: Assets/_dev/Art/Sprites/Ultimates/spr_ashen_oblivion_01.png
     sprite: {fileID: 21300000, guid: deb750d6d58ab904db062e023edb1669, type: 3}
+  - id: Assets/_dev/Art/Sprites/UI/spr_lethe_intro_background_01.png
+    sprite: {fileID: 3785305220665580237, guid: 1abc24db02a83a048a5610075028e829, type: 3}
+  - id: Assets/_dev/Art/Sprites/UI/spr_lethe_project_thumbnail_01.png
+    sprite: {fileID: 3510281725555987951, guid: 70d4128bac8766047bb1f6b1f9bef967, type: 3}

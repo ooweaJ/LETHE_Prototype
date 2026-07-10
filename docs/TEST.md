@@ -1,5 +1,28 @@
 # LETHE TEST
 
+# 2026-07-10 Project Thumbnail and Intro Key-Art Pass
+
+- Purpose:
+  - Add LETHE-feeling project thumbnail art and replace the in-game intro's flat procedural background with a proper key-art first screen.
+- Applied target:
+  - Imported `LETHE/Assets/_dev/Art/Sprites/UI/spr_lethe_project_thumbnail_01.png`.
+  - Imported `LETHE/Assets/_dev/Art/Sprites/UI/spr_lethe_intro_background_01.png`.
+  - Added both UI assets to `V1_ContentCatalog.asset`.
+  - Updated `DrawLetheIntroOverlay()` to draw the generated intro background behind the weapon cards and use lighter glass panels.
+- Commands / checks:
+  - Unity `Assets/Refresh` through MCP.
+  - Unity compilation error check on LETHE port `7890`.
+  - Unity Play Mode entry and Game View screenshot capture.
+  - Unity console error check after capture.
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`.
+- Results:
+  - Unity compilation errors: `0`.
+  - Unity console errors after Play Mode capture: `0`.
+  - Runtime screenshot evidence: `LETHE/Assets/_dev/Evidence/lethe_intro_keyart_screen_20260710.png`.
+  - Runtime build passed with 7 existing legacy deprecation warnings and 0 errors.
+- Notes:
+  - Direct play should now judge whether the first screen feels ceremonial enough and whether weapon cards are readable over the darker key art.
+
 # 2026-07-09 Greatsword Blood Echo Double Crescent Scale Pass
 
 - Purpose:

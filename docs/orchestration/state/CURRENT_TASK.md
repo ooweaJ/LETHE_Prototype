@@ -1,5 +1,40 @@
 # Current Task
 
+# 2026-07-10 Project Thumbnail and Intro Key-Art Pass
+
+## Status
+
+- Implemented and verified.
+
+## Applied Changes
+
+- Added LETHE project thumbnail/key visual:
+  - `LETHE/Assets/_dev/Art/Sprites/UI/spr_lethe_project_thumbnail_01.png`.
+- Added LETHE in-game intro background:
+  - `LETHE/Assets/_dev/Art/Sprites/UI/spr_lethe_intro_background_01.png`.
+- Added both UI sprites to `LETHE/Assets/_dev/Data/V1_ContentCatalog.asset`.
+- Updated `V1GameManager.DrawLetheIntroOverlay()`:
+  - draws the generated intro background with scale-and-crop,
+  - keeps a fallback procedural background,
+  - overlays subtle dark bands for title/card readability,
+  - changes the main panel and weapon cards to lighter glass panels so the art remains visible.
+
+## Verification
+
+- Unity `Assets/Refresh`: success.
+- Unity compilation errors: `0`.
+- Unity Play Mode intro capture succeeded:
+  - `LETHE/Assets/_dev/Evidence/lethe_intro_keyart_screen_20260710.png`.
+- Unity console errors after capture: `0`.
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+
+## Remaining Gate
+
+- Direct-play visual review:
+  - confirm the first screen feels like LETHE rather than a placeholder menu,
+  - confirm the two weapon cards remain readable over the key art,
+  - decide whether a more ceremonial start button or animation is needed later.
+
 # 2026-07-09 Greatsword Blood Echo Double Crescent Scale Pass
 
 ## Status
