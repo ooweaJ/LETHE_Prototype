@@ -2,6 +2,32 @@
 
 Last updated: 2026-07-10
 
+## 2026-07-10 Update: Echo Common VFX Body Separation
+
+- jaewoo reported that the weapon Echo VFX still looked the same in direct review.
+- Used `docs/무기별 잔향 및 기억.md` as the design reference:
+  - Dual Blades should read as short, fast, repeated cuts, chained marks, needles, and local afterimages.
+  - Greatsword should read as long-reach, slower, heavier, wider cleaves, fractures, lances, fields, and wall-like impacts.
+- Applied in `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`:
+  - Reduced the shared generic Echo body that made both weapons look similar:
+    - generic Blood red pulse/wound/mark no longer drives the visible Blood Echo read,
+    - generic Execution prompt/halo removed from the main execution branch,
+    - generic Hunter lock ring removed,
+    - generic Stopped/Ashen/Oblivion prompt-ring reads reduced or split by weapon.
+  - Added/strengthened weapon-specific primary silhouettes:
+    - Dual Blades: blood stitch fan, shatter needle spray, execution sentence needles, hunter fan needles, stopped micro-ticks, ashen parry needles, oblivion stack cuts.
+    - Greatsword: execution sentence plate and ground sigil, hunter lance tell, stopped dome/clock-hand field, ashen wall face, oblivion gravity well/crater.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - Unity editor state on port `7890`: connected to `Dev_Prototype_v1`, not compiling.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: executed successfully through MCP.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: attempted once, but MCP returned `Error polling queue: fetch failed`; editor state, compilation errors, and console errors remained clean afterward.
+- Next step:
+  - Direct-play F12 -> `Echo One` with both `DB Rev` and `GS Rev`.
+  - Judge whether the old "same VFX with different size" feeling is gone, especially Blood, Execution, Hunter, Ashen, and Oblivion.
+
 ## 2026-07-10 Update: Weapon-Specific Echo VFX Runtime Pass
 
 - jaewoo approved moving from the VFX concept board into implementation and asked to judge by direct play.

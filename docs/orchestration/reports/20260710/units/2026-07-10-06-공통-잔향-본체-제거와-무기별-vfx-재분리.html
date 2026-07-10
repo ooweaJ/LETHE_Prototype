@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-10-06 - 공통 잔향 본체 제거와 무기별 VFX 재분리</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-10-06 - 공통 잔향 본체 제거와 무기별 VFX 재분리</h1>
+      <p class="meta">Generated from 2026-07-10-06-공통-잔향-본체-제거와-무기별-vfx-재분리.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260710/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-10-06 - 공통 잔향 본체 제거와 무기별 VFX 재분리</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>의 잔향 VFX가 다시 수정됐다. 이전 구현은 무기별 장식은 있었지만 공용 프롬프트, 링, 표식이 너무 크게 남아 있어서 단검과 대검이 같은 VFX처럼 보이는 문제가 있었다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>docs/무기별 잔향 및 기억.md</code>를 참고해 무기별 원칙을 다시 적용했다.</li>
+<li>단검 계열은 짧고 빠른 바늘, 체인, 틱, 스택 컷 중심으로 정리했다.</li>
+<li>대검 계열은 큰 판, 창, 시계장, 방패벽, 붕괴 구덩이 중심으로 정리했다.</li>
+<li>공통 빨간 혈반 펄스, 처형 프롬프트/헤일로, 추적 락 링, 망각 프롬프트/링처럼 양쪽 무기를 비슷하게 보이게 만들던 본체 VFX를 제거하거나 약화했다.</li>
+<li>주요 변경:</li>
+<li>혈반: 단검은 혈침 다발, 대검은 대검 혈 발도/반달 위주.</li>
+<li>균열: 단검은 바늘 분사와 미세 파문, 대검은 전방 균열.</li>
+<li>처형: 단검은 선고 바늘, 대검은 처형판/지면 문양/길로틴.</li>
+<li>추적: 단검은 부채꼴 추적침, 대검은 큰 창 예고.</li>
+<li>정지: 단검은 작은 시계 틱, 대검은 큰 시간장과 시계바늘.</li>
+<li>잿빛: 단검은 패리 바늘, 대검은 방패벽.</li>
+<li>망각: 단검은 스택 컷/점프 룬, 대검은 중력우물/크레이터.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 성공, 기존 경고 7개, 오류 0개.</li>
+<li>Unity editor state: <code>Dev_Prototype_v1</code>, 포트 <code>7890</code>, 컴파일 중 아님.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Unity console errors: <code>0</code>.</li>
+<li><code>LETHE/V1 QA/Echo Matrix Dual Blades</code>: MCP 메뉴 실행 성공.</li>
+<li><code>LETHE/V1 QA/Echo Matrix Greatsword</code>: 1회 시도했지만 MCP가 <code>Error polling queue: fetch failed</code>를 반환했다. 이후 에디터 상태, 컴파일 에러, 콘솔 에러는 정상이다.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>잔향 VFX는 같은 계열 색이나 아이콘을 공유하더라도, 화면에서 처음 읽히는 실루엣은 무기별로 달라야 한다. 단검은 다단 잔상, 대검은 큰 판정 덩어리가 먼저 보여야 한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>이번 수정은 자동 검증상 문제는 없지만, 실제로 “똑같아 보인다”는 감각이 사라졌는지는 직접 플레이가 필요하다. 특히 혈반, 처형, 추적, 잿빛, 망각은 F12 <code>Echo One</code>으로 하나씩 확인해야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>무기별 잔향 차별화는 단순 크기 조절이 아니라 공용 VFX 본체 제거 문제였다. 다음 리뷰는 각 잔향별 색보다 실루엣, 발동 위치, 타격 판정 언어가 무기 컨셉과 맞는지 봐야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo 직접 플레이 피드백을 기준으로 아직 비슷해 보이는 잔향을 하나씩 재설계한다.</li>
+<li>우선 확인 순서: 혈반, 처형, 추적, 잿빛, 망각.</li>
+<li><code>DB Rev</code>, <code>GS Rev</code>, <code>Echo One</code> 조합으로 같은 잔향을 무기별로 비교한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 무기별 성장 선택지가 시각적으로 구분되지 않아 선택의 의미가 약해졌다.</li>
+<li>방향: 같은 잔향이라도 무기의 전투 리듬에 따라 판정과 VFX 언어를 다르게 만든다.</li>
+<li>행동: 공용 잔향 본체를 줄이고 단검/대검 전용 실루엣을 주효과로 끌어올렸다.</li>
+<li>결과: 플레이어가 같은 잔향을 다른 무기로 골랐을 때 다른 빌드처럼 느낄 수 있는 평가 지점이 생겼다.</li>
+</ul>
+  </main>
+</body>
+</html>

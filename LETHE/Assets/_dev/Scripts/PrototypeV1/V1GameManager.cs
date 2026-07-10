@@ -1738,7 +1738,13 @@ namespace Lethe.PrototypeV1
                 enemy.BloodMarked = true;
                 enemy.MarkTimer = 2.2f + bloodLevel * 0.25f;
                 var denseSecondary = DenseDualBladeVfxThrottle(weapon) && hitIndex > 0;
-                if (!denseSecondary)
+                if (!denseSecondary && !IsHeavyEchoWeapon(weapon))
+                {
+                    var f = EchoForward(forward);
+                    PlaySfx("blood_mark", 0.26f, 0.10f);
+                    SpawnDualBloodStitchFan(enemy.transform.position, f, new Vector2(-f.y, f.x), bloodLevel, false);
+                }
+                if (!denseSecondary && bloodLevel < 0)
                 {
                 PlaySfx("blood_mark", 0.34f, 0.08f);
                 SpawnTransientSprite("BloodEchoPulse", MakeRingSprite("BloodEchoPulse", Color.white, 128), enemy.transform.position, Quaternion.identity, 0.38f + bloodLevel * 0.025f, new Color(1f, 0.10f, 0.18f, 0.42f), 0.28f);
@@ -2152,10 +2158,9 @@ namespace Lethe.PrototypeV1
             var chain = denseDualBlade
                 ? new List<V1Enemy> { enemy }
                 : EchoChainTargets(enemy, EchoTargetLimit(V1MemoryId.ShatterWave, levelValue, false), 1.10f + levelValue * 0.07f);
-            SpawnTransientSprite("EchoDual_ShatterNeedleOrigin", MakeRingSprite("ShatterEchoTell", Color.white, 112), enemy.transform.position, Quaternion.identity, 0.42f + levelValue * 0.035f, new Color(0.54f, 0.92f, 1f, 0.42f), 0.24f);
             if (!denseDualBlade)
             {
-                SpawnRadialSlashLines("EchoDual_ShatterNeedleRipple", enemy.transform.position, f, 3, 0.58f + levelValue * 0.035f, new Color(0.62f, 0.98f, 1f, 0.52f), 0.32f);
+                SpawnDualBladeNeedleFan("EchoDual_ShatterNeedleSpray", enemy.transform.position, f, 0.58f + levelValue * 0.035f, 5, new Color(0.62f, 0.98f, 1f, 0.46f), 0.26f);
                 SpawnDualMicroRippleChain(enemy.transform.position, f, levelValue);
             }
             for (int i = 0; i < chain.Count; i++)
@@ -2197,10 +2202,10 @@ namespace Lethe.PrototypeV1
             }
 
             PlaySfx("execution", heavy ? 0.68f : 0.48f, heavy ? 0.14f : 0.08f);
-            SpawnPromptSprite(heavy ? "EchoGreat_ExecutionStamp" : "EchoDual_ExecutionChain", EchoVfxSprite(V1MemoryId.ExecutionFlash), () => MakeImpactDiamondSprite("ExecutionEcho", Color.white), enemy.transform.position, Quaternion.identity, heavy ? 2.85f : 2.05f, heavy ? 1.20f : 0.90f, new Color(1f, 0.92f, 0.58f, 0.98f), heavy ? 0.74f : 0.58f);
-            SpawnTransientSprite(heavy ? "EchoGreat_ExecutionHalo" : "EchoDual_ExecutionHalo", MakeRingSprite("ExecutionEchoHalo", Color.white, heavy ? 180 : 144), enemy.transform.position, Quaternion.identity, heavy ? 1.22f : 0.86f, new Color(1f, 0.90f, 0.44f, heavy ? 0.66f : 0.54f), heavy ? 0.52f : 0.40f);
             if (heavy)
             {
+                SpawnTransientSpriteScaled("EchoGreat_ExecutionSentencePlate", MakeBoxSprite("EchoGreat_ExecutionSentencePlate", Color.white, 20, 188), enemy.transform.position + Vector3.up * 0.18f, Quaternion.Euler(0f, 0f, Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg - 90f), new Vector3(0.18f, 1.28f + levelValue * 0.05f, 1f), new Color(1f, 0.88f, 0.42f, 0.54f), 0.58f);
+                SpawnTransientSprite("EchoGreat_ExecutionGroundSigil", MakeSectorSprite("EchoGreat_ExecutionGroundSigil", Color.white, 192, 82f), enemy.transform.position + (Vector3)(f * 0.18f), Quaternion.Euler(0f, 0f, Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg - 41f), 1.10f + levelValue * 0.05f, new Color(1f, 0.82f, 0.32f, 0.26f), 0.62f);
                 SpawnGreatswordGuillotineDrop(enemy.transform.position, f, levelValue);
                 SpawnEchoWoundLine("EchoGreat_ExecutionGuillotine", enemy.transform.position + Vector3.up * 0.08f, f, new Color(1f, 0.94f, 0.52f, 0.84f), 1.62f + levelValue * 0.08f, 0.54f);
                 SpawnRadialSlashLines("EchoGreat_ExecutionCrack", enemy.transform.position, f, 5, 1.42f + levelValue * 0.10f, new Color(1f, 0.96f, 0.50f, 0.82f), 0.50f);
@@ -2220,6 +2225,7 @@ namespace Lethe.PrototypeV1
                 {
                     SpawnDualExecutionSentenceMarks(chain, f, levelValue);
                 }
+                SpawnDualBladeNeedleFan("EchoDual_ExecutionSentenceNeedle", enemy.transform.position, f, 0.72f + levelValue * 0.04f, 5, new Color(1f, 0.94f, 0.48f, 0.58f), 0.26f);
                 for (int i = 0; i < 3; i++)
                 {
                     var rotated = Quaternion.Euler(0f, 0f, i * 38f) * (Vector3)f;
@@ -2254,11 +2260,15 @@ namespace Lethe.PrototypeV1
                 ? SelectHunterTargets(enemy.transform.position, enemy, 1)
                 : SelectHunterTargets(enemy.transform.position, enemy, EchoTargetLimit(V1MemoryId.HunterOath, levelValue, false));
             if (force && targets.Count == 0) targets.Add(enemy);
-            SpawnTransientSprite(heavy ? "EchoGreat_HunterSpearLock" : "EchoDual_HunterFanLock", MakeRingSprite("HunterEchoOriginMark", Color.white, heavy ? 168 : 128), enemy.transform.position, Quaternion.Euler(0f, 0f, elapsed * (heavy ? -55f : 90f)), heavy ? 0.86f : 0.56f, new Color(0.74f, 1f, 0.38f, heavy ? 0.74f : 0.62f), heavy ? 0.64f : 0.48f);
-            SpawnEchoWoundLine(heavy ? "EchoGreat_HunterSpearShadow" : "EchoDual_HunterFanNeedle", enemy.transform.position + Vector3.up * 0.04f, EchoForward(forward), new Color(0.76f, 1f, 0.36f, heavy ? 0.68f : 0.48f), heavy ? 1.72f : 0.86f, heavy ? 0.58f : 0.34f);
-            if (!heavy)
+            var f = EchoForward(forward);
+            if (heavy)
             {
-                SpawnDualHunterFan(enemy.transform.position, EchoForward(forward), levelValue, targets.Count);
+                SpawnGreatswordHunterLanceTell(enemy.transform.position, f, levelValue);
+            }
+            else
+            {
+                SpawnDualHunterFan(enemy.transform.position, f, levelValue, targets.Count);
+                SpawnDualBladeNeedleFan("EchoDual_HunterFanLockNeedles", enemy.transform.position, f, 0.68f + levelValue * 0.035f, Mathf.Clamp(targets.Count + 2, 4, 6), new Color(0.74f, 1f, 0.36f, 0.46f), 0.24f);
             }
             for (int i = 0; i < targets.Count; i++)
             {
@@ -2301,13 +2311,18 @@ namespace Lethe.PrototypeV1
 
             PlaySfx("stopped", heavy ? 0.58f : 0.40f, heavy ? 0.18f : 0.12f);
             var radius = EchoRadius(V1MemoryId.StoppedSecond, levelValue, heavy) * (heavy ? 1.12f : 1.07f);
-            SpawnTransientSprite(heavy ? "EchoGreat_StoppedDome" : "EchoDual_StoppedMicroTick", MakeRingSprite("StoppedEchoWeaponTell", Color.white, heavy ? 180 : 112), enemy.transform.position, Quaternion.identity, radius * (heavy ? 1.08f : 0.44f), new Color(1f, 0.76f, 0.22f, heavy ? 0.58f : 0.44f), heavy ? 0.62f : 0.24f);
-            SpawnStoppedEchoClamp(enemy.transform.position, heavy ? 1.18f + levelValue * 0.10f : 0.52f + levelValue * 0.035f, heavy ? 1.46f : 0.46f);
-            SpawnEchoWoundLine(heavy ? "EchoGreat_StoppedClockHand" : "EchoDual_StoppedTickCut", enemy.transform.position + Vector3.up * 0.05f, f, new Color(1f, 0.80f, 0.30f, heavy ? 0.72f : 0.58f), heavy ? 1.24f : 0.58f, heavy ? 0.58f : 0.24f);
             if (heavy)
             {
+                SpawnTransientSprite("EchoGreat_StoppedDome", MakeRingSprite("StoppedEchoWeaponTell", Color.white, 180), enemy.transform.position, Quaternion.identity, radius * 1.08f, new Color(1f, 0.76f, 0.22f, 0.58f), 0.62f);
+                SpawnStoppedEchoClamp(enemy.transform.position, 1.18f + levelValue * 0.10f, 1.46f);
+                SpawnEchoWoundLine("EchoGreat_StoppedClockHand", enemy.transform.position + Vector3.up * 0.05f, f, new Color(1f, 0.80f, 0.30f, 0.72f), 1.24f, 0.58f);
                 SpawnStoppedSecondField(enemy.transform.position, radius, TimeStopGold(true), 1.82f, true);
                 SpawnGreatswordClockJudgement(enemy.transform.position, f, radius, levelValue);
+            }
+            else
+            {
+                SpawnDualStoppedTicks(enemy.transform.position, f, levelValue);
+                SpawnEchoWoundLine("EchoDual_StoppedTickCut", enemy.transform.position + Vector3.up * 0.05f, f, new Color(1f, 0.80f, 0.30f, 0.58f), 0.58f, 0.24f);
             }
             var stoppedTargets = heavy
                 ? EchoTargetsInRadius(enemy.transform.position, radius, EchoTargetLimit(V1MemoryId.StoppedSecond, levelValue, true), enemy)
@@ -2338,19 +2353,17 @@ namespace Lethe.PrototypeV1
             HealPlayer((heavy ? 0.48f : 0.28f) + levelValue * (heavy ? 0.16f : 0.12f));
             AddAshenGuardCharge(weapon.Damage * (heavy ? 0.16f : 0.075f) + levelValue * 0.65f, levelValue, enemy.transform.position, denseDualBlade);
             PlaySfx("ashen", heavy ? 0.46f : 0.30f, heavy ? 0.24f : 0.18f);
-            SpawnTransientSprite(heavy ? "EchoGreat_AshenGuardSeal" : "EchoDual_AshenParrySeal", MakeRingSprite("AshenEchoHitSeal", Color.white, heavy ? 172 : 128), enemy.transform.position, Quaternion.Euler(0f, 0f, elapsed * (heavy ? 70f : -90f)), heavy ? 0.88f : 0.54f, new Color(0.82f, 0.88f, 0.94f, heavy ? 0.68f : 0.56f), heavy ? 0.62f : 0.48f);
             SpawnEchoLink(heavy ? "EchoGreat_AshenCounterThread" : "EchoDual_AshenReturnThread", enemy.transform.position, player.position, new Color(0.84f, 0.90f, 1f, heavy ? 0.52f : 0.38f), heavy ? 0.54f : 0.40f, heavy ? 0.032f : 0.020f);
             if (heavy)
             {
                 var bulwarkCenter = player.position + (Vector3)(f * 0.68f);
                 SpawnGreatswordAshenBulwark(bulwarkCenter, f, levelValue);
-                SpawnPromptSprite("EchoGreat_AshenCounterWave", EchoVfxSprite(V1MemoryId.AshenShield), () => MakeRingSprite("AshenEcho", Color.white, 112), player.position, Quaternion.identity, 2.25f, 0.92f, new Color(0.78f, 0.86f, 0.92f, 0.70f), 0.76f);
-                SpawnTransientSprite("EchoGreat_AshenShieldBreakRing", MakeRingSprite("AshenEchoGuard", Color.white, 180), player.position, Quaternion.Euler(0f, 0f, elapsed * -120f), 1.34f, new Color(0.86f, 0.92f, 1f, 0.50f), 0.64f);
+                SpawnTransientSpriteScaled("EchoGreat_AshenWallFace", MakeBoxSprite("EchoGreat_AshenWallFace", Color.white, 26, 150), bulwarkCenter + (Vector3)(f * 0.08f), Quaternion.Euler(0f, 0f, Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg - 90f), new Vector3(0.24f, 1.12f + levelValue * 0.05f, 1f), new Color(0.80f, 0.88f, 0.96f, 0.38f), 0.72f);
             }
             else if (!denseDualBlade)
             {
-                SpawnTransientSprite("EchoDual_AshenParryGuard", MakeRingSprite("AshenEchoGuard", Color.white, 112), enemy.transform.position, Quaternion.Euler(0f, 0f, elapsed * -180f), 0.44f, new Color(0.86f, 0.92f, 1f, 0.42f), 0.28f);
                 SpawnDualAshenParrySparks(enemy.transform.position, f, levelValue);
+                SpawnDualBladeNeedleFan("EchoDual_AshenParryNeedles", enemy.transform.position, f, 0.44f + levelValue * 0.025f, 4, new Color(0.88f, 0.96f, 1f, 0.44f), 0.22f);
             }
             if (heavy || !denseDualBlade)
             {
@@ -2408,13 +2421,10 @@ namespace Lethe.PrototypeV1
             if (!ShouldTriggerEcho(V1MemoryId.OblivionBrand, levelValue, hitIndex, force)) return;
 
             PlaySfx("brand", heavy ? 0.52f : 0.36f, heavy ? 0.16f : 0.10f);
-            SpawnPromptSprite(heavy ? "EchoGreat_OblivionDetonation" : "EchoDual_OblivionBrandStack", EchoVfxSprite(V1MemoryId.OblivionBrand), () => MakeRingSprite("OblivionEcho", Color.white, 112), enemy.transform.position, Quaternion.identity, heavy ? 2.55f : 1.78f, heavy ? 1.20f : 0.86f, new Color(0.76f, 0.46f, 1f, heavy ? 0.92f : 0.82f), heavy ? 0.94f : 0.78f);
-            SpawnTransientSprite(heavy ? "EchoGreat_OblivionCoreBreak" : "EchoDual_OblivionSlash", MakeImpactDiamondSprite("OblivionEchoSlash", Color.white), enemy.transform.position + Vector3.up * 0.08f, Quaternion.Euler(0f, 0f, elapsed * 140f), heavy ? 0.66f : 0.42f, new Color(0.96f, 0.72f, 1f, heavy ? 0.92f : 0.80f), heavy ? 0.50f : 0.38f);
-            SpawnTransientSprite(heavy ? "EchoGreat_OblivionCollapseRing" : "EchoDual_OblivionStackRing", MakeRingSprite("OblivionEchoStackRing", Color.white, heavy ? 180 : 112), enemy.transform.position, Quaternion.Euler(0f, 0f, elapsed * (heavy ? 70f : -160f)), heavy ? 1.12f + levelValue * 0.08f : 0.52f + levelValue * 0.035f, new Color(0.80f, 0.44f, 1f, heavy ? 0.58f : 0.42f), heavy ? 0.58f : 0.34f);
-            SpawnOblivionEchoBrand(enemy.transform.position, f, heavy ? 0.90f : 0.70f);
             if (heavy)
             {
                 var collapseRadius = EchoRadius(V1MemoryId.OblivionBrand, levelValue, true) * 1.18f;
+                SpawnTransientSprite("EchoGreat_OblivionCoreBreak", MakeImpactDiamondSprite("EchoGreat_OblivionCoreBreak", Color.white), enemy.transform.position + Vector3.up * 0.08f, Quaternion.Euler(0f, 0f, elapsed * 70f), 0.74f, new Color(0.96f, 0.72f, 1f, 0.84f), 0.54f);
                 SpawnRadialSlashLines("EchoGreat_OblivionBrandBurst", enemy.transform.position, f, 7, 1.26f + levelValue * 0.12f, new Color(0.86f, 0.48f, 1f, 0.70f), 0.52f);
                 SpawnTransientSprite("EchoGreat_OblivionGravityWell", MakeDiscSprite("EchoGreat_OblivionGravityWell", Color.white, 160), enemy.transform.position, Quaternion.identity, collapseRadius * 0.58f, new Color(0.42f, 0.12f, 0.78f, 0.32f), 0.70f);
                 SpawnGreatswordBrandCrater(enemy.transform.position, f, collapseRadius);
@@ -2436,7 +2446,9 @@ namespace Lethe.PrototypeV1
             }
             else
             {
+                SpawnOblivionEchoBrand(enemy.transform.position, f, 0.48f);
                 SpawnDualBrandHopRunes(enemy.transform.position, f, levelValue);
+                SpawnDualBladeNeedleFan("EchoDual_OblivionStackCuts", enemy.transform.position, f, 0.52f + levelValue * 0.025f, 4, new Color(0.88f, 0.52f, 1f, 0.42f), 0.24f);
                 for (int i = 0; i < Mathf.Min(4, 1 + levelValue / 2); i++)
                 {
                     SpawnTransientSprite("EchoDual_OblivionStackPip", MakeImpactDiamondSprite("EchoDual_OblivionStackPip", Color.white), enemy.transform.position + Quaternion.Euler(0f, 0f, i * 90f + elapsed * 60f) * Vector3.right * 0.26f, Quaternion.Euler(0f, 0f, 45f + i * 30f), 0.20f, new Color(0.92f, 0.64f, 1f, 0.66f), 0.34f);
@@ -2482,6 +2494,48 @@ namespace Lethe.PrototypeV1
             sr.color = new Color(0.84f, 1f, 0.48f, 0.94f);
             sr.sortingOrder = 52;
             go.AddComponent<V1Projectile>().Configure(this, target, 6.8f + levelValue * 0.20f, weapon.Damage * (0.34f + levelValue * 0.075f), HunterEchoSource);
+        }
+
+        void SpawnDualBladeNeedleFan(string name, Vector3 center, Vector2 forward, float length, int count, Color color, float lifetime)
+        {
+            var f = EchoForward(forward);
+            var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
+            var needle = MakeBoxSprite(name, Color.white, 6, 116);
+            count = Mathf.Clamp(count, 3, 7);
+            for (int i = 0; i < count; i++)
+            {
+                var lane = count <= 1 ? 0f : (i - (count - 1) * 0.5f) / ((count - 1) * 0.5f);
+                var angle = baseAngle + lane * 36f;
+                var dir = (Vector2)(Quaternion.Euler(0f, 0f, angle) * Vector3.right);
+                var pos = center + (Vector3)(dir * (0.16f + Mathf.Abs(lane) * 0.04f));
+                SpawnTransientSpriteScaled(name, needle, pos, Quaternion.Euler(0f, 0f, angle - 90f), new Vector3(0.020f, Mathf.Max(0.22f, length), 1f), color, lifetime + i * 0.010f);
+            }
+        }
+
+        void SpawnGreatswordHunterLanceTell(Vector3 center, Vector2 forward, int levelValue)
+        {
+            var f = EchoForward(forward);
+            var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
+            var range = 1.42f + levelValue * 0.10f;
+            SpawnTransientSpriteScaled("EchoGreat_HunterLanceBody", MakeBoxSprite("EchoGreat_HunterLanceBody", Color.white, 16, 190), center + (Vector3)(f * 0.42f), Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(0.090f, range, 1f), new Color(0.78f, 1f, 0.32f, 0.54f), 0.58f);
+            SpawnTransientSprite("EchoGreat_HunterLanceHead", MakeImpactDiamondSprite("EchoGreat_HunterLanceHead", Color.white), center + (Vector3)(f * (0.98f + levelValue * 0.04f)), Quaternion.Euler(0f, 0f, baseAngle - 45f), 0.40f + levelValue * 0.018f, new Color(0.84f, 1f, 0.42f, 0.72f), 0.50f);
+            SpawnGreatswordForwardWedge("EchoGreat_HunterLancePressure", center - (Vector3)(f * 0.18f), f, 1.55f + levelValue * 0.10f, 26f, new Color(0.62f, 1f, 0.26f, 0.16f), 0.54f);
+        }
+
+        void SpawnDualStoppedTicks(Vector3 center, Vector2 forward, int levelValue)
+        {
+            var f = EchoForward(forward);
+            var s = new Vector2(-f.y, f.x);
+            var tick = MakeBoxSprite("EchoDual_StoppedNeedleTick", Color.white, 5, 72);
+            var count = Mathf.Clamp(4 + levelValue / 2, 4, 7);
+            for (int i = 0; i < count; i++)
+            {
+                var t = count <= 1 ? 0f : i / (count - 1f);
+                var lane = t - 0.5f;
+                var pos = center + (Vector3)(f * (0.05f + t * 0.20f) + s * (lane * 0.38f));
+                var angle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg - 90f + lane * 72f;
+                SpawnTransientSpriteScaled("EchoDual_StoppedNeedleTick", tick, pos, Quaternion.Euler(0f, 0f, angle), new Vector3(0.018f, 0.26f + levelValue * 0.010f, 1f), new Color(1f, 0.84f, 0.34f, 0.58f), 0.22f + i * 0.012f);
+            }
         }
 
         void SpawnDualBloodStitchFan(Vector3 center, Vector2 forward, Vector2 side, int levelValue, bool denseDualBlade)
