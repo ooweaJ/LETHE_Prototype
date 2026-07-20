@@ -1,5 +1,49 @@
 # Current Task
 
+# 2026-07-20 Spatial Hash Targeting Optimization
+
+## Status
+
+- Implemented and C# build-verified.
+- Unity Play Mode QA is pending because no Unity Editor instance was detected through MCP.
+
+## Applied Changes
+
+- Added a per-frame living-enemy spatial hash grid in `V1GameManager`.
+- Added reusable query buffers for hot target paths.
+- Replaced the main full-list target scans in:
+  - weapon target selection,
+  - weapon hit collection,
+  - Echo radius/cone/chain target helpers,
+  - Void Priest heal target selection,
+  - enemy separation force,
+  - live enemy counting.
+- Added spatial cache invalidation when enemies spawn, die, are cleared, or are removed by debug/gatekeeper cleanup.
+
+## Expected Efficiency
+
+- Range-based queries now check nearby grid cells instead of every enemy.
+- Densest-arc Greatsword targeting avoids repeated whole-list scans for each candidate direction.
+- Enemy separation changes from broad `N x N` style scanning toward local-neighborhood scanning.
+- Core helper paths allocate fewer temporary LINQ lists during dense combat.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+- `npm run report`: passed.
+- `npm.cmd run report:check`: passed.
+- Unity MCP:
+  - `unity_editor_state` failed with no Unity Editor instances detected.
+
+## Remaining Gate
+
+- Run Unity QA when the editor is open:
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`
+  - `LETHE/V1 QA/Echo Matrix Greatsword`
+- Direct-play dense packs and confirm target selection still feels the same.
+
 # 2026-07-10 Final Gatekeeper Boss Prototype
 
 ## Status

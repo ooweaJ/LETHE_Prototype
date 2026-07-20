@@ -1,5 +1,28 @@
 # LETHE TEST
 
+# 2026-07-20 Spatial Hash Targeting Optimization
+
+- Purpose:
+  - Reduce dense-combat CPU/GC pressure from repeated full-list enemy scans and LINQ sorting in core targeting helpers.
+- Applied target:
+  - `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`.
+  - Added per-frame enemy spatial hash grid and reusable target buffers.
+  - Routed weapon targeting, weapon hit collection, Echo radius/cone/chain helpers, Void Priest healing, enemy separation, and live enemy counting through lower-allocation helpers.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`.
+  - `npm run report`.
+  - `npm.cmd run report:check`.
+  - Unity MCP `unity_editor_state` attempted.
+- Results:
+  - Runtime build passed with 7 existing legacy deprecation warnings and 0 errors.
+  - Editor build passed with 0 warnings and 0 errors.
+  - Report generation passed.
+  - Report unit heading check passed.
+  - Unity MCP reported no detected Unity Editor instance, so Play Mode QA is pending.
+- Notes:
+  - Next Unity checks should run Dense Dual Blades Perf Matrix and both Echo Matrix QA menus, then direct-play dense packs for targeting feel regression.
+
 # 2026-07-10 Project Thumbnail and Intro Key-Art Pass
 
 - Purpose:

@@ -1,6 +1,34 @@
 # Status
 
-Last updated: 2026-07-10
+Last updated: 2026-07-20
+
+## 2026-07-20 Update: Spatial Hash Targeting Optimization
+
+- jaewoo asked whether LETHE uses algorithms/data structures and then asked Codex to implement an optimization pass.
+- Applied in `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`:
+  - Added a per-frame spatial hash grid for living enemies using `Dictionary<Vector2Int, List<V1Enemy>>`.
+  - Added reusable query buffers for weapon targeting, weapon hit collection, radius/cone Echo targeting, and enemy separation.
+  - Replaced the hottest full-list LINQ target scans in:
+    - weapon target selection,
+    - weapon hit collection,
+    - Echo radius/cone/chain helper targeting,
+    - Void Priest heal target selection,
+    - enemy separation force,
+    - live enemy counting.
+  - Kept existing `enemies` as the source-of-truth list and invalidated the spatial cache on spawn, kill, debug clear, gatekeeper removal, and cleanup.
+- Expected efficiency:
+  - weapon and Echo range checks now inspect nearby grid cells instead of repeatedly scanning every enemy;
+  - enemy separation moves away from per-enemy full-list checks toward local-neighborhood checks;
+  - repeated `OrderBy/Where/ToList` allocation is reduced in core helper paths.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - `npm run report`: passed and generated the 20260720 report page.
+  - `npm.cmd run report:check`: passed.
+  - Unity MCP editor check could not run because no Unity Editor instance was detected.
+- Next step:
+  - Open Unity and run `LETHE/V1 QA/Dense Dual Blades Perf Matrix`, `LETHE/V1 QA/Echo Matrix Dual Blades`, and `LETHE/V1 QA/Echo Matrix Greatsword`.
+  - During direct play, watch for any changed target feel caused by spatial candidate ordering.
 
 ## 2026-07-10 Update: Echo Common VFX Body Separation
 

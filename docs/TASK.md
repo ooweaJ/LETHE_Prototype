@@ -1,5 +1,22 @@
 # LETHE TASK
 
+## 2026-07-20 Update
+
+- [x] `Dev_Prototype_v1` runtime targeting optimization added:
+  - [x] per-frame living-enemy spatial hash grid in `V1GameManager`.
+  - [x] reusable query buffers for weapon targeting, weapon hit collection, Echo radius/cone/chain helpers, Void Priest healing, enemy separation, and live enemy counting.
+  - [x] cache invalidation on enemy spawn, kill, debug clear, gatekeeper removal, and cleanup.
+  - [x] `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 7 existing warnings and 0 errors.
+  - [x] `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo` passed with 0 warnings and 0 errors.
+  - [x] `npm run report` and `npm.cmd run report:check` passed.
+  - [ ] Unity Play Mode QA pending because no Unity Editor instance was detected through MCP.
+
+Current next:
+
+1. Open Unity and run Dense Dual Blades Perf Matrix plus both Echo Matrix QA menus.
+2. Direct-play dense combat and check target-selection/separation feel after the spatial hash pass.
+3. Continue the existing Echo/Kalmuri direct-play review gate after optimization QA passes.
+
 ## 2026-07-10 Update
 
 - [x] LETHE project thumbnail/key visual added under `_dev/Art/Sprites/UI`.

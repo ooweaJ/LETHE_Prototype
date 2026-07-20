@@ -1,5 +1,19 @@
 # LETHE CHANGELOG
 
+# 2026-07-20
+
+- Added a runtime targeting optimization pass to `Dev_Prototype_v1`:
+  - Introduced a per-frame living-enemy spatial hash grid in `V1GameManager`.
+  - Added reusable query buffers for weapon targeting, weapon hits, radius/cone Echo helpers, and enemy separation.
+  - Replaced the hottest full-list LINQ scans in weapon targeting, Echo helper targeting, Void Priest healing, enemy separation, and live enemy counting.
+  - Added spatial cache invalidation on enemy spawn, kill, gatekeeper removal, debug clear, and cleanup.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - `npm run report`: passed.
+  - `npm.cmd run report:check`: passed.
+  - Unity MCP Play Mode QA was blocked because no Unity Editor instance was detected.
+
 # 2026-07-10
 
 - Added LETHE project thumbnail and in-game intro key art:

@@ -112,6 +112,8 @@ namespace Lethe.PrototypeV1
         const float EnemySeparationPadding = 0.10f;
         const float EnemySeparationMax = 1.15f;
         const float EnemySeparationProbeStep = 0.22f;
+        const float EnemySpatialCellSize = 2.4f;
+        const float EnemySpatialMaxTouchRadius = 1.2f;
         const float PlayerMoveAcceleration = 14f;
         const float PlayerMoveDeceleration = 22f;
         const float DualBladeVisualScale = 0.43f;
@@ -248,6 +250,18 @@ namespace Lethe.PrototypeV1
         [SerializeField] UtilityEchoTuningSpec[] utilityEchoTuningSpecs = DefaultUtilityEchoTuningSpecTable.ToArray();
 
         readonly List<V1Enemy> enemies = new();
+        readonly Dictionary<Vector2Int, List<V1Enemy>> enemySpatialGrid = new();
+        readonly List<V1Enemy> weaponTargetCandidates = new();
+        readonly List<V1Enemy> weaponHitCandidates = new();
+        readonly List<V1Enemy> targetEvalHitCandidates = new();
+        readonly List<WeaponHit> weaponHitBuffer = new();
+        readonly List<WeaponHit> targetEvalHitBuffer = new();
+        readonly List<V1Enemy> radiusQueryBuffer = new();
+        readonly List<V1Enemy> targetSortBuffer = new();
+        readonly List<V1Enemy> separationQueryBuffer = new();
+        int enemySpatialGridFrame = -1;
+        int liveEnemyCountFrame = -1;
+        int liveEnemyCountCache;
         readonly List<V1XpOrb> xpOrbs = new();
         readonly List<string> combatLog = new();
         readonly List<MemoryState> activeMemories = new();
@@ -1069,40 +1083,212 @@ namespace Lethe.PrototypeV1
             }
         }
 
+        void InvalidateEnemySpatialGrid()
+        {
+            enemySpatialGridFrame = -1;
+            liveEnemyCountFrame = -1;
+        }
+
+        Vector2Int EnemySpatialCell(Vector3 position)
+        {
+            return new Vector2Int(
+                Mathf.FloorToInt(position.x / EnemySpatialCellSize),
+                Mathf.FloorToInt(position.y / EnemySpatialCellSize));
+        }
+
+        void RebuildEnemySpatialGridIfNeeded()
+        {
+            if (enemySpatialGridFrame == Time.frameCount) return;
+
+            foreach (var bucket in enemySpatialGrid.Values)
+            {
+                bucket.Clear();
+            }
+
+            var live = 0;
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                var enemy = enemies[i];
+                if (enemy == null || !enemy.IsAlive) continue;
+
+                live++;
+                var cell = EnemySpatialCell(enemy.transform.position);
+                if (!enemySpatialGrid.TryGetValue(cell, out var bucket))
+                {
+                    bucket = new List<V1Enemy>(8);
+                    enemySpatialGrid.Add(cell, bucket);
+                }
+                bucket.Add(enemy);
+            }
+
+            enemySpatialGridFrame = Time.frameCount;
+            liveEnemyCountFrame = Time.frameCount;
+            liveEnemyCountCache = live;
+        }
+
+        void QueryLivingEnemiesInRadius(Vector3 origin, float radius, List<V1Enemy> results, V1Enemy exclude = null, bool includeTouchRadius = true)
+        {
+            results.Clear();
+            RebuildEnemySpatialGridIfNeeded();
+
+            var queryRadius = Mathf.Max(0f, radius) + (includeTouchRadius ? EnemySpatialMaxTouchRadius : 0f);
+            var minCell = EnemySpatialCell(origin - new Vector3(queryRadius, queryRadius, 0f));
+            var maxCell = EnemySpatialCell(origin + new Vector3(queryRadius, queryRadius, 0f));
+            var origin2 = (Vector2)origin;
+
+            for (int y = minCell.y; y <= maxCell.y; y++)
+            {
+                for (int x = minCell.x; x <= maxCell.x; x++)
+                {
+                    if (!enemySpatialGrid.TryGetValue(new Vector2Int(x, y), out var bucket)) continue;
+
+                    for (int i = 0; i < bucket.Count; i++)
+                    {
+                        var enemy = bucket[i];
+                        if (enemy == null || enemy == exclude || !enemy.IsAlive) continue;
+                        var allowed = radius + (includeTouchRadius ? enemy.TouchRadius : 0f);
+                        if (((Vector2)enemy.transform.position - origin2).sqrMagnitude <= allowed * allowed)
+                        {
+                            results.Add(enemy);
+                        }
+                    }
+                }
+            }
+        }
+
+        void InsertEnemyByDistance(List<V1Enemy> results, V1Enemy enemy, Vector3 origin, int cap)
+        {
+            if (enemy == null || cap <= 0) return;
+            var distanceSq = ((Vector2)(enemy.transform.position - origin)).sqrMagnitude;
+            var insert = results.Count;
+            while (insert > 0 && ((Vector2)(results[insert - 1].transform.position - origin)).sqrMagnitude > distanceSq)
+            {
+                insert--;
+            }
+            results.Insert(insert, enemy);
+            if (results.Count > cap) results.RemoveAt(results.Count - 1);
+        }
+
+        void InsertEnemyByHealthThenDistance(List<V1Enemy> results, V1Enemy enemy, Vector3 origin, int cap)
+        {
+            if (enemy == null || cap <= 0) return;
+            var distanceSq = ((Vector2)(enemy.transform.position - origin)).sqrMagnitude;
+            var insert = results.Count;
+            while (insert > 0)
+            {
+                var previous = results[insert - 1];
+                var previousDistanceSq = ((Vector2)(previous.transform.position - origin)).sqrMagnitude;
+                if (previous.HealthRatio < enemy.HealthRatio) break;
+                if (Mathf.Approximately(previous.HealthRatio, enemy.HealthRatio) && previousDistanceSq <= distanceSq) break;
+                insert--;
+            }
+            results.Insert(insert, enemy);
+            if (results.Count > cap) results.RemoveAt(results.Count - 1);
+        }
+
+        void InsertEnemyByThreatThenDistance(List<V1Enemy> results, V1Enemy enemy, Vector3 origin, int cap)
+        {
+            if (enemy == null || cap <= 0) return;
+            var threat = EnemyThreatPriority(enemy);
+            var distanceSq = ((Vector2)(enemy.transform.position - origin)).sqrMagnitude;
+            var insert = results.Count;
+            while (insert > 0)
+            {
+                var previous = results[insert - 1];
+                var previousThreat = EnemyThreatPriority(previous);
+                var previousDistanceSq = ((Vector2)(previous.transform.position - origin)).sqrMagnitude;
+                if (previousThreat > threat) break;
+                if (Mathf.Approximately(previousThreat, threat) && previousDistanceSq <= distanceSq) break;
+                insert--;
+            }
+            results.Insert(insert, enemy);
+            if (results.Count > cap) results.RemoveAt(results.Count - 1);
+        }
+
+        V1Enemy FindLowestHealthEnemy()
+        {
+            V1Enemy best = null;
+            var bestHealth = float.MaxValue;
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                var enemy = enemies[i];
+                if (enemy == null || !enemy.IsAlive) continue;
+                if (enemy.HealthRatio >= bestHealth) continue;
+                bestHealth = enemy.HealthRatio;
+                best = enemy;
+            }
+            return best;
+        }
+
         V1Enemy FindWeaponTarget(WeaponRuntimeSpec weapon)
         {
             var range = weapon.Range * (1f + WeaponStat.AreaMul);
             var engageRadius = range * weapon.EngageMul;
-            var candidates = enemies
-                .Where(e => e != null && e.IsAlive)
-                .Select(e => new { Enemy = e, Dir = (Vector2)(e.transform.position - player.position) })
-                .Where(x => x.Dir.magnitude <= engageRadius + x.Enemy.TouchRadius)
-                .ToList();
+            QueryLivingEnemiesInRadius(player.position, engageRadius, weaponTargetCandidates);
 
             if (weapon.TargetingMode == V1WeaponTargetingMode.Nearest)
             {
-                return candidates
-                    .OrderBy(x => x.Dir.sqrMagnitude)
-                    .Select(x => x.Enemy)
-                    .FirstOrDefault();
+                V1Enemy nearest = null;
+                var nearestDistanceSq = float.MaxValue;
+                for (int i = 0; i < weaponTargetCandidates.Count; i++)
+                {
+                    var enemy = weaponTargetCandidates[i];
+                    var distanceSq = ((Vector2)(enemy.transform.position - player.position)).sqrMagnitude;
+                    if (distanceSq >= nearestDistanceSq) continue;
+                    nearestDistanceSq = distanceSq;
+                    nearest = enemy;
+                }
+                return nearest;
             }
 
-            return candidates
-                .Select(x =>
+            V1Enemy best = null;
+            var bestHitCount = -1;
+            var bestCenterDistanceSq = float.MaxValue;
+            var bestDistanceSq = float.MaxValue;
+            for (int i = 0; i < weaponTargetCandidates.Count; i++)
+            {
+                var enemy = weaponTargetCandidates[i];
+                var dir = (Vector2)(enemy.transform.position - player.position);
+                var forward = dir.sqrMagnitude > 0.001f ? dir.normalized : lastAim.normalized;
+                CollectWeaponHitsInto(weapon, forward, targetEvalHitBuffer, targetEvalHitCandidates);
+                var hitCount = targetEvalHitBuffer.Count;
+                var center = Vector2.zero;
+                for (int hitIndex = 0; hitIndex < hitCount; hitIndex++)
                 {
-                    var forward = x.Dir.sqrMagnitude > 0.001f ? x.Dir.normalized : lastAim.normalized;
-                    var hits = CollectWeaponHits(weapon, forward);
-                    var center = hits.Count == 0 ? x.Enemy.transform.position : (Vector3)hits.Aggregate(Vector2.zero, (sum, h) => sum + (Vector2)h.Enemy.transform.position) / hits.Count;
-                    return new { x.Enemy, x.Dir, HitCount = hits.Count, CenterDistance = Vector2.Distance(player.position, center) };
-                })
-                .OrderByDescending(x => x.HitCount)
-                .ThenBy(x => x.CenterDistance)
-                .ThenBy(x => x.Dir.sqrMagnitude)
-                .Select(x => x.Enemy)
-                .FirstOrDefault();
+                    center += (Vector2)targetEvalHitBuffer[hitIndex].Enemy.transform.position;
+                }
+                if (hitCount > 0) center /= hitCount;
+                else center = enemy.transform.position;
+
+                var centerDistanceSq = ((Vector2)player.position - center).sqrMagnitude;
+                var distanceSq = dir.sqrMagnitude;
+                if (hitCount < bestHitCount) continue;
+                if (hitCount == bestHitCount && centerDistanceSq > bestCenterDistanceSq) continue;
+                if (hitCount == bestHitCount && Mathf.Approximately(centerDistanceSq, bestCenterDistanceSq) && distanceSq >= bestDistanceSq) continue;
+
+                best = enemy;
+                bestHitCount = hitCount;
+                bestCenterDistanceSq = centerDistanceSq;
+                bestDistanceSq = distanceSq;
+            }
+
+            return best;
         }
 
-        int CountLiveEnemies() => enemies.Count(e => e != null && e.IsAlive);
+        int CountLiveEnemies()
+        {
+            RebuildEnemySpatialGridIfNeeded();
+            if (liveEnemyCountFrame == Time.frameCount) return liveEnemyCountCache;
+            var live = 0;
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                var enemy = enemies[i];
+                if (enemy != null && enemy.IsAlive) live++;
+            }
+            liveEnemyCountFrame = Time.frameCount;
+            liveEnemyCountCache = live;
+            return live;
+        }
 
         bool DenseDualBladeVfxThrottle(WeaponRuntimeSpec weapon)
         {
@@ -1121,16 +1307,36 @@ namespace Lethe.PrototypeV1
 
         List<WeaponHit> CollectWeaponHits(WeaponRuntimeSpec weapon, Vector2 forward)
         {
+            CollectWeaponHitsInto(weapon, forward, weaponHitBuffer, weaponHitCandidates);
+            return weaponHitBuffer;
+        }
+
+        void CollectWeaponHitsInto(WeaponRuntimeSpec weapon, Vector2 forward, List<WeaponHit> results, List<V1Enemy> candidates)
+        {
             var f = forward.sqrMagnitude > 0.001f ? forward.normalized : lastAim.normalized;
             var range = weapon.Range * (1f + WeaponStat.AreaMul);
-            return enemies
-                .Where(e => e != null && e.IsAlive)
-                .Select(e => new WeaponHit(e, (Vector2)(e.transform.position - player.position)))
-                .Where(x => x.Distance <= range + x.Enemy.TouchRadius)
-                .Where(x => x.Distance <= 0.001f || Vector2.Angle(f, x.Dir.normalized) <= weapon.ArcDegrees * 0.5f)
-                .OrderBy(x => x.Distance)
-                .Take(weapon.MaxTargets)
-                .ToList();
+            results.Clear();
+            QueryLivingEnemiesInRadius(player.position, range, candidates);
+            for (int i = 0; i < candidates.Count; i++)
+            {
+                var enemy = candidates[i];
+                var hit = new WeaponHit(enemy, (Vector2)(enemy.transform.position - player.position));
+                if (hit.Distance > range + enemy.TouchRadius) continue;
+                if (hit.Distance > 0.001f && Vector2.Angle(f, hit.Dir.normalized) > weapon.ArcDegrees * 0.5f) continue;
+                InsertWeaponHitByDistance(results, hit, weapon.MaxTargets);
+            }
+        }
+
+        void InsertWeaponHitByDistance(List<WeaponHit> results, WeaponHit hit, int cap)
+        {
+            if (cap <= 0) return;
+            var insert = results.Count;
+            while (insert > 0 && results[insert - 1].Distance > hit.Distance)
+            {
+                insert--;
+            }
+            results.Insert(insert, hit);
+            if (results.Count > cap) results.RemoveAt(results.Count - 1);
         }
 
         void UpdateActiveMemories(float dt)
@@ -1883,12 +2089,15 @@ namespace Lethe.PrototypeV1
 
         List<V1Enemy> SelectHunterTargets(Vector3 origin, V1Enemy exclude, int cap)
         {
-            return enemies
-                .Where(e => e != null && e.IsAlive && e != exclude)
-                .OrderByDescending(EnemyThreatPriority)
-                .ThenBy(e => Vector2.Distance(origin, e.transform.position))
-                .Take(Mathf.Max(1, cap))
-                .ToList();
+            var result = new List<V1Enemy>();
+            var targetCap = Mathf.Max(1, cap);
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                var enemy = enemies[i];
+                if (enemy == null || enemy == exclude || !enemy.IsAlive) continue;
+                InsertEnemyByThreatThenDistance(result, enemy, origin, targetCap);
+            }
+            return result;
         }
 
         void SpawnExecutionForecast(V1Enemy enemy, int levelValue, bool echo)
@@ -1995,12 +2204,16 @@ namespace Lethe.PrototypeV1
         {
             var result = new List<V1Enemy>();
             if (first != null && first.IsAlive) result.Add(first);
-            foreach (var target in enemies
-                .Where(e => e != null && e.IsAlive && e != first && Vector2.Distance(origin, e.transform.position) <= radius + e.TouchRadius)
-                .OrderBy(e => Vector2.Distance(origin, e.transform.position))
-                .Take(Mathf.Max(0, cap - result.Count)))
+            var remaining = Mathf.Max(0, cap - result.Count);
+            targetSortBuffer.Clear();
+            QueryLivingEnemiesInRadius(origin, radius, radiusQueryBuffer, first);
+            for (int i = 0; i < radiusQueryBuffer.Count; i++)
             {
-                result.Add(target);
+                InsertEnemyByDistance(targetSortBuffer, radiusQueryBuffer[i], origin, remaining);
+            }
+            for (int i = 0; i < targetSortBuffer.Count; i++)
+            {
+                result.Add(targetSortBuffer[i]);
             }
             return result;
         }
@@ -2010,14 +2223,20 @@ namespace Lethe.PrototypeV1
             var f = EchoForward(forward);
             var result = new List<V1Enemy>();
             if (first != null && first.IsAlive) result.Add(first);
-            foreach (var target in enemies
-                .Where(e => e != null && e.IsAlive && e != first)
-                .Select(e => new { Enemy = e, Delta = (Vector2)(e.transform.position - origin) })
-                .Where(x => x.Delta.magnitude <= range + x.Enemy.TouchRadius && Vector2.Angle(f, x.Delta.sqrMagnitude > 0.01f ? x.Delta.normalized : f) <= halfAngle)
-                .OrderBy(x => x.Delta.magnitude)
-                .Take(Mathf.Max(0, cap - result.Count)))
+            var remaining = Mathf.Max(0, cap - result.Count);
+            targetSortBuffer.Clear();
+            QueryLivingEnemiesInRadius(origin, range, radiusQueryBuffer, first);
+            for (int i = 0; i < radiusQueryBuffer.Count; i++)
             {
-                result.Add(target.Enemy);
+                var enemy = radiusQueryBuffer[i];
+                var delta = (Vector2)(enemy.transform.position - origin);
+                if (delta.magnitude > range + enemy.TouchRadius) continue;
+                if (Vector2.Angle(f, delta.sqrMagnitude > 0.01f ? delta.normalized : f) > halfAngle) continue;
+                InsertEnemyByDistance(targetSortBuffer, enemy, origin, remaining);
+            }
+            for (int i = 0; i < targetSortBuffer.Count; i++)
+            {
+                result.Add(targetSortBuffer[i]);
             }
             return result;
         }
@@ -2030,10 +2249,19 @@ namespace Lethe.PrototypeV1
             var cursor = first;
             while (result.Count < cap)
             {
-                var next = enemies
-                    .Where(e => e != null && e.IsAlive && !result.Contains(e) && Vector2.Distance(cursor.transform.position, e.transform.position) <= hopRadius + e.TouchRadius)
-                    .OrderBy(e => Vector2.Distance(cursor.transform.position, e.transform.position))
-                    .FirstOrDefault();
+                V1Enemy next = null;
+                var bestDistanceSq = float.MaxValue;
+                var origin = cursor.transform.position;
+                QueryLivingEnemiesInRadius(origin, hopRadius, radiusQueryBuffer);
+                for (int i = 0; i < radiusQueryBuffer.Count; i++)
+                {
+                    var enemy = radiusQueryBuffer[i];
+                    if (result.Contains(enemy)) continue;
+                    var distanceSq = ((Vector2)(enemy.transform.position - origin)).sqrMagnitude;
+                    if (distanceSq >= bestDistanceSq) continue;
+                    bestDistanceSq = distanceSq;
+                    next = enemy;
+                }
                 if (next == null) break;
                 result.Add(next);
                 cursor = next;
@@ -3369,7 +3597,7 @@ namespace Lethe.PrototypeV1
 
         void SpawnFractureExecutionUltimate(bool heavy)
         {
-            var target = enemies.Where(e => e != null && e.IsAlive).OrderBy(e => e.HealthRatio).FirstOrDefault();
+            var target = FindLowestHealthEnemy();
             if (target == null) return;
 
             var forward = (Vector2)(target.transform.position - player.position);
@@ -3422,7 +3650,7 @@ namespace Lethe.PrototypeV1
 
             if (heavy)
             {
-                var focus = enemies.Where(e => e != null && e.IsAlive).OrderBy(e => Vector2.Distance(player.position, e.transform.position)).FirstOrDefault();
+                var focus = FindNearestLivingEnemy(player.position);
                 var center = focus != null ? focus.transform.position : player.position;
                 SpawnPromptSprite("UltGreat_StasisHuntDome", LoadSprite(UltimateStasisPath), () => MakeRingSprite("UltGreat_StasisHuntDome", Color.white, 180), center, Quaternion.identity, 4.10f, 1.54f, new Color(1f, 0.74f, 0.28f, 0.66f), 1.08f);
                 SpawnStoppedSecondField(center, 2.85f, TimeStopGold(true), 1.95f, true);
@@ -3508,7 +3736,7 @@ namespace Lethe.PrototypeV1
                 if (ultimatePulseTimer <= 0f)
                 {
                     ultimatePulseTimer = 0.58f;
-                    var target = enemies.Where(e => e != null && e.IsAlive).OrderBy(e => e.HealthRatio).FirstOrDefault();
+                    var target = FindLowestHealthEnemy();
                     if (target != null)
                     {
                         PlaySfx("execution", 0.82f, 0.18f);
@@ -3800,6 +4028,7 @@ namespace Lethe.PrototypeV1
             enemy.Configure(this, kind, player, debugHpOverride > 0f ? debugHpOverride : EnemyHp(kind), EnemySpeed(kind), EnemyDamage(kind), EnemyRadius(kind));
             AddEnemyRoleMarker(go.transform, kind);
             enemies.Add(enemy);
+            InvalidateEnemySpatialGrid();
         }
 
         void SpawnGatekeeper()
@@ -3823,6 +4052,7 @@ namespace Lethe.PrototypeV1
                 }
             }
             enemies.RemoveAll(e => e == null || gatekeepers.Contains(e));
+            InvalidateEnemySpatialGrid();
         }
 
         void ClearEnemiesForDebug()
@@ -3835,6 +4065,7 @@ namespace Lethe.PrototypeV1
                 }
             }
             enemies.Clear();
+            InvalidateEnemySpatialGrid();
         }
 
         void SpawnGatekeeperWarning()
@@ -4378,10 +4609,10 @@ namespace Lethe.PrototypeV1
             var selfPos = (Vector2)self.transform.position;
             var push = Vector2.zero;
             var count = 0;
-            for (int i = 0; i < enemies.Count; i++)
+            QueryLivingEnemiesInRadius(self.transform.position, self.TouchRadius + EnemySpatialMaxTouchRadius + EnemySeparationPadding, separationQueryBuffer, self);
+            for (int i = 0; i < separationQueryBuffer.Count; i++)
             {
-                var other = enemies[i];
-                if (other == null || other == self || !other.IsAlive) continue;
+                var other = separationQueryBuffer[i];
                 var otherPos = (Vector2)other.transform.position;
                 var delta = selfPos - otherPos;
                 var minDist = self.TouchRadius + other.TouchRadius + EnemySeparationPadding;
@@ -4512,28 +4743,33 @@ namespace Lethe.PrototypeV1
 
         public V1Enemy FindNearestLivingEnemy(Vector3 origin, V1Enemy exclude = null)
         {
-            return enemies
-                .Where(e => e != null && e.IsAlive && e != exclude)
-                .OrderBy(e => Vector2.Distance(origin, e.transform.position))
-                .FirstOrDefault();
+            V1Enemy best = null;
+            var bestDistanceSq = float.MaxValue;
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                var enemy = enemies[i];
+                if (enemy == null || enemy == exclude || !enemy.IsAlive) continue;
+                var distanceSq = ((Vector2)(enemy.transform.position - origin)).sqrMagnitude;
+                if (distanceSq >= bestDistanceSq) continue;
+                bestDistanceSq = distanceSq;
+                best = enemy;
+            }
+            return best;
         }
 
         public List<V1Enemy> FindVoidPriestHealTargets(V1Enemy priest, float radius, int targetCap)
         {
-            if (priest == null) return new List<V1Enemy>();
+            var result = new List<V1Enemy>();
+            if (priest == null) return result;
             var origin = priest.transform.position;
-            var radiusSq = radius * radius;
-            return enemies
-                .Where(e => e != null
-                    && e != priest
-                    && e.IsAlive
-                    && e.Kind != V1EnemyKind.Gatekeeper
-                    && e.HealthRatio < 0.999f
-                    && ((Vector2)(e.transform.position - origin)).sqrMagnitude < radiusSq)
-                .OrderBy(e => e.HealthRatio)
-                .ThenBy(e => ((Vector2)(e.transform.position - origin)).sqrMagnitude)
-                .Take(targetCap)
-                .ToList();
+            QueryLivingEnemiesInRadius(origin, radius, radiusQueryBuffer, priest, false);
+            for (int i = 0; i < radiusQueryBuffer.Count; i++)
+            {
+                var enemy = radiusQueryBuffer[i];
+                if (enemy.Kind == V1EnemyKind.Gatekeeper || enemy.HealthRatio >= 0.999f) continue;
+                InsertEnemyByHealthThenDistance(result, enemy, origin, targetCap);
+            }
+            return result;
         }
 
         void SpawnHunterOathImpact(Vector3 center, float primaryDamage, bool echo)
@@ -4551,6 +4787,7 @@ namespace Lethe.PrototypeV1
 
         void OnEnemyKilled(V1Enemy enemy)
         {
+            InvalidateEnemySpatialGrid();
             kills++;
             if (enemy.Kind != V1EnemyKind.Gatekeeper) PlaySfx("kill", 0.65f, 0.045f);
             var xpAmount = KillXpAmount(enemy);
@@ -7463,7 +7700,10 @@ namespace Lethe.PrototypeV1
 
         void CleanupLists()
         {
-            enemies.RemoveAll(e => e == null);
+            if (enemies.RemoveAll(e => e == null) > 0)
+            {
+                InvalidateEnemySpatialGrid();
+            }
             xpOrbs.RemoveAll(o => o == null);
         }
 

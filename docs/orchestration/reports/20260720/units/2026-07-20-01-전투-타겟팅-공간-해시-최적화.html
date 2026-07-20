@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-20-01 - 전투 타겟팅 공간 해시 최적화</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-20-01 - 전투 타겟팅 공간 해시 최적화</h1>
+      <p class="meta">Generated from 2026-07-20-01-전투-타겟팅-공간-해시-최적화.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260720/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-20-01 - 전투 타겟팅 공간 해시 최적화</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에 전투 타겟팅 최적화가 들어갔다. Unity 에디터가 꺼져 있어 Play Mode QA는 아직 못 했지만, 런타임/에디터 C# 빌드는 통과했다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li><code>V1GameManager</code>에 살아있는 적 전용 spatial hash grid를 추가했다.</li>
+<li>무기 타겟 선택, 무기 히트 수집, 잔향 radius/cone/chain 타겟 헬퍼, Void Priest 힐 타겟, 적 분리력, live enemy count를 새 쿼리 구조로 옮겼다.</li>
+<li>적 생성, 처치, 디버그 클리어, Gatekeeper 제거, null cleanup 때 공간 캐시를 무효화하도록 했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, 기존 legacy warning 7개, error 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 통과, warning 0개, error 0개.</li>
+<li><code>npm run report</code>: 통과, 20260720 HTML 보고서 생성.</li>
+<li><code>npm.cmd run report:check</code>: 통과.</li>
+<li>Unity MCP는 에디터 인스턴스를 찾지 못해 Play Mode QA를 실행하지 못했다.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<ul>
+<li><code>enemies</code> 리스트는 계속 source of truth로 둔다.</li>
+<li>공간 해시는 매 프레임 살아있는 적 위치를 재구성하는 보조 인덱스로만 쓴다.</li>
+<li>최적화는 게임 감각을 바꾸는 밸런스 패치가 아니라, 같은 타겟팅 규칙을 더 적은 검색 비용으로 실행하는 방향으로 제한한다.</li>
+</ul>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>Unity Play Mode에서 아직 Dense Dual Blades / Echo Matrix QA를 확인하지 못했다.</li>
+<li>공간 셀 후보 순서가 일부 동률 상황에서 이전 LINQ 정렬과 완전히 같지 않을 수 있으므로 직접 플레이에서 타겟 선택 감각을 확인해야 한다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>전투 성능 최적화를 위해 living enemy spatial hash grid를 추가했다. 핵심 타겟 검색은 주변 셀 후보만 검사하고, 최종 판정은 기존과 같은 거리/각도/TouchRadius 조건을 사용한다. 다음 리뷰는 성능 수치보다 타겟팅 회귀 여부를 먼저 봐야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>Unity 에디터를 켠 뒤 <code>Dense Dual Blades Perf Matrix</code>, <code>Echo Matrix Dual Blades</code>, <code>Echo Matrix Greatsword</code>를 실행한다.</li>
+<li>QA가 통과하면 직접 플레이로 밀집 전투의 타겟 선택, Kalmuri chain, Void Priest heal, enemy separation을 확인한다.</li>
+</ul>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 적과 VFX가 많아지는 서바이버 전투에서 전체 적 리스트를 반복 정렬/검색하면 성능과 GC가 불안정해질 수 있다.</li>
+<li>방향: 기획/전투 감각은 유지하고, 내부 쿼리만 공간 분할과 재사용 버퍼로 바꾼다.</li>
+<li>행동: spatial hash grid와 Top-K식 삽입 정렬 헬퍼를 추가하고 핵심 타겟 경로를 교체했다.</li>
+<li>결과: C# 빌드는 통과했으며, Unity Play Mode 성능 QA만 남았다.</li>
+</ul>
+  </main>
+</body>
+</html>
