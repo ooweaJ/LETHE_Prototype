@@ -2,6 +2,33 @@
 
 Last updated: 2026-07-21
 
+## 2026-07-21 Update: Stopped/Hunter Readability Follow-up
+
+- jaewoo follow-up review:
+  - Dual Blades Stopped Echo was hard to see.
+  - Stopped Echo should show a clock second hand moving during the frozen time.
+  - Greatsword Hunter Echo had an unwanted fan/cone shape.
+  - Dual Blades Hunter Echo concept was good, but the thrown blades were slightly too small.
+- Applied in `_dev`:
+  - Dual Blades Hunter ricochet blade visual height increased from `0.62` to `0.82`.
+  - Dual Blades Hunter now spawns immediate ricochet path/mark previews so the thrown-blade route reads before the moving blades finish.
+  - Greatsword Hunter removed the fan/cone pressure sector and keeps the thrown greatsword line/wake/reticle.
+  - Stopped Echo gained weapon-specific clockwork:
+    - Dual Blades: small clock lock, second-hand sweep, tick cuts.
+    - Greatsword: larger clock field, second-hand sweep, judgement hand.
+  - Dense Dual Blades throttles the heaviest clockwork and ricochet preview extras to keep the perf matrix under budget.
+- Verification:
+  - Runtime C# build passed with 7 existing legacy warnings and 0 errors.
+  - Editor C# build passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors after final QA: `0`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `transient=139`, `activeVfx=82`, `ms=91.05`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=946`, `H=175`, `St=160`, `stateH=19`, `stateSt=11`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=671`, `H=51`, `St=168`, `stateH=3`, `stateSt=19`.
+- Remaining concept plan:
+  - Kalmuri, Blood, Hunter, and Stopped now have acceptable concept directions.
+  - Next redesign candidates are Shatter, Ashen, and Oblivion, in that order.
+
 ## 2026-07-21 Update: Hunter Echo Rework and Greatsword Blood Readability
 
 - jaewoo reported that Greatsword Blood Echo was still hard to see, and that most non-Kalmuri Echoes still risk feeling like size/color variants rather than distinct actions.

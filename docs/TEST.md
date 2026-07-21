@@ -1,5 +1,42 @@
 # LETHE TEST
 
+# 2026-07-21 Stopped / Hunter Readability Follow-up
+
+- Purpose:
+  - Make Dual Blades Stopped Echo visible.
+  - Add the desired clock second-hand motion to Stopped Echo.
+  - Remove the unwanted Greatsword Hunter fan/cone shape.
+  - Increase Dual Blades Hunter blade readability.
+- Applied target:
+  - `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`.
+- Changes:
+  - Dual Blades Hunter blade visual height increased from `0.62` to `0.82`.
+  - Dual Blades Hunter now spawns ricochet preview links/marks immediately, while the moving blades still fly afterward.
+  - Greatsword Hunter no longer spawns `EchoGreat_HunterPiercePressureCone`.
+  - Dual Blades Stopped Echo now spawns a small clock field, second-hand sweep, clock ticks, and stronger tick cut outside dense throttle.
+  - Greatsword Stopped Echo now layers a larger second-hand sweep over the clock field.
+  - Dense Dual Blades reduces the heaviest clockwork and ricochet preview extras.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`.
+  - Unity `AssetDatabase.Refresh()`.
+  - Unity compilation error check.
+  - Unity console error check.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`.
+- Results:
+  - Runtime C# build passed with 7 existing legacy warnings and 0 errors.
+  - Editor C# build passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors after final QA: `0`.
+  - Dense Dual Blades Perf Matrix: PASS, `hits=18`, `suppressed=15`, `transient=139`, `activeVfx=82`, `ms=91.05`.
+  - Echo Matrix Dual Blades: PASS, `total=946`, `H=175`, `St=160`, `stateH=19`, `stateSt=11`.
+  - Echo Matrix Greatsword: PASS, `total=671`, `H=51`, `St=168`, `stateH=3`, `stateSt=19`.
+- Notes:
+  - The first post-change Dual Blades Matrix failed before Unity reloaded the latest script and before ricochet preview stabilization.
+  - One Dense Dual run failed at `ms=113.26`; dense-only VFX throttling restored the final run to `ms=91.05`.
+
 # 2026-07-21 Hunter Echo / Greatsword Blood Readability Pass
 
 - Purpose:

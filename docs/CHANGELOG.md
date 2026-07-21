@@ -2,6 +2,26 @@
 
 # 2026-07-21
 
+- Finished the Stopped/Hunter readability follow-up:
+  - Dual Blades Hunter ricochet blades are larger (`0.62 -> 0.82` target height).
+  - Dual Blades Hunter now spawns immediate ricochet preview marks/links so the thrown blade path reads clearly.
+  - Greatsword Hunter no longer spawns the unwanted green fan/cone sector.
+  - Stopped Echo gained clockwork VFX:
+    - Dual Blades: smaller clock lock plus visible second-hand sweep.
+    - Greatsword: larger clock field plus second-hand sweep and judgement hand.
+  - Dense Dual Blades keeps reduced clockwork/preview extras for performance.
+- Verification:
+  - Runtime C# build passed with 7 existing legacy warnings and 0 errors.
+  - Editor C# build passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors after final QA: `0`.
+  - Dense Dual Blades Perf Matrix: PASS, `ms=91.05`.
+  - Echo Matrix Dual Blades: PASS, `total=946`, `H=175`, `St=160`.
+  - Echo Matrix Greatsword: PASS, `total=671`, `H=51`, `St=168`.
+- Added remaining Echo concept plan:
+  - Kalmuri, Blood, Hunter, and Stopped are conceptually usable.
+  - Next redesign order: Shatter, Ashen, then Oblivion.
+
 - Reworked Hunter Echo and improved Greatsword Blood Echo readability:
   - Greatsword Blood Echo now has a larger blood-iaido crescent stack, shadow crescent, impact zone, blood bloom, radial blood petals, longer wound cut, and stronger hit feedback.
   - Dual Blades Hunter Echo now throws two green ricochet blades that bounce between enemies.

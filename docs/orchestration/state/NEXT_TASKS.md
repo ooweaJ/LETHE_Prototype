@@ -1,21 +1,22 @@
 # Next Tasks
 
-## 1. Echo / Memory Concept Direct-Play Review
+## 1. Shatter / Ashen / Oblivion Concept Rework
 
 - Priority: urgent
-- Problem: Greatsword Blood and Hunter have now been reworked, but jaewoo correctly flagged that the remaining Echo families can still feel like size/color variants. The next review should judge the active memory fantasy and Echo fantasy together, not only VFX scale.
+- Problem: Kalmuri, Blood, Hunter, and Stopped now have clearer weapon-specific directions. Shatter, Ashen, and Oblivion still need concept-up review so they stop feeling like color/size variants.
 - Build:
   - Play `Dev_Prototype_v1` with both Greatsword and Dual Blades.
-  - Confirm Greatsword Blood reads as a large red blood-iaido slash.
-  - Confirm Hunter reads as two green bouncing Dual Blades versus one green thrown Greatsword pierce.
-  - Keep Stopped Second mechanics for now, but judge whether it needs a premium clockwork VFX pass.
-  - Re-evaluate Shatter, Ashen, and Oblivion from the memory concept upward:
-    - Shatter should feel like fracture/terrain rupture, not just another needle or ring.
-    - Ashen should feel like guard, sacrifice, or counter-pressure, not just a gray burst.
-    - Oblivion should feel like erasure/brand spreading, not just purple size scaling.
-  - Watch dense Dual Blades for clutter after ricochet blades enter the effect budget.
+  - Rework Shatter first as terrain/world fracture:
+    - Dual Blades: short chained ground cracks under targets.
+    - Greatsword: large forward fissure rupture.
+  - Rework Ashen second as stored guard/counter-pressure:
+    - Dual Blades: enemy-side parry spark into quick counter cut.
+    - Greatsword: ash wall / shield face into heavy counter wave.
+  - Rework Oblivion third as mark/spread/erase:
+    - Dual Blades: brand hop between targets.
+    - Greatsword: large brand stamp into collapse/erase.
 - Done:
-  - jaewoo can name which Echo family is conceptually correct, which only needs VFX polish, and which needs a memory/Echo redesign.
+  - Each of Shatter, Ashen, and Oblivion has a readable active-memory fantasy, Echo action fantasy, and weapon-specific VFX/action split.
 
 ## 2. Kalmuri / Dual Blades Visibility Direct-Play Review
 
@@ -56,6 +57,7 @@
 
 Completed sequence:
 
+- 2026-07-21: Stopped/Hunter follow-up made Dual Blades Stopped visible with clockwork/second-hand VFX, enlarged Dual Blades Hunter blades, removed the Greatsword Hunter cone sector, added ricochet preview marks, and restored Dense Dual perf to PASS.
 - 2026-07-21: Greatsword Blood Echo readability increased with larger blood-iaido crescents, bloom, petals, and impact feedback. Hunter Echo was reworked so Dual Blades throw two green ricochet blades and Greatsword throws one green piercing greatsword. Runtime/editor builds and Dual/Great Echo Matrix plus Dense Dual QA passed.
 - 2026-07-21: Dual Blades Kalmuri visibility pass recolored the Kalmuri Hunger Echo into dark indigo/violet-blue, delayed Dual Blades Kalmuri follow-up timing to `0.085/0.018`, and passed Dense Dual, Kalmuri, Echo Dual, and Echo Great QA.
 - 2026-07-21: Unity MCP connected on port `7890`; spatial hash follow-up QA passed Dense Dual Blades Perf Matrix, Echo Matrix Dual Blades, and Echo Matrix Greatsword. Console and compilation errors were 0.

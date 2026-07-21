@@ -1,5 +1,33 @@
 # LETHE TASK
 
+## 2026-07-21 Stopped / Hunter Readability Finish
+
+- [x] Dual Blades Stopped Echo visibility improved:
+  - [x] Added clock field/lock outside dense throttle.
+  - [x] Added second-hand sweep and clock ticks.
+  - [x] Strengthened tick cut.
+- [x] Greatsword Stopped Echo improved:
+  - [x] Added larger second-hand sweep over the existing field.
+  - [x] Kept judgement-hand read.
+- [x] Hunter follow-up completed:
+  - [x] Removed the Greatsword Hunter fan/cone sector.
+  - [x] Increased Dual Blades Hunter blade size from `0.62` to `0.82`.
+  - [x] Added immediate ricochet preview links/marks for readability and QA stability.
+  - [x] Added dense-only preview/clockwork throttling after a perf regression.
+- [x] Verification completed:
+  - [x] Runtime C# build passed.
+  - [x] Editor C# build passed.
+  - [x] Unity compilation errors `0`, console errors `0`.
+  - [x] Dense Dual Blades Perf Matrix PASS, `ms=91.05`.
+  - [x] Echo Matrix Dual Blades PASS, `H=175`, `St=160`.
+  - [x] Echo Matrix Greatsword PASS, `H=51`, `St=168`.
+
+Current next:
+
+1. Direct-play Stopped Echo with both weapons and judge whether the second-hand motion reads in the frozen-time window.
+2. Direct-play Hunter Echo and judge whether the larger Dual Blades are readable enough.
+3. Start the remaining concept rework in this order: Shatter, Ashen, Oblivion.
+
 ## 2026-07-21 Hunter Echo / Blood Readability Update
 
 - [x] Greatsword Blood Echo readability pass completed:

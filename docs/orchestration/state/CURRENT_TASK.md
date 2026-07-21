@@ -1,5 +1,45 @@
 # Current Task
 
+# 2026-07-21 Stopped / Hunter Readability Finish
+
+## Status
+
+- Implemented, C# build-verified, Unity QA-verified, and concept-report documented.
+
+## Applied Changes
+
+- Dual Blades Stopped Echo:
+  - added visible clock field/lock, second-hand sweep, clock ticks, and stronger tick cut outside dense throttle;
+  - dense branch keeps a reduced version to protect frame budget.
+- Greatsword Stopped Echo:
+  - added a larger second-hand sweep over the existing clock field;
+  - kept the judgement hand read.
+- Hunter Echo:
+  - enlarged Dual Blades ricochet blades from `0.62` to `0.82` target height;
+  - added immediate ricochet preview links/marks;
+  - stabilized ricochet impact detection for fast-moving blades;
+  - removed the unwanted Greatsword Hunter pressure cone/fan sector.
+- Remaining concept plan:
+  - Kalmuri, Blood, Hunter, and Stopped are currently usable concept directions.
+  - Next concept rework order: Shatter -> Ashen -> Oblivion.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- Unity compilation errors: `0`.
+- Unity console errors after final QA: `0`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `transient=139`, `activeVfx=82`, `ms=91.05`.
+- `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=946`, `H=175`, `St=160`, `stateH=19`, `stateSt=11`.
+- `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=671`, `H=51`, `St=168`, `stateH=3`, `stateSt=19`.
+
+## Remaining Gate
+
+- jaewoo direct-play review:
+  - confirm Stopped second-hand motion reads during the freeze window;
+  - confirm larger Dual Blades Hunter blades are now readable without becoming too large;
+  - confirm Greatsword Hunter no longer has the unwanted fan/cone read.
+
 # 2026-07-21 Hunter Echo Rework / Greatsword Blood Readability
 
 ## Status
