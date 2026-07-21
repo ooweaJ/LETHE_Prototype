@@ -2,6 +2,25 @@
 
 # 2026-07-21
 
+- Added a Blood / Stopped Echo dopamine VFX pass:
+  - Greatsword Blood Echo now adds a white/red broken blood-vortex ring inspired by jaewoo's reference image.
+  - Greatsword Blood Echo hitstop and camera shake were increased.
+  - Stopped Echo now clamps freeze to at least `1.0s`.
+  - Stopped clock VFX now holds through the frozen second, and the second hand performs a full sweep during that window.
+  - Dual Blades Stopped now also receives the visible clock read.
+  - Dense Dual Blades trims dense-only Kalmuri/Blood decorations to keep the richer normal Echoes under budget.
+- Verification:
+  - Runtime C# build passed with 7 existing legacy warnings and 0 errors.
+  - Editor C# build passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors after final QA: `0`.
+  - Dense Dual Blades Perf Matrix: PASS, `ms=93.06`.
+  - Echo Matrix Dual Blades: PASS, `total=1027`, `St=160`.
+  - Echo Matrix Greatsword: PASS, `total=779`, `B=87`, `St=168`.
+- Concept follow-up:
+  - Normal Echoes need a stronger dopamine baseline before Ultimate Echoes are tuned.
+  - Ultimate Echoes should later exceed this baseline with a more dramatic payoff.
+
 - Reworked Shatter Echo into a terrain/world fracture concept:
   - Dual Blades Shatter now reads as chained ground cracks under targets.
   - Greatsword Shatter now reads as a forward ground rupture with branch cracks, glow, shards, and per-target ground breaks.

@@ -2,6 +2,31 @@
 
 Last updated: 2026-07-21
 
+## 2026-07-21 Update: Blood / Stopped Dopamine VFX Pass
+
+- jaewoo direction:
+  - Greatsword Blood Echo should feel like a white/red blood-blade vortex ring, closer to the provided circular slash reference.
+  - Normal Echoes need more dopamine, not only readability.
+  - Ultimate Echoes will need an even stronger dopamine peak later.
+  - Stopped Echo should keep a clock VFX visible during the 1-second stop, with the second hand rotating while time is frozen.
+- Applied in `_dev`:
+  - Greatsword Blood Echo now adds a procedural white/red broken vortex ring over the blood-iaido crescent stack.
+  - Greatsword Blood hit feedback was strengthened with more hitstop and camera shake.
+  - Stopped Echo now clamps freeze duration to at least `1.0s` and keeps its clock face, lock rings, ticks, and pin visible through the freeze window.
+  - Stopped Echo second hand now performs a real one-turn sweep during the frozen second instead of disappearing quickly.
+  - Dual Blades Stopped now also gets the visible clock field; dense mode uses smaller clock radius and reduced dense Kalmuri/Blood extras to protect the perf budget.
+- Verification:
+  - Runtime C# build passed with 7 existing legacy warnings and 0 errors.
+  - Editor C# build passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors after final QA: `0`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `transient=36`, `activeVfx=15`, `ms=93.06`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=1027`, `St=160`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=779`, `B=87`, `St=168`.
+- Next concept rework:
+  - Ashen / Oblivion still need concept-up rework.
+  - Ultimate Echoes need a separate dopamine pass after normal Echoes establish a stronger baseline.
+
 ## 2026-07-21 Update: Shatter Echo Ground Fracture Rework
 
 - Applied in `_dev`:

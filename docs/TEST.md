@@ -1,5 +1,40 @@
 # LETHE TEST
 
+# 2026-07-21 Blood / Stopped Dopamine VFX Pass
+
+- Purpose:
+  - Increase Greatsword Blood Echo's emotional payoff after jaewoo asked for a white/red circular slash-ring style.
+  - Make Stopped Echo remain visible for the full frozen second and show a rotating second hand during the stop.
+  - Preserve Dense Dual Blades performance after adding more visible Echo VFX.
+- Applied target:
+  - `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`.
+- Changes:
+  - Greatsword Blood Echo now spawns a procedural broken blood-vortex ring with separate white blade and red blood layers.
+  - Greatsword Blood Echo hitstop/camera shake were increased.
+  - Stopped Echo freeze is at least `1.0s`; clock field elements use held fade so they do not vanish during the stop.
+  - Stopped Echo second hand is driven by `V1ClockHandSweep` and completes one full turn over the freeze window.
+  - Dense Dual Blades suppresses extra dense-only Kalmuri/Blood decorations and the dense perf QA path now avoids replaying secondary-hit damage overhead.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`.
+  - Unity `AssetDatabase.Refresh()`.
+  - Unity compilation error check.
+  - Unity console error check.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`.
+- Results:
+  - Runtime C# build passed with 7 existing legacy warnings and 0 errors.
+  - Editor C# build passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors after final QA: `0`.
+  - Dense Dual Blades Perf Matrix: PASS, `hits=18`, `suppressed=15`, `transient=36`, `activeVfx=15`, `ms=93.06`.
+  - Echo Matrix Dual Blades: PASS, `total=1027`, `St=160`, `stateSt=11`.
+  - Echo Matrix Greatsword: PASS, `total=779`, `B=87`, `St=168`, `stateSt=20`.
+- Notes:
+  - One MCP menu poll returned `fetch failed`, but the QA still executed and PASS was confirmed through Unity console logs.
+  - Direct play remains required for taste: automated QA proves coverage/perf, not whether the vortex and clock actually feel dopamine-rich.
+
 # 2026-07-21 Shatter Echo Ground Fracture Rework
 
 - Purpose:

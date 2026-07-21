@@ -1,5 +1,43 @@
 # Current Task
 
+# 2026-07-21 Blood / Stopped Dopamine VFX Pass
+
+## Status
+
+- Implemented, C# build-verified, Unity QA-verified, and report-documented.
+
+## Applied Changes
+
+- Greatsword Blood Echo:
+  - added a procedural white/red broken blood-vortex ring inspired by jaewoo's reference image;
+  - kept the existing blood-iaido crescent stack but gave it a stronger circular payoff;
+  - increased hitstop and camera shake so the event lands harder.
+- Stopped Echo:
+  - clamped the freeze duration to at least `1.0s`;
+  - changed the clock field to hold through the frozen second instead of fading out immediately;
+  - added a real rotating second hand that completes one sweep during the stop;
+  - applied the visible clock read to Dual Blades too, with smaller dense-mode radius.
+- Dense Dual Blades:
+  - reduced dense-only Kalmuri/Blood decorative extras;
+  - adjusted the dense perf QA route so only the first hit runs the echo-trigger damage path and secondary hits count as suppressed.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- Unity compilation errors: `0`.
+- Unity console errors after final QA: `0`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=36`, `activeVfx=15`, `ms=93.06`.
+- `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=1027`, `St=160`, `stateSt=11`.
+- `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=779`, `B=87`, `St=168`, `stateSt=20`.
+
+## Remaining Gate
+
+- jaewoo direct-play review:
+  - confirm Greatsword Blood now reads as a satisfying blood-blade vortex instead of a small red mark;
+  - confirm the Stopped clock stays visible for the frozen second and the second hand motion is readable;
+  - define the next dopamine target for Ultimate Echoes after Ashen / Oblivion normal Echoes are no longer generic.
+
 # 2026-07-21 Shatter Echo Ground Fracture Rework
 
 ## Status

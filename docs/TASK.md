@@ -1,5 +1,33 @@
 # LETHE TASK
 
+## 2026-07-21 Blood / Stopped Dopamine VFX Pass
+
+- [x] Greatsword Blood Echo dopamine pass completed:
+  - [x] Added white/red broken blood-vortex ring inspired by jaewoo's reference.
+  - [x] Kept the blood-iaido slash stack but made the first read a circular blade/blood payoff.
+  - [x] Increased Blood Echo hitstop and camera shake.
+- [x] Stopped Echo 1-second clock pass completed:
+  - [x] Freeze duration clamps to at least `1.0s`.
+  - [x] Clock field, lock rings, ticks, and pin hold through the freeze window.
+  - [x] Second hand rotates one full turn during the stop.
+  - [x] Dual Blades Stopped now also shows the clock field.
+- [x] Dense performance recovery completed:
+  - [x] Reduced dense-only Kalmuri/Blood decorative extras.
+  - [x] Dense perf QA now counts secondary hits as suppressed instead of replaying the damage path for every hit.
+- [x] Verification completed:
+  - [x] Runtime C# build passed.
+  - [x] Editor C# build passed.
+  - [x] Unity compilation errors `0`, console errors `0`.
+  - [x] Dense Dual Blades Perf Matrix PASS, `ms=93.06`.
+  - [x] Echo Matrix Dual Blades PASS, `St=160`.
+  - [x] Echo Matrix Greatsword PASS, `B=87`, `St=168`.
+
+Current next:
+
+1. Direct-play Greatsword Blood and Stopped Echo to judge actual dopamine/readability.
+2. Rework Ashen and Oblivion so remaining normal Echoes stop feeling like size/color variants.
+3. After normal Echo baseline improves, design Ultimate Echoes with a higher dopamine ceiling than these normal Echoes.
+
 ## 2026-07-21 Shatter Echo Ground Fracture Rework
 
 - [x] Shatter concept rework completed:
