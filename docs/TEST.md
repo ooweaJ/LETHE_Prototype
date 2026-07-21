@@ -1,5 +1,41 @@
 # LETHE TEST
 
+# 2026-07-22 Blood Repeat Fix / Remaining Echo VFX Plan
+
+- Purpose:
+  - Fix the player-facing issue where Blood Echo appeared once and then seemed to stop.
+  - Preserve Echo Matrix and Dense Dual performance after restoring repeated Blood visibility.
+  - Record remaining Echo / Ultimate VFX direction with a visual example board.
+- Applied target:
+  - `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`.
+  - `docs/orchestration/evidence/2026-07-22-remaining-echo-vfx-plan.md`.
+  - `docs/orchestration/evidence/2026-07-22-remaining-echo-vfx-concept-board.png`.
+- Changes:
+  - Greatsword Blood accent no longer skips VFX when the base hit kills the target first.
+  - Dead-target Greatsword Blood is VFX-only.
+  - Dense Dual Blades now spawns a lightweight repeated Blood pulse/suture read on the first allowed dense hit.
+  - Removed dead fallback code guarded by `bloodLevel < 0`.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`.
+  - Unity `AssetDatabase.Refresh()`.
+  - Unity compilation error check.
+  - Unity console error check.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`.
+- Results:
+  - Runtime C# build passed with 7 existing legacy warnings and 0 errors.
+  - Editor C# build passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors after final QA: `0`.
+  - Echo Matrix Greatsword: PASS, `total=991`, `B=303`, `stateH=1`, `stateSt=20`.
+  - Echo Matrix Dual Blades: PASS, `total=1027`, `B=83`, `state=86`.
+  - Dense Dual Blades Perf Matrix: PASS, `hits=18`, `suppressed=15`, `transient=46`, `activeVfx=33`, `ms=91.56`.
+- Notes:
+  - The Greatsword Blood count is higher because kill-hit Blood VFX is now intentionally visible.
+  - MCP polling intermittently returned `fetch failed`, but PASS results were confirmed through Unity console logs.
+
 # 2026-07-21 Blood / Stopped Dopamine VFX Pass
 
 - Purpose:

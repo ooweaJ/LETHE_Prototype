@@ -1,5 +1,26 @@
 # LETHE CHANGELOG
 
+# 2026-07-22
+
+- Fixed Blood Echo visibility after jaewoo reported it appeared once and then stopped:
+  - Greatsword Blood VFX now appears even when the base Greatsword hit kills the target before Echo accent processing.
+  - Dead-target Greatsword Blood is VFX-only so it does not over-kill later Echo Matrix targets.
+  - Dense Dual Blades now spawns a lightweight repeated Blood pulse/suture read on the first allowed dense hit.
+  - Removed the impossible `bloodLevel < 0` fallback branch.
+- Organized remaining Echo / Ultimate VFX direction:
+  - Ashen: stored guard, cracked shield plate, counter wave.
+  - Oblivion: brand stamp, spreading void cracks, erase burst.
+  - Ultimate Echoes: later dopamine pass with stronger ceremony and aftermath than normal Echoes.
+  - Saved concept board and plan under `docs/orchestration/evidence/`.
+- Verification:
+  - Runtime C# build passed with 7 existing legacy warnings and 0 errors.
+  - Editor C# build passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors after final QA: `0`.
+  - Echo Matrix Greatsword: PASS, `total=991`, `B=303`.
+  - Echo Matrix Dual Blades: PASS, `total=1027`, `B=83`.
+  - Dense Dual Blades Perf Matrix: PASS, `ms=91.56`.
+
 # 2026-07-21
 
 - Added a Blood / Stopped Echo dopamine VFX pass:

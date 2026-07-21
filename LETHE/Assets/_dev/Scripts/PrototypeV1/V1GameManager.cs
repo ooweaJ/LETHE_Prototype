@@ -1943,23 +1943,20 @@ namespace Lethe.PrototypeV1
             {
                 enemy.BloodMarked = true;
                 enemy.MarkTimer = 2.2f + bloodLevel * 0.25f;
-                var denseSecondary = DenseDualBladeVfxThrottle(weapon) && hitIndex > 0;
-                if (!denseSecondary && !DenseDualBladeVfxThrottle(weapon) && !IsHeavyEchoWeapon(weapon))
+                var denseBloodRead = DenseDualBladeVfxThrottle(weapon);
+                var denseSecondary = denseBloodRead && hitIndex > 0;
+                if (!denseSecondary && !IsHeavyEchoWeapon(weapon))
                 {
                     var f = EchoForward(forward);
-                    PlaySfx("blood_mark", 0.26f, 0.10f);
-                    SpawnDualBloodStitchFan(enemy.transform.position, f, new Vector2(-f.y, f.x), bloodLevel, false);
-                }
-                if (!denseSecondary && bloodLevel < 0)
-                {
-                PlaySfx("blood_mark", 0.34f, 0.08f);
-                SpawnTransientSprite("BloodEchoPulse", MakeRingSprite("BloodEchoPulse", Color.white, 128), enemy.transform.position, Quaternion.identity, 0.38f + bloodLevel * 0.025f, new Color(1f, 0.10f, 0.18f, 0.42f), 0.28f);
-                SpawnEchoWoundSlash("BloodEchoWound", enemy.transform.position + Vector3.up * 0.04f, forward, new Color(1f, 0.10f, 0.18f, 0.62f), 0.72f, 0.30f);
-                SpawnTransientSprite("혈반", LoadSprite("Assets/_dev/Art/Sprites/Echoes/Blood/spr_blood_mark_01.png"), enemy.transform.position + Vector3.up * 0.2f, Quaternion.identity, 0.33f, new Color(1f, 0.18f, 0.25f, 0.9f), 0.35f);
-                if (!DenseDualBladeVfxThrottle(weapon) && bloodLevel >= 5 && UnityEngine.Random.value < 0.42f)
-                {
-                    BloodBloom(enemy, bloodLevel);
-                }
+                    if (denseBloodRead)
+                    {
+                        SpawnDenseDualBloodMarkRead(enemy.transform.position, f, bloodLevel);
+                    }
+                    else
+                    {
+                        PlaySfx("blood_mark", 0.26f, 0.10f);
+                        SpawnDualBloodStitchFan(enemy.transform.position, f, new Vector2(-f.y, f.x), bloodLevel, false);
+                    }
                 }
             }
 
@@ -2274,8 +2271,9 @@ namespace Lethe.PrototypeV1
 
         void TriggerBloodEchoAccent(V1Enemy enemy, Vector2 forward, int levelValue, int hitIndex, WeaponRuntimeSpec weapon, bool force)
         {
-            if (enemy == null || !enemy.IsAlive || levelValue <= 0) return;
+            if (enemy == null || levelValue <= 0) return;
             var heavy = IsHeavyEchoWeapon(weapon);
+            if (!heavy && !enemy.IsAlive) return;
             var denseDualBlade = DenseDualBladeVfxThrottle(weapon);
             var f = EchoForward(forward);
             if (heavy)
@@ -2326,7 +2324,8 @@ namespace Lethe.PrototypeV1
             var slashCenter = Vector3.Lerp(swing.TipStart, swing.TipEnd, 0.86f) + (Vector3)(slashForward * 0.16f);
             var arc = MakeWideCrescentSprite("EchoGreat_BloodIaidoThinCrescent", Color.white);
             var radius = 1.92f + levelValue * 0.24f;
-            var targets = EchoTargetsInRadius(slashCenter, radius, 10, enemy);
+            var applyBloodDamage = enemy.IsAlive;
+            var targets = applyBloodDamage ? EchoTargetsInRadius(slashCenter, radius, 10, enemy) : new List<V1Enemy>();
 
             PlaySfx("blood_mark", 0.54f, 0.12f);
             SpawnGreatswordBloodVortexRing(slashCenter, slashForward, side, radius, levelValue);
@@ -2899,6 +2898,20 @@ namespace Lethe.PrototypeV1
             }
 
             SpawnTransientSprite("EchoDual_BloodStitchKnot", MakeImpactDiamondSprite("EchoDual_BloodStitchKnot", Color.white), center + (Vector3)(f * 0.06f), Quaternion.Euler(0f, 0f, baseAngle + 45f), 0.22f + levelValue * 0.012f, new Color(1f, 0.24f, 0.28f, 0.72f), 0.26f);
+        }
+
+        void SpawnDenseDualBloodMarkRead(Vector3 center, Vector2 forward, int levelValue)
+        {
+            var f = EchoForward(forward);
+            var side = new Vector2(-f.y, f.x);
+            PlaySfx("blood_mark", 0.18f, 0.13f);
+            SpawnTransientSprite("EchoDual_BloodDenseMarkPulse", MakeRingSprite("EchoDual_BloodDenseMarkPulse", Color.white, 96), center, Quaternion.identity, 0.36f + levelValue * 0.018f, new Color(1f, 0.08f, 0.16f, 0.44f), 0.24f);
+            SpawnEchoWoundSlash("EchoDual_BloodDenseSutureA", center + (Vector3)(side * 0.08f + f * 0.02f), f, new Color(1f, 0.13f, 0.19f, 0.58f), 0.54f + levelValue * 0.035f, 0.22f);
+            SpawnEchoWoundSlash("EchoDual_BloodDenseSutureB", center - (Vector3)(side * 0.08f) + (Vector3)(f * 0.06f), side, new Color(1f, 0.22f, 0.26f, 0.42f), 0.36f + levelValue * 0.018f, 0.18f);
+            if (levelValue >= 5)
+            {
+                SpawnTransientSprite("EchoDual_BloodDenseBloomHint", MakeImpactDiamondSprite("EchoDual_BloodDenseBloomHint", Color.white), center + Vector3.up * 0.05f, Quaternion.Euler(0f, 0f, elapsed * 180f), 0.20f, new Color(1f, 0.05f, 0.10f, 0.58f), 0.20f);
+            }
         }
 
         void SpawnGreatswordBloodVortexRing(Vector3 center, Vector2 forward, Vector2 side, float radius, int levelValue)

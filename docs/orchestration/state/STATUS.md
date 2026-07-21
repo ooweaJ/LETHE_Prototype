@@ -1,6 +1,30 @@
 # Status
 
-Last updated: 2026-07-21
+Last updated: 2026-07-22
+
+## 2026-07-22 Update: Blood Repeat Fix / Remaining VFX Plan
+
+- jaewoo reported that Blood Echo appears once and then stops appearing.
+- Applied in `_dev`:
+  - Greatsword Blood can now spawn its vortex VFX even when the base Greatsword hit kills the target before Echo accent processing.
+  - Dead-target Greatsword Blood is VFX-only, so it does not kill later Echo Matrix targets before state checks run.
+  - Dense Dual Blades now gets a lightweight repeated Blood mark read on the first allowed dense hit.
+  - Removed an impossible `bloodLevel < 0` fallback branch that prevented the older Blood pulse from ever running.
+- Remaining VFX direction:
+  - Ashen: stored guard -> cracked shield plate -> counter wave.
+  - Oblivion: brand stamp -> spreading void cracks -> erase burst.
+  - Ultimate Echoes: later pass should exceed normal Echoes with screen-dominating ceremony and aftermath.
+- Evidence:
+  - `docs/orchestration/evidence/2026-07-22-remaining-echo-vfx-concept-board.png`
+  - `docs/orchestration/evidence/2026-07-22-remaining-echo-vfx-plan.md`
+- Verification:
+  - Runtime C# build passed with 7 existing legacy warnings and 0 errors.
+  - Editor C# build passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors after final QA: `0`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=991`, `B=303`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=1027`, `B=83`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `transient=46`, `activeVfx=33`, `ms=91.56`.
 
 ## 2026-07-21 Update: Blood / Stopped Dopamine VFX Pass
 

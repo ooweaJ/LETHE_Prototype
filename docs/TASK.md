@@ -1,5 +1,32 @@
 # LETHE TASK
 
+## 2026-07-22 Blood Repeat Fix / Remaining Echo VFX Plan
+
+- [x] Blood visibility regression fixed:
+  - [x] Greatsword Blood VFX appears on kill hits.
+  - [x] Dead-target Greatsword Blood is VFX-only.
+  - [x] Dense Dual Blades now shows a lightweight repeated Blood mark read.
+  - [x] Removed the impossible `bloodLevel < 0` fallback branch.
+- [x] Remaining VFX direction organized:
+  - [x] Ashen = stored guard / cracked shield / counter wave.
+  - [x] Oblivion = brand stamp / void spread / erase burst.
+  - [x] Ultimate Echoes = later dopamine pass above normal Echo baseline.
+  - [x] Concept board saved under orchestration evidence.
+- [x] Verification completed:
+  - [x] Runtime C# build passed.
+  - [x] Editor C# build passed.
+  - [x] Unity compilation errors `0`, console errors `0`.
+  - [x] Echo Matrix Greatsword PASS, `B=303`.
+  - [x] Echo Matrix Dual Blades PASS, `B=83`.
+  - [x] Dense Dual Blades Perf Matrix PASS, `ms=91.56`.
+
+Current next:
+
+1. Direct-play Blood Echo and confirm it no longer feels one-shot.
+2. Rework Ashen Echo as cracked shield/counter wave.
+3. Rework Oblivion Echo as brand spread/erase.
+4. Start Ultimate Echo dopamine pass after normal Echoes stabilize.
+
 ## 2026-07-21 Blood / Stopped Dopamine VFX Pass
 
 - [x] Greatsword Blood Echo dopamine pass completed:

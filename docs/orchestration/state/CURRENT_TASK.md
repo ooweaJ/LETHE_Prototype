@@ -1,5 +1,43 @@
 # Current Task
 
+# 2026-07-22 Blood Repeat Fix / Remaining Echo VFX Plan
+
+## Status
+
+- Implemented, C# build-verified, Unity QA-verified, and report-documented.
+
+## Applied Changes
+
+- Fixed Blood Echo visibility regression:
+  - Greatsword Blood VFX now appears even if the base Greatsword hit kills the target before Echo accent processing.
+  - Dead-target Greatsword Blood is VFX-only to avoid over-killing QA targets.
+  - Dense Dual Blades now gets a lightweight repeated Blood mark read on the first allowed dense hit.
+  - Removed the impossible `bloodLevel < 0` fallback branch.
+- Organized remaining VFX direction:
+  - Ashen: stored guard/counter-pressure.
+  - Oblivion: brand spread/erase.
+  - Ultimate Echoes: screen-dominating dopamine pass after normal Echoes are clearer.
+- Generated concept-board evidence:
+  - `docs/orchestration/evidence/2026-07-22-remaining-echo-vfx-concept-board.png`.
+  - `docs/orchestration/evidence/2026-07-22-remaining-echo-vfx-plan.md`.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- Unity compilation errors: `0`.
+- Unity console errors after final QA: `0`.
+- `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=991`, `B=303`, `stateSt=20`.
+- `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=1027`, `B=83`, `state=86`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `transient=46`, `activeVfx=33`, `ms=91.56`.
+
+## Remaining Gate
+
+- jaewoo direct-play review:
+  - confirm Blood Echo no longer feels like a one-time-only visual;
+  - pick whether Ashen rework should proceed exactly as cracked shield/counter wave;
+  - decide whether the generated concept board is close enough for Ultimate Echo mood direction.
+
 # 2026-07-21 Blood / Stopped Dopamine VFX Pass
 
 ## Status

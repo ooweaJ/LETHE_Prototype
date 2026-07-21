@@ -1,36 +1,38 @@
 # Next Tasks
 
-## 1. Ashen / Oblivion Concept Rework
+## 1. Blood Direct-Play Regression Check
 
 - Priority: urgent
-- Problem: Kalmuri, Blood, Hunter, Stopped, and Shatter now have clearer weapon-specific directions. Ashen and Oblivion still need concept-up review so they stop feeling like color/size variants, and the new baseline is dopamine/readability together rather than readability alone.
+- Problem: Blood Echo was reported as appearing once and then disappearing. The code now guarantees kill-hit Greatsword Blood VFX and dense Dual Blades lightweight repeated Blood marks, but this needs a human feel check.
 - Build:
-  - Play `Dev_Prototype_v1` with both Greatsword and Dual Blades.
-  - Rework Ashen next as stored guard/counter-pressure:
-    - Dual Blades: enemy-side parry spark into quick counter cut.
-    - Greatsword: ash wall / shield face into heavy counter wave.
-  - Rework Oblivion after that as mark/spread/erase:
-    - Dual Blades: brand hop between targets.
-    - Greatsword: large brand stamp into collapse/erase.
+  - Play Greatsword + Blood Echo in normal packs and confirm the white/red vortex appears on repeated attacks, including kill hits.
+  - Play Dual Blades + Blood Echo in dense packs and confirm the smaller blood pulse/suture read repeats without becoming noisy.
 - Done:
-  - Ashen and Oblivion each has a readable active-memory fantasy, Echo action fantasy, weapon-specific VFX/action split, and at least one short dopamine peak.
+  - jaewoo can say whether Blood now feels repeated, too frequent, too large, or still missing.
 
-## 2. Normal Echo Dopamine Direct-Play Review
+## 2. Ashen Echo Rework
 
 - Priority: urgent
-- Problem: Automated QA confirms Echo coverage/perf, but jaewoo's latest feedback is about emotional payoff. Greatsword Blood, Stopped, and Kalmuri need a direct-play dopamine review, not just a readability check.
+- Problem: Ashen still risks feeling like generic pale rings. It needs a guard/counter action fantasy.
 - Build:
-  - Play Greatsword Blood Echo +5 and check whether the white/red vortex ring feels like a satisfying blood-blade event.
-  - Play Stopped Echo with both weapons and check whether the clock remains for the frozen second and the second hand visibly rotates.
-  - Play `Dev_Prototype_v1` with Greatsword and Hungry Blades +5.
-  - Watch whether blades visibly gather from the outer ring before impact.
-  - Play Dual Blades with Hungry Blades +5 in normal packs and dense packs.
-  - Judge whether the new dark indigo/violet Dual Blades Kalmuri bite separates from the bright white/cyan basic slash.
-  - Watch whether the slightly delayed follow-up feels readable rather than sluggish.
+  - Use `docs/orchestration/evidence/2026-07-22-remaining-echo-vfx-concept-board.png` top-left as the visual target.
+  - Dual Blades: enemy-side parry spark into two quick counter cuts.
+  - Greatsword: ash shield wall cracks into a heavy counter wave.
 - Done:
-  - jaewoo can say which normal Echoes now have dopamine, which are merely readable, and which lever to tune next: size, lifetime, hitstop, camera shake, silhouette, or dense-only reduction.
+  - Ashen has a visible guard charge, break, and counter payoff for both weapons.
 
-## 3. Ultimate Echo Dopamine Pass
+## 3. Oblivion Echo Rework
+
+- Priority: high
+- Problem: Oblivion still needs a concrete erase fantasy instead of another dark mark/ring.
+- Build:
+  - Use `docs/orchestration/evidence/2026-07-22-remaining-echo-vfx-concept-board.png` top-right as the visual target.
+  - Dual Blades: brand hops between targets and leaves tiny void scars.
+  - Greatsword: large brand stamp collapses into a dark erased crater.
+- Done:
+  - Oblivion reads as stamp -> spread -> erase, with separate Dual Blades and Greatsword silhouettes.
+
+## 4. Ultimate Echo Dopamine Pass
 
 - Priority: high
 - Problem: jaewoo explicitly expects Ultimate Echoes to feel stronger than normal Echoes. Current normal Echoes are being raised first; Ultimate Echoes need a separate payoff layer once the baseline is set.
@@ -41,7 +43,7 @@
 - Done:
   - Ultimate Echoes clearly exceed normal Echoes in ceremony, hit feedback, and aftermath while staying within dense performance budget.
 
-## 4. Intro Weapon Selection Direct-Play Review
+## 5. Intro Weapon Selection Direct-Play Review
 
 - Priority: high
 - Problem: the first screen now uses generated LETHE key art behind the weapon cards, and Game View capture confirms it renders. Direct play still needs to judge whether the ceremony, contrast, and card readability feel good.
@@ -54,7 +56,7 @@
 - Done:
   - jaewoo can say keep/tune/redesign for the intro and identify the exact weak read if it misses.
 
-## 5. Greatsword Start-Smoke QA Fix
+## 6. Greatsword Start-Smoke QA Fix
 
 - Priority: high
 - Problem: `LETHE/V1 QA/Start Greatsword` invokes the run but currently fails with `liveEnemies=2` against the current start-smoke expectation.
@@ -67,6 +69,7 @@
 
 Completed sequence:
 
+- 2026-07-22: Blood visibility regression fixed. Greatsword Blood now appears on kill hits as VFX-only, Dense Dual Blades gets repeated lightweight Blood marks, remaining Ashen/Oblivion/Ultimate VFX direction and concept board were documented, and C#/Unity QA passed.
 - 2026-07-21: Blood / Stopped dopamine pass added a white/red Greatsword Blood vortex ring, stronger Blood hit feedback, 1-second held Stopped clock VFX, rotating second hand, and Dense Dual perf recovery. Runtime/editor builds, Unity compile, console error check, Dense Dual, Echo Dual, and Echo Great QA passed.
 - 2026-07-21: Shatter Echo was reworked into terrain/world fracture. Dual Blades now uses chained ground cracks, Greatsword now uses a large forward rupture, and Dense Dual perf was restored by suppressing extra dense identity/link VFX.
 - 2026-07-21: Stopped/Hunter follow-up made Dual Blades Stopped visible with clockwork/second-hand VFX, enlarged Dual Blades Hunter blades, removed the Greatsword Hunter cone sector, added ricochet preview marks, and restored Dense Dual perf to PASS.
