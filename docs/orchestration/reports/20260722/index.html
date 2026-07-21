@@ -146,13 +146,20 @@
     <nav><a href="/api/projects/lethe/reports/index.html">전체 리포트 목록</a></nav>
     <p class="eyebrow">20260722 개발 기록</p>
     <h1>2026-07-22 개발 리포트</h1>
-    <p class="intro">Dev_Prototype_v1에서 혈반 잔향이 처음 한 번만 보이는 문제를 수정했다. C# 빌드, Unity 컴파일, 대검/쌍검 Echo Matrix, Dense Dual Blades Perf Matrix가 통과했다.</p>
+    <p class="intro">Dev_Prototype_v1에서 혈반 잔향이 처음 한 번만 보이는 것처럼 느껴지던 문제를 수정했다. C# 빌드, Unity 컴파일, 대검/쌍검 Echo Matrix, Dense Dual Blades Perf Matrix가 통과했다.</p>
     <ul id="unit-list">
       <li>
         <article class="unit-card">
           <span class="number">2026-07-22-01</span>
           <h2><a href="#unit-2026-07-22-01" data-unit-link="unit-2026-07-22-01">혈반 반복 표시 수정과 남은 잔향 VFX 방향</a></h2>
-          <p>Dev_Prototype_v1에서 혈반 잔향이 처음 한 번만 보이는 문제를 수정했다. C# 빌드, Unity 컴파일, 대검/쌍검 Echo Matrix, Dense Dual Blades Perf Matrix가 통과했다.</p>
+          <p>Dev_Prototype_v1에서 혈반 잔향이 처음 한 번만 보이는 것처럼 느껴지던 문제를 수정했다. C# 빌드, Unity 컴파일, 대검/쌍검 Echo Matrix, Dense Dual Blades Perf Matrix가 통과했다.</p>
+        </article>
+      </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-22-02</span>
+          <h2><a href="#unit-2026-07-22-02" data-unit-link="unit-2026-07-22-02">기억/잔향/궁극 잔향 도파민 리워크</a></h2>
+          <p>Dev_Prototype_v1에 기억, 일반 잔향, 궁극 잔향의 뽕맛 강화 패스를 적용했다. C# 빌드, Unity 컴파일, 잔향/기억/궁극 QA, Dense Dual Blades 성능 QA가 모두 통과했다.</p>
         </article>
       </li>
     </ul>
@@ -167,29 +174,27 @@
       <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
       <h1>2026-07-22-01 - 혈반 반복 표시 수정과 남은 잔향 VFX 방향</h1>
 <h2>1. 현재 빌드 상태</h2>
-<p><code>Dev_Prototype_v1</code>에서 혈반 잔향이 처음 한 번만 보이는 문제를 수정했다. C# 빌드, Unity 컴파일, 대검/쌍검 Echo Matrix, Dense Dual Blades Perf Matrix가 통과했다.</p>
+<p><code>Dev_Prototype_v1</code>에서 혈반 잔향이 처음 한 번만 보이는 것처럼 느껴지던 문제를 수정했다. C# 빌드, Unity 컴파일, 대검/쌍검 Echo Matrix, Dense Dual Blades Perf Matrix가 통과했다.</p>
 <h2>2. 오늘 바뀐 것</h2>
 <ul>
 <li>대검 혈반:</li>
-<li>기본 대검 타격이 적을 먼저 죽여도 혈반 원환 VFX는 나오도록 바꿨다.</li>
-<li>단, 죽은 타겟 기준 혈반은 VFX-only로 처리해서 다른 잔향 QA 대상까지 과하게 죽이지 않게 했다.</li>
+<li>기본 대검 타격이 적을 먼저 죽여도 혈반 소환 VFX가 나오도록 바꿨다.</li>
+<li>이미 죽은 대상 기준 혈반은 VFX-only로 처리해서 다른 잔향 QA 대상을 과하게 죽이지 않게 했다.</li>
 <li>쌍검 혈반:</li>
 <li>dense 상황에서도 첫 허용 타격마다 작은 혈반 표식 VFX가 반복해서 보이게 했다.</li>
 <li>빨간 pulse, 짧은 봉합 베기 2개, +5 bloom hint를 추가했다.</li>
-<li>혈반 fallback:</li>
-<li><code>bloodLevel &lt; 0</code> 때문에 절대 실행되지 않던 죽은 분기를 제거했다.</li>
 <li>남은 잔향/궁극 방향:</li>
-<li>잿빛은 저장된 방어력/반격 압력.</li>
-<li>낙인은 낙인 확산/소거.</li>
+<li>잿빛은 저장된 방어/방패 파괴/반격 충격.</li>
+<li>망각은 낙인 확산/void 균열/삭제.</li>
 <li>궁극 잔향은 일반 잔향보다 더 큰 화면 장악, 정지감, 후폭풍을 가져야 한다.</li>
 </ul>
 <h2>3. VFX 예시</h2>
-<p>!<a href="../../evidence/2026-07-22-remaining-echo-vfx-concept-board.png">남은 잔향 VFX 콘셉트 보드</a></p>
+<p>!<a href="../../evidence/2026-07-22-remaining-echo-vfx-concept-board.png">남은 잔향 VFX 컨셉 보드</a></p>
 <ul>
-<li>좌상단: 잿빛 - 흰 재 방패판이 깨지고 반격 파동이 나가는 느낌.</li>
-<li>우상단: 낙인 - 검보라 낙인이 바닥을 깨고 void 조각으로 지워지는 느낌.</li>
-<li>좌하단: 궁극 혈반 기준 - 일반 혈반보다 큰 붉은/흰 칼날 원환과 중앙 폭발.</li>
-<li>우하단: 정지 궁극 기준 - 거대한 금색 시계판, 다중 초침, 얼어붙은 파편, 폭발 후광.</li>
+<li>좌상단: 잿빛 - 흰 방패판이 깨지고 반격 파동이 나가는 느낌.</li>
+<li>우상단: 망각 - 보라 낙인이 바닥을 깨고 void 조각으로 지워지는 느낌.</li>
+<li>좌하단: 궁극 혈반 기준 - 일반 혈반보다 더 붉고 흰 칼날 폭풍과 중앙 폭발.</li>
+<li>우하단: 정지 궁극 기준 - 거대한 금색 시계와 다중 초침, 얼어붙은 파편, 빛 폭발.</li>
 </ul>
 <h2>4. 테스트 결과와 근거</h2>
 <ul>
@@ -202,19 +207,70 @@
 <li><code>LETHE/V1 QA/Dense Dual Blades Perf Matrix</code>: PASS, <code>transient=46</code>, <code>activeVfx=33</code>, <code>ms=91.56</code>.</li>
 </ul>
 <h2>5. 결정한 것</h2>
-<p>남은 일반 잔향은 잿빛과 낙인을 먼저 리워크한다. 일반 잔향 기준은 이제 &quot;보이는가&quot;가 아니라 &quot;한 번 터질 때 짧은 도파민 피크가 있는가&quot;다. 궁극 잔향은 일반 잔향보다 더 큰 의식감과 후폭풍을 가져야 한다.</p>
+<p>남은 일반 잔향은 잿빛과 망각을 먼저 리워크한다. 일반 잔향 기준이 올라간 뒤, 궁극 잔향은 별도 도파민 패스로 더 강한 연출을 가진다.</p>
 <h2>6. 문제 또는 리스크</h2>
-<p>자동 QA는 혈반 VFX가 계속 생성되는지와 성능 예산을 확인했다. 하지만 실제 플레이에서 혈반이 &quot;처음 한 번만&quot;으로 느껴지는 문제가 완전히 사라졌는지는 직접 플레이로 확인해야 한다.</p>
+<p>자동 QA는 혈반 VFX가 반복 생성되는지와 성능 예산을 확인했다. 하지만 실제 플레이에서 혈반이 정말 처음 한 번만이 아니라 반복 보상처럼 느껴지는지는 직접 플레이로 확인해야 한다.</p>
 <h2>7. GPT/Claude 인계 요약</h2>
 <p>Blood Echo visibility regression was fixed. Greatsword Blood now spawns VFX even on kill hits, but dead-target Blood is VFX-only. Dense Dual Blades now gets a lightweight repeated Blood mark read. Remaining normal Echo rework should target Ashen as guard/counter-pressure and Oblivion as brand spread/erase before the Ultimate Echo dopamine pass.</p>
 <h2>8. 다음 Codex 작업</h2>
-<p>잿빛 잔향을 먼저 리워크한다. 목표는 방패를 키우는 것이 아니라, 저장된 방어력이 깨지는 순간 반격 파동으로 바뀌는 행동을 만들고 쌍검/대검 실루엣을 나누는 것이다.</p>
+<p>잿빛과 망각의 콘셉트 리워크를 진행하고, 궁극 잔향은 일반 잔향보다 더 큰 의식감과 폭발감을 주는 방향으로 올린다.</p>
 <h2>9. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
 <ul>
 <li>문제: 혈반이 반복 보상처럼 보이지 않고 처음 한 번만 보이는 체감이 있었다.</li>
-<li>방향: 처치타와 dense 상황에서도 최소한의 반복 VFX를 보장한다.</li>
-<li>행동: 대검 처치타 VFX-only 혈반, 쌍검 dense 경량 혈반 표식을 추가하고 남은 잔향 VFX 보드를 정리했다.</li>
-<li>결과: 자동 QA와 dense 성능 예산을 통과했고, 남은 리워크 순서가 잿빛 -&gt; 낙인 -&gt; 궁극 도파민 패스로 정리됐다.</li>
+<li>방향: 처치 타이밍과 dense 상황에서도 최소한의 반복 VFX를 보장한다.</li>
+<li>행동: 대검 처치-hit VFX-only 혈반, 쌍검 dense 경량 혈반 표식을 추가하고 남은 잔향 VFX 보드를 정리했다.</li>
+<li>결과: 자동 QA는 dense 성능 예산을 통과했고, 다음 리워크 순서가 잿빛 -&gt; 망각 -&gt; 궁극 도파민 패스로 정리됐다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-22-02" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-22-02 - 기억/잔향/궁극 잔향 도파민 리워크</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에 기억, 일반 잔향, 궁극 잔향의 뽕맛 강화 패스를 적용했다. C# 빌드, Unity 컴파일, 잔향/기억/궁극 QA, Dense Dual Blades 성능 QA가 모두 통과했다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>잿빛 방패:</li>
+<li>기억은 플레이어 주변에 금 간 방패판/후광이 떠서 저장된 방어로 보이게 했다.</li>
+<li>잔향은 방패가 깨지며 반격하는 레이어를 추가했다. 쌍검은 빠른 패링 컷, 대검은 방패벽 충격파 쪽이다.</li>
+<li>망각 낙인:</li>
+<li>기억 +5와 잔향에 void core, 낙인 링, 균열, 지워지는 조각을 추가했다.</li>
+<li>목표는 <code>낙인 -&gt; 확산 -&gt; 삭제</code>로 읽히게 하는 것이다.</li>
+<li>궁극 잔향:</li>
+<li>피의 칼폭풍은 시작/절정에 충격 링, 백색 코어, 검 파편 폭발을 추가했다.</li>
+<li>균열 처형은 처형 전에 바닥 판결선/문장을 남긴다.</li>
+<li>정지 추적은 궁극용 시계 폭발과 초침 스냅을 추가했다.</li>
+<li>잿빛 망각은 방패판, 잿빛 벽, void 파열, 방패 붕괴를 겹치게 했다.</li>
+<li>성능:</li>
+<li>첫 Dense Dual Blades QA는 장식 VFX가 너무 쌓여 실패했다.</li>
+<li>밀집 쌍검에서는 잿빛/망각의 비핵심 장식 레이어를 생략하도록 바꿔 최종 PASS로 회복했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, 기존 legacy warning 7개, 오류 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 통과, warning 0개, 오류 0개.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Unity console errors after final QA: <code>0</code>.</li>
+<li><code>LETHE/V1 QA/Echo Matrix Dual Blades</code>: PASS, <code>total=1028</code>, <code>A=110</code>, <code>O=146</code>.</li>
+<li><code>LETHE/V1 QA/Echo Matrix Greatsword</code>: PASS, <code>total=991</code>, <code>A=120</code>, <code>O=103</code>.</li>
+<li><code>LETHE/V1 QA/Passive Memory Matrix</code>: PASS, <code>blood=17</code>, <code>ash=6</code>, <code>stopped=8</code>, <code>oblivion=60</code>.</li>
+<li><code>LETHE/V1 QA/Utility Ultimate Matrix Dual Blades</code>: PASS, <code>fracture=28</code>, <code>stasis=11</code>, <code>ashen=47</code>.</li>
+<li><code>LETHE/V1 QA/Utility Ultimate Matrix Greatsword</code>: PASS, <code>fracture=49</code>, <code>stasis=26</code>, <code>ashen=12</code>.</li>
+<li><code>LETHE/V1 QA/Dense Dual Blades Perf Matrix</code>: 최종 PASS, <code>transient=51</code>, <code>activeVfx=38</code>, <code>ms=98.03</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>이번 패스의 기준은 일반 전투에서는 뽕맛을 올리고, 밀집 쌍검에서는 핵심 표식만 남기는 것이다. 궁극 잔향은 일반 잔향보다 화면 의식, 충격, 후폭풍이 더 강해야 한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>자동 QA는 스폰/성능/오류를 확인하지만, 실제로 도파민이 느껴지는지는 직접 플레이로만 판정 가능하다. 특히 궁극 잔향은 강해진 만큼 화면 소음이 생길 수 있어 알파, 지속시간, 파편 개수 튜닝 여지가 있다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Memory/Echo/Ultimate dopamine rework is implemented in <code>V1GameManager</code>. Ashen now reads as guard/counter, Oblivion as brand/erase, and utility Ultimates gained stronger ceremony layers. Dense Dual initially failed from VFX overbudget, then passed after skipping non-essential Ashen/Oblivion ornament layers in dense Dual Blades.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo가 직접 플레이로 각 계열을 <code>keep</code>, <code>tune</code>, <code>redesign</code> 중 하나로 판정한다. 다음 작업은 새 메커니즘 추가보다 화면 소음, 알파, 지속시간, 파편 개수 튜닝을 우선한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 잔향과 궁극 잔향이 같은 효과의 크기 차이처럼 보여 보상감이 약했다.</li>
+<li>방향: 각 계열의 판타지를 액션 문법으로 분리했다.</li>
+<li>행동: 잿빛은 방패/반격, 망각은 낙인/삭제, 궁극은 의식/충격/후폭풍으로 강화했다.</li>
+<li>결과: 자동 QA와 Dense 성능 예산을 통과한 상태로 직접 플레이 감각 평가 단계에 들어갔다.</li>
 </ul>
     </article>
       </div>

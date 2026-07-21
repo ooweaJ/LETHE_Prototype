@@ -1,5 +1,47 @@
 # LETHE TEST
 
+# 2026-07-22 Memory / Echo / Ultimate Dopamine Rework
+
+- Purpose:
+  - Rework memories, normal Echoes, and Ultimate Echoes so the next review checks dopamine/payoff, not only baseline readability.
+  - Preserve Dense Dual Blades performance after adding richer VFX layers.
+- Applied target:
+  - `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`.
+- Changes:
+  - Ashen memory gained a cracked guard plate/halo.
+  - Ashen Echo gained counter-burst layers for normal density.
+  - Oblivion memory +5 and Echo gained void erase burst layers.
+  - Blood Blade Storm opening/climax gained shock ring, white-hot core, and orbit shard bursts.
+  - Fracture Execution gained a ground sentence/verdict mark.
+  - Stasis Hunt gained a larger clock burst and second-hand snap.
+  - Ashen Oblivion gained shield plate, ash wall, void break, and guard-collapse layers.
+  - Dense Dual Blades skips the newest non-essential Ashen/Oblivion ornament layer.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`.
+  - Unity compilation error check.
+  - Unity console error check.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`.
+  - `LETHE/V1 QA/Passive Memory Matrix`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`.
+- Results:
+  - Runtime C# build passed with 7 existing legacy warnings and 0 errors.
+  - Editor C# build passed with 0 warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors after final QA: `0`.
+  - Echo Matrix Dual Blades: PASS, `total=1028`, `A=110`, `O=146`, `state=88`.
+  - Echo Matrix Greatsword: PASS, `total=991`, `A=120`, `O=103`, `state=45`.
+  - Passive Memory Matrix: PASS, `blood=17`, `ash=6`, `stopped=8`, `oblivion=60`.
+  - Utility Ultimate Matrix Dual Blades: PASS, `fracture=28`, `stasis=11`, `ashen=47`.
+  - Utility Ultimate Matrix Greatsword: PASS, `fracture=49`, `stasis=26`, `ashen=12`.
+  - Dense Dual Blades Perf Matrix: first run failed at `transient=170`, `activeVfx=96`, `ms=146.61`; final run passed at `transient=51`, `activeVfx=38`, `ms=98.03`.
+- Notes:
+  - MCP polling intermittently returned `fetch failed`, but each QA result was confirmed through Unity console logs.
+  - Direct play remains required to judge whether the new spectacle actually feels satisfying.
+
 # 2026-07-22 Blood Repeat Fix / Remaining Echo VFX Plan
 
 - Purpose:

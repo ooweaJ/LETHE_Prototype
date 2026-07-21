@@ -1,5 +1,36 @@
 # LETHE TASK
 
+## 2026-07-22 Memory / Echo / Ultimate Dopamine Rework
+
+- [x] Memory/Echo dopamine pass completed:
+  - [x] Ashen memory now shows a cracked guard plate/halo.
+  - [x] Ashen Echo now adds parry/counter burst layers for normal density.
+  - [x] Oblivion memory +5 and Echo now add void-core, brand ring, cracks, and erase fragments.
+  - [x] Blood Blade Storm opening/climax now add shock-ring, white-hot core, and blade-shard burst layers.
+  - [x] Fracture Execution now adds a sentence/verdict ground mark.
+  - [x] Stasis Hunt now adds a larger ultimate clock burst and second-hand snap.
+  - [x] Ashen Oblivion now layers guard plate, ash wall, void break, and guard-collapse burst.
+- [x] Dense performance recovery completed:
+  - [x] First dense run failed after the dopamine additions.
+  - [x] Dense Dual Blades now skips non-essential Ashen/Oblivion ornament layers.
+  - [x] Dense Dual Blades Perf Matrix returned to PASS.
+- [x] Verification completed:
+  - [x] Runtime C# build passed.
+  - [x] Editor C# build passed.
+  - [x] Unity compilation errors `0`, console errors `0`.
+  - [x] Echo Matrix Dual Blades PASS, `total=1028`.
+  - [x] Echo Matrix Greatsword PASS, `total=991`.
+  - [x] Passive Memory Matrix PASS.
+  - [x] Utility Ultimate Matrix Dual Blades PASS.
+  - [x] Utility Ultimate Matrix Greatsword PASS.
+  - [x] Dense Dual Blades Perf Matrix PASS, `ms=98.03`.
+
+Current next:
+
+1. Direct-play the new Ashen, Oblivion, Blood Blade Storm, Fracture Execution, Stasis Hunt, and Ashen Oblivion reads.
+2. Mark each effect `keep`, `tune`, or `redesign`.
+3. If the screen feels too noisy, tune alpha/lifetime/counts before adding any new mechanics.
+
 ## 2026-07-22 Blood Repeat Fix / Remaining Echo VFX Plan
 
 - [x] Blood visibility regression fixed:

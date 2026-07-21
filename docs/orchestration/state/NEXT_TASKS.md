@@ -1,49 +1,37 @@
 # Next Tasks
 
-## 1. Blood Direct-Play Regression Check
+## 1. Dopamine VFX Direct-Play Review
 
 - Priority: urgent
-- Problem: Blood Echo was reported as appearing once and then disappearing. The code now guarantees kill-hit Greatsword Blood VFX and dense Dual Blades lightweight repeated Blood marks, but this needs a human feel check.
+- Problem: Ashen, Oblivion, and the utility Ultimate Echoes now have stronger visual ceremony, but automated QA only proves that they spawn and stay under budget.
+- Build:
+  - Play both weapons with Ashen + Oblivion Echoes and judge whether the concepts read as guard/counter and brand/erase.
+  - Trigger all 4 Ultimate Echo routes and judge whether they feel stronger than normal Echoes.
+  - Check Blood Blade Storm opening/climax after the added shock ring and shard burst.
+- Done:
+  - jaewoo can mark each family `keep`, `tune`, or `redesign`, with one clear reason.
+
+## 2. Blood Direct-Play Regression Check
+
+- Priority: urgent
+- Problem: Blood Echo was reported as appearing once and then disappearing. The code now guarantees repeated kill-hit / dense reads, but direct play still needs to confirm the feel.
 - Build:
   - Play Greatsword + Blood Echo in normal packs and confirm the white/red vortex appears on repeated attacks, including kill hits.
   - Play Dual Blades + Blood Echo in dense packs and confirm the smaller blood pulse/suture read repeats without becoming noisy.
 - Done:
   - jaewoo can say whether Blood now feels repeated, too frequent, too large, or still missing.
 
-## 2. Ashen Echo Rework
-
-- Priority: urgent
-- Problem: Ashen still risks feeling like generic pale rings. It needs a guard/counter action fantasy.
-- Build:
-  - Use `docs/orchestration/evidence/2026-07-22-remaining-echo-vfx-concept-board.png` top-left as the visual target.
-  - Dual Blades: enemy-side parry spark into two quick counter cuts.
-  - Greatsword: ash shield wall cracks into a heavy counter wave.
-- Done:
-  - Ashen has a visible guard charge, break, and counter payoff for both weapons.
-
-## 3. Oblivion Echo Rework
+## 3. VFX Budget / Noise Tune
 
 - Priority: high
-- Problem: Oblivion still needs a concrete erase fantasy instead of another dark mark/ring.
+- Problem: The first dopamine pass temporarily failed Dense Dual Blades perf (`transient=170`, `activeVfx=96`, `ms=146.61`) before dense ornament throttling restored PASS.
 - Build:
-  - Use `docs/orchestration/evidence/2026-07-22-remaining-echo-vfx-concept-board.png` top-right as the visual target.
-  - Dual Blades: brand hops between targets and leaves tiny void scars.
-  - Greatsword: large brand stamp collapses into a dark erased crater.
+  - If direct play feels too noisy, tune alpha/lifetime/spawn counts rather than adding new mechanics.
+  - Keep dense branches on core readable markers, not full ornament stacks.
 - Done:
-  - Oblivion reads as stamp -> spread -> erase, with separate Dual Blades and Greatsword silhouettes.
+  - Dense Dual remains under budget and normal packs retain the stronger payoff.
 
-## 4. Ultimate Echo Dopamine Pass
-
-- Priority: high
-- Problem: jaewoo explicitly expects Ultimate Echoes to feel stronger than normal Echoes. Current normal Echoes are being raised first; Ultimate Echoes need a separate payoff layer once the baseline is set.
-- Build:
-  - Review the 4 utility Ultimate Echo routes.
-  - Define each Ultimate's one-screen spectacle: screen-space tell, sound/stop moment, main hit, aftermath, and weapon-specific silhouette.
-  - Keep gameplay scope unchanged; this is a VFX/action payoff pass, not a new ultimate system.
-- Done:
-  - Ultimate Echoes clearly exceed normal Echoes in ceremony, hit feedback, and aftermath while staying within dense performance budget.
-
-## 5. Intro Weapon Selection Direct-Play Review
+## 4. Intro Weapon Selection Direct-Play Review
 
 - Priority: high
 - Problem: the first screen now uses generated LETHE key art behind the weapon cards, and Game View capture confirms it renders. Direct play still needs to judge whether the ceremony, contrast, and card readability feel good.
@@ -56,7 +44,7 @@
 - Done:
   - jaewoo can say keep/tune/redesign for the intro and identify the exact weak read if it misses.
 
-## 6. Greatsword Start-Smoke QA Fix
+## 5. Greatsword Start-Smoke QA Fix
 
 - Priority: high
 - Problem: `LETHE/V1 QA/Start Greatsword` invokes the run but currently fails with `liveEnemies=2` against the current start-smoke expectation.

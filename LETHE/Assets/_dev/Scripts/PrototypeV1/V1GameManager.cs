@@ -1683,6 +1683,7 @@ namespace Lethe.PrototypeV1
             PlaySfx("ashen", 0.36f, 0.42f);
             SpawnPromptSprite("AshenShield", MemoryVfxSprite(V1MemoryId.AshenShield), () => MakeRingSprite("AshenShield", Color.white, 128), player.position, Quaternion.identity, 1.78f + memory.Level * 0.12f, 0.76f + memory.Level * 0.056f, new Color(0.72f, 0.80f, 0.86f, 0.54f), 0.56f);
             SpawnTransientSprite("AshenShieldCore", MakeRingSprite("AshenShieldCore", Color.white, 96), player.position, Quaternion.Euler(0f, 0f, elapsed * -96f), 0.46f + memory.Level * 0.040f, new Color(0.90f, 0.96f, 1f, 0.36f), 0.34f);
+            SpawnAshenMemoryGuardPlate(player.position, lastAim, memory.Level);
             if (memory.Level >= 3)
             {
                 SpawnRadialSlashLines("MemoryAshenShieldCounterLine", player.position, lastAim, 5, 0.72f + memory.Level * 0.065f, new Color(0.84f, 0.92f, 1f, 0.54f), 0.38f);
@@ -1733,6 +1734,7 @@ namespace Lethe.PrototypeV1
                 {
                     SpawnTransientSprite("MemoryOblivionBrandAwakenSeal", MakeRingSprite("MemoryOblivionBrandAwakenSeal", Color.white, 180), enemy.transform.position, Quaternion.Euler(0f, 0f, elapsed * 120f), 0.92f, new Color(0.70f, 0.22f, 1f, 0.46f), 0.62f);
                     SpawnRadialSlashLines("MemoryOblivionBrandDetonation", enemy.transform.position, (Vector2)(enemy.transform.position - player.position), 6, 0.86f, new Color(0.92f, 0.46f, 1f, 0.68f), 0.42f);
+                    SpawnOblivionEraseBurst(enemy.transform.position, (Vector2)(enemy.transform.position - player.position), 0.88f + memory.Level * 0.08f, true, "MemoryOblivionBrandErase");
                     foreach (var linked in enemies.Where(e => e != null && e.IsAlive && e != enemy && Vector2.Distance(enemy.transform.position, e.transform.position) <= 1.72f + memory.Level * 0.12f).Take(5).ToList())
                     {
                         var dir = (Vector2)(linked.transform.position - enemy.transform.position);
@@ -2650,6 +2652,10 @@ namespace Lethe.PrototypeV1
             PlaySfx("ashen", heavy ? 0.46f : 0.30f, heavy ? 0.24f : 0.18f);
             if (heavy || !denseDualBlade)
             {
+                SpawnAshenEchoCounterBurst(heavy ? player.position + (Vector3)(f * 0.42f) : enemy.transform.position, f, levelValue, heavy, denseDualBlade);
+            }
+            if (heavy || !denseDualBlade)
+            {
                 SpawnEchoLink(heavy ? "EchoGreat_AshenCounterThread" : "EchoDual_AshenReturnThread", enemy.transform.position, player.position, new Color(0.84f, 0.90f, 1f, heavy ? 0.52f : 0.38f), heavy ? 0.54f : 0.40f, heavy ? 0.032f : 0.020f);
             }
             if (heavy)
@@ -2716,6 +2722,7 @@ namespace Lethe.PrototypeV1
             if (levelValue <= 0) return;
             var heavy = IsHeavyEchoWeapon(weapon);
             var f = EchoForward(forward);
+            var denseDualBlade = !heavy && DenseDualBladeVfxThrottle(weapon);
             if (!ShouldTriggerEcho(V1MemoryId.OblivionBrand, levelValue, hitIndex, force)) return;
 
             PlaySfx("brand", heavy ? 0.52f : 0.36f, heavy ? 0.16f : 0.10f);
@@ -2726,6 +2733,7 @@ namespace Lethe.PrototypeV1
                 SpawnRadialSlashLines("EchoGreat_OblivionBrandBurst", enemy.transform.position, f, 7, 1.26f + levelValue * 0.12f, new Color(0.86f, 0.48f, 1f, 0.70f), 0.52f);
                 SpawnTransientSprite("EchoGreat_OblivionGravityWell", MakeDiscSprite("EchoGreat_OblivionGravityWell", Color.white, 160), enemy.transform.position, Quaternion.identity, collapseRadius * 0.58f, new Color(0.42f, 0.12f, 0.78f, 0.32f), 0.70f);
                 SpawnGreatswordBrandCrater(enemy.transform.position, f, collapseRadius);
+                SpawnOblivionEraseBurst(enemy.transform.position, f, collapseRadius * 0.74f, true, "EchoGreat_OblivionErase");
                 foreach (var target in EchoTargetsInRadius(enemy.transform.position, collapseRadius, EchoTargetLimit(V1MemoryId.OblivionBrand, levelValue, true), enemy))
                 {
                     var dir = (Vector2)(target.transform.position - enemy.transform.position);
@@ -2745,6 +2753,10 @@ namespace Lethe.PrototypeV1
             else
             {
                 SpawnOblivionEchoBrand(enemy.transform.position, f, 0.48f);
+                if (!denseDualBlade)
+                {
+                    SpawnOblivionEraseBurst(enemy.transform.position, f, 0.54f + levelValue * 0.05f, false, "EchoDual_OblivionErase");
+                }
                 SpawnDualBrandHopRunes(enemy.transform.position, f, levelValue);
                 SpawnDualBladeNeedleFan("EchoDual_OblivionStackCuts", enemy.transform.position, f, 0.52f + levelValue * 0.025f, 4, new Color(0.88f, 0.52f, 1f, 0.42f), 0.24f);
                 for (int i = 0; i < Mathf.Min(4, 1 + levelValue / 2); i++)
@@ -3139,6 +3151,113 @@ namespace Lethe.PrototypeV1
                     SpawnEchoLink("EchoDual_OblivionHopThread", prev, pos, new Color(0.82f, 0.46f, 1f, 0.26f), 0.22f, 0.010f);
                 }
             }
+        }
+
+        void SpawnAshenMemoryGuardPlate(Vector3 center, Vector2 forward, int levelValue)
+        {
+            var f = EchoForward(forward);
+            var angle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg - 90f;
+            var plate = MakeBoxSprite("MemoryAshenGuardPlate", Color.white, 28, 128);
+            var shard = MakeImpactDiamondSprite("MemoryAshenGuardShard", Color.white);
+            var radius = 0.72f + levelValue * 0.065f;
+            var shardCount = Mathf.Clamp(3 + levelValue, 4, 8);
+            SpawnTransientSpriteScaled("MemoryAshenGuardPlateFace", plate, center + (Vector3)(f * 0.18f), Quaternion.Euler(0f, 0f, angle), new Vector3(0.24f, radius, 1f), new Color(0.92f, 0.98f, 1f, 0.52f), 0.52f);
+            SpawnTransientSprite("MemoryAshenGuardPlateHalo", MakeRingSprite("MemoryAshenGuardPlateHalo", Color.white, 132), center, Quaternion.Euler(0f, 0f, elapsed * -82f), radius * 0.82f, new Color(0.86f, 0.94f, 1f, 0.34f), 0.48f);
+            SpawnRadialSlashLines("MemoryAshenGuardPlateCrack", center + (Vector3)(f * 0.12f), f, 5, 0.56f + levelValue * 0.035f, new Color(0.96f, 1f, 1f, 0.58f), 0.38f);
+            for (int i = 0; i < shardCount; i++)
+            {
+                var a = angle + 90f + i * (360f / shardCount) + Mathf.Sin(i * 1.7f) * 10f;
+                var dir = Quaternion.Euler(0f, 0f, a) * Vector3.right;
+                SpawnTransientSprite("MemoryAshenGuardPlateShard", shard, center + dir * radius * 0.38f, Quaternion.Euler(0f, 0f, a + 45f), 0.12f + levelValue * 0.006f, new Color(0.92f, 0.98f, 1f, 0.50f), 0.30f + i * 0.010f);
+            }
+        }
+
+        void SpawnAshenEchoCounterBurst(Vector3 center, Vector2 forward, int levelValue, bool heavy, bool dense)
+        {
+            var f = EchoForward(forward);
+            var angle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg - 90f;
+            var radius = heavy ? 1.18f + levelValue * 0.08f : 0.62f + levelValue * 0.045f;
+            if (dense) radius *= 0.80f;
+            SpawnTransientSprite(heavy ? "EchoGreat_AshenCrackedGuardPlate" : "EchoDual_AshenCrackedParryPlate", MakeRingSprite("EchoAshenCrackedGuard", Color.white, heavy ? 156 : 104), center, Quaternion.Euler(0f, 0f, elapsed * (heavy ? -64f : 128f)), radius, new Color(0.90f, 0.97f, 1f, heavy ? 0.54f : 0.42f), heavy ? 0.58f : 0.34f);
+            SpawnRadialSlashLines(heavy ? "EchoGreat_AshenPlateBreakShard" : "EchoDual_AshenParryBreakShard", center, f, dense ? 3 : heavy ? 8 : 5, radius * (heavy ? 0.78f : 0.56f), new Color(0.96f, 1f, 1f, heavy ? 0.66f : 0.48f), heavy ? 0.48f : 0.28f);
+            if (heavy)
+            {
+                SpawnGreatswordForwardWedge("EchoGreat_AshenCounterShockFront", center - (Vector3)(f * 0.22f), f, 1.92f + levelValue * 0.10f, 44f, new Color(0.92f, 0.98f, 1f, 0.24f), 0.52f);
+                SpawnEchoWoundSlash("EchoGreat_AshenCounterBreakLine", center + (Vector3)(f * 0.18f), f, new Color(0.96f, 1f, 1f, 0.70f), 1.12f + levelValue * 0.06f, 0.42f);
+            }
+            else if (!dense)
+            {
+                var s = new Vector2(-f.y, f.x);
+                SpawnEchoWoundSlash("EchoDual_AshenCounterCutA", center + (Vector3)(s * 0.10f), f, new Color(0.96f, 1f, 1f, 0.66f), 0.68f + levelValue * 0.035f, 0.24f);
+                SpawnEchoWoundSlash("EchoDual_AshenCounterCutB", center - (Vector3)(s * 0.10f), -f, new Color(0.82f, 0.92f, 1f, 0.54f), 0.54f + levelValue * 0.025f, 0.22f);
+            }
+            SpawnTransientSprite(heavy ? "EchoGreat_AshenCounterCoreFlash" : "EchoDual_AshenCounterCoreFlash", MakeImpactDiamondSprite("EchoAshenCounterCoreFlash", Color.white), center, Quaternion.Euler(0f, 0f, angle + 45f), heavy ? 0.34f : 0.20f, new Color(1f, 1f, 1f, heavy ? 0.78f : 0.58f), heavy ? 0.24f : 0.16f);
+        }
+
+        void SpawnOblivionEraseBurst(Vector3 center, Vector2 forward, float radius, bool heavy, string name)
+        {
+            var f = EchoForward(forward);
+            var violet = heavy ? new Color(0.72f, 0.18f, 1f, 0.62f) : new Color(0.80f, 0.34f, 1f, 0.50f);
+            var voidColor = heavy ? new Color(0.08f, 0.00f, 0.16f, 0.48f) : new Color(0.12f, 0.00f, 0.22f, 0.36f);
+            SpawnTransientSprite($"{name}_VoidCore", MakeDiscSprite($"{name}_VoidCore", Color.white, 132), center, Quaternion.identity, radius * (heavy ? 0.48f : 0.36f), voidColor, heavy ? 0.62f : 0.38f);
+            SpawnTransientSprite($"{name}_BrandRing", MakeRingSprite($"{name}_BrandRing", Color.white, heavy ? 180 : 128), center, Quaternion.Euler(0f, 0f, elapsed * (heavy ? 72f : -118f)), radius, violet, heavy ? 0.66f : 0.42f);
+            SpawnRadialSlashLines($"{name}_VoidCrack", center, f, heavy ? 9 : 5, radius * (heavy ? 0.82f : 0.56f), new Color(0.90f, 0.52f, 1f, heavy ? 0.70f : 0.54f), heavy ? 0.54f : 0.30f);
+            var shard = MakeImpactDiamondSprite($"{name}_VoidFragment", Color.white);
+            for (int i = 0; i < (heavy ? 8 : 4); i++)
+            {
+                var angle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg + i * (heavy ? 45f : 90f) + Mathf.Sin(i * 1.43f) * 14f;
+                var dir = Quaternion.Euler(0f, 0f, angle) * Vector3.right;
+                SpawnTransientSprite($"{name}_LiftedFragment", shard, center + dir * radius * (0.28f + i * 0.018f), Quaternion.Euler(0f, 0f, angle + 45f), heavy ? 0.18f : 0.12f, new Color(0.86f, 0.44f, 1f, heavy ? 0.62f : 0.42f), heavy ? 0.44f : 0.26f);
+            }
+        }
+
+        void SpawnUltimateDopamineBurst(string name, Vector3 center, Vector2 forward, float radius, Color primary, Color secondary, int shardCount, float lifetime)
+        {
+            var f = EchoForward(forward);
+            SpawnTransientSprite($"{name}_OuterShockRing", MakeRingSprite($"{name}_OuterShockRing", Color.white, 192), center, Quaternion.Euler(0f, 0f, elapsed * -100f), radius, new Color(primary.r, primary.g, primary.b, primary.a * 0.68f), lifetime);
+            SpawnTransientSprite($"{name}_WhiteHotCore", MakeDiscSprite($"{name}_WhiteHotCore", Color.white, 128), center, Quaternion.identity, radius * 0.18f, new Color(secondary.r, secondary.g, secondary.b, secondary.a * 0.72f), lifetime * 0.62f);
+            SpawnRadialSlashLines($"{name}_ImpactSpokes", center, f, Mathf.Clamp(shardCount / 2, 5, 10), radius * 0.52f, secondary, lifetime * 0.72f);
+            var shard = MakeBoxSprite($"{name}_BladeShard", Color.white, 7, 118);
+            for (int i = 0; i < shardCount; i++)
+            {
+                var angle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg + i * (360f / shardCount) + Mathf.Sin(i * 1.37f) * 8f;
+                var dir = Quaternion.Euler(0f, 0f, angle) * Vector3.right;
+                var pos = center + dir * radius * (0.45f + (i % 3) * 0.055f);
+                var color = i % 2 == 0 ? secondary : primary;
+                SpawnTransientSpriteScaled($"{name}_OrbitShard", shard, pos, Quaternion.Euler(0f, 0f, angle + 92f), new Vector3(0.030f, radius * 0.18f, 1f), color, lifetime * (0.70f + i * 0.010f));
+            }
+        }
+
+        void SpawnFractureExecutionGroundSentence(Vector3 center, Vector2 forward, float radius, bool heavy)
+        {
+            var f = EchoForward(forward);
+            var gold = new Color(1f, 0.92f, 0.42f, heavy ? 0.76f : 0.58f);
+            var crack = new Color(0.52f, 0.98f, 1f, heavy ? 0.46f : 0.34f);
+            SpawnEchoWoundSlash(heavy ? "UltGreat_FractureExecutionSentenceLine" : "UltDual_FractureExecutionSentenceLine", center, f, gold, radius * (heavy ? 1.12f : 0.78f), heavy ? 0.58f : 0.36f);
+            SpawnShatterEchoScar(center - (Vector3)(f * radius * 0.12f), f, radius * (heavy ? 0.78f : 0.52f), heavy ? 0.52f : 0.32f);
+            SpawnTransientSprite(heavy ? "UltGreat_FractureExecutionVerdictSeal" : "UltDual_FractureExecutionVerdictSeal", MakeRingSprite("UltFractureExecutionVerdictSeal", Color.white, heavy ? 180 : 132), center, Quaternion.Euler(0f, 0f, elapsed * 88f), radius * 0.52f, gold, heavy ? 0.56f : 0.34f);
+            SpawnRadialSlashLines(heavy ? "UltGreat_FractureExecutionGroundCrack" : "UltDual_FractureExecutionGroundCrack", center, f, heavy ? 8 : 5, radius * 0.42f, crack, heavy ? 0.44f : 0.28f);
+        }
+
+        void SpawnUltimateClockBurst(string name, Vector3 center, Vector2 forward, float radius, bool heavy)
+        {
+            var f = EchoForward(forward);
+            var gold = new Color(1f, 0.82f, 0.24f, heavy ? 0.82f : 0.66f);
+            var ice = new Color(0.86f, 0.92f, 1f, heavy ? 0.62f : 0.46f);
+            SpawnStoppedSecondField(center, radius, gold, heavy ? 1.80f : 1.32f, true);
+            SpawnUltimateDopamineBurst(name, center, forward, radius * 0.92f, gold, ice, heavy ? 12 : 8, heavy ? 0.66f : 0.46f);
+            var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
+            var hand = MakeBoxSprite($"{name}_SecondHand", Color.white, heavy ? 8 : 6, heavy ? 190 : 132);
+            SpawnClockHandSweep($"{name}_ClockHandSnap", hand, center, radius, baseAngle - 110f, baseAngle + 250f, heavy ? 0.052f : 0.040f, heavy ? 0.72f : 0.62f, gold, heavy ? 1.15f : 0.86f, heavy ? 0.72f : 0.52f);
+        }
+
+        void SpawnAshenOblivionRupture(Vector3 center, Vector2 forward, float radius, bool heavy, string name)
+        {
+            var f = EchoForward(forward);
+            SpawnAshenMemoryGuardPlate(center, f, heavy ? 5 : 3);
+            SpawnTransientSprite($"{name}_AshWall", MakeRingSprite($"{name}_AshWall", Color.white, heavy ? 180 : 132), center, Quaternion.Euler(0f, 0f, elapsed * -64f), radius * 0.58f, new Color(0.90f, 0.96f, 1f, heavy ? 0.58f : 0.42f), heavy ? 0.70f : 0.46f);
+            SpawnOblivionEraseBurst(center + (Vector3)(f * (heavy ? 0.22f : 0.12f)), f, radius * (heavy ? 0.72f : 0.54f), heavy, $"{name}_VoidBreak");
+            SpawnUltimateDopamineBurst($"{name}_GuardCollapse", center, f, radius * (heavy ? 0.84f : 0.66f), new Color(0.78f, 0.34f, 1f, heavy ? 0.64f : 0.48f), new Color(0.92f, 0.98f, 1f, heavy ? 0.66f : 0.50f), heavy ? 10 : 7, heavy ? 0.58f : 0.38f);
         }
 
         void SpawnRadialSlashLines(string name, Vector3 center, Vector2 forward, int count, float length, Color color, float lifetime)
@@ -3735,9 +3854,11 @@ namespace Lethe.PrototypeV1
         void SpawnBloodStormOpening(bool heavy)
         {
             PlaySfx("blood_storm", heavy ? 0.92f : 0.76f, 0.18f);
+            SpawnUltimateDopamineBurst("Ult_BloodBladeStormOpening", player.position, lastAim, heavy ? 3.45f : 2.86f, new Color(1f, 0.06f, 0.11f, 0.72f), new Color(1f, 0.96f, 0.92f, 0.74f), heavy ? 15 : 11, heavy ? 0.72f : 0.58f);
             SpawnPromptSprite("BloodBladeStormOpen", LoadSprite(BloodBladeStormRingPath), () => MakeRingSprite("BloodBladeStormOpen", Color.white, 180), player.position, Quaternion.identity, heavy ? 6.20f : 5.20f, heavy ? 1.96f : 1.62f, new Color(1f, 0.08f, 0.16f, 0.54f), 0.56f);
             SpawnTransientSprite("BloodBladeStormWarning", MakeRingSprite("BloodBladeStormWarning", Color.white, 156), player.position, Quaternion.identity, heavy ? 1.92f : 1.56f, new Color(0.72f, 0.98f, 1f, 0.36f), 0.38f);
             SpawnFloatingText(player.position + Vector3.up * 1.05f, "피의 칼폭풍", new Color(1f, 0.18f, 0.24f));
+            hitstopTimer = Mathf.Max(hitstopTimer, heavy ? 0.075f : 0.052f);
             cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.24f);
             cameraShakeAmount = Mathf.Max(cameraShakeAmount, heavy ? 0.13f : 0.095f);
         }
@@ -3748,6 +3869,7 @@ namespace Lethe.PrototypeV1
             var radius = heavy ? 4.75f : 4.05f;
             var burstDamage = heavy ? 84f : 52f;
             PlaySfx("blood_storm", heavy ? 0.86f : 0.64f, heavy ? 0.28f : 0.18f);
+            SpawnUltimateDopamineBurst("Ult_BloodBladeStormClimax", center, lastAim, heavy ? 3.20f : 2.70f, new Color(1f, 0.02f, 0.08f, heavy ? 0.80f : 0.66f), new Color(1f, 0.96f, 0.94f, heavy ? 0.82f : 0.70f), heavy ? 18 : 13, heavy ? 0.54f : 0.40f);
             SpawnPromptSprite("BloodBladeStormBurst", LoadSprite(BloodBladeStormRingPath), () => MakeRingSprite("BloodBladeStormBurst", Color.white, 180), center, Quaternion.Euler(0f, 0f, elapsed * (heavy ? -72f : 160f)), heavy ? 6.35f : 5.40f, heavy ? 2.05f : 1.72f, new Color(1f, 0.08f, 0.13f, heavy ? 0.66f : 0.56f), heavy ? 0.44f : 0.32f);
             var bladeCount = heavy ? 8 : 14;
             for (int i = 0; i < bladeCount; i++)
@@ -3844,9 +3966,11 @@ namespace Lethe.PrototypeV1
             if (forward.sqrMagnitude < 0.01f) forward = lastAim.sqrMagnitude > 0.01f ? lastAim : Vector2.up;
             forward.Normalize();
             PlaySfx("execution", heavy ? 0.96f : 0.70f, 0.16f);
+            SpawnUltimateDopamineBurst(heavy ? "UltGreat_FractureExecutionOpening" : "UltDual_FractureExecutionOpening", target.transform.position, forward, heavy ? 2.55f : 1.82f, new Color(1f, 0.92f, 0.38f, heavy ? 0.78f : 0.64f), new Color(0.58f, 0.96f, 1f, heavy ? 0.50f : 0.36f), heavy ? 12 : 8, heavy ? 0.56f : 0.38f);
 
             if (heavy)
             {
+                SpawnFractureExecutionGroundSentence(target.transform.position, forward, 2.45f, true);
                 SpawnPromptSprite("UltGreat_FractureExecutionStamp", LoadSprite(UltimateFracturePath), () => MakeRingSprite("UltGreat_FractureExecutionStamp", Color.white, 180), target.transform.position, Quaternion.identity, 3.32f, 1.30f, new Color(1f, 0.90f, 0.48f, 0.78f), 0.62f);
                 SpawnEchoWoundSlash("UltGreat_FractureExecutionCleave", target.transform.position, forward, new Color(1f, 0.94f, 0.54f, 0.80f), 1.65f, 0.54f);
                 SpawnRadialSlashLines("UltGreat_FractureExecutionVerdict", target.transform.position, forward, 6, 1.18f, new Color(1f, 0.88f, 0.46f, 0.64f), 0.50f);
@@ -3867,6 +3991,7 @@ namespace Lethe.PrototypeV1
                 return;
             }
 
+            SpawnFractureExecutionGroundSentence(target.transform.position, forward, 1.72f, false);
             SpawnPromptSprite("UltDual_FractureExecutionRing", LoadSprite(UltimateFracturePath), () => MakeRingSprite("UltDual_FractureExecutionRing", Color.white, 144), target.transform.position, Quaternion.Euler(0f, 0f, elapsed * 200f), 2.30f, 0.90f, new Color(1f, 0.96f, 0.62f, 0.64f), 0.36f);
             var cutTargets = enemies.Where(e => e != null && e.IsAlive).OrderBy(e => e.HealthRatio).Take(9).ToList();
             for (int i = 0; i < cutTargets.Count; i++)
@@ -3892,6 +4017,7 @@ namespace Lethe.PrototypeV1
             {
                 var focus = FindNearestLivingEnemy(player.position);
                 var center = focus != null ? focus.transform.position : player.position;
+                SpawnUltimateClockBurst("UltGreat_StasisHuntClockBurst", center, lastAim, 3.10f, true);
                 SpawnPromptSprite("UltGreat_StasisHuntDome", LoadSprite(UltimateStasisPath), () => MakeRingSprite("UltGreat_StasisHuntDome", Color.white, 180), center, Quaternion.identity, 4.10f, 1.54f, new Color(1f, 0.74f, 0.28f, 0.66f), 1.08f);
                 SpawnStoppedSecondField(center, 2.85f, TimeStopGold(true), 1.95f, true);
                 foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(center, e.transform.position) <= 3.15f).Take(12).ToList())
@@ -3905,10 +4031,11 @@ namespace Lethe.PrototypeV1
                     DealDamage(enemy, 78f, "UltGreat StasisHunt", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 1.00f);
                 }
                 SpawnTransientSpriteScaled("UltGreat_StasisHuntSpear", MakeBoxSprite("UltGreat_StasisHuntSpear", Color.white, 8, 150), center + Vector3.up * 0.15f, Quaternion.Euler(0f, 0f, elapsed * 60f), new Vector3(0.036f, 1.08f, 1f), new Color(0.86f, 0.78f, 1f, 0.78f), 0.60f);
-                hitstopTimer = Mathf.Max(hitstopTimer, 0.060f);
+                hitstopTimer = Mathf.Max(hitstopTimer, 0.085f);
                 return;
             }
 
+            SpawnUltimateClockBurst("UltDual_StasisHuntClockBurst", player.position, lastAim, 2.26f, false);
             SpawnPromptSprite("UltDual_StasisHuntField", LoadSprite(UltimateStasisPath), () => MakeRingSprite("UltDual_StasisHuntField", Color.white, 144), player.position, Quaternion.Euler(0f, 0f, elapsed * 150f), 2.85f, 1.06f, new Color(1f, 0.78f, 0.30f, 0.60f), 0.72f);
             SpawnStoppedSecondField(player.position, 1.92f, TimeStopGold(true), 1.34f, true);
             var shotTargets = SelectHunterTargets(player.position, null, 10);
@@ -3933,6 +4060,7 @@ namespace Lethe.PrototypeV1
 
             if (heavy)
             {
+                SpawnAshenOblivionRupture(player.position, lastAim, 3.15f, true, "UltGreat_AshenOblivionRupture");
                 SpawnPromptSprite("UltGreat_AshenOblivionWave", LoadSprite(UltimateAshenOblivionPath), () => MakeRingSprite("UltGreat_AshenOblivionWave", Color.white, 180), player.position, Quaternion.identity, 4.40f, 1.66f, new Color(0.78f, 0.68f, 1f, 0.70f), 0.94f);
                 SpawnTransientSprite("UltGreat_AshenOblivionGuardBreak", MakeRingSprite("UltGreat_AshenOblivionGuardBreak", Color.white, 180), player.position, Quaternion.Euler(0f, 0f, elapsed * -80f), 2.22f, new Color(0.88f, 0.92f, 1f, 0.52f), 0.72f);
                 SpawnRadialSlashLines("UltGreat_AshenOblivionGuardBreakLine", player.position, lastAim, 6, 1.05f, new Color(0.86f, 0.76f, 1f, 0.58f), 0.48f);
@@ -3950,6 +4078,7 @@ namespace Lethe.PrototypeV1
                 return;
             }
 
+            SpawnAshenOblivionRupture(player.position, lastAim, 2.30f, false, "UltDual_AshenOblivionRupture");
             SpawnPromptSprite("UltDual_AshenOblivionGuard", LoadSprite(UltimateAshenOblivionPath), () => MakeRingSprite("UltDual_AshenOblivionGuard", Color.white, 150), player.position, Quaternion.Euler(0f, 0f, elapsed * 165f), 2.90f, 1.12f, new Color(0.82f, 0.72f, 1f, 0.58f), 0.58f);
             SpawnTransientSprite("UltDual_AshenOblivionReturnRing", MakeRingSprite("UltDual_AshenOblivionReturnRing", Color.white, 128), player.position, Quaternion.Euler(0f, 0f, elapsed * -200f), 1.24f, new Color(0.90f, 0.96f, 1f, 0.44f), 0.44f);
             ReleaseAshenGuardWave(player.position, MaxEchoLevel, storedRelease + 7f, false, "UltDual AshenOblivion stored wave");

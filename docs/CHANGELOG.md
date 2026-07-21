@@ -2,6 +2,26 @@
 
 # 2026-07-22
 
+- Added a memory / Echo / Ultimate dopamine rework:
+  - Ashen memory and Echo now use cracked guard plate, shield-break, and counter-burst reads.
+  - Oblivion memory and Echo now use void-core, brand-ring, crack, and erase-fragment reads.
+  - Blood Blade Storm opening and climax now add shock-ring, white-hot core, and orbit shard bursts.
+  - Fracture Execution now adds a ground sentence/verdict mark before the execution hit.
+  - Stasis Hunt now adds a stronger ultimate clock burst and second-hand snap.
+  - Ashen Oblivion now combines guard plate, ash wall, void break, and guard-collapse burst.
+  - Dense Dual Blades skips the newest Ashen/Oblivion ornament layers to keep dense VFX under budget.
+- Verification:
+  - Runtime C# build passed with 7 existing legacy warnings and 0 errors.
+  - Editor C# build passed with 0 warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors after final QA: `0`.
+  - Echo Matrix Dual Blades: PASS, `total=1028`, `A=110`, `O=146`.
+  - Echo Matrix Greatsword: PASS, `total=991`, `A=120`, `O=103`.
+  - Passive Memory Matrix: PASS, `blood=17`, `ash=6`, `stopped=8`, `oblivion=60`.
+  - Utility Ultimate Matrix Dual Blades: PASS, `fracture=28`, `stasis=11`, `ashen=47`.
+  - Utility Ultimate Matrix Greatsword: PASS, `fracture=49`, `stasis=26`, `ashen=12`.
+  - Dense Dual Blades Perf Matrix: PASS after dense ornament throttling, `ms=98.03`.
+
 - Fixed Blood Echo visibility after jaewoo reported it appeared once and then stopped:
   - Greatsword Blood VFX now appears even when the base Greatsword hit kills the target before Echo accent processing.
   - Dead-target Greatsword Blood is VFX-only so it does not over-kill later Echo Matrix targets.

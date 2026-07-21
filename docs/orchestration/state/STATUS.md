@@ -2,6 +2,32 @@
 
 Last updated: 2026-07-22
 
+## 2026-07-22 Update: Memory / Echo / Ultimate Dopamine Rework
+
+- jaewoo asked to rework memories, normal Echoes, and Ultimate Echoes so they produce stronger dopamine/payoff instead of feeling like size/color variants.
+- Applied in `_dev`:
+  - Ashen memory now adds a cracked guard-plate read around the player, making the passive shield feel like stored defense instead of a pale ring.
+  - Ashen Echo now adds a shield-break/counter-burst layer in normal density: Dual Blades reads as parry cuts, Greatsword reads as a cracked bulwark shock front.
+  - Oblivion memory and Echo now add a void-core, brand ring, cracks, and erase fragments so the fantasy reads as stamp -> spread -> erase.
+  - Blood Blade Storm opening/climax now gets extra white-hot core, outer shock ring, and orbit blade shards over the existing blood-vortex motif.
+  - Fracture Execution now adds a verdict/sentence ground mark before the execution hit.
+  - Stasis Hunt now adds a larger golden clock burst and second-hand snap layer for the ultimate version.
+  - Ashen Oblivion now combines guard plate, ash wall, void break, and guard-collapse burst.
+  - Dense Dual Blades suppresses the newest Ashen/Oblivion ornament layer during dense echo spam, keeping the richer normal read without blowing the perf budget.
+- Verification:
+  - Runtime C# build passed with 7 existing legacy warnings and 0 errors.
+  - Editor C# build passed with 0 warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors after final QA: `0`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=1028`, `A=110`, `O=146`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=991`, `A=120`, `O=103`.
+  - `LETHE/V1 QA/Passive Memory Matrix`: PASS, `blood=17`, `ash=6`, `stopped=8`, `oblivion=60`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: PASS, `fracture=28`, `stasis=11`, `ashen=47`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: PASS, `fracture=49`, `stasis=26`, `ashen=12`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS after dense ornament throttling, `transient=51`, `activeVfx=38`, `ms=98.03`.
+- Note:
+  - First Dense Dual run failed at `transient=170`, `activeVfx=96`, `ms=146.61`; the final patch restored dense performance by skipping non-essential Ashen/Oblivion ornament layers under dense throttle.
+
 ## 2026-07-22 Update: Blood Repeat Fix / Remaining VFX Plan
 
 - jaewoo reported that Blood Echo appears once and then stops appearing.

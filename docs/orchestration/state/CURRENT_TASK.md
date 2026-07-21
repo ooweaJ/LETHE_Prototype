@@ -1,5 +1,47 @@
 # Current Task
 
+# 2026-07-22 Memory / Echo / Ultimate Dopamine Rework
+
+## Status
+
+- Implemented, C# build-verified, Unity QA-verified, and ready for jaewoo direct-play review.
+
+## Applied Changes
+
+- Memory rework:
+  - Ashen memory now shows a cracked guard-plate/halo around the player.
+  - Oblivion memory +5 detonation now adds a void erase burst over the brand explosion.
+- Normal Echo rework:
+  - Ashen Echo adds a counter-burst layer: Dual Blades reads as parry cuts, Greatsword as a cracked shield shock front.
+  - Oblivion Echo adds void-core, brand ring, cracks, and erase fragments in normal density.
+  - Dense Dual Blades skips the newest Ashen/Oblivion ornament layer to preserve perf.
+- Ultimate Echo rework:
+  - Blood Blade Storm adds shock-ring, white-hot core, and orbit shard bursts at opening and climax.
+  - Fracture Execution adds a ground sentence/verdict mark before the execution hit.
+  - Stasis Hunt adds an ultimate clock burst and stronger second-hand snap.
+  - Ashen Oblivion combines shield plate, ash wall, void break, and guard-collapse burst.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+- Unity compilation errors: `0`.
+- Unity console errors after final QA: `0`.
+- `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=1028`, `A=110`, `O=146`.
+- `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=991`, `A=120`, `O=103`.
+- `LETHE/V1 QA/Passive Memory Matrix`: PASS, `blood=17`, `ash=6`, `stopped=8`, `oblivion=60`.
+- `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: PASS, `fracture=28`, `stasis=11`, `ashen=47`.
+- `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: PASS, `fracture=49`, `stasis=26`, `ashen=12`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `transient=51`, `activeVfx=38`, `ms=98.03`.
+
+## Remaining Gate
+
+- jaewoo direct-play review:
+  - confirm normal Ashen now reads as shield/counter, not generic white VFX;
+  - confirm normal Oblivion now reads as erase/void, not only purple marks;
+  - confirm Ultimate Echoes feel above normal Echoes in ceremony and impact;
+  - decide whether any of the new bursts are too noisy in real combat.
+
 # 2026-07-22 Blood Repeat Fix / Remaining Echo VFX Plan
 
 ## Status
