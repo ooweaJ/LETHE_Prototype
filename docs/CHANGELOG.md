@@ -2,6 +2,21 @@
 
 # 2026-07-21
 
+- Improved Dual Blades Kalmuri Echo readability:
+  - Recolored the Dual Blades Kalmuri Hunger Echo branch from bright cyan/white into dark indigo, violet-blue, and blue-edge colors.
+  - Kept the Greatsword Kalmuri branch stable.
+  - Increased the Dual Blades Kalmuri core/pulse/bite lifetimes slightly.
+  - Changed `Weapon_DualBlades.asset` Kalmuri follow-up timing from `0.035/0.012` to `0.085/0.018`.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors on the final rerun.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+  - Dense Dual Blades Perf Matrix: PASS, `ms=87.49`.
+  - Kalmuri Perf Matrix: PASS, `totalKalmuri=396`.
+  - Echo Matrix Dual Blades: PASS, `total=803`.
+  - Echo Matrix Greatsword: PASS, `total=499`.
+
 - Completed Unity QA for the spatial hash targeting optimization:
   - Unity MCP connected to LETHE on port `7890`.
   - Unity compilation errors: `0`.

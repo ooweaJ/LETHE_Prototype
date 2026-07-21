@@ -2,6 +2,28 @@
 
 Last updated: 2026-07-21
 
+## 2026-07-21 Update: Dual Blades Kalmuri Visibility Pass
+
+- jaewoo reported that Dual Blades Kalmuri Echo looked too close to the basic Dual Blades attack color, reducing readability.
+- Applied in `_dev`:
+  - `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`
+    - Recolored the Dual Blades Kalmuri Hunger Echo branch from bright cyan/white into dark indigo, violet-blue, and blue-edge colors.
+    - Kept the Greatsword Kalmuri branch visually unchanged.
+    - Slightly increased Dual Blades Kalmuri lifetimes/scale on the core pulse, bite pulls, gnaw scars, links, and secondary bite so the Echo reads as a separate memory-bite event.
+  - `LETHE/Assets/_dev/Data/Weapons/Weapon_DualBlades.asset`
+    - Moved Kalmuri follow-up timing from `0.035/0.012` to `0.085/0.018` so the Echo lands after the basic paired slash instead of visually stacking on it.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors on the final rerun.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `transient=103`, `activeVfx=81`, `ms=87.49`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS, `totalKalmuri=396`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=803`, `K=8`, `state=82`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=499`, `K=8`, `state=51`.
+- Next step:
+  - Direct-play Dual Blades + Hungry Blades/Kalmuri in normal and dense packs. The target read is: bright cyan basic slash first, then a darker indigo/violet Kalmuri bite.
+
 ## 2026-07-21 Update: Spatial Hash Unity QA Pass
 
 - Unity MCP is connected to LETHE on port `7890`.

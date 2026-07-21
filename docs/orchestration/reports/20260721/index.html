@@ -155,6 +155,13 @@
           <p>Dev_Prototype_v1는 spatial hash 최적화 이후 Unity QA까지 통과했다. Unity MCP는 LETHE 프로젝트 포트 7890에 연결됐고, 씬은 Dev_Prototype_v1로 깨끗한 상태였다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-21-02</span>
+          <h2><a href="#unit-2026-07-21-02" data-unit-link="unit-2026-07-21-02">칼무리 쌍검 가시성 개선</a></h2>
+          <p>Dev_Prototype_v1에서 쌍검 칼무리 잔향 가시성 패스를 적용했고, C# 빌드와 Unity 자동 QA가 통과했다. 아직 최종 판단은 직접 플레이로 봐야 한다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -204,6 +211,51 @@
 <li>방향: 전투 규칙은 유지하고 내부 쿼리 구조만 최적화한다.</li>
 <li>행동: spatial hash 적용 후 Unity QA로 dense combat과 Echo coverage를 확인했다.</li>
 <li>결과: 자동 QA 기준으로 최적화 패치가 통과했고, 다음 검증은 직접 플레이 감각 리뷰로 넘어갔다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-21-02" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-21-02 - 칼무리 쌍검 가시성 개선</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에서 쌍검 칼무리 잔향 가시성 패스를 적용했고, C# 빌드와 Unity 자동 QA가 통과했다. 아직 최종 판단은 직접 플레이로 봐야 한다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>쌍검 칼무리 잔향 색을 밝은 청록/흰색에서 짙은 남색, 보라청색, 파란 외곽선 계열로 분리했다.</li>
+<li>기본 쌍검 공격은 기존처럼 밝은 청록/흰색 베기로 남겼다.</li>
+<li>칼무리 후속타 타이밍을 <code>0.035/0.012</code>에서 <code>0.085/0.018</code>로 늦춰, 기본 베기 뒤에 칼무리 물림이 따라오는 리듬으로 조정했다.</li>
+<li>대검 칼무리 분기는 이번 작업에서 유지했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 최종 재실행 통과.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 통과.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Unity console errors: <code>0</code>.</li>
+<li>Dense Dual Blades Perf Matrix: PASS, <code>transient=103</code>, <code>activeVfx=81</code>, <code>ms=87.49</code>.</li>
+<li>Kalmuri Perf Matrix: PASS, <code>totalKalmuri=396</code>.</li>
+<li>Echo Matrix Dual Blades: PASS, <code>total=803</code>, <code>K=8</code>, <code>state=82</code>.</li>
+<li>Echo Matrix Greatsword: PASS, <code>total=499</code>, <code>K=8</code>, <code>state=51</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>이번 문제는 크기보다 색상군과 타이밍 겹침이 원인이라고 보고, VFX 수를 크게 늘리지 않고 기존 칼무리 쌍검 브랜치의 팔레트와 후속타 지연을 조정했다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<ul>
+<li>자동 QA는 성능과 경로가 깨지지 않았다는 근거일 뿐, 실제 가시성은 직접 플레이 판단이 필요하다.</li>
+<li>너무 어둡게 느껴지면 다음 패스에서 보라 외곽선이나 파란 엣지만 강화하는 쪽이 좋다.</li>
+</ul>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>쌍검 기본 공격은 밝은 청록/흰색으로 유지하고, 칼무리 잔향은 남색/보라청색의 어두운 물림 연출로 분리했다. 직접 플레이에서 “기본 베기 -&gt; 짧은 간격 -&gt; 칼무리 물림” 순서가 읽히는지 봐야 한다.</p>
+<h2>7. 다음 Codex 작업</h2>
+<ul>
+<li>jaewoo가 쌍검 + Hungry Blades/Kalmuri를 normal pack과 dense pack에서 직접 확인한다.</li>
+<li>여전히 약하면 한 번에 하나만 조정한다: 더 어두운 core, 더 밝은 violet edge, 더 긴 delay, 또는 dense mode 기본 slash 억제.</li>
+</ul>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 같은 색 계열의 전투 피드백이 겹치면 추가 효과가 사라진다.</li>
+<li>방향: 효과의 크기보다 색상군, 실루엣, 타이밍을 분리한다.</li>
+<li>행동: 쌍검 칼무리 잔향을 어두운 남색/보라청색 물림으로 재정의하고 후속타 타이밍을 늦췄다.</li>
+<li>결과: 자동 QA는 통과했고, 다음 단계는 인간 눈으로 가시성 개선을 판정하는 것이다.</li>
 </ul>
     </article>
       </div>

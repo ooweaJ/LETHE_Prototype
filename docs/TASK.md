@@ -1,5 +1,26 @@
 # LETHE TASK
 
+## 2026-07-21 Kalmuri Dual Blades Visibility Update
+
+- [x] Dual Blades Kalmuri Echo visibility pass completed:
+  - [x] Recolored the Dual Blades Kalmuri Hunger Echo branch from bright cyan/white into dark indigo, violet-blue, and blue-edge colors.
+  - [x] Preserved the Greatsword Kalmuri branch.
+  - [x] Increased Dual Blades Kalmuri core/pulse/bite lifetimes slightly so it reads as a separate memory-bite event.
+  - [x] Adjusted `Weapon_DualBlades.asset` Kalmuri follow-up timing from `0.035/0.012` to `0.085/0.018`.
+  - [x] `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed on the final rerun.
+  - [x] `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo` passed.
+  - [x] Unity compilation errors `0`, console errors `0`.
+  - [x] Dense Dual Blades Perf Matrix PASS, `ms=87.49`.
+  - [x] Kalmuri Perf Matrix PASS, `totalKalmuri=396`.
+  - [x] Echo Matrix Dual Blades PASS, `total=803`.
+  - [x] Echo Matrix Greatsword PASS, `total=499`.
+
+Current next:
+
+1. Direct-play Dual Blades + Hungry Blades/Kalmuri in normal and dense packs.
+2. Judge whether the bright basic slash and darker Kalmuri bite now separate clearly.
+3. If still weak, tune only one lever next: darker core, stronger violet edge, longer delay, or fewer dense-mode basic slash overlays.
+
 ## 2026-07-20 Update
 
 - [x] `Dev_Prototype_v1` runtime targeting optimization added:

@@ -14,17 +14,18 @@
 - Done:
   - jaewoo can name the exact Echo family and weapon pair that should be kept, enlarged, reduced, recolored, sped up, slowed down, or redesigned.
 
-## 2. Kalmuri Convergence Direct-Play Review
+## 2. Kalmuri / Dual Blades Visibility Direct-Play Review
 
 - Priority: urgent
-- Problem: Greatsword Kalmuri Echo timing and Dual Blades Kalmuri visibility were retuned. Automated QA passes, but only direct play can prove whether the slower ring-edge convergence reads correctly.
+- Problem: Greatsword Kalmuri Echo timing was previously retuned, and Dual Blades Kalmuri has now been recolored/timed because it looked too close to the basic Dual Blades slash. Automated QA passes, but only direct play can prove whether the Echo now reads as a separate event.
 - Build:
   - Play `Dev_Prototype_v1` with Greatsword and Hungry Blades +5.
   - Watch whether blades visibly gather from the outer ring before impact.
   - Play Dual Blades with Hungry Blades +5 in normal packs and dense packs.
-  - Judge whether the blue Kalmuri Echo remains visible without becoming visual noise.
+  - Judge whether the new dark indigo/violet Dual Blades Kalmuri bite separates from the bright white/cyan basic slash.
+  - Watch whether the slightly delayed follow-up feels readable rather than sluggish.
 - Done:
-  - jaewoo can say keep, slow further, speed back up, brighten, enlarge, or reduce dense-only effects.
+  - jaewoo can say keep, slow further, speed back up, darken, brighten, enlarge, or reduce dense-only effects.
 
 ## 3. Intro Weapon Selection Direct-Play Review
 
@@ -52,6 +53,7 @@
 
 Completed sequence:
 
+- 2026-07-21: Dual Blades Kalmuri visibility pass recolored the Kalmuri Hunger Echo into dark indigo/violet-blue, delayed Dual Blades Kalmuri follow-up timing to `0.085/0.018`, and passed Dense Dual, Kalmuri, Echo Dual, and Echo Great QA.
 - 2026-07-21: Unity MCP connected on port `7890`; spatial hash follow-up QA passed Dense Dual Blades Perf Matrix, Echo Matrix Dual Blades, and Echo Matrix Greatsword. Console and compilation errors were 0.
 - 2026-07-20: spatial hash targeting optimization added for living-enemy range queries, weapon hit collection, Echo target helpers, Void Priest healing, enemy separation, and live enemy counting. Runtime and Editor C# builds passed; Unity Play Mode QA is pending because the editor was not detected.
 - 2026-07-10: common Echo prompt/ring bodies were reduced so weapon-specific VFX become the primary read. Dual Blades now lean into needles/ticks/chains, while Greatsword leans into plates/lances/fields/walls/craters. C#/Unity checks pass and `Echo Matrix Dual Blades` menu execution succeeded.

@@ -36,6 +36,6 @@ MonoBehaviour:
   targetingMode: 0
   echoProcStyle: 0
   ultimatePattern: 0
-  followupBaseDelay: 0.035
-  followupStagger: 0.012
+  followupBaseDelay: 0.085
+  followupStagger: 0.018
   vfxProfile: {fileID: 11400000, guid: c99c419d2df27644195d50d27813610a, type: 2}

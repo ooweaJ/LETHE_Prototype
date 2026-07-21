@@ -1,5 +1,40 @@
 # LETHE TEST
 
+# 2026-07-21 Dual Blades Kalmuri Visibility Pass
+
+- Purpose:
+  - Improve readability after jaewoo reported that Dual Blades Kalmuri Echo looked too close to the basic Dual Blades attack color.
+- Applied target:
+  - `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`.
+  - `LETHE/Assets/_dev/Data/Weapons/Weapon_DualBlades.asset`.
+- Changes:
+  - Dual Blades Kalmuri Hunger Echo now uses dark indigo, violet-blue, and blue-edge colors instead of mostly cyan/white.
+  - Follow-up timing changed from `0.035/0.012` to `0.085/0.018` so the Kalmuri bite lands after the basic paired slash.
+  - Greatsword Kalmuri colors/timing were kept stable.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`.
+  - Unity `AssetDatabase.Refresh()`.
+  - Unity compilation error check.
+  - Unity console error check.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`.
+  - `LETHE/V1 QA/Kalmuri Perf Matrix`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`.
+- Results:
+  - Runtime C# build passed with 0 warnings and 0 errors on the final rerun.
+  - Editor C# build passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+  - Dense Dual Blades Perf Matrix: PASS, `hits=18`, `suppressed=15`, `transient=103`, `activeVfx=81`, `ms=87.49`.
+  - Kalmuri Perf Matrix: PASS, `totalKalmuri=396`.
+  - Echo Matrix Dual Blades: PASS, `prefix=EchoDual_`, `total=803`, `K=8`, `state=82`.
+  - Echo Matrix Greatsword: PASS, `prefix=EchoGreat_`, `total=499`, `K=8`, `state=51`.
+- Notes:
+  - The first parallel C# build attempt hit a transient DLL write lock between runtime/editor builds; rerunning runtime build alone passed cleanly.
+  - MCP polling still intermittently returned `fetch failed`, but QA results were confirmed through Unity console logs.
+  - Direct play remains the real visual gate.
+
 # 2026-07-21 Spatial Hash Unity QA Follow-up
 
 - Purpose:

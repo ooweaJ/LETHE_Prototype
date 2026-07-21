@@ -1,5 +1,39 @@
 # Current Task
 
+# 2026-07-21 Dual Blades Kalmuri Visibility Pass
+
+## Status
+
+- Implemented, C# build-verified, and Unity QA-verified.
+
+## Applied Changes
+
+- Recolored Dual Blades Kalmuri Hunger Echo VFX in `V1GameManager`:
+  - bright cyan/white reads were replaced with dark indigo, violet-blue, and blue-edge reads;
+  - the Greatsword Kalmuri branch was preserved;
+  - core pulse, blade pulls, gnaw scars, scent links, and secondary bites now last slightly longer and read more like a delayed memory-bite than another basic slash.
+- Adjusted `Weapon_DualBlades.asset`:
+  - `followupBaseDelay: 0.035 -> 0.085`;
+  - `followupStagger: 0.012 -> 0.018`.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors on the final rerun.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- Unity compilation errors: `0`.
+- Unity console errors: `0`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `transient=103`, `activeVfx=81`, `ms=87.49`.
+- `LETHE/V1 QA/Kalmuri Perf Matrix`: PASS, `totalKalmuri=396`.
+- `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=803`, `K=8`, `state=82`.
+- `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=499`, `K=8`, `state=51`.
+
+## Remaining Gate
+
+- jaewoo direct-play review:
+  - confirm the basic Dual Blades attack still reads as bright white/cyan paired slashes;
+  - confirm Kalmuri Echo now reads as a darker indigo/violet follow-up bite after the slash;
+  - check normal packs and dense packs for clutter.
+
 # 2026-07-20 Spatial Hash Targeting Optimization
 
 ## Status
