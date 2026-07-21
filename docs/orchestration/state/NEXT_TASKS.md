@@ -1,19 +1,6 @@
 # Next Tasks
 
-## 1. Spatial Hash Optimization Unity QA
-
-- Priority: urgent
-- Problem: targeting/separation optimization is C# build-clean, but Unity Play Mode QA could not run because no Unity Editor instance was detected.
-- Build:
-  - Open Unity on `Dev_Prototype_v1`.
-  - Run `LETHE/V1 QA/Dense Dual Blades Perf Matrix`.
-  - Run `LETHE/V1 QA/Echo Matrix Dual Blades`.
-  - Run `LETHE/V1 QA/Echo Matrix Greatsword`.
-  - Direct-play a dense pack and check whether target choice, Kalmuri chains, Void Priest healing, and enemy separation still feel natural.
-- Done:
-  - QA menus pass and jaewoo sees no obvious targeting regression from the spatial hash pass.
-
-## 2. Utility Echo Weapon-Identity Direct-Play Review
+## 1. Utility Echo Weapon-Identity Direct-Play Review
 
 - Priority: urgent
 - Problem: jaewoo reported that the previous weapon-specific pass still looked too similar because shared Echo prompt/ring bodies dominated the read. A follow-up pass now reduces those common bodies and makes the weapon silhouettes primary: Dual Blades use short needle/chain/tick VFX, while Greatsword uses large plate/lance/field/wall/crater reads. Automated checks pass, but direct play is still the real gate.
@@ -27,7 +14,7 @@
 - Done:
   - jaewoo can name the exact Echo family and weapon pair that should be kept, enlarged, reduced, recolored, sped up, slowed down, or redesigned.
 
-## 3. Kalmuri Convergence Direct-Play Review
+## 2. Kalmuri Convergence Direct-Play Review
 
 - Priority: urgent
 - Problem: Greatsword Kalmuri Echo timing and Dual Blades Kalmuri visibility were retuned. Automated QA passes, but only direct play can prove whether the slower ring-edge convergence reads correctly.
@@ -39,7 +26,7 @@
 - Done:
   - jaewoo can say keep, slow further, speed back up, brighten, enlarge, or reduce dense-only effects.
 
-## 4. Intro Weapon Selection Direct-Play Review
+## 3. Intro Weapon Selection Direct-Play Review
 
 - Priority: high
 - Problem: the first screen now uses generated LETHE key art behind the weapon cards, and Game View capture confirms it renders. Direct play still needs to judge whether the ceremony, contrast, and card readability feel good.
@@ -52,7 +39,7 @@
 - Done:
   - jaewoo can say keep/tune/redesign for the intro and identify the exact weak read if it misses.
 
-## 5. Greatsword Start-Smoke QA Fix
+## 4. Greatsword Start-Smoke QA Fix
 
 - Priority: high
 - Problem: `LETHE/V1 QA/Start Greatsword` invokes the run but currently fails with `liveEnemies=2` against the current start-smoke expectation.
@@ -65,6 +52,7 @@
 
 Completed sequence:
 
+- 2026-07-21: Unity MCP connected on port `7890`; spatial hash follow-up QA passed Dense Dual Blades Perf Matrix, Echo Matrix Dual Blades, and Echo Matrix Greatsword. Console and compilation errors were 0.
 - 2026-07-20: spatial hash targeting optimization added for living-enemy range queries, weapon hit collection, Echo target helpers, Void Priest healing, enemy separation, and live enemy counting. Runtime and Editor C# builds passed; Unity Play Mode QA is pending because the editor was not detected.
 - 2026-07-10: common Echo prompt/ring bodies were reduced so weapon-specific VFX become the primary read. Dual Blades now lean into needles/ticks/chains, while Greatsword leans into plates/lances/fields/walls/craters. C#/Unity checks pass and `Echo Matrix Dual Blades` menu execution succeeded.
 - 2026-07-10: weapon-specific Echo runtime pass added stronger Dual Blades stitch/mark/fan/rune reads and Greatsword crescent/fissure/guillotine/clock/bulwark/crater reads. C# and Unity compilation pass.

@@ -1,5 +1,17 @@
 # LETHE CHANGELOG
 
+# 2026-07-21
+
+- Completed Unity QA for the spatial hash targeting optimization:
+  - Unity MCP connected to LETHE on port `7890`.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=141`, `activeVfx=87`, `ms=43.11`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `prefix=EchoDual_`, `total=803`, `state=82`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `prefix=EchoGreat_`, `total=501`, `state=53`.
+- Note:
+  - MCP polling intermittently returned `fetch failed`, but PASS results were confirmed from Unity console logs.
+
 # 2026-07-20
 
 - Added a runtime targeting optimization pass to `Dev_Prototype_v1`:

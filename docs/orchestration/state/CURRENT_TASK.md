@@ -4,8 +4,7 @@
 
 ## Status
 
-- Implemented and C# build-verified.
-- Unity Play Mode QA is pending because no Unity Editor instance was detected through MCP.
+- Implemented, C# build-verified, and Unity QA-verified.
 
 ## Applied Changes
 
@@ -34,15 +33,16 @@
 - `npm run report`: passed.
 - `npm.cmd run report:check`: passed.
 - Unity MCP:
-  - `unity_editor_state` failed with no Unity Editor instances detected.
+  - 2026-07-20: `unity_editor_state` failed with no Unity Editor instances detected.
+  - 2026-07-21: connected to LETHE on port `7890`, scene `Dev_Prototype_v1`, Unity compilation errors `0`, console errors `0`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `ms=43.11`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=803`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=501`.
 
 ## Remaining Gate
 
-- Run Unity QA when the editor is open:
-  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`
-  - `LETHE/V1 QA/Echo Matrix Dual Blades`
-  - `LETHE/V1 QA/Echo Matrix Greatsword`
 - Direct-play dense packs and confirm target selection still feels the same.
+- Continue the Echo/Kalmuri direct-play review gate.
 
 # 2026-07-10 Final Gatekeeper Boss Prototype
 

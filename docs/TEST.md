@@ -1,5 +1,31 @@
 # LETHE TEST
 
+# 2026-07-21 Spatial Hash Unity QA Follow-up
+
+- Purpose:
+  - Complete the Unity QA that was pending after the spatial hash targeting optimization.
+- Unity MCP state:
+  - Project: `D:/LETHE_Prototype/LETHE`.
+  - Port: `7890`.
+  - Scene: `Dev_Prototype_v1`.
+  - Unity: `6000.3.10f1`.
+  - `isPlaying=false`, `isCompiling=false`, `sceneDirty=false`.
+- Commands / checks:
+  - Unity compilation error check.
+  - Unity console error check.
+  - `Lethe.PrototypeV1.Editor.V1SmokeTestMenu.QaDenseDualBladesPerfMatrix()`.
+  - `Lethe.PrototypeV1.Editor.V1SmokeTestMenu.QaEchoMatrixDualBlades()`.
+  - `Lethe.PrototypeV1.Editor.V1SmokeTestMenu.QaEchoMatrixGreatsword()`.
+- Results:
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+  - Dense Dual Blades Perf Matrix: PASS, `hits=18`, `suppressed=15`, `transient=141`, `activeVfx=87`, `ms=43.11`.
+  - Echo Matrix Dual Blades: PASS, `prefix=EchoDual_`, `total=803`, `state=82`.
+  - Echo Matrix Greatsword: PASS, `prefix=EchoGreat_`, `total=501`, `state=53`.
+- Notes:
+  - MCP menu/code polling intermittently returned `fetch failed`, but the QA methods executed and PASS lines were confirmed in Unity console logs.
+  - Direct play is still needed to judge whether target selection feels unchanged after the optimization.
+
 # 2026-07-20 Spatial Hash Targeting Optimization
 
 - Purpose:

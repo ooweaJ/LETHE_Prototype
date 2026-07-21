@@ -9,13 +9,15 @@
   - [x] `dotnet build LETHE/Assembly-CSharp.csproj --nologo` passed with 7 existing warnings and 0 errors.
   - [x] `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo` passed with 0 warnings and 0 errors.
   - [x] `npm run report` and `npm.cmd run report:check` passed.
-  - [ ] Unity Play Mode QA pending because no Unity Editor instance was detected through MCP.
+  - [x] Unity follow-up QA passed on 2026-07-21:
+    - [x] Dense Dual Blades Perf Matrix PASS, `ms=43.11`.
+    - [x] Echo Matrix Dual Blades PASS, `total=803`.
+    - [x] Echo Matrix Greatsword PASS, `total=501`.
 
 Current next:
 
-1. Open Unity and run Dense Dual Blades Perf Matrix plus both Echo Matrix QA menus.
-2. Direct-play dense combat and check target-selection/separation feel after the spatial hash pass.
-3. Continue the existing Echo/Kalmuri direct-play review gate after optimization QA passes.
+1. Direct-play dense combat and check target-selection/separation feel after the spatial hash pass.
+2. Continue the existing Echo/Kalmuri direct-play review gate.
 
 ## 2026-07-10 Update
 

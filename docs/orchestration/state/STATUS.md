@@ -1,6 +1,28 @@
 # Status
 
-Last updated: 2026-07-20
+Last updated: 2026-07-21
+
+## 2026-07-21 Update: Spatial Hash Unity QA Pass
+
+- Unity MCP is connected to LETHE on port `7890`.
+- Editor state:
+  - Project: `D:/LETHE_Prototype/LETHE`
+  - Scene: `Dev_Prototype_v1`
+  - Unity: `6000.3.10f1`
+  - `isPlaying=false`, `isCompiling=false`, `sceneDirty=false`
+- Verification after the spatial hash targeting optimization:
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS.
+    - `hits=18`, `suppressed=15`, `transient=141`, `activeVfx=87`, `ms=43.11`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS.
+    - `prefix=EchoDual_`, `total=803`, `K=8`, `B=83`, `Ex=171`, `H=136`, `Sh=93`, `St=56`, `A=110`, `O=146`, `state=82`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS.
+    - `prefix=EchoGreat_`, `total=501`, `K=8`, `B=31`, `Ex=96`, `H=30`, `Sh=72`, `St=40`, `A=120`, `O=104`, `state=53`.
+- Note:
+  - `unity_execute_menu_item` and some `unity_execute_code` calls intermittently returned `Error polling queue: fetch failed`, but the QA methods did execute and PASS lines were confirmed through Unity console logs.
+- Next step:
+  - Direct-play dense combat and Echo/Kalmuri review. Automated QA now clears the spatial hash pass.
 
 ## 2026-07-20 Update: Spatial Hash Targeting Optimization
 
@@ -25,7 +47,8 @@ Last updated: 2026-07-20
   - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
   - `npm run report`: passed and generated the 20260720 report page.
   - `npm.cmd run report:check`: passed.
-  - Unity MCP editor check could not run because no Unity Editor instance was detected.
+  - Unity MCP editor check could not run on 2026-07-20 because no Unity Editor instance was detected.
+  - 2026-07-21 Unity follow-up QA passed Dense Dual Blades Perf Matrix and both Echo Matrix menus.
 - Next step:
   - Open Unity and run `LETHE/V1 QA/Dense Dual Blades Perf Matrix`, `LETHE/V1 QA/Echo Matrix Dual Blades`, and `LETHE/V1 QA/Echo Matrix Greatsword`.
   - During direct play, watch for any changed target feel caused by spatial candidate ordering.
