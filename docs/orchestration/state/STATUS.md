@@ -2,6 +2,32 @@
 
 Last updated: 2026-07-22
 
+## 2026-07-22 Update: Stopped Field / Non-Circle VFX Readability Pass
+
+- jaewoo review:
+  - Stopped Second should freeze enemies that enter the space during the effect, not only enemies inside on the first pulse.
+  - The time-stop field should render above the map but behind monsters.
+  - Execution, Shatter, Oblivion, and Ashen still felt too much like circle/ring variants and needed stronger identity.
+- Applied in `_dev`:
+  - Added active Stopped fields that repeatedly apply short freeze pulses to living enemies entering the active radius during the field lifetime.
+  - Moved Stopped field/clock/dome VFX to `sortingOrder=12`, above arena tiles/details and behind enemy bodies; enemy state badges remain above monsters.
+  - Execution memory/Echo now uses a judgement/condemnation stamp: dark sentence plate, gold sentence bars, vertical blade stamp, nail core, and burst lines.
+  - Shatter memory field now reads as a down-slam ground impact with pressure slab, vertical strike, cracks, and lifted shards; shatter SFX was tuned lower/heavier.
+  - Oblivion memory/Echo now uses torn void-brand glyphs, cross strokes, tears, and fragments instead of a purple circle.
+  - Ashen memory/Echo now leans into holy ash fire: white/gold flame tongues, grey ash bed, embers, and guard plate/counter reads.
+  - Debug Echo Matrix order now triggers Hunter before Execution so forced Greatsword QA does not kill the target before Hunter state marking.
+- Verification:
+  - `dotnet build LETHE/LETHE.sln`: passed with 7 existing legacy warnings and 0 errors.
+  - Unity compilation errors after `Assets/Refresh`: `0`.
+  - `LETHE/V1 QA/Passive Memory Matrix`: PASS, `blood=17`, `ash=5`, `stopped=8`, `oblivion=180`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=1210`, `Ex=171`, `Sh=175`, `St=160`, `A=190`, `O=248`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: PASS, `fracture=51`, `stasis=27`, `ashen=75`.
+  - `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: PASS, `fracture=80`, `stasis=43`, `ashen=53`.
+  - Direct `DebugRunEchoMatrix(Greatsword)` object count confirmed new Greatsword Echo VFX spawned: `total=1240`, `execution=176`, `shatter=144`, `stoppedFields=433`, `ashen=424`, `oblivion=472`.
+  - Stopped field reflection check: `activeStoppedFields=8`; field/clock sample sorting order was `12`, while `EchoState_StoppedSecond` remained `52`.
+- Note:
+  - MCP `unity_execute_menu_item` / `unity_execute_code` intermittently returned `Error polling queue: fetch failed`; Unity console/direct manager calls confirmed execution. One menu-run Greatsword Echo Matrix result was timing-contaminated, so the direct manager object-count check is the reliable evidence for this pass.
+
 ## 2026-07-22 Update: Memory / Echo / Ultimate Dopamine Rework
 
 - jaewoo asked to rework memories, normal Echoes, and Ultimate Echoes so they produce stronger dopamine/payoff instead of feeling like size/color variants.

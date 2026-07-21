@@ -1,5 +1,51 @@
 # Current Task
 
+# 2026-07-22 Stopped Field / Non-Circle VFX Readability Pass
+
+## Status
+
+- Implemented, C# build-verified, Unity compile-verified, and partially Unity QA-verified.
+
+## Applied Changes
+
+- Stopped Second:
+  - added active stopped fields so enemies entering the field during its lifetime are also frozen;
+  - cleared active stopped fields during debug transient cleanup;
+  - moved stopped field/clock/dome render layers to map-above / monster-behind order.
+- Execution:
+  - replaced the old prompt/flash read with a judgement stamp silhouette;
+  - normal memory and Echo now share dark sentence plate, gold sentence bars, vertical blade stamp, nail core, and burst lines;
+  - Greatsword keeps the guillotine drop, while Dual Blades keeps chain cuts and sentence marks.
+- Shatter:
+  - replaced memory field ring/spoke read with down-slam ground pressure, impact core, cracks, and lifted shards;
+  - tuned `shatter` SFX lower/heavier.
+- Oblivion:
+  - replaced purple circle reads with torn void-brand glyphs, cross strokes, erased tears, and lifted fragments.
+- Ashen:
+  - shifted the concept from pale shield rings to holy ash fire;
+  - memory, guard charge, stored release, and Echo counter bursts now spawn white/gold flame tongues, grey ash bed, and embers.
+- QA support:
+  - forced Echo Matrix debug order now triggers Hunter before Execution so Greatsword Hunter state marking is not erased by forced execution kills.
+
+## Verification
+
+- `dotnet build LETHE/LETHE.sln`: passed with 7 existing legacy warnings and 0 errors.
+- Unity `Assets/Refresh`: success.
+- Unity compilation errors: `0`.
+- `LETHE/V1 QA/Passive Memory Matrix`: PASS, `blood=17`, `ash=5`, `stopped=8`, `oblivion=180`.
+- `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=1210`, `Ex=171`, `Sh=175`, `St=160`, `A=190`, `O=248`.
+- `LETHE/V1 QA/Utility Ultimate Matrix Dual Blades`: PASS, `fracture=51`, `stasis=27`, `ashen=75`.
+- `LETHE/V1 QA/Utility Ultimate Matrix Greatsword`: PASS, `fracture=80`, `stasis=43`, `ashen=53`.
+- Direct Greatsword Echo Matrix object count after `DebugRunEchoMatrix(Greatsword)`: `total=1240`, `execution=176`, `shatter=144`, `stoppedFields=433`, `ashen=424`, `oblivion=472`.
+- Stopped field reflection/layer check: `activeStoppedFields=8`; field/clock samples rendered at `sortingOrder=12`, enemy state badge remained at `52`.
+
+## Remaining Gate
+
+- jaewoo direct-play review:
+  - confirm Stopped freezes enemies that walk into the clock field;
+  - confirm field sits visually behind monsters but above the map;
+  - mark Execution / Shatter / Oblivion / Ashen as `keep`, `tune`, or `redesign` based on whether each now feels like a distinct event instead of circle VFX.
+
 # 2026-07-22 Memory / Echo / Ultimate Dopamine Rework
 
 ## Status

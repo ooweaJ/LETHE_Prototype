@@ -1,13 +1,15 @@
 # Next Tasks
 
-## 1. Dopamine VFX Direct-Play Review
+## 1. Non-Circle VFX Direct-Play Review
 
 - Priority: urgent
-- Problem: Ashen, Oblivion, and the utility Ultimate Echoes now have stronger visual ceremony, but automated QA only proves that they spawn and stay under budget.
+- Problem: Stopped, Execution, Shatter, Oblivion, and Ashen were reworked away from generic circle/ring reads, but automated QA only proves that they spawn.
 - Build:
-  - Play both weapons with Ashen + Oblivion Echoes and judge whether the concepts read as guard/counter and brand/erase.
-  - Trigger all 4 Ultimate Echo routes and judge whether they feel stronger than normal Echoes.
-  - Check Blood Blade Storm opening/climax after the added shock ring and shard burst.
+  - Check Stopped Second: enemies entering the active clock field should freeze, and the field should sit above the map but behind monsters.
+  - Check Execution: memory/Echo should read as judgement/condemnation, not a flash circle.
+  - Check Shatter: memory/Echo should read as a ground down-slam and cracks, not a ripple ring.
+  - Check Oblivion: memory/Echo should read as torn void-brand/erase marks, not a purple circle.
+  - Check Ashen: memory/Echo should read as holy ash fire plus guard/counter, not a pale shield ring.
 - Done:
   - jaewoo can mark each family `keep`, `tune`, or `redesign`, with one clear reason.
 
@@ -57,6 +59,7 @@
 
 Completed sequence:
 
+- 2026-07-22: Stopped field now freezes enemies entering the active space, stopped field/clock/dome VFX render above map and behind monsters, and Execution/Shatter/Oblivion/Ashen were reworked away from circle/ring reads into judgement stamps, ground slams, torn void brands, and holy ash fire. C# build and Unity compile passed; Passive Memory, Echo Dual, Utility Ultimate Dual/Great QA passed; Greatsword Echo was directly verified by manager object counts because MCP menu polling was unstable.
 - 2026-07-22: Blood visibility regression fixed. Greatsword Blood now appears on kill hits as VFX-only, Dense Dual Blades gets repeated lightweight Blood marks, remaining Ashen/Oblivion/Ultimate VFX direction and concept board were documented, and C#/Unity QA passed.
 - 2026-07-21: Blood / Stopped dopamine pass added a white/red Greatsword Blood vortex ring, stronger Blood hit feedback, 1-second held Stopped clock VFX, rotating second hand, and Dense Dual perf recovery. Runtime/editor builds, Unity compile, console error check, Dense Dual, Echo Dual, and Echo Great QA passed.
 - 2026-07-21: Shatter Echo was reworked into terrain/world fracture. Dual Blades now uses chained ground cracks, Greatsword now uses a large forward rupture, and Dense Dual perf was restored by suppressing extra dense identity/link VFX.

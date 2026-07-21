@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-22-03 - 정지장 판정과 원형 VFX 탈피 리워크</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-22-03 - 정지장 판정과 원형 VFX 탈피 리워크</h1>
+      <p class="meta">Generated from 2026-07-22-03-정지장-판정과-원형-vfx-탈피-리워크.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260722/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-22-03 - 정지장 판정과 원형 VFX 탈피 리워크</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에 정지장 판정/레이어 수정과 처형, 파문, 낙인, 잿빛 기억/잔향의 1차 실루엣 리워크를 적용했다. C# 빌드와 Unity 컴파일은 통과했고, 주요 자동 QA와 직접 오브젝트 카운트 검증을 완료했다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>정지 잔향:</li>
+<li>장판 생성 시점에 있던 적만 멈추던 구조를 바꿔, 장판이 살아있는 동안 그 공간에 들어온 적도 짧은 freeze pulse를 계속 받게 했다.</li>
+<li>정지장/시계/돔 VFX는 <code>sortingOrder=12</code>로 내려서 맵보다 위, 몬스터보다 뒤에 보이게 했다.</li>
+<li>적 위 상태표식은 계속 몬스터보다 위에 남긴다.</li>
+<li>처형:</li>
+<li>원형 플래시 대신 판결/처형 각인으로 변경했다.</li>
+<li>검은 sentence plate, 금색 sentence bar, 세로 칼날 stamp, nail core, burst cut을 조합했다.</li>
+<li>파문:</li>
+<li>원형 파동 대신 위에서 지역을 내리찍는 ground slam으로 변경했다.</li>
+<li>pressure slab, vertical downstroke, impact core, ground crack, lifted shard가 나오게 했다.</li>
+<li><code>shatter</code> SFX도 더 낮고 무거운 충격음 쪽으로 조정했다.</li>
+<li>낙인:</li>
+<li>보라색 원 대신 찢어진 void brand glyph로 변경했다.</li>
+<li>black tear, cross stroke, erased tear, lifted fragment로 삭제/붕괴 느낌을 강화했다.</li>
+<li>잿빛:</li>
+<li>차가운 회색 원형 보호막보다 성스러운 재불꽃 방향으로 바꿨다.</li>
+<li>white/gold flame tongue, grey ash bed, ember, guard plate/counter read를 섞었다.</li>
+<li>QA 보정:</li>
+<li>Debug Echo Matrix에서 Hunter를 Execution보다 먼저 강제 호출하게 바꿔, 대검 처형이 먼저 적을 죽여 Hunter 상태표식이 사라지는 검증 순서 문제를 줄였다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/LETHE.sln</code>: 통과, 기존 legacy warning 7개, error 0개.</li>
+<li>Unity <code>Assets/Refresh</code>: 성공.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li><code>LETHE/V1 QA/Passive Memory Matrix</code>: PASS, <code>blood=17</code>, <code>ash=5</code>, <code>stopped=8</code>, <code>oblivion=180</code>.</li>
+<li><code>LETHE/V1 QA/Echo Matrix Dual Blades</code>: PASS, <code>total=1210</code>, <code>Ex=171</code>, <code>Sh=175</code>, <code>St=160</code>, <code>A=190</code>, <code>O=248</code>.</li>
+<li><code>LETHE/V1 QA/Utility Ultimate Matrix Dual Blades</code>: PASS, <code>fracture=51</code>, <code>stasis=27</code>, <code>ashen=75</code>.</li>
+<li><code>LETHE/V1 QA/Utility Ultimate Matrix Greatsword</code>: PASS, <code>fracture=80</code>, <code>stasis=43</code>, <code>ashen=53</code>.</li>
+<li>직접 <code>DebugRunEchoMatrix(Greatsword)</code> 호출 후 카운트: <code>total=1240</code>, <code>execution=176</code>, <code>shatter=144</code>, <code>stoppedFields=433</code>, <code>ashen=424</code>, <code>oblivion=472</code>.</li>
+<li>정지장 리플렉션/레이어 확인: <code>activeStoppedFields=8</code>, 필드/시계 샘플은 <code>sortingOrder=12</code>, 적 상태표식은 <code>52</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>원형 장판은 앞으로 기본 표현이 아니라 보조 표현으로만 쓴다. 기억/잔향의 주 표현은 각자의 행동 실루엣으로 분리한다: 정지는 시계장, 처형은 판결 각인, 파문은 지면 내려찍기, 낙인은 찢어진 삭제문양, 잿빛은 성스러운 재불꽃.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>MCP <code>unity_execute_menu_item</code>와 일부 <code>unity_execute_code</code> 호출이 간헐적으로 <code>Error polling queue: fetch failed</code>를 반환했다. Unity 콘솔과 직접 매니저 호출로 실행 결과는 확인했지만, 대검 Echo Matrix 메뉴 판정은 타이밍 오염이 있어 직접 오브젝트 카운트를 근거로 남겼다. 최종 평가는 직접 플레이에서 scale, noise, timing을 봐야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Stopped Second now keeps active gameplay fields that freeze enemies entering during the field lifetime and renders field/clock VFX behind monsters. Execution, Shatter, Oblivion, and Ashen were reworked away from generic ring reads into judgement stamps, ground slams, torn void brands, and holy ash fire. Automated compile and most QA passed; Greatsword Echo Matrix should be judged with direct object counts or a clean runner due MCP polling/timing instability.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo 직접 플레이로 각 계열을 <code>keep</code>, <code>tune</code>, <code>redesign</code>으로 판정한다. 특히 정지장은 새로 들어온 적이 멈추는지, 장판이 몬스터 뒤에서 잘 읽히는지, 처형/파문/낙인/잿빛이 더 이상 원 놀이처럼 보이지 않는지를 확인한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 기능은 다른데 VFX 언어가 원형 장판으로 반복되어 개성이 약했다.</li>
+<li>방향: 색/크기 차이가 아니라 사건 실루엣을 분리한다.</li>
+<li>행동: 정지장 판정/레이어를 고치고, 처형/파문/낙인/잿빛의 기억/잔향 VFX를 별도 문법으로 재구성했다.</li>
+<li>결과: 자동 검증과 직접 카운트에서 새 VFX 생성과 레이어가 확인됐고, 이제 직접 플레이 감각 평가 단계로 넘어갈 수 있다.</li>
+</ul>
+  </main>
+</body>
+</html>
