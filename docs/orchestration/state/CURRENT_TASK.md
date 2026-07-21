@@ -1,5 +1,40 @@
 # Current Task
 
+# 2026-07-21 Hunter Echo Rework / Greatsword Blood Readability
+
+## Status
+
+- Implemented, C# build-verified, and Unity QA-verified.
+
+## Applied Changes
+
+- Greatsword Blood Echo readability:
+  - enlarged the blood-iaido radius and target cap;
+  - strengthened the red crescent stack with a shadow crescent, outer/inner crescents, second crescent pair, impact zone, bloom, radial blood petals, and longer wound cut;
+  - slightly increased hitstop and camera shake so the Echo reads as a heavy blood slash instead of a small red mark.
+- Hunter Echo weapon split:
+  - Dual Blades now throws two green spectral blades that ricochet between enemies, with bounce count scaling by Echo level;
+  - Greatsword now throws one large green greatsword forward as a piercing area attack;
+  - both variants keep the green Hunter color language so players can recognize the old tracking Echo lineage.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+- Unity compilation errors: `0`.
+- Unity console errors: `0`.
+- `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `prefix=EchoDual_`, `total=802`, `H=136`, `state=82`.
+- `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `prefix=EchoGreat_`, `total=500`, `B=31`, `H=30`, `state=51`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=109`, `activeVfx=82`, `ms=87.70`.
+
+## Remaining Gate
+
+- jaewoo direct-play review:
+  - Greatsword Blood Echo should now be visible as a larger red half-moon/blood-iaido event at the Greatsword range edge.
+  - Dual Blades Hunter Echo should read as two separate bouncing blades, not a generic green fan shot.
+  - Greatsword Hunter Echo should read as one thrown greatsword piercing through a line/area.
+  - Decide the next concept pass for Stopped, Shatter, Ashen, and Oblivion by checking whether each memory concept itself still fits.
+
 # 2026-07-21 Dual Blades Kalmuri Visibility Pass
 
 ## Status

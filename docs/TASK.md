@@ -1,5 +1,30 @@
 # LETHE TASK
 
+## 2026-07-21 Hunter Echo / Blood Readability Update
+
+- [x] Greatsword Blood Echo readability pass completed:
+  - [x] Increased Greatsword Blood Echo radius and target cap.
+  - [x] Added stronger crescent stack, shadow crescent, impact zone, blood bloom, radial petals, and longer cut line.
+  - [x] Increased Blood Echo hitstop/camera shake slightly.
+- [x] Hunter Echo weapon mechanic rework completed:
+  - [x] Dual Blades now throws two green ricochet blades.
+  - [x] Ricochet bounce count scales by Echo level, with +5 reaching the highest bounce budget.
+  - [x] Greatsword now throws a large green piercing greatsword line/area.
+  - [x] Both variants preserve green tracking/Hunter lineage.
+- [x] Verification completed:
+  - [x] Runtime C# build passed.
+  - [x] Editor C# build passed.
+  - [x] Unity compilation errors `0`, console errors `0`.
+  - [x] Echo Matrix Dual Blades PASS, `total=802`, `H=136`.
+  - [x] Echo Matrix Greatsword PASS, `total=500`, `B=31`, `H=30`.
+  - [x] Dense Dual Blades Perf Matrix PASS, `ms=87.70`.
+
+Current next:
+
+1. Direct-play Greatsword Blood, Dual Blades Hunter, and Greatsword Hunter.
+2. Keep Stopped Second mechanics but plan a premium clockwork VFX pass.
+3. Recheck Shatter, Ashen, and Oblivion from the memory concept upward before adding more size/color polish.
+
 ## 2026-07-21 Kalmuri Dual Blades Visibility Update
 
 - [x] Dual Blades Kalmuri Echo visibility pass completed:

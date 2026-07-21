@@ -2,6 +2,28 @@
 
 Last updated: 2026-07-21
 
+## 2026-07-21 Update: Hunter Echo Rework and Greatsword Blood Readability
+
+- jaewoo reported that Greatsword Blood Echo was still hard to see, and that most non-Kalmuri Echoes still risk feeling like size/color variants rather than distinct actions.
+- Applied in `_dev`:
+  - `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`
+    - Greatsword Blood Echo now has a larger blood-iaido read: bigger radius, wider target cap, stronger red crescents, shadow crescent, impact zone, blood bloom, radial blood petals, longer cut line, and slightly stronger hitstop/camera shake.
+    - Hunter Echo now has weapon-specific mechanics:
+      - Dual Blades throws two green ricochet blades that bounce between nearby enemies.
+      - Greatsword throws one large green greatsword forward as a piercing area line.
+    - Added a small runtime `V1HunterRicochetBlade` controller for the Dual Blades bounce behavior.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=802`, `H=136`, `state=82`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS, `total=500`, `B=31`, `H=30`, `state=51`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `transient=109`, `activeVfx=82`, `ms=87.70`.
+- Concept follow-up:
+  - Stopped Second can keep its mechanics, but should receive a premium clockwork VFX pass.
+  - Shatter, Ashen, and Oblivion should be rechecked from the memory concept upward before more VFX scaling. The next pass should decide whether each active memory fantasy is right, then make the Echo express that fantasy through action, not just bigger marks.
+
 ## 2026-07-21 Update: Dual Blades Kalmuri Visibility Pass
 
 - jaewoo reported that Dual Blades Kalmuri Echo looked too close to the basic Dual Blades attack color, reducing readability.

@@ -2322,18 +2322,21 @@ namespace Lethe.PrototypeV1
             var baseAngle = GreatswordSlashVfxBaseAngle(slashForward);
             var slashCenter = Vector3.Lerp(swing.TipStart, swing.TipEnd, 0.86f) + (Vector3)(slashForward * 0.16f);
             var arc = MakeWideCrescentSprite("EchoGreat_BloodIaidoThinCrescent", Color.white);
-            var radius = 1.66f + levelValue * 0.18f;
-            var targets = EchoTargetsInRadius(slashCenter, radius, 8, enemy);
+            var radius = 1.92f + levelValue * 0.24f;
+            var targets = EchoTargetsInRadius(slashCenter, radius, 10, enemy);
 
             PlaySfx("blood_mark", 0.54f, 0.12f);
-            SpawnTransientSprite("EchoGreat_BloodIaidoAfterimage", arc, slashCenter - (Vector3)(slashForward * 0.18f), Quaternion.Euler(0f, 0f, baseAngle - 5f), 0.82f, new Color(0.50f, 0.02f, 0.05f, 0.30f), 0.44f);
-            SpawnTransientSprite("EchoGreat_BloodIaidoCrescentOuter", arc, slashCenter + (Vector3)(slashForward * 0.08f), Quaternion.Euler(0f, 0f, baseAngle), 1.04f, new Color(1f, 0.04f, 0.10f, 0.82f), 0.42f);
-            SpawnTransientSprite("EchoGreat_BloodIaidoCrescentInner", arc, slashCenter - (Vector3)(slashForward * 0.18f) - (Vector3)(side * (leftBladeLead ? -0.08f : 0.08f)), Quaternion.Euler(0f, 0f, baseAngle - 2f), 0.82f, new Color(1f, 0.16f, 0.20f, 0.66f), 0.34f);
-            SpawnTransientSprite("EchoGreat_BloodIaidoCrescentSecondOuter", arc, slashCenter + (Vector3)(slashForward * 0.30f + side * 0.18f), Quaternion.Euler(0f, 0f, baseAngle + 2f), 0.96f, new Color(1f, 0.02f, 0.08f, 0.56f), 0.36f);
-            SpawnTransientSprite("EchoGreat_BloodIaidoCrescentSecondInner", arc, slashCenter + (Vector3)(slashForward * 0.12f - side * 0.16f), Quaternion.Euler(0f, 0f, baseAngle - 4f), 0.76f, new Color(1f, 0.20f, 0.24f, 0.44f), 0.30f);
-            SpawnTransientSprite("EchoGreat_BloodIaidoEdge", arc, slashCenter + (Vector3)(slashForward * 0.22f), Quaternion.Euler(0f, 0f, baseAngle + 4f), 0.58f, new Color(1f, 0.34f, 0.36f, 0.46f), 0.24f);
-            SpawnTransientSprite("EchoGreat_BloodIaidoImpactZone", MakeRingSprite("EchoGreat_BloodIaidoImpactZone", Color.white, 156), slashCenter, Quaternion.identity, radius * 0.82f, new Color(1f, 0.04f, 0.10f, 0.22f), 0.30f);
-            SpawnEchoWoundSlash("EchoGreat_BloodIaidoCutLine", slashCenter + (Vector3)(slashForward * 0.10f), slashForward, new Color(1f, 0.12f, 0.18f, 0.78f), 2.16f + levelValue * 0.10f, 0.38f);
+            SpawnTransientSprite("EchoGreat_BloodIaidoShadowCrescent", arc, slashCenter - (Vector3)(slashForward * 0.28f), Quaternion.Euler(0f, 0f, baseAngle - 7f), 1.32f, new Color(0.20f, 0.00f, 0.025f, 0.46f), 0.62f);
+            SpawnTransientSprite("EchoGreat_BloodIaidoAfterimage", arc, slashCenter - (Vector3)(slashForward * 0.18f), Quaternion.Euler(0f, 0f, baseAngle - 5f), 1.08f, new Color(0.50f, 0.02f, 0.05f, 0.42f), 0.58f);
+            SpawnTransientSprite("EchoGreat_BloodIaidoCrescentOuter", arc, slashCenter + (Vector3)(slashForward * 0.08f), Quaternion.Euler(0f, 0f, baseAngle), 1.36f, new Color(1f, 0.02f, 0.08f, 0.92f), 0.56f);
+            SpawnTransientSprite("EchoGreat_BloodIaidoCrescentInner", arc, slashCenter - (Vector3)(slashForward * 0.18f) - (Vector3)(side * (leftBladeLead ? -0.08f : 0.08f)), Quaternion.Euler(0f, 0f, baseAngle - 2f), 1.06f, new Color(1f, 0.14f, 0.18f, 0.78f), 0.46f);
+            SpawnTransientSprite("EchoGreat_BloodIaidoCrescentSecondOuter", arc, slashCenter + (Vector3)(slashForward * 0.34f + side * 0.20f), Quaternion.Euler(0f, 0f, baseAngle + 2f), 1.20f, new Color(1f, 0.01f, 0.07f, 0.68f), 0.48f);
+            SpawnTransientSprite("EchoGreat_BloodIaidoCrescentSecondInner", arc, slashCenter + (Vector3)(slashForward * 0.12f - side * 0.18f), Quaternion.Euler(0f, 0f, baseAngle - 4f), 0.98f, new Color(1f, 0.20f, 0.24f, 0.56f), 0.40f);
+            SpawnTransientSprite("EchoGreat_BloodIaidoEdge", arc, slashCenter + (Vector3)(slashForward * 0.28f), Quaternion.Euler(0f, 0f, baseAngle + 4f), 0.76f, new Color(1f, 0.34f, 0.36f, 0.58f), 0.34f);
+            SpawnTransientSprite("EchoGreat_BloodIaidoImpactZone", MakeRingSprite("EchoGreat_BloodIaidoImpactZone", Color.white, 180), slashCenter, Quaternion.identity, radius * 0.92f, new Color(1f, 0.04f, 0.10f, 0.32f), 0.44f);
+            SpawnTransientSprite("EchoGreat_BloodIaidoBloodBloom", MakeDiscSprite("EchoGreat_BloodIaidoBloodBloom", Color.white, 144), slashCenter + (Vector3)(slashForward * 0.12f), Quaternion.identity, radius * 0.24f, new Color(0.72f, 0.00f, 0.04f, 0.30f), 0.48f);
+            SpawnRadialSlashLines("EchoGreat_BloodIaidoBloodPetals", slashCenter, slashForward, 8, radius * 0.52f, new Color(1f, 0.08f, 0.12f, 0.62f), 0.42f);
+            SpawnEchoWoundSlash("EchoGreat_BloodIaidoCutLine", slashCenter + (Vector3)(slashForward * 0.10f), slashForward, new Color(1f, 0.10f, 0.16f, 0.88f), 2.70f + levelValue * 0.13f, 0.52f);
 
             foreach (var target in targets)
             {
@@ -2341,13 +2344,13 @@ namespace Lethe.PrototypeV1
                 var distanceMul = Mathf.Lerp(1f, 0.62f, Mathf.Clamp01(dir.magnitude / Mathf.Max(0.01f, radius)));
                 target.BloodMarked = true;
                 target.MarkTimer = Mathf.Max(target.MarkTimer, 2.1f + levelValue * 0.12f);
-                SpawnTransientSprite("EchoGreat_BloodIaidoHitPetal", MakeImpactDiamondSprite("EchoGreat_BloodIaidoHitPetal", Color.white), target.transform.position + Vector3.up * 0.06f, Quaternion.Euler(0f, 0f, baseAngle + dir.x * 22f), 0.24f, new Color(1f, 0.10f, 0.16f, 0.72f), 0.26f);
+                SpawnTransientSprite("EchoGreat_BloodIaidoHitPetal", MakeImpactDiamondSprite("EchoGreat_BloodIaidoHitPetal", Color.white), target.transform.position + Vector3.up * 0.06f, Quaternion.Euler(0f, 0f, baseAngle + dir.x * 22f), 0.30f, new Color(1f, 0.10f, 0.16f, 0.82f), 0.34f);
                 DealDamage(target, weapon.Damage * (0.105f + levelValue * 0.022f) * distanceMul, "Blood Echo Great iaido", false, dir.sqrMagnitude > 0.01f ? dir.normalized : slashForward, 0.34f);
             }
 
-            hitstopTimer = Mathf.Max(hitstopTimer, 0.030f);
-            cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.10f);
-            cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.052f);
+            hitstopTimer = Mathf.Max(hitstopTimer, 0.038f);
+            cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.14f);
+            cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.066f);
         }
 
         void TriggerShatterEcho(V1Enemy enemy, Vector2 forward, int hitIndex, WeaponRuntimeSpec weapon, bool force)
@@ -2484,49 +2487,88 @@ namespace Lethe.PrototypeV1
             var heavy = IsHeavyEchoWeapon(weapon);
             if (!ShouldTriggerEcho(V1MemoryId.HunterOath, levelValue, hitIndex, force)) return;
 
-            var targets = heavy
-                ? SelectHunterTargets(enemy.transform.position, enemy, 1)
-                : SelectHunterTargets(enemy.transform.position, enemy, EchoTargetLimit(V1MemoryId.HunterOath, levelValue, false));
-            if (force && targets.Count == 0) targets.Add(enemy);
             var f = EchoForward(forward);
             if (heavy)
             {
-                SpawnGreatswordHunterLanceTell(enemy.transform.position, f, levelValue);
+                SpawnGreatswordHunterPierce(enemy.transform.position, f, levelValue, weapon);
+                return;
             }
-            else
-            {
-                SpawnDualHunterFan(enemy.transform.position, f, levelValue, targets.Count);
-                SpawnDualBladeNeedleFan("EchoDual_HunterFanLockNeedles", enemy.transform.position, f, 0.68f + levelValue * 0.035f, Mathf.Clamp(targets.Count + 2, 4, 6), new Color(0.74f, 1f, 0.36f, 0.46f), 0.24f);
-            }
+
+            SpawnDualHunterRicochetBlades(enemy, f, levelValue, weapon, force);
+        }
+
+        void SpawnDualHunterRicochetBlades(V1Enemy enemy, Vector2 forward, int levelValue, WeaponRuntimeSpec weapon, bool force)
+        {
+            if (enemy == null || !enemy.IsAlive) return;
+            var f = EchoForward(forward);
+            var s = new Vector2(-f.y, f.x).normalized;
+            var bounceCount = levelValue >= 5 ? 5 : Mathf.Clamp(2 + levelValue / 2, 2, 4);
+            var damage = weapon.Damage * EchoDamageMultiplier(V1MemoryId.HunterOath, levelValue, false) * 0.82f;
+            var speed = 9.6f + levelValue * 0.42f;
+            var colorA = new Color(0.62f, 1f, 0.28f, 0.94f);
+            var colorB = new Color(0.82f, 1f, 0.38f, 0.88f);
+            var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
+
+            PlaySfx("hunter", 0.52f, 0.08f);
+            SpawnTransientSprite("EchoDual_HunterTwinLaunchRing", MakeRingSprite("EchoDual_HunterTwinLaunchRing", Color.white, 112), enemy.transform.position, Quaternion.Euler(0f, 0f, elapsed * -120f), 0.56f + levelValue * 0.035f, new Color(0.68f, 1f, 0.28f, 0.42f), 0.32f);
+            SpawnEchoLink("EchoDual_HunterTwinLaunchLineA", enemy.transform.position - (Vector3)(s * 0.26f), enemy.transform.position + (Vector3)(f * 0.58f + s * 0.18f), new Color(0.68f, 1f, 0.30f, 0.46f), 0.26f, 0.018f);
+            SpawnEchoLink("EchoDual_HunterTwinLaunchLineB", enemy.transform.position + (Vector3)(s * 0.26f), enemy.transform.position + (Vector3)(f * 0.58f - s * 0.18f), new Color(0.82f, 1f, 0.36f, 0.40f), 0.26f, 0.018f);
+
+            var firstTargets = EchoTargetsInRadius(enemy.transform.position, 2.8f + levelValue * 0.20f, 3, enemy);
+            var leftTarget = firstTargets.Count > 1 ? firstTargets[1] : enemy;
+            var rightTarget = firstTargets.Count > 2 ? firstTargets[2] : enemy;
+            SpawnHunterRicochetBlade("EchoDual_HunterLeftRicochetBlade", dualLeftWeaponSprite, enemy.transform.position - (Vector3)(s * 0.22f) + (Vector3)(f * 0.10f), leftTarget, baseAngle + 18f, speed, damage, bounceCount, colorA, -1);
+            SpawnHunterRicochetBlade("EchoDual_HunterRightRicochetBlade", dualRightWeaponSprite, enemy.transform.position + (Vector3)(s * 0.22f) + (Vector3)(f * 0.10f), rightTarget, baseAngle - 18f, speed, damage * 0.96f, bounceCount, colorB, 1);
+        }
+
+        void SpawnHunterRicochetBlade(string name, Sprite sprite, Vector3 origin, V1Enemy target, float angle, float speed, float damage, int bounces, Color color, int sideSign)
+        {
+            if (target == null || !target.IsAlive) return;
+            var go = new GameObject(name);
+            go.transform.position = origin;
+            go.transform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = sprite ?? KalmuriBladeSprite();
+            sr.color = color;
+            sr.sortingOrder = 52;
+            var scale = ScaleSpriteToWorldHeight(sr.sprite, 0.62f);
+            go.transform.localScale = Vector3.one * scale;
+            go.AddComponent<V1HunterRicochetBlade>().Configure(this, target, speed, damage, HunterEchoSource, bounces, color, sideSign);
+        }
+
+        void SpawnGreatswordHunterPierce(Vector3 origin, Vector2 forward, int levelValue, WeaponRuntimeSpec weapon)
+        {
+            var f = EchoForward(forward);
+            var s = new Vector2(-f.y, f.x).normalized;
+            var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
+            var range = 3.55f + levelValue * 0.34f;
+            var halfAngle = 18f;
+            var start = origin - (Vector3)(f * 0.46f);
+            var end = origin + (Vector3)(f * range);
+            var center = Vector3.Lerp(start, end, 0.52f);
+            var targets = EchoTargetsInCone(start, f, range + 0.48f, halfAngle, EchoTargetLimit(V1MemoryId.HunterOath, levelValue, true) + 5);
+
+            PlaySfx("hunter", 0.70f, 0.11f);
+            SpawnEchoLink("EchoGreat_HunterThrownGreatswordSpine", start, end, new Color(0.64f, 1f, 0.24f, 0.64f), 0.62f, 0.060f);
+            SpawnEchoLink("EchoGreat_HunterThrownGreatswordEdgeA", start + (Vector3)(s * 0.18f), end + (Vector3)(s * 0.26f), new Color(0.82f, 1f, 0.38f, 0.44f), 0.54f, 0.030f);
+            SpawnEchoLink("EchoGreat_HunterThrownGreatswordEdgeB", start - (Vector3)(s * 0.18f), end - (Vector3)(s * 0.26f), new Color(0.82f, 1f, 0.38f, 0.36f), 0.54f, 0.026f);
+            SpawnTransientSpriteScaled("EchoGreat_HunterThrownGreatswordWake", MakeBoxSprite("EchoGreat_HunterThrownGreatswordWake", Color.white, 18, 190), center, Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(0.22f, range * 0.56f, 1f), new Color(0.42f, 1f, 0.18f, 0.22f), 0.54f);
+            SpawnSweepingTransientSprite("EchoGreat_HunterThrownGreatsword", greatswordWeaponSprite, start, end, baseAngle - 90f, baseAngle - 90f, 0.44f, 0.64f, new Color(0.72f, 1f, 0.32f, 0.94f), 0.62f, 0.20f);
+            SpawnTransientSprite("EchoGreat_HunterPierceTargetReticle", MakeRingSprite("EchoGreat_HunterPierceTargetReticle", Color.white, 128), end, Quaternion.Euler(0f, 0f, elapsed * -100f), 0.62f + levelValue * 0.035f, new Color(0.78f, 1f, 0.34f, 0.50f), 0.42f);
+            SpawnGreatswordForwardWedge("EchoGreat_HunterPiercePressureCone", origin - (Vector3)(f * 0.24f), f, range, 30f, new Color(0.58f, 1f, 0.22f, 0.16f), 0.52f);
+
             for (int i = 0; i < targets.Count; i++)
             {
-                MarkEnemyEchoState(targets[i], V1MemoryId.HunterOath, heavy ? 1.45f : 1.15f, heavy ? 1.08f : 0.92f);
-                SpawnEchoLink(heavy ? "EchoGreat_HunterSpearLine" : "EchoDual_HunterAimLine", enemy.transform.position, targets[i].transform.position, new Color(0.72f, 1f, 0.36f, heavy ? 0.66f : 0.50f), heavy ? 0.64f : 0.46f, heavy ? 0.040f : 0.024f);
-                if (!heavy)
-                {
-                    SpawnTransientSprite("EchoDual_HunterTargetPip", MakeRingSprite("EchoDual_HunterTargetPip", Color.white, 72), targets[i].transform.position, Quaternion.Euler(0f, 0f, elapsed * 150f + i * 45f), 0.34f, new Color(0.76f, 1f, 0.34f, 0.46f), 0.30f);
-                }
-                if (heavy)
-                {
-                    SpawnHunterGreatEchoSpear(targets[i], enemy.transform.position, levelValue, weapon);
-                    var spearDir = (Vector2)(targets[i].transform.position - enemy.transform.position);
-                    var pierceTargets = EchoTargetsInCone(enemy.transform.position, spearDir.sqrMagnitude > 0.01f ? spearDir.normalized : EchoForward(forward), 2.45f + levelValue * 0.20f, 22f, 4, targets[i]);
-                    foreach (var pierce in pierceTargets)
-                    {
-                        var dir = (Vector2)(pierce.transform.position - enemy.transform.position);
-                        MarkEnemyEchoState(pierce, V1MemoryId.HunterOath, 1.25f, 1.04f);
-                        DealDamage(pierce, weapon.Damage * (0.16f + levelValue * 0.040f), "Hunter Echo Great pierce", false, dir.sqrMagnitude > 0.01f ? dir.normalized : EchoForward(forward), 0.34f);
-                    }
-                }
-                else
-                {
-                    SpawnHunterOathShot(targets[i], enemy.transform.position, i, targets.Count, 10.2f + levelValue * 0.35f, weapon.Damage * EchoDamageMultiplier(V1MemoryId.HunterOath, levelValue, false), HunterEchoSource, true);
-                    if (levelValue >= 4 && i < 3)
-                    {
-                        DealDamage(targets[i], weapon.Damage * 0.055f, "Hunter Echo Dual mark bite", false);
-                    }
-                }
+                var target = targets[i];
+                var dir = (Vector2)(target.transform.position - start);
+                MarkEnemyEchoState(target, V1MemoryId.HunterOath, 1.40f, 1.08f);
+                SpawnTransientSprite("EchoGreat_HunterPierceHitSeal", MakeRingSprite("EchoGreat_HunterPierceHitSeal", Color.white, 96), target.transform.position, Quaternion.Euler(0f, 0f, elapsed * 120f + i * 30f), 0.36f, new Color(0.76f, 1f, 0.34f, 0.58f), 0.34f);
+                DealDamage(target, weapon.Damage * (0.20f + levelValue * 0.052f) * (i == 0 ? 1f : 0.82f), "Hunter Echo Great thrown pierce", false, dir.sqrMagnitude > 0.01f ? dir.normalized : f, 0.42f);
             }
+
+            hitstopTimer = Mathf.Max(hitstopTimer, 0.030f);
+            cameraShakeTimer = Mathf.Max(cameraShakeTimer, 0.12f);
+            cameraShakeAmount = Mathf.Max(cameraShakeAmount, 0.052f);
         }
 
         void TriggerStoppedEcho(V1Enemy enemy, Vector2 forward, int hitIndex, WeaponRuntimeSpec weapon, bool force)
@@ -4747,6 +4789,19 @@ namespace Lethe.PrototypeV1
                 MarkEnemyEchoState(enemy, V1MemoryId.HunterOath, isHunterEcho ? 1.20f : 1.00f, isHunterEcho ? 1.02f : 0.92f);
                 SpawnHunterOathImpact(impactPos, damage, isHunterEcho);
             }
+        }
+
+        public void HunterRicochetImpact(Vector3 from, V1Enemy target, int bounceIndex, Color color)
+        {
+            if (target == null) return;
+            var pos = target.transform.position;
+            var dir = (Vector2)(pos - from);
+            var f = dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up;
+            var scale = 0.38f + Mathf.Min(4, bounceIndex) * 0.035f;
+            SpawnEchoLink("EchoDual_HunterRicochetTrail", from, pos, new Color(color.r, color.g, color.b, 0.46f), 0.24f, 0.020f);
+            SpawnTransientSprite("EchoDual_HunterRicochetPing", MakeRingSprite("EchoDual_HunterRicochetPing", Color.white, 96), pos, Quaternion.Euler(0f, 0f, elapsed * -140f + bounceIndex * 38f), scale, new Color(color.r, color.g, color.b, 0.56f), 0.30f);
+            SpawnEchoWoundLine("EchoDual_HunterRicochetCut", pos + Vector3.up * 0.04f, f, new Color(color.r, color.g, color.b, 0.66f), 0.62f + bounceIndex * 0.035f, 0.24f);
+            MarkEnemyEchoState(target, V1MemoryId.HunterOath, 1.18f, 0.92f);
         }
 
         public V1Enemy FindNearestLivingEnemy(Vector3 origin, V1Enemy exclude = null)
@@ -8968,6 +9023,88 @@ namespace Lethe.PrototypeV1
             {
                 manager.ProjectileHit(target, damage, source);
                 Destroy(gameObject);
+            }
+        }
+    }
+
+    public sealed class V1HunterRicochetBlade : MonoBehaviour
+    {
+        V1GameManager manager;
+        V1Enemy target;
+        float speed;
+        float damage;
+        string source;
+        int remainingHits;
+        int bounceIndex;
+        int sideSign;
+        float life;
+        Color color;
+        Vector3 lastPosition;
+
+        public void Configure(V1GameManager manager, V1Enemy target, float speed, float damage, string source, int hitCount, Color color, int sideSign)
+        {
+            this.manager = manager;
+            this.target = target;
+            this.speed = speed;
+            this.damage = damage;
+            this.source = source;
+            this.color = color;
+            this.sideSign = sideSign == 0 ? 1 : sideSign;
+            remainingHits = Mathf.Max(1, hitCount);
+            bounceIndex = 0;
+            life = 2.4f;
+            lastPosition = transform.position;
+        }
+
+        void Update()
+        {
+            if (V1GameManager.GameplayPaused || V1GameManager.HitstopActive) return;
+            life -= Time.deltaTime;
+            if (life <= 0f || manager == null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            if (target == null || !target.IsAlive)
+            {
+                target = manager.FindNearestLivingEnemy(transform.position, target);
+            }
+            if (target == null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            lastPosition = transform.position;
+            var dir = target.transform.position - transform.position;
+            if (dir.sqrMagnitude > 0.0001f)
+            {
+                var wobble = Quaternion.Euler(0f, 0f, Mathf.Sin(Time.time * 18f + sideSign * 0.7f) * 8f * sideSign) * dir.normalized;
+                transform.position += wobble * speed * Time.deltaTime;
+                transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f + sideSign * 8f);
+            }
+
+            if (dir.magnitude < 0.20f)
+            {
+                manager.HunterRicochetImpact(lastPosition, target, bounceIndex, color);
+                manager.ProjectileHit(target, damage, source);
+                remainingHits--;
+                bounceIndex++;
+                if (remainingHits <= 0)
+                {
+                    Destroy(gameObject);
+                    return;
+                }
+
+                var previous = target;
+                target = manager.FindNearestLivingEnemy(transform.position, previous);
+                damage *= 0.82f;
+                speed *= 1.03f;
+                if (target == null)
+                {
+                    Destroy(gameObject);
+                }
             }
         }
     }

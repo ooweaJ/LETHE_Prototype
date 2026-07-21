@@ -2,6 +2,23 @@
 
 # 2026-07-21
 
+- Reworked Hunter Echo and improved Greatsword Blood Echo readability:
+  - Greatsword Blood Echo now has a larger blood-iaido crescent stack, shadow crescent, impact zone, blood bloom, radial blood petals, longer wound cut, and stronger hit feedback.
+  - Dual Blades Hunter Echo now throws two green ricochet blades that bounce between enemies.
+  - Greatsword Hunter Echo now throws one large green greatsword forward as a piercing area attack.
+  - Added `V1HunterRicochetBlade` runtime behavior for the bouncing Dual Blades projectiles.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+  - Echo Matrix Dual Blades: PASS, `total=802`, `H=136`, `state=82`.
+  - Echo Matrix Greatsword: PASS, `total=500`, `B=31`, `H=30`, `state=51`.
+  - Dense Dual Blades Perf Matrix: PASS, `ms=87.70`.
+- Concept follow-up:
+  - Stopped Second should get a premium clockwork VFX pass.
+  - Shatter, Ashen, and Oblivion should be reviewed from the memory concept upward before another VFX-only pass.
+
 - Improved Dual Blades Kalmuri Echo readability:
   - Recolored the Dual Blades Kalmuri Hunger Echo branch from bright cyan/white into dark indigo, violet-blue, and blue-edge colors.
   - Kept the Greatsword Kalmuri branch stable.

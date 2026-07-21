@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260721\\index.md",
-  "generatedAt": "2026-07-21T06:24:47.925Z",
-  "unitCount": 2,
+  "generatedAt": "2026-07-21T07:00:53.445Z",
+  "unitCount": 3,
   "latest": {
-    "title": "2026-07-21-02 - 칼무리 쌍검 가시성 개선",
-    "number": "02",
-    "markdownPath": "docs\\orchestration\\reports\\20260721\\units\\2026-07-21-02-칼무리-쌍검-가시성-개선.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260721\\units\\2026-07-21-02-칼무리-쌍검-가시성-개선.html"
+    "title": "2026-07-21-03 - 칼무리 쌍검 가시성 개선",
+    "number": "03",
+    "markdownPath": "docs\\orchestration\\reports\\20260721\\units\\2026-07-21-03-칼무리-쌍검-가시성-개선.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260721\\units\\2026-07-21-03-칼무리-쌍검-가시성-개선.html"
   }
 }

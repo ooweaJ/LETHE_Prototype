@@ -1,5 +1,36 @@
 # LETHE TEST
 
+# 2026-07-21 Hunter Echo / Greatsword Blood Readability Pass
+
+- Purpose:
+  - Improve Greatsword Blood Echo readability after jaewoo reported it was hard to see.
+  - Rework Hunter Echo into a weapon-specific action instead of another generic tracking VFX.
+- Applied target:
+  - `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`.
+- Changes:
+  - Greatsword Blood Echo now uses a larger blood-iaido crescent stack, impact zone, bloom, radial blood petals, longer wound cut, larger radius, and stronger hit feedback.
+  - Dual Blades Hunter Echo now throws two green ricochet blades that bounce between enemies.
+  - Greatsword Hunter Echo now throws one large green greatsword forward as a piercing area attack.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`.
+  - Unity compilation error check.
+  - Unity console error check.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`.
+- Results:
+  - Runtime C# build passed with 0 warnings and 0 errors.
+  - Editor C# build passed with 0 warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors: `0`.
+  - Echo Matrix Dual Blades: PASS, `prefix=EchoDual_`, `total=802`, `K=8`, `H=136`, `state=82`.
+  - Echo Matrix Greatsword: PASS, `prefix=EchoGreat_`, `total=500`, `K=8`, `B=31`, `H=30`, `state=51`.
+  - Dense Dual Blades Perf Matrix: PASS, `hits=18`, `suppressed=15`, `transient=109`, `activeVfx=82`, `ms=87.70`.
+- Notes:
+  - MCP menu polling intermittently returned `fetch failed`, but each QA menu produced PASS lines in Unity console logs.
+  - Direct play remains required for visual taste: the automated matrix proves coverage, not whether the new Echo identity feels good.
+
 # 2026-07-21 Dual Blades Kalmuri Visibility Pass
 
 - Purpose:

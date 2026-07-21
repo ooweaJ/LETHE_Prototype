@@ -1,4 +1,4 @@
-# 2026-07-21-01 - Spatial Hash Unity QA 통과
+# 2026-07-21-02 - Spatial Hash Unity QA 통과
 
 ## 1. 현재 빌드 상태
 
