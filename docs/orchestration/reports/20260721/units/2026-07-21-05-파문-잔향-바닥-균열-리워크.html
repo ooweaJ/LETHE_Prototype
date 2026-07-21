@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-21-05 - 파문 잔향 바닥 균열 리워크</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-21-05 - 파문 잔향 바닥 균열 리워크</h1>
+      <p class="meta">Generated from 2026-07-21-05-파문-잔향-바닥-균열-리워크.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260721/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-21-05 - 파문 잔향 바닥 균열 리워크</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에 파문 잔향 리워크가 적용됐다. 자동 QA 기준으로 쌍검/대검 Echo Matrix와 Dense Dual Blades Perf Matrix가 모두 통과했다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>파문 잔향 컨셉을 원형 파동/침 형태에서 바닥 균열, 지형 파괴 쪽으로 재정리했다.</li>
+<li>쌍검 파문은 대상 아래에 짧은 연쇄 바닥 균열이 생기는 방식으로 바꿨다.</li>
+<li>대검 파문은 전방으로 큰 균열이 뻗고, 중심 균열/가지 균열/파편이 생기는 방식으로 바꿨다.</li>
+<li>Dense Dual Blades에서는 파문/잿빛의 추가 identity burst/link VFX를 줄여 성능 예산을 회복했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과, 기존 legacy warning 7개, 오류 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 통과, warning 0개, 오류 0개.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li><code>Dense Dual Blades Perf Matrix</code>: PASS, <code>transient=97</code>, <code>activeVfx=81</code>, <code>ms=93.74</code>.</li>
+<li><code>Echo Matrix Dual Blades</code>: PASS, <code>total=1027</code>, <code>Sh=175</code>, <code>stateSh=12</code>.</li>
+<li><code>Echo Matrix Greatsword</code>: PASS, <code>total=742</code>, <code>Sh=144</code>, <code>stateSh=3</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>파문 잔향은 &quot;충격파&quot;보다 &quot;세계/바닥이 갈라지는 기억&quot;으로 보는 방향이 더 낫다. 색은 기존 청록 계열을 유지하되, 무기별 실루엣을 쌍검은 짧은 연쇄 균열, 대검은 전방 대균열로 나눈다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>자동 QA는 VFX 생성량과 상태 마크를 확인하지만, 바닥 균열이 실제 플레이 중 적/무기/카메라 흔들림 사이에서 얼마나 명확한지는 직접 플레이로 봐야 한다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Shatter Echo was reworked into terrain fracture. Dual Blades now uses chained ground cracks under targets. Greatsword now uses one large forward rupture. Dense Dual performance was restored by suppressing extra identity/link VFX in dense throttle.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>다음 리워크 대상은 잿빛이다. 컨셉은 저장된 방어력, 반격 압력, 방패/재벽 쪽으로 먼저 고정하고 그 다음 쌍검/대검 VFX를 나누는 방식이 좋다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 파문 잔향이 다른 잔향과 구분되는 행동 실루엣이 약했다.</li>
+<li>방향: 크기 차이가 아니라 기억 판타지 자체를 바닥 균열로 재정의했다.</li>
+<li>행동: 쌍검은 연쇄 균열, 대검은 전방 대균열로 구현하고 dense 성능 예산을 별도로 보호했다.</li>
+<li>결과: 자동 QA 기준으로 가시성 카운트와 dense 성능이 모두 통과했다.</li>
+</ul>
+  </main>
+</body>
+</html>

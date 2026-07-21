@@ -2,6 +2,25 @@
 
 Last updated: 2026-07-21
 
+## 2026-07-21 Update: Shatter Echo Ground Fracture Rework
+
+- Applied in `_dev`:
+  - Shatter Echo concept was moved away from generic rings/needles into terrain/world fracture.
+  - Dual Blades Shatter now reads as short chained ground cracks under targets instead of a small needle/ripple variant.
+  - Greatsword Shatter now reads as a large forward ground rupture with a spine crack, glow, branch cracks, and ground shards.
+  - Dense Dual Blades keeps Shatter/Ashen state application and damage, but suppresses extra identity burst/link VFX to protect the perf budget.
+  - Dense QA now clears transient debug VFX before starting, so previous matrix runs do not contaminate the active VFX count.
+- Verification:
+  - Runtime C# build passed with 7 existing legacy warnings and 0 errors.
+  - Editor C# build passed with 0 warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `transient=97`, `activeVfx=81`, `ms=93.74`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=1027`, `Sh=175`, `stateSh=12`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`: PASS on rerun, `total=742`, `Sh=144`, `stateSh=3`.
+- Next concept rework:
+  - Ashen should be handled next as stored guard/counter-pressure.
+  - Oblivion should follow as brand spread/erase.
+
 ## 2026-07-21 Update: Stopped/Hunter Readability Follow-up
 
 - jaewoo follow-up review:

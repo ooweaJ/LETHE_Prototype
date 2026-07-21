@@ -1,5 +1,28 @@
 # LETHE TASK
 
+## 2026-07-21 Shatter Echo Ground Fracture Rework
+
+- [x] Shatter concept rework completed:
+  - [x] Reframed Shatter as terrain/world fracture.
+  - [x] Dual Blades Shatter now uses chained ground cracks under targets.
+  - [x] Greatsword Shatter now uses a forward ground rupture with branch cracks and shards.
+  - [x] Removed the old Greatsword Shatter ring/wedge/fan-like read.
+  - [x] Added dense-only suppression for Shatter/Ashen identity burst/link extras.
+  - [x] Dense perf matrix now clears transient debug VFX before setup.
+- [x] Verification completed:
+  - [x] Runtime C# build passed.
+  - [x] Editor C# build passed.
+  - [x] Unity compilation errors `0`.
+  - [x] Dense Dual Blades Perf Matrix PASS, `ms=93.74`.
+  - [x] Echo Matrix Dual Blades PASS, `Sh=175`.
+  - [x] Echo Matrix Greatsword PASS, `Sh=144`.
+
+Current next:
+
+1. Direct-play Shatter with both weapons and judge whether it reads as ground fracture.
+2. Start Ashen concept rework as stored guard/counter-pressure.
+3. Rework Oblivion after Ashen as brand spread/erase.
+
 ## 2026-07-21 Stopped / Hunter Readability Finish
 
 - [x] Dual Blades Stopped Echo visibility improved:

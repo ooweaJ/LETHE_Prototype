@@ -1,5 +1,42 @@
 # Current Task
 
+# 2026-07-21 Shatter Echo Ground Fracture Rework
+
+## Status
+
+- Implemented, C# build-verified, Unity QA-verified, and report-documented.
+
+## Applied Changes
+
+- Reframed Shatter Echo as terrain/world fracture instead of another ring/needle size variant.
+- Dual Blades Shatter:
+  - changed the read to chained ground cracks under hit targets;
+  - retained short target-chain behavior;
+  - keeps dense-mode state/damage while suppressing extra identity burst VFX.
+- Greatsword Shatter:
+  - replaced the old ring/wedge/fan-like read with a forward ground rupture;
+  - added rupture spine, glow, core crack, branch cracks, ground shards, and per-target ground breaks;
+  - narrowed the cone read so it feels like a directed fissure rather than a fan.
+- Dense QA support:
+  - Shatter/Ashen dense branches now avoid extra identity burst/link VFX;
+  - dense perf matrix clears transient debug VFX before setup to avoid contaminated active counts.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+- Unity compilation errors: `0`.
+- `LETHE/V1 QA/Dense Dual Blades Perf Matrix`: PASS, `hits=18`, `suppressed=15`, `transient=97`, `activeVfx=81`, `ms=93.74`.
+- `LETHE/V1 QA/Echo Matrix Dual Blades`: PASS, `total=1027`, `Sh=175`, `stateSh=12`.
+- `LETHE/V1 QA/Echo Matrix Greatsword`: PASS on rerun, `total=742`, `Sh=144`, `stateSh=3`.
+
+## Remaining Gate
+
+- jaewoo direct-play review:
+  - confirm Dual Blades Shatter reads as ground cracks, not another blade fan;
+  - confirm Greatsword Shatter reads as a large forward fissure/rupture;
+  - decide whether Ashen should be the next rework target as stored guard/counter-pressure.
+
 # 2026-07-21 Stopped / Hunter Readability Finish
 
 ## Status

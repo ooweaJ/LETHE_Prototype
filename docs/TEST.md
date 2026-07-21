@@ -1,5 +1,37 @@
 # LETHE TEST
 
+# 2026-07-21 Shatter Echo Ground Fracture Rework
+
+- Purpose:
+  - Move Shatter Echo away from generic ring/needle VFX and into a clear terrain/world fracture fantasy.
+  - Preserve Dense Dual Blades performance after adding richer Shatter visuals.
+- Applied target:
+  - `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`.
+- Changes:
+  - Dual Blades Shatter now spawns chained ground cracks under targets outside dense throttle.
+  - Greatsword Shatter now spawns a forward rupture spine, glow, core crack, branch cracks, shards, and ground breaks.
+  - Dense Dual Blades suppresses extra Shatter/Ashen identity burst/link VFX while keeping state application and damage.
+  - Dense perf matrix clears transient debug VFX before setup.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`.
+  - Unity `AssetDatabase.Refresh()`.
+  - Unity compilation error check.
+  - `LETHE/V1 QA/Dense Dual Blades Perf Matrix`.
+  - `LETHE/V1 QA/Echo Matrix Dual Blades`.
+  - `LETHE/V1 QA/Echo Matrix Greatsword`.
+- Results:
+  - Runtime C# build passed with 7 existing legacy warnings and 0 errors.
+  - Editor C# build passed with 0 warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Dense Dual Blades Perf Matrix: PASS, `hits=18`, `suppressed=15`, `transient=97`, `activeVfx=81`, `ms=93.74`.
+  - Echo Matrix Dual Blades: PASS, `total=1027`, `Sh=175`, `stateSh=12`.
+  - Echo Matrix Greatsword: PASS on rerun, `total=742`, `Sh=144`, `stateSh=3`.
+- Notes:
+  - The first Dense Dual run failed after the richer Shatter pass; dense-only burst/link suppression restored the matrix to `ms=93.74`.
+  - The first Greatsword Echo Matrix run failed from a zero-live-enemy setup snapshot; rerun passed with the expected Shatter counts.
+  - MCP menu polling still intermittently returned `fetch failed`, but PASS/FAIL was confirmed through Unity console logs.
+
 # 2026-07-21 Stopped / Hunter Readability Follow-up
 
 - Purpose:

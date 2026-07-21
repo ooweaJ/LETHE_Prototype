@@ -2,6 +2,19 @@
 
 # 2026-07-21
 
+- Reworked Shatter Echo into a terrain/world fracture concept:
+  - Dual Blades Shatter now reads as chained ground cracks under targets.
+  - Greatsword Shatter now reads as a forward ground rupture with branch cracks, glow, shards, and per-target ground breaks.
+  - Dense Dual Blades suppresses extra Shatter/Ashen identity burst/link VFX while keeping gameplay state and damage.
+  - Dense perf matrix now clears transient debug VFX before setup.
+- Verification:
+  - Runtime C# build passed with 7 existing legacy warnings and 0 errors.
+  - Editor C# build passed with 0 warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Dense Dual Blades Perf Matrix: PASS, `ms=93.74`.
+  - Echo Matrix Dual Blades: PASS, `total=1027`, `Sh=175`.
+  - Echo Matrix Greatsword: PASS, `total=742`, `Sh=144`.
+
 - Finished the Stopped/Hunter readability follow-up:
   - Dual Blades Hunter ricochet blades are larger (`0.62 -> 0.82` target height).
   - Dual Blades Hunter now spawns immediate ricochet preview marks/links so the thrown blade path reads clearly.

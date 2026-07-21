@@ -1,22 +1,19 @@
 # Next Tasks
 
-## 1. Shatter / Ashen / Oblivion Concept Rework
+## 1. Ashen / Oblivion Concept Rework
 
 - Priority: urgent
-- Problem: Kalmuri, Blood, Hunter, and Stopped now have clearer weapon-specific directions. Shatter, Ashen, and Oblivion still need concept-up review so they stop feeling like color/size variants.
+- Problem: Kalmuri, Blood, Hunter, Stopped, and Shatter now have clearer weapon-specific directions. Ashen and Oblivion still need concept-up review so they stop feeling like color/size variants.
 - Build:
   - Play `Dev_Prototype_v1` with both Greatsword and Dual Blades.
-  - Rework Shatter first as terrain/world fracture:
-    - Dual Blades: short chained ground cracks under targets.
-    - Greatsword: large forward fissure rupture.
-  - Rework Ashen second as stored guard/counter-pressure:
+  - Rework Ashen next as stored guard/counter-pressure:
     - Dual Blades: enemy-side parry spark into quick counter cut.
     - Greatsword: ash wall / shield face into heavy counter wave.
-  - Rework Oblivion third as mark/spread/erase:
+  - Rework Oblivion after that as mark/spread/erase:
     - Dual Blades: brand hop between targets.
     - Greatsword: large brand stamp into collapse/erase.
 - Done:
-  - Each of Shatter, Ashen, and Oblivion has a readable active-memory fantasy, Echo action fantasy, and weapon-specific VFX/action split.
+  - Ashen and Oblivion each has a readable active-memory fantasy, Echo action fantasy, and weapon-specific VFX/action split.
 
 ## 2. Kalmuri / Dual Blades Visibility Direct-Play Review
 
@@ -57,6 +54,7 @@
 
 Completed sequence:
 
+- 2026-07-21: Shatter Echo was reworked into terrain/world fracture. Dual Blades now uses chained ground cracks, Greatsword now uses a large forward rupture, and Dense Dual perf was restored by suppressing extra dense identity/link VFX.
 - 2026-07-21: Stopped/Hunter follow-up made Dual Blades Stopped visible with clockwork/second-hand VFX, enlarged Dual Blades Hunter blades, removed the Greatsword Hunter cone sector, added ricochet preview marks, and restored Dense Dual perf to PASS.
 - 2026-07-21: Greatsword Blood Echo readability increased with larger blood-iaido crescents, bloom, petals, and impact feedback. Hunter Echo was reworked so Dual Blades throw two green ricochet blades and Greatsword throws one green piercing greatsword. Runtime/editor builds and Dual/Great Echo Matrix plus Dense Dual QA passed.
 - 2026-07-21: Dual Blades Kalmuri visibility pass recolored the Kalmuri Hunger Echo into dark indigo/violet-blue, delayed Dual Blades Kalmuri follow-up timing to `0.085/0.018`, and passed Dense Dual, Kalmuri, Echo Dual, and Echo Great QA.

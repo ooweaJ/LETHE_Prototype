@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260721\\index.md",
-  "generatedAt": "2026-07-21T08:05:35.793Z",
-  "unitCount": 4,
+  "generatedAt": "2026-07-21T13:18:41.450Z",
+  "unitCount": 5,
   "latest": {
-    "title": "2026-07-21-04 - 정지/추적 마무리와 남은 잔향 컨셉 계획",
-    "number": "04",
-    "markdownPath": "docs\\orchestration\\reports\\20260721\\units\\2026-07-21-04-정지-추적-마무리와-남은-잔향-컨셉-계획.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260721\\units\\2026-07-21-04-정지-추적-마무리와-남은-잔향-컨셉-계획.html"
+    "title": "2026-07-21-05 - 파문 잔향 바닥 균열 리워크",
+    "number": "05",
+    "markdownPath": "docs\\orchestration\\reports\\20260721\\units\\2026-07-21-05-파문-잔향-바닥-균열-리워크.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260721\\units\\2026-07-21-05-파문-잔향-바닥-균열-리워크.html"
   }
 }
