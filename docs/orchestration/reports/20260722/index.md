@@ -233,3 +233,56 @@ jaewoo 직접 플레이로 정지, 처형, 파문, 낙인, 잿빛을 각각 `kee
 - 방향: 각 잔향을 대표 실루엣과 행동 문법으로 구분한다.
 - 행동: 시계 인장, 판결 인장, 지면 내려찍기, 찢어진 낙인, 성화 모티브를 절차 스프라이트로 만들고 실제 호출부에 연결했다.
 - 결과: 자동 검증과 Play Mode smoke에서 오류 없이 생성되며, 다음 단계는 직접 플레이 감각 튜닝으로 좁혀졌다.
+# 2026-07-22-05 - 고품질 비트맵 VFX 텍스처 적용
+
+## 1. 현재 빌드 상태
+
+`Dev_Prototype_v1`에 고품질 비트맵 VFX 텍스처 6종을 적용했다. 이제 혈반, 정지, 처형, 파문, 낙인, 잿빛 계열은 단순 원/절차 도형이 아니라 실제 이미지 질감이 들어간 대표 실루엣을 우선 사용한다.
+
+## 2. 오늘 바뀐 것
+
+- 혈반: 레퍼런스 이미지와 가까운 붉은/흰색 원형 칼날 소용돌이 텍스처를 만들고 대검 혈반 및 피의 칼폭풍에 연결했다.
+- 정지: 금색 시계, 로마 숫자, 얼음 파편, 초침이 보이는 HQ 시계 텍스처를 정지 기억/잔향에 연결했다.
+- 처형: 판결문/단두대/검 낙인처럼 보이는 HQ 처형 텍스처를 연결했다.
+- 파문: 위에서 찍어누른 충격, 얼음빛 파편, 갈라진 지면 텍스처를 연결했다.
+- 낙인: 찢어진 보라색 void 각인 텍스처를 연결했다.
+- 잿빛: 성스러운 흰색/금색 재의 불꽃과 방패 실루엣 텍스처를 연결했다.
+- 쌍검 정지 잔향은 반복 발동 때 화면을 너무 덮지 않도록 HQ 시계 크기와 알파를 낮췄다.
+
+## 3. VFX 예시
+
+![HQ VFX 텍스처 시트](../../evidence/2026-07-22-hq-vfx-texture-contact-sheet.png)
+
+## 4. 테스트 결과와 근거
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: 통과, 기존 legacy warning 7개, error 0개.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: 통과, warning 0개, error 0개.
+- Unity compilation errors: `0`.
+- Unity console errors after Play Mode HQ QA: `0`.
+- `DebugPreviewAllUtilityVfx()`: `activeSprites=768`, `hqLike=20`.
+- `DebugRunEchoMatrix(DualBlades)`: 8개 잔향 `+5`, `hqLike=161`, 캡처 저장.
+- `DebugRunEchoMatrix(Greatsword)`: 8개 잔향 `+5`, `hqLike=155`, 캡처 저장.
+- `DebugRunDenseDualBladePerfMatrix()`: `hits=18`, `suppressed=15`, `transient=113`, `ms=25.07`.
+
+## 5. 결정한 것
+
+이번 패스부터 기억/잔향의 대표 이미지는 절차 도형이 아니라 HQ 비트맵 텍스처를 기준으로 잡는다. 절차 VFX는 완전히 버리지 않고 타이밍, 타격선, 보조 링처럼 게임적인 움직임을 보강하는 용도로만 둔다.
+
+## 6. 문제 또는 리스크
+
+이미지 품질은 올라갔지만, 모든 잔향을 동시에 터뜨리는 디버그 매트릭스에서는 화면이 과밀하다. 특히 대검 매트릭스는 궁극기급 연출들이 한 장면에 겹쳐서 실제 플레이 감각보다 훨씬 과장되어 보인다. 다음 판단은 개별 발동 상태의 직접 플레이 기준으로 해야 한다.
+
+## 7. GPT/Claude 인계 요약
+
+HQ bitmap VFX pass is implemented. Blood Vortex, Stopped Clock, Execution Judgement, Shatter Slam, Oblivion Brand, and Ashen Holy Fire were generated, chroma-keyed, imported as Unity sprites, and wired into `V1GameManager` memory/Echo/Ultimate motif paths. Compile and console checks passed. Next review should tune scale/alpha/lifetime per effect in direct play, not all-on debug matrices.
+
+## 8. 다음 Codex 작업
+
+직접 플레이로 각 효과를 `keep`, `tune`, `redesign`으로 판정한다. 우선순위는 혈반 레퍼런스 만족도, 정지 시계 판독성, 처형/파문/낙인/잿빛의 개별 실루엣 판독성, 그리고 대검/쌍검별 화면 과밀도 조절이다.
+
+## 9. 포트폴리오 메모: 문제, 방향, 행동, 결과
+
+- 문제: 잔향이 기능적으로는 달라도 화면에서는 낮은 퀄리티의 원/도형 조합처럼 보였다.
+- 방향: 각 기억과 잔향마다 한눈에 읽히는 고품질 대표 이미지를 먼저 세우고, 절차 VFX는 보조 레이어로 낮춘다.
+- 행동: 6종 HQ 텍스처를 생성, 투명화, Unity 스프라이트 임포트, 런타임 연결, Play Mode 캡처 검증까지 완료했다.
+- 결과: 레퍼런스에 가까운 혈반 소용돌이와 시계/처형/파문/낙인/잿빛의 고품질 모티브가 게임 화면에 실제로 들어갔다.

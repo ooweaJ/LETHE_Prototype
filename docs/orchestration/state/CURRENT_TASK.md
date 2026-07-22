@@ -1,5 +1,51 @@
 # Current Task
 
+# 2026-07-22 HQ Bitmap VFX Texture Pass
+
+## Status
+
+- Implemented, C# build-verified, Unity compile-verified, Play Mode smoke-verified, and ready for jaewoo direct-play taste review.
+
+## Goal
+
+Move the latest memory/Echo/Ultimate VFX from low-detail procedural motif sprites toward reference-quality bitmap art, especially matching the red/white Blood vortex reference direction.
+
+## Applied Changes
+
+- Generated and imported HQ transparent bitmap sprites:
+  - Blood Vortex
+  - Stopped Clock
+  - Execution Judgement
+  - Shatter Slam
+  - Oblivion Brand
+  - Ashen Holy Fire
+- Added runtime sprite copies for memory, Echo, and Ultimate folders under `LETHE/Assets/_dev/Art/Sprites/`.
+- Rewired `V1GameManager` motif sprite paths so HQ art is the primary asset and procedural sprites are fallbacks/support layers.
+- Added HQ Blood Blade Storm ring usage to Greatsword Blood Echo and Blood Blade Storm ultimate beats.
+- Tuned repeated Stopped clock motifs so Dual Blades uses smaller/lighter HQ clocks while Greatsword/Ultimate keeps the larger clock identity.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+- Unity compilation errors: `0`.
+- Unity console errors after Play Mode QA: `0`.
+- `DebugPreviewAllUtilityVfx()`: `activeSprites=768`, `hqLike=20`.
+- `DebugRunEchoMatrix(DualBlades)`: all 8 Echoes at `+5`, tuned camera capture saved, `hqLike=161`.
+- `DebugRunEchoMatrix(Greatsword)`: all 8 Echoes at `+5`, tuned camera capture saved, `hqLike=155`.
+- `DebugRunDenseDualBladePerfMatrix()`: `hits=18`, `suppressed=15`, `transient=113`, `ms=25.07`.
+- Evidence captured:
+  - `docs/orchestration/evidence/2026-07-22-hq-vfx-texture-contact-sheet.png`
+  - `docs/orchestration/evidence/2026-07-22-hq-vfx-dual-echo-matrix-tuned.png`
+  - `docs/orchestration/evidence/2026-07-22-hq-vfx-great-echo-matrix-tuned.png`
+
+## Remaining Gate
+
+- jaewoo direct-play review:
+  - confirm whether Blood now feels close enough to the reference image;
+  - check whether Stopped / Execution / Shatter / Oblivion / Ashen read as premium art rather than procedural shape effects;
+  - tune individual scale/alpha/lifetime in normal combat because all-on debug matrices are deliberately overpacked.
+
 # 2026-07-22 Procedural Motif VFX Rework
 
 ## Status

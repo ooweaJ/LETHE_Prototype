@@ -1,5 +1,43 @@
 # LETHE TEST
 
+# 2026-07-22 HQ Bitmap VFX Texture Pass
+
+- Purpose:
+  - Replace the latest low-detail procedural VFX read with high-quality bitmap sprites close to jaewoo's Blood vortex reference direction.
+  - Confirm the HQ assets are imported, wired into runtime motif paths, visible in Play Mode, and free of compile/console errors.
+- Applied target:
+  - `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`.
+  - `LETHE/Assets/_dev/Art/Source/spr_hq_*_chroma.png`.
+  - `LETHE/Assets/_dev/Art/Sprites/**/spr_*_hq_01.png`.
+- Changes:
+  - Generated Blood Vortex, Stopped Clock, Execution Judgement, Shatter Slam, Oblivion Brand, and Ashen Holy Fire source images.
+  - Chroma-keyed them into transparent Unity sprites.
+  - Set imported sprites to Sprite/Single, alpha transparency, no mipmaps, bilinear, uncompressed, PPU 100.
+  - Rewired memory, Echo, and Ultimate motif calls to use the HQ assets first.
+  - Tuned repeated Stopped clock scale/alpha for Dual Blades after Play Mode capture review.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`.
+  - Unity `AssetDatabase.Refresh()`.
+  - Unity compilation error check.
+  - Unity console error check.
+  - Play Mode `DebugPreviewAllUtilityVfx()`.
+  - Play Mode `DebugRunEchoMatrix(DualBlades)` with synchronous camera capture.
+  - Play Mode `DebugRunEchoMatrix(Greatsword)` with synchronous camera capture.
+  - Play Mode `DebugRunDenseDualBladePerfMatrix()` reflection read.
+- Results:
+  - Runtime C# build passed with 7 existing legacy warnings and 0 errors.
+  - Editor C# build passed with 0 warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors after Play Mode HQ QA: `0`.
+  - Utility preview: `activeSprites=768`, `hqLike=20`.
+  - Dual Blades Echo Matrix: all 8 Echoes at `+5`, `hqLike=161`.
+  - Greatsword Echo Matrix: all 8 Echoes at `+5`, `hqLike=155`.
+  - Dense Dual Blades Perf Matrix: `hits=18`, `suppressed=15`, `transient=113`, `ms=25.07`.
+  - Evidence screenshots saved under `docs/orchestration/evidence/`.
+- Notes:
+  - The HQ texture sheet is now strong, but all-on Echo Matrix captures are intentionally overpacked. Direct play should tune normal-combat scale/noise before the next VFX expansion.
+
 # 2026-07-22 Procedural Motif VFX Rework
 
 - Purpose:

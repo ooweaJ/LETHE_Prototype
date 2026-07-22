@@ -1,16 +1,17 @@
 # Next Tasks
 
-## 1. Motif VFX Direct-Play / Noise Review
+## 1. HQ Bitmap VFX Direct-Play / Scale Review
 
 - Priority: urgent
-- Problem: Stopped, Execution, Shatter, Oblivion, and Ashen now have detailed procedural motif silhouettes, but debug all-on captures are intentionally overpacked and only direct play can judge taste.
+- Problem: Stopped, Execution, Shatter, Oblivion, Ashen, and Blood now use high-detail bitmap motifs, but debug all-on captures are intentionally overpacked and only direct play can judge taste.
 - Build:
-  - Check Stopped: ornate clock seal should remain visible during the freeze without hiding monsters.
+  - Check Blood: Greatsword Blood and Blood Blade Storm should feel close to the red/white vortex reference.
+  - Check Stopped: HQ clock should remain visible during the freeze without hiding monsters.
   - Check Execution: judgement/guillotine stamp should be the first read, with old flash/ring language only supporting it.
-  - Check Shatter: down-slam and ground cracks should be the first read, not a ripple.
-  - Check Oblivion: torn void-brand should be legible without becoming just purple clutter.
+  - Check Shatter: HQ down-slam/ice-fracture art should read as impact, not a generic cyan burst.
+  - Check Oblivion: torn void-brand should be legible without becoming purple clutter.
   - Check Ashen: holy ash fire should read as sacred fire/guard/counter, not pale shield noise.
-  - If noisy, tune scale, alpha, lifetime, and spawn count before adding any new mechanics.
+  - Tune scale, alpha, lifetime, and layer counts per effect before adding any new mechanics.
 - Done:
   - jaewoo can mark each family `keep`, `tune`, or `redesign`, with one clear reason.
 
@@ -60,6 +61,7 @@
 
 Completed sequence:
 
+- 2026-07-22: HQ bitmap VFX texture pass implemented. Blood Vortex, Stopped Clock, Execution Judgement, Shatter Slam, Oblivion Brand, and Ashen Holy Fire sprites were generated, chroma-keyed, imported as Unity sprites, wired into memory/Echo/Ultimate motif paths, and verified with C# builds plus Unity Play Mode captures. Console and compilation errors were 0.
 - 2026-07-22: Procedural motif VFX rework implemented from the approved silhouette board. Stopped/Execution/Shatter/Oblivion/Ashen now have primary generated motif sprites, previews and weapon-specific Echoes use those motifs, Unity compile/console errors are 0, and preview/dual/great evidence screenshots were saved.
 - 2026-07-22: Stopped field now freezes enemies entering the active space, stopped field/clock/dome VFX render above map and behind monsters, and Execution/Shatter/Oblivion/Ashen were reworked away from circle/ring reads into judgement stamps, ground slams, torn void brands, and holy ash fire. C# build and Unity compile passed; Passive Memory, Echo Dual, Utility Ultimate Dual/Great QA passed; Greatsword Echo was directly verified by manager object counts because MCP menu polling was unstable.
 - 2026-07-22: Blood visibility regression fixed. Greatsword Blood now appears on kill hits as VFX-only, Dense Dual Blades gets repeated lightweight Blood marks, remaining Ashen/Oblivion/Ultimate VFX direction and concept board were documented, and C#/Unity QA passed.

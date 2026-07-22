@@ -2,6 +2,32 @@
 
 Last updated: 2026-07-22
 
+## 2026-07-22 Update: HQ Bitmap VFX Texture Pass
+
+- jaewoo called out that the implemented VFX still felt low quality compared with the blood-vortex reference image.
+- Applied in `_dev`:
+  - Generated high-detail transparent bitmap VFX sprites for Blood Vortex, Stopped Clock, Execution Judgement, Shatter Slam, Oblivion Brand, and Ashen Holy Fire.
+  - Saved source chroma images under `LETHE/Assets/_dev/Art/Source/` and runtime transparent sprites under `LETHE/Assets/_dev/Art/Sprites/`.
+  - Rewired `V1GameManager` motif paths so memory previews, normal Echoes, weapon-specific Echoes, and utility Ultimate support layers use the HQ sprite assets first, with procedural motifs only as fallback/support.
+  - Added HQ Blood Blade Storm ring usage to Greatsword Blood Echo and Blood Blade Storm opening/climax.
+  - Reduced Stopped clock HQ motif scale/alpha for repeated Dual Blades triggers while keeping the Greatsword/Ultimate clock as the large representative read.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing legacy warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 0 warnings and 0 errors.
+  - Unity compilation errors after `AssetDatabase.Refresh`: `0`.
+  - Unity console errors after Play Mode HQ VFX QA: `0`.
+  - `DebugPreviewAllUtilityVfx()`: `activeSprites=768`, `hqLike=20`.
+  - `DebugRunEchoMatrix(DualBlades)` synchronous camera capture: all 8 Echoes at `+5`, `hqLike=161`.
+  - `DebugRunEchoMatrix(Greatsword)` synchronous camera capture: all 8 Echoes at `+5`, `hqLike=155`.
+  - `DebugRunDenseDualBladePerfMatrix()`: `hits=18`, `suppressed=15`, `transient=113`, `ms=25.07`, console errors `0`.
+- Evidence:
+  - `docs/orchestration/evidence/2026-07-22-hq-vfx-texture-contact-sheet.png`
+  - `docs/orchestration/evidence/2026-07-22-hq-vfx-unity-preview.png`
+  - `docs/orchestration/evidence/2026-07-22-hq-vfx-dual-echo-matrix-tuned.png`
+  - `docs/orchestration/evidence/2026-07-22-hq-vfx-great-echo-matrix-tuned.png`
+- Remaining gate:
+  - The texture quality now matches the intended high-detail direction much better, but all-on debug matrices are intentionally overpacked. Next direct-play work should tune per-effect scale, alpha, lifetime, and layer count so the HQ art reads premium without becoming visual noise.
+
 ## 2026-07-22 Update: Procedural Motif VFX Rework
 
 - jaewoo approved the memory/echo/weapon silhouette board direction and asked to implement detailed VFX from that motif.

@@ -1,5 +1,35 @@
 # LETHE TASK
 
+## 2026-07-22 HQ Bitmap VFX Texture Pass
+
+- [x] Reference-quality bitmap VFX pass completed:
+  - [x] Blood Vortex generated close to the red/white circular slash reference.
+  - [x] Stopped Clock generated with ornate clock, Roman numerals, gold frame, and frozen-glass accents.
+  - [x] Execution Judgement generated as guillotine/verdict stamp art.
+  - [x] Shatter Slam generated as a down-slam ground rupture.
+  - [x] Oblivion Brand generated as a torn void/rune mark.
+  - [x] Ashen Holy Fire generated as sacred ash flame/ward art.
+- [x] Runtime integration completed:
+  - [x] transparent sprites imported under `_dev/Art/Sprites`;
+  - [x] source chroma images preserved under `_dev/Art/Source`;
+  - [x] memory/Echo/Ultimate motif paths now prefer HQ bitmap sprites;
+  - [x] procedural motif sprites remain as fallback/support layers;
+  - [x] repeated Dual Blades Stopped clock scale/alpha tuned down after first capture review.
+- [x] Verification completed:
+  - [x] Runtime C# build passed.
+  - [x] Editor C# build passed.
+  - [x] Unity compilation errors `0`.
+  - [x] Unity console errors `0`.
+  - [x] Play Mode utility preview showed HQ sprites active.
+  - [x] Dual Blades and Greatsword Echo Matrix captures saved.
+  - [x] Dense Dual Blades perf reflection run completed without console errors.
+
+Current next:
+
+1. Direct-play individual HQ effects in normal combat.
+2. Tune each family scale/alpha/lifetime from the player camera, especially all-on overpacked cases.
+3. Keep the HQ bitmap motifs as the visual baseline unless jaewoo marks a family `redesign`.
+
 ## 2026-07-22 Procedural Motif VFX Rework
 
 - [x] Approved silhouette-board direction implemented:

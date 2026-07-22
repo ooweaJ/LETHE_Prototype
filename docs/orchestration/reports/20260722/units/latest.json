@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260722\\index.md",
-  "generatedAt": "2026-07-22T08:15:12.087Z",
-  "unitCount": 4,
+  "generatedAt": "2026-07-22T09:04:24.388Z",
+  "unitCount": 5,
   "latest": {
-    "title": "2026-07-22-04 - 절차형 모티브 VFX 리워크",
-    "number": "04",
-    "markdownPath": "docs\\orchestration\\reports\\20260722\\units\\2026-07-22-04-절차형-모티브-vfx-리워크.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260722\\units\\2026-07-22-04-절차형-모티브-vfx-리워크.html"
+    "title": "2026-07-22-05 - 고품질 비트맵 VFX 텍스처 적용",
+    "number": "05",
+    "markdownPath": "docs\\orchestration\\reports\\20260722\\units\\2026-07-22-05-고품질-비트맵-vfx-텍스처-적용.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260722\\units\\2026-07-22-05-고품질-비트맵-vfx-텍스처-적용.html"
   }
 }

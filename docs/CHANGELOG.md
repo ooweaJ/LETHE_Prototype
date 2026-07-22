@@ -2,6 +2,23 @@
 
 # 2026-07-22
 
+- Added a high-quality bitmap VFX texture pass:
+  - Generated and imported HQ sprites for Blood Vortex, Stopped Clock, Execution Judgement, Shatter Slam, Oblivion Brand, and Ashen Holy Fire.
+  - Chroma-keyed the generated source images into transparent Unity sprites and imported them as Sprite/Single assets.
+  - Rewired memory, Echo, weapon-specific Echo, and utility Ultimate motif paths so the HQ sprites are the primary read, with procedural sprites retained as fallback/support.
+  - Added HQ Blood Vortex ring usage to Greatsword Blood Echo and Blood Blade Storm beats.
+  - Tuned repeated Dual Blades Stopped clock scale/alpha after Play Mode capture review.
+- Verification:
+  - Runtime C# build passed with 7 existing legacy warnings and 0 errors.
+  - Editor C# build passed with 0 warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors after Play Mode HQ QA: `0`.
+  - `DebugPreviewAllUtilityVfx()`: `hqLike=20`.
+  - `DebugRunEchoMatrix(DualBlades)`: `hqLike=161`.
+  - `DebugRunEchoMatrix(Greatsword)`: `hqLike=155`.
+  - `DebugRunDenseDualBladePerfMatrix()`: `hits=18`, `suppressed=15`, `transient=113`, `ms=25.07`.
+  - Evidence screenshots saved under `docs/orchestration/evidence/`.
+
 - Implemented the approved procedural motif VFX rework:
   - Stopped now has an ornate generated clock seal motif.
   - Execution now uses generated judgement/guillotine stamp motifs.

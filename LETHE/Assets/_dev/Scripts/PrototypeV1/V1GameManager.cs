@@ -175,19 +175,20 @@ namespace Lethe.PrototypeV1
         const string KalmuriLaunchBladePath = "Assets/_dev/Art/Sprites/Echoes/Kalmuri/spr_kalmuri_launch_blade_01.png";
         const string HitSparkCyanPath = "Assets/_dev/Art/Sprites/Feedback/spr_hit_spark_cyan_01.png";
         const string HitSparkRedPath = "Assets/_dev/Art/Sprites/Feedback/spr_hit_spark_red_01.png";
-        const string MemoryExecutionPath = "Assets/_dev/Art/Sprites/Memories/Execution/spr_execution_flash_01.png";
+        const string MemoryExecutionPath = "Assets/_dev/Art/Sprites/Memories/Execution/spr_execution_judgement_hq_01.png";
         const string MemoryHunterPath = "Assets/_dev/Art/Sprites/Memories/Homing/spr_homing_shot_01.png";
-        const string MemoryShatterPath = "Assets/_dev/Art/Sprites/Memories/Shockwave/spr_shockwave_ring_01.png";
-        const string MemoryStoppedPath = "Assets/_dev/Art/Sprites/Memories/TimeStop/spr_timestop_field_01.png";
-        const string MemoryAshenPath = "Assets/_dev/Art/Sprites/Memories/Ashen/spr_ashen_shield_01.png";
-        const string MemoryBrandPath = "Assets/_dev/Art/Sprites/Memories/Brand/spr_brand_mark_01.png";
-        const string EchoExecutionPath = "Assets/_dev/Art/Sprites/Echoes/Execution/spr_execution_burst_01.png";
+        const string MemoryShatterPath = "Assets/_dev/Art/Sprites/Memories/Shockwave/spr_shatter_slam_hq_01.png";
+        const string MemoryStoppedPath = "Assets/_dev/Art/Sprites/Memories/TimeStop/spr_timestop_clock_hq_01.png";
+        const string MemoryAshenPath = "Assets/_dev/Art/Sprites/Memories/Ashen/spr_ashen_holy_fire_hq_01.png";
+        const string MemoryBrandPath = "Assets/_dev/Art/Sprites/Memories/Brand/spr_oblivion_brand_hq_01.png";
+        const string EchoExecutionPath = "Assets/_dev/Art/Sprites/Echoes/Execution/spr_execution_judgement_hq_01.png";
         const string EchoHunterPath = "Assets/_dev/Art/Sprites/Echoes/Homing/spr_homing_echo_01.png";
-        const string EchoShatterPath = "Assets/_dev/Art/Sprites/Echoes/Shockwave/spr_shockwave_echo_01.png";
-        const string EchoStoppedPath = "Assets/_dev/Art/Sprites/Echoes/TimeStop/spr_timestop_echo_01.png";
-        const string EchoAshenPath = "Assets/_dev/Art/Sprites/Echoes/Ashen/spr_ashen_echo_01.png";
-        const string EchoBrandPath = "Assets/_dev/Art/Sprites/Echoes/Brand/spr_brand_echo_01.png";
-        const string BloodBladeStormRingPath = "Assets/_dev/Art/Sprites/Ultimates/spr_blood_blade_storm_ring_01.png";
+        const string EchoShatterPath = "Assets/_dev/Art/Sprites/Echoes/Shockwave/spr_shatter_slam_hq_01.png";
+        const string EchoStoppedPath = "Assets/_dev/Art/Sprites/Echoes/TimeStop/spr_timestop_clock_hq_01.png";
+        const string EchoAshenPath = "Assets/_dev/Art/Sprites/Echoes/Ashen/spr_ashen_holy_fire_hq_01.png";
+        const string EchoBrandPath = "Assets/_dev/Art/Sprites/Echoes/Brand/spr_oblivion_brand_hq_01.png";
+        const string BloodVortexPath = "Assets/_dev/Art/Sprites/Echoes/Blood/spr_blood_vortex_hq_01.png";
+        const string BloodBladeStormRingPath = "Assets/_dev/Art/Sprites/Ultimates/spr_blood_blade_storm_ring_hq_01.png";
         const string BloodBladeStormBladePath = "Assets/_dev/Art/Sprites/Ultimates/spr_blood_blade_storm_blade_01.png";
         const string UltimateFracturePath = "Assets/_dev/Art/Sprites/Ultimates/spr_fracture_execution_01.png";
         const string UltimateStasisPath = "Assets/_dev/Art/Sprites/Ultimates/spr_stasis_hunt_01.png";
@@ -1579,13 +1580,13 @@ namespace Lethe.PrototypeV1
             var prefix = echo ? "ShatterEchoSlam" : "ShatterWaveSlam";
             var impact = echo ? new Color(0.56f, 0.94f, 1f, 0.66f) : new Color(0.74f, 1f, 1f, 0.78f);
             var shadow = echo ? new Color(0.02f, 0.14f, 0.18f, 0.34f) : new Color(0.03f, 0.16f, 0.20f, 0.42f);
-            var motif = MakeShatterSlamMotifSprite($"{prefix}_Motif", echo, !echo);
             var crack = MakeBoxSprite($"{prefix}_Crack", Color.white, 9, 160);
             var shard = MakeImpactDiamondSprite($"{prefix}_Shard", Color.white);
             var slab = MakeBoxSprite($"{prefix}_PressurePlate", Color.white, 48, 104);
             var downstroke = MakeBoxSprite($"{prefix}_Downstroke", Color.white, echo ? 14 : 18, echo ? 156 : 190);
 
-            SpawnTransientSprite($"{prefix}_GroundSlamMotif", motif, center + Vector3.up * 0.04f, Quaternion.identity, radius * (echo ? 0.56f : 0.70f), new Color(1f, 1f, 1f, echo ? 0.82f : 0.96f), lifetime);
+            var motifScale = radius * (echo ? 0.56f : 0.70f);
+            SpawnMotifPromptSprite($"{prefix}_GroundSlamMotif", V1MemoryId.ShatterWave, echo, () => MakeShatterSlamMotifSprite($"{prefix}_Motif", echo, !echo), center + Vector3.up * 0.04f, Quaternion.identity, motifScale * 2.56f, motifScale, new Color(1f, 1f, 1f, echo ? 0.82f : 0.96f), lifetime);
             SpawnTransientSpriteScaled($"{prefix}_ImpactShadow", slab, center, Quaternion.Euler(0f, 0f, elapsed * 8f), new Vector3(radius * 0.74f, radius * 0.42f, 1f), shadow, lifetime * 0.92f);
             SpawnTransientSpriteScaled($"{prefix}_Downstroke", downstroke, center + Vector3.up * (0.22f + radius * 0.05f), Quaternion.identity, new Vector3(echo ? 0.09f : 0.12f, radius * 0.86f, 1f), new Color(0.90f, 1f, 1f, echo ? 0.70f : 0.82f), lifetime * 0.55f);
             SpawnTransientSprite($"{prefix}_ImpactCore", shard, center, Quaternion.Euler(0f, 0f, 45f + elapsed * 120f), radius * 0.22f, impact, lifetime * 0.48f);
@@ -1652,7 +1653,8 @@ namespace Lethe.PrototypeV1
         void SpawnStoppedEchoClamp(Vector3 center, float radius, float lifetime)
         {
             var color = TimeStopGold(false);
-            SpawnHeldTransientSprite("StoppedEchoClampSealMotif", MakeStoppedClockSealSprite("StoppedEchoClampSealMotif", false), center, Quaternion.Euler(0f, 0f, elapsed * -28f), radius * 0.58f, new Color(1f, 1f, 1f, 0.72f), lifetime, 0.82f);
+            var motifScale = radius * 0.58f;
+            SpawnHeldMotifPromptSprite("StoppedEchoClampSealMotif", V1MemoryId.StoppedSecond, true, () => MakeStoppedClockSealSprite("StoppedEchoClampSealMotif", false), center, Quaternion.Euler(0f, 0f, elapsed * -28f), motifScale * 2.56f, motifScale, new Color(1f, 1f, 1f, 0.72f), lifetime, 0.82f);
             SpawnHeldTransientSprite("StoppedEchoClampRing", MakeRingSprite("StoppedEchoClampRing", Color.white, 132), center, Quaternion.Euler(0f, 0f, elapsed * -110f), radius, new Color(color.r, color.g, color.b, 0.72f), lifetime, 0.82f);
             SpawnHeldTransientSprite("StoppedEchoClampCore", MakeImpactDiamondSprite("StoppedEchoClampCore", Color.white), center, Quaternion.Euler(0f, 0f, elapsed * 160f), 0.24f, new Color(1f, 0.86f, 0.28f, 0.72f), lifetime, 0.82f);
             var tick = MakeBoxSprite("StoppedEchoClampTick", Color.white, 7, 48);
@@ -1678,12 +1680,12 @@ namespace Lethe.PrototypeV1
             var scale = (echo ? 0.76f : 0.92f) + levelValue * 0.035f + (rupture ? 0.22f : 0f);
             var violet = rupture ? new Color(0.94f, 0.48f, 1f, 0.84f) : new Color(0.86f, 0.40f, 1f, echo ? 0.70f : 0.78f);
             var voidInk = rupture ? new Color(0.10f, 0.00f, 0.18f, 0.56f) : new Color(0.08f, 0.00f, 0.16f, 0.42f);
-            var motif = MakeOblivionBrandMotifSprite($"{prefix}_Motif", echo, rupture);
             var tear = MakeBoxSprite($"{prefix}_VoidTear", Color.white, 16, 124);
             var slash = MakeBoxSprite($"{prefix}_BrokenStroke", Color.white, 7, 112);
             var shard = MakeImpactDiamondSprite($"{prefix}_Shard", Color.white);
 
-            SpawnTransientSprite($"{prefix}_TornBrandMotif", motif, center + (Vector3)(f * 0.04f), Quaternion.Euler(0f, 0f, baseAngle - 90f), scale * (rupture ? 0.74f : 0.62f), new Color(1f, 1f, 1f, rupture ? 0.96f : 0.84f), lifetime);
+            var motifScale = scale * (rupture ? 0.74f : 0.62f);
+            SpawnMotifPromptSprite($"{prefix}_TornBrandMotif", V1MemoryId.OblivionBrand, echo, () => MakeOblivionBrandMotifSprite($"{prefix}_Motif", echo, rupture), center + (Vector3)(f * 0.04f), Quaternion.Euler(0f, 0f, baseAngle - 90f), motifScale * 2.24f, motifScale, new Color(1f, 1f, 1f, rupture ? 0.96f : 0.84f), lifetime);
             SpawnTransientSpriteScaled($"{prefix}_BlackTear", tear, center + (Vector3)(f * 0.03f), Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(0.12f * scale, 0.74f * scale, 1f), voidInk, lifetime);
             SpawnTransientSpriteScaled($"{prefix}_CrossStrokeA", slash, center + (Vector3)(s * 0.10f), Quaternion.Euler(0f, 0f, baseAngle - 38f), new Vector3(0.030f * scale, 0.68f * scale, 1f), violet, lifetime * 0.88f);
             SpawnTransientSpriteScaled($"{prefix}_CrossStrokeB", slash, center - (Vector3)(s * 0.11f), Quaternion.Euler(0f, 0f, baseAngle + 42f), new Vector3(0.026f * scale, 0.58f * scale, 1f), new Color(violet.r, violet.g, violet.b, violet.a * 0.76f), lifetime * 0.82f);
@@ -2184,13 +2186,13 @@ namespace Lethe.PrototypeV1
             var shadow = execute ? new Color(0.24f, 0.14f, 0.02f, 0.34f) : new Color(0.18f, 0.12f, 0.02f, 0.22f);
             var gold = execute ? new Color(1f, 0.93f, 0.38f, 0.88f) : new Color(1f, 0.84f, 0.28f, 0.54f);
             var white = execute ? new Color(1f, 1f, 0.86f, 0.92f) : new Color(1f, 0.96f, 0.62f, 0.58f);
-            var motif = MakeExecutionJudgementMotifSprite($"{prefix}_Motif", echo, execute);
             var plate = MakeBoxSprite($"{prefix}_JudgementPlate", Color.white, 38, 118);
             var bar = MakeBoxSprite($"{prefix}_SentenceBar", Color.white, 8, 120);
             var blade = MakeBoxSprite($"{prefix}_BladeStamp", Color.white, 12, 166);
             var mark = MakeImpactDiamondSprite($"{prefix}_Nail", Color.white);
 
-            SpawnTransientSprite($"{prefix}_JudgementMotif", motif, center + (Vector3)(f * 0.05f), Quaternion.Euler(0f, 0f, baseAngle - 90f), scale * (execute ? 0.72f : 0.54f), new Color(1f, 1f, 1f, execute ? 0.98f : 0.72f), lifetime);
+            var motifScale = scale * (execute ? 0.72f : 0.54f);
+            SpawnMotifPromptSprite($"{prefix}_JudgementMotif", V1MemoryId.ExecutionFlash, echo, () => MakeExecutionJudgementMotifSprite($"{prefix}_Motif", echo, execute), center + (Vector3)(f * 0.05f), Quaternion.Euler(0f, 0f, baseAngle - 90f), motifScale * 1.92f, motifScale, new Color(1f, 1f, 1f, execute ? 0.98f : 0.72f), lifetime);
             SpawnTransientSpriteScaled($"{prefix}_BlackSentencePlate", plate, center + (Vector3)(f * 0.03f), Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(0.34f * scale, 0.72f * scale, 1f), shadow, lifetime);
             SpawnTransientSpriteScaled($"{prefix}_VerticalBladeStamp", blade, center + (Vector3)(f * 0.07f), Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(0.060f * scale, 1.12f * scale, 1f), white, lifetime);
             SpawnTransientSpriteScaled($"{prefix}_SentenceBarA", bar, center + (Vector3)(s * 0.18f * scale), Quaternion.Euler(0f, 0f, baseAngle + 4f), new Vector3(0.036f * scale, 0.66f * scale, 1f), gold, lifetime * 0.88f);
@@ -2952,7 +2954,9 @@ namespace Lethe.PrototypeV1
             var startAngle = baseAngle - (heavy ? 132f : 96f);
             var endAngle = startAngle + 360f;
 
-            SpawnHeldTransientSprite(heavy ? "EchoGreat_StoppedClockMotif" : "EchoDual_StoppedClockMotif", MakeStoppedClockSealSprite(heavy ? "EchoGreat_StoppedClockMotif" : "EchoDual_StoppedClockMotif", heavy), center, Quaternion.Euler(0f, 0f, baseAngle * 0.08f), radius * (heavy ? 0.86f : 0.76f), new Color(1f, 1f, 1f, heavy ? 0.76f : 0.66f), lifetime, 0.82f);
+            var motifScale = radius * (heavy ? 0.82f : 0.50f);
+            var motifWidth = radius * (heavy ? 2.10f : 1.34f);
+            SpawnHeldMotifPromptSprite(heavy ? "EchoGreat_StoppedClockMotif" : "EchoDual_StoppedClockMotif", V1MemoryId.StoppedSecond, true, () => MakeStoppedClockSealSprite(heavy ? "EchoGreat_StoppedClockMotif" : "EchoDual_StoppedClockMotif", heavy), center, Quaternion.Euler(0f, 0f, baseAngle * 0.08f), motifWidth, motifScale, new Color(1f, 1f, 1f, heavy ? 0.70f : 0.46f), lifetime, 0.82f);
             SpawnHeldTransientSprite(heavy ? "EchoGreat_StoppedClockLockOuter" : "EchoDual_StoppedClockLockOuter", MakeRingSprite("EchoStoppedClockLockOuter", Color.white, heavy ? 192 : 144), center, Quaternion.identity, radius * (heavy ? 0.98f : 0.92f), new Color(gold.r, gold.g, gold.b, heavy ? 0.48f : 0.40f), lifetime, 0.82f);
             SpawnHeldTransientSprite(heavy ? "EchoGreat_StoppedClockLockInner" : "EchoDual_StoppedClockLockInner", MakeRingSprite("EchoStoppedClockLockInner", Color.white, heavy ? 144 : 112), center, Quaternion.identity, radius * 0.46f, faint, lifetime, 0.82f);
             SpawnClockHandSweep(heavy ? "EchoGreat_StoppedSecondHandSweep" : "EchoDual_StoppedSecondHandSweep", secondHand, center, radius, startAngle, endAngle, heavy ? 0.050f : 0.040f, heavy ? 0.74f : 0.68f, gold, lifetime, secondDuration);
@@ -3024,15 +3028,16 @@ namespace Lethe.PrototypeV1
             var f = EchoForward(forward);
             var s = side.sqrMagnitude > 0.01f ? side.normalized : new Vector2(-f.y, f.x);
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
+            var scale = radius * (0.70f + levelValue * 0.012f);
             var outer = MakeBloodVortexRingSprite("EchoGreat_BloodVortexOuterRing", Color.white, true);
             var inner = MakeBloodVortexRingSprite("EchoGreat_BloodVortexInnerRing", Color.white, false);
             var bladeShard = MakeBoxSprite("EchoGreat_BloodVortexBladeShard", Color.white, 8, 116);
             var bloodShard = MakeBoxSprite("EchoGreat_BloodVortexBloodThread", Color.white, 6, 92);
-            var scale = radius * (0.70f + levelValue * 0.012f);
             var blood = new Color(1f, 0.02f, 0.045f, 0.92f);
             var white = new Color(1f, 0.96f, 0.92f, 0.88f);
             var ember = new Color(0.78f, 0.00f, 0.018f, 0.76f);
 
+            SpawnPromptSprite("EchoGreat_BloodVortexHqRing", LoadSprite(BloodBladeStormRingPath), () => MakeBloodVortexRingSprite("EchoGreat_BloodVortexHqRingFallback", Color.white, true), center, Quaternion.Euler(0f, 0f, baseAngle - 18f), radius * 2.18f, scale, new Color(1f, 1f, 1f, 0.88f), 1.02f);
             SpawnSweepingTransientSprite("EchoGreat_BloodVortexWhiteRing", outer, center, center, baseAngle - 36f, baseAngle + 250f, scale, scale * 1.04f, white, 0.92f, 0.66f);
             SpawnSweepingTransientSprite("EchoGreat_BloodVortexRedRing", inner, center, center, baseAngle + 22f, baseAngle - 214f, scale * 0.94f, scale * 1.02f, blood, 0.96f, 0.74f);
             SpawnTransientSprite("EchoGreat_BloodVortexCoreVoid", MakeDiscSprite("EchoGreat_BloodVortexCoreVoid", Color.white, 132), center, Quaternion.identity, radius * 0.28f, new Color(0.08f, 0.00f, 0.012f, 0.42f), 0.62f);
@@ -3075,11 +3080,11 @@ namespace Lethe.PrototypeV1
             var length = radius * (2.00f + levelValue * 0.055f);
             var end = origin + (Vector3)(f * length);
             var mid = Vector3.Lerp(origin, end, 0.52f);
-            var motif = MakeShatterSlamMotifSprite("EchoGreat_ShatterRuptureMotif", true, true);
             var crack = MakeBoxSprite("EchoGreat_ShatterGroundCrack", Color.white, 9, 210);
             var shard = MakeImpactDiamondSprite("EchoGreat_ShatterGroundShard", Color.white);
 
-            SpawnTransientSpriteScaled("EchoGreat_ShatterRuptureMotif", motif, mid, Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(radius * 0.62f, radius * 1.08f, 1f), new Color(1f, 1f, 1f, 0.92f), 0.72f);
+            var motifScale = radius * 0.84f;
+            SpawnMotifPromptSprite("EchoGreat_ShatterRuptureMotif", V1MemoryId.ShatterWave, true, () => MakeShatterSlamMotifSprite("EchoGreat_ShatterRuptureMotif", true, true), mid, Quaternion.Euler(0f, 0f, baseAngle - 90f), motifScale * 2.56f, motifScale, new Color(1f, 1f, 1f, 0.92f), 0.72f);
             SpawnEchoLink("EchoGreat_ShatterRuptureSpine", origin, end, new Color(0.60f, 0.98f, 1f, 0.74f), 0.68f, 0.054f);
             SpawnTransientSpriteScaled("EchoGreat_ShatterRuptureGlow", MakeBoxSprite("EchoGreat_ShatterRuptureGlow", Color.white, 18, 220), mid, Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(0.18f, length * 0.50f, 1f), new Color(0.32f, 0.88f, 1f, 0.18f), 0.58f);
             SpawnTransientSpriteScaled("EchoGreat_ShatterRuptureCoreCrack", crack, mid, Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(0.056f, length * 0.56f, 1f), new Color(0.78f, 1f, 1f, 0.78f), 0.72f);
@@ -3121,13 +3126,13 @@ namespace Lethe.PrototypeV1
             var f = EchoForward(forward);
             var s = new Vector2(-f.y, f.x);
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
-            var motif = MakeShatterSlamMotifSprite(heavy ? "EchoGreat_ShatterGroundMotif" : "EchoDual_ShatterGroundMotif", true, heavy);
             var crack = MakeBoxSprite(heavy ? "EchoGreat_ShatterGroundBreak" : "EchoDual_ShatterGroundBreak", Color.white, heavy ? 8 : 6, heavy ? 154 : 108);
             var shard = MakeImpactDiamondSprite(heavy ? "EchoGreat_ShatterGroundChip" : "EchoDual_ShatterGroundChip", Color.white);
             var mainColor = heavy ? new Color(0.70f, 1f, 1f, 0.72f) : new Color(0.60f, 0.98f, 1f, 0.66f);
             var sideColor = heavy ? new Color(0.52f, 0.94f, 1f, 0.46f) : new Color(0.52f, 0.94f, 1f, 0.38f);
 
-            SpawnTransientSprite(heavy ? "EchoGreat_ShatterGroundMotif" : "EchoDual_ShatterGroundMotif", motif, center + (Vector3)(f * 0.03f), Quaternion.Euler(0f, 0f, baseAngle - 90f), scale * (heavy ? 0.42f : 0.34f), new Color(1f, 1f, 1f, heavy ? 0.84f : 0.72f), heavy ? 0.50f : 0.32f);
+            var motifScale = scale * (heavy ? 0.42f : 0.34f);
+            SpawnMotifPromptSprite(heavy ? "EchoGreat_ShatterGroundMotif" : "EchoDual_ShatterGroundMotif", V1MemoryId.ShatterWave, true, () => MakeShatterSlamMotifSprite(heavy ? "EchoGreat_ShatterGroundMotif" : "EchoDual_ShatterGroundMotif", true, heavy), center + (Vector3)(f * 0.03f), Quaternion.Euler(0f, 0f, baseAngle - 90f), motifScale * 2.56f, motifScale, new Color(1f, 1f, 1f, heavy ? 0.84f : 0.72f), heavy ? 0.50f : 0.32f);
             SpawnTransientSpriteScaled(heavy ? "EchoGreat_ShatterGroundBreakMain" : "EchoDual_ShatterGroundBreakMain", crack, center, Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(heavy ? 0.040f : 0.030f, scale, 1f), mainColor, heavy ? 0.52f : 0.34f);
             SpawnTransientSpriteScaled(heavy ? "EchoGreat_ShatterGroundBreakLeft" : "EchoDual_ShatterGroundBreakLeft", crack, center + (Vector3)(s * scale * 0.13f), Quaternion.Euler(0f, 0f, baseAngle - 126f), new Vector3(heavy ? 0.028f : 0.022f, scale * 0.56f, 1f), sideColor, heavy ? 0.46f : 0.30f);
             SpawnTransientSpriteScaled(heavy ? "EchoGreat_ShatterGroundBreakRight" : "EchoDual_ShatterGroundBreakRight", crack, center - (Vector3)(s * scale * 0.11f), Quaternion.Euler(0f, 0f, baseAngle - 52f), new Vector3(heavy ? 0.026f : 0.020f, scale * 0.46f, 1f), sideColor, heavy ? 0.42f : 0.28f);
@@ -3155,7 +3160,8 @@ namespace Lethe.PrototypeV1
             var blade = MakeBoxSprite("EchoGreat_ExecutionGuillotineBlade", Color.white, 14, 172);
             var start = center + Vector3.up * (0.94f + levelValue * 0.04f) - (Vector3)(f * 0.16f);
             var end = center + (Vector3)(f * 0.08f);
-            SpawnTransientSprite("EchoGreat_ExecutionGuillotineMotif", MakeExecutionJudgementMotifSprite("EchoGreat_ExecutionGuillotineMotif", true, true), center + (Vector3)(f * 0.04f), Quaternion.Euler(0f, 0f, baseAngle - 90f), 0.78f + levelValue * 0.030f, new Color(1f, 1f, 1f, 0.88f), 0.62f);
+            var motifScale = 0.78f + levelValue * 0.030f;
+            SpawnMotifPromptSprite("EchoGreat_ExecutionGuillotineMotif", V1MemoryId.ExecutionFlash, true, () => MakeExecutionJudgementMotifSprite("EchoGreat_ExecutionGuillotineMotif", true, true), center + (Vector3)(f * 0.04f), Quaternion.Euler(0f, 0f, baseAngle - 90f), motifScale * 1.92f, motifScale, new Color(1f, 1f, 1f, 0.88f), 0.62f);
             SpawnSweepingTransientSprite("EchoGreat_ExecutionFallingVerdict", blade, start, end, baseAngle + 180f, baseAngle + 180f, 0.38f, 0.52f, new Color(1f, 0.96f, 0.56f, 0.82f), 0.56f, 0.22f);
             SpawnEchoLink("EchoGreat_ExecutionVerticalTell", center + Vector3.up * 0.82f, center - Vector3.up * 0.62f, new Color(1f, 0.92f, 0.48f, 0.42f), 0.42f, 0.024f);
             SpawnEchoWoundSlash("EchoGreat_ExecutionGroundSentence", center + (Vector3)(s * 0.05f), s, new Color(1f, 0.88f, 0.44f, 0.56f), 1.05f + levelValue * 0.05f, 0.34f);
@@ -3172,7 +3178,8 @@ namespace Lethe.PrototypeV1
                 var target = chain[i];
                 if (target == null) continue;
                 var pos = target.transform.position + (Vector3)(s * ((i % 2 == 0 ? -1f : 1f) * 0.10f) + f * 0.06f);
-                SpawnTransientSprite("EchoDual_ExecutionSentenceMotif", MakeExecutionJudgementMotifSprite("EchoDual_ExecutionSentenceMotif", true, true), pos, Quaternion.Euler(0f, 0f, Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg - 90f), 0.32f + levelValue * 0.012f, new Color(1f, 1f, 1f, 0.74f), 0.32f);
+                var motifScale = 0.32f + levelValue * 0.012f;
+                SpawnMotifPromptSprite("EchoDual_ExecutionSentenceMotif", V1MemoryId.ExecutionFlash, true, () => MakeExecutionJudgementMotifSprite("EchoDual_ExecutionSentenceMotif", true, true), pos, Quaternion.Euler(0f, 0f, Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg - 90f), motifScale * 1.92f, motifScale, new Color(1f, 1f, 1f, 0.74f), 0.32f);
                 SpawnTransientSprite("EchoDual_ExecutionSentenceMark", MakeImpactDiamondSprite("EchoDual_ExecutionSentenceMark", Color.white), pos, Quaternion.Euler(0f, 0f, 45f + elapsed * 180f + i * 30f), 0.18f + levelValue * 0.010f, new Color(1f, 0.94f, 0.50f, 0.76f), 0.34f);
                 SpawnEchoWoundSlash("EchoDual_ExecutionSentenceTick", pos, f, new Color(1f, 0.94f, 0.54f, 0.50f), 0.42f + i * 0.035f, 0.22f);
             }
@@ -3208,7 +3215,8 @@ namespace Lethe.PrototypeV1
         {
             var f = EchoForward(forward);
             var angle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg - 90f;
-            SpawnTransientSprite("EchoGreat_AshenBulwarkHolyFire", MakeAshenHolyFireMotifSprite("EchoGreat_AshenBulwarkHolyFire", true, true), center + (Vector3)(f * 0.12f), Quaternion.Euler(0f, 0f, angle), 0.62f + levelValue * 0.028f, new Color(1f, 1f, 1f, 0.88f), 0.68f);
+            var motifScale = 0.62f + levelValue * 0.028f;
+            SpawnMotifPromptSprite("EchoGreat_AshenBulwarkHolyFire", V1MemoryId.AshenShield, true, () => MakeAshenHolyFireMotifSprite("EchoGreat_AshenBulwarkHolyFire", true, true), center + (Vector3)(f * 0.12f), Quaternion.Euler(0f, 0f, angle), motifScale * 2.24f, motifScale, new Color(1f, 1f, 1f, 0.88f), 0.68f);
             SpawnTransientSpriteScaled("EchoGreat_AshenBulwarkPlate", MakeBoxSprite("EchoGreat_AshenBulwarkPlate", Color.white, 18, 138), center, Quaternion.Euler(0f, 0f, angle), new Vector3(0.16f, 0.92f + levelValue * 0.045f, 1f), new Color(0.86f, 0.92f, 1f, 0.48f), 0.62f);
             SpawnRadialSlashLines("EchoGreat_AshenBulwarkFracture", center, f, 5, 0.78f + levelValue * 0.04f, new Color(0.90f, 0.96f, 1f, 0.50f), 0.42f);
             SpawnGreatswordForwardWedge("EchoGreat_AshenBulwarkReleaseCone", center, f, 1.62f + levelValue * 0.08f, 50f, new Color(0.78f, 0.86f, 0.94f, 0.18f), 0.56f);
@@ -3219,7 +3227,8 @@ namespace Lethe.PrototypeV1
             var f = EchoForward(forward);
             var s = new Vector2(-f.y, f.x);
             var count = Mathf.Clamp(3 + levelValue / 2, 4, 6);
-            SpawnTransientSprite("EchoDual_AshenParryHolySpark", MakeAshenHolyFireMotifSprite("EchoDual_AshenParryHolySpark", true, false), center + (Vector3)(f * 0.04f), Quaternion.Euler(0f, 0f, Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg - 90f), 0.30f + levelValue * 0.010f, new Color(1f, 1f, 1f, 0.72f), 0.32f);
+            var motifScale = 0.30f + levelValue * 0.010f;
+            SpawnMotifPromptSprite("EchoDual_AshenParryHolySpark", V1MemoryId.AshenShield, true, () => MakeAshenHolyFireMotifSprite("EchoDual_AshenParryHolySpark", true, false), center + (Vector3)(f * 0.04f), Quaternion.Euler(0f, 0f, Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg - 90f), motifScale * 2.24f, motifScale, new Color(1f, 1f, 1f, 0.72f), 0.32f);
             for (int i = 0; i < count; i++)
             {
                 var lane = i - (count - 1) * 0.5f;
@@ -3262,7 +3271,8 @@ namespace Lethe.PrototypeV1
             var shard = MakeImpactDiamondSprite("MemoryAshenGuardShard", Color.white);
             var radius = 0.72f + levelValue * 0.065f;
             var shardCount = Mathf.Clamp(3 + levelValue, 4, 8);
-            SpawnTransientSprite("MemoryAshenGuardHolyFireSigil", MakeAshenHolyFireMotifSprite("MemoryAshenGuardHolyFireSigil", false, true), center + (Vector3)(f * 0.06f), Quaternion.Euler(0f, 0f, angle), radius * 0.52f, new Color(1f, 1f, 1f, 0.84f), 0.58f);
+            var motifScale = radius * 0.52f;
+            SpawnMotifPromptSprite("MemoryAshenGuardHolyFireSigil", V1MemoryId.AshenShield, false, () => MakeAshenHolyFireMotifSprite("MemoryAshenGuardHolyFireSigil", false, true), center + (Vector3)(f * 0.06f), Quaternion.Euler(0f, 0f, angle), motifScale * 2.24f, motifScale, new Color(1f, 1f, 1f, 0.84f), 0.58f);
             SpawnTransientSpriteScaled("MemoryAshenGuardPlateFace", plate, center + (Vector3)(f * 0.18f), Quaternion.Euler(0f, 0f, angle), new Vector3(0.24f, radius, 1f), new Color(0.92f, 0.98f, 1f, 0.52f), 0.52f);
             SpawnRadialSlashLines("MemoryAshenGuardPlateCrack", center + (Vector3)(f * 0.12f), f, 5, 0.56f + levelValue * 0.035f, new Color(0.96f, 1f, 1f, 0.58f), 0.38f);
             for (int i = 0; i < shardCount; i++)
@@ -3289,7 +3299,8 @@ namespace Lethe.PrototypeV1
             var white = strong ? new Color(0.96f, 1f, 1f, 0.76f) : new Color(0.94f, 0.98f, 1f, 0.58f);
             var smoke = strong ? new Color(0.42f, 0.48f, 0.50f, 0.34f) : new Color(0.38f, 0.42f, 0.44f, 0.24f);
 
-            SpawnTransientSprite($"{prefix}_HolyFireMotif", MakeAshenHolyFireMotifSprite($"{prefix}_HolyFireMotif", echo, strong), center + (Vector3)(f * 0.07f), Quaternion.Euler(0f, 0f, baseAngle - 90f), (strong ? 0.58f : 0.38f) + levelValue * (strong ? 0.030f : 0.018f), new Color(1f, 1f, 1f, strong ? 0.90f : 0.74f), lifetime);
+            var motifScale = (strong ? 0.58f : 0.38f) + levelValue * (strong ? 0.030f : 0.018f);
+            SpawnMotifPromptSprite($"{prefix}_HolyFireMotif", V1MemoryId.AshenShield, echo, () => MakeAshenHolyFireMotifSprite($"{prefix}_HolyFireMotif", echo, strong), center + (Vector3)(f * 0.07f), Quaternion.Euler(0f, 0f, baseAngle - 90f), motifScale * 2.24f, motifScale, new Color(1f, 1f, 1f, strong ? 0.90f : 0.74f), lifetime);
             SpawnTransientSpriteScaled($"{prefix}_AshBed", ash, center - (Vector3)(f * 0.05f), Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(0.44f * span, 0.28f * span, 1f), smoke, lifetime * 0.95f);
             for (int i = 0; i < flameCount; i++)
             {
@@ -3338,7 +3349,8 @@ namespace Lethe.PrototypeV1
             var violet = heavy ? new Color(0.72f, 0.18f, 1f, 0.62f) : new Color(0.80f, 0.34f, 1f, 0.50f);
             var voidColor = heavy ? new Color(0.08f, 0.00f, 0.16f, 0.48f) : new Color(0.12f, 0.00f, 0.22f, 0.36f);
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
-            SpawnTransientSprite($"{name}_TornBrandMotif", MakeOblivionBrandMotifSprite($"{name}_TornBrandMotif", true, heavy), center + (Vector3)(f * 0.05f), Quaternion.Euler(0f, 0f, baseAngle - 90f), radius * (heavy ? 0.58f : 0.48f), new Color(1f, 1f, 1f, heavy ? 0.88f : 0.72f), heavy ? 0.62f : 0.38f);
+            var motifScale = radius * (heavy ? 0.58f : 0.48f);
+            SpawnMotifPromptSprite($"{name}_TornBrandMotif", V1MemoryId.OblivionBrand, true, () => MakeOblivionBrandMotifSprite($"{name}_TornBrandMotif", true, heavy), center + (Vector3)(f * 0.05f), Quaternion.Euler(0f, 0f, baseAngle - 90f), motifScale * 2.24f, motifScale, new Color(1f, 1f, 1f, heavy ? 0.88f : 0.72f), heavy ? 0.62f : 0.38f);
             SpawnTransientSprite($"{name}_VoidCore", MakeDiscSprite($"{name}_VoidCore", Color.white, 132), center, Quaternion.identity, radius * (heavy ? 0.48f : 0.36f), voidColor, heavy ? 0.62f : 0.38f);
             var tear = MakeBoxSprite($"{name}_ErasedTear", Color.white, heavy ? 16 : 10, heavy ? 190 : 126);
             SpawnTransientSpriteScaled($"{name}_ErasedTearMain", tear, center + (Vector3)(f * 0.08f), Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(heavy ? 0.078f : 0.052f, radius * (heavy ? 0.92f : 0.64f), 1f), violet, heavy ? 0.62f : 0.38f);
@@ -3379,8 +3391,10 @@ namespace Lethe.PrototypeV1
             var crack = new Color(0.52f, 0.98f, 1f, heavy ? 0.46f : 0.34f);
             SpawnEchoWoundSlash(heavy ? "UltGreat_FractureExecutionSentenceLine" : "UltDual_FractureExecutionSentenceLine", center, f, gold, radius * (heavy ? 1.12f : 0.78f), heavy ? 0.58f : 0.36f);
             SpawnShatterEchoScar(center - (Vector3)(f * radius * 0.12f), f, radius * (heavy ? 0.78f : 0.52f), heavy ? 0.52f : 0.32f);
-            SpawnTransientSprite(heavy ? "UltGreat_FractureExecutionVerdictMotif" : "UltDual_FractureExecutionVerdictMotif", MakeExecutionJudgementMotifSprite("UltFractureExecutionVerdictMotif", true, true), center + (Vector3)(f * 0.06f), Quaternion.Euler(0f, 0f, baseAngle - 90f), radius * (heavy ? 0.42f : 0.34f), new Color(1f, 1f, 1f, heavy ? 0.92f : 0.76f), heavy ? 0.58f : 0.36f);
-            SpawnTransientSprite(heavy ? "UltGreat_FractureExecutionShatterMotif" : "UltDual_FractureExecutionShatterMotif", MakeShatterSlamMotifSprite("UltFractureExecutionShatterMotif", true, heavy), center - (Vector3)(f * radius * 0.08f), Quaternion.Euler(0f, 0f, baseAngle - 90f), radius * (heavy ? 0.46f : 0.36f), new Color(1f, 1f, 1f, heavy ? 0.78f : 0.60f), heavy ? 0.52f : 0.32f);
+            var executionMotifScale = radius * (heavy ? 0.42f : 0.34f);
+            var shatterMotifScale = radius * (heavy ? 0.46f : 0.36f);
+            SpawnMotifPromptSprite(heavy ? "UltGreat_FractureExecutionVerdictMotif" : "UltDual_FractureExecutionVerdictMotif", V1MemoryId.ExecutionFlash, true, () => MakeExecutionJudgementMotifSprite("UltFractureExecutionVerdictMotif", true, true), center + (Vector3)(f * 0.06f), Quaternion.Euler(0f, 0f, baseAngle - 90f), executionMotifScale * 1.92f, executionMotifScale, new Color(1f, 1f, 1f, heavy ? 0.92f : 0.76f), heavy ? 0.58f : 0.36f);
+            SpawnMotifPromptSprite(heavy ? "UltGreat_FractureExecutionShatterMotif" : "UltDual_FractureExecutionShatterMotif", V1MemoryId.ShatterWave, true, () => MakeShatterSlamMotifSprite("UltFractureExecutionShatterMotif", true, heavy), center - (Vector3)(f * radius * 0.08f), Quaternion.Euler(0f, 0f, baseAngle - 90f), shatterMotifScale * 2.56f, shatterMotifScale, new Color(1f, 1f, 1f, heavy ? 0.78f : 0.60f), heavy ? 0.52f : 0.32f);
             SpawnRadialSlashLines(heavy ? "UltGreat_FractureExecutionGroundCrack" : "UltDual_FractureExecutionGroundCrack", center, f, heavy ? 8 : 5, radius * 0.42f, crack, heavy ? 0.44f : 0.28f);
         }
 
@@ -3400,7 +3414,8 @@ namespace Lethe.PrototypeV1
         {
             var f = EchoForward(forward);
             SpawnAshenMemoryGuardPlate(center, f, heavy ? 5 : 3);
-            SpawnTransientSprite($"{name}_AshWallHolyFire", MakeAshenHolyFireMotifSprite($"{name}_AshWallHolyFire", true, heavy), center + (Vector3)(f * 0.08f), Quaternion.Euler(0f, 0f, Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg - 90f), radius * (heavy ? 0.52f : 0.42f), new Color(1f, 1f, 1f, heavy ? 0.88f : 0.68f), heavy ? 0.70f : 0.46f);
+            var ashMotifScale = radius * (heavy ? 0.52f : 0.42f);
+            SpawnMotifPromptSprite($"{name}_AshWallHolyFire", V1MemoryId.AshenShield, true, () => MakeAshenHolyFireMotifSprite($"{name}_AshWallHolyFire", true, heavy), center + (Vector3)(f * 0.08f), Quaternion.Euler(0f, 0f, Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg - 90f), ashMotifScale * 2.24f, ashMotifScale, new Color(1f, 1f, 1f, heavy ? 0.88f : 0.68f), heavy ? 0.70f : 0.46f);
             SpawnOblivionEraseBurst(center + (Vector3)(f * (heavy ? 0.22f : 0.12f)), f, radius * (heavy ? 0.72f : 0.54f), heavy, $"{name}_VoidBreak");
             SpawnUltimateDopamineBurst($"{name}_GuardCollapse", center, f, radius * (heavy ? 0.84f : 0.66f), new Color(0.78f, 0.34f, 1f, heavy ? 0.64f : 0.48f), new Color(0.92f, 0.98f, 1f, heavy ? 0.66f : 0.50f), heavy ? 10 : 7, heavy ? 0.58f : 0.38f);
         }
@@ -4117,7 +4132,7 @@ namespace Lethe.PrototypeV1
             if (heavy)
             {
                 SpawnFractureExecutionGroundSentence(target.transform.position, forward, 2.45f, true);
-                SpawnTransientSprite("UltGreat_FractureExecutionStampMotif", MakeExecutionJudgementMotifSprite("UltGreat_FractureExecutionStampMotif", true, true), target.transform.position + (Vector3)(forward * 0.08f), Quaternion.Euler(0f, 0f, Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg - 90f), 1.08f, new Color(1f, 1f, 1f, 0.96f), 0.62f);
+                SpawnMotifPromptSprite("UltGreat_FractureExecutionStampMotif", V1MemoryId.ExecutionFlash, true, () => MakeExecutionJudgementMotifSprite("UltGreat_FractureExecutionStampMotif", true, true), target.transform.position + (Vector3)(forward * 0.08f), Quaternion.Euler(0f, 0f, Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg - 90f), 1.08f * 1.92f, 1.08f, new Color(1f, 1f, 1f, 0.96f), 0.62f);
                 SpawnEchoWoundSlash("UltGreat_FractureExecutionCleave", target.transform.position, forward, new Color(1f, 0.94f, 0.54f, 0.80f), 1.65f, 0.54f);
                 SpawnRadialSlashLines("UltGreat_FractureExecutionVerdict", target.transform.position, forward, 6, 1.18f, new Color(1f, 0.88f, 0.46f, 0.64f), 0.50f);
                 foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(target.transform.position, e.transform.position) < 2.30f).Take(12).ToList())
@@ -4138,7 +4153,7 @@ namespace Lethe.PrototypeV1
             }
 
             SpawnFractureExecutionGroundSentence(target.transform.position, forward, 1.72f, false);
-            SpawnTransientSprite("UltDual_FractureExecutionMotif", MakeExecutionJudgementMotifSprite("UltDual_FractureExecutionMotif", true, true), target.transform.position + (Vector3)(forward * 0.06f), Quaternion.Euler(0f, 0f, Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg - 90f), 0.70f, new Color(1f, 1f, 1f, 0.82f), 0.38f);
+            SpawnMotifPromptSprite("UltDual_FractureExecutionMotif", V1MemoryId.ExecutionFlash, true, () => MakeExecutionJudgementMotifSprite("UltDual_FractureExecutionMotif", true, true), target.transform.position + (Vector3)(forward * 0.06f), Quaternion.Euler(0f, 0f, Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg - 90f), 0.70f * 1.92f, 0.70f, new Color(1f, 1f, 1f, 0.82f), 0.38f);
             var cutTargets = enemies.Where(e => e != null && e.IsAlive).OrderBy(e => e.HealthRatio).Take(9).ToList();
             for (int i = 0; i < cutTargets.Count; i++)
             {
@@ -4164,7 +4179,7 @@ namespace Lethe.PrototypeV1
                 var focus = FindNearestLivingEnemy(player.position);
                 var center = focus != null ? focus.transform.position : player.position;
                 SpawnUltimateClockBurst("UltGreat_StasisHuntClockBurst", center, lastAim, 3.10f, true);
-                SpawnHeldTransientSprite("UltGreat_StasisHuntClockDomeMotif", MakeStoppedClockSealSprite("UltGreat_StasisHuntClockDomeMotif", true), center, Quaternion.Euler(0f, 0f, elapsed * 5f), 1.48f, new Color(1f, 1f, 1f, 0.78f), 1.08f, 0.82f);
+                SpawnHeldMotifPromptSprite("UltGreat_StasisHuntClockDomeMotif", V1MemoryId.StoppedSecond, true, () => MakeStoppedClockSealSprite("UltGreat_StasisHuntClockDomeMotif", true), center, Quaternion.Euler(0f, 0f, elapsed * 5f), 1.48f * 2.56f, 1.48f, new Color(1f, 1f, 1f, 0.78f), 1.08f, 0.82f);
                 SpawnStoppedSecondField(center, 2.85f, TimeStopGold(true), 1.95f, true);
                 RegisterStoppedField(center, 3.15f, 1.95f, 0.92f, true);
                 foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(center, e.transform.position) <= 3.15f).Take(12).ToList())
@@ -4183,7 +4198,7 @@ namespace Lethe.PrototypeV1
             }
 
             SpawnUltimateClockBurst("UltDual_StasisHuntClockBurst", player.position, lastAim, 2.26f, false);
-            SpawnHeldTransientSprite("UltDual_StasisHuntClockFieldMotif", MakeStoppedClockSealSprite("UltDual_StasisHuntClockFieldMotif", true), player.position, Quaternion.Euler(0f, 0f, elapsed * -9f), 1.06f, new Color(1f, 1f, 1f, 0.66f), 0.72f, 0.82f);
+            SpawnHeldMotifPromptSprite("UltDual_StasisHuntClockFieldMotif", V1MemoryId.StoppedSecond, true, () => MakeStoppedClockSealSprite("UltDual_StasisHuntClockFieldMotif", true), player.position, Quaternion.Euler(0f, 0f, elapsed * -9f), 1.06f * 2.56f, 1.06f, new Color(1f, 1f, 1f, 0.66f), 0.72f, 0.82f);
             SpawnStoppedSecondField(player.position, 1.92f, TimeStopGold(true), 1.34f, true);
             RegisterStoppedField(player.position, 1.92f, 1.34f, 0.40f, true);
             var shotTargets = SelectHunterTargets(player.position, null, 10);
@@ -4209,8 +4224,8 @@ namespace Lethe.PrototypeV1
             if (heavy)
             {
                 SpawnAshenOblivionRupture(player.position, lastAim, 3.15f, true, "UltGreat_AshenOblivionRupture");
-                SpawnTransientSprite("UltGreat_AshenOblivionWaveMotif", MakeAshenHolyFireMotifSprite("UltGreat_AshenOblivionWaveMotif", true, true), player.position + (Vector3)(lastAim * 0.10f), Quaternion.Euler(0f, 0f, Mathf.Atan2(lastAim.y, lastAim.x) * Mathf.Rad2Deg - 90f), 1.58f, new Color(1f, 1f, 1f, 0.92f), 0.94f);
-                SpawnTransientSprite("UltGreat_AshenOblivionGuardBreakMotif", MakeOblivionBrandMotifSprite("UltGreat_AshenOblivionGuardBreakMotif", true, true), player.position, Quaternion.Euler(0f, 0f, Mathf.Atan2(lastAim.y, lastAim.x) * Mathf.Rad2Deg - 90f), 1.10f, new Color(1f, 1f, 1f, 0.78f), 0.72f);
+                SpawnMotifPromptSprite("UltGreat_AshenOblivionWaveMotif", V1MemoryId.AshenShield, true, () => MakeAshenHolyFireMotifSprite("UltGreat_AshenOblivionWaveMotif", true, true), player.position + (Vector3)(lastAim * 0.10f), Quaternion.Euler(0f, 0f, Mathf.Atan2(lastAim.y, lastAim.x) * Mathf.Rad2Deg - 90f), 1.58f * 2.24f, 1.58f, new Color(1f, 1f, 1f, 0.92f), 0.94f);
+                SpawnMotifPromptSprite("UltGreat_AshenOblivionGuardBreakMotif", V1MemoryId.OblivionBrand, true, () => MakeOblivionBrandMotifSprite("UltGreat_AshenOblivionGuardBreakMotif", true, true), player.position, Quaternion.Euler(0f, 0f, Mathf.Atan2(lastAim.y, lastAim.x) * Mathf.Rad2Deg - 90f), 1.10f * 2.24f, 1.10f, new Color(1f, 1f, 1f, 0.78f), 0.72f);
                 SpawnRadialSlashLines("UltGreat_AshenOblivionGuardBreakLine", player.position, lastAim, 6, 1.05f, new Color(0.86f, 0.76f, 1f, 0.58f), 0.48f);
                 ReleaseAshenGuardWave(player.position, MaxEchoLevel, storedRelease + 16f, true, "UltGreat AshenOblivion stored wave");
                 foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 4.15f).Take(14).ToList())
@@ -4227,8 +4242,8 @@ namespace Lethe.PrototypeV1
             }
 
             SpawnAshenOblivionRupture(player.position, lastAim, 2.30f, false, "UltDual_AshenOblivionRupture");
-            SpawnTransientSprite("UltDual_AshenOblivionGuardMotif", MakeAshenHolyFireMotifSprite("UltDual_AshenOblivionGuardMotif", true, false), player.position + (Vector3)(lastAim * 0.06f), Quaternion.Euler(0f, 0f, Mathf.Atan2(lastAim.y, lastAim.x) * Mathf.Rad2Deg - 90f), 1.00f, new Color(1f, 1f, 1f, 0.74f), 0.58f);
-            SpawnTransientSprite("UltDual_AshenOblivionReturnBrandMotif", MakeOblivionBrandMotifSprite("UltDual_AshenOblivionReturnBrandMotif", true, false), player.position, Quaternion.Euler(0f, 0f, Mathf.Atan2(lastAim.y, lastAim.x) * Mathf.Rad2Deg - 90f), 0.72f, new Color(1f, 1f, 1f, 0.64f), 0.44f);
+            SpawnMotifPromptSprite("UltDual_AshenOblivionGuardMotif", V1MemoryId.AshenShield, true, () => MakeAshenHolyFireMotifSprite("UltDual_AshenOblivionGuardMotif", true, false), player.position + (Vector3)(lastAim * 0.06f), Quaternion.Euler(0f, 0f, Mathf.Atan2(lastAim.y, lastAim.x) * Mathf.Rad2Deg - 90f), 1.00f * 2.24f, 1.00f, new Color(1f, 1f, 1f, 0.74f), 0.58f);
+            SpawnMotifPromptSprite("UltDual_AshenOblivionReturnBrandMotif", V1MemoryId.OblivionBrand, true, () => MakeOblivionBrandMotifSprite("UltDual_AshenOblivionReturnBrandMotif", true, false), player.position, Quaternion.Euler(0f, 0f, Mathf.Atan2(lastAim.y, lastAim.x) * Mathf.Rad2Deg - 90f), 0.72f * 2.24f, 0.72f, new Color(1f, 1f, 1f, 0.64f), 0.44f);
             ReleaseAshenGuardWave(player.position, MaxEchoLevel, storedRelease + 7f, false, "UltDual AshenOblivion stored wave");
             var targets = enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 3.65f).OrderBy(e => Vector2.Distance(player.position, e.transform.position)).Take(9).ToList();
             for (int i = 0; i < targets.Count; i++)
@@ -4388,7 +4403,7 @@ namespace Lethe.PrototypeV1
         void BloodBloom(V1Enemy center, int level)
         {
             PlaySfx("blood_mark", 0.58f, 0.12f);
-            SpawnTransientSprite("피꽃", LoadSprite("Assets/_dev/Art/Sprites/Echoes/Blood/spr_blood_bloom_01.png"), center.transform.position, Quaternion.identity, 0.92f, new Color(1f, 0.12f, 0.18f, 0.94f), 0.52f);
+            SpawnPromptSprite("피꽃", LoadSprite(BloodVortexPath), () => LoadSprite("Assets/_dev/Art/Sprites/Echoes/Blood/spr_blood_bloom_01.png"), center.transform.position, Quaternion.Euler(0f, 0f, elapsed * -80f), 1.36f, 0.92f, new Color(1f, 0.92f, 0.94f, 0.76f), 0.52f);
             SpawnTransientSprite("BloodBloomRing", MakeRingSprite("BloodBloomRing", Color.white, 132), center.transform.position, Quaternion.identity, 0.72f + level * 0.055f, new Color(1f, 0.12f, 0.18f, 0.46f), 0.42f);
             SpawnBloodThread(center.transform.position, 0.8f + level * 0.16f, level);
             foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(center.transform.position, e.transform.position) < 1.85f).ToList())
@@ -6709,7 +6724,7 @@ namespace Lethe.PrototypeV1
             var ashen = center + Vector3.right * 2.65f;
             SpawnFractureExecutionGroundSentence(fracture, Vector2.up, 2.10f, true);
             SpawnExecutionCondemnation(fracture, Vector2.up, MaxEchoLevel, true, true);
-            SpawnHeldTransientSprite("Preview_StasisHuntClockMotif", MakeStoppedClockSealSprite("Preview_StasisHuntClockMotif", true), stasis, Quaternion.Euler(0f, 0f, elapsed * 5f), 1.22f, new Color(1f, 1f, 1f, 0.74f), 1.16f, 0.82f);
+            SpawnHeldMotifPromptSprite("Preview_StasisHuntClockMotif", V1MemoryId.StoppedSecond, true, () => MakeStoppedClockSealSprite("Preview_StasisHuntClockMotif", true), stasis, Quaternion.Euler(0f, 0f, elapsed * 5f), 1.22f * 2.56f, 1.22f, new Color(1f, 1f, 1f, 0.74f), 1.16f, 0.82f);
             SpawnStoppedSecondField(stasis, 1.65f, TimeStopGold(true), 1.50f, true);
             SpawnAshenOblivionRupture(ashen, Vector2.up, 1.95f, true, "Preview_AshenOblivionRupture");
         }
@@ -7767,6 +7782,16 @@ namespace Lethe.PrototypeV1
             SpawnHeldTransientSprite(name, sprite, position, rotation, scale, color, lifetime, holdRatio);
         }
 
+        void SpawnMotifPromptSprite(string name, V1MemoryId id, bool echo, Func<Sprite> fallbackSprite, Vector3 position, Quaternion rotation, float targetWorldWidth, float fallbackScale, Color color, float lifetime)
+        {
+            SpawnPromptSprite(name, echo ? EchoVfxSprite(id) : MemoryVfxSprite(id), fallbackSprite, position, rotation, targetWorldWidth, fallbackScale, color, lifetime);
+        }
+
+        void SpawnHeldMotifPromptSprite(string name, V1MemoryId id, bool echo, Func<Sprite> fallbackSprite, Vector3 position, Quaternion rotation, float targetWorldWidth, float fallbackScale, Color color, float lifetime, float holdRatio)
+        {
+            SpawnHeldPromptSprite(name, echo ? EchoVfxSprite(id) : MemoryVfxSprite(id), fallbackSprite, position, rotation, targetWorldWidth, fallbackScale, color, lifetime, holdRatio);
+        }
+
         float ScaleSpriteToWorldWidth(Sprite sprite, float targetWorldWidth)
         {
             if (sprite == null || sprite.bounds.size.x <= 0.001f) return 1f;
@@ -7781,6 +7806,7 @@ namespace Lethe.PrototypeV1
 
         Sprite MemoryVfxSprite(V1MemoryId id) => id switch
         {
+            V1MemoryId.BloodReflection => LoadSprite(BloodVortexPath),
             V1MemoryId.ExecutionFlash => LoadSprite(MemoryExecutionPath),
             V1MemoryId.HunterOath => LoadSprite(MemoryHunterPath),
             V1MemoryId.ShatterWave => LoadSprite(MemoryShatterPath),
@@ -7804,7 +7830,7 @@ namespace Lethe.PrototypeV1
         Sprite EchoTransformSprite(V1MemoryId id) => id switch
         {
             V1MemoryId.HungryBlades => KalmuriBladeSprite(),
-            V1MemoryId.BloodReflection => LoadSprite("Assets/_dev/Art/Sprites/Echoes/Blood/spr_blood_bloom_01.png"),
+            V1MemoryId.BloodReflection => LoadSprite(BloodVortexPath),
             _ => EchoVfxSprite(id)
         };
 
@@ -7898,7 +7924,9 @@ namespace Lethe.PrototypeV1
         {
             var fieldAlpha = strong ? Mathf.Min(0.62f, color.a) : Mathf.Min(0.46f, color.a);
             var ringAlpha = strong ? Mathf.Min(0.86f, color.a + 0.18f) : Mathf.Min(0.70f, color.a + 0.12f);
-            SpawnHeldTransientSprite("StoppedSecondClockMotif", MakeStoppedClockSealSprite(strong ? "StoppedSecondClockMotifStrong" : "StoppedSecondClockMotif", strong), center, Quaternion.Euler(0f, 0f, strong ? elapsed * 4f : elapsed * -3f), radius * (strong ? 0.90f : 0.78f), new Color(1f, 1f, 1f, strong ? Mathf.Max(0.78f, fieldAlpha) : Mathf.Max(0.62f, fieldAlpha)), lifetime, 0.82f);
+            var motifScale = radius * (strong ? 0.86f : 0.54f);
+            var motifWidth = radius * (strong ? 2.20f : 1.42f);
+            SpawnHeldMotifPromptSprite("StoppedSecondClockMotif", V1MemoryId.StoppedSecond, true, () => MakeStoppedClockSealSprite(strong ? "StoppedSecondClockMotifStrong" : "StoppedSecondClockMotif", strong), center, Quaternion.Euler(0f, 0f, strong ? elapsed * 4f : elapsed * -3f), motifWidth, motifScale, new Color(1f, 1f, 1f, strong ? Mathf.Max(0.72f, fieldAlpha) : Mathf.Max(0.44f, fieldAlpha)), lifetime, 0.82f);
             SpawnHeldTransientSprite("StoppedSecondClockPulse", MakeRingSprite("StoppedSecondClockPulse", Color.white, 180), center, Quaternion.Euler(0f, 0f, elapsed * -70f), radius * 1.04f, new Color(1f, 0.88f, 0.36f, ringAlpha * 0.68f), lifetime, 0.82f);
             SpawnHeldTransientSprite("StoppedSecondClockOuter", MakeRingSprite("StoppedSecondClockOuter", Color.white, 180), center, Quaternion.identity, radius * 0.96f, new Color(color.r, color.g, color.b, ringAlpha), lifetime, 0.82f);
             SpawnHeldTransientSprite("StoppedSecondClockInner", MakeRingSprite("StoppedSecondClockInner", Color.white, 144), center, Quaternion.identity, radius * 0.56f, new Color(color.r, color.g, color.b, fieldAlpha * 0.82f), lifetime, 0.82f);
