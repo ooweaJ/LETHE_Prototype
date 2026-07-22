@@ -2,6 +2,27 @@
 
 Last updated: 2026-07-22
 
+## 2026-07-22 Update: Weapon-Specific Echo Mutation VFX Pass
+
+- jaewoo clarified that the new HQ VFX improved quality, but Echoes still need their own weapon-specific VFX language instead of reusing the same memory motif.
+- Applied in `_dev`:
+  - Kept HQ bitmap motifs as the family identity baseline, then added weapon mutation layers on top.
+  - Dual Blades Echoes now favor small twin, ricochet, barcode, broken-clock, parry-return, and shred marks.
+  - Greatsword Echoes now favor ritual spine, anvil slam, execution gate, clock cage, cathedral wall, and crater-teeth silhouettes.
+  - Dense Dual Blades skips the newest non-essential mutation ornaments so the high-hit case stays under budget.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing deprecation warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing deprecation warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Play Mode `DebugRunEchoMatrix(DualBlades)`: all 8 Echoes at `+5`, `dualMutationObjects=320`, `spriteRenderers=4124`.
+  - Play Mode `DebugRunEchoMatrix(Greatsword)`: all 8 Echoes at `+5`, `greatMutationObjects=240`, `spriteRenderers=3952`.
+  - Play Mode `DebugRunDenseDualBladePerfMatrix()`: `hits=18`, `echoesSuppressed=15`, `transient=109`, `ms=27.16`.
+- Evidence:
+  - `docs/orchestration/evidence/2026-07-22-weapon-echo-mutation-dual-matrix.png`
+  - `docs/orchestration/evidence/2026-07-22-weapon-echo-mutation-great-matrix.png`
+- Remaining gate:
+  - Direct play should now judge whether each Echo family has enough weapon identity in normal combat, and tune alpha/scale/lifetime where the all-on matrix is too visually dense.
+
 ## 2026-07-22 Update: HQ Bitmap VFX Texture Pass
 
 - jaewoo called out that the implemented VFX still felt low quality compared with the blood-vortex reference image.

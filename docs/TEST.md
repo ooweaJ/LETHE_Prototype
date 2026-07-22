@@ -1,5 +1,34 @@
 # LETHE TEST
 
+# 2026-07-22 Weapon-Specific Echo Mutation VFX Pass
+
+- Purpose:
+  - Make Echo VFX use the new HQ family motifs as source language but mutate by weapon.
+  - Confirm Dual Blades and Greatsword Echoes produce different supporting silhouettes instead of the same HQ image at different scale.
+- Applied target:
+  - `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`.
+- Changes:
+  - Added Dual Blades mutation layers for Blood, Shatter, Execution, Stopped, Ashen, and Oblivion.
+  - Added Greatsword mutation layers for Blood, Shatter, Execution, Stopped, Ashen, and Oblivion.
+  - Preserved dense-branch throttling for non-essential Dual Blades ornaments.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`.
+  - Unity compilation error check.
+  - Play Mode `DebugRunEchoMatrix(DualBlades)` with synchronous camera capture.
+  - Play Mode `DebugRunEchoMatrix(Greatsword)` with synchronous camera capture.
+  - Play Mode `DebugRunDenseDualBladePerfMatrix()` reflection read.
+- Results:
+  - Runtime C# build passed with 7 existing deprecation warnings and 0 errors.
+  - Editor C# build passed with 7 existing deprecation warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Dual Blades Echo Matrix: all 8 Echoes at `+5`, `dualMutationObjects=320`, `spriteRenderers=4124`.
+  - Greatsword Echo Matrix: all 8 Echoes at `+5`, `greatMutationObjects=240`, `spriteRenderers=3952`.
+  - Dense Dual Blades Perf Matrix: `hits=18`, `echoesSuppressed=15`, `transient=109`, `ms=27.16`.
+  - Evidence screenshots saved under `docs/orchestration/evidence/`.
+- Notes:
+  - The all-on captures intentionally overpack the screen. Direct play should decide normal-combat scale, alpha, and lifetime.
+
 # 2026-07-22 HQ Bitmap VFX Texture Pass
 
 - Purpose:

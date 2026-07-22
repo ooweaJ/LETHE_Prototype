@@ -2,6 +2,19 @@
 
 # 2026-07-22
 
+- Added weapon-specific Echo mutation VFX on top of the HQ bitmap motif baseline:
+  - Dual Blades Echoes now use small twin/chain reads: blood pips and needle cuts, skip chips, sentence/barcode marks, broken-clock shards, parry-return streaks, and shredded void marks.
+  - Greatsword Echoes now use large commitment reads: ritual blood spine, anvil slam, execution gate, clock cage, cathedral wall, crater teeth, and collapse-line pressure.
+  - Dense Dual Blades skips non-essential mutation ornaments so dense hit scenarios remain under budget.
+- Verification:
+  - Runtime C# build passed with 7 existing deprecation warnings and 0 errors.
+  - Editor C# build passed with 7 existing deprecation warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - `DebugRunEchoMatrix(DualBlades)`: `dualMutationObjects=320`.
+  - `DebugRunEchoMatrix(Greatsword)`: `greatMutationObjects=240`.
+  - `DebugRunDenseDualBladePerfMatrix()`: `hits=18`, `echoesSuppressed=15`, `transient=109`, `ms=27.16`.
+  - Evidence screenshots saved under `docs/orchestration/evidence/`.
+
 - Added a high-quality bitmap VFX texture pass:
   - Generated and imported HQ sprites for Blood Vortex, Stopped Clock, Execution Judgement, Shatter Slam, Oblivion Brand, and Ashen Holy Fire.
   - Chroma-keyed the generated source images into transparent Unity sprites and imported them as Sprite/Single assets.

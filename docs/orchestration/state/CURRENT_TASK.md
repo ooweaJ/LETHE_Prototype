@@ -1,5 +1,45 @@
 # Current Task
 
+# 2026-07-22 Weapon-Specific Echo Mutation VFX Pass
+
+## Status
+
+- Implemented, C# build-verified, Unity compile-verified, Play Mode matrix-verified, and ready for jaewoo direct-play taste review.
+
+## Goal
+
+Make Echo VFX inherit the new HQ memory motifs while still changing shape by weapon, so memory, normal Echo, Dual Blades Echo, and Greatsword Echo do not feel like the same image repeated at different sizes.
+
+## Applied Changes
+
+- Added weapon-specific Echo mutation layers in `V1GameManager`:
+  - Blood: Dual Blades gets twin blood pips/needle cuts; Greatsword gets a large ritual spine and crescent teeth over the vortex.
+  - Shatter: Dual Blades gets skipping chip cuts; Greatsword gets an anvil/down-slam rupture silhouette.
+  - Execution: Dual Blades gets sentence/barcode marks; Greatsword gets an execution gate frame.
+  - Stopped: Dual Blades gets broken clock shards and twin second-slashes; Greatsword gets a clock cage around the frozen space.
+  - Ashen: Dual Blades gets parry-return streaks; Greatsword gets cathedral/holy wall pressure.
+  - Oblivion: Dual Blades gets shredded void marks; Greatsword gets crater teeth and collapse-line pressure.
+- Preserved Dense Dual Blades suppression for non-essential ornaments so dense hit scenarios stay budget-safe.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing deprecation warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing deprecation warnings and 0 errors.
+- Unity compilation errors: `0`.
+- `DebugRunEchoMatrix(DualBlades)`: all 8 Echoes at `+5`, `dualMutationObjects=320`, capture saved.
+- `DebugRunEchoMatrix(Greatsword)`: all 8 Echoes at `+5`, `greatMutationObjects=240`, capture saved.
+- `DebugRunDenseDualBladePerfMatrix()`: `hits=18`, `echoesSuppressed=15`, `transient=109`, `ms=27.16`.
+- Evidence captured:
+  - `docs/orchestration/evidence/2026-07-22-weapon-echo-mutation-dual-matrix.png`
+  - `docs/orchestration/evidence/2026-07-22-weapon-echo-mutation-great-matrix.png`
+
+## Remaining Gate
+
+- jaewoo direct-play review:
+  - confirm whether the Echoes now feel like weapon-mutated effects rather than duplicated memory motifs;
+  - mark each family/weapon pair `keep`, `tune`, or `redesign`;
+  - tune normal-combat alpha/scale/lifetime before adding more mechanics if the all-on density feels noisy.
+
 # 2026-07-22 HQ Bitmap VFX Texture Pass
 
 ## Status

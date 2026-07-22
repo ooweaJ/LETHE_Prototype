@@ -1,5 +1,30 @@
 # LETHE TASK
 
+## 2026-07-22 Weapon-Specific Echo Mutation VFX Pass
+
+- [x] Echo weapon mutation pass completed:
+  - [x] Blood Echo now has separate Dual Blades twin-pip/needle and Greatsword ritual-spine/crescent-teeth layers.
+  - [x] Shatter Echo now has separate Dual Blades skip-chip cuts and Greatsword anvil/down-slam rupture layers.
+  - [x] Execution Echo now has separate Dual Blades sentence/barcode marks and Greatsword execution-gate layers.
+  - [x] Stopped Echo now has separate Dual Blades broken-clock shards and Greatsword clock-cage layers.
+  - [x] Ashen Echo now has separate Dual Blades parry-return streaks and Greatsword cathedral-wall pressure layers.
+  - [x] Oblivion Echo now has separate Dual Blades shredded-void marks and Greatsword crater-teeth/collapse-line layers.
+- [x] Performance guard completed:
+  - [x] Dense Dual Blades skips the newest non-essential mutation ornaments.
+  - [x] Dense Dual Blades perf reflection run stayed within the current VFX budget.
+- [x] Verification completed:
+  - [x] Runtime C# build passed.
+  - [x] Editor C# build passed.
+  - [x] Unity compilation errors `0`.
+  - [x] Dual Blades and Greatsword mutation matrix captures saved.
+  - [x] Dense Dual Blades perf reflection run completed.
+
+Current next:
+
+1. Direct-play weapon-specific Echo mutation effects in normal combat.
+2. Mark each family/weapon pair `keep`, `tune`, or `redesign`.
+3. Tune alpha/scale/lifetime for the all-on overpacked cases before adding additional gameplay logic.
+
 ## 2026-07-22 HQ Bitmap VFX Texture Pass
 
 - [x] Reference-quality bitmap VFX pass completed:

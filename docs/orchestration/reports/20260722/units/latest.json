@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260722\\index.md",
-  "generatedAt": "2026-07-22T09:04:24.388Z",
-  "unitCount": 5,
+  "generatedAt": "2026-07-22T14:07:13.176Z",
+  "unitCount": 6,
   "latest": {
-    "title": "2026-07-22-05 - 고품질 비트맵 VFX 텍스처 적용",
-    "number": "05",
-    "markdownPath": "docs\\orchestration\\reports\\20260722\\units\\2026-07-22-05-고품질-비트맵-vfx-텍스처-적용.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260722\\units\\2026-07-22-05-고품질-비트맵-vfx-텍스처-적용.html"
+    "title": "2026-07-22-06 - 무기별 잔향 변형 VFX 패스",
+    "number": "06",
+    "markdownPath": "docs\\orchestration\\reports\\20260722\\units\\2026-07-22-06-무기별-잔향-변형-vfx-패스.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260722\\units\\2026-07-22-06-무기별-잔향-변형-vfx-패스.html"
   }
 }
