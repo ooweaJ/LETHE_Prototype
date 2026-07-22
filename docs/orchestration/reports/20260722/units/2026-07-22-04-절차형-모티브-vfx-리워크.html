@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-22-04 - 절차형 모티브 VFX 리워크</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-22-04 - 절차형 모티브 VFX 리워크</h1>
+      <p class="meta">Generated from 2026-07-22-04-절차형-모티브-vfx-리워크.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260722/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-22-04 - 절차형 모티브 VFX 리워크</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에 승인된 실루엣 보드 기반 VFX 리워크를 적용했다. 정지, 처형, 파문, 낙인, 잿빛이 이제 원형/색상 차이보다 각자의 대표 모티브로 먼저 보이도록 바뀌었다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>정지: 톱니, 눈금, 시계바늘, 얼어붙은 스크래치가 들어간 금색 시계 인장 스프라이트를 절차 생성한다.</li>
+<li>처형: 검은 판결 몸체, 금색 판결선, 참수 칼날, 파편으로 구성된 판결/기요틴 인장을 절차 생성한다.</li>
+<li>파문: 위에서 내리찍히는 충격, 지면 그림자, 균열, 들린 파편으로 구성된 내려찍기 실루엣을 절차 생성한다.</li>
+<li>낙인: 찢어진 검은 void 축, 보라색 획, 부서진 룬 조각으로 구성된 각인 실루엣을 절차 생성한다.</li>
+<li>잿빛: 흰색/금색 성화, 회색 재 바닥, 불씨, 수호 십자 문양으로 구성된 성스러운 재불꽃 실루엣을 절차 생성한다.</li>
+<li>기억 프리뷰, 일반 잔향, 무기별 잔향 보조 레이어, 궁극 잔향 프리뷰가 새 모티브를 1차 읽기로 사용한다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build</code>: 루트에 솔루션/프로젝트 파일이 없어 <code>MSB1003</code>으로 해당 검증 경로는 적용 불가.</li>
+<li>Unity editor state: <code>Dev_Prototype_v1</code>, not playing, not compiling.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Unity console errors after Play Mode QA: <code>0</code>.</li>
+<li><code>DebugPreviewAllUtilityVfx()</code> 직접 호출 성공.</li>
+<li><code>DebugRunEchoMatrix(DualBlades)</code> 직접 호출 성공: 8개 잔향 <code>+5</code>, <code>kills=31</code>, <code>storm=True</code>.</li>
+<li><code>DebugRunEchoMatrix(Greatsword)</code> 직접 호출 성공: 8개 잔향 <code>+5</code>, <code>kills=57</code>, <code>storm=True</code>.</li>
+<li>증거:</li>
+<li><code>docs/orchestration/evidence/2026-07-22-memory-echo-weapon-vfx-silhouette-board.png</code></li>
+<li><code>docs/orchestration/evidence/2026-07-22-vfx-motif-preview-slow.png</code></li>
+<li><code>docs/orchestration/evidence/2026-07-22-vfx-motif-dual-echo-matrix.png</code></li>
+<li><code>docs/orchestration/evidence/2026-07-22-vfx-motif-great-echo-matrix.png</code></li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>앞으로 유틸리티 기억/잔향 VFX는 색과 크기보다 대표 행동 실루엣이 먼저 읽혀야 한다. 원, 링, 선은 필드 범위나 타이밍을 돕는 보조 언어로만 사용한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>전체 프리뷰와 Echo Matrix는 일부러 모든 잔향을 한 번에 켜기 때문에 과밀하게 보인다. 실제 조정은 새 기능을 더 넣기보다 크기, 알파, 지속시간, 파편 개수를 먼저 줄이는 쪽이 안전하다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Implemented procedural motif sprites in <code>V1GameManager</code> for Stopped, Execution, Shatter, Oblivion, and Ashen. These motifs are now wired into memory previews, normal Echoes, weapon-specific Echo support, and utility Ultimate previews. Unity compile and Play Mode smoke checks passed with console errors <code>0</code>. Next review should be direct-play taste tuning, especially scale/noise/timing.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo 직접 플레이로 정지, 처형, 파문, 낙인, 잿빛을 각각 <code>keep</code>, <code>tune</code>, <code>redesign</code>으로 판정한다. 과밀하면 새 메커닉을 더하지 말고 scale, alpha, lifetime, spawn count를 먼저 조정한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 잔향이 원형/색상/크기 차이처럼 보여 보상감과 개성이 부족했다.</li>
+<li>방향: 각 잔향을 대표 실루엣과 행동 문법으로 구분한다.</li>
+<li>행동: 시계 인장, 판결 인장, 지면 내려찍기, 찢어진 낙인, 성화 모티브를 절차 스프라이트로 만들고 실제 호출부에 연결했다.</li>
+<li>결과: 자동 검증과 Play Mode smoke에서 오류 없이 생성되며, 다음 단계는 직접 플레이 감각 튜닝으로 좁혀졌다.</li>
+</ul>
+  </main>
+</body>
+</html>

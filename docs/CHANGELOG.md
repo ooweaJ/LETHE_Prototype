@@ -2,6 +2,22 @@
 
 # 2026-07-22
 
+- Implemented the approved procedural motif VFX rework:
+  - Stopped now has an ornate generated clock seal motif.
+  - Execution now uses generated judgement/guillotine stamp motifs.
+  - Shatter now uses generated down-slam, impact, crack, and debris motifs.
+  - Oblivion now uses generated torn void-brand motifs.
+  - Ashen now uses generated holy ash fire / ward motifs.
+  - Memory previews, normal Echoes, weapon-specific Echo support layers, and utility Ultimate previews now route through these motif reads.
+  - Old rings/lines remain only as supporting field/timing layers where useful.
+- Verification:
+  - Unity compilation errors: `0`.
+  - Unity console errors after Play Mode QA: `0`.
+  - `DebugPreviewAllUtilityVfx()` invoked successfully.
+  - `DebugRunEchoMatrix(DualBlades)` completed with all 8 Echoes at `+5`, `kills=31`, `storm=True`.
+  - `DebugRunEchoMatrix(Greatsword)` completed with all 8 Echoes at `+5`, `kills=57`, `storm=True`.
+  - Evidence screenshots saved under `docs/orchestration/evidence/`.
+
 - Added a memory / Echo / Ultimate dopamine rework:
   - Ashen memory and Echo now use cracked guard plate, shield-break, and counter-burst reads.
   - Oblivion memory and Echo now use void-core, brand-ring, crack, and erase-fragment reads.

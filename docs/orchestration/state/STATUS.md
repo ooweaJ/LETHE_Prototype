@@ -2,6 +2,34 @@
 
 Last updated: 2026-07-22
 
+## 2026-07-22 Update: Procedural Motif VFX Rework
+
+- jaewoo approved the memory/echo/weapon silhouette board direction and asked to implement detailed VFX from that motif.
+- Applied in `_dev`:
+  - Added procedural colored motif sprites in `V1GameManager` for:
+    - Stopped: ornate golden clock seal with ticks, teeth, hands, and frozen-glass scratches.
+    - Execution: judgement/guillotine stamp with dark sentence body, gold bars, blade core, and shards.
+    - Shatter: vertical down-slam, impact diamond, ground shadow, jagged cracks, and lifted chips.
+    - Oblivion: torn void-brand with black tear spine, purple cross strokes, and broken rune fragments.
+    - Ashen: white/gold holy ash fire with flame tongues, ash bed, embers, and ward cross.
+  - Rewired memory previews, normal Echoes, weapon-specific Echo reads, and the three utility Ultimate previews to use these motifs as the primary silhouette instead of old prompt rings.
+  - Kept old rings/lines only as support layers where they help timing or field readability.
+- Verification:
+  - `dotnet build` at repository root is not applicable here because there is no root solution/project file (`MSB1003`).
+  - Unity editor state: `Dev_Prototype_v1`, not playing, not compiling.
+  - Unity compilation errors: `0`.
+  - Unity console errors after Play Mode motif QA: `0`.
+  - Direct `DebugPreviewAllUtilityVfx()` invoked successfully.
+  - Direct `DebugRunEchoMatrix(DualBlades)` completed: `kills=31`, all 8 echoes at `+5`, `storm=True`, no result/death overlay.
+  - Direct `DebugRunEchoMatrix(Greatsword)` completed: `kills=57`, all 8 echoes at `+5`, `storm=True`, no result/death overlay.
+- Evidence:
+  - `docs/orchestration/evidence/2026-07-22-memory-echo-weapon-vfx-silhouette-board.png`
+  - `docs/orchestration/evidence/2026-07-22-vfx-motif-preview-slow.png`
+  - `docs/orchestration/evidence/2026-07-22-vfx-motif-dual-echo-matrix.png`
+  - `docs/orchestration/evidence/2026-07-22-vfx-motif-great-echo-matrix.png`
+- Remaining gate:
+  - Direct-play taste review should judge scale/noise/timing. The debug all-on screenshots intentionally look overpacked, so next tuning should reduce alpha/lifetime/counts before adding new mechanics.
+
 ## 2026-07-22 Update: Stopped Field / Non-Circle VFX Readability Pass
 
 - jaewoo review:

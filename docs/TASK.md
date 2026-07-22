@@ -1,5 +1,32 @@
 # LETHE TASK
 
+## 2026-07-22 Procedural Motif VFX Rework
+
+- [x] Approved silhouette-board direction implemented:
+  - [x] Stopped = ornate clock seal / frozen second.
+  - [x] Execution = judgement / guillotine / sentence stamp.
+  - [x] Shatter = down-slam / ground crack / lifted debris.
+  - [x] Oblivion = torn void brand / erased rune fragments.
+  - [x] Ashen = holy ash fire / ward / guard-counter.
+- [x] Runtime wiring completed:
+  - [x] memory previews use motif call paths;
+  - [x] normal memory and Echo paths use motif sprites as primary silhouettes;
+  - [x] weapon-specific Greatsword and Dual Blades utility Echoes use the same family motifs at different scale/action density;
+  - [x] utility Ultimate previews/support layers use motif language instead of only prompt rings.
+- [x] Verification completed:
+  - [x] Unity compilation errors `0`.
+  - [x] Unity console errors `0`.
+  - [x] `DebugPreviewAllUtilityVfx()` invoked successfully.
+  - [x] `DebugRunEchoMatrix(DualBlades)` completed.
+  - [x] `DebugRunEchoMatrix(Greatsword)` completed.
+  - [x] Evidence screenshots copied to orchestration evidence.
+
+Current next:
+
+1. Direct-play the motif pass in normal combat, not only all-on debug matrices.
+2. Mark Stopped / Execution / Shatter / Oblivion / Ashen as `keep`, `tune`, or `redesign`.
+3. If noisy, tune scale, alpha, lifetime, and spawn count before adding new mechanics.
+
 ## 2026-07-22 Memory / Echo / Ultimate Dopamine Rework
 
 - [x] Memory/Echo dopamine pass completed:

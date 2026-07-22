@@ -1,5 +1,56 @@
 # Current Task
 
+# 2026-07-22 Procedural Motif VFX Rework
+
+## Status
+
+- Implemented, Unity compile-verified, Play Mode smoke-verified, and awaiting jaewoo direct-play taste review.
+
+## Goal
+
+Move Stopped, Execution, Shatter, Oblivion, and Ashen away from "same circle with different color/size" by making each family start from a representative action silhouette.
+
+## Applied Changes
+
+- Added procedural motif sprite generators in `V1GameManager`:
+  - `MakeStoppedClockSealSprite`
+  - `MakeExecutionJudgementMotifSprite`
+  - `MakeShatterSlamMotifSprite`
+  - `MakeOblivionBrandMotifSprite`
+  - `MakeAshenHolyFireMotifSprite`
+- Added shared pixel drawing helpers for soft lines, discs, rings, diamonds, and ellipses.
+- Rewired major VFX call sites:
+  - memory previews now call the actual motif VFX paths;
+  - Stopped fields use a detailed clock seal as the main held layer;
+  - Execution memories/Echoes and Fracture Execution use judgement motifs;
+  - Shatter memory/Echoes and Fracture Execution use slam/crack motifs;
+  - Oblivion memories/Echoes and erase bursts use torn brand motifs;
+  - Ashen memory/Echoes and Ashen Oblivion use holy fire motifs.
+- Preserved support lines/rings only as secondary timing or field-read layers.
+
+## Verification
+
+- `dotnet build`: not applicable from repo root, `MSB1003` because there is no root solution/project file.
+- Unity editor state: `Dev_Prototype_v1`, not playing, not compiling.
+- Unity compilation errors: `0`.
+- Unity console errors after Play Mode QA: `0`.
+- `DebugPreviewAllUtilityVfx()` invoked successfully.
+- `DebugRunEchoMatrix(DualBlades)`: completed with all 8 Echoes at `+5`, `kills=31`, `storm=True`.
+- `DebugRunEchoMatrix(Greatsword)`: completed with all 8 Echoes at `+5`, `kills=57`, `storm=True`.
+- Evidence captured:
+  - `docs/orchestration/evidence/2026-07-22-memory-echo-weapon-vfx-silhouette-board.png`
+  - `docs/orchestration/evidence/2026-07-22-vfx-motif-preview-slow.png`
+  - `docs/orchestration/evidence/2026-07-22-vfx-motif-dual-echo-matrix.png`
+  - `docs/orchestration/evidence/2026-07-22-vfx-motif-great-echo-matrix.png`
+
+## Remaining Gate
+
+- jaewoo direct-play review:
+  - mark each motif family `keep`, `tune`, or `redesign`;
+  - check whether Stopped clock is now visible without hiding monsters;
+  - check whether Execution/Shatter/Oblivion/Ashen feel like distinct events;
+  - if noisy, tune scale, alpha, lifetime, and spawn count before adding more mechanics.
+
 # 2026-07-22 Stopped Field / Non-Circle VFX Readability Pass
 
 ## Status

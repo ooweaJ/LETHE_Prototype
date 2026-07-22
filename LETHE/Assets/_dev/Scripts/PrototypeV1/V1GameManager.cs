@@ -1579,11 +1579,13 @@ namespace Lethe.PrototypeV1
             var prefix = echo ? "ShatterEchoSlam" : "ShatterWaveSlam";
             var impact = echo ? new Color(0.56f, 0.94f, 1f, 0.66f) : new Color(0.74f, 1f, 1f, 0.78f);
             var shadow = echo ? new Color(0.02f, 0.14f, 0.18f, 0.34f) : new Color(0.03f, 0.16f, 0.20f, 0.42f);
+            var motif = MakeShatterSlamMotifSprite($"{prefix}_Motif", echo, !echo);
             var crack = MakeBoxSprite($"{prefix}_Crack", Color.white, 9, 160);
             var shard = MakeImpactDiamondSprite($"{prefix}_Shard", Color.white);
             var slab = MakeBoxSprite($"{prefix}_PressurePlate", Color.white, 48, 104);
             var downstroke = MakeBoxSprite($"{prefix}_Downstroke", Color.white, echo ? 14 : 18, echo ? 156 : 190);
 
+            SpawnTransientSprite($"{prefix}_GroundSlamMotif", motif, center + Vector3.up * 0.04f, Quaternion.identity, radius * (echo ? 0.56f : 0.70f), new Color(1f, 1f, 1f, echo ? 0.82f : 0.96f), lifetime);
             SpawnTransientSpriteScaled($"{prefix}_ImpactShadow", slab, center, Quaternion.Euler(0f, 0f, elapsed * 8f), new Vector3(radius * 0.74f, radius * 0.42f, 1f), shadow, lifetime * 0.92f);
             SpawnTransientSpriteScaled($"{prefix}_Downstroke", downstroke, center + Vector3.up * (0.22f + radius * 0.05f), Quaternion.identity, new Vector3(echo ? 0.09f : 0.12f, radius * 0.86f, 1f), new Color(0.90f, 1f, 1f, echo ? 0.70f : 0.82f), lifetime * 0.55f);
             SpawnTransientSprite($"{prefix}_ImpactCore", shard, center, Quaternion.Euler(0f, 0f, 45f + elapsed * 120f), radius * 0.22f, impact, lifetime * 0.48f);
@@ -1650,6 +1652,7 @@ namespace Lethe.PrototypeV1
         void SpawnStoppedEchoClamp(Vector3 center, float radius, float lifetime)
         {
             var color = TimeStopGold(false);
+            SpawnHeldTransientSprite("StoppedEchoClampSealMotif", MakeStoppedClockSealSprite("StoppedEchoClampSealMotif", false), center, Quaternion.Euler(0f, 0f, elapsed * -28f), radius * 0.58f, new Color(1f, 1f, 1f, 0.72f), lifetime, 0.82f);
             SpawnHeldTransientSprite("StoppedEchoClampRing", MakeRingSprite("StoppedEchoClampRing", Color.white, 132), center, Quaternion.Euler(0f, 0f, elapsed * -110f), radius, new Color(color.r, color.g, color.b, 0.72f), lifetime, 0.82f);
             SpawnHeldTransientSprite("StoppedEchoClampCore", MakeImpactDiamondSprite("StoppedEchoClampCore", Color.white), center, Quaternion.Euler(0f, 0f, elapsed * 160f), 0.24f, new Color(1f, 0.86f, 0.28f, 0.72f), lifetime, 0.82f);
             var tick = MakeBoxSprite("StoppedEchoClampTick", Color.white, 7, 48);
@@ -1675,10 +1678,12 @@ namespace Lethe.PrototypeV1
             var scale = (echo ? 0.76f : 0.92f) + levelValue * 0.035f + (rupture ? 0.22f : 0f);
             var violet = rupture ? new Color(0.94f, 0.48f, 1f, 0.84f) : new Color(0.86f, 0.40f, 1f, echo ? 0.70f : 0.78f);
             var voidInk = rupture ? new Color(0.10f, 0.00f, 0.18f, 0.56f) : new Color(0.08f, 0.00f, 0.16f, 0.42f);
+            var motif = MakeOblivionBrandMotifSprite($"{prefix}_Motif", echo, rupture);
             var tear = MakeBoxSprite($"{prefix}_VoidTear", Color.white, 16, 124);
             var slash = MakeBoxSprite($"{prefix}_BrokenStroke", Color.white, 7, 112);
             var shard = MakeImpactDiamondSprite($"{prefix}_Shard", Color.white);
 
+            SpawnTransientSprite($"{prefix}_TornBrandMotif", motif, center + (Vector3)(f * 0.04f), Quaternion.Euler(0f, 0f, baseAngle - 90f), scale * (rupture ? 0.74f : 0.62f), new Color(1f, 1f, 1f, rupture ? 0.96f : 0.84f), lifetime);
             SpawnTransientSpriteScaled($"{prefix}_BlackTear", tear, center + (Vector3)(f * 0.03f), Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(0.12f * scale, 0.74f * scale, 1f), voidInk, lifetime);
             SpawnTransientSpriteScaled($"{prefix}_CrossStrokeA", slash, center + (Vector3)(s * 0.10f), Quaternion.Euler(0f, 0f, baseAngle - 38f), new Vector3(0.030f * scale, 0.68f * scale, 1f), violet, lifetime * 0.88f);
             SpawnTransientSpriteScaled($"{prefix}_CrossStrokeB", slash, center - (Vector3)(s * 0.11f), Quaternion.Euler(0f, 0f, baseAngle + 42f), new Vector3(0.026f * scale, 0.58f * scale, 1f), new Color(violet.r, violet.g, violet.b, violet.a * 0.76f), lifetime * 0.82f);
@@ -2179,11 +2184,13 @@ namespace Lethe.PrototypeV1
             var shadow = execute ? new Color(0.24f, 0.14f, 0.02f, 0.34f) : new Color(0.18f, 0.12f, 0.02f, 0.22f);
             var gold = execute ? new Color(1f, 0.93f, 0.38f, 0.88f) : new Color(1f, 0.84f, 0.28f, 0.54f);
             var white = execute ? new Color(1f, 1f, 0.86f, 0.92f) : new Color(1f, 0.96f, 0.62f, 0.58f);
+            var motif = MakeExecutionJudgementMotifSprite($"{prefix}_Motif", echo, execute);
             var plate = MakeBoxSprite($"{prefix}_JudgementPlate", Color.white, 38, 118);
             var bar = MakeBoxSprite($"{prefix}_SentenceBar", Color.white, 8, 120);
             var blade = MakeBoxSprite($"{prefix}_BladeStamp", Color.white, 12, 166);
             var mark = MakeImpactDiamondSprite($"{prefix}_Nail", Color.white);
 
+            SpawnTransientSprite($"{prefix}_JudgementMotif", motif, center + (Vector3)(f * 0.05f), Quaternion.Euler(0f, 0f, baseAngle - 90f), scale * (execute ? 0.72f : 0.54f), new Color(1f, 1f, 1f, execute ? 0.98f : 0.72f), lifetime);
             SpawnTransientSpriteScaled($"{prefix}_BlackSentencePlate", plate, center + (Vector3)(f * 0.03f), Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(0.34f * scale, 0.72f * scale, 1f), shadow, lifetime);
             SpawnTransientSpriteScaled($"{prefix}_VerticalBladeStamp", blade, center + (Vector3)(f * 0.07f), Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(0.060f * scale, 1.12f * scale, 1f), white, lifetime);
             SpawnTransientSpriteScaled($"{prefix}_SentenceBarA", bar, center + (Vector3)(s * 0.18f * scale), Quaternion.Euler(0f, 0f, baseAngle + 4f), new Vector3(0.036f * scale, 0.66f * scale, 1f), gold, lifetime * 0.88f);
@@ -2945,6 +2952,7 @@ namespace Lethe.PrototypeV1
             var startAngle = baseAngle - (heavy ? 132f : 96f);
             var endAngle = startAngle + 360f;
 
+            SpawnHeldTransientSprite(heavy ? "EchoGreat_StoppedClockMotif" : "EchoDual_StoppedClockMotif", MakeStoppedClockSealSprite(heavy ? "EchoGreat_StoppedClockMotif" : "EchoDual_StoppedClockMotif", heavy), center, Quaternion.Euler(0f, 0f, baseAngle * 0.08f), radius * (heavy ? 0.86f : 0.76f), new Color(1f, 1f, 1f, heavy ? 0.76f : 0.66f), lifetime, 0.82f);
             SpawnHeldTransientSprite(heavy ? "EchoGreat_StoppedClockLockOuter" : "EchoDual_StoppedClockLockOuter", MakeRingSprite("EchoStoppedClockLockOuter", Color.white, heavy ? 192 : 144), center, Quaternion.identity, radius * (heavy ? 0.98f : 0.92f), new Color(gold.r, gold.g, gold.b, heavy ? 0.48f : 0.40f), lifetime, 0.82f);
             SpawnHeldTransientSprite(heavy ? "EchoGreat_StoppedClockLockInner" : "EchoDual_StoppedClockLockInner", MakeRingSprite("EchoStoppedClockLockInner", Color.white, heavy ? 144 : 112), center, Quaternion.identity, radius * 0.46f, faint, lifetime, 0.82f);
             SpawnClockHandSweep(heavy ? "EchoGreat_StoppedSecondHandSweep" : "EchoDual_StoppedSecondHandSweep", secondHand, center, radius, startAngle, endAngle, heavy ? 0.050f : 0.040f, heavy ? 0.74f : 0.68f, gold, lifetime, secondDuration);
@@ -3067,9 +3075,11 @@ namespace Lethe.PrototypeV1
             var length = radius * (2.00f + levelValue * 0.055f);
             var end = origin + (Vector3)(f * length);
             var mid = Vector3.Lerp(origin, end, 0.52f);
+            var motif = MakeShatterSlamMotifSprite("EchoGreat_ShatterRuptureMotif", true, true);
             var crack = MakeBoxSprite("EchoGreat_ShatterGroundCrack", Color.white, 9, 210);
             var shard = MakeImpactDiamondSprite("EchoGreat_ShatterGroundShard", Color.white);
 
+            SpawnTransientSpriteScaled("EchoGreat_ShatterRuptureMotif", motif, mid, Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(radius * 0.62f, radius * 1.08f, 1f), new Color(1f, 1f, 1f, 0.92f), 0.72f);
             SpawnEchoLink("EchoGreat_ShatterRuptureSpine", origin, end, new Color(0.60f, 0.98f, 1f, 0.74f), 0.68f, 0.054f);
             SpawnTransientSpriteScaled("EchoGreat_ShatterRuptureGlow", MakeBoxSprite("EchoGreat_ShatterRuptureGlow", Color.white, 18, 220), mid, Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(0.18f, length * 0.50f, 1f), new Color(0.32f, 0.88f, 1f, 0.18f), 0.58f);
             SpawnTransientSpriteScaled("EchoGreat_ShatterRuptureCoreCrack", crack, mid, Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(0.056f, length * 0.56f, 1f), new Color(0.78f, 1f, 1f, 0.78f), 0.72f);
@@ -3111,11 +3121,13 @@ namespace Lethe.PrototypeV1
             var f = EchoForward(forward);
             var s = new Vector2(-f.y, f.x);
             var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
+            var motif = MakeShatterSlamMotifSprite(heavy ? "EchoGreat_ShatterGroundMotif" : "EchoDual_ShatterGroundMotif", true, heavy);
             var crack = MakeBoxSprite(heavy ? "EchoGreat_ShatterGroundBreak" : "EchoDual_ShatterGroundBreak", Color.white, heavy ? 8 : 6, heavy ? 154 : 108);
             var shard = MakeImpactDiamondSprite(heavy ? "EchoGreat_ShatterGroundChip" : "EchoDual_ShatterGroundChip", Color.white);
             var mainColor = heavy ? new Color(0.70f, 1f, 1f, 0.72f) : new Color(0.60f, 0.98f, 1f, 0.66f);
             var sideColor = heavy ? new Color(0.52f, 0.94f, 1f, 0.46f) : new Color(0.52f, 0.94f, 1f, 0.38f);
 
+            SpawnTransientSprite(heavy ? "EchoGreat_ShatterGroundMotif" : "EchoDual_ShatterGroundMotif", motif, center + (Vector3)(f * 0.03f), Quaternion.Euler(0f, 0f, baseAngle - 90f), scale * (heavy ? 0.42f : 0.34f), new Color(1f, 1f, 1f, heavy ? 0.84f : 0.72f), heavy ? 0.50f : 0.32f);
             SpawnTransientSpriteScaled(heavy ? "EchoGreat_ShatterGroundBreakMain" : "EchoDual_ShatterGroundBreakMain", crack, center, Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(heavy ? 0.040f : 0.030f, scale, 1f), mainColor, heavy ? 0.52f : 0.34f);
             SpawnTransientSpriteScaled(heavy ? "EchoGreat_ShatterGroundBreakLeft" : "EchoDual_ShatterGroundBreakLeft", crack, center + (Vector3)(s * scale * 0.13f), Quaternion.Euler(0f, 0f, baseAngle - 126f), new Vector3(heavy ? 0.028f : 0.022f, scale * 0.56f, 1f), sideColor, heavy ? 0.46f : 0.30f);
             SpawnTransientSpriteScaled(heavy ? "EchoGreat_ShatterGroundBreakRight" : "EchoDual_ShatterGroundBreakRight", crack, center - (Vector3)(s * scale * 0.11f), Quaternion.Euler(0f, 0f, baseAngle - 52f), new Vector3(heavy ? 0.026f : 0.020f, scale * 0.46f, 1f), sideColor, heavy ? 0.42f : 0.28f);
@@ -3143,6 +3155,7 @@ namespace Lethe.PrototypeV1
             var blade = MakeBoxSprite("EchoGreat_ExecutionGuillotineBlade", Color.white, 14, 172);
             var start = center + Vector3.up * (0.94f + levelValue * 0.04f) - (Vector3)(f * 0.16f);
             var end = center + (Vector3)(f * 0.08f);
+            SpawnTransientSprite("EchoGreat_ExecutionGuillotineMotif", MakeExecutionJudgementMotifSprite("EchoGreat_ExecutionGuillotineMotif", true, true), center + (Vector3)(f * 0.04f), Quaternion.Euler(0f, 0f, baseAngle - 90f), 0.78f + levelValue * 0.030f, new Color(1f, 1f, 1f, 0.88f), 0.62f);
             SpawnSweepingTransientSprite("EchoGreat_ExecutionFallingVerdict", blade, start, end, baseAngle + 180f, baseAngle + 180f, 0.38f, 0.52f, new Color(1f, 0.96f, 0.56f, 0.82f), 0.56f, 0.22f);
             SpawnEchoLink("EchoGreat_ExecutionVerticalTell", center + Vector3.up * 0.82f, center - Vector3.up * 0.62f, new Color(1f, 0.92f, 0.48f, 0.42f), 0.42f, 0.024f);
             SpawnEchoWoundSlash("EchoGreat_ExecutionGroundSentence", center + (Vector3)(s * 0.05f), s, new Color(1f, 0.88f, 0.44f, 0.56f), 1.05f + levelValue * 0.05f, 0.34f);
@@ -3159,6 +3172,7 @@ namespace Lethe.PrototypeV1
                 var target = chain[i];
                 if (target == null) continue;
                 var pos = target.transform.position + (Vector3)(s * ((i % 2 == 0 ? -1f : 1f) * 0.10f) + f * 0.06f);
+                SpawnTransientSprite("EchoDual_ExecutionSentenceMotif", MakeExecutionJudgementMotifSprite("EchoDual_ExecutionSentenceMotif", true, true), pos, Quaternion.Euler(0f, 0f, Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg - 90f), 0.32f + levelValue * 0.012f, new Color(1f, 1f, 1f, 0.74f), 0.32f);
                 SpawnTransientSprite("EchoDual_ExecutionSentenceMark", MakeImpactDiamondSprite("EchoDual_ExecutionSentenceMark", Color.white), pos, Quaternion.Euler(0f, 0f, 45f + elapsed * 180f + i * 30f), 0.18f + levelValue * 0.010f, new Color(1f, 0.94f, 0.50f, 0.76f), 0.34f);
                 SpawnEchoWoundSlash("EchoDual_ExecutionSentenceTick", pos, f, new Color(1f, 0.94f, 0.54f, 0.50f), 0.42f + i * 0.035f, 0.22f);
             }
@@ -3194,6 +3208,7 @@ namespace Lethe.PrototypeV1
         {
             var f = EchoForward(forward);
             var angle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg - 90f;
+            SpawnTransientSprite("EchoGreat_AshenBulwarkHolyFire", MakeAshenHolyFireMotifSprite("EchoGreat_AshenBulwarkHolyFire", true, true), center + (Vector3)(f * 0.12f), Quaternion.Euler(0f, 0f, angle), 0.62f + levelValue * 0.028f, new Color(1f, 1f, 1f, 0.88f), 0.68f);
             SpawnTransientSpriteScaled("EchoGreat_AshenBulwarkPlate", MakeBoxSprite("EchoGreat_AshenBulwarkPlate", Color.white, 18, 138), center, Quaternion.Euler(0f, 0f, angle), new Vector3(0.16f, 0.92f + levelValue * 0.045f, 1f), new Color(0.86f, 0.92f, 1f, 0.48f), 0.62f);
             SpawnRadialSlashLines("EchoGreat_AshenBulwarkFracture", center, f, 5, 0.78f + levelValue * 0.04f, new Color(0.90f, 0.96f, 1f, 0.50f), 0.42f);
             SpawnGreatswordForwardWedge("EchoGreat_AshenBulwarkReleaseCone", center, f, 1.62f + levelValue * 0.08f, 50f, new Color(0.78f, 0.86f, 0.94f, 0.18f), 0.56f);
@@ -3204,6 +3219,7 @@ namespace Lethe.PrototypeV1
             var f = EchoForward(forward);
             var s = new Vector2(-f.y, f.x);
             var count = Mathf.Clamp(3 + levelValue / 2, 4, 6);
+            SpawnTransientSprite("EchoDual_AshenParryHolySpark", MakeAshenHolyFireMotifSprite("EchoDual_AshenParryHolySpark", true, false), center + (Vector3)(f * 0.04f), Quaternion.Euler(0f, 0f, Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg - 90f), 0.30f + levelValue * 0.010f, new Color(1f, 1f, 1f, 0.72f), 0.32f);
             for (int i = 0; i < count; i++)
             {
                 var lane = i - (count - 1) * 0.5f;
@@ -3246,8 +3262,8 @@ namespace Lethe.PrototypeV1
             var shard = MakeImpactDiamondSprite("MemoryAshenGuardShard", Color.white);
             var radius = 0.72f + levelValue * 0.065f;
             var shardCount = Mathf.Clamp(3 + levelValue, 4, 8);
+            SpawnTransientSprite("MemoryAshenGuardHolyFireSigil", MakeAshenHolyFireMotifSprite("MemoryAshenGuardHolyFireSigil", false, true), center + (Vector3)(f * 0.06f), Quaternion.Euler(0f, 0f, angle), radius * 0.52f, new Color(1f, 1f, 1f, 0.84f), 0.58f);
             SpawnTransientSpriteScaled("MemoryAshenGuardPlateFace", plate, center + (Vector3)(f * 0.18f), Quaternion.Euler(0f, 0f, angle), new Vector3(0.24f, radius, 1f), new Color(0.92f, 0.98f, 1f, 0.52f), 0.52f);
-            SpawnTransientSprite("MemoryAshenGuardPlateHalo", MakeRingSprite("MemoryAshenGuardPlateHalo", Color.white, 132), center, Quaternion.Euler(0f, 0f, elapsed * -82f), radius * 0.82f, new Color(0.86f, 0.94f, 1f, 0.34f), 0.48f);
             SpawnRadialSlashLines("MemoryAshenGuardPlateCrack", center + (Vector3)(f * 0.12f), f, 5, 0.56f + levelValue * 0.035f, new Color(0.96f, 1f, 1f, 0.58f), 0.38f);
             for (int i = 0; i < shardCount; i++)
             {
@@ -3273,6 +3289,7 @@ namespace Lethe.PrototypeV1
             var white = strong ? new Color(0.96f, 1f, 1f, 0.76f) : new Color(0.94f, 0.98f, 1f, 0.58f);
             var smoke = strong ? new Color(0.42f, 0.48f, 0.50f, 0.34f) : new Color(0.38f, 0.42f, 0.44f, 0.24f);
 
+            SpawnTransientSprite($"{prefix}_HolyFireMotif", MakeAshenHolyFireMotifSprite($"{prefix}_HolyFireMotif", echo, strong), center + (Vector3)(f * 0.07f), Quaternion.Euler(0f, 0f, baseAngle - 90f), (strong ? 0.58f : 0.38f) + levelValue * (strong ? 0.030f : 0.018f), new Color(1f, 1f, 1f, strong ? 0.90f : 0.74f), lifetime);
             SpawnTransientSpriteScaled($"{prefix}_AshBed", ash, center - (Vector3)(f * 0.05f), Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(0.44f * span, 0.28f * span, 1f), smoke, lifetime * 0.95f);
             for (int i = 0; i < flameCount; i++)
             {
@@ -3320,9 +3337,10 @@ namespace Lethe.PrototypeV1
             var f = EchoForward(forward);
             var violet = heavy ? new Color(0.72f, 0.18f, 1f, 0.62f) : new Color(0.80f, 0.34f, 1f, 0.50f);
             var voidColor = heavy ? new Color(0.08f, 0.00f, 0.16f, 0.48f) : new Color(0.12f, 0.00f, 0.22f, 0.36f);
+            var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
+            SpawnTransientSprite($"{name}_TornBrandMotif", MakeOblivionBrandMotifSprite($"{name}_TornBrandMotif", true, heavy), center + (Vector3)(f * 0.05f), Quaternion.Euler(0f, 0f, baseAngle - 90f), radius * (heavy ? 0.58f : 0.48f), new Color(1f, 1f, 1f, heavy ? 0.88f : 0.72f), heavy ? 0.62f : 0.38f);
             SpawnTransientSprite($"{name}_VoidCore", MakeDiscSprite($"{name}_VoidCore", Color.white, 132), center, Quaternion.identity, radius * (heavy ? 0.48f : 0.36f), voidColor, heavy ? 0.62f : 0.38f);
             var tear = MakeBoxSprite($"{name}_ErasedTear", Color.white, heavy ? 16 : 10, heavy ? 190 : 126);
-            var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
             SpawnTransientSpriteScaled($"{name}_ErasedTearMain", tear, center + (Vector3)(f * 0.08f), Quaternion.Euler(0f, 0f, baseAngle - 90f), new Vector3(heavy ? 0.078f : 0.052f, radius * (heavy ? 0.92f : 0.64f), 1f), violet, heavy ? 0.62f : 0.38f);
             SpawnTransientSpriteScaled($"{name}_ErasedTearCrossA", tear, center, Quaternion.Euler(0f, 0f, baseAngle - 34f), new Vector3(heavy ? 0.044f : 0.030f, radius * (heavy ? 0.58f : 0.42f), 1f), new Color(violet.r, violet.g, violet.b, violet.a * 0.78f), heavy ? 0.52f : 0.32f);
             SpawnTransientSpriteScaled($"{name}_ErasedTearCrossB", tear, center, Quaternion.Euler(0f, 0f, baseAngle + 42f), new Vector3(heavy ? 0.040f : 0.026f, radius * (heavy ? 0.48f : 0.34f), 1f), new Color(1f, 0.70f, 1f, violet.a * 0.58f), heavy ? 0.46f : 0.28f);
@@ -3356,11 +3374,13 @@ namespace Lethe.PrototypeV1
         void SpawnFractureExecutionGroundSentence(Vector3 center, Vector2 forward, float radius, bool heavy)
         {
             var f = EchoForward(forward);
+            var baseAngle = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg;
             var gold = new Color(1f, 0.92f, 0.42f, heavy ? 0.76f : 0.58f);
             var crack = new Color(0.52f, 0.98f, 1f, heavy ? 0.46f : 0.34f);
             SpawnEchoWoundSlash(heavy ? "UltGreat_FractureExecutionSentenceLine" : "UltDual_FractureExecutionSentenceLine", center, f, gold, radius * (heavy ? 1.12f : 0.78f), heavy ? 0.58f : 0.36f);
             SpawnShatterEchoScar(center - (Vector3)(f * radius * 0.12f), f, radius * (heavy ? 0.78f : 0.52f), heavy ? 0.52f : 0.32f);
-            SpawnTransientSprite(heavy ? "UltGreat_FractureExecutionVerdictSeal" : "UltDual_FractureExecutionVerdictSeal", MakeRingSprite("UltFractureExecutionVerdictSeal", Color.white, heavy ? 180 : 132), center, Quaternion.Euler(0f, 0f, elapsed * 88f), radius * 0.52f, gold, heavy ? 0.56f : 0.34f);
+            SpawnTransientSprite(heavy ? "UltGreat_FractureExecutionVerdictMotif" : "UltDual_FractureExecutionVerdictMotif", MakeExecutionJudgementMotifSprite("UltFractureExecutionVerdictMotif", true, true), center + (Vector3)(f * 0.06f), Quaternion.Euler(0f, 0f, baseAngle - 90f), radius * (heavy ? 0.42f : 0.34f), new Color(1f, 1f, 1f, heavy ? 0.92f : 0.76f), heavy ? 0.58f : 0.36f);
+            SpawnTransientSprite(heavy ? "UltGreat_FractureExecutionShatterMotif" : "UltDual_FractureExecutionShatterMotif", MakeShatterSlamMotifSprite("UltFractureExecutionShatterMotif", true, heavy), center - (Vector3)(f * radius * 0.08f), Quaternion.Euler(0f, 0f, baseAngle - 90f), radius * (heavy ? 0.46f : 0.36f), new Color(1f, 1f, 1f, heavy ? 0.78f : 0.60f), heavy ? 0.52f : 0.32f);
             SpawnRadialSlashLines(heavy ? "UltGreat_FractureExecutionGroundCrack" : "UltDual_FractureExecutionGroundCrack", center, f, heavy ? 8 : 5, radius * 0.42f, crack, heavy ? 0.44f : 0.28f);
         }
 
@@ -3380,7 +3400,7 @@ namespace Lethe.PrototypeV1
         {
             var f = EchoForward(forward);
             SpawnAshenMemoryGuardPlate(center, f, heavy ? 5 : 3);
-            SpawnTransientSprite($"{name}_AshWall", MakeRingSprite($"{name}_AshWall", Color.white, heavy ? 180 : 132), center, Quaternion.Euler(0f, 0f, elapsed * -64f), radius * 0.58f, new Color(0.90f, 0.96f, 1f, heavy ? 0.58f : 0.42f), heavy ? 0.70f : 0.46f);
+            SpawnTransientSprite($"{name}_AshWallHolyFire", MakeAshenHolyFireMotifSprite($"{name}_AshWallHolyFire", true, heavy), center + (Vector3)(f * 0.08f), Quaternion.Euler(0f, 0f, Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg - 90f), radius * (heavy ? 0.52f : 0.42f), new Color(1f, 1f, 1f, heavy ? 0.88f : 0.68f), heavy ? 0.70f : 0.46f);
             SpawnOblivionEraseBurst(center + (Vector3)(f * (heavy ? 0.22f : 0.12f)), f, radius * (heavy ? 0.72f : 0.54f), heavy, $"{name}_VoidBreak");
             SpawnUltimateDopamineBurst($"{name}_GuardCollapse", center, f, radius * (heavy ? 0.84f : 0.66f), new Color(0.78f, 0.34f, 1f, heavy ? 0.64f : 0.48f), new Color(0.92f, 0.98f, 1f, heavy ? 0.66f : 0.50f), heavy ? 10 : 7, heavy ? 0.58f : 0.38f);
         }
@@ -4092,11 +4112,12 @@ namespace Lethe.PrototypeV1
             forward.Normalize();
             PlaySfx("execution", heavy ? 0.96f : 0.70f, 0.16f);
             SpawnUltimateDopamineBurst(heavy ? "UltGreat_FractureExecutionOpening" : "UltDual_FractureExecutionOpening", target.transform.position, forward, heavy ? 2.55f : 1.82f, new Color(1f, 0.92f, 0.38f, heavy ? 0.78f : 0.64f), new Color(0.58f, 0.96f, 1f, heavy ? 0.50f : 0.36f), heavy ? 12 : 8, heavy ? 0.56f : 0.38f);
+            SpawnExecutionCondemnation(target.transform.position, forward, MaxEchoLevel, true, true);
 
             if (heavy)
             {
                 SpawnFractureExecutionGroundSentence(target.transform.position, forward, 2.45f, true);
-                SpawnPromptSprite("UltGreat_FractureExecutionStamp", LoadSprite(UltimateFracturePath), () => MakeRingSprite("UltGreat_FractureExecutionStamp", Color.white, 180), target.transform.position, Quaternion.identity, 3.32f, 1.30f, new Color(1f, 0.90f, 0.48f, 0.78f), 0.62f);
+                SpawnTransientSprite("UltGreat_FractureExecutionStampMotif", MakeExecutionJudgementMotifSprite("UltGreat_FractureExecutionStampMotif", true, true), target.transform.position + (Vector3)(forward * 0.08f), Quaternion.Euler(0f, 0f, Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg - 90f), 1.08f, new Color(1f, 1f, 1f, 0.96f), 0.62f);
                 SpawnEchoWoundSlash("UltGreat_FractureExecutionCleave", target.transform.position, forward, new Color(1f, 0.94f, 0.54f, 0.80f), 1.65f, 0.54f);
                 SpawnRadialSlashLines("UltGreat_FractureExecutionVerdict", target.transform.position, forward, 6, 1.18f, new Color(1f, 0.88f, 0.46f, 0.64f), 0.50f);
                 foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(target.transform.position, e.transform.position) < 2.30f).Take(12).ToList())
@@ -4117,7 +4138,7 @@ namespace Lethe.PrototypeV1
             }
 
             SpawnFractureExecutionGroundSentence(target.transform.position, forward, 1.72f, false);
-            SpawnPromptSprite("UltDual_FractureExecutionRing", LoadSprite(UltimateFracturePath), () => MakeRingSprite("UltDual_FractureExecutionRing", Color.white, 144), target.transform.position, Quaternion.Euler(0f, 0f, elapsed * 200f), 2.30f, 0.90f, new Color(1f, 0.96f, 0.62f, 0.64f), 0.36f);
+            SpawnTransientSprite("UltDual_FractureExecutionMotif", MakeExecutionJudgementMotifSprite("UltDual_FractureExecutionMotif", true, true), target.transform.position + (Vector3)(forward * 0.06f), Quaternion.Euler(0f, 0f, Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg - 90f), 0.70f, new Color(1f, 1f, 1f, 0.82f), 0.38f);
             var cutTargets = enemies.Where(e => e != null && e.IsAlive).OrderBy(e => e.HealthRatio).Take(9).ToList();
             for (int i = 0; i < cutTargets.Count; i++)
             {
@@ -4143,7 +4164,7 @@ namespace Lethe.PrototypeV1
                 var focus = FindNearestLivingEnemy(player.position);
                 var center = focus != null ? focus.transform.position : player.position;
                 SpawnUltimateClockBurst("UltGreat_StasisHuntClockBurst", center, lastAim, 3.10f, true);
-                SpawnPromptSprite("UltGreat_StasisHuntDome", LoadSprite(UltimateStasisPath), () => MakeRingSprite("UltGreat_StasisHuntDome", Color.white, 180), center, Quaternion.identity, 4.10f, 1.54f, new Color(1f, 0.74f, 0.28f, 0.66f), 1.08f);
+                SpawnHeldTransientSprite("UltGreat_StasisHuntClockDomeMotif", MakeStoppedClockSealSprite("UltGreat_StasisHuntClockDomeMotif", true), center, Quaternion.Euler(0f, 0f, elapsed * 5f), 1.48f, new Color(1f, 1f, 1f, 0.78f), 1.08f, 0.82f);
                 SpawnStoppedSecondField(center, 2.85f, TimeStopGold(true), 1.95f, true);
                 RegisterStoppedField(center, 3.15f, 1.95f, 0.92f, true);
                 foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(center, e.transform.position) <= 3.15f).Take(12).ToList())
@@ -4162,7 +4183,7 @@ namespace Lethe.PrototypeV1
             }
 
             SpawnUltimateClockBurst("UltDual_StasisHuntClockBurst", player.position, lastAim, 2.26f, false);
-            SpawnPromptSprite("UltDual_StasisHuntField", LoadSprite(UltimateStasisPath), () => MakeRingSprite("UltDual_StasisHuntField", Color.white, 144), player.position, Quaternion.Euler(0f, 0f, elapsed * 150f), 2.85f, 1.06f, new Color(1f, 0.78f, 0.30f, 0.60f), 0.72f);
+            SpawnHeldTransientSprite("UltDual_StasisHuntClockFieldMotif", MakeStoppedClockSealSprite("UltDual_StasisHuntClockFieldMotif", true), player.position, Quaternion.Euler(0f, 0f, elapsed * -9f), 1.06f, new Color(1f, 1f, 1f, 0.66f), 0.72f, 0.82f);
             SpawnStoppedSecondField(player.position, 1.92f, TimeStopGold(true), 1.34f, true);
             RegisterStoppedField(player.position, 1.92f, 1.34f, 0.40f, true);
             var shotTargets = SelectHunterTargets(player.position, null, 10);
@@ -4188,8 +4209,8 @@ namespace Lethe.PrototypeV1
             if (heavy)
             {
                 SpawnAshenOblivionRupture(player.position, lastAim, 3.15f, true, "UltGreat_AshenOblivionRupture");
-                SpawnPromptSprite("UltGreat_AshenOblivionWave", LoadSprite(UltimateAshenOblivionPath), () => MakeRingSprite("UltGreat_AshenOblivionWave", Color.white, 180), player.position, Quaternion.identity, 4.40f, 1.66f, new Color(0.78f, 0.68f, 1f, 0.70f), 0.94f);
-                SpawnTransientSprite("UltGreat_AshenOblivionGuardBreak", MakeRingSprite("UltGreat_AshenOblivionGuardBreak", Color.white, 180), player.position, Quaternion.Euler(0f, 0f, elapsed * -80f), 2.22f, new Color(0.88f, 0.92f, 1f, 0.52f), 0.72f);
+                SpawnTransientSprite("UltGreat_AshenOblivionWaveMotif", MakeAshenHolyFireMotifSprite("UltGreat_AshenOblivionWaveMotif", true, true), player.position + (Vector3)(lastAim * 0.10f), Quaternion.Euler(0f, 0f, Mathf.Atan2(lastAim.y, lastAim.x) * Mathf.Rad2Deg - 90f), 1.58f, new Color(1f, 1f, 1f, 0.92f), 0.94f);
+                SpawnTransientSprite("UltGreat_AshenOblivionGuardBreakMotif", MakeOblivionBrandMotifSprite("UltGreat_AshenOblivionGuardBreakMotif", true, true), player.position, Quaternion.Euler(0f, 0f, Mathf.Atan2(lastAim.y, lastAim.x) * Mathf.Rad2Deg - 90f), 1.10f, new Color(1f, 1f, 1f, 0.78f), 0.72f);
                 SpawnRadialSlashLines("UltGreat_AshenOblivionGuardBreakLine", player.position, lastAim, 6, 1.05f, new Color(0.86f, 0.76f, 1f, 0.58f), 0.48f);
                 ReleaseAshenGuardWave(player.position, MaxEchoLevel, storedRelease + 16f, true, "UltGreat AshenOblivion stored wave");
                 foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 4.15f).Take(14).ToList())
@@ -4206,8 +4227,8 @@ namespace Lethe.PrototypeV1
             }
 
             SpawnAshenOblivionRupture(player.position, lastAim, 2.30f, false, "UltDual_AshenOblivionRupture");
-            SpawnPromptSprite("UltDual_AshenOblivionGuard", LoadSprite(UltimateAshenOblivionPath), () => MakeRingSprite("UltDual_AshenOblivionGuard", Color.white, 150), player.position, Quaternion.Euler(0f, 0f, elapsed * 165f), 2.90f, 1.12f, new Color(0.82f, 0.72f, 1f, 0.58f), 0.58f);
-            SpawnTransientSprite("UltDual_AshenOblivionReturnRing", MakeRingSprite("UltDual_AshenOblivionReturnRing", Color.white, 128), player.position, Quaternion.Euler(0f, 0f, elapsed * -200f), 1.24f, new Color(0.90f, 0.96f, 1f, 0.44f), 0.44f);
+            SpawnTransientSprite("UltDual_AshenOblivionGuardMotif", MakeAshenHolyFireMotifSprite("UltDual_AshenOblivionGuardMotif", true, false), player.position + (Vector3)(lastAim * 0.06f), Quaternion.Euler(0f, 0f, Mathf.Atan2(lastAim.y, lastAim.x) * Mathf.Rad2Deg - 90f), 1.00f, new Color(1f, 1f, 1f, 0.74f), 0.58f);
+            SpawnTransientSprite("UltDual_AshenOblivionReturnBrandMotif", MakeOblivionBrandMotifSprite("UltDual_AshenOblivionReturnBrandMotif", true, false), player.position, Quaternion.Euler(0f, 0f, Mathf.Atan2(lastAim.y, lastAim.x) * Mathf.Rad2Deg - 90f), 0.72f, new Color(1f, 1f, 1f, 0.64f), 0.44f);
             ReleaseAshenGuardWave(player.position, MaxEchoLevel, storedRelease + 7f, false, "UltDual AshenOblivion stored wave");
             var targets = enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) < 3.65f).OrderBy(e => Vector2.Distance(player.position, e.transform.position)).Take(9).ToList();
             for (int i = 0; i < targets.Count; i++)
@@ -6643,6 +6664,28 @@ namespace Lethe.PrototypeV1
             var color = UtilityVfxColor(id, echo);
             var sprite = echo ? EchoVfxSprite(id) : MemoryVfxSprite(id);
             var name = echo ? $"PreviewEcho_{id}" : $"PreviewMemory_{id}";
+            var forward = (Vector2)(Quaternion.Euler(0f, 0f, angle) * Vector3.right);
+            switch (id)
+            {
+                case V1MemoryId.ExecutionFlash:
+                    SpawnExecutionCondemnation(pos, forward, MaxEchoLevel, echo, true);
+                    SpawnExecutionFlashBurst(pos, echo ? 0.74f : 1.00f, echo ? 0.42f : 0.56f);
+                    return;
+                case V1MemoryId.ShatterWave:
+                    SpawnShatterWaveField(pos, echo ? 0.86f : 1.02f, echo ? 0.95f : 1.05f, echo);
+                    return;
+                case V1MemoryId.StoppedSecond:
+                    SpawnStoppedSecondField(pos, echo ? 1.18f : 1.48f, TimeStopGold(!echo), echo ? 1.25f : 1.75f, !echo);
+                    return;
+                case V1MemoryId.AshenShield:
+                    SpawnAshenHolyFlames(pos, forward, MaxEchoLevel, echo, !echo);
+                    if (!echo) SpawnAshenMemoryGuardPlate(pos, forward, MaxEchoLevel);
+                    return;
+                case V1MemoryId.OblivionBrand:
+                    SpawnOblivionBrandGlyph(pos, forward, MaxEchoLevel, echo, !echo, echo ? 0.78f : 0.92f);
+                    if (echo) SpawnOblivionEraseBurst(pos, forward, 0.86f, false, "PreviewEcho_OblivionBrandErase");
+                    return;
+            }
             var width = id switch
             {
                 V1MemoryId.ExecutionFlash => echo ? 1.52f : 1.95f,
@@ -6656,18 +6699,6 @@ namespace Lethe.PrototypeV1
             var fallbackScale = id == V1MemoryId.ExecutionFlash ? 0.72f : id == V1MemoryId.OblivionBrand ? 0.46f : 0.62f;
             var lifetime = id == V1MemoryId.ShatterWave ? echo ? 0.95f : 1.05f : id == V1MemoryId.StoppedSecond ? echo ? 1.20f : 1.75f : echo ? 0.76f : 0.82f;
             SpawnPromptSprite(name, sprite, () => id == V1MemoryId.ExecutionFlash || id == V1MemoryId.OblivionBrand ? MakeImpactDiamondSprite(name, Color.white) : MakeRingSprite(name, Color.white, 128), pos, Quaternion.Euler(0f, 0f, angle), width, fallbackScale, color, lifetime);
-            if (id == V1MemoryId.ExecutionFlash)
-            {
-                SpawnExecutionFlashBurst(pos, echo ? 0.74f : 1.00f, echo ? 0.42f : 0.56f);
-            }
-            if (id == V1MemoryId.ShatterWave)
-            {
-                SpawnShatterWaveField(pos, echo ? 0.86f : 1.02f, echo ? 0.95f : 1.05f, echo);
-            }
-            if (id == V1MemoryId.StoppedSecond)
-            {
-                SpawnStoppedSecondField(pos, echo ? 1.18f : 1.48f, TimeStopGold(!echo), echo ? 1.25f : 1.75f, !echo);
-            }
         }
 
         void SpawnUtilityUltimatePreview()
@@ -6676,10 +6707,11 @@ namespace Lethe.PrototypeV1
             var fracture = center + Vector3.left * 2.65f;
             var stasis = center;
             var ashen = center + Vector3.right * 2.65f;
-            SpawnPromptSprite("Preview_FractureExecution", LoadSprite(UltimateFracturePath), () => MakeRingSprite("Preview_FractureExecution", Color.white, 160), fracture, Quaternion.identity, 2.85f, 1.16f, new Color(1f, 0.94f, 0.62f, 0.70f), 0.82f);
-            SpawnPromptSprite("Preview_StasisHunt", LoadSprite(UltimateStasisPath), () => MakeRingSprite("Preview_StasisHunt", Color.white, 160), stasis, Quaternion.identity, 3.18f, 1.24f, new Color(1f, 0.74f, 0.28f, 0.66f), 1.16f);
+            SpawnFractureExecutionGroundSentence(fracture, Vector2.up, 2.10f, true);
+            SpawnExecutionCondemnation(fracture, Vector2.up, MaxEchoLevel, true, true);
+            SpawnHeldTransientSprite("Preview_StasisHuntClockMotif", MakeStoppedClockSealSprite("Preview_StasisHuntClockMotif", true), stasis, Quaternion.Euler(0f, 0f, elapsed * 5f), 1.22f, new Color(1f, 1f, 1f, 0.74f), 1.16f, 0.82f);
             SpawnStoppedSecondField(stasis, 1.65f, TimeStopGold(true), 1.50f, true);
-            SpawnPromptSprite("Preview_AshenOblivion", LoadSprite(UltimateAshenOblivionPath), () => MakeRingSprite("Preview_AshenOblivion", Color.white, 180), ashen, Quaternion.identity, 3.24f, 1.30f, new Color(0.78f, 0.68f, 1f, 0.60f), 0.82f);
+            SpawnAshenOblivionRupture(ashen, Vector2.up, 1.95f, true, "Preview_AshenOblivionRupture");
         }
 
         static Color UtilityVfxColor(V1MemoryId id, bool echo)
@@ -7866,7 +7898,7 @@ namespace Lethe.PrototypeV1
         {
             var fieldAlpha = strong ? Mathf.Min(0.62f, color.a) : Mathf.Min(0.46f, color.a);
             var ringAlpha = strong ? Mathf.Min(0.86f, color.a + 0.18f) : Mathf.Min(0.70f, color.a + 0.12f);
-            SpawnHeldPromptSprite("StoppedSecondClockFace", MemoryVfxSprite(V1MemoryId.StoppedSecond), () => MakeRingSprite("StoppedSecondClockFace", Color.white, 180), center, Quaternion.identity, radius * 2.56f, radius * 1.08f, new Color(color.r, color.g, color.b, fieldAlpha), lifetime, 0.82f);
+            SpawnHeldTransientSprite("StoppedSecondClockMotif", MakeStoppedClockSealSprite(strong ? "StoppedSecondClockMotifStrong" : "StoppedSecondClockMotif", strong), center, Quaternion.Euler(0f, 0f, strong ? elapsed * 4f : elapsed * -3f), radius * (strong ? 0.90f : 0.78f), new Color(1f, 1f, 1f, strong ? Mathf.Max(0.78f, fieldAlpha) : Mathf.Max(0.62f, fieldAlpha)), lifetime, 0.82f);
             SpawnHeldTransientSprite("StoppedSecondClockPulse", MakeRingSprite("StoppedSecondClockPulse", Color.white, 180), center, Quaternion.Euler(0f, 0f, elapsed * -70f), radius * 1.04f, new Color(1f, 0.88f, 0.36f, ringAlpha * 0.68f), lifetime, 0.82f);
             SpawnHeldTransientSprite("StoppedSecondClockOuter", MakeRingSprite("StoppedSecondClockOuter", Color.white, 180), center, Quaternion.identity, radius * 0.96f, new Color(color.r, color.g, color.b, ringAlpha), lifetime, 0.82f);
             SpawnHeldTransientSprite("StoppedSecondClockInner", MakeRingSprite("StoppedSecondClockInner", Color.white, 144), center, Quaternion.identity, radius * 0.56f, new Color(color.r, color.g, color.b, fieldAlpha * 0.82f), lifetime, 0.82f);
@@ -8717,6 +8749,381 @@ namespace Lethe.PrototypeV1
             }
             tex.Apply();
             return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        static Sprite MakeStoppedClockSealSprite(string name, bool strong)
+        {
+            return CachedGeneratedSprite($"motifStoppedClock:{name}:{strong}", () => MakeStoppedClockSealSpriteUncached(name, strong));
+        }
+
+        static Sprite MakeStoppedClockSealSpriteUncached(string name, bool strong)
+        {
+            const int size = 256;
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { name = name };
+            ClearTexture(tex);
+            var center = new Vector2(size * 0.5f, size * 0.5f);
+            var gold = strong ? new Color(1f, 0.74f, 0.18f, 0.88f) : new Color(1f, 0.78f, 0.28f, 0.72f);
+            var bright = strong ? new Color(1f, 0.96f, 0.68f, 0.90f) : new Color(1f, 0.92f, 0.58f, 0.72f);
+            var cool = strong ? new Color(0.82f, 0.92f, 1f, 0.34f) : new Color(0.82f, 0.92f, 1f, 0.24f);
+            var dark = new Color(0.06f, 0.035f, 0.012f, strong ? 0.50f : 0.34f);
+
+            DrawSoftDisc(tex, center, size * 0.41f, dark, 24f);
+            DrawSoftRing(tex, center, size * 0.405f, strong ? 4.6f : 3.6f, gold);
+            DrawSoftRing(tex, center, size * 0.315f, strong ? 2.8f : 2.2f, new Color(gold.r, gold.g, gold.b, gold.a * 0.62f));
+            DrawSoftRing(tex, center, size * 0.185f, 2.2f, new Color(cool.r, cool.g, cool.b, cool.a * 0.76f));
+
+            for (int i = 0; i < 32; i++)
+            {
+                var angle = i * (360f / 32f);
+                var dir = AngleDirection(angle);
+                var toothColor = i % 4 == 0 ? bright : new Color(gold.r, gold.g, gold.b, gold.a * 0.46f);
+                DrawSoftLine(tex, center + dir * size * 0.408f, center + dir * size * 0.462f, i % 4 == 0 ? 2.4f : 1.4f, toothColor, 2.4f);
+            }
+
+            for (int i = 0; i < 60; i++)
+            {
+                var major = i % 5 == 0;
+                var angle = i * 6f;
+                var dir = AngleDirection(angle);
+                var tickColor = major ? bright : new Color(gold.r, gold.g, gold.b, gold.a * 0.36f);
+                DrawSoftLine(tex, center + dir * size * (major ? 0.315f : 0.340f), center + dir * size * 0.376f, major ? 1.8f : 0.9f, tickColor, 1.8f);
+            }
+
+            DrawSoftLine(tex, center + AngleDirection(90f) * size * 0.245f, center + AngleDirection(90f) * size * 0.340f, 3.0f, bright, 2.0f);
+            DrawSoftLine(tex, center + AngleDirection(0f) * size * 0.245f, center + AngleDirection(0f) * size * 0.340f, 3.0f, bright, 2.0f);
+            DrawSoftLine(tex, center + AngleDirection(180f) * size * 0.245f, center + AngleDirection(180f) * size * 0.340f, 3.0f, bright, 2.0f);
+            DrawSoftLine(tex, center + AngleDirection(270f) * size * 0.245f, center + AngleDirection(270f) * size * 0.340f, 3.0f, bright, 2.0f);
+
+            DrawSoftLine(tex, center, center + AngleDirection(strong ? -38f : -28f) * size * 0.318f, strong ? 3.2f : 2.6f, bright, 2.2f);
+            DrawSoftLine(tex, center, center + AngleDirection(strong ? 74f : 66f) * size * 0.215f, strong ? 4.2f : 3.2f, gold, 2.6f);
+            DrawSoftDiamond(tex, center, strong ? 12f : 9f, new Color(1f, 0.94f, 0.48f, 0.92f), 3f);
+
+            DrawSoftLine(tex, center + new Vector2(-size * 0.26f, size * 0.18f), center + new Vector2(size * 0.16f, -size * 0.26f), 1.4f, cool, 2.2f);
+            DrawSoftLine(tex, center + new Vector2(size * 0.22f, size * 0.12f), center + new Vector2(-size * 0.18f, -size * 0.21f), 1.0f, new Color(cool.r, cool.g, cool.b, cool.a * 0.70f), 2.0f);
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        static Sprite MakeExecutionJudgementMotifSprite(string name, bool echo, bool execute)
+        {
+            return CachedGeneratedSprite($"motifExecution:{name}:{echo}:{execute}", () => MakeExecutionJudgementMotifSpriteUncached(name, echo, execute));
+        }
+
+        static Sprite MakeExecutionJudgementMotifSpriteUncached(string name, bool echo, bool execute)
+        {
+            const int width = 192;
+            const int height = 256;
+            var tex = new Texture2D(width, height, TextureFormat.RGBA32, false) { name = name };
+            ClearTexture(tex);
+            var cx = width * 0.5f;
+            var gold = execute ? new Color(1f, 0.86f, 0.24f, 0.90f) : new Color(1f, 0.76f, 0.24f, 0.62f);
+            var white = execute ? new Color(1f, 0.98f, 0.82f, 0.94f) : new Color(1f, 0.94f, 0.64f, 0.62f);
+            var dark = new Color(0.055f, 0.036f, 0.010f, execute ? 0.62f : 0.42f);
+            var cool = echo ? new Color(0.72f, 1f, 1f, execute ? 0.28f : 0.18f) : new Color(1f, 0.56f, 0.18f, execute ? 0.20f : 0.12f);
+
+            DrawSoftLine(tex, new Vector2(cx, 28f), new Vector2(cx, height - 24f), execute ? 18f : 13f, dark, 12f);
+            DrawSoftLine(tex, new Vector2(cx - 44f, 76f), new Vector2(cx + 44f, 76f), 6f, gold, 4f);
+            DrawSoftLine(tex, new Vector2(cx - 26f, 48f), new Vector2(cx + 30f, 222f), 3.0f, new Color(gold.r, gold.g, gold.b, gold.a * 0.60f), 2.8f);
+            DrawSoftLine(tex, new Vector2(cx + 34f, 42f), new Vector2(cx - 28f, 196f), 2.4f, new Color(gold.r, gold.g, gold.b, gold.a * 0.48f), 2.4f);
+            DrawSoftLine(tex, new Vector2(cx - 56f, 130f), new Vector2(cx + 58f, 156f), 2.2f, cool, 3f);
+
+            for (int y = 28; y < height - 18; y++)
+            {
+                var t = Mathf.InverseLerp(30f, height - 22f, y);
+                var half = Mathf.Lerp(execute ? 19f : 14f, 3.0f, t);
+                for (int x = 0; x < width; x++)
+                {
+                    var px = Mathf.Abs(x - cx);
+                    if (px > half) continue;
+                    var edge = Mathf.Clamp01((half - px) / Mathf.Max(1f, half * 0.28f));
+                    var a = Mathf.Lerp(0.46f, 0.96f, edge) * (execute ? 1f : 0.68f);
+                    var shine = x < cx ? 1.0f : 0.78f;
+                    PaintPixel(tex, x, y, new Color(white.r * shine, white.g * shine, white.b * shine, a));
+                }
+            }
+
+            DrawSoftDiamond(tex, new Vector2(cx, 34f), 12f, gold, 4f);
+            DrawSoftDiamond(tex, new Vector2(cx, height - 42f), execute ? 18f : 13f, white, 5f);
+
+            for (int i = 0; i < (execute ? 9 : 5); i++)
+            {
+                var side = i % 2 == 0 ? -1f : 1f;
+                var y = 54f + i * 19f;
+                var x = cx + side * (32f + Mathf.Sin(i * 1.7f) * 13f);
+                DrawSoftLine(tex, new Vector2(x, y), new Vector2(x + side * 18f, y + 20f), 1.6f, new Color(gold.r, gold.g, gold.b, gold.a * 0.62f), 2f);
+                DrawSoftDiamond(tex, new Vector2(x + side * 22f, y + 23f), 4f, new Color(white.r, white.g, white.b, white.a * 0.54f), 2f);
+            }
+
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        static Sprite MakeShatterSlamMotifSprite(string name, bool echo, bool heavy)
+        {
+            return CachedGeneratedSprite($"motifShatter:{name}:{echo}:{heavy}", () => MakeShatterSlamMotifSpriteUncached(name, echo, heavy));
+        }
+
+        static Sprite MakeShatterSlamMotifSpriteUncached(string name, bool echo, bool heavy)
+        {
+            const int size = 256;
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { name = name };
+            ClearTexture(tex);
+            var center = new Vector2(size * 0.5f, size * 0.48f);
+            var cyan = heavy ? new Color(0.52f, 0.98f, 1f, 0.90f) : new Color(0.58f, 0.94f, 1f, 0.74f);
+            var white = heavy ? new Color(0.94f, 1f, 1f, 0.94f) : new Color(0.86f, 1f, 1f, 0.78f);
+            var shadow = new Color(0.00f, 0.12f, 0.18f, heavy ? 0.48f : 0.34f);
+
+            DrawSoftEllipse(tex, center + Vector2.down * 42f, heavy ? 96f : 76f, heavy ? 34f : 28f, shadow, 0.10f);
+            DrawSoftLine(tex, center + Vector2.up * 92f, center + Vector2.down * 18f, heavy ? 10f : 7f, white, 5f);
+            DrawSoftLine(tex, center + new Vector2(-14f, 78f), center + Vector2.down * 20f, heavy ? 5.0f : 3.6f, cyan, 4f);
+            DrawSoftLine(tex, center + new Vector2(14f, 78f), center + Vector2.down * 20f, heavy ? 4.2f : 3.0f, new Color(cyan.r, cyan.g, cyan.b, cyan.a * 0.74f), 4f);
+            DrawSoftDiamond(tex, center + Vector2.down * 22f, heavy ? 21f : 16f, white, 5f);
+
+            var points = new[]
+            {
+                center + Vector2.down * 20f,
+                center + new Vector2(-13f, -42f),
+                center + new Vector2(12f, -68f),
+                center + new Vector2(-8f, -92f),
+                center + new Vector2(5f, -116f)
+            };
+            for (int i = 0; i < points.Length - 1; i++)
+            {
+                DrawSoftLine(tex, points[i], points[i + 1], heavy ? 5.0f : 3.6f, cyan, 3f);
+                DrawSoftLine(tex, points[i] + Vector2.right * 1.5f, points[i + 1] + Vector2.right * 1.5f, heavy ? 1.9f : 1.3f, white, 2f);
+            }
+
+            for (int i = 1; i < points.Length - 1; i++)
+            {
+                var p = points[i];
+                var side = i % 2 == 0 ? -1f : 1f;
+                DrawSoftLine(tex, p, p + new Vector2(side * (heavy ? 58f : 42f), -18f - i * 7f), heavy ? 3.0f : 2.1f, new Color(cyan.r, cyan.g, cyan.b, cyan.a * 0.72f), 2.6f);
+                DrawSoftLine(tex, p + new Vector2(-side * 5f, -3f), p + new Vector2(-side * (heavy ? 42f : 30f), -9f - i * 5f), heavy ? 2.3f : 1.6f, new Color(white.r, white.g, white.b, white.a * 0.48f), 2.2f);
+            }
+
+            for (int i = 0; i < (heavy ? 8 : 5); i++)
+            {
+                var lane = i - ((heavy ? 8 : 5) - 1) * 0.5f;
+                DrawSoftDiamond(tex, center + new Vector2(lane * (heavy ? 16f : 13f), -44f - Mathf.Abs(lane) * 9f), heavy ? 7f : 5f, new Color(white.r, white.g, white.b, white.a * 0.60f), 2f);
+            }
+
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        static Sprite MakeOblivionBrandMotifSprite(string name, bool echo, bool rupture)
+        {
+            return CachedGeneratedSprite($"motifOblivion:{name}:{echo}:{rupture}", () => MakeOblivionBrandMotifSpriteUncached(name, echo, rupture));
+        }
+
+        static Sprite MakeOblivionBrandMotifSpriteUncached(string name, bool echo, bool rupture)
+        {
+            const int size = 224;
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { name = name };
+            ClearTexture(tex);
+            var center = new Vector2(size * 0.5f, size * 0.5f);
+            var violet = rupture ? new Color(0.90f, 0.36f, 1f, 0.92f) : new Color(0.78f, 0.34f, 1f, 0.76f);
+            var bright = rupture ? new Color(1f, 0.74f, 1f, 0.84f) : new Color(0.92f, 0.56f, 1f, 0.64f);
+            var ink = new Color(0.045f, 0.000f, 0.085f, rupture ? 0.76f : 0.56f);
+            var cold = echo ? new Color(0.80f, 0.92f, 1f, rupture ? 0.32f : 0.22f) : new Color(0.50f, 0.12f, 0.78f, rupture ? 0.26f : 0.18f);
+
+            var tear = new[]
+            {
+                center + new Vector2(-6f, 86f),
+                center + new Vector2(10f, 48f),
+                center + new Vector2(-13f, 12f),
+                center + new Vector2(6f, -28f),
+                center + new Vector2(-9f, -78f)
+            };
+            for (int i = 0; i < tear.Length - 1; i++)
+            {
+                DrawSoftLine(tex, tear[i], tear[i + 1], rupture ? 12f : 9f, ink, 6f);
+                DrawSoftLine(tex, tear[i] + Vector2.right * 3f, tear[i + 1] + Vector2.right * 3f, rupture ? 4.5f : 3.4f, violet, 3f);
+            }
+
+            DrawSoftLine(tex, center + new Vector2(-66f, 36f), center + new Vector2(62f, -50f), rupture ? 5f : 3.8f, violet, 3.4f);
+            DrawSoftLine(tex, center + new Vector2(54f, 44f), center + new Vector2(-46f, -58f), rupture ? 3.6f : 2.8f, bright, 3f);
+            DrawSoftLine(tex, center + new Vector2(-50f, -6f), center + new Vector2(50f, 18f), rupture ? 2.8f : 2.0f, cold, 2.6f);
+            DrawSoftDiamond(tex, center + new Vector2(0f, 4f), rupture ? 14f : 10f, new Color(violet.r, violet.g, violet.b, violet.a * 0.76f), 4f);
+
+            for (int i = 0; i < (rupture ? 10 : 6); i++)
+            {
+                var side = i % 2 == 0 ? -1f : 1f;
+                var y = center.y + 70f - i * 15f;
+                var x = center.x + side * (32f + Mathf.Sin(i * 1.47f) * 18f);
+                DrawSoftLine(tex, new Vector2(x, y), new Vector2(x + side * 16f, y + 9f), 1.5f, new Color(bright.r, bright.g, bright.b, bright.a * 0.62f), 2f);
+                DrawSoftDiamond(tex, new Vector2(x + side * 21f, y + 11f), rupture ? 4.5f : 3.5f, new Color(violet.r, violet.g, violet.b, violet.a * 0.52f), 2f);
+            }
+
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        static Sprite MakeAshenHolyFireMotifSprite(string name, bool echo, bool strong)
+        {
+            return CachedGeneratedSprite($"motifAshen:{name}:{echo}:{strong}", () => MakeAshenHolyFireMotifSpriteUncached(name, echo, strong));
+        }
+
+        static Sprite MakeAshenHolyFireMotifSpriteUncached(string name, bool echo, bool strong)
+        {
+            const int size = 224;
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { name = name };
+            ClearTexture(tex);
+            var center = new Vector2(size * 0.5f, size * 0.44f);
+            var gold = strong ? new Color(1f, 0.78f, 0.30f, 0.90f) : new Color(1f, 0.84f, 0.48f, 0.70f);
+            var white = strong ? new Color(0.96f, 1f, 0.98f, 0.90f) : new Color(0.92f, 0.98f, 1f, 0.68f);
+            var ash = new Color(0.45f, 0.50f, 0.52f, strong ? 0.44f : 0.30f);
+            var blue = echo ? new Color(0.72f, 0.88f, 1f, strong ? 0.34f : 0.24f) : new Color(1f, 0.92f, 0.64f, strong ? 0.28f : 0.18f);
+
+            DrawSoftEllipse(tex, center + Vector2.down * 46f, strong ? 76f : 58f, strong ? 28f : 22f, ash, 0.16f);
+            var tongues = strong ? 7 : 5;
+            for (int i = 0; i < tongues; i++)
+            {
+                var lane = i - (tongues - 1) * 0.5f;
+                var root = center + new Vector2(lane * (strong ? 14f : 12f), -48f);
+                var mid = center + new Vector2(lane * (strong ? 8f : 7f) + Mathf.Sin(i * 1.33f) * 7f, 10f + Mathf.Abs(lane) * 4f);
+                var tip = center + new Vector2(lane * (strong ? 3f : 2f) + Mathf.Cos(i * 1.9f) * 5f, strong ? 88f : 68f);
+                var tongueColor = i % 2 == 0 ? gold : white;
+                DrawSoftLine(tex, root, mid, strong ? 8f : 6f, new Color(tongueColor.r, tongueColor.g, tongueColor.b, tongueColor.a * 0.80f), 6f);
+                DrawSoftLine(tex, mid, tip, strong ? 5.2f : 3.9f, tongueColor, 4.5f);
+                DrawSoftLine(tex, root + Vector2.right * lane * 1.5f, tip + Vector2.left * lane * 0.8f, strong ? 2.2f : 1.6f, blue, 3f);
+            }
+
+            DrawSoftLine(tex, center + Vector2.down * 32f, center + Vector2.up * (strong ? 72f : 54f), strong ? 3.4f : 2.5f, white, 3f);
+            DrawSoftLine(tex, center + new Vector2(-26f, 22f), center + new Vector2(26f, 22f), strong ? 2.8f : 2.2f, white, 3f);
+            DrawSoftDiamond(tex, center + Vector2.down * 18f, strong ? 11f : 8f, gold, 3f);
+
+            for (int i = 0; i < (strong ? 10 : 6); i++)
+            {
+                var angle = i * (360f / (strong ? 10f : 6f)) + 18f;
+                var dir = AngleDirection(angle);
+                var pos = center + dir * (strong ? 64f : 48f) + Vector2.down * 8f;
+                DrawSoftDiamond(tex, pos, strong ? 4.5f : 3.4f, new Color(gold.r, gold.g, gold.b, gold.a * 0.54f), 2f);
+            }
+
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        static void ClearTexture(Texture2D tex)
+        {
+            for (int y = 0; y < tex.height; y++)
+            for (int x = 0; x < tex.width; x++)
+            {
+                tex.SetPixel(x, y, Color.clear);
+            }
+        }
+
+        static Vector2 AngleDirection(float degrees)
+        {
+            var radians = degrees * Mathf.Deg2Rad;
+            return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
+        }
+
+        static void PaintPixel(Texture2D tex, int x, int y, Color color)
+        {
+            if (x < 0 || y < 0 || x >= tex.width || y >= tex.height || color.a <= 0f) return;
+            var srcA = Mathf.Clamp01(color.a);
+            var dst = tex.GetPixel(x, y);
+            var outA = srcA + dst.a * (1f - srcA);
+            if (outA <= 0.001f)
+            {
+                tex.SetPixel(x, y, Color.clear);
+                return;
+            }
+
+            var r = Mathf.Clamp01((Mathf.Clamp01(color.r) * srcA + dst.r * dst.a * (1f - srcA)) / outA);
+            var g = Mathf.Clamp01((Mathf.Clamp01(color.g) * srcA + dst.g * dst.a * (1f - srcA)) / outA);
+            var b = Mathf.Clamp01((Mathf.Clamp01(color.b) * srcA + dst.b * dst.a * (1f - srcA)) / outA);
+            tex.SetPixel(x, y, new Color(r, g, b, Mathf.Clamp01(outA)));
+        }
+
+        static void DrawSoftDisc(Texture2D tex, Vector2 center, float radius, Color color, float feather)
+        {
+            var minX = Mathf.Clamp(Mathf.FloorToInt(center.x - radius - feather), 0, tex.width - 1);
+            var maxX = Mathf.Clamp(Mathf.CeilToInt(center.x + radius + feather), 0, tex.width - 1);
+            var minY = Mathf.Clamp(Mathf.FloorToInt(center.y - radius - feather), 0, tex.height - 1);
+            var maxY = Mathf.Clamp(Mathf.CeilToInt(center.y + radius + feather), 0, tex.height - 1);
+            feather = Mathf.Max(0.5f, feather);
+            for (int y = minY; y <= maxY; y++)
+            for (int x = minX; x <= maxX; x++)
+            {
+                var d = Vector2.Distance(new Vector2(x, y), center);
+                var alpha = Mathf.Clamp01((radius + feather - d) / feather) * color.a;
+                PaintPixel(tex, x, y, new Color(color.r, color.g, color.b, alpha));
+            }
+        }
+
+        static void DrawSoftRing(Texture2D tex, Vector2 center, float radius, float width, Color color)
+        {
+            var reach = radius + width * 2f;
+            var minX = Mathf.Clamp(Mathf.FloorToInt(center.x - reach), 0, tex.width - 1);
+            var maxX = Mathf.Clamp(Mathf.CeilToInt(center.x + reach), 0, tex.width - 1);
+            var minY = Mathf.Clamp(Mathf.FloorToInt(center.y - reach), 0, tex.height - 1);
+            var maxY = Mathf.Clamp(Mathf.CeilToInt(center.y + reach), 0, tex.height - 1);
+            width = Mathf.Max(0.5f, width);
+            for (int y = minY; y <= maxY; y++)
+            for (int x = minX; x <= maxX; x++)
+            {
+                var d = Vector2.Distance(new Vector2(x, y), center);
+                var alpha = Mathf.Clamp01(1f - Mathf.Abs(d - radius) / width) * color.a;
+                PaintPixel(tex, x, y, new Color(color.r, color.g, color.b, alpha));
+            }
+        }
+
+        static void DrawSoftLine(Texture2D tex, Vector2 a, Vector2 b, float radius, Color color, float feather)
+        {
+            var reach = radius + feather;
+            var minX = Mathf.Clamp(Mathf.FloorToInt(Mathf.Min(a.x, b.x) - reach), 0, tex.width - 1);
+            var maxX = Mathf.Clamp(Mathf.CeilToInt(Mathf.Max(a.x, b.x) + reach), 0, tex.width - 1);
+            var minY = Mathf.Clamp(Mathf.FloorToInt(Mathf.Min(a.y, b.y) - reach), 0, tex.height - 1);
+            var maxY = Mathf.Clamp(Mathf.CeilToInt(Mathf.Max(a.y, b.y) + reach), 0, tex.height - 1);
+            feather = Mathf.Max(0.5f, feather);
+            for (int y = minY; y <= maxY; y++)
+            for (int x = minX; x <= maxX; x++)
+            {
+                var d = DistanceToSegment(new Vector2(x, y), a, b);
+                var alpha = Mathf.Clamp01((radius + feather - d) / feather) * color.a;
+                PaintPixel(tex, x, y, new Color(color.r, color.g, color.b, alpha));
+            }
+        }
+
+        static void DrawSoftDiamond(Texture2D tex, Vector2 center, float radius, Color color, float feather)
+        {
+            var reach = radius + feather;
+            var minX = Mathf.Clamp(Mathf.FloorToInt(center.x - reach), 0, tex.width - 1);
+            var maxX = Mathf.Clamp(Mathf.CeilToInt(center.x + reach), 0, tex.width - 1);
+            var minY = Mathf.Clamp(Mathf.FloorToInt(center.y - reach), 0, tex.height - 1);
+            var maxY = Mathf.Clamp(Mathf.CeilToInt(center.y + reach), 0, tex.height - 1);
+            feather = Mathf.Max(0.5f, feather);
+            for (int y = minY; y <= maxY; y++)
+            for (int x = minX; x <= maxX; x++)
+            {
+                var p = new Vector2(x, y) - center;
+                var d = Mathf.Abs(p.x) + Mathf.Abs(p.y);
+                var alpha = Mathf.Clamp01((radius + feather - d) / feather) * color.a;
+                PaintPixel(tex, x, y, new Color(color.r, color.g, color.b, alpha));
+            }
+        }
+
+        static void DrawSoftEllipse(Texture2D tex, Vector2 center, float radiusX, float radiusY, Color color, float feather)
+        {
+            radiusX = Mathf.Max(1f, radiusX);
+            radiusY = Mathf.Max(1f, radiusY);
+            feather = Mathf.Max(0.01f, feather);
+            var minX = Mathf.Clamp(Mathf.FloorToInt(center.x - radiusX * (1f + feather)), 0, tex.width - 1);
+            var maxX = Mathf.Clamp(Mathf.CeilToInt(center.x + radiusX * (1f + feather)), 0, tex.width - 1);
+            var minY = Mathf.Clamp(Mathf.FloorToInt(center.y - radiusY * (1f + feather)), 0, tex.height - 1);
+            var maxY = Mathf.Clamp(Mathf.CeilToInt(center.y + radiusY * (1f + feather)), 0, tex.height - 1);
+            for (int y = minY; y <= maxY; y++)
+            for (int x = minX; x <= maxX; x++)
+            {
+                var nx = (x - center.x) / radiusX;
+                var ny = (y - center.y) / radiusY;
+                var d = Mathf.Sqrt(nx * nx + ny * ny);
+                var alpha = Mathf.Clamp01((1f + feather - d) / feather) * color.a;
+                PaintPixel(tex, x, y, new Color(color.r, color.g, color.b, alpha));
+            }
         }
 
         static float DistanceToSegment(Vector2 p, Vector2 a, Vector2 b)

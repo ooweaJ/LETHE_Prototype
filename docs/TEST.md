@@ -1,5 +1,36 @@
 # LETHE TEST
 
+# 2026-07-22 Procedural Motif VFX Rework
+
+- Purpose:
+  - Implement the approved silhouette-board direction in the actual Unity VFX path.
+  - Make Stopped, Execution, Shatter, Oblivion, and Ashen readable by distinct action motifs instead of circle/ring variants.
+- Applied target:
+  - `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`.
+  - `docs/orchestration/evidence/2026-07-22-memory-echo-weapon-vfx-silhouette-board.png`.
+- Changes:
+  - Added procedural generated motif sprites for ornate clock seals, judgement stamps, shatter slams, torn void brands, and holy ash fire.
+  - Rewired memory previews, normal Echoes, weapon-specific Echo layers, and utility Ultimate preview/support layers to use the motif sprites as primary silhouettes.
+  - Kept rings/lines as supporting timing or field-read layers only.
+- Commands / checks:
+  - `dotnet build` from repo root: not applicable, returned `MSB1003` because no root solution/project file exists.
+  - Unity editor state check.
+  - Unity compilation error check.
+  - Unity console error check.
+  - Play Mode `DebugPreviewAllUtilityVfx()`.
+  - Play Mode `DebugRunEchoMatrix(DualBlades)`.
+  - Play Mode `DebugRunEchoMatrix(Greatsword)`.
+- Results:
+  - Unity editor state after QA: `Dev_Prototype_v1`, not playing, not compiling.
+  - Unity compilation errors: `0`.
+  - Unity console errors after Play Mode QA: `0`.
+  - Utility VFX preview invoked successfully.
+  - Dual Blades Echo Matrix direct run completed with all 8 Echoes at `+5`, `kills=31`, `storm=True`.
+  - Greatsword Echo Matrix direct run completed with all 8 Echoes at `+5`, `kills=57`, `storm=True`.
+  - Evidence screenshots saved under `docs/orchestration/evidence/`.
+- Notes:
+  - The all-on debug screenshots are intentionally overpacked; direct play should judge final scale/noise/timing.
+
 # 2026-07-22 Memory / Echo / Ultimate Dopamine Rework
 
 - Purpose:
