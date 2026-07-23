@@ -1,5 +1,50 @@
 # Current Task
 
+# 2026-07-23 Echo Rule Identity Rework
+
+## Status
+
+- Implemented, C# build-verified, Unity compile-verified, Play Mode matrix-smoke-verified, and ready for direct-play feel review.
+
+## Goal
+
+Stop Ashen, Oblivion Brand, and Execution from feeling like differently colored area attacks. Shatter remains mostly unchanged because its ground-fracture hit rule already reads clearly.
+
+## Applied Changes
+
+- Ashen:
+  - memory no longer periodically damages nearby enemies from the player body;
+  - memory now reads as guard storage / threat watch / stored counter;
+  - stored counter targets a few high-threat enemies rather than all enemies in radius;
+  - Greatsword Echo uses a holy-wall lane instead of a broad cone;
+  - Dual Blades Echo remains a parry-return chain.
+- Oblivion Brand:
+  - memory now inscribes first, then resolves delayed erase and delayed spread;
+  - Echoes now apply light inscription damage first and delayed deletion/collapse as the real hit;
+  - +5 spread is marked/delayed instead of instant generic splash.
+- Execution:
+  - Greatsword Echo now focuses the condemned target and limited low-health verdict witnesses;
+  - Dual Blades Echo chains only through condemned/low-health targets in normal play.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after a transient file-lock retry.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing deprecation warnings and 0 errors.
+- Unity compilation errors: `0`.
+- Play Mode `DebugRunEchoMatrix(DualBlades)`: completed.
+- Play Mode `DebugRunEchoMatrix(Greatsword)`: completed.
+- Play Mode `DebugRunPassiveMemoryMatrix()`: completed.
+- Play Mode `DebugRunDenseDualBladePerfMatrix()`: completed.
+- Unity console errors after delayed Brand coroutine wait: `0`.
+
+## Remaining Gate
+
+- jaewoo direct-play review:
+  - Ashen: does it now feel defensive/counter-based instead of body AoE?
+  - Oblivion Brand: does inscription -> delayed erase feel distinct from ordinary damage?
+  - Execution: does low-health verdict feel distinct from ordinary AoE?
+  - Shatter: confirm current ground-fracture direction still holds.
+
 # 2026-07-23 Echo Hit Readability Follow-up
 
 ## Status

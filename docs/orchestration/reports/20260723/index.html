@@ -162,6 +162,13 @@
           <p>Dev_Prototype_v1에서 새로 리워크한 처형, 파문, 잿빛, 망각 잔향의 피격 가독성을 보강했다. VFX 품질은 유지하고, 실제 데미지를 받은 적마다 짧은 표식과 연결선을 추가했다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-23-03</span>
+          <h2><a href="#unit-2026-07-23-03" data-unit-link="unit-2026-07-23-03">잔향 판정 규칙 아이덴티티 리워크</a></h2>
+          <p>Dev_Prototype_v1에서 잿빛, 망각/낙인, 처형 잔향의 판정 규칙을 다시 갈랐다. 파문은 현재처럼 지면 파괴 규칙이 VFX와 맞기 때문에 큰 방향을 유지했다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -257,6 +264,53 @@
 <li>방향: 아름다운 대표 실루엣 위에 피격 가독성 레이어를 별도로 둔다.</li>
 <li>행동: 네 잔향과 잿빛 기억에 target-local hit read를 추가했다.</li>
 <li>결과: 빌드와 Unity 매트릭스 스모크 기준으로 런타임 오류 없이 테스트 가능한 상태가 됐다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-23-03" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-23-03 - 잔향 판정 규칙 아이덴티티 리워크</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에서 잿빛, 망각/낙인, 처형 잔향의 판정 규칙을 다시 갈랐다. 파문은 현재처럼 지면 파괴 규칙이 VFX와 맞기 때문에 큰 방향을 유지했다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>잿빛:</li>
+<li>기억이 더 이상 플레이어 몸 주변 적을 주기적으로 때리지 않는다.</li>
+<li>평소에는 방패/주시선으로 보이고, 저장된 방어력이 있을 때만 반격 피해를 낸다.</li>
+<li>저장 반격은 주변 전체가 아니라 위협도가 높은 소수 대상에게 되돌아간다.</li>
+<li>대검 잔향은 넓은 콘이 아니라 성벽 차선 판정으로 바뀌었다.</li>
+<li>망각/낙인:</li>
+<li>기억은 즉시 피해/즉시 전염이 아니라 <code>새김 -&gt; 지연 삭제 -&gt; 지연 전염</code>으로 바뀌었다.</li>
+<li>잔향도 가벼운 새김 피해 후 짧은 지연 삭제 피해가 본 피해로 들어간다.</li>
+<li>+5 전염도 즉시 광역 피해가 아니라 예고/지연 중심으로 정리했다.</li>
+<li>처형:</li>
+<li>대검 처형은 반경 전체 피해가 아니라 판결 대상과 제한된 저체력 목격자만 때린다.</li>
+<li>쌍검 처형도 일반 플레이에서는 저체력/판결 대상 중심으로 연쇄된다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과. Unity DLL 파일 잠금으로 첫 시도는 실패했지만 단독 재시도에서 경고 0개, 오류 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 통과. 기존 deprecation warning 7개, 오류 0개.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Play Mode <code>DebugRunEchoMatrix(DualBlades)</code>: 완료.</li>
+<li>Play Mode <code>DebugRunEchoMatrix(Greatsword)</code>: 완료.</li>
+<li>Play Mode <code>DebugRunPassiveMemoryMatrix()</code>: 완료.</li>
+<li>Play Mode <code>DebugRunDenseDualBladePerfMatrix()</code>: 완료.</li>
+<li>지연 낙인 코루틴 대기 후 Unity console errors: <code>0</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>잔향의 개성은 색과 이미지뿐 아니라 판정 규칙에서 먼저 갈라져야 한다. 기준은 <code>파문 = 지면 파괴</code>, <code>잿빛 = 방어 축적/반격</code>, <code>망각 = 새김/지연 삭제</code>, <code>처형 = 저체력 판결</code>로 잡는다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>잿빛은 이제 더 이상 몸 주변 주기 피해가 아니므로 직접 플레이에서 너무 조용하게 느껴질 수 있다. 만약 그렇다면 수치 광역을 되돌리기보다, 피격/근접 압박을 받을 때 반격 빈도와 방패 반응을 더 살리는 쪽이 맞다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Ashen, Oblivion Brand, and Execution were reworked at the hit-rule level. Ashen is now guard storage/counter, Brand is inscription -&gt; delayed erase/spread, and Execution is low-health verdict targeting. Shatter remains the reference because its ground-fracture rule already reads clearly.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo가 직접 플레이하면서 세 가지 질문에 답하면 된다. 잿빛이 방어/반격으로 읽히는가, 낙인이 지연 삭제로 읽히는가, 처형이 저체력 판결로 읽히는가. 부족한 항목은 VFX가 아니라 판정 규칙부터 다시 조정한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 다른 VFX를 붙여도 같은 광역 판정이면 플레이 감각은 같게 느껴진다.</li>
+<li>방향: 각 잔향의 전투 규칙을 서로 다른 플레이 언어로 분리한다.</li>
+<li>행동: 잿빛/낙인/처형의 기억 및 잔향 판정 구조를 바꿨다.</li>
+<li>결과: 기술 검증 기준으로 런타임 오류 없이 직접 테스트 가능한 상태가 됐다.</li>
 </ul>
     </article>
       </div>

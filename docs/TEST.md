@@ -1,5 +1,47 @@
 # LETHE TEST
 
+# 2026-07-23 Echo Rule Identity Rework
+
+- Purpose:
+  - Respond to jaewoo's review that Ashen, Brand, and Execution still feel like similar area attacks even after VFX improvements.
+  - Preserve Shatter's current direction because its ground-break action already matches the hit rule.
+- Applied target:
+  - `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`.
+- Changes:
+  - Ashen memory:
+    - removed periodic nearby enemy damage from the player body;
+    - kept guard VFX / threat watch;
+    - only releases damage when guard charge is stored.
+  - Ashen stored release:
+    - targets a small number of high-threat enemies instead of all enemies in a radius.
+  - Great Ashen Echo:
+    - changed from broad cone to holy-wall lane targeting.
+  - Oblivion Brand memory:
+    - changed from immediate mark damage / fork damage to inscription -> delayed erase -> delayed spread.
+  - Oblivion Echo:
+    - changed Great/Dual paths to light inscription damage followed by delayed erasure/collapse damage.
+  - Execution Echo:
+    - reduced broad area damage;
+    - Greatsword now focuses the condemned target and a few low-health verdict witnesses;
+    - Dual Blades chains only through condemned/low-health targets in normal play.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`.
+  - Unity compilation error check.
+  - Play Mode `DebugRunEchoMatrix(DualBlades)`.
+  - Play Mode `DebugRunEchoMatrix(Greatsword)`.
+  - Play Mode `DebugRunPassiveMemoryMatrix()`.
+  - Play Mode `DebugRunDenseDualBladePerfMatrix()`.
+  - Unity console error check after a delayed coroutine wait.
+- Results:
+  - Runtime C# build passed with 0 warnings and 0 errors after retrying a transient `Assembly-CSharp.dll` file lock.
+  - Editor C# build passed with 7 existing deprecation warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Dual / Great / Passive / Dense matrix reflection calls completed.
+  - Unity console errors after delayed Brand coroutine wait: `0`.
+- Notes:
+  - Direct play should judge whether Ashen now feels like defense/counter, Brand like delayed deletion, and Execution like conditional verdict instead of three differently colored area attacks.
+
 # 2026-07-23 Echo Hit Readability Follow-up
 
 - Purpose:

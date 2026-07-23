@@ -1,17 +1,18 @@
 # Next Tasks
 
-## 1. Four Reworked Echoes Direct-Play Review
+## 1. Echo Rule Identity Direct-Play Review
 
 - Priority: urgent
-- Problem: Execution, Shatter, Ashen, and Oblivion now use new Echo-only sprites and changed weapon-specific hit logic, but only direct play can judge whether they finally feel like separate combat events.
+- Problem: Shatter reads acceptably as ground fracture, but Ashen / Oblivion Brand / Execution were reworked again because they still felt like similar area attacks.
 - Build:
-  - Check Execution: Dual = guilty shredding; Great = execution gate area.
-  - Check Shatter: Dual = fault hop chain; Great = ground collapse area.
-  - Check Ashen: Dual = parry return; Great = holy wall pressure.
-  - Check Oblivion: Dual = erasure scars; Great = void collapse crater.
-  - Tune scale, alpha, lifetime, and layer counts per effect before adding any new mechanics.
+  - Check Ashen memory: guard/threat-watch first, stored counter only when charged, no body-centered periodic AoE.
+  - Check Great Ashen: holy-wall lane, not broad cone or circle.
+  - Check Dual Ashen: parry-return chain.
+  - Check Oblivion Brand: inscription -> delayed erase -> delayed spread.
+  - Check Execution: low-health verdict target and limited witnesses, not broad area damage.
+  - Keep Shatter as the current reference if ground fracture still feels good.
 - Done:
-  - jaewoo can mark each family/weapon pair `keep`, `tune`, or `redesign`, with one clear reason.
+  - jaewoo can say whether Ashen, Brand, and Execution now feel mechanically distinct, and mark each `keep`, `tune`, or `redesign`.
 
 ## 2. Blood Direct-Play Regression Check
 
@@ -59,6 +60,8 @@
 
 Completed sequence:
 
+- 2026-07-23: Echo rule identity rework implemented. Ashen memory no longer body-AoEs and now stores guard/counter charge, Ashen releases target high-threat enemies, Great Ashen uses a holy-wall lane, Brand uses inscription -> delayed erase/spread, and Execution targets condemned low-health verdicts instead of broad area damage. Runtime/editor builds, Unity compile, Play Mode Dual/Great/Passive/Dense matrix calls, and delayed Brand console check passed.
+- 2026-07-23: Echo hit readability follow-up implemented. Added per-victim hit-confirm VFX so source/path/victim reads are clearer, especially Ashen guard/counter paths. Runtime/editor builds, Unity compile, Play Mode Dual/Great matrix calls, and console error checks passed.
 - 2026-07-23: Execution/Shatter/Ashen/Oblivion normal Echo redesign implemented. Generated a new LETHE-style Echo-only sprite atlas, cut 8 transparent weapon-specific Echo sprites, removed memory-motif reuse from these Echo paths, changed Greatsword Shatter/Execution/Ashen/Oblivion hit reads, and verified C# builds, Unity compile, Dual/Great matrix counts, and Dense Dual budget.
 - 2026-07-22: Weapon-specific Echo mutation VFX pass implemented. HQ memory motifs now get separate Dual Blades and Greatsword Echo ornament layers for Blood, Shatter, Execution, Stopped, Ashen, and Oblivion. C# builds passed, Unity compilation errors were 0, Dual/Great matrix captures were saved, and Dense Dual stayed within budget.
 - 2026-07-22: HQ bitmap VFX texture pass implemented. Blood Vortex, Stopped Clock, Execution Judgement, Shatter Slam, Oblivion Brand, and Ashen Holy Fire sprites were generated, chroma-keyed, imported as Unity sprites, wired into memory/Echo/Ultimate motif paths, and verified with C# builds plus Unity Play Mode captures. Console and compilation errors were 0.

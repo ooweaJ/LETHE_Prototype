@@ -2,6 +2,20 @@
 
 # 2026-07-23
 
+- Reworked Ashen, Oblivion Brand, and Execution away from same-feeling area damage rules:
+  - Ashen memory no longer periodically damages nearby enemies from the player body. It now behaves as guard storage / threat watch / stored counter release.
+  - Ashen stored releases now select a small number of high-threat counter targets instead of every enemy in a radius.
+  - Greatsword Ashen Echo now uses a narrow holy-wall lane instead of a broad cone.
+  - Oblivion Brand memory now inscribes a target first, then resolves delayed erase damage and spread.
+  - Oblivion Echo now deals light inscription damage first, then delayed erasure/collapse damage; +5 spread is delayed/marked instead of immediate generic splash.
+  - Execution Echo now limits damage to the condemned low-health target and a small number of verdict witnesses instead of broad area damage.
+- Verification:
+  - Runtime C# build passed with 0 warnings and 0 errors after retrying a transient Unity DLL file lock.
+  - Editor C# build passed with 7 existing deprecation warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Play Mode `DebugRunEchoMatrix(DualBlades)`, `DebugRunEchoMatrix(Greatsword)`, `DebugRunPassiveMemoryMatrix()`, and `DebugRunDenseDualBladePerfMatrix()` reflection calls completed.
+  - Unity console errors after delayed Brand coroutine wait: `0`.
+
 - Added an Echo hit-readability follow-up for the newly reworked Execution, Shatter, Ashen, and Oblivion Echoes:
   - Added per-victim hit-confirm VFX immediately before Echo damage is applied.
   - Ashen memory and stored guard releases now draw counter-return links from the player/guard source to damaged enemies.

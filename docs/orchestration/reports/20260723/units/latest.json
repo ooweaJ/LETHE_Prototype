@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260723\\index.md",
-  "generatedAt": "2026-07-23T10:06:41.989Z",
-  "unitCount": 2,
+  "generatedAt": "2026-07-23T13:29:47.070Z",
+  "unitCount": 3,
   "latest": {
-    "title": "2026-07-23-02 - 잔향 판정 가독성 후속 패치",
-    "number": "02",
-    "markdownPath": "docs\\orchestration\\reports\\20260723\\units\\2026-07-23-02-잔향-판정-가독성-후속-패치.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260723\\units\\2026-07-23-02-잔향-판정-가독성-후속-패치.html"
+    "title": "2026-07-23-03 - 잔향 판정 규칙 아이덴티티 리워크",
+    "number": "03",
+    "markdownPath": "docs\\orchestration\\reports\\20260723\\units\\2026-07-23-03-잔향-판정-규칙-아이덴티티-리워크.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260723\\units\\2026-07-23-03-잔향-판정-규칙-아이덴티티-리워크.html"
   }
 }

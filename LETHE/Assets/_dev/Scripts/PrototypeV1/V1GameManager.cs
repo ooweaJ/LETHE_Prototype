@@ -1802,18 +1802,24 @@ namespace Lethe.PrototypeV1
             SpawnAshenMemoryGuardPlate(player.position, lastAim, memory.Level);
             if (memory.Level >= 3)
             {
-                SpawnRadialSlashLines("MemoryAshenShieldCounterLine", player.position, lastAim, 5, 0.72f + memory.Level * 0.065f, new Color(0.84f, 0.92f, 1f, 0.54f), 0.38f);
-                var release = ConsumeAshenGuardCharge(0.42f, memory.Level >= 5 ? 5f : 2.5f);
-                if (release > 0f)
+                SpawnRadialSlashLines("MemoryAshenShieldStoredWard", player.position, lastAim, 4, 0.58f + memory.Level * 0.045f, new Color(0.84f, 0.92f, 1f, 0.34f), 0.32f);
+                var releaseThreshold = 7f + memory.Level * 2.2f;
+                if (ashenStoredGuardCharge >= releaseThreshold)
                 {
+                    var release = ConsumeAshenGuardCharge(memory.Level >= 5 ? 0.62f : 0.42f, memory.Level >= 5 ? 5f : 2.5f);
                     ReleaseAshenGuardWave(player.position, memory.Level, release, memory.Level >= 5, "Ashen stored counter");
                 }
-                foreach (var enemy in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(player.position, e.transform.position) <= 1.75f + memory.Level * 0.12f).Take(7).ToList())
+                else
                 {
-                    var dir = (Vector2)(enemy.transform.position - player.position);
-                    MarkEnemyEchoState(enemy, V1MemoryId.AshenShield, 1.05f, 0.98f);
-                    SpawnEchoHitRead(V1MemoryId.AshenShield, player.position, enemy, dir.sqrMagnitude > 0.01f ? dir.normalized : lastAim, false, memory.Level);
-                    DealDamage(enemy, 4.0f + memory.Level * 1.45f, "AshenShield counter", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 0.40f);
+                    var watched = enemies
+                        .Where(e => e != null && e.IsAlive)
+                        .OrderByDescending(EnemyThreatPriority)
+                        .ThenBy(e => Vector2.Distance(player.position, e.transform.position))
+                        .FirstOrDefault();
+                    if (watched != null)
+                    {
+                        SpawnEchoLink("MemoryAshenShieldWatchThread", player.position + Vector3.up * 0.12f, watched.transform.position + Vector3.up * 0.08f, new Color(0.90f, 0.96f, 1f, 0.22f), 0.26f, 0.010f);
+                    }
                 }
             }
             if (memory.Level >= 5)
@@ -1837,27 +1843,71 @@ namespace Lethe.PrototypeV1
                 MarkEnemyEchoState(enemy, V1MemoryId.OblivionBrand, 1.35f, 1.02f);
                 SpawnOblivionBrandGlyph(enemy.transform.position + Vector3.up * 0.10f, (Vector2)(enemy.transform.position - player.position), memory.Level, false, memory.Level >= 5, 0.54f);
                 SpawnEchoLink("MemoryOblivionBrandTether", enemy.transform.position, player.position, new Color(0.78f, 0.34f, 1f, 0.48f), 0.36f, 0.022f);
-                if (memory.Level >= 3)
-                {
-                    SpawnRadialSlashLines("MemoryOblivionBrandFork", enemy.transform.position, (Vector2)(enemy.transform.position - player.position), 4, 0.74f + memory.Level * 0.055f, new Color(0.84f, 0.42f, 1f, 0.62f), 0.38f);
-                    foreach (var linked in enemies.Where(e => e != null && e.IsAlive && e != enemy && Vector2.Distance(enemy.transform.position, e.transform.position) <= 1.38f + memory.Level * 0.13f).Take(4).ToList())
-                    {
-                        SpawnEchoLink("MemoryOblivionBrandForkLink", enemy.transform.position, linked.transform.position, new Color(0.76f, 0.30f, 1f, 0.42f), 0.28f, 0.016f);
-                        DealDamage(linked, 3.2f + memory.Level * 1.25f, "OblivionBrand fork", false);
-                    }
-                }
-                if (memory.Level >= 5)
-                {
-                    SpawnRadialSlashLines("MemoryOblivionBrandDetonation", enemy.transform.position, (Vector2)(enemy.transform.position - player.position), 6, 0.86f, new Color(0.92f, 0.46f, 1f, 0.68f), 0.42f);
-                    SpawnOblivionEraseBurst(enemy.transform.position, (Vector2)(enemy.transform.position - player.position), 0.88f + memory.Level * 0.08f, true, "MemoryOblivionBrandErase");
-                    foreach (var linked in enemies.Where(e => e != null && e.IsAlive && e != enemy && Vector2.Distance(enemy.transform.position, e.transform.position) <= 1.72f + memory.Level * 0.12f).Take(5).ToList())
-                    {
-                        var dir = (Vector2)(linked.transform.position - enemy.transform.position);
-                        MarkEnemyEchoState(linked, V1MemoryId.OblivionBrand, 1.25f, 1.02f);
-                        DealDamage(linked, 6.0f + memory.Level * 2.0f, "OblivionBrand detonation", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, 0.18f);
-                    }
-                }
-                DealDamage(enemy, 7f + memory.Level * 3.0f, "OblivionBrand mark", false);
+                DealDamage(enemy, 1.4f + memory.Level * 0.45f, "OblivionBrand inscription", false);
+                StartCoroutine(ResolveOblivionDelayedErase(enemy, player.position, memory.Level, memory.Level >= 5, 0.30f, "OblivionBrand delayed erase"));
+            }
+        }
+
+        IEnumerator ResolveOblivionDelayedErase(V1Enemy target, Vector3 source, int levelValue, bool rupture, float delay, string sourceName)
+        {
+            if (delay > 0f) yield return new WaitForSeconds(delay);
+            if (target == null || !target.IsAlive) yield break;
+
+            var center = target.transform.position;
+            var dir = (Vector2)(center - source);
+            var f = dir.sqrMagnitude > 0.01f ? dir.normalized : lastAim;
+            PlaySfx("brand", rupture ? 0.54f : 0.42f, 0.06f);
+            SpawnOblivionEraseBurst(center, f, 0.62f + levelValue * 0.065f, rupture, sourceName);
+            SpawnEchoHitRead(V1MemoryId.OblivionBrand, source, target, f, rupture, levelValue);
+            MarkEnemyEchoState(target, V1MemoryId.OblivionBrand, rupture ? 1.35f : 1.05f, rupture ? 1.10f : 0.94f);
+            DealDamage(target, 6.0f + levelValue * (rupture ? 3.2f : 2.2f), sourceName, false, f, rupture ? 0.28f : 0.12f);
+
+            if (levelValue < 3) yield break;
+
+            var spreadRadius = rupture ? 1.74f + levelValue * 0.12f : 1.22f + levelValue * 0.08f;
+            var spreadCap = rupture ? 4 : 2;
+            var linkedTargets = enemies
+                .Where(e => e != null && e.IsAlive && e != target && Vector2.Distance(center, e.transform.position) <= spreadRadius + e.TouchRadius)
+                .OrderBy(e => Vector2.Distance(center, e.transform.position))
+                .Take(spreadCap)
+                .ToList();
+            for (int i = 0; i < linkedTargets.Count; i++)
+            {
+                var linked = linkedTargets[i];
+                var linkedDir = (Vector2)(linked.transform.position - center);
+                SpawnEchoLink(rupture ? "OblivionBrandRuptureInfection" : "OblivionBrandDelayedInfection", center, linked.transform.position, new Color(0.78f, 0.34f, 1f, rupture ? 0.42f : 0.30f), rupture ? 0.34f : 0.24f, rupture ? 0.016f : 0.010f);
+                SpawnOblivionBrandGlyph(linked.transform.position + Vector3.up * 0.08f, linkedDir.sqrMagnitude > 0.01f ? linkedDir.normalized : f, levelValue, false, false, rupture ? 0.40f : 0.28f);
+                MarkEnemyEchoState(linked, V1MemoryId.OblivionBrand, rupture ? 1.10f : 0.84f, rupture ? 1.00f : 0.88f);
+                DealDamage(linked, (rupture ? 3.8f : 2.4f) + levelValue * (rupture ? 1.35f : 0.82f), rupture ? "OblivionBrand rupture spread" : "OblivionBrand delayed spread", false, linkedDir.sqrMagnitude > 0.01f ? linkedDir.normalized : f, rupture ? 0.16f : 0.06f);
+            }
+        }
+
+        IEnumerator ResolveOblivionEchoErase(V1Enemy target, Vector3 source, float damage, int levelValue, bool heavy, float delay, string sourceName)
+        {
+            if (delay > 0f) yield return new WaitForSeconds(delay);
+            if (target == null || !target.IsAlive) yield break;
+
+            var center = target.transform.position;
+            var dir = (Vector2)(center - source);
+            var f = dir.sqrMagnitude > 0.01f ? dir.normalized : lastAim;
+            SpawnOblivionEraseBurst(center, f, heavy ? 0.82f + levelValue * 0.08f : 0.52f + levelValue * 0.045f, heavy, sourceName);
+            SpawnEchoHitRead(V1MemoryId.OblivionBrand, source, target, heavy ? -f : f, heavy, levelValue);
+            MarkEnemyEchoState(target, V1MemoryId.OblivionBrand, heavy ? 1.32f : 0.96f, heavy ? 1.08f : 0.90f);
+            DealDamage(target, damage, sourceName, false, heavy ? -f : f, heavy ? 0.44f : 0.08f);
+
+            if (levelValue < 5) yield break;
+
+            var spreadTargets = enemies
+                .Where(e => e != null && e.IsAlive && e != target && Vector2.Distance(center, e.transform.position) <= (heavy ? 1.58f : 1.22f) + levelValue * 0.08f + e.TouchRadius)
+                .OrderBy(e => Vector2.Distance(center, e.transform.position))
+                .Take(heavy ? 3 : 2)
+                .ToList();
+            foreach (var linked in spreadTargets)
+            {
+                var linkedDir = (Vector2)(linked.transform.position - center);
+                SpawnEchoLink(heavy ? "EchoGreat_OblivionDelayedRuptureSpread" : "EchoDual_OblivionDelayedScarSpread", center, linked.transform.position, new Color(0.82f, 0.46f, 1f, heavy ? 0.34f : 0.26f), heavy ? 0.30f : 0.22f, heavy ? 0.014f : 0.008f);
+                MarkEnemyEchoState(linked, V1MemoryId.OblivionBrand, heavy ? 1.00f : 0.78f, heavy ? 0.96f : 0.86f);
+                DealDamage(linked, damage * (heavy ? 0.22f : 0.16f), heavy ? "Oblivion Echo Great delayed spread" : "Oblivion Echo Dual delayed spread", false, linkedDir.sqrMagnitude > 0.01f ? linkedDir.normalized : f, heavy ? 0.12f : 0.04f);
             }
         }
 
@@ -2291,16 +2341,48 @@ namespace Lethe.PrototypeV1
             PlaySfx("ashen", heavy ? 0.62f : 0.44f, 0.18f);
             SpawnAshenHolyFlames(center, lastAim, levelValue, true, heavy);
             SpawnRadialSlashLines(heavy ? "AshenStoredWaveShardHeavy" : "AshenStoredWaveShard", center, lastAim, heavy ? 9 : 6, radius * 0.62f, new Color(1f, 0.94f, 0.68f, heavy ? 0.70f : 0.52f), heavy ? 0.42f : 0.30f);
-            foreach (var target in enemies.Where(e => e != null && e.IsAlive && Vector2.Distance(center, e.transform.position) <= radius + e.TouchRadius).Take(heavy ? 14 : 9).ToList())
+            var counterTargets = AshenGuardCounterTargets(center, radius, heavy, levelValue);
+            for (int i = 0; i < counterTargets.Count; i++)
             {
+                var target = counterTargets[i];
                 var dir = (Vector2)(target.transform.position - center);
                 MarkEnemyEchoState(target, V1MemoryId.AshenShield, heavy ? 1.55f : 1.15f, heavy ? 1.14f : 0.96f);
                 SpawnEchoHitRead(V1MemoryId.AshenShield, center, target, dir.sqrMagnitude > 0.01f ? dir.normalized : lastAim, heavy, levelValue);
-                DealDamage(target, damage, source, false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, heavy ? 1.15f : 0.62f);
+                DealDamage(target, damage * (i == 0 ? 1f : heavy ? 0.56f : 0.42f), source, false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, heavy ? 1.15f : 0.62f);
             }
             hitstopTimer = Mathf.Max(hitstopTimer, heavy ? 0.045f : 0.025f);
             cameraShakeTimer = Mathf.Max(cameraShakeTimer, heavy ? 0.18f : 0.10f);
             cameraShakeAmount = Mathf.Max(cameraShakeAmount, heavy ? 0.085f : 0.052f);
+        }
+
+        List<V1Enemy> AshenGuardCounterTargets(Vector3 center, float radius, bool heavy, int levelValue)
+        {
+            var cap = heavy ? Mathf.Clamp(2 + levelValue / 2, 4, 6) : Mathf.Clamp(1 + levelValue / 2, 2, 4);
+            return enemies
+                .Where(e => e != null && e.IsAlive && Vector2.Distance(center, e.transform.position) <= radius + e.TouchRadius)
+                .OrderByDescending(EnemyThreatPriority)
+                .ThenBy(e => Vector2.Distance(center, e.transform.position))
+                .Take(cap)
+                .ToList();
+        }
+
+        List<V1Enemy> AshenHolyWallTargets(Vector3 source, Vector2 forward, float range, float halfWidth, int cap)
+        {
+            var f = EchoForward(forward);
+            var s = new Vector2(-f.y, f.x);
+            return enemies
+                .Where(e =>
+                {
+                    if (e == null || !e.IsAlive) return false;
+                    var delta = (Vector2)(e.transform.position - source);
+                    var along = Vector2.Dot(delta, f);
+                    var across = Mathf.Abs(Vector2.Dot(delta, s));
+                    return along >= -0.18f && along <= range + e.TouchRadius && across <= halfWidth + e.TouchRadius;
+                })
+                .OrderBy(e => Vector2.Dot((Vector2)(e.transform.position - source), f))
+                .ThenByDescending(EnemyThreatPriority)
+                .Take(cap)
+                .ToList();
         }
 
         bool ShouldTriggerEcho(V1MemoryId id, int levelValue, int hitIndex, bool force)
@@ -2598,21 +2680,34 @@ namespace Lethe.PrototypeV1
                 SpawnGreatswordGuillotineDrop(enemy.transform.position, f, levelValue);
                 SpawnEchoWoundLine("EchoGreat_ExecutionGuillotine", enemy.transform.position + Vector3.up * 0.08f, f, new Color(1f, 0.94f, 0.52f, 0.84f), 1.62f + levelValue * 0.08f, 0.54f);
                 SpawnRadialSlashLines("EchoGreat_ExecutionCrack", enemy.transform.position, f, 5, 1.42f + levelValue * 0.10f, new Color(1f, 0.96f, 0.50f, 0.82f), 0.50f);
-                foreach (var target in EchoTargetsInRadius(enemy.transform.position, 1.72f + levelValue * 0.16f, 7, enemy))
+                var verdictTargets = EchoTargetsInRadius(enemy.transform.position, 1.72f + levelValue * 0.16f, 7, enemy)
+                    .Where(target => target == enemy || force || target.HealthRatio <= executeThreshold + 0.14f)
+                    .OrderBy(target => target == enemy ? 0 : 1)
+                    .ThenBy(target => target.HealthRatio)
+                    .Take(force ? 4 : 3)
+                    .ToList();
+                for (int i = 0; i < verdictTargets.Count; i++)
                 {
+                    var target = verdictTargets[i];
                     var dir = (Vector2)(target.transform.position - enemy.transform.position);
-                    var executionMul = target == enemy || target.HealthRatio < 0.42f ? 1.16f : 0.72f;
+                    var executionMul = i == 0 || target.HealthRatio < executeThreshold + 0.08f ? 1.22f : 0.46f;
                     MarkEnemyEchoState(target, V1MemoryId.ExecutionFlash, 1.15f, heavy ? 1.16f : 0.96f);
                     SpawnEchoHitRead(V1MemoryId.ExecutionFlash, enemy.transform.position, target, dir.sqrMagnitude > 0.01f ? dir.normalized : f, true, levelValue);
-                    DealDamage(target, weapon.Damage * (target.HealthRatio < 0.42f ? 0.46f + levelValue * 0.075f : 0.18f + levelValue * 0.038f) * executionMul, "Execution Echo Great execution gate", false, dir.sqrMagnitude > 0.01f ? dir.normalized : f, target.HealthRatio < 0.42f ? 0.86f : 0.34f);
+                    DealDamage(target, weapon.Damage * (target.HealthRatio <= executeThreshold + 0.08f ? 0.52f + levelValue * 0.084f : 0.12f + levelValue * 0.026f) * executionMul, i == 0 ? "Execution Echo Great verdict" : "Execution Echo Great witness cut", false, dir.sqrMagnitude > 0.01f ? dir.normalized : f, i == 0 ? 0.92f : 0.22f);
                 }
             }
             else
             {
                 var side = new Vector2(-f.y, f.x);
-                var chain = denseDualBlade
+                var rawChain = denseDualBlade
                     ? new List<V1Enemy> { enemy }
                     : EchoChainTargets(enemy, Mathf.Min(5, 2 + levelValue / 2), 1.22f + levelValue * 0.08f);
+                var chain = rawChain
+                    .Where(target => target == enemy || force || target.HealthRatio <= executeThreshold + 0.16f)
+                    .OrderBy(target => target == enemy ? 0 : 1)
+                    .ThenBy(target => target.HealthRatio)
+                    .Take(denseDualBlade ? 1 : Mathf.Min(4, 1 + levelValue / 2))
+                    .ToList();
                 if (!denseDualBlade)
                 {
                     SpawnDualExecutionSentenceMarks(chain, f, levelValue);
@@ -2853,13 +2948,14 @@ namespace Lethe.PrototypeV1
                     ReleaseAshenGuardWave(player.position, levelValue, release, true, "Ashen Echo stored wave");
                 }
                 var wallRange = EchoRadius(V1MemoryId.AshenShield, levelValue, heavy) * 1.55f;
-                foreach (var target in EchoTargetsInCone(player.position - (Vector3)(f * 0.34f), f, wallRange, 48f, EchoTargetLimit(V1MemoryId.AshenShield, levelValue, heavy) + 2))
+                var wallSource = player.position + (Vector3)(f * 0.68f);
+                foreach (var target in AshenHolyWallTargets(wallSource, f, wallRange, 0.54f + levelValue * 0.055f, EchoTargetLimit(V1MemoryId.AshenShield, levelValue, heavy) + 1))
                 {
-                    var dir = (Vector2)(target.transform.position - player.position);
+                    var dir = (Vector2)(target.transform.position - wallSource);
                     var distanceMul = Mathf.Lerp(1.08f, 0.72f, Mathf.Clamp01(dir.magnitude / Mathf.Max(0.01f, wallRange)));
                     MarkEnemyEchoState(target, V1MemoryId.AshenShield, 1.35f, heavy ? 1.12f : 0.94f);
-                    SpawnEchoHitRead(V1MemoryId.AshenShield, player.position + (Vector3)(f * 0.68f), target, dir.sqrMagnitude > 0.01f ? dir.normalized : f, true, levelValue);
-                    DealDamage(target, weapon.Damage * EchoDamageMultiplier(V1MemoryId.AshenShield, levelValue, heavy) * distanceMul, "Ashen Echo Great holy wall", false, dir.sqrMagnitude > 0.01f ? dir.normalized : f, 0.58f);
+                    SpawnEchoHitRead(V1MemoryId.AshenShield, wallSource, target, dir.sqrMagnitude > 0.01f ? dir.normalized : f, true, levelValue);
+                    DealDamage(target, weapon.Damage * EchoDamageMultiplier(V1MemoryId.AshenShield, levelValue, heavy) * distanceMul, "Ashen Echo Great holy wall lane", false, f, 0.58f);
                 }
             }
             else
@@ -2915,23 +3011,23 @@ namespace Lethe.PrototypeV1
                 SpawnTransientSprite("EchoGreat_OblivionCollapseCoreShard", MakeImpactDiamondSprite("EchoGreat_OblivionCollapseCoreShard", Color.white), enemy.transform.position, Quaternion.Euler(0f, 0f, 45f + elapsed * -120f), collapseRadius * 0.46f, new Color(0.42f, 0.12f, 0.78f, 0.42f), 0.70f);
                 SpawnGreatswordBrandCrater(enemy.transform.position, f, collapseRadius);
                 SpawnGreatswordOblivionEchoMutation(enemy.transform.position, f, collapseRadius, levelValue);
-                SpawnOblivionEraseBurst(enemy.transform.position, f, collapseRadius * 0.74f, true, "EchoGreat_OblivionErase");
-                foreach (var target in EchoTargetsInRadius(enemy.transform.position, collapseRadius, EchoTargetLimit(V1MemoryId.OblivionBrand, levelValue, true), enemy))
+                var brandTargets = EchoTargetsInRadius(enemy.transform.position, collapseRadius, EchoTargetLimit(V1MemoryId.OblivionBrand, levelValue, true), enemy)
+                    .OrderBy(target => target == enemy ? 0 : 1)
+                    .ThenBy(target => Vector2.Distance(enemy.transform.position, target.transform.position))
+                    .Take(heavy ? 3 : 2)
+                    .ToList();
+                for (int i = 0; i < brandTargets.Count; i++)
                 {
+                    var target = brandTargets[i];
                     var dir = (Vector2)(target.transform.position - enemy.transform.position);
-                    var centerMul = Mathf.Lerp(1.20f, 0.78f, Mathf.Clamp01(dir.magnitude / Mathf.Max(0.01f, collapseRadius)));
                     MarkEnemyEchoState(target, V1MemoryId.OblivionBrand, 1.75f, 1.14f);
                     if (dir.sqrMagnitude > 0.01f)
                     {
-                        SpawnEchoLink("EchoGreat_OblivionCollapseThread", target.transform.position, enemy.transform.position, new Color(0.78f, 0.42f, 1f, 0.32f), 0.36f, 0.014f);
+                        SpawnEchoLink("EchoGreat_OblivionCondemnThread", enemy.transform.position, target.transform.position, new Color(0.78f, 0.42f, 1f, 0.34f), 0.36f, 0.014f);
                     }
                     SpawnEchoHitRead(V1MemoryId.OblivionBrand, enemy.transform.position, target, dir.sqrMagnitude > 0.01f ? -dir.normalized : f, true, levelValue);
-                    DealDamage(target, weapon.Damage * EchoDamageMultiplier(V1MemoryId.OblivionBrand, levelValue, true) * centerMul, "Oblivion Echo Great existence collapse", false, dir.sqrMagnitude > 0.01f ? -dir.normalized : f, 0.46f);
-                    if (levelValue >= 5)
-                    {
-                        SpawnTransientSprite("EchoGreat_OblivionRuptureAftermark", MakeImpactDiamondSprite("EchoGreat_OblivionRuptureAftermark", Color.white), target.transform.position, Quaternion.Euler(0f, 0f, 45f + elapsed * 120f), 0.30f, new Color(0.92f, 0.52f, 1f, 0.60f), 0.32f);
-                        DealDamage(target, weapon.Damage * 0.28f, "Oblivion Echo collapse rupture", false, dir.sqrMagnitude > 0.01f ? dir.normalized : f, 0.08f);
-                    }
+                    DealDamage(target, weapon.Damage * (0.08f + levelValue * 0.018f), "Oblivion Echo Great inscription", false, dir.sqrMagnitude > 0.01f ? -dir.normalized : f, 0.10f);
+                    StartCoroutine(ResolveOblivionEchoErase(target, enemy.transform.position, weapon.Damage * EchoDamageMultiplier(V1MemoryId.OblivionBrand, levelValue, true) * (i == 0 ? 1.10f : 0.62f), levelValue, true, 0.22f + i * 0.06f, i == 0 ? "Oblivion Echo Great collapse verdict" : "Oblivion Echo Great collapse witness"));
                 }
             }
             else
@@ -2965,7 +3061,8 @@ namespace Lethe.PrototypeV1
                     {
                         SpawnEchoHitRead(V1MemoryId.OblivionBrand, i == 0 ? enemy.transform.position : stackTargets[i - 1].transform.position, target, dir.sqrMagnitude > 0.01f ? dir.normalized : f, false, levelValue, i);
                     }
-                    DealDamage(target, weapon.Damage * EchoDamageMultiplier(V1MemoryId.OblivionBrand, levelValue, false) * (i == 0 ? 1f : 0.62f), "Oblivion Echo Dual stack", false, dir.sqrMagnitude > 0.01f ? dir.normalized : f, 0.08f);
+                    DealDamage(target, weapon.Damage * (0.035f + levelValue * 0.008f) * (i == 0 ? 1f : 0.70f), "Oblivion Echo Dual inscription", false, dir.sqrMagnitude > 0.01f ? dir.normalized : f, 0.04f);
+                    StartCoroutine(ResolveOblivionEchoErase(target, i == 0 ? enemy.transform.position : stackTargets[i - 1].transform.position, weapon.Damage * EchoDamageMultiplier(V1MemoryId.OblivionBrand, levelValue, false) * (i == 0 ? 0.92f : 0.56f), levelValue, false, 0.16f + i * 0.045f, "Oblivion Echo Dual delayed scar"));
                 }
                 if (levelValue >= 5)
                 {
@@ -2974,7 +3071,7 @@ namespace Lethe.PrototypeV1
                         var dir = (Vector2)(linked.transform.position - enemy.transform.position);
                         MarkEnemyEchoState(linked, V1MemoryId.OblivionBrand, 1.05f, 0.90f);
                         SpawnEchoLink("EchoDual_OblivionSpreadLink", enemy.transform.position, linked.transform.position, new Color(0.82f, 0.46f, 1f, 0.38f), 0.24f, 0.014f);
-                        DealDamage(linked, weapon.Damage * 0.16f, "Oblivion Echo spread", false, dir.sqrMagnitude > 0.01f ? dir.normalized : f, 0.06f);
+                        SpawnOblivionBrandGlyph(linked.transform.position + Vector3.up * 0.08f, dir.sqrMagnitude > 0.01f ? dir.normalized : f, levelValue, true, false, 0.24f);
                     }
                 }
             }

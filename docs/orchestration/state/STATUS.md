@@ -2,6 +2,27 @@
 
 Last updated: 2026-07-23
 
+## 2026-07-23 Update: Echo Rule Identity Rework
+
+- jaewoo review:
+  - Shatter is acceptable because its ground-break action matches the hit rule.
+  - Ashen, Oblivion Brand, and Execution still feel like different-colored area attacks, so their mechanics need clearer identities.
+- Applied in `_dev`:
+  - Ashen memory no longer periodically damages enemies around the player body. It now shows guard/threat-watch VFX and releases damage only from stored guard charge.
+  - Ashen stored release now chooses a small number of high-threat counter targets rather than every enemy in range.
+  - Greatsword Ashen Echo now uses a narrow holy-wall lane instead of a broad cone.
+  - Oblivion Brand memory now inscribes targets, then resolves delayed erase damage and delayed spread.
+  - Oblivion Echo now deals light inscription damage first and resolves the real erasure/collapse as a short delayed event.
+  - Execution Echo now focuses the condemned low-health target and limited verdict witnesses instead of broad area damage.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after a transient file-lock retry.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing deprecation warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Play Mode matrix calls completed for Dual, Great, Passive Memory, and Dense Dual Blades.
+  - Unity console errors after delayed Brand coroutine wait: `0`.
+- Remaining gate:
+  - jaewoo direct play should judge whether Ashen = defense/counter, Brand = delayed deletion/spread, Execution = conditional verdict, and Shatter = ground fracture now feel mechanically different.
+
 ## 2026-07-23 Update: Echo Hit Readability Follow-up
 
 - jaewoo review after the Echo sprite pass:

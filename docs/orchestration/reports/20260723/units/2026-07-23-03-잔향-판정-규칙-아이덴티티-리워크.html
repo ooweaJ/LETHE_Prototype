@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026-07-23-03 - 잔향 판정 규칙 아이덴티티 리워크</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #2563eb;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    header {
+      background: #101828;
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+    }
+    .header-inner {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.55em; }
+    h1 { margin-top: 0; font-size: 30px; }
+    h2 {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 22px;
+    }
+    h3 { font-size: 17px; color: #243047; }
+    p, ul, ol, table, pre { margin: 0 0 16px; }
+    a { color: var(--accent); }
+    ul, ol { padding-left: 24px; }
+    code {
+      background: #eef2f7;
+      color: #111827;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    blockquote {
+      margin: 0 0 18px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eef4ff;
+      color: #243047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f4f7;
+      text-align: left;
+    }
+    .meta {
+      color: #cbd5e1;
+      margin: 8px 0 0;
+    }
+    .back-link {
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+    .back-link a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .back-link a:hover { text-decoration: underline; }
+    @media (max-width: 720px) {
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2026-07-23-03 - 잔향 판정 규칙 아이덴티티 리워크</h1>
+      <p class="meta">Generated from 2026-07-23-03-잔향-판정-규칙-아이덴티티-리워크.md</p>
+    </div>
+  </header>
+  <main>
+    <p class="back-link"><a href="/api/projects/lethe/reports/20260723/index.html">날짜 리포트로 돌아가기</a></p>
+    <h1>2026-07-23-03 - 잔향 판정 규칙 아이덴티티 리워크</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에서 잿빛, 망각/낙인, 처형 잔향의 판정 규칙을 다시 갈랐다. 파문은 현재처럼 지면 파괴 규칙이 VFX와 맞기 때문에 큰 방향을 유지했다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>잿빛:</li>
+<li>기억이 더 이상 플레이어 몸 주변 적을 주기적으로 때리지 않는다.</li>
+<li>평소에는 방패/주시선으로 보이고, 저장된 방어력이 있을 때만 반격 피해를 낸다.</li>
+<li>저장 반격은 주변 전체가 아니라 위협도가 높은 소수 대상에게 되돌아간다.</li>
+<li>대검 잔향은 넓은 콘이 아니라 성벽 차선 판정으로 바뀌었다.</li>
+<li>망각/낙인:</li>
+<li>기억은 즉시 피해/즉시 전염이 아니라 <code>새김 -&gt; 지연 삭제 -&gt; 지연 전염</code>으로 바뀌었다.</li>
+<li>잔향도 가벼운 새김 피해 후 짧은 지연 삭제 피해가 본 피해로 들어간다.</li>
+<li>+5 전염도 즉시 광역 피해가 아니라 예고/지연 중심으로 정리했다.</li>
+<li>처형:</li>
+<li>대검 처형은 반경 전체 피해가 아니라 판결 대상과 제한된 저체력 목격자만 때린다.</li>
+<li>쌍검 처형도 일반 플레이에서는 저체력/판결 대상 중심으로 연쇄된다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과. Unity DLL 파일 잠금으로 첫 시도는 실패했지만 단독 재시도에서 경고 0개, 오류 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 통과. 기존 deprecation warning 7개, 오류 0개.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Play Mode <code>DebugRunEchoMatrix(DualBlades)</code>: 완료.</li>
+<li>Play Mode <code>DebugRunEchoMatrix(Greatsword)</code>: 완료.</li>
+<li>Play Mode <code>DebugRunPassiveMemoryMatrix()</code>: 완료.</li>
+<li>Play Mode <code>DebugRunDenseDualBladePerfMatrix()</code>: 완료.</li>
+<li>지연 낙인 코루틴 대기 후 Unity console errors: <code>0</code>.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>잔향의 개성은 색과 이미지뿐 아니라 판정 규칙에서 먼저 갈라져야 한다. 기준은 <code>파문 = 지면 파괴</code>, <code>잿빛 = 방어 축적/반격</code>, <code>망각 = 새김/지연 삭제</code>, <code>처형 = 저체력 판결</code>로 잡는다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>잿빛은 이제 더 이상 몸 주변 주기 피해가 아니므로 직접 플레이에서 너무 조용하게 느껴질 수 있다. 만약 그렇다면 수치 광역을 되돌리기보다, 피격/근접 압박을 받을 때 반격 빈도와 방패 반응을 더 살리는 쪽이 맞다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Ashen, Oblivion Brand, and Execution were reworked at the hit-rule level. Ashen is now guard storage/counter, Brand is inscription -&gt; delayed erase/spread, and Execution is low-health verdict targeting. Shatter remains the reference because its ground-fracture rule already reads clearly.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo가 직접 플레이하면서 세 가지 질문에 답하면 된다. 잿빛이 방어/반격으로 읽히는가, 낙인이 지연 삭제로 읽히는가, 처형이 저체력 판결로 읽히는가. 부족한 항목은 VFX가 아니라 판정 규칙부터 다시 조정한다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 다른 VFX를 붙여도 같은 광역 판정이면 플레이 감각은 같게 느껴진다.</li>
+<li>방향: 각 잔향의 전투 규칙을 서로 다른 플레이 언어로 분리한다.</li>
+<li>행동: 잿빛/낙인/처형의 기억 및 잔향 판정 구조를 바꿨다.</li>
+<li>결과: 기술 검증 기준으로 런타임 오류 없이 직접 테스트 가능한 상태가 됐다.</li>
+</ul>
+  </main>
+</body>
+</html>
