@@ -1,5 +1,36 @@
 # LETHE TEST
 
+# 2026-07-23 Echo Hit Readability Follow-up
+
+- Purpose:
+  - Respond to jaewoo's review that the new sprites look better but the damage 판정 path is still ambiguous.
+  - Especially make Ashen memory/Echo explain how a player-side guard effect turns into enemy damage.
+- Applied target:
+  - `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`.
+- Changes:
+  - Added `SpawnEchoHitRead` as a shared per-victim hit-confirm layer.
+  - Ashen memory counter and stored guard wave now draw visible counter-return links and target-local consecration marks.
+  - Great Ashen holy wall now links from the wall source to each damaged target.
+  - Execution / Shatter / Oblivion Echo damage loops now stamp target-local verdict, fault, or erase marks on every affected enemy.
+  - Dense Dual Blades still skips non-essential extra hit-read layers to avoid VFX spam.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`.
+  - Unity compilation error check.
+  - Play Mode `DebugRunEchoMatrix(DualBlades)` through MCP reflection.
+  - Play Mode `DebugRunEchoMatrix(Greatsword)` through MCP reflection.
+  - Unity console error check.
+- Results:
+  - Runtime C# build passed with 0 warnings and 0 errors after a retry. First retry hit a transient `Assembly-CSharp.dll` file lock while Unity/editor build was active.
+  - Editor C# build passed with 7 existing deprecation warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Dual Blades Echo Matrix reflection call completed.
+  - Greatsword Echo Matrix reflection call completed.
+  - Unity console errors: `0`.
+- Notes:
+  - Name-based runtime object counting is not reliable for these transient sprites because the runtime sprite pool does not preserve every requested effect id as the GameObject name.
+  - Direct play should judge whether Ashen now reads as guard -> return/counter -> enemy hit instead of body-only VFX.
+
 # 2026-07-23 Execution / Shatter / Ashen / Oblivion Echo Redesign Pass
 
 - Purpose:

@@ -2,6 +2,18 @@
 
 # 2026-07-23
 
+- Added an Echo hit-readability follow-up for the newly reworked Execution, Shatter, Ashen, and Oblivion Echoes:
+  - Added per-victim hit-confirm VFX immediately before Echo damage is applied.
+  - Ashen memory and stored guard releases now draw counter-return links from the player/guard source to damaged enemies.
+  - Greatsword Ashen keeps the holy-wall concept but now rays from the wall to each affected enemy.
+  - Execution, Shatter, and Oblivion now add target-local wound/core marks so area damage no longer relies only on the large representative sprite.
+  - Damage numbers and balance values were not intentionally changed; this pass is for 판정 가독성.
+- Verification:
+  - Runtime C# build passed with 0 warnings and 0 errors after retrying a transient Unity DLL file lock.
+  - Editor C# build passed with 7 existing deprecation warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Unity console errors after Dual Blades / Greatsword Echo Matrix calls: `0`.
+
 - Reworked Execution, Shatter, Ashen, and Oblivion normal Echoes so they no longer reuse memory VFX as their primary read:
   - Generated a darker LETHE-style Echo-only VFX atlas and cut 8 transparent weapon-specific sprites.
   - Dual Blades Execution now reads as guilty shredding / red X cuts.

@@ -1,5 +1,46 @@
 # Current Task
 
+# 2026-07-23 Echo Hit Readability Follow-up
+
+## Status
+
+- Implemented, C# build-verified, Unity compile-verified, Play Mode matrix-smoke-verified, and ready for jaewoo direct-play 판정 readability review.
+
+## Goal
+
+Keep the improved Echo sprites, but make the actual damage path readable. Every important Echo damage loop should show where the hit came from and which enemy was affected.
+
+## Applied Changes
+
+- Added `SpawnEchoHitRead` in `V1GameManager`.
+- Ashen memory:
+  - player-side guard/counter VFX remains;
+  - damaged enemies now receive target-local consecration marks;
+  - visible counter-return links connect player/guard source to victims.
+- Ashen Echo:
+  - Greatsword holy wall now connects to each cone victim with a wall ray and target mark.
+  - Dual Blades parry chain now stamps the actual parry-return victims.
+- Execution / Shatter / Oblivion Echo:
+  - area and chain damage now adds target-local verdict/fault/erase hit reads before `DealDamage`.
+- Dense Dual Blades:
+  - still throttles non-essential extra layers to avoid high-hit VFX spam.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after a transient file-lock retry.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing deprecation warnings and 0 errors.
+- Unity compilation errors: `0`.
+- Play Mode `DebugRunEchoMatrix(DualBlades)`: reflection call completed.
+- Play Mode `DebugRunEchoMatrix(Greatsword)`: reflection call completed.
+- Unity console errors after matrix calls: `0`.
+
+## Remaining Gate
+
+- jaewoo direct-play review:
+  - Ashen memory: does guard -> counter-return -> enemy hit now read clearly?
+  - Great Ashen: does the wall look like it hits enemies, not just appears in front of the player?
+  - Execution/Shatter/Oblivion: do hit victims now show clear local 판정 marks?
+
 # 2026-07-23 Execution / Shatter / Ashen / Oblivion Echo Redesign Pass
 
 ## Status

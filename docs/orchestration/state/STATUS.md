@@ -2,6 +2,27 @@
 
 Last updated: 2026-07-23
 
+## 2026-07-23 Update: Echo Hit Readability Follow-up
+
+- jaewoo review after the Echo sprite pass:
+  - the new VFX quality is better, but the damage 판정 path is still ambiguous;
+  - Ashen especially feels odd because the effect starts from the player body/guard but enemies still take damage without a clear return path.
+- Applied in `_dev`:
+  - Added `SpawnEchoHitRead` as a shared target-local hit-confirm layer.
+  - Ashen memory counter and stored guard wave now draw counter-return links from the player/guard source to damaged enemies.
+  - Greatsword Ashen holy wall now emits visible rays/marks to each enemy hit by the cone.
+  - Execution, Shatter, and Oblivion Echo damage loops now stamp each affected enemy with family-specific verdict/fault/erase hit reads.
+  - Dense Dual Blades keeps non-essential hit-read extras throttled.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after a retry. First attempt hit a transient Unity DLL file lock.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing deprecation warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Play Mode `DebugRunEchoMatrix(DualBlades)`: reflection call completed.
+  - Play Mode `DebugRunEchoMatrix(Greatsword)`: reflection call completed.
+  - Unity console errors after matrix calls: `0`.
+- Remaining gate:
+  - jaewoo direct play should focus on whether each Echo now reads as source -> path -> victim, especially Ashen memory/Echo.
+
 ## 2026-07-23 Update: Execution / Shatter / Ashen / Oblivion Echo Redesign Pass
 
 - jaewoo clarified that reusing remade memory VFX for Echoes hurts player excitement. Echoes must be separate combat events, not memory sprites with weapon ornaments.
