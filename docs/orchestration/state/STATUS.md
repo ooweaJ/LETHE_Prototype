@@ -1,6 +1,34 @@
 # Status
 
-Last updated: 2026-07-22
+Last updated: 2026-07-23
+
+## 2026-07-23 Update: Execution / Shatter / Ashen / Oblivion Echo Redesign Pass
+
+- jaewoo clarified that reusing remade memory VFX for Echoes hurts player excitement. Echoes must be separate combat events, not memory sprites with weapon ornaments.
+- Applied in `_dev`:
+  - Generated two VFX atlas attempts, selected the darker LETHE-style version, cut it into 8 transparent Echo-only sprites.
+  - Added Dual Blades / Greatsword dedicated sprites for Execution, Shatter, Ashen, and Oblivion Echoes.
+  - Stopped Echo use of memory motif in Execution Echo condemnation paths.
+  - Reworked Greatsword Shatter from a forward fan into a target-centered ground-collapse area with center damage bonus.
+  - Reworked Greatsword Execution into an execution-gate area around the condemned target.
+  - Reworked Greatsword Ashen into a forward holy-wall pressure cone instead of a player-centered circle.
+  - Reworked Greatsword Oblivion with new void-collapse crater sprite and center damage bonus.
+  - Dual Blades Shatter / Execution / Ashen / Oblivion now stamp the new quick chain/parry/erasure sprites on chain targets.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing deprecation warnings and 0 errors.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing deprecation warnings and 0 errors.
+  - Unity import settings configured for 9 generated PNG assets.
+  - Unity compilation errors: `0`.
+  - Play Mode `DebugRunEchoMatrix(DualBlades)`: all 8 Echoes at `+5`, `dualReworkObjects=64`.
+  - Play Mode `DebugRunEchoMatrix(Greatsword)`: all 8 Echoes at `+5`, `greatReworkObjects=32`.
+  - Play Mode `DebugRunDenseDualBladePerfMatrix()`: `hits=18`, `echoesSuppressed=15`, `transient=46`, `ms=18.30`.
+- Evidence:
+  - `docs/orchestration/evidence/2026-07-23-echo-rework-sprite-contact-sheet.png`
+  - `docs/orchestration/evidence/2026-07-23-echo-rework-dual-matrix.png`
+  - `docs/orchestration/evidence/2026-07-23-echo-rework-great-matrix.png`
+  - `docs/orchestration/evidence/2026-07-23-echo-rework-unity-isolated-preview.png`
+- Remaining gate:
+  - jaewoo direct-play review should judge whether these four Echoes now feel like distinct events: Execution = execution/guilty shredding, Shatter = ground collapse/fault hop, Ashen = parry/holy wall, Oblivion = erasure/void collapse.
 
 ## 2026-07-22 Update: Weapon-Specific Echo Mutation VFX Pass
 

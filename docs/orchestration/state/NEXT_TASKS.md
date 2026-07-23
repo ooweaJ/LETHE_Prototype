@@ -1,15 +1,14 @@
 # Next Tasks
 
-## 1. Weapon-Specific Echo Mutation Direct-Play Review
+## 1. Four Reworked Echoes Direct-Play Review
 
 - Priority: urgent
-- Problem: Echoes now use HQ bitmap motifs plus weapon-specific mutation layers, but debug all-on captures are intentionally overpacked and only direct play can judge taste.
+- Problem: Execution, Shatter, Ashen, and Oblivion now use new Echo-only sprites and changed weapon-specific hit logic, but only direct play can judge whether they finally feel like separate combat events.
 - Build:
-  - Check Dual Blades: Echoes should read as quick twin/chain mutations, not tiny copies of the memory motif.
-  - Check Greatsword: Echoes should read as large committed ritual/impact/field mutations, not enlarged copies of the memory motif.
-  - Check Blood: Greatsword Blood and Blood Blade Storm should keep the red/white vortex dopamine while the Echo layer adds weapon identity.
-  - Check Stopped: clock-field identity should remain visible during freeze without hiding monsters.
-  - Check Execution/Shatter/Oblivion/Ashen: each should be recognized by its action silhouette before color or text explains it.
+  - Check Execution: Dual = guilty shredding; Great = execution gate area.
+  - Check Shatter: Dual = fault hop chain; Great = ground collapse area.
+  - Check Ashen: Dual = parry return; Great = holy wall pressure.
+  - Check Oblivion: Dual = erasure scars; Great = void collapse crater.
   - Tune scale, alpha, lifetime, and layer counts per effect before adding any new mechanics.
 - Done:
   - jaewoo can mark each family/weapon pair `keep`, `tune`, or `redesign`, with one clear reason.
@@ -60,6 +59,7 @@
 
 Completed sequence:
 
+- 2026-07-23: Execution/Shatter/Ashen/Oblivion normal Echo redesign implemented. Generated a new LETHE-style Echo-only sprite atlas, cut 8 transparent weapon-specific Echo sprites, removed memory-motif reuse from these Echo paths, changed Greatsword Shatter/Execution/Ashen/Oblivion hit reads, and verified C# builds, Unity compile, Dual/Great matrix counts, and Dense Dual budget.
 - 2026-07-22: Weapon-specific Echo mutation VFX pass implemented. HQ memory motifs now get separate Dual Blades and Greatsword Echo ornament layers for Blood, Shatter, Execution, Stopped, Ashen, and Oblivion. C# builds passed, Unity compilation errors were 0, Dual/Great matrix captures were saved, and Dense Dual stayed within budget.
 - 2026-07-22: HQ bitmap VFX texture pass implemented. Blood Vortex, Stopped Clock, Execution Judgement, Shatter Slam, Oblivion Brand, and Ashen Holy Fire sprites were generated, chroma-keyed, imported as Unity sprites, wired into memory/Echo/Ultimate motif paths, and verified with C# builds plus Unity Play Mode captures. Console and compilation errors were 0.
 - 2026-07-22: Procedural motif VFX rework implemented from the approved silhouette board. Stopped/Execution/Shatter/Oblivion/Ashen now have primary generated motif sprites, previews and weapon-specific Echoes use those motifs, Unity compile/console errors are 0, and preview/dual/great evidence screenshots were saved.

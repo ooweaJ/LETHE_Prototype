@@ -1,0 +1,364 @@
+fileFormatVersion: 2
+guid: 7c70bf28c8ed2be4e85c6c87173d076a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5599892081243948077
+    second: spr_shatter_echo_dual_fault_hop_01_0
+  - first:
+      213: -3720261477489563997
+    second: spr_shatter_echo_dual_fault_hop_01_1
+  - first:
+      213: 1662970475901409628
+    second: spr_shatter_echo_dual_fault_hop_01_2
+  - first:
+      213: 465158321057378785
+    second: spr_shatter_echo_dual_fault_hop_01_3
+  - first:
+      213: -8532529765678965850
+    second: spr_shatter_echo_dual_fault_hop_01_4
+  - first:
+      213: 2274159905616892704
+    second: spr_shatter_echo_dual_fault_hop_01_5
+  - first:
+      213: 8146465585807973138
+    second: spr_shatter_echo_dual_fault_hop_01_6
+  - first:
+      213: 278556163078587505
+    second: spr_shatter_echo_dual_fault_hop_01_7
+  - first:
+      213: 6957504800682525112
+    second: spr_shatter_echo_dual_fault_hop_01_8
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: spr_shatter_echo_dual_fault_hop_01_0
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 253
+        width: 86
+        height: 141
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d24811bad20d6bd40800000000000000
+      internalID: 5599892081243948077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_shatter_echo_dual_fault_hop_01_1
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 380
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a62aa2a5e9fe5cc0800000000000000
+      internalID: -3720261477489563997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_shatter_echo_dual_fault_hop_01_2
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 310
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c59d01846de041710800000000000000
+      internalID: 1662970475901409628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_shatter_echo_dual_fault_hop_01_3
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 277
+        width: 40
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e131fa4703947600800000000000000
+      internalID: 465158321057378785
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_shatter_echo_dual_fault_hop_01_4
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 18
+        width: 281
+        height: 278
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ab1249a26d569980800000000000000
+      internalID: -8532529765678965850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_shatter_echo_dual_fault_hop_01_5
+      rect:
+        serializedVersion: 2
+        x: 123
+        y: 272
+        width: 22
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0231bb892607f8f10800000000000000
+      internalID: 2274159905616892704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_shatter_echo_dual_fault_hop_01_6
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 291
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21b5709d94f0e0170800000000000000
+      internalID: 8146465585807973138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_shatter_echo_dual_fault_hop_01_7
+      rect:
+        serializedVersion: 2
+        x: 309
+        y: 198
+        width: 33
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1748b4eba51add300800000000000000
+      internalID: 278556163078587505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_shatter_echo_dual_fault_hop_01_8
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 151
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b1c1c7f0c50e8060800000000000000
+      internalID: 6957504800682525112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      spr_shatter_echo_dual_fault_hop_01_0: 5599892081243948077
+      spr_shatter_echo_dual_fault_hop_01_1: -3720261477489563997
+      spr_shatter_echo_dual_fault_hop_01_2: 1662970475901409628
+      spr_shatter_echo_dual_fault_hop_01_3: 465158321057378785
+      spr_shatter_echo_dual_fault_hop_01_4: -8532529765678965850
+      spr_shatter_echo_dual_fault_hop_01_5: 2274159905616892704
+      spr_shatter_echo_dual_fault_hop_01_6: 8146465585807973138
+      spr_shatter_echo_dual_fault_hop_01_7: 278556163078587505
+      spr_shatter_echo_dual_fault_hop_01_8: 6957504800682525112
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

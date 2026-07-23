@@ -1,5 +1,37 @@
 # LETHE TEST
 
+# 2026-07-23 Execution / Shatter / Ashen / Oblivion Echo Redesign Pass
+
+- Purpose:
+  - Stop normal Echoes from reusing the remade memory VFX for Execution, Shatter, Ashen, and Oblivion.
+  - Confirm new weapon-specific Echo sprites and hit reads are wired, visible, and budget-safe.
+- Applied target:
+  - `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`.
+  - `LETHE/Assets/_dev/Art/Sprites/Echoes/{Execution,Shockwave,Ashen,Brand}/spr_*_echo_*_01.png`.
+- Changes:
+  - Generated and imported 8 Echo-only sprites from a selected LETHE-style atlas.
+  - Rewired four normal Echo families to use dedicated Dual/Great sprites.
+  - Changed Great Shatter, Execution, Ashen, and Oblivion hit reads to match the new concepts.
+  - Kept Dense Dual Blades from spawning non-essential ornament stacks.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`.
+  - Unity import setting automation for 9 PNGs.
+  - Unity compilation error check.
+  - Play Mode `DebugRunEchoMatrix(DualBlades)` with camera capture.
+  - Play Mode `DebugRunEchoMatrix(Greatsword)` with camera capture.
+  - Play Mode `DebugRunDenseDualBladePerfMatrix()` reflection read.
+- Results:
+  - Runtime C# build passed with 7 existing deprecation warnings and 0 errors.
+  - Editor C# build passed with 7 existing deprecation warnings and 0 errors.
+  - Unity import settings configured: `configured=9`.
+  - Unity compilation errors: `0`.
+  - Dual Blades Echo Matrix: all 8 Echoes at `+5`, `dualReworkObjects=64`.
+  - Greatsword Echo Matrix: all 8 Echoes at `+5`, `greatReworkObjects=32`.
+  - Dense Dual Blades Perf Matrix: `hits=18`, `echoesSuppressed=15`, `transient=46`, `ms=18.30`.
+- Notes:
+  - All-on matrix screenshots are still intentionally noisy. The contact sheet is the cleanest evidence of the new sprite quality; direct play should judge combat scale and timing.
+
 # 2026-07-22 Weapon-Specific Echo Mutation VFX Pass
 
 - Purpose:

@@ -1,5 +1,25 @@
 # LETHE CHANGELOG
 
+# 2026-07-23
+
+- Reworked Execution, Shatter, Ashen, and Oblivion normal Echoes so they no longer reuse memory VFX as their primary read:
+  - Generated a darker LETHE-style Echo-only VFX atlas and cut 8 transparent weapon-specific sprites.
+  - Dual Blades Execution now reads as guilty shredding / red X cuts.
+  - Dual Blades Shatter now reads as cyan fault-hop chain cracks.
+  - Dual Blades Ashen now reads as parry-return from a broken holy guard.
+  - Dual Blades Oblivion now reads as violet erasure scars and void shreds.
+  - Greatsword Execution now reads as an execution gate area.
+  - Greatsword Shatter now reads as a target-centered ground collapse.
+  - Greatsword Ashen now reads as forward holy-wall pressure.
+  - Greatsword Oblivion now reads as a void-collapse crater.
+- Verification:
+  - Runtime C# build passed with 7 existing deprecation warnings and 0 errors.
+  - Editor C# build passed with 7 existing deprecation warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - `DebugRunEchoMatrix(DualBlades)`: `dualReworkObjects=64`.
+  - `DebugRunEchoMatrix(Greatsword)`: `greatReworkObjects=32`.
+  - `DebugRunDenseDualBladePerfMatrix()`: `hits=18`, `echoesSuppressed=15`, `transient=46`, `ms=18.30`.
+
 # 2026-07-22
 
 - Added weapon-specific Echo mutation VFX on top of the HQ bitmap motif baseline:

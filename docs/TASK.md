@@ -1,5 +1,31 @@
 # LETHE TASK
 
+## 2026-07-23 Execution / Shatter / Ashen / Oblivion Echo Redesign Pass
+
+- [x] Echo-only sprite asset pass completed:
+  - [x] Generated two atlas attempts and selected the darker LETHE-style version.
+  - [x] Cut 8 transparent sprites for Dual/Great Execution, Shatter, Ashen, and Oblivion.
+  - [x] Imported sprites as Sprite/Single with alpha transparency.
+- [x] Runtime redesign completed:
+  - [x] Removed memory motif reuse from Execution Echo condemnation paths.
+  - [x] Great Shatter became target-centered ground collapse.
+  - [x] Great Execution became execution-gate area.
+  - [x] Great Ashen became forward holy-wall pressure.
+  - [x] Great Oblivion gained void-collapse crater and center bonus.
+  - [x] Dual Echoes stamp quick chain/parry/erasure sprites on targets.
+- [x] Verification completed:
+  - [x] Runtime C# build passed.
+  - [x] Editor C# build passed.
+  - [x] Unity compilation errors `0`.
+  - [x] Dual/Great Echo Matrix rework object counts confirmed.
+  - [x] Dense Dual Blades perf reflection run stayed under budget.
+
+Current next:
+
+1. Direct-play the four reworked Echoes in normal combat.
+2. Mark each weapon/family pair `keep`, `tune`, or `redesign`.
+3. Tune visibility/noise before touching other Echo families.
+
 ## 2026-07-22 Weapon-Specific Echo Mutation VFX Pass
 
 - [x] Echo weapon mutation pass completed:

@@ -1,5 +1,56 @@
 # Current Task
 
+# 2026-07-23 Execution / Shatter / Ashen / Oblivion Echo Redesign Pass
+
+## Status
+
+- Implemented, asset-imported, C# build-verified, Unity compile-verified, Play Mode matrix-verified, and ready for jaewoo direct-play taste review.
+
+## Goal
+
+Stop using remade memory VFX as normal Echo VFX for Execution, Shatter, Ashen, and Oblivion. These four Echoes should be separate combat events with weapon-specific actions, hit logic, and dedicated sprites.
+
+## Applied Changes
+
+- Generated two VFX atlas attempts and selected the darker LETHE-style atlas.
+- Cut the selected atlas into 8 transparent Unity sprites:
+  - Dual Execution: verdict shred / guilty X cuts.
+  - Dual Shatter: fault hop / chain crack.
+  - Dual Ashen: parry return / broken guard.
+  - Dual Oblivion: erasure scars / void shreds.
+  - Great Execution: execution gate / falling judgement.
+  - Great Shatter: ground collapse / raised slabs.
+  - Great Ashen: holy ash wall / sacred shield fire.
+  - Great Oblivion: void collapse crater.
+- Rewired `V1GameManager` so these Echo paths no longer use the memory motif as the primary read.
+- Reworked gameplay reads:
+  - Great Shatter is now a target-centered collapse area with center damage bonus.
+  - Great Execution is now a target-centered execution gate area.
+  - Great Ashen is now a forward holy-wall pressure cone.
+  - Great Oblivion keeps area collapse but gains new crater sprite and center damage bonus.
+  - Dual Echoes stamp new sprites across chain/parry/erasure targets.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 7 existing deprecation warnings and 0 errors.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing deprecation warnings and 0 errors.
+- Unity compilation errors: `0`.
+- Unity import settings configured for 9 generated PNG assets.
+- `DebugRunEchoMatrix(DualBlades)`: all 8 Echoes at `+5`, `dualReworkObjects=64`.
+- `DebugRunEchoMatrix(Greatsword)`: all 8 Echoes at `+5`, `greatReworkObjects=32`.
+- `DebugRunDenseDualBladePerfMatrix()`: `hits=18`, `echoesSuppressed=15`, `transient=46`, `ms=18.30`.
+- Evidence captured:
+  - `docs/orchestration/evidence/2026-07-23-echo-rework-sprite-contact-sheet.png`
+  - `docs/orchestration/evidence/2026-07-23-echo-rework-dual-matrix.png`
+  - `docs/orchestration/evidence/2026-07-23-echo-rework-great-matrix.png`
+
+## Remaining Gate
+
+- jaewoo direct-play review:
+  - confirm whether Execution / Shatter / Ashen / Oblivion now feel like separate Echo events rather than reused memory VFX;
+  - mark each family and weapon pair `keep`, `tune`, or `redesign`;
+  - tune size/alpha/lifetime if the new sprites are too strong or too hidden in normal combat.
+
 # 2026-07-22 Weapon-Specific Echo Mutation VFX Pass
 
 ## Status
