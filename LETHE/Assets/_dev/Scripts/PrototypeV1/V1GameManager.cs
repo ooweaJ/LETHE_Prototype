@@ -1719,6 +1719,30 @@ namespace Lethe.PrototypeV1
             SpawnOblivionBrandGlyph(center, forward, 3, true, false, lifetime);
         }
 
+        void SpawnOblivionOverheadBrand(V1Enemy target, int levelValue, bool echo, bool rupture, float lifetime)
+        {
+            if (target == null || !target.IsAlive) return;
+            var markerName = echo ? "EchoOverhead_OblivionBrand" : "MemoryOverhead_OblivionBrand";
+            var child = target.transform.Find(markerName);
+            var marker = child != null ? child.gameObject : new GameObject(markerName);
+            marker.transform.SetParent(target.transform, false);
+            marker.transform.localPosition = new Vector3(0f, target.Kind == V1EnemyKind.Gatekeeper ? 0.78f : 0.52f, -0.04f);
+            marker.transform.localRotation = Quaternion.identity;
+            marker.transform.localScale = Vector3.one * (target.Kind == V1EnemyKind.Gatekeeper ? 0.42f : 0.28f) * (rupture ? 1.18f : 1f);
+
+            var sr = marker.GetComponent<SpriteRenderer>();
+            if (sr == null) sr = marker.AddComponent<SpriteRenderer>();
+            sr.sprite = MakeOblivionBrandMotifSprite(markerName, echo, rupture);
+            sr.color = rupture ? new Color(1f, 0.78f, 1f, 0.98f) : new Color(0.90f, 0.48f, 1f, 0.94f);
+            sr.sortingOrder = 64;
+
+            var badge = marker.GetComponent<V1EnemyStateBadge>();
+            if (badge == null) badge = marker.AddComponent<V1EnemyStateBadge>();
+            badge.Configure(sr.color, Mathf.Max(0.30f, lifetime), V1MemoryId.OblivionBrand);
+
+            SpawnEchoLink(echo ? "EchoOblivionOverheadBrandPin" : "MemoryOblivionOverheadBrandPin", marker.transform.position, target.transform.position + Vector3.up * 0.10f, new Color(0.82f, 0.42f, 1f, 0.32f), 0.26f, 0.010f);
+        }
+
         void SpawnOblivionBrandGlyph(Vector3 center, Vector2 forward, int levelValue, bool echo, bool rupture, float lifetime)
         {
             var f = EchoForward(forward);
@@ -1798,28 +1822,29 @@ namespace Lethe.PrototypeV1
             if (memory.VisualTimer > 0f) return;
             memory.VisualTimer = Mathf.Max(0.82f, 1.28f - memory.Level * 0.075f);
             PlaySfx("ashen", 0.36f, 0.42f);
-            SpawnAshenHolyFlames(player.position, lastAim, memory.Level, false, true);
-            SpawnAshenMemoryGuardPlate(player.position, lastAim, memory.Level);
+            var focus = enemies
+                .Where(e => e != null && e.IsAlive)
+                .OrderByDescending(EnemyThreatPriority)
+                .ThenBy(e => Vector2.Distance(player.position, e.transform.position))
+                .FirstOrDefault();
+            var fieldForward = focus != null ? (Vector2)(focus.transform.position - player.position) : lastAim;
+            var fieldCenter = focus != null
+                ? Vector3.Lerp(player.position, focus.transform.position, 0.72f)
+                : player.position + (Vector3)(EchoForward(lastAim) * (0.95f + memory.Level * 0.06f));
+            SpawnAshenScorchedField(fieldCenter, fieldForward, memory.Level, memory.Level >= 5);
+            SpawnAshenMemoryGuardPlate(player.position, fieldForward, memory.Level);
             if (memory.Level >= 3)
             {
-                SpawnRadialSlashLines("MemoryAshenShieldStoredWard", player.position, lastAim, 4, 0.58f + memory.Level * 0.045f, new Color(0.84f, 0.92f, 1f, 0.34f), 0.32f);
+                SpawnRadialSlashLines("MemoryAshenShieldStoredWard", player.position, fieldForward, 4, 0.58f + memory.Level * 0.045f, new Color(0.84f, 0.92f, 1f, 0.34f), 0.32f);
                 var releaseThreshold = 7f + memory.Level * 2.2f;
                 if (ashenStoredGuardCharge >= releaseThreshold)
                 {
                     var release = ConsumeAshenGuardCharge(memory.Level >= 5 ? 0.62f : 0.42f, memory.Level >= 5 ? 5f : 2.5f);
                     ReleaseAshenGuardWave(player.position, memory.Level, release, memory.Level >= 5, "Ashen stored counter");
                 }
-                else
+                else if (focus != null)
                 {
-                    var watched = enemies
-                        .Where(e => e != null && e.IsAlive)
-                        .OrderByDescending(EnemyThreatPriority)
-                        .ThenBy(e => Vector2.Distance(player.position, e.transform.position))
-                        .FirstOrDefault();
-                    if (watched != null)
-                    {
-                        SpawnEchoLink("MemoryAshenShieldWatchThread", player.position + Vector3.up * 0.12f, watched.transform.position + Vector3.up * 0.08f, new Color(0.90f, 0.96f, 1f, 0.22f), 0.26f, 0.010f);
-                    }
+                    SpawnEchoLink("MemoryAshenShieldWatchThread", player.position + Vector3.up * 0.12f, focus.transform.position + Vector3.up * 0.08f, new Color(0.90f, 0.96f, 1f, 0.22f), 0.26f, 0.010f);
                 }
             }
             if (memory.Level >= 5)
@@ -1841,6 +1866,7 @@ namespace Lethe.PrototypeV1
             {
                 PlaySfx("brand", 0.46f, 0.12f);
                 MarkEnemyEchoState(enemy, V1MemoryId.OblivionBrand, 1.35f, 1.02f);
+                SpawnOblivionOverheadBrand(enemy, memory.Level, false, memory.Level >= 5, 1.10f);
                 SpawnOblivionBrandGlyph(enemy.transform.position + Vector3.up * 0.10f, (Vector2)(enemy.transform.position - player.position), memory.Level, false, memory.Level >= 5, 0.54f);
                 SpawnEchoLink("MemoryOblivionBrandTether", enemy.transform.position, player.position, new Color(0.78f, 0.34f, 1f, 0.48f), 0.36f, 0.022f);
                 DealDamage(enemy, 1.4f + memory.Level * 0.45f, "OblivionBrand inscription", false);
@@ -1876,6 +1902,7 @@ namespace Lethe.PrototypeV1
                 var linked = linkedTargets[i];
                 var linkedDir = (Vector2)(linked.transform.position - center);
                 SpawnEchoLink(rupture ? "OblivionBrandRuptureInfection" : "OblivionBrandDelayedInfection", center, linked.transform.position, new Color(0.78f, 0.34f, 1f, rupture ? 0.42f : 0.30f), rupture ? 0.34f : 0.24f, rupture ? 0.016f : 0.010f);
+                SpawnOblivionOverheadBrand(linked, levelValue, false, rupture, rupture ? 0.92f : 0.68f);
                 SpawnOblivionBrandGlyph(linked.transform.position + Vector3.up * 0.08f, linkedDir.sqrMagnitude > 0.01f ? linkedDir.normalized : f, levelValue, false, false, rupture ? 0.40f : 0.28f);
                 MarkEnemyEchoState(linked, V1MemoryId.OblivionBrand, rupture ? 1.10f : 0.84f, rupture ? 1.00f : 0.88f);
                 DealDamage(linked, (rupture ? 3.8f : 2.4f) + levelValue * (rupture ? 1.35f : 0.82f), rupture ? "OblivionBrand rupture spread" : "OblivionBrand delayed spread", false, linkedDir.sqrMagnitude > 0.01f ? linkedDir.normalized : f, rupture ? 0.16f : 0.06f);
@@ -1893,6 +1920,7 @@ namespace Lethe.PrototypeV1
             SpawnOblivionEraseBurst(center, f, heavy ? 0.82f + levelValue * 0.08f : 0.52f + levelValue * 0.045f, heavy, sourceName);
             SpawnEchoHitRead(V1MemoryId.OblivionBrand, source, target, heavy ? -f : f, heavy, levelValue);
             MarkEnemyEchoState(target, V1MemoryId.OblivionBrand, heavy ? 1.32f : 0.96f, heavy ? 1.08f : 0.90f);
+            SpawnOblivionOverheadBrand(target, levelValue, true, heavy, heavy ? 0.58f : 0.44f);
             DealDamage(target, damage, sourceName, false, heavy ? -f : f, heavy ? 0.44f : 0.08f);
 
             if (levelValue < 5) yield break;
@@ -1907,6 +1935,7 @@ namespace Lethe.PrototypeV1
                 var linkedDir = (Vector2)(linked.transform.position - center);
                 SpawnEchoLink(heavy ? "EchoGreat_OblivionDelayedRuptureSpread" : "EchoDual_OblivionDelayedScarSpread", center, linked.transform.position, new Color(0.82f, 0.46f, 1f, heavy ? 0.34f : 0.26f), heavy ? 0.30f : 0.22f, heavy ? 0.014f : 0.008f);
                 MarkEnemyEchoState(linked, V1MemoryId.OblivionBrand, heavy ? 1.00f : 0.78f, heavy ? 0.96f : 0.86f);
+                SpawnOblivionOverheadBrand(linked, levelValue, true, heavy, heavy ? 0.62f : 0.46f);
                 DealDamage(linked, damage * (heavy ? 0.22f : 0.16f), heavy ? "Oblivion Echo Great delayed spread" : "Oblivion Echo Dual delayed spread", false, linkedDir.sqrMagnitude > 0.01f ? linkedDir.normalized : f, heavy ? 0.12f : 0.04f);
             }
         }
@@ -2353,6 +2382,47 @@ namespace Lethe.PrototypeV1
             hitstopTimer = Mathf.Max(hitstopTimer, heavy ? 0.045f : 0.025f);
             cameraShakeTimer = Mathf.Max(cameraShakeTimer, heavy ? 0.18f : 0.10f);
             cameraShakeAmount = Mathf.Max(cameraShakeAmount, heavy ? 0.085f : 0.052f);
+        }
+
+        void SpawnAshenScorchedField(Vector3 center, Vector2 forward, int levelValue, bool awakened)
+        {
+            var f = EchoForward(forward);
+            var radius = (awakened ? 1.34f : 1.02f) + levelValue * 0.085f;
+            var lifetime = awakened ? 1.90f : 1.48f;
+            var color = awakened ? new Color(1f, 0.86f, 0.48f, 0.52f) : new Color(0.86f, 0.92f, 1f, 0.44f);
+            SpawnTransientSprite("MemoryAshenScorchedFieldOuter", MakeRingSprite("MemoryAshenScorchedFieldOuter", Color.white, 180), center, Quaternion.Euler(0f, 0f, elapsed * -35f), radius, new Color(color.r, color.g, color.b, 0.42f), lifetime);
+            SpawnTransientSprite("MemoryAshenScorchedFieldCore", MakeDiscSprite("MemoryAshenScorchedFieldCore", Color.white, 144), center, Quaternion.identity, radius * 0.62f, new Color(0.48f, 0.50f, 0.52f, awakened ? 0.24f : 0.18f), lifetime);
+            SpawnAshenHolyFlames(center, f, levelValue, false, awakened);
+            SpawnRadialSlashLines("MemoryAshenScorchedFieldCinders", center, f, awakened ? 8 : 6, radius * 0.54f, new Color(1f, 0.94f, 0.70f, awakened ? 0.50f : 0.34f), 0.48f);
+            StartCoroutine(ResolveAshenScorchedField(center, radius, levelValue, awakened, lifetime));
+        }
+
+        IEnumerator ResolveAshenScorchedField(Vector3 center, float radius, int levelValue, bool awakened, float lifetime)
+        {
+            var age = 0f;
+            var tick = awakened ? 0.22f : 0.28f;
+            while (age < lifetime)
+            {
+                yield return new WaitForSeconds(tick);
+                age += tick;
+                var targets = enemies
+                    .Where(e => e != null && e.IsAlive && Vector2.Distance(center, e.transform.position) <= radius + e.TouchRadius)
+                    .OrderBy(e => Vector2.Distance(center, e.transform.position))
+                    .Take(awakened ? 8 : 5)
+                    .ToList();
+                for (int i = 0; i < targets.Count; i++)
+                {
+                    var target = targets[i];
+                    var dir = (Vector2)(target.transform.position - center);
+                    MarkEnemyEchoState(target, V1MemoryId.AshenShield, 0.60f, awakened ? 1.00f : 0.86f, i == 0);
+                    if (i == 0 || awakened)
+                    {
+                        SpawnEchoHitRead(V1MemoryId.AshenShield, center, target, dir.sqrMagnitude > 0.01f ? dir.normalized : lastAim, false, levelValue, i);
+                    }
+                    DealDamage(target, (awakened ? 1.55f : 1.05f) + levelValue * (awakened ? 0.52f : 0.34f), awakened ? "Ashen scorched field awaken" : "Ashen scorched field", false, dir.sqrMagnitude > 0.01f ? dir.normalized : Vector2.up, awakened ? 0.10f : 0.04f);
+                }
+                AddAshenGuardCharge(0.28f + targets.Count * 0.18f, levelValue, center, true);
+            }
         }
 
         List<V1Enemy> AshenGuardCounterTargets(Vector3 center, float radius, bool heavy, int levelValue)
@@ -3021,6 +3091,7 @@ namespace Lethe.PrototypeV1
                     var target = brandTargets[i];
                     var dir = (Vector2)(target.transform.position - enemy.transform.position);
                     MarkEnemyEchoState(target, V1MemoryId.OblivionBrand, 1.75f, 1.14f);
+                    SpawnOblivionOverheadBrand(target, levelValue, true, true, 0.95f);
                     if (dir.sqrMagnitude > 0.01f)
                     {
                         SpawnEchoLink("EchoGreat_OblivionCondemnThread", enemy.transform.position, target.transform.position, new Color(0.78f, 0.42f, 1f, 0.34f), 0.36f, 0.014f);
@@ -3057,6 +3128,7 @@ namespace Lethe.PrototypeV1
                         SpawnDualOblivionEchoMutation(target.transform.position, dir.sqrMagnitude > 0.01f ? dir.normalized : f, levelValue);
                     }
                     MarkEnemyEchoState(target, V1MemoryId.OblivionBrand, 1.18f + i * 0.08f, 0.92f);
+                    SpawnOblivionOverheadBrand(target, levelValue, true, false, 0.78f + i * 0.05f);
                     if (!denseDualBlade)
                     {
                         SpawnEchoHitRead(V1MemoryId.OblivionBrand, i == 0 ? enemy.transform.position : stackTargets[i - 1].transform.position, target, dir.sqrMagnitude > 0.01f ? dir.normalized : f, false, levelValue, i);
@@ -3071,6 +3143,7 @@ namespace Lethe.PrototypeV1
                         var dir = (Vector2)(linked.transform.position - enemy.transform.position);
                         MarkEnemyEchoState(linked, V1MemoryId.OblivionBrand, 1.05f, 0.90f);
                         SpawnEchoLink("EchoDual_OblivionSpreadLink", enemy.transform.position, linked.transform.position, new Color(0.82f, 0.46f, 1f, 0.38f), 0.24f, 0.014f);
+                        SpawnOblivionOverheadBrand(linked, levelValue, true, false, 0.66f);
                         SpawnOblivionBrandGlyph(linked.transform.position + Vector3.up * 0.08f, dir.sqrMagnitude > 0.01f ? dir.normalized : f, levelValue, true, false, 0.24f);
                     }
                 }

@@ -1,5 +1,42 @@
 # Current Task
 
+# 2026-07-23 Brand Overhead / Ashen Field Identity Follow-up
+
+## Status
+
+- Implemented, C# build-verified, Unity compile-verified, Play Mode smoke-verified, and ready for jaewoo direct-play review.
+
+## Goal
+
+Make Brand visibly attach to monsters and give Ashen memory a stronger identity than player-body guard flashes.
+
+## Applied Changes
+
+- Brand:
+  - added dedicated overhead Brand markers above affected enemies;
+  - markers appear for memory inscription, Echo inscription, delayed erase, and spread;
+  - marker uses Oblivion motif, higher sorting, and a head-above position.
+- Ashen:
+  - memory now watches/threatens a target and creates a scorched holy-ash field near it;
+  - field persists briefly, burns enemies inside with DoT ticks, and adds small guard charge;
+  - guard/counter identity remains, but the active memory now has a visible ash/fire zone.
+
+## Verification
+
+- `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after a transient file-lock retry.
+- `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing deprecation warnings and 0 errors.
+- Unity compilation errors: `0`.
+- Play Mode Passive + Dual Echo Matrix smoke: `memoryOverhead=4`, `echoOverhead=11`, `ashenField=10`, `ashenDots=63`.
+- Unity console errors after delayed field/brand coroutine wait: `0`.
+- Dense Dual Blades matrix reflection call completed.
+
+## Remaining Gate
+
+- jaewoo direct-play review:
+  - Brand: is the monster-head mark visible enough before erase/spread?
+  - Ashen memory: does the scorched field finally feel like a distinct Ashen identity?
+  - Ashen balance: does the field feel too quiet, too frequent, or too noisy?
+
 # 2026-07-23 Echo Rule Identity Rework
 
 ## Status

@@ -169,6 +169,13 @@
           <p>Dev_Prototype_v1에서 잿빛, 망각/낙인, 처형 잔향의 판정 규칙을 다시 갈랐다. 파문은 현재처럼 지면 파괴 규칙이 VFX와 맞기 때문에 큰 방향을 유지했다.</p>
         </article>
       </li>
+<li>
+        <article class="unit-card">
+          <span class="number">2026-07-23-04</span>
+          <h2><a href="#unit-2026-07-23-04" data-unit-link="unit-2026-07-23-04">낙인 머리표식 / 잿빛 성화 영역 후속 패치</a></h2>
+          <p>Dev_Prototype_v1에서 낙인은 몬스터 머리 위에 전용 표식이 뜨고, 잿빛 기억은 적 주변에 잿빛 성화 영역을 만들어 도트 피해를 주는 구조로 바뀌었다.</p>
+        </article>
+      </li>
     </ul>
     <section id="unit-detail-root" class="unit-panel" hidden aria-label="작업 단위 상세 패널">
       <div class="unit-panel__scrim" data-panel-close></div>
@@ -311,6 +318,51 @@
 <li>방향: 각 잔향의 전투 규칙을 서로 다른 플레이 언어로 분리한다.</li>
 <li>행동: 잿빛/낙인/처형의 기억 및 잔향 판정 구조를 바꿨다.</li>
 <li>결과: 기술 검증 기준으로 런타임 오류 없이 직접 테스트 가능한 상태가 됐다.</li>
+</ul>
+    </article>
+<article class="unit-detail" id="unit-2026-07-23-04" hidden>
+      <p class="back-inline"><a href="#" data-panel-close>패널 닫기</a></p>
+      <h1>2026-07-23-04 - 낙인 머리표식 / 잿빛 성화 영역 후속 패치</h1>
+<h2>1. 현재 빌드 상태</h2>
+<p><code>Dev_Prototype_v1</code>에서 낙인은 몬스터 머리 위에 전용 표식이 뜨고, 잿빛 기억은 적 주변에 잿빛 성화 영역을 만들어 도트 피해를 주는 구조로 바뀌었다.</p>
+<h2>2. 오늘 바뀐 것</h2>
+<ul>
+<li>낙인:</li>
+<li>기억 새김, 잔향 새김, 지연 삭제, 전염 시점에 몬스터 머리 위 전용 낙인 표식을 생성한다.</li>
+<li>기존 상태 배지보다 더 위쪽에, 더 명확한 망각 문양으로 표시한다.</li>
+<li>잿빛:</li>
+<li>기억이 위협 대상 근처에 <code>잿빛 성화 영역</code>을 만든다.</li>
+<li>영역은 잠깐 유지되고, 안에 들어온 적에게 도트 피해를 준다.</li>
+<li>영역 피해는 소량의 방어 저장량도 쌓아 잿빛의 방어/반격 성격과 이어진다.</li>
+<li>기존 방패/반격 구조는 유지하되, 공격 정체성은 공간 점유형으로 강화했다.</li>
+</ul>
+<h2>3. 테스트 결과와 근거</h2>
+<ul>
+<li><code>dotnet build LETHE/Assembly-CSharp.csproj --nologo</code>: 통과. 첫 시도는 Unity DLL 파일 잠금으로 실패했으나 단독 재시도에서 경고 0개, 오류 0개.</li>
+<li><code>dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo</code>: 통과. 기존 deprecation warning 7개, 오류 0개.</li>
+<li>Unity compilation errors: <code>0</code>.</li>
+<li>Play Mode Passive + Dual Echo Matrix smoke:</li>
+<li><code>memoryOverhead=4</code></li>
+<li><code>echoOverhead=11</code></li>
+<li><code>ashenField=10</code></li>
+<li><code>ashenDots=63</code></li>
+<li>지연 코루틴 대기 후 Unity console errors: <code>0</code>.</li>
+<li>Dense Dual Blades matrix reflection call 완료.</li>
+</ul>
+<h2>4. 결정한 것</h2>
+<p>낙인은 피격 순간보다 먼저 “이 몬스터에게 낙인이 찍혔다”는 머리 위 표식이 있어야 한다. 잿빛은 단순 자동 반격보다 <code>잿빛 영역</code>이라는 공간 정체성을 가져야 한다.</p>
+<h2>5. 문제 또는 리스크</h2>
+<p>잿빛 성화 영역은 직접 플레이에서 빈도, 반경, 도트 피해, 시각 노이즈를 다시 봐야 한다. 너무 조용하면 빈도/지속시간을 올리고, 너무 시끄러우면 링보다 바닥 연기와 불꽃을 줄이는 방향이 맞다.</p>
+<h2>6. GPT/Claude 인계 요약</h2>
+<p>Brand now creates dedicated overhead markers on monsters for memory inscription, Echo inscription, delayed erase, and spread. Ashen memory now creates a scorched holy-ash field near threatened enemies; the field persists, applies DoT, and feeds guard charge.</p>
+<h2>7. 다음 Codex 작업</h2>
+<p>jaewoo가 직접 플레이하면서 낙인 머리표식의 크기/지속시간과 잿빛 영역의 빈도/반경/도트감/노이즈를 판단한다. 특히 잿빛이 이제 “성화 영역”으로 읽히는지 먼저 본다.</p>
+<h2>8. 포트폴리오 메모: 문제, 방향, 행동, 결과</h2>
+<ul>
+<li>문제: 낙인은 찍힌 대상이 명확하지 않았고, 잿빛은 기억부터 아이덴티티가 약했다.</li>
+<li>방향: 낙인은 머리 위 표식, 잿빛은 영역형 성화 도트로 분리한다.</li>
+<li>행동: 전용 낙인 오버헤드 마커와 잿빛 성화 필드 코루틴을 추가했다.</li>
+<li>결과: 기술 검증 기준으로 표식/필드/도트가 생성되고 런타임 오류 없이 동작한다.</li>
 </ul>
     </article>
       </div>

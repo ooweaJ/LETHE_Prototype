@@ -1,11 +1,11 @@
 {
   "source": "docs\\orchestration\\reports\\20260723\\index.md",
-  "generatedAt": "2026-07-23T13:29:47.070Z",
-  "unitCount": 3,
+  "generatedAt": "2026-07-23T14:00:38.306Z",
+  "unitCount": 4,
   "latest": {
-    "title": "2026-07-23-03 - 잔향 판정 규칙 아이덴티티 리워크",
-    "number": "03",
-    "markdownPath": "docs\\orchestration\\reports\\20260723\\units\\2026-07-23-03-잔향-판정-규칙-아이덴티티-리워크.md",
-    "htmlPath": "docs\\orchestration\\reports\\20260723\\units\\2026-07-23-03-잔향-판정-규칙-아이덴티티-리워크.html"
+    "title": "2026-07-23-04 - 낙인 머리표식 / 잿빛 성화 영역 후속 패치",
+    "number": "04",
+    "markdownPath": "docs\\orchestration\\reports\\20260723\\units\\2026-07-23-04-낙인-머리표식-잿빛-성화-영역-후속-패치.md",
+    "htmlPath": "docs\\orchestration\\reports\\20260723\\units\\2026-07-23-04-낙인-머리표식-잿빛-성화-영역-후속-패치.html"
   }
 }

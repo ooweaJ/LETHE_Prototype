@@ -1,5 +1,41 @@
 # LETHE TEST
 
+# 2026-07-23 Brand Overhead / Ashen Field Identity Follow-up
+
+- Purpose:
+  - Respond to jaewoo's review that Brand should visibly mark the monster's head.
+  - Rework Ashen memory identity away from a body-only guard cue into a recognizable ash/fire zone.
+- Applied target:
+  - `LETHE/Assets/_dev/Scripts/PrototypeV1/V1GameManager.cs`.
+- Changes:
+  - Added `SpawnOblivionOverheadBrand`:
+    - creates a dedicated overhead brand child on the affected enemy;
+    - used by Brand memory inscription, Echo inscription, delayed erase, and spread.
+  - Reworked Ashen memory:
+    - chooses a watched/threatened enemy;
+    - creates a scorched holy-ash field near that enemy / forward lane;
+    - field persists briefly and applies DoT ticks to enemies inside;
+    - field ticks also feed small guard charge.
+  - Kept Ashen guard/counter behavior, but moved the memory's active offensive identity into the field.
+- Commands / checks:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`.
+  - Unity `AssetDatabase.Refresh()`.
+  - Unity compilation error check.
+  - Play Mode `DebugRunPassiveMemoryMatrix()`.
+  - Play Mode `DebugRunEchoMatrix(DualBlades)`.
+  - Delayed coroutine wait + Unity console error check.
+  - Play Mode `DebugRunDenseDualBladePerfMatrix()`.
+- Results:
+  - Runtime C# build passed with 0 warnings and 0 errors after a retry. First attempt hit the recurring transient Unity DLL file lock.
+  - Editor C# build passed with 7 existing deprecation warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Passive + Dual Echo Matrix smoke: `memoryOverhead=4`, `echoOverhead=11`, `ashenField=10`, `ashenDots=63`.
+  - Unity console errors after delayed field/brand coroutine wait: `0`.
+  - Dense Dual Blades matrix reflection call completed.
+- Notes:
+  - Direct play should judge whether Ashen now reads as a distinct burning ash zone, not merely an automatic player-centered hit.
+
 # 2026-07-23 Echo Rule Identity Rework
 
 - Purpose:

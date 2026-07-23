@@ -3,9 +3,11 @@
 ## 1. Echo Rule Identity Direct-Play Review
 
 - Priority: urgent
-- Problem: Shatter reads acceptably as ground fracture, but Ashen / Oblivion Brand / Execution were reworked again because they still felt like similar area attacks.
+- Problem: Shatter reads acceptably as ground fracture. Brand now has monster-head marks and Ashen memory now creates a scorched field, but only direct play can judge whether the identity finally lands.
 - Build:
-  - Check Ashen memory: guard/threat-watch first, stored counter only when charged, no body-centered periodic AoE.
+  - Check Brand: overhead mark appears above the monster before delayed erase/spread.
+  - Check Ashen memory: scorched holy-ash field appears near threatened enemies and burns as a field, not a body-centered automatic hit.
+  - Check Ashen field balance: frequency, radius, DoT, and visual noise.
   - Check Great Ashen: holy-wall lane, not broad cone or circle.
   - Check Dual Ashen: parry-return chain.
   - Check Oblivion Brand: inscription -> delayed erase -> delayed spread.
@@ -60,6 +62,7 @@
 
 Completed sequence:
 
+- 2026-07-23: Brand overhead / Ashen field identity follow-up implemented. Brand now spawns dedicated overhead markers on affected monsters, and Ashen memory creates a scorched holy-ash field with DoT ticks and guard-charge feed. Runtime/editor builds, Unity compile, Passive + Dual Echo Matrix smoke, delayed coroutine console check, and Dense Dual matrix call passed.
 - 2026-07-23: Echo rule identity rework implemented. Ashen memory no longer body-AoEs and now stores guard/counter charge, Ashen releases target high-threat enemies, Great Ashen uses a holy-wall lane, Brand uses inscription -> delayed erase/spread, and Execution targets condemned low-health verdicts instead of broad area damage. Runtime/editor builds, Unity compile, Play Mode Dual/Great/Passive/Dense matrix calls, and delayed Brand console check passed.
 - 2026-07-23: Echo hit readability follow-up implemented. Added per-victim hit-confirm VFX so source/path/victim reads are clearer, especially Ashen guard/counter paths. Runtime/editor builds, Unity compile, Play Mode Dual/Great matrix calls, and console error checks passed.
 - 2026-07-23: Execution/Shatter/Ashen/Oblivion normal Echo redesign implemented. Generated a new LETHE-style Echo-only sprite atlas, cut 8 transparent weapon-specific Echo sprites, removed memory-motif reuse from these Echo paths, changed Greatsword Shatter/Execution/Ashen/Oblivion hit reads, and verified C# builds, Unity compile, Dual/Great matrix counts, and Dense Dual budget.

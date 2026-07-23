@@ -2,6 +2,27 @@
 
 Last updated: 2026-07-23
 
+## 2026-07-23 Update: Brand Overhead / Ashen Field Identity Follow-up
+
+- jaewoo review:
+  - Brand should clearly appear over the monster's head.
+  - Ashen still lacks identity from the memory level; it needs an ash/fire zone or other distinctive attack structure instead of a body-only automatic hit.
+- Applied in `_dev`:
+  - Added dedicated overhead Oblivion Brand markers above affected monsters.
+  - Brand overhead markers now appear for memory inscription, Echo inscription, delayed erase, and spread.
+  - Ashen memory now creates a scorched holy-ash field near the watched/threatened enemy.
+  - Ashen field persists briefly, applies DoT ticks to enemies inside, and feeds small guard charge.
+  - Ashen still keeps guard/counter behavior, but its memory-level offensive identity is now a spatial burning field.
+- Verification:
+  - `dotnet build LETHE/Assembly-CSharp.csproj --nologo`: passed with 0 warnings and 0 errors after a transient file-lock retry.
+  - `dotnet build LETHE/Assembly-CSharp-Editor.csproj --nologo`: passed with 7 existing deprecation warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Play Mode Passive + Dual Echo Matrix smoke confirmed `memoryOverhead=4`, `echoOverhead=11`, `ashenField=10`, `ashenDots=63`.
+  - Unity console errors after delayed field/brand coroutine wait: `0`.
+  - Dense Dual Blades matrix reflection call completed.
+- Remaining gate:
+  - jaewoo direct play should judge whether Brand's overhead mark is visible enough and whether Ashen now feels like a distinct ash/fire zone.
+
 ## 2026-07-23 Update: Echo Rule Identity Rework
 
 - jaewoo review:

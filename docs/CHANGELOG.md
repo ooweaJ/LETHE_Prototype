@@ -2,6 +2,19 @@
 
 # 2026-07-23
 
+- Added clearer Brand and Ashen identity reads:
+  - Oblivion Brand now spawns a dedicated overhead brand marker above affected monsters during memory inscription, Echo inscription, delayed erase, and spread.
+  - Ashen memory now creates a scorched holy-ash field near the watched/threatened enemy instead of only showing a player-body guard cue.
+  - The Ashen field persists briefly, burns enemies inside with DoT ticks, and feeds a small amount of guard charge.
+  - Ashen still keeps guard/counter behavior, but now has a stronger spatial identity as an ash/fire zone.
+- Verification:
+  - Runtime C# build passed with 0 warnings and 0 errors after retrying a transient Unity DLL file lock.
+  - Editor C# build passed with 7 existing deprecation warnings and 0 errors.
+  - Unity compilation errors: `0`.
+  - Play Mode Passive + Dual Echo Matrix smoke confirmed `memoryOverhead=4`, `echoOverhead=11`, `ashenField=10`, `ashenDots=63`.
+  - Unity console errors after delayed field/brand coroutine wait: `0`.
+  - Dense Dual Blades perf matrix reflection call completed.
+
 - Reworked Ashen, Oblivion Brand, and Execution away from same-feeling area damage rules:
   - Ashen memory no longer periodically damages nearby enemies from the player body. It now behaves as guard storage / threat watch / stored counter release.
   - Ashen stored releases now select a small number of high-threat counter targets instead of every enemy in a radius.
